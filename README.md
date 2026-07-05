@@ -76,6 +76,42 @@ wins. For single-knob adjustments the escape hatches — `withRootUser`,
 `withWritableRootFilesystem`, `withHostUsers` — each downgrade exactly one
 default; chain them *after* a profile to fine-tune it.
 
+## Rollout stages and migrations
+
+A workload deployed through [stageset-controller](https://github.com/metio/stageset-controller)
+rolls through stages and may need version-gated migrations at boundaries.
+Both are declared next to the workload:
+
+```jsonnet
+kurly.stageLists(shop, {
+  dev: { config+:: { replicas: 1 } },
+  production: { config+:: { replicas: 3 } }
+              + kurly.expose.gateway('shop.example.com', 'shared-gateway'),
+})
+```
+
+renders a map of stage name → `kind: List`, and a migration ladder is a plain
+array of `kurly.migrations.migration(name, to, from=, stage=, actions=)`
+entries (actions are stageset-controller `Action` objects, passed through
+verbatim). See `examples/staged.jsonnet` and `examples/migrations.jsonnet`.
+
+The release pipeline packs a staged workload into **one OCI image with one
+layer per stage** plus a layer for the migration ladder, each under its own
+media type. A Flux `OCIRepository` selects exactly one stage:
+
+```yaml
+spec:
+  layerSelector:
+    mediaType: application/vnd.metio.stage.production.tar+gzip
+    operation: extract
+```
+
+and the `application/vnd.metio.migrations.tar+gzip` layer feeds a StageSet's
+`spec.migrationsSourceRef`. One image means one version, one signature, and
+one changelog entry covering every stage of a rollout. Always set
+`layerSelector` on these images — without it Flux extracts whichever layer
+comes first.
+
 ## Consuming
 
 - **Locally**: `jb install github.com/metio/kurly@main` and render with

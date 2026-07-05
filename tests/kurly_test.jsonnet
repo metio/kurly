@@ -338,4 +338,68 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
     std.objectHas((cron + kurly.security.baseline).cronjob.spec.jobTemplate.spec.template.spec, 'securityContext'),
     false
   ),
+
+  // --- stages --------------------------------------------------------------------
+  // One workload declared once, layered per rollout stage.
+  stages_keys: std.assertEqual(
+    std.objectFields(kurly.stages(shop, { dev: {}, production: {} })),
+    ['dev', 'production']
+  ),
+  stages_overlay_applies: std.assertEqual(
+    kurly.stages(shop, { dev: { config+:: { replicas: 1 } }, production: {} }).dev.deployment.spec.replicas,
+    1
+  ),
+  stages_are_independent: std.assertEqual(
+    local staged = kurly.stages(shop, {
+      dev: { config+:: { replicas: 1 } },
+      production: { config+:: { replicas: 5 } } + kurly.expose.ingress('shop.example.com'),
+    });
+    [staged.production.deployment.spec.replicas, std.objectHas(staged.dev, 'ingress'), std.objectHas(staged.production, 'ingress')],
+    [5, false, true]
+  ),
+  // A stage overlay never mutates the base app.
+  stages_leave_base_untouched: std.assertEqual(
+    local unused = kurly.stages(shop, { dev: { config+:: { replicas: 1 } } });
+    shop.deployment.spec.replicas,
+    3
+  ),
+  // Stage apps stay open for further composition — the fluent hatches and
+  // profile/expose mixins work per stage.
+  stages_compose_further: std.assertEqual(
+    kurly.stages(shop, { dev: {} }).dev.withImage('ghcr.io/example/shop:dev').deployment.spec.template.spec.containers[0].image,
+    'ghcr.io/example/shop:dev'
+  ),
+  stage_lists: std.assertEqual(
+    local lists = kurly.stageLists(shop, { dev: {}, production: kurly.expose.gateway('shop.example.com', 'shared') });
+    [lists.dev.kind, std.length(lists.dev.items), std.length(lists.production.items)],
+    ['List', 2, 3]
+  ),
+
+  // --- migrations ------------------------------------------------------------------
+  // The serialized Migration carries only what was given — optional fields
+  // and an empty action list are pruned, so the wire shape stays minimal.
+  migration_minimal: std.assertEqual(
+    kurly.migrations.migration('recreate', to='2.0.0'),
+    { name: 'recreate', to: '2.0.0' }
+  ),
+  migration_full: std.assertEqual(
+    kurly.migrations.migration('backfill', to='2.1.0', from='>=2.0.0', stage='production', actions=[
+      { name: 'run', job: { sourceRef: { kind: 'ExternalArtifact', name: 'jobs' } } },
+    ]),
+    {
+      name: 'backfill',
+      to: '2.1.0',
+      from: '>=2.0.0',
+      stage: 'production',
+      actions: [{ name: 'run', job: { sourceRef: { kind: 'ExternalArtifact', name: 'jobs' } } }],
+    }
+  ),
+  // A ladder is a plain array — order is authoring order.
+  migration_ladder_is_array: std.assertEqual(
+    std.map(
+      function(m) m.name,
+      [kurly.migrations.migration('a', to='1.1.0'), kurly.migrations.migration('b', to='2.0.0')]
+    ),
+    ['a', 'b']
+  ),
 }
