@@ -15,14 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       - name: jsonnetfmt --test
         run: nix develop --command jsonnetfmt --test ./*.libsonnet examples/*.jsonnet tests/*.jsonnet
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       - name: Vendor k8s-libsonnet
         # The dependency floats at upstream HEAD — the same state the JOI
         # k8s-libsonnet image ships — so an upstream break surfaces here as a
@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       - name: Vendor k8s-libsonnet
         run: nix develop --command jb install
       - name: Render examples and validate against the Kubernetes schemas
@@ -58,19 +58,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       - run: nix develop --command reuse lint
   yaml:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       - run: nix develop --command yamllint .
   github-actions:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       # The devShell carries shellcheck alongside actionlint, so run: blocks
       # are shell-linted too — without it actionlint silently skips them.
       - run: nix develop --command actionlint
@@ -78,13 +78,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       - run: nix develop --command markdownlint-cli2 "**/*.md" "#vendor"
   typos:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - uses: ./.github/actions/nix-devshell
       - run: nix develop --command typos
   dco:
     # Developer Certificate of Origin: every commit must carry a Signed-off-by
