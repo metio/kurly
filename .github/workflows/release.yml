@@ -119,16 +119,8 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: metio/ci/nix-devshell@50117191bb36382ab22777be480c539fc4c37fed # 2026.7.5211151
-      - name: Vendor k8s-libsonnet
-        run: nix develop --command jb install
-      - name: Run the assertion suite
-        run: |
-          nix develop --command bash -c "
-            jsonnet -J vendor tests/kurly_test.jsonnet \
-              | jq -e 'to_entries | all(.value == true)' >/dev/null
-          "
-      - name: Render examples and workloads, validate against the Kubernetes schemas
-        run: nix develop --command hack/validate-examples.sh
+      - run: nix develop --command check-tests
+      - run: nix develop --command check-examples
   library:
     name: Release the library
     needs: [discover, validate]

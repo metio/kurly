@@ -17,46 +17,24 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: metio/ci/nix-devshell@50117191bb36382ab22777be480c539fc4c37fed # 2026.7.5211151
-      - name: jsonnetfmt --test
-        run: nix develop --command jsonnetfmt --test ./*.libsonnet examples/*.jsonnet workloads/*/*.jsonnet tests/*.jsonnet
+      - run: nix develop --command check-fmt
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: metio/ci/nix-devshell@50117191bb36382ab22777be480c539fc4c37fed # 2026.7.5211151
-      - name: Vendor k8s-libsonnet
-        # The dependency floats at upstream HEAD — the same state the JOI
-        # k8s-libsonnet image ships — so an upstream break surfaces here as a
-        # wanted signal rather than at a user's cluster.
-        run: nix develop --command jb install
-      - name: Run the assertion suite
-        run: |
-          nix develop --command bash -c "
-            jsonnet -J vendor tests/kurly_test.jsonnet \
-              | jq -e 'to_entries | all(.value == true)' >/dev/null
-          "
-          echo "all assertions passed"
-      - name: Exposure onto a Service-less workload must fail
-        # The requiresService assert is the only guard against silently
-        # rendering a route to a Service that does not exist.
-        run: |
-          if nix develop --command jsonnet -J vendor \
-            -e "local kurly = import 'main.libsonnet'; kurly.worker.new('w', 'img:1') + kurly.expose.ingress('h.example.com')" >/dev/null 2>&1; then
-            echo "::error::composing an exposure onto a worker rendered instead of failing"
-            exit 1
-          fi
-          echo "assert fired as expected"
+      # Vendors k8s-libsonnet (floats at upstream HEAD, matching the JOI
+      # images), runs the assertion suite, and exercises the requiresService
+      # negative check — all in scripts/check-tests.sh.
+      - run: nix develop --command check-tests
   examples:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: metio/ci/nix-devshell@50117191bb36382ab22777be480c539fc4c37fed # 2026.7.5211151
-      - name: Vendor k8s-libsonnet
-        run: nix develop --command jb install
-      - name: Render examples and validate against the Kubernetes schemas
-        run: nix develop --command hack/validate-examples.sh
+      - run: nix develop --command check-examples
   reuse:
     runs-on: ubuntu-latest
     timeout-minutes: 15

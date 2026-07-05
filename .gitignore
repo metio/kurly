@@ -6,3 +6,7 @@
 # committed lock would only pin a state the runtime images never see.
 vendor/
 jsonnetfile.lock.json
+
+# direnv nix-direnv build cache (contributors with real nix may add a
+# local, gitignored .envrc: `use flake`).
+.direnv/

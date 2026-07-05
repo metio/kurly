@@ -13,21 +13,23 @@ kurly is a Jsonnet library of composable Kubernetes workload recipes (`http`, `w
 
 ## Common commands
 
-The toolchain is defined once in `flake.nix` and version-pinned by `flake.lock` (Renovate-maintained): CI runs every gate through the flake's devShell, so a gate that is green locally is green in CI by construction. With nix installed, enter the shell via `nix develop` (plain `nix-shell` works too — `shell.nix` reuses the flake via flake-compat, pinned through `flake.lock`):
+The toolchain and the dev-task commands are defined once in `flake.nix` and version-pinned by `flake.lock` (Renovate-maintained): CI runs every gate through the flake's devShell, so a gate that is green locally is green in CI by construction. Each multi-step gate is a `writeShellApplication` command (a `scripts/<name>.sh` file wrapped by nix — shellchecked at build, hermetic `runtimeInputs`), on `$PATH` inside `nix develop` and callable one-shot. There is no host task-runner (no `just`/Makefile wrapper) — the commands live in the shell they run in.
 
 ```shell
-nix develop --command jb install                                    # vendor k8s-libsonnet (needed once, gitignored)
-nix develop --command jsonnet -J vendor tests/kurly_test.jsonnet    # run the assertion suite
-nix develop --command jsonnetfmt --test ./*.libsonnet examples/*.jsonnet workloads/*/*.jsonnet tests/*.jsonnet  # format gate (-i to fix)
-nix develop --command ./hack/validate-examples.sh                   # render examples + kubeconform
-nix develop --command yamllint .                                    # CI yaml gate
-nix develop --command actionlint                                    # CI workflow gate (shellcheck comes from the shell too)
-nix develop --command typos                                         # CI spelling gate
-nix develop --command reuse lint                                    # CI REUSE gate
-nix develop --command markdownlint-cli2 '**/*.md' '#vendor'         # CI markdown gate
+nix develop --command verify           # every gate, serially — the local pre-push check (what CI runs)
+nix develop --command check-fmt        # jsonnetfmt --test across all sources
+nix develop --command check-tests      # jb install + assertion suite + the requiresService negative check
+nix develop --command check-examples   # render examples + workloads, validate with kubeconform
+nix develop --command reuse lint       # the single-tool gates call the tool directly:
+nix develop --command yamllint .
+nix develop --command actionlint       # shellcheck rides in the devShell, so run: blocks are linted too
+nix develop --command markdownlint-cli2 '**/*.md' '#vendor'
+nix develop --command typos
 ```
 
-On this host, `nix` is [nix-portable](https://github.com/DavHau/nix-portable) (`~/.local/bin/nix`, store in `~/.nix-portable` — user-level, no system install) and needs `NP_RUNTIME=bwrap` (exported in `~/.bashrc`; the auto-selected runtime cannot nest the build sandbox's mount namespace here). Fallbacks that resolve the same flake: the nix container image (`podman run --rm -v "$PWD:/work:z" -v kurly-nix:/nix -w /work docker.io/nixos/nix:latest`, with `NIX_CONFIG='experimental-features = nix-command flakes'` — also the right path from sandboxed shells, where nix-portable's user namespaces are blocked), and the ilo dev shell (`ilo bash -c '…'`, `dev/Containerfile`) — though ilo installs tools at `@latest` and can drift ahead of `flake.lock`; when versions disagree, the flake is authoritative because it is what CI runs.
+Or drop into the shell — `nix develop` prints the command menu on entry, then run `verify` / `check-*` / any tool (`jsonnet`, `jb`, `kubeconform`, …) bare. Plain `nix-shell` works too (`shell.nix` reuses the flake via flake-compat, pinned through `flake.lock`).
+
+On this host, `nix` is [nix-portable](https://github.com/DavHau/nix-portable) (`~/.local/bin/nix`, store in `~/.nix-portable` — user-level, no system install) and needs `NP_RUNTIME=bwrap` (exported in `~/.bashrc`; the auto-selected runtime cannot nest the build sandbox's mount namespace here). A system-level nix install is not possible on this Fedora Atomic host (the transient-root workaround broke boot). From a sandboxed shell, where nix-portable's user namespaces are blocked, resolve the same flake through the nix container image: `podman run --rm -v "$PWD:/work:z" -v metio-nix:/nix -w /work docker.io/nixos/nix:latest` with `NIX_CONFIG='experimental-features = nix-command flakes'`. **direnv is not usable here** — nix-portable's store is namespace-local, so an exported devShell env references `/nix` paths the host can't see; `nix develop` is the workflow. A contributor with a real nix install may add a local, gitignored `.envrc` (`use flake`) if they want direnv auto-loading.
 
 jsonnet-lint is deliberately not part of the gate: it cannot resolve the vendored k8s-libsonnet's internal `doc-util` imports (jb `legacyImports: false`) and drowns real findings in vendor noise.
 
