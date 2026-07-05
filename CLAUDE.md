@@ -9,7 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-kurly is a Jsonnet library of composable Kubernetes workload recipes (`web`, `api`, `worker`, `cron`, `daemon`), built on k8s-libsonnet. It publishes as the single-layer OCI image `ghcr.io/metio/kurly` (JOI-shaped: `FROM scratch`, jb-vendor-tree layout under `/github.com/metio/kurly/`), consumable by [jaas](https://github.com/metio/jaas) as a Flux `OCIRepository` source or an image-volume mount, and locally via `jb install`.
+kurly is a Jsonnet library of composable Kubernetes workload recipes (`http`, `worker`, `cron`, `daemon`) plus exposure recipes (`expose.*`), built on k8s-libsonnet. It publishes as the single-layer OCI image `ghcr.io/metio/kurly` (JOI-shaped: `FROM scratch`, jb-vendor-tree layout under `/github.com/metio/kurly/`), consumable by [jaas](https://github.com/metio/jaas) as a Flux `OCIRepository` source or an image-volume mount, and locally via `jb install`.
 
 ## Common commands
 
@@ -34,13 +34,14 @@ The library lives at the **repo root** (`main.libsonnet` + one file per workload
 
 - `k.libsonnet` — the single pin of the k8s-libsonnet API version (a directory like `1.35`); every module imports k8s-libsonnet through this file, so a version bump is one line.
 - `base.libsonnet` — the shared core: a hidden `config::` object, computed `labels`/`container`/`podSecurity` fields that late-bind against it, the fluent `with*` modifiers, plus the `deployment` and `service` mixins the Deployment-backed kinds compose.
-- `web|api|worker|cron|daemon.libsonnet` — one workload kind each: compose `base.core` (+ mixins) and add kind-specific manifests/modifiers.
-- `main.libsonnet` — the entry point: exposes the kinds plus `list(app)` (wraps an app's manifests in a `kind: List`).
+- `http|worker|cron|daemon.libsonnet` — one workload kind each: compose `base.core` (+ mixins) and add kind-specific manifests/modifiers.
+- `expose.libsonnet` — exposure recipes composed onto a `kurly.http` app with `+`: `ingress` (Ingress API), and for the Gateway API `gateway`/`listenerSet` (attach an HTTPRoute to an existing parent) and `ownGateway`/`ownListenerSet` (generate the parent too). **Workload and exposure are deliberately two separate composable axes — do not fold routing back into a workload kind or add a mode toggle.** Every Gateway API recipe emits an HTTPRoute. Each recipe captures its `host` argument lexically (not via `config`), so several exposures compose with independent hosts. A shared `requiresService` object-level assert fails composition onto Service-less kinds. The Gateway API objects are plain manifests (no gateway-api-libsonnet) to keep consumers' render-time dependency closure at k8s-libsonnet alone; XListenerSet is the experimental `gateway.networking.x-k8s.io/v1alpha1` kind.
+- `main.libsonnet` — the entry point: exposes the kinds, `expose`, and `list(app)` (wraps an app's manifests in a `kind: List`).
 
 **The fluent pattern:** `new(name, image)` returns an object whose hidden `config::` holds all knobs, whose hidden `with*(…)::` methods return `self + { config+:: … }`, and whose *visible* fields are the manifests, computed from `self.config` — so modifiers late-bind regardless of call order, and `std.objectValues(app)` is exactly the manifest set. Two traps:
 
-- Inside a field whose value is a **nested object literal**, `self` binds to that literal, not the app — `base.core` captures `local this = self` for those cases (e.g. `selectorLabels`).
-- A modifier that **adds a manifest** (e.g. `withHost` adding `ingress`) must compute it from `self.config`, never from another method on `self` that it is simultaneously overriding (self-recursion).
+- Inside a field whose value is a **nested object literal**, `self` binds to that literal, not the app — `base.core` captures `local this = self` for those cases (e.g. `selectorLabels`), and the expose recipes capture `local app = self` for the same reason.
+- A mixin that **adds a manifest** must compute it from `self.config`/captured args, never from another method on `self` that it is simultaneously overriding (self-recursion).
 
 **Selector stability:** `selectorLabels` (plus the `name` label k8s-libsonnet's constructors force) feed immutable `matchLabels`; user labels from `withLabels` go to metadata + pod template only. Do not let user labels reach a selector.
 
@@ -52,7 +53,7 @@ The library lives at the **repo root** (`main.libsonnet` + one file per workload
 
 ## Tests
 
-`tests/kurly_test.jsonnet` is an assertion suite: every field is a `std.assertEqual` (raises on mismatch), and CI additionally checks all values are `true` via jq. The examples double as end-to-end fixtures: `hack/validate-examples.sh` renders each one, splits the `List` items, and validates every manifest with kubeconform `-strict` against the upstream Kubernetes schemas.
+`tests/kurly_test.jsonnet` is an assertion suite: every field is a `std.assertEqual` (raises on mismatch), and CI additionally checks all values are `true` via jq. The `requiresService` assert is covered by a negative check in the CI test job (a worker + exposure composition must fail to evaluate) — jsonnet has no try/catch, so error paths cannot live in the assertion suite. The examples double as end-to-end fixtures: `hack/validate-examples.sh` renders each one, splits the `List` items, and validates every manifest with kubeconform `-strict` — core kinds against the upstream Kubernetes schemas, Gateway API kinds against the community CRD schema catalog (`-ignore-missing-schemas` covers kinds absent from both, e.g. XListenerSet; watch the summary's skipped count).
 
 ## CI
 

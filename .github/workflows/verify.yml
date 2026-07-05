@@ -34,6 +34,16 @@ jobs:
           go run github.com/google/go-jsonnet/cmd/jsonnet@latest -J vendor tests/kurly_test.jsonnet \
             | jq -e 'to_entries | all(.value == true)' >/dev/null
           echo "all assertions passed"
+      - name: Exposure onto a Service-less workload must fail
+        # The requiresService assert is the only guard against silently
+        # rendering a route to a Service that does not exist.
+        run: |
+          if go run github.com/google/go-jsonnet/cmd/jsonnet@latest -J vendor \
+            -e "local kurly = import 'main.libsonnet'; kurly.worker.new('w', 'img:1') + kurly.expose.ingress('h.example.com')" >/dev/null 2>&1; then
+            echo "::error::composing an exposure onto a worker rendered instead of failing"
+            exit 1
+          fi
+          echo "assert fired as expected"
   examples:
     runs-on: ubuntu-latest
     steps:

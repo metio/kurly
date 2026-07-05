@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: 0BSD
 
 // An in-cluster HTTP API: Deployment and Service, reached via the Service DNS
-// name (users.<namespace>.svc). No Ingress — nothing outside the cluster
-// talks to it.
+// name (users.<namespace>.svc). No exposure recipe — nothing outside the
+// cluster talks to it.
 local kurly = import '../main.libsonnet';
 
 kurly.list(
-  kurly.api.new('users', 'ghcr.io/example/users-api:2.4.1')
+  kurly.http.new('users', 'ghcr.io/example/users-api:2.4.1')
   .withPort(3000)
   .withHttpProbes('/healthz')
   .withEnv({

@@ -17,31 +17,45 @@ token unless a ServiceAccount is configured.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 kurly.list(
-  kurly.web.new('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
+  kurly.http.new('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
   .withReplicas(3)
   .withHttpProbes('/')
-  .withHost('shop.example.com')
+  + kurly.expose.gateway('shop.example.com', 'shared-gateway', gatewayNamespace='infrastructure')
 )
 ```
 
-renders a Deployment, a Service, and an Ingress, ready for
-`kubectl apply --filename -`.
+renders a Deployment, a Service, and an HTTPRoute attached to the platform
+team's Gateway, ready for `kubectl apply --filename -`.
 
 ## Workload kinds
 
 | Kind | Manifests | For |
 |---|---|---|
-| `kurly.web` | Deployment + Service + Ingress (via `withHost`) | HTTP workloads reachable from outside the cluster |
-| `kurly.api` | Deployment + Service | HTTP workloads for in-cluster consumers |
+| `kurly.http` | Deployment + Service | HTTP workloads; compose an `expose` recipe to accept outside traffic |
 | `kurly.worker` | Deployment | queue consumers, background processors |
 | `kurly.cron` | CronJob | scheduled jobs (`new` requires a schedule) |
 | `kurly.daemon` | DaemonSet | per-node agents |
 
 Every kind shares the same modifiers (`withEnv`, `withLabels`,
 `withResources`, `withServiceAccount`, `withHttpProbes`, …) plus per-kind ones
-like `withReplicas`, `withHost`, or `withSchedule`. Security escape hatches —
+like `withReplicas` or `withSchedule`. Security escape hatches —
 `withRootUser`, `withWritableRootFilesystem`, `withHostUsers` — each downgrade
 exactly one `restricted` default for the workloads that genuinely need it.
+
+## Exposure recipes
+
+Exposure is a separate axis from the workload: compose one (or several — an
+Ingress→Gateway migration can run both) onto a `kurly.http` app with `+`.
+Every Gateway API recipe emits an HTTPRoute; the `own*` recipes additionally
+generate the parent it attaches to.
+
+| Recipe | Emits | For |
+|---|---|---|
+| `expose.ingress(host, ingressClass=)` | Ingress | clusters on the Ingress API |
+| `expose.gateway(host, name, gatewayNamespace=, sectionName=)` | HTTPRoute | attaching to an existing shared Gateway (the usual setup) |
+| `expose.listenerSet(host, name, listenerSetNamespace=, sectionName=)` | HTTPRoute | attaching to an existing XListenerSet |
+| `expose.ownGateway(host, gatewayClass)` | Gateway + HTTPRoute | clusters without a shared Gateway |
+| `expose.ownListenerSet(host, gateway, gatewayNamespace=)` | XListenerSet + HTTPRoute | bringing your own listener to a shared Gateway |
 
 ## Consuming
 

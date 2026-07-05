@@ -21,4 +21,12 @@ for example in examples/*.jsonnet; do
     | split --lines=1 --additional-suffix=.json - "$workdir/$name-"
 done
 
-kubeconform -strict -summary "$workdir"/*.json
+# Gateway API kinds are CRDs, validated against the community CRD schema
+# catalog. -ignore-missing-schemas covers kinds absent from both locations
+# (e.g. the experimental XListenerSet); the summary line reports how many
+# manifests were skipped, so a silent gap stays visible.
+kubeconform -strict -summary \
+  -schema-location default \
+  -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+  -ignore-missing-schemas \
+  "$workdir"/*.json

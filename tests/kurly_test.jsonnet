@@ -5,16 +5,18 @@
 // mismatch), so `jsonnet -J vendor tests/kurly_test.jsonnet` is the test run.
 local kurly = import '../main.libsonnet';
 
-local web = kurly.web.new('shop', 'ghcr.io/example/shop:1.2.3')
-            .withReplicas(3)
-            .withLabels({ team: 'storefront' })
-            .withEnv({ ZED: 'last' })
-            .withEnv({ ALPHA: 'first' })
-            .withHttpProbes('/health')
-            .withIngressClass('nginx')
-            .withHost('shop.example.com');
+local shop = kurly.http.new('shop', 'ghcr.io/example/shop:1.2.3')
+             .withReplicas(3)
+             .withLabels({ team: 'storefront' })
+             .withEnv({ ZED: 'last' })
+             .withEnv({ ALPHA: 'first' })
+             .withHttpProbes('/health');
 
-local api = kurly.api.new('users', 'ghcr.io/example/users:2.0.0')
+local ingressed = shop + kurly.expose.ingress('shop.example.com', ingressClass='nginx');
+
+local routed = shop + kurly.expose.gateway('shop.example.com', 'shared-gateway', gatewayNamespace='infrastructure', sectionName='https');
+
+local api = kurly.http.new('users', 'ghcr.io/example/users:2.0.0')
             .withPort(3000)
             .withResources(limits={ memory: '256Mi' })
             .withAnnotations({ 'example.com/scrape': 'true' });
@@ -29,72 +31,146 @@ local cron = kurly.cron.new('backup', 'ghcr.io/example/backup:1.0.0', '13 3 * * 
 local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
 
 {
-  // --- web -----------------------------------------------------------------
-  web_replicas: std.assertEqual(web.deployment.spec.replicas, 3),
-  web_image: std.assertEqual(web.deployment.spec.template.spec.containers[0].image, 'ghcr.io/example/shop:1.2.3'),
+  // --- http ------------------------------------------------------------------
+  http_replicas: std.assertEqual(shop.deployment.spec.replicas, 3),
+  http_image: std.assertEqual(shop.deployment.spec.template.spec.containers[0].image, 'ghcr.io/example/shop:1.2.3'),
 
   // User labels land on metadata and the pod template, but never in the
   // immutable selector.
-  web_selector_is_stable: std.assertEqual(
-    web.deployment.spec.selector.matchLabels,
+  http_selector_is_stable: std.assertEqual(
+    shop.deployment.spec.selector.matchLabels,
     { name: 'shop', 'app.kubernetes.io/name': 'shop' }
   ),
-  web_user_labels_on_metadata: std.assertEqual(web.deployment.metadata.labels.team, 'storefront'),
-  web_user_labels_on_pods: std.assertEqual(web.deployment.spec.template.metadata.labels.team, 'storefront'),
+  http_user_labels_on_metadata: std.assertEqual(shop.deployment.metadata.labels.team, 'storefront'),
+  http_user_labels_on_pods: std.assertEqual(shop.deployment.spec.template.metadata.labels.team, 'storefront'),
 
   // The env map renders as a sorted array, so rendered output is deterministic
   // regardless of the order withEnv calls added the variables.
-  web_env_sorted: std.assertEqual(
-    web.deployment.spec.template.spec.containers[0].env,
+  http_env_sorted: std.assertEqual(
+    shop.deployment.spec.template.spec.containers[0].env,
     [{ name: 'ALPHA', value: 'first' }, { name: 'ZED', value: 'last' }]
   ),
 
-  web_probes: std.assertEqual(
-    web.deployment.spec.template.spec.containers[0].readinessProbe.httpGet,
+  http_probes: std.assertEqual(
+    shop.deployment.spec.template.spec.containers[0].readinessProbe.httpGet,
     { path: '/health', port: 'http' }
   ),
 
-  web_service_targets_named_port: std.assertEqual(
-    web.service.spec.ports,
+  http_service_targets_named_port: std.assertEqual(
+    shop.service.spec.ports,
     [{ name: 'http', port: 80, targetPort: 'http' }]
   ),
-  web_service_selector_matches_pods: std.assertEqual(
-    web.service.spec.selector,
+  http_service_selector_matches_pods: std.assertEqual(
+    shop.service.spec.selector,
     { 'app.kubernetes.io/name': 'shop' }
   ),
 
-  web_ingress_host: std.assertEqual(web.ingress.spec.rules[0].host, 'shop.example.com'),
-  web_ingress_class: std.assertEqual(web.ingress.spec.ingressClassName, 'nginx'),
-  web_ingress_backend: std.assertEqual(
-    web.ingress.spec.rules[0].http.paths[0].backend.service,
-    { name: 'shop', port: { name: 'http' } }
-  ),
-
-  // Without withHost there is no Ingress to render.
-  web_no_ingress_by_default: std.assertEqual(
-    std.objectHas(kurly.web.new('plain', 'img:1'), 'ingress'),
-    false
-  ),
-
-  // --- api -----------------------------------------------------------------
-  api_port_override: std.assertEqual(
+  http_port_override: std.assertEqual(
     api.deployment.spec.template.spec.containers[0].ports,
     [{ containerPort: 3000, name: 'http' }]
   ),
 
   // withResources merges: adding limits keeps the default requests.
-  api_limits_added: std.assertEqual(
+  http_limits_added: std.assertEqual(
     api.deployment.spec.template.spec.containers[0].resources,
     { requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }
   ),
 
-  api_annotations_on_metadata: std.assertEqual(api.deployment.metadata.annotations, { 'example.com/scrape': 'true' }),
-  api_annotations_on_pods: std.assertEqual(
+  http_annotations_on_metadata: std.assertEqual(api.deployment.metadata.annotations, { 'example.com/scrape': 'true' }),
+  http_annotations_on_pods: std.assertEqual(
     api.deployment.spec.template.metadata.annotations,
     { 'example.com/scrape': 'true' }
   ),
 
-  api_has_service: std.assertEqual(std.objectHas(api, 'service'), true),
+  // A plain http workload carries no routing objects at all.
+  http_no_ingress: std.assertEqual(std.objectHas(shop, 'ingress'), false),
+  http_no_httproute: std.assertEqual(std.objectHas(shop, 'httproute'), false),
+
+  // --- expose.ingress ----------------------------------------------------------
+  ingress_host: std.assertEqual(ingressed.ingress.spec.rules[0].host, 'shop.example.com'),
+  ingress_class: std.assertEqual(ingressed.ingress.spec.ingressClassName, 'nginx'),
+  ingress_backend: std.assertEqual(
+    ingressed.ingress.spec.rules[0].http.paths[0].backend.service,
+    { name: 'shop', port: { name: 'http' } }
+  ),
+  ingress_labels: std.assertEqual(ingressed.ingress.metadata.labels.team, 'storefront'),
+
+  // --- expose.gateway (reuse an existing Gateway) --------------------------------
+  gateway_parent: std.assertEqual(
+    routed.httproute.spec.parentRefs,
+    [{ name: 'shared-gateway', namespace: 'infrastructure', sectionName: 'https' }]
+  ),
+  gateway_hostnames: std.assertEqual(routed.httproute.spec.hostnames, ['shop.example.com']),
+  gateway_backend: std.assertEqual(
+    routed.httproute.spec.rules[0].backendRefs,
+    [{ name: 'shop', port: 80 }]
+  ),
+  gateway_no_ingress: std.assertEqual(std.objectHas(routed, 'ingress'), false),
+  gateway_generates_no_gateway: std.assertEqual(std.objectHas(routed, 'gateway'), false),
+
+  // Optional parentRef fields stay absent when not given.
+  gateway_minimal_parent: std.assertEqual(
+    (shop + kurly.expose.gateway('shop.example.com', 'shared')).httproute.spec.parentRefs,
+    [{ name: 'shared' }]
+  ),
+
+  // --- expose.listenerSet (reuse an existing XListenerSet) -----------------------
+  listenerset_parent: std.assertEqual(
+    (shop + kurly.expose.listenerSet('shop.example.com', 'tenant-listeners', listenerSetNamespace='infrastructure')).httproute.spec.parentRefs,
+    [{
+      group: 'gateway.networking.x-k8s.io',
+      kind: 'XListenerSet',
+      name: 'tenant-listeners',
+      namespace: 'infrastructure',
+    }]
+  ),
+
+  // --- expose.ownGateway ---------------------------------------------------------
+  own_gateway: std.assertEqual(
+    (shop + kurly.expose.ownGateway('shop.example.com', 'cilium')).gateway.spec,
+    {
+      gatewayClassName: 'cilium',
+      listeners: [{
+        name: 'http',
+        protocol: 'HTTP',
+        port: 80,
+        hostname: 'shop.example.com',
+        allowedRoutes: { namespaces: { from: 'Same' } },
+      }],
+    }
+  ),
+  own_gateway_route_attaches: std.assertEqual(
+    (shop + kurly.expose.ownGateway('shop.example.com', 'cilium')).httproute.spec.parentRefs,
+    [{ name: 'shop' }]
+  ),
+
+  // --- expose.ownListenerSet -------------------------------------------------------
+  own_listenerset: std.assertEqual(
+    (shop + kurly.expose.ownListenerSet('shop.example.com', 'shared-gateway', gatewayNamespace='infrastructure')).listenerset.spec,
+    {
+      parentRef: {
+        group: 'gateway.networking.k8s.io',
+        kind: 'Gateway',
+        name: 'shared-gateway',
+        namespace: 'infrastructure',
+      },
+      listeners: [{ name: 'http', protocol: 'HTTP', port: 80, hostname: 'shop.example.com' }],
+    }
+  ),
+  own_listenerset_route_attaches: std.assertEqual(
+    (shop + kurly.expose.ownListenerSet('shop.example.com', 'shared-gateway')).httproute.spec.parentRefs,
+    [{ group: 'gateway.networking.x-k8s.io', kind: 'XListenerSet', name: 'shop' }]
+  ),
+
+  // Exposures compose: running Ingress and Gateway API side by side (e.g.
+  // during a migration) renders both, each with its own host.
+  dual_exposure: std.assertEqual(
+    local both = shop
+                 + kurly.expose.ingress('old.example.com')
+                 + kurly.expose.gateway('new.example.com', 'shared');
+    [std.length(kurly.list(both).items), both.ingress.spec.rules[0].host, both.httproute.spec.hostnames],
+    [4, 'old.example.com', ['new.example.com']]
+  ),
 
   // --- worker ----------------------------------------------------------------
   worker_replicas: std.assertEqual(worker.deployment.spec.replicas, 4),
@@ -129,26 +205,27 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
   ),
 
   // --- list ------------------------------------------------------------------
-  list_kind: std.assertEqual(kurly.list(web).kind, 'List'),
-  list_renders_all_manifests: std.assertEqual(std.length(kurly.list(web).items), 3),
+  list_kind: std.assertEqual(kurly.list(ingressed).kind, 'List'),
+  list_renders_all_manifests: std.assertEqual(std.length(kurly.list(ingressed).items), 3),
+  list_gateway_mode: std.assertEqual(std.length(kurly.list(routed).items), 3),
   list_worker_has_only_deployment: std.assertEqual(std.length(kurly.list(worker).items), 1),
 
-  // Modifiers late-bind: an image swap after other modifiers still lands in
-  // the rendered container.
+  // Modifiers late-bind: an image swap after exposure still lands in the
+  // rendered container.
   late_binding: std.assertEqual(
-    web.withImage('ghcr.io/example/shop:2.0.0').deployment.spec.template.spec.containers[0].image,
+    routed.withImage('ghcr.io/example/shop:2.0.0').deployment.spec.template.spec.containers[0].image,
     'ghcr.io/example/shop:2.0.0'
   ),
 
   // --- Pod Security Standards (restricted) ------------------------------------
   // Every kind ships the full restricted profile by default.
   pss_pod_security_context: std.assertEqual(
-    web.deployment.spec.template.spec.securityContext,
+    shop.deployment.spec.template.spec.securityContext,
     { runAsNonRoot: true, seccompProfile: { type: 'RuntimeDefault' } }
   ),
-  pss_user_namespace: std.assertEqual(web.deployment.spec.template.spec.hostUsers, false),
+  pss_user_namespace: std.assertEqual(shop.deployment.spec.template.spec.hostUsers, false),
   pss_container_hardening: std.assertEqual(
-    web.deployment.spec.template.spec.containers[0].securityContext,
+    shop.deployment.spec.template.spec.containers[0].securityContext,
     {
       allowPrivilegeEscalation: false,
       readOnlyRootFilesystem: true,
@@ -171,7 +248,7 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
   // The ServiceAccount token is mounted only when a ServiceAccount is
   // explicitly configured.
   pss_no_token_by_default: std.assertEqual(
-    web.deployment.spec.template.spec.automountServiceAccountToken,
+    shop.deployment.spec.template.spec.automountServiceAccountToken,
     false
   ),
   pss_token_with_service_account: std.assertEqual(
@@ -181,19 +258,19 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
 
   // Escape hatches downgrade exactly one default and leave the rest intact.
   hatch_root_user: std.assertEqual(
-    web.withRootUser().deployment.spec.template.spec.securityContext,
+    shop.withRootUser().deployment.spec.template.spec.securityContext,
     { runAsNonRoot: false, seccompProfile: { type: 'RuntimeDefault' } }
   ),
   hatch_writable_root_filesystem: std.assertEqual(
-    web.withWritableRootFilesystem().deployment.spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem,
+    shop.withWritableRootFilesystem().deployment.spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem,
     false
   ),
   hatch_host_users: std.assertEqual(
-    std.objectHas(web.withHostUsers().deployment.spec.template.spec, 'hostUsers'),
+    std.objectHas(shop.withHostUsers().deployment.spec.template.spec, 'hostUsers'),
     false
   ),
   hatch_host_users_keeps_profile: std.assertEqual(
-    web.withHostUsers().deployment.spec.template.spec.securityContext.runAsNonRoot,
+    shop.withHostUsers().deployment.spec.template.spec.securityContext.runAsNonRoot,
     true
   ),
 }
