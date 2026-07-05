@@ -114,12 +114,12 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
     [{ name: 'shared' }]
   ),
 
-  // --- expose.listenerSet (reuse an existing XListenerSet) -----------------------
+  // --- expose.listenerSet (reuse an existing ListenerSet) ------------------------
   listenerset_parent: std.assertEqual(
     (shop + kurly.expose.listenerSet('shop.example.com', 'tenant-listeners', listenerSetNamespace='infrastructure')).httproute.spec.parentRefs,
     [{
-      group: 'gateway.networking.x-k8s.io',
-      kind: 'XListenerSet',
+      group: 'gateway.networking.k8s.io',
+      kind: 'ListenerSet',
       name: 'tenant-listeners',
       namespace: 'infrastructure',
     }]
@@ -145,6 +145,11 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
   ),
 
   // --- expose.ownListenerSet -------------------------------------------------------
+  own_listenerset_api: std.assertEqual(
+    local ls = (shop + kurly.expose.ownListenerSet('shop.example.com', 'shared-gateway')).listenerset;
+    [ls.apiVersion, ls.kind],
+    ['gateway.networking.k8s.io/v1', 'ListenerSet']
+  ),
   own_listenerset: std.assertEqual(
     (shop + kurly.expose.ownListenerSet('shop.example.com', 'shared-gateway', gatewayNamespace='infrastructure')).listenerset.spec,
     {
@@ -159,7 +164,7 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
   ),
   own_listenerset_route_attaches: std.assertEqual(
     (shop + kurly.expose.ownListenerSet('shop.example.com', 'shared-gateway')).httproute.spec.parentRefs,
-    [{ group: 'gateway.networking.x-k8s.io', kind: 'XListenerSet', name: 'shop' }]
+    [{ group: 'gateway.networking.k8s.io', kind: 'ListenerSet', name: 'shop' }]
   ),
 
   // Exposures compose: running Ingress and Gateway API side by side (e.g.

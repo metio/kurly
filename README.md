@@ -53,9 +53,9 @@ generate the parent it attaches to.
 |---|---|---|
 | `expose.ingress(host, ingressClass=)` | Ingress | clusters on the Ingress API |
 | `expose.gateway(host, name, gatewayNamespace=, sectionName=)` | HTTPRoute | attaching to an existing shared Gateway (the usual setup) |
-| `expose.listenerSet(host, name, listenerSetNamespace=, sectionName=)` | HTTPRoute | attaching to an existing XListenerSet |
+| `expose.listenerSet(host, name, listenerSetNamespace=, sectionName=)` | HTTPRoute | attaching to an existing ListenerSet |
 | `expose.ownGateway(host, gatewayClass)` | Gateway + HTTPRoute | clusters without a shared Gateway |
-| `expose.ownListenerSet(host, gateway, gatewayNamespace=)` | XListenerSet + HTTPRoute | bringing your own listener to a shared Gateway |
+| `expose.ownListenerSet(host, gateway, gatewayNamespace=)` | ListenerSet + HTTPRoute | bringing your own listener to a shared Gateway (it must allow ListenerSets via `spec.allowedListeners`) |
 
 ## Consuming
 

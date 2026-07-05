@@ -7,9 +7,9 @@
 //
 //   Ingress API:   ingress(host)
 //   Gateway API:   gateway(host, name)           — route to an existing Gateway
-//                  listenerSet(host, name)       — route to an existing XListenerSet
+//                  listenerSet(host, name)       — route to an existing ListenerSet
 //                  ownGateway(host, class)       — dedicated Gateway + route
-//                  ownListenerSet(host, gateway) — own XListenerSet on a shared Gateway + route
+//                  ownListenerSet(host, gateway) — own ListenerSet on a shared Gateway + route
 //
 // Every Gateway API recipe emits an HTTPRoute; the own* recipes additionally
 // generate the parent it attaches to. Each recipe captures its host argument
@@ -42,8 +42,8 @@ local httpRoute(app, host, parent) = {
 };
 
 local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
-  group: 'gateway.networking.x-k8s.io',
-  kind: 'XListenerSet',
+  group: 'gateway.networking.k8s.io',
+  kind: 'ListenerSet',
   name: name,
   namespace: namespace,
   sectionName: sectionName,
@@ -91,7 +91,7 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
     })),
   },
 
-  // listenerSet routes the host through an existing XListenerSet — for
+  // listenerSet routes the host through an existing ListenerSet — for
   // clusters where listener ownership is already delegated per tenant.
   listenerSet(host, listenerSet, listenerSetNamespace=null, sectionName=null):: requiresService {
     local app = self,
@@ -123,15 +123,16 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
     httproute: httpRoute(app, host, { name: app.config.name }),
   },
 
-  // ownListenerSet generates an XListenerSet that adds the workload's own
-  // listener to a shared Gateway (which must allow ListenerSet attachment)
-  // and routes the host through it.
+  // ownListenerSet generates a ListenerSet that adds the workload's own
+  // listener to a shared Gateway and routes the host through it. Gateways
+  // reject ListenerSet attachment by default — the shared Gateway must opt in
+  // via spec.allowedListeners.
   ownListenerSet(host, gateway, gatewayNamespace=null):: requiresService {
     local app = self,
 
     listenerset: {
-      apiVersion: 'gateway.networking.x-k8s.io/v1alpha1',
-      kind: 'XListenerSet',
+      apiVersion: 'gateway.networking.k8s.io/v1',
+      kind: 'ListenerSet',
       metadata: { name: app.config.name, labels: app.labels },
       spec: {
         parentRef: std.prune({

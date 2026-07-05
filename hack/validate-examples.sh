@@ -22,9 +22,9 @@ for example in examples/*.jsonnet; do
 done
 
 # Gateway API kinds are CRDs, validated against the community CRD schema
-# catalog. -ignore-missing-schemas covers kinds absent from both locations
-# (e.g. the experimental XListenerSet); the summary line reports how many
-# manifests were skipped, so a silent gap stays visible.
+# catalog. -ignore-missing-schemas covers kinds the catalog has not picked up
+# yet; the summary line reports how many manifests were skipped, so a silent
+# gap stays visible.
 kubeconform -strict -summary \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
