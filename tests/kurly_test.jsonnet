@@ -262,12 +262,16 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
   ),
 
   // Escape hatches downgrade exactly one default and leave the rest intact.
+  // A relaxed knob omits its field rather than writing the Kubernetes default.
   hatch_root_user: std.assertEqual(
     shop.withRootUser().deployment.spec.template.spec.securityContext,
-    { runAsNonRoot: false, seccompProfile: { type: 'RuntimeDefault' } }
+    { seccompProfile: { type: 'RuntimeDefault' } }
   ),
   hatch_writable_root_filesystem: std.assertEqual(
-    shop.withWritableRootFilesystem().deployment.spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem,
+    std.objectHas(
+      shop.withWritableRootFilesystem().deployment.spec.template.spec.containers[0].securityContext,
+      'readOnlyRootFilesystem'
+    ),
     false
   ),
   hatch_host_users: std.assertEqual(
@@ -277,5 +281,61 @@ local daemon = kurly.daemon.new('node-agent', 'ghcr.io/example/agent:1.0.0');
   hatch_host_users_keeps_profile: std.assertEqual(
     shop.withHostUsers().deployment.spec.template.spec.securityContext.runAsNonRoot,
     true
+  ),
+
+  // --- security profiles -------------------------------------------------------
+  // Profiles compose with `+` like exposures; each sets every security knob,
+  // so the last profile wins and hatches still fine-tune afterwards.
+
+  // Explicitly composing the default is a no-op.
+  security_restricted_is_default: std.assertEqual(
+    (shop + kurly.security.restricted).deployment.spec.template.spec,
+    shop.deployment.spec.template.spec
+  ),
+
+  // baseline drops only what `restricted` requires beyond baseline — the pod
+  // securityContext empties out entirely...
+  security_baseline_pod: std.assertEqual(
+    std.objectHas((shop + kurly.security.baseline).deployment.spec.template.spec, 'securityContext'),
+    false
+  ),
+  // ...while kurly's extra hardening (read-only rootfs, user namespaces),
+  // legal at every PSS level, stays on.
+  security_baseline_keeps_extras: std.assertEqual(
+    local spec = (shop + kurly.security.baseline).deployment.spec.template.spec;
+    [spec.containers[0].securityContext, spec.hostUsers],
+    [{ readOnlyRootFilesystem: true }, false]
+  ),
+
+  // privileged constrains nothing: no security fields anywhere. The token
+  // automount rule is ServiceAccount hygiene, not PSS, so it stays.
+  security_privileged: std.assertEqual(
+    local spec = (shop + kurly.security.privileged).deployment.spec.template.spec;
+    [
+      std.objectHas(spec, 'securityContext'),
+      std.objectHas(spec, 'hostUsers'),
+      std.objectHas(spec.containers[0], 'securityContext'),
+      spec.automountServiceAccountToken,
+    ],
+    [false, false, false, false]
+  ),
+
+  // The last-composed profile wins — restricted after baseline re-tightens.
+  security_retighten: std.assertEqual(
+    (shop + kurly.security.baseline + kurly.security.restricted).deployment.spec.template.spec.securityContext,
+    { runAsNonRoot: true, seccompProfile: { type: 'RuntimeDefault' } }
+  ),
+
+  // Hatches fine-tune after a profile: baseline plus host user namespaces.
+  security_profile_then_hatch: std.assertEqual(
+    local spec = (shop + kurly.security.baseline).withHostUsers().deployment.spec.template.spec;
+    [std.objectHas(spec, 'hostUsers'), spec.containers[0].securityContext.readOnlyRootFilesystem],
+    [false, true]
+  ),
+
+  // Profiles work on every kind, not just Deployments.
+  security_baseline_on_cron: std.assertEqual(
+    std.objectHas((cron + kurly.security.baseline).cronjob.spec.jobTemplate.spec.template.spec, 'securityContext'),
+    false
   ),
 }

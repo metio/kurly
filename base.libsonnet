@@ -24,9 +24,16 @@ local k = import './k.libsonnet';
       resources: { requests: { cpu: '100m', memory: '128Mi' } },
       serviceAccountName: null,
       probePath: null,
-      // Pod Security Standards `restricted` defaults. Each has an explicit
-      // escape hatch below for the workloads that genuinely need more.
+      // Security knobs, defaulting to the Pod Security Standards `restricted`
+      // profile plus extra hardening (read-only root filesystem, user
+      // namespaces). The with* hatches below relax one knob each; the
+      // kurly.security profile mixins set them as a bundle. A relaxed knob
+      // omits its field from the manifest rather than writing the Kubernetes
+      // default explicitly.
       runAsNonRoot: true,
+      seccompProfile: 'RuntimeDefault',
+      allowPrivilegeEscalation: false,
+      dropAllCapabilities: true,
       readOnlyRootFilesystem: true,
       hostUsers: false,
     },
@@ -39,20 +46,25 @@ local k = import './k.libsonnet';
       'app.kubernetes.io/managed-by': 'kurly',
     } + self.config.labels,
 
-    // The pod-level half of the Pod Security Standards `restricted` profile;
-    // each workload kind merges this into its pod template spec. The
-    // container-level half lives in `container`. hostUsers=false runs the pod
-    // in its own user namespace, so even a container-breakout lands in an
-    // unprivileged host user. The ServiceAccount token is only mounted when a
-    // ServiceAccount is explicitly configured — workloads that never talk to
-    // the apiserver should not carry credentials for it.
-    podSecurity:: {
-      securityContext: {
-        runAsNonRoot: this.config.runAsNonRoot,
-        seccompProfile: { type: 'RuntimeDefault' },
-      },
-      automountServiceAccountToken: this.config.serviceAccountName != null,
-    } + (if this.config.hostUsers then {} else { hostUsers: false }),
+    // The pod-level half of the security posture; each workload kind merges
+    // this into its pod template spec. The container-level half lives in
+    // `container`. hostUsers=false runs the pod in its own user namespace, so
+    // even a container-breakout lands in an unprivileged host user. The
+    // ServiceAccount token is only mounted when a ServiceAccount is
+    // explicitly configured — workloads that never talk to the apiserver
+    // should not carry credentials for it; that rule is about ServiceAccount
+    // hygiene, not the PSS profile, so no profile mixin touches it.
+    podSecurity::
+      local securityContext =
+        (if this.config.runAsNonRoot then { runAsNonRoot: true } else {})
+        + (
+          if this.config.seccompProfile == null
+          then {}
+          else { seccompProfile: { type: this.config.seccompProfile } }
+        );
+      (if securityContext == {} then {} else { securityContext: securityContext })
+      + { automountServiceAccountToken: this.config.serviceAccountName != null }
+      + (if this.config.hostUsers then {} else { hostUsers: false }),
 
     container::
       local cfg = self.config;
@@ -85,9 +97,21 @@ local k = import './k.libsonnet';
           + k.core.v1.container.livenessProbe.httpGet.withPath(cfg.probePath)
           + k.core.v1.container.livenessProbe.httpGet.withPort('http')
       )
-      + k.core.v1.container.securityContext.withAllowPrivilegeEscalation(false)
-      + k.core.v1.container.securityContext.withReadOnlyRootFilesystem(cfg.readOnlyRootFilesystem)
-      + k.core.v1.container.securityContext.capabilities.withDrop(['ALL']),
+      + (
+        if cfg.allowPrivilegeEscalation
+        then {}
+        else k.core.v1.container.securityContext.withAllowPrivilegeEscalation(false)
+      )
+      + (
+        if cfg.readOnlyRootFilesystem
+        then k.core.v1.container.securityContext.withReadOnlyRootFilesystem(true)
+        else {}
+      )
+      + (
+        if cfg.dropAllCapabilities
+        then k.core.v1.container.securityContext.capabilities.withDrop(['ALL'])
+        else {}
+      ),
 
     withImage(image):: self + { config+:: { image: image } },
     withPort(port):: self + { config+:: { port: port } },
@@ -104,9 +128,10 @@ local k = import './k.libsonnet';
     withServiceAccount(serviceAccountName):: self + { config+:: { serviceAccountName: serviceAccountName } },
     withHttpProbes(path='/healthz'):: self + { config+:: { probePath: path } },
 
-    // Security escape hatches. Each one downgrades a single `restricted`
-    // default for the workloads that genuinely need it — the rest of the
-    // profile stays intact.
+    // Security escape hatches. Each one downgrades a single default for the
+    // workloads that genuinely need it — the rest of the profile stays
+    // intact. The kurly.security mixins relax knobs as whole PSS profiles
+    // instead.
     withRootUser():: self + { config+:: { runAsNonRoot: false } },
     withWritableRootFilesystem():: self + { config+:: { readOnlyRootFilesystem: false } },
     withHostUsers():: self + { config+:: { hostUsers: true } },

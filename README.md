@@ -38,9 +38,7 @@ team's Gateway, ready for `kubectl apply --filename -`.
 
 Every kind shares the same modifiers (`withEnv`, `withLabels`,
 `withResources`, `withServiceAccount`, `withHttpProbes`, …) plus per-kind ones
-like `withReplicas` or `withSchedule`. Security escape hatches —
-`withRootUser`, `withWritableRootFilesystem`, `withHostUsers` — each downgrade
-exactly one `restricted` default for the workloads that genuinely need it.
+like `withReplicas` or `withSchedule`.
 
 ## Exposure recipes
 
@@ -56,6 +54,27 @@ generate the parent it attaches to.
 | `expose.listenerSet(host, name, listenerSetNamespace=, sectionName=)` | HTTPRoute | attaching to an existing ListenerSet |
 | `expose.ownGateway(host, gatewayClass)` | Gateway + HTTPRoute | clusters without a shared Gateway |
 | `expose.ownListenerSet(host, gateway, gatewayNamespace=)` | ListenerSet + HTTPRoute | bringing your own listener to a shared Gateway (it must allow ListenerSets via `spec.allowedListeners`) |
+
+## Security profiles
+
+Every kind ships the Pod Security Standards `restricted` profile by default,
+so composing a profile only ever relaxes the posture — for the images that
+genuinely can't run under `restricted`:
+
+| Profile | Effect |
+|---|---|
+| `security.restricted` | the default, written out — compose it after another profile to re-tighten |
+| `security.baseline` | allows root, the image's stock capabilities, privilege escalation, and an unpinned seccomp profile; the extra hardening beyond PSS (read-only root filesystem, user namespaces) stays on |
+| `security.privileged` | emits no security fields at all |
+
+```jsonnet
+kurly.http.new('erp', 'ghcr.io/example/erp:5.4.1') + kurly.security.baseline
+```
+
+A profile sets every security knob, so when several compose the last one
+wins. For single-knob adjustments the escape hatches — `withRootUser`,
+`withWritableRootFilesystem`, `withHostUsers` — each downgrade exactly one
+default; chain them *after* a profile to fine-tune it.
 
 ## Consuming
 
