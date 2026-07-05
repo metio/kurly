@@ -46,11 +46,11 @@
             markdownlint-cli2
 
             # Release plumbing: oras pushes the layer-per-stage OCI image,
-            # cosign signs keyless, git-cliff renders the per-unit release
-            # notes from conventional commits.
+            # cosign signs keyless. Release notes come from the metio/ci
+            # release-notes action (which owns its git-cliff pin), not from
+            # a tool here — one pin per tool.
             oras
             cosign
-            git-cliff
           ];
         };
       });
