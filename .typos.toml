@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+[files]
+extend-exclude = ["LICENSES/", "vendor/"]

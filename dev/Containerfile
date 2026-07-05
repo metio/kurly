@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Pinned to 1.26.4 (over `latest`) for a reproducible image whose stdlib has
+# current advisories patched. Bump as new advisories land.
+FROM docker.io/library/golang:1.26.4@sha256:32c0e6e5c4f6707717051091b4d0b077464a679eaab563e11474efc5328e2aa5
+
+RUN apt-get update && apt-get install -y git curl jq reuse yamllint
+
+# The Jsonnet toolchain: go-jsonnet's evaluator, formatter, and linter mirror
+# what jaas embeds, so a snippet that renders here renders identically
+# in-cluster. jb vendors the k8s-libsonnet dependency the same way the JOI
+# images lay it out.
+RUN go install github.com/google/go-jsonnet/cmd/jsonnet@latest
+RUN go install github.com/google/go-jsonnet/cmd/jsonnetfmt@latest
+RUN go install github.com/google/go-jsonnet/cmd/jsonnet-lint@latest
+RUN go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+
+# kubeconform validates the rendered manifests against the upstream Kubernetes
+# JSON schemas (the CI kubeconform job); actionlint lints the workflows.
+RUN go install github.com/yannh/kubeconform/cmd/kubeconform@latest
+RUN go install github.com/rhysd/actionlint/cmd/actionlint@latest
+
+# typos: the spell-checker the CI `typos` job runs against .typos.toml. It is a
+# Rust binary with no Go toolchain involvement, so fetch the prebuilt release
+# tarball. Renovate bumps it from the upstream releases.
+# renovate: datasource=github-releases depName=crate-ci/typos
+ARG TYPOS_VERSION=1.48.0
+RUN ARCH="$(uname -m)" \
+    && case "$ARCH" in x86_64) T=x86_64 ;; aarch64) T=aarch64 ;; *) T="$ARCH" ;; esac \
+    && curl -fsSL "https://github.com/crate-ci/typos/releases/download/v${TYPOS_VERSION}/typos-v${TYPOS_VERSION}-${T}-unknown-linux-musl.tar.gz" \
+       | tar -xz -C /usr/local/bin ./typos

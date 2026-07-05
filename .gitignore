@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# jb's vendor tree and lock file are recreated on demand (`jb install`); the
+# dependency floats at upstream HEAD, matching what the JOI images ship, so a
+# committed lock would only pin a state the runtime images never see.
+vendor/
+jsonnetfile.lock.json
