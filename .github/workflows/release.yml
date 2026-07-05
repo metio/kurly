@@ -47,6 +47,7 @@ jobs:
   discover:
     name: Discover changed units
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       library: ${{ steps.changed.outputs.library }}
       workloads: ${{ steps.changed.outputs.workloads }}
@@ -114,6 +115,7 @@ jobs:
     needs: discover
     if: needs.discover.outputs.any == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
@@ -132,6 +134,7 @@ jobs:
     needs: [discover, validate]
     if: needs.discover.outputs.library == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write # push the library-<version> tag + GitHub Release
       packages: write # push to GHCR
@@ -197,6 +200,7 @@ jobs:
     needs: [discover, validate]
     if: needs.discover.outputs.workloads != '[]'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       # One workload's failure must not block another's release.
       fail-fast: false

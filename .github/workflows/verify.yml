@@ -13,6 +13,7 @@ permissions:
 jobs:
   fmt:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
@@ -20,6 +21,7 @@ jobs:
         run: nix develop --command jsonnetfmt --test ./*.libsonnet examples/*.jsonnet workloads/*/*.jsonnet tests/*.jsonnet
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
@@ -47,6 +49,7 @@ jobs:
           echo "assert fired as expected"
   examples:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
@@ -56,18 +59,21 @@ jobs:
         run: nix develop --command hack/validate-examples.sh
   reuse:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
       - run: nix develop --command reuse lint
   yaml:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
       - run: nix develop --command yamllint .
   github-actions:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
@@ -76,22 +82,34 @@ jobs:
       - run: nix develop --command actionlint
   markdown:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
       - run: nix develop --command markdownlint-cli2 "**/*.md" "#vendor"
   typos:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: ./.github/actions/nix-devshell
       - run: nix develop --command typos
+  policy:
+    # The metio org convention policies (conftest/Rego) from metio/ci: SHA
+    # pins, permissions, timeouts, run-injection, and — because this repo
+    # ships a flake.nix — the flake-owned-toolchain rules.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: metio/ci/policy-check@afbf10fe3c5ceb438a1da090e78cc6c0159c4754 # 2026.7.5093733
   dco:
     # Developer Certificate of Origin: every commit must carry a Signed-off-by
     # trailer. Skipped for bot-authored PRs (Renovate/Dependabot cannot sign off);
     # a skipped job still satisfies the all-green gate below.
     if: github.event.pull_request.user.type != 'Bot'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
@@ -119,9 +137,10 @@ jobs:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.
     name: Verify
-    needs: [fmt, test, examples, reuse, yaml, github-actions, markdown, typos, dco]
+    needs: [fmt, test, examples, reuse, yaml, github-actions, markdown, typos, policy, dco]
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Verify every job succeeded or skipped
         env:
