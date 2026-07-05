@@ -1,6 +1,9 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
+# Every tool gate runs through the flake's devShell (`nix develop --command`),
+# so CI and local shells resolve the exact same tool versions from flake.lock.
+# Renovate maintains the lock; no job installs tools any other way.
 name: Verify
 on:
   pull_request:
@@ -12,33 +15,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
-        with:
-          go-version: stable
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
       - name: jsonnetfmt --test
-        run: go run github.com/google/go-jsonnet/cmd/jsonnetfmt@latest --test ./*.libsonnet examples/*.jsonnet tests/*.jsonnet
+        run: nix develop --command jsonnetfmt --test ./*.libsonnet examples/*.jsonnet tests/*.jsonnet
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
-        with:
-          go-version: stable
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
       - name: Vendor k8s-libsonnet
         # The dependency floats at upstream HEAD — the same state the JOI
         # k8s-libsonnet image ships — so an upstream break surfaces here as a
         # wanted signal rather than at a user's cluster.
-        run: go run github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest install
+        run: nix develop --command jb install
       - name: Run the assertion suite
         run: |
-          go run github.com/google/go-jsonnet/cmd/jsonnet@latest -J vendor tests/kurly_test.jsonnet \
-            | jq -e 'to_entries | all(.value == true)' >/dev/null
+          nix develop --command bash -c "
+            jsonnet -J vendor tests/kurly_test.jsonnet \
+              | jq -e 'to_entries | all(.value == true)' >/dev/null
+          "
           echo "all assertions passed"
       - name: Exposure onto a Service-less workload must fail
         # The requiresService assert is the only guard against silently
         # rendering a route to a Service that does not exist.
         run: |
-          if go run github.com/google/go-jsonnet/cmd/jsonnet@latest -J vendor \
+          if nix develop --command jsonnet -J vendor \
             -e "local kurly = import 'main.libsonnet'; kurly.worker.new('w', 'img:1') + kurly.expose.ingress('h.example.com')" >/dev/null 2>&1; then
             echo "::error::composing an exposure onto a worker rendered instead of failing"
             exit 1
@@ -48,47 +49,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
-        with:
-          go-version: stable
-      - name: Install the Jsonnet toolchain
-        run: |
-          go install github.com/google/go-jsonnet/cmd/jsonnet@latest
-          go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
-          go install github.com/yannh/kubeconform/cmd/kubeconform@latest
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
       - name: Vendor k8s-libsonnet
-        run: jb install
+        run: nix develop --command jb install
       - name: Render examples and validate against the Kubernetes schemas
-        run: hack/validate-examples.sh
+        run: nix develop --command hack/validate-examples.sh
   reuse:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - run: nix develop --command reuse lint
   yaml:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - run: pipx install yamllint && yamllint .
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - run: nix develop --command yamllint .
   github-actions:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: reviewdog/action-actionlint@6fb7acc99f4a1008869fa8a0f09cfca740837d9d # v1
-        with:
-          fail_on_error: true
-          filter_mode: nofilter
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      # The devShell carries shellcheck alongside actionlint, so run: blocks
+      # are shell-linted too — without it actionlint silently skips them.
+      - run: nix develop --command actionlint
   markdown:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: DavidAnson/markdownlint-cli2-action@ded1f9488f68a970bc66ea5619e13e9b52e601cd # v23
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - run: nix develop --command markdownlint-cli2 "**/*.md" "#vendor"
   typos:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: crate-ci/typos@37bb98842b0d8c4ffebdb75301a13db0267cef89 # v1
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
+      - run: nix develop --command typos
   dco:
     # Developer Certificate of Origin: every commit must carry a Signed-off-by
     # trailer. Skipped for bot-authored PRs (Renovate/Dependabot cannot sign off);

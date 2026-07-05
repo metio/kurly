@@ -25,23 +25,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
-        with:
-          go-version: stable
-      - name: Install the Jsonnet toolchain
-        run: |
-          go install github.com/google/go-jsonnet/cmd/jsonnet@latest
-          go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
-          go install github.com/yannh/kubeconform/cmd/kubeconform@latest
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
       - name: Vendor k8s-libsonnet
-        run: jb install
+        run: nix develop --command jb install
       - name: Run the assertion suite
         run: |
-          jsonnet -J vendor tests/kurly_test.jsonnet \
-            | jq -e 'to_entries | all(.value == true)' >/dev/null
+          nix develop --command bash -c "
+            jsonnet -J vendor tests/kurly_test.jsonnet \
+              | jq -e 'to_entries | all(.value == true)' >/dev/null
+          "
       - name: Render examples and validate against the Kubernetes schemas
-        run: hack/validate-examples.sh
+        run: nix develop --command hack/validate-examples.sh
   publish:
     name: Build and push the library image
     needs: validate

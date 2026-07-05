@@ -13,18 +13,21 @@ kurly is a Jsonnet library of composable Kubernetes workload recipes (`http`, `w
 
 ## Common commands
 
-This host has no toolchain installed; commands run inside the containerized dev shell driven by `dev/Containerfile` (a `.ilo.rc` at the repo root supplies the args):
+The toolchain is defined once in `flake.nix` and version-pinned by `flake.lock` (Renovate-maintained): CI runs every gate through the flake's devShell, so a gate that is green locally is green in CI by construction. With nix installed, enter the shell via `nix develop` (plain `nix-shell` works too — `shell.nix` reuses the flake via flake-compat, pinned through `flake.lock`):
 
 ```shell
-ilo bash -c 'jb install'                                    # vendor k8s-libsonnet (needed once, gitignored)
-ilo bash -c 'jsonnet -J vendor tests/kurly_test.jsonnet'    # run the assertion suite
-ilo bash -c 'jsonnetfmt --test *.libsonnet examples/*.jsonnet tests/*.jsonnet'  # format gate (-i to fix)
-ilo bash -c './hack/validate-examples.sh'                   # render examples + kubeconform
-ilo bash -c 'yamllint .'                                    # CI yaml gate
-ilo bash -c 'actionlint'                                    # CI workflow gate
-ilo bash -c 'typos'                                         # CI spelling gate
-ilo bash -c 'reuse lint'                                    # CI REUSE gate
+nix develop --command jb install                                    # vendor k8s-libsonnet (needed once, gitignored)
+nix develop --command jsonnet -J vendor tests/kurly_test.jsonnet    # run the assertion suite
+nix develop --command jsonnetfmt --test ./*.libsonnet examples/*.jsonnet tests/*.jsonnet  # format gate (-i to fix)
+nix develop --command ./hack/validate-examples.sh                   # render examples + kubeconform
+nix develop --command yamllint .                                    # CI yaml gate
+nix develop --command actionlint                                    # CI workflow gate (shellcheck comes from the shell too)
+nix develop --command typos                                         # CI spelling gate
+nix develop --command reuse lint                                    # CI REUSE gate
+nix develop --command markdownlint-cli2 '**/*.md' '#vendor'         # CI markdown gate
 ```
+
+On a host without nix, the same commands run inside the containerized dev shell driven by `dev/Containerfile` (`ilo bash -c '…'`), or through the nix container image (`podman run --rm -v "$PWD:/work:z" -v kurly-nix:/nix -w /work docker.io/nixos/nix:latest`, with `NIX_CONFIG='experimental-features = nix-command flakes'`). The ilo shell installs tools at `@latest` and can drift ahead of `flake.lock` — when versions disagree, the flake is authoritative because it is what CI runs.
 
 jsonnet-lint is deliberately not part of the gate: it cannot resolve the vendored k8s-libsonnet's internal `doc-util` imports (jb `legacyImports: false`) and drowns real findings in vendor noise.
 
@@ -58,4 +61,4 @@ The library lives at the **repo root** (`main.libsonnet` + one file per workload
 
 ## CI
 
-`verify.yml` is the PR gate (fmt, test, examples, reuse, yaml, github-actions, markdown, typos, dco), ending in the single `Verify` aggregate job — the only check to mark required in branch protection. `release.yml` runs on pushes to `main` touching the library: it re-runs the tests, builds the image, asserts **exactly one layer** (the contract that makes the image dual-consumable), pushes `:latest` + a dated calver tag over the six standard metio arches, and cosign-signs by digest. CI installs Jsonnet tools fresh via `go run`/`go install @latest`; the dev shell pre-installs the same tools so local and CI agree.
+`verify.yml` is the PR gate (fmt, test, examples, reuse, yaml, github-actions, markdown, typos, dco), ending in the single `Verify` aggregate job — the only check to mark required in branch protection. Every tool job is checkout → `DeterminateSystems/nix-installer-action` → `nix develop --command <gate>`: the tools come from the flake's devShell, pinned by `flake.lock`, never from marketplace actions or `@latest` installs — so CI and local shells cannot disagree on versions. The `dco` job is the one exception (pure git, no tools). `release.yml` runs on pushes to `main` touching the library: its validate job re-runs the tests through the same devShell, then builds the image, asserts **exactly one layer** (the contract that makes the image dual-consumable), pushes `:latest` + a dated calver tag over the six standard metio arches, and cosign-signs by digest. Renovate keeps `flake.lock` fresh (the repo-local `renovate.json` enables the `nix` manager + lock-file maintenance on top of the org preset).
