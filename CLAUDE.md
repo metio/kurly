@@ -27,7 +27,7 @@ nix develop --command reuse lint                                    # CI REUSE g
 nix develop --command markdownlint-cli2 '**/*.md' '#vendor'         # CI markdown gate
 ```
 
-On a host without nix, the same commands run inside the containerized dev shell driven by `dev/Containerfile` (`ilo bash -c '…'`), or through the nix container image (`podman run --rm -v "$PWD:/work:z" -v kurly-nix:/nix -w /work docker.io/nixos/nix:latest`, with `NIX_CONFIG='experimental-features = nix-command flakes'`). The ilo shell installs tools at `@latest` and can drift ahead of `flake.lock` — when versions disagree, the flake is authoritative because it is what CI runs.
+On this host, `nix` is [nix-portable](https://github.com/DavHau/nix-portable) (`~/.local/bin/nix`, store in `~/.nix-portable` — user-level, no system install) and needs `NP_RUNTIME=bwrap` (exported in `~/.bashrc`; the auto-selected runtime cannot nest the build sandbox's mount namespace here). Fallbacks that resolve the same flake: the nix container image (`podman run --rm -v "$PWD:/work:z" -v kurly-nix:/nix -w /work docker.io/nixos/nix:latest`, with `NIX_CONFIG='experimental-features = nix-command flakes'` — also the right path from sandboxed shells, where nix-portable's user namespaces are blocked), and the ilo dev shell (`ilo bash -c '…'`, `dev/Containerfile`) — though ilo installs tools at `@latest` and can drift ahead of `flake.lock`; when versions disagree, the flake is authoritative because it is what CI runs.
 
 jsonnet-lint is deliberately not part of the gate: it cannot resolve the vendored k8s-libsonnet's internal `doc-util` imports (jb `legacyImports: false`) and drowns real findings in vendor noise.
 
