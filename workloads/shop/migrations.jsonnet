@@ -6,7 +6,7 @@
 // and consumed via a StageSet's spec.migrationsSourceRef. Each entry gates on
 // a version boundary; actions are stageset-controller Action objects passed
 // through verbatim.
-local kurly = import '../main.libsonnet';
+local kurly = import '../../main.libsonnet';
 
 [
   // Crossing up to 2.0.0 recreates the worker Deployment: its selector

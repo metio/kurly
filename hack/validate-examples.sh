@@ -2,9 +2,9 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# Renders every example and validates each contained manifest against the
-# upstream Kubernetes JSON schemas via kubeconform. Examples render to one of
-# three shapes: a `kind: List` (single workload), a map of stage name → List
+# Renders every example and every workload and validates each contained
+# manifest against the upstream Kubernetes JSON schemas via kubeconform. The
+# files render to one of three shapes: a `kind: List` (single workload), a map of stage name → List
 # (a staged workload — every stage's items are validated), or a plain array (a
 # stageset-controller migration ladder — not Kubernetes manifests, checked
 # structurally instead). List items are split into one file per manifest
@@ -16,8 +16,9 @@ cd "$(dirname "$0")/.."
 workdir="$(mktemp -d)"
 trap 'rm -rf "$workdir"' EXIT
 
-for example in examples/*.jsonnet; do
-  name="$(basename "$example" .jsonnet)"
+for example in examples/*.jsonnet workloads/*/*.jsonnet; do
+  rel="${example%.jsonnet}"
+  name="${rel//\//-}"
   echo "rendering $example"
   rendered="$workdir/$name.rendered"
   jsonnet -J vendor "$example" > "$rendered"

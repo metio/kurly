@@ -6,7 +6,7 @@
 // a map of stage name -> kind: List — the shape the workload artifact
 // pipeline packs into one OCI layer per stage, which a stageset-controller
 // stage selects via its OCIRepository layerSelector.
-local kurly = import '../main.libsonnet';
+local kurly = import '../../main.libsonnet';
 
 local shop = kurly.http.new('shop', 'docker.io/nginxinc/nginx-unprivileged:1.29')
              .withHttpProbes('/');

@@ -93,11 +93,15 @@ kurly.stageLists(shop, {
 renders a map of stage name → `kind: List`, and a migration ladder is a plain
 array of `kurly.migrations.migration(name, to, from=, stage=, actions=)`
 entries (actions are stageset-controller `Action` objects, passed through
-verbatim). See `examples/staged.jsonnet` and `examples/migrations.jsonnet`.
+verbatim).
 
-The release pipeline packs a staged workload into **one OCI image with one
-layer per stage** plus a layer for the migration ladder, each under its own
-media type. A Flux `OCIRepository` selects exactly one stage:
+Workloads live as directories under `workloads/` (`stages.jsonnet` +
+`migrations.jsonnet`, see `workloads/shop/`), and each is a **release unit of
+its own**: it publishes as `ghcr.io/metio/kurly/workloads/<name>`, tagged and
+changelogged independently of the library and of every other workload. Each
+workload image is **one OCI image with one layer per stage** plus a layer for
+the migration ladder, each under its own media type. A Flux `OCIRepository`
+selects exactly one stage:
 
 ```yaml
 spec:

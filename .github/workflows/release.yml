@@ -1,64 +1,120 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# Publishes two OCI artifacts per release, versioned by metio/ci calver and
-# changelogged by git-cliff through metio/ci release-notes:
+# Multi-unit releases from one repository, modeled on metio/helm-charts: each
+# releasable unit — the library plus every directory under workloads/ — is
+# detected, versioned, published, tagged (<unit>-<version>), and changelogged
+# independently. Every unit released in one run shares a single metio/ci
+# calver version; release notes are rendered per unit by git-cliff, scoped to
+# the unit's paths and tag lineage, so one unit's commits never leak into
+# another's changelog and one unit's failure never blocks another's release.
 #
-# - ghcr.io/metio/kurly — the library, a single-layer image laid out like a
-#   jb vendor/ tree, consumable as a Flux OCIRepository source, an
-#   image-volume mount, or via `jb install`.
-# - ghcr.io/metio/kurly/examples/shop — the staged workload example, ONE
-#   image whose layers are the rollout stages plus the migration ladder, each
-#   under its own media type so a Flux OCIRepository selects exactly one via
-#   spec.layerSelector.mediaType. This is the reference for the
-#   kurly→jaas→stageset chain.
+# Units and their artifacts:
+# - library → ghcr.io/metio/kurly — single-layer image laid out like a jb
+#   vendor/ tree (Flux OCIRepository source, image-volume mount, jb install).
+# - workloads/<name> → ghcr.io/metio/kurly/workloads/<name> — ONE image whose
+#   layers are the rollout stages plus the migration ladder, each under its
+#   own media type for OCIRepository layerSelector selection.
 #
-# The full assertion suite and example validation run first through the nix
-# devShell, so a broken library never publishes.
+# Change detection covers this push's range only (like helm-charts): a failed
+# run is recovered by re-running via workflow_dispatch, whose empty input
+# releases everything. Library changes do not re-release workloads — a
+# workload picks up library changes with its own next release (or a forced
+# dispatch), mirroring how helm-charts handles its common library chart.
 name: Release
 on:
   push:
     branches: [main]
+    paths:
+      - '*.libsonnet'
+      - Containerfile
+      - 'workloads/**'
   workflow_dispatch:
-# Serialize release runs. Each run's release-notes lower bound is the latest
-# tag at the time its prepare job runs; two merges in quick succession would
-# both read that bound before either run has tagged, producing overlapping
-# notes. Queueing (no cancel) lets the earlier release finish and create its
-# tag first, so the next run's notes start from that tag and carry only its
-# own commits.
+    inputs:
+      unit:
+        description: Unit to force-release ("library" or a directory name under workloads/). Leave empty to release every unit.
+        required: false
+permissions:
+  contents: read
+# Serialize release runs. A unit's release notes are scoped to the range since
+# its previous <unit>-* tag; two runs touching the same unit in quick
+# succession would race on creating that tag and produce overlapping notes.
+# Queueing (no cancel) lets the earlier run tag first.
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
-permissions:
-  contents: read
 env:
-  LIBRARY_IMAGE: ghcr.io/metio/kurly
-  WORKLOAD_IMAGE: ghcr.io/metio/kurly/examples/shop
+  CLIFF_CONFIG: https://raw.githubusercontent.com/metio/git-cliff-config/16dc9654e9eb431d6169059509ce5552912a14ad/cliff.toml
 jobs:
-  prepare:
-    name: Prepare Release
+  discover:
+    name: Discover changed units
     runs-on: ubuntu-latest
     outputs:
-      needed: ${{ steps.gate.outputs.needed }}
+      library: ${{ steps.changed.outputs.library }}
+      workloads: ${{ steps.changed.outputs.workloads }}
+      any: ${{ steps.changed.outputs.any }}
       version: ${{ steps.version.outputs.version }}
-      previous: ${{ steps.gate.outputs.last }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
-      - id: gate
-        name: Check whether a release is needed
-        uses: metio/ci/needs-release@553c5f3c3d2693c7ef182954136bdfac7b25b80e # 2026.7.2101318
-        with:
-          paths: '*.libsonnet examples Containerfile'
+      - id: changed
+        env:
+          # Via env, never inlined into the script: a dispatch input containing
+          # a quote would otherwise inject commands into the release pipeline.
+          UNIT_INPUT: ${{ github.event.inputs.unit }}
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          all_workloads() { find workloads -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort || true; }
+          # "library" is the library unit's tag prefix — a workload directory
+          # of that name would collide with it.
+          if all_workloads | grep -qx 'library'; then
+            echo "::error::a workload must not be named 'library' (reserved for the library unit's tags)"
+            exit 1
+          fi
+          library=false
+          workloads=""
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            if [ -z "$UNIT_INPUT" ]; then
+              library=true
+              workloads="$(all_workloads)"
+            elif [ "$UNIT_INPUT" = "library" ]; then
+              library=true
+            elif [ -d "workloads/$UNIT_INPUT" ]; then
+              workloads="$UNIT_INPUT"
+            else
+              echo "::error::no such unit: $UNIT_INPUT"
+              exit 1
+            fi
+          else
+            # On the first push to the branch BEFORE is the all-zeros SHA (and
+            # the commit isn't present), so the diff would fail — treat every
+            # unit as changed instead of silently releasing nothing.
+            if [ -z "$BEFORE" ] || ! git rev-parse -q --verify "${BEFORE}^{commit}" >/dev/null 2>&1; then
+              library=true
+              workloads="$(all_workloads)"
+            else
+              diff="$(git diff --name-only "$BEFORE" "$SHA")"
+              echo "$diff" | grep -qE '^([^/]+\.libsonnet|Containerfile)$' && library=true
+              workloads="$(echo "$diff" | grep -oP '^workloads/\K[^/]+' | sort -u || true)"
+            fi
+          fi
+          {
+            echo "library=$library"
+            echo "workloads=$(printf '%s\n' "$workloads" | grep -v '^$' | jq --raw-input . | jq --slurp --compact-output .)"
+            if [ "$library" = "true" ] || [ -n "$workloads" ]; then echo "any=true"; else echo "any=false"; fi
+          } >> "$GITHUB_OUTPUT"
       - id: version
-        name: Compute the next version
-        if: steps.gate.outputs.needed == 'true'
-        uses: metio/ci/calver@553c5f3c3d2693c7ef182954136bdfac7b25b80e # 2026.7.2101318
+        name: Compute the shared version for this run
+        if: steps.changed.outputs.any == 'true'
+        uses: metio/ci/calver@0723b4d89f3638abaa992a666382b00bb7c45d3d # 2026.7.3153603
   validate:
-    name: Test the library
-    needs: prepare
-    if: needs.prepare.outputs.needed == 'true'
+    name: Test the library and workloads
+    needs: discover
+    if: needs.discover.outputs.any == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
@@ -71,50 +127,93 @@ jobs:
             jsonnet -J vendor tests/kurly_test.jsonnet \
               | jq -e 'to_entries | all(.value == true)' >/dev/null
           "
-      - name: Render examples and validate against the Kubernetes schemas
+      - name: Render examples and workloads, validate against the Kubernetes schemas
         run: nix develop --command hack/validate-examples.sh
   library:
-    name: Publish the library image
-    needs: [prepare, validate]
-    if: needs.prepare.outputs.needed == 'true'
+    name: Release the library
+    needs: [discover, validate]
+    if: needs.discover.outputs.library == 'true'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write # push the library-<version> tag + GitHub Release
       packages: write # push to GHCR
       id-token: write # cosign keyless image signing
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/nix-devshell
       - name: Assert exactly one layer
         # Single layer is the library-image contract: it serves as both an
         # image-volume mount and a Flux OCIRepository source without a
-        # layerSelector. (The workload example image is the deliberate
-        # opposite — one layer PER stage, selected by media type.)
+        # layerSelector. (Workload images are the deliberate opposite — one
+        # layer PER stage, selected by media type.)
         run: |
           docker build --file Containerfile --tag kurly-verify:latest .
           n=$(docker image inspect kurly-verify:latest --format '{{ len .RootFS.Layers }}')
           [ "$n" = "1" ] || { echo "::error::kurly image has $n layers, expected 1"; exit 1; }
       - name: Build, push and sign the image
-        uses: metio/ci/container-release@553c5f3c3d2693c7ef182954136bdfac7b25b80e # 2026.7.2101318
+        uses: metio/ci/container-release@0723b4d89f3638abaa992a666382b00bb7c45d3d # 2026.7.3153603
         with:
-          image: ${{ env.LIBRARY_IMAGE }}
-          version: ${{ needs.prepare.outputs.version }}
+          image: ghcr.io/metio/kurly
+          version: ${{ needs.discover.outputs.version }}
           file: ./Containerfile
+      - name: Tag and publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # git-cliff reads GITHUB_TOKEN (not GH_TOKEN) for its remote API
+          # calls; without it they are unauthenticated and rate-limit out.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.discover.outputs.version }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          tag="library-${VERSION}"
+          # Path-scoped notes since this unit's last tag; --tag-pattern keeps
+          # another unit's tag inside the range from splitting the notes.
+          prev="$(git tag --list 'library-*' --sort=-creatordate | head -1)"
+          cliff_args=(--config-url "$CLIFF_CONFIG"
+            --include-path '*.libsonnet' --include-path 'Containerfile'
+            --tag "$tag" --tag-pattern '^library-')
+          [ -n "$prev" ] && cliff_args+=("${prev}..HEAD")
+          CHART=library nix develop --command git-cliff "${cliff_args[@]}" > notes.md
+          cat >> notes.md <<EOF
+
+          ## Artifacts
+
+          \`ghcr.io/metio/kurly:${VERSION}\` — single layer, jb vendor-tree
+          layout; register it as a JsonnetLibrary (Flux OCIRepository source)
+          or mount it as an image volume. Signed with cosign keyless.
+          EOF
+          git tag "$tag" "$SHA"
+          git push origin "$tag"
+          gh release create "$tag" --title "$tag" --notes-file notes.md
   workload:
-    name: Publish the staged workload example
-    needs: [prepare, validate]
-    if: needs.prepare.outputs.needed == 'true'
+    name: Release workload ${{ matrix.workload }}
+    needs: [discover, validate]
+    if: needs.discover.outputs.workloads != '[]'
     runs-on: ubuntu-latest
+    strategy:
+      # One workload's failure must not block another's release.
+      fail-fast: false
+      matrix:
+        workload: ${{ fromJSON(needs.discover.outputs.workloads) }}
     permissions:
-      contents: read
+      contents: write # push the <workload>-<version> tag + GitHub Release
       packages: write # push to GHCR
       id-token: write # cosign keyless image signing
+    env:
+      WORKLOAD: ${{ matrix.workload }}
+      VERSION: ${{ needs.discover.outputs.version }}
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
       - uses: ./.github/actions/nix-devshell
       - name: Vendor k8s-libsonnet
         run: nix develop --command jb install
       - name: Build one layer per stage plus the migration ladder
-        run: nix develop --command hack/build-workload-artifact.sh examples/staged.jsonnet examples/migrations.jsonnet dist
+        run: nix develop --command hack/build-workload-artifact.sh "workloads/$WORKLOAD/stages.jsonnet" "workloads/$WORKLOAD/migrations.jsonnet" dist
       - uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4
         with:
           registry: ghcr.io
@@ -122,13 +221,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: push
         name: Push the layer-per-stage image
-        # nix develop passes the environment through, so VERSION and the
-        # GITHUB_* vars are visible inside the shell. layers.txt entries are
-        # word-split into file:mediaType args deliberately.
-        env:
-          VERSION: ${{ needs.prepare.outputs.version }}
         run: |
-          # The $vars expand inside the devShell's bash, not in this script.
+          # The $vars expand inside the devShell's bash, not in this script,
+          # and layers.txt entries are word-split into file:mediaType args
+          # deliberately.
           # shellcheck disable=SC2016
           nix develop --command bash -c '
             cd dist
@@ -136,72 +232,45 @@ jobs:
               --artifact-type application/vnd.metio.workload.v1 \
               --annotation "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
               --annotation "org.opencontainers.image.revision=$GITHUB_SHA" \
-              "$WORKLOAD_IMAGE:$VERSION,latest" \
+              "ghcr.io/metio/kurly/workloads/$WORKLOAD:$VERSION,latest" \
               $(cat layers.txt) > push.json
           '
           echo "digest=$(jq -r .digest dist/push.json)" >> "$GITHUB_OUTPUT"
       - name: Sign
-        run: nix develop --command cosign sign --yes "${{ env.WORKLOAD_IMAGE }}@${{ steps.push.outputs.digest }}"
-  github:
-    name: GitHub Release
-    # Gate the release on green publishes: the notes advertise both image
-    # tags, so they must exist before the release is published.
-    needs: [prepare, validate, library, workload]
-    if: needs.prepare.outputs.needed == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # create the GitHub Release
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-        with:
-          fetch-depth: 0
-      - id: notes
-        name: Generate Release Notes
-        uses: metio/ci/release-notes@553c5f3c3d2693c7ef182954136bdfac7b25b80e # 2026.7.2101318
-        with:
-          version: ${{ needs.prepare.outputs.version }}
-          previous: ${{ needs.prepare.outputs.previous }}
-      - name: Append usage footer
+        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/workloads/${WORKLOAD}@${{ steps.push.outputs.digest }}"
+      - name: Tag and publish the GitHub Release
         env:
-          VERSION: ${{ needs.prepare.outputs.version }}
-          NOTES: ${{ steps.notes.outputs.file }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ github.sha }}
         run: |
-          cat >> "$NOTES" <<EOF
+          set -euo pipefail
+          tag="${WORKLOAD}-${VERSION}"
+          prev="$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)"
+          cliff_args=(--config-url "$CLIFF_CONFIG"
+            --include-path "workloads/${WORKLOAD}/**"
+            --tag "$tag" --tag-pattern "^${WORKLOAD}-")
+          [ -n "$prev" ] && cliff_args+=("${prev}..HEAD")
+          CHART="$WORKLOAD" nix develop --command git-cliff "${cliff_args[@]}" > notes.md
+          cat >> notes.md <<EOF
 
           ## Artifacts
 
-          - **Library**: \`${LIBRARY_IMAGE}:${VERSION}\` — single layer, jb
-            vendor-tree layout; register it as a JsonnetLibrary (Flux
-            OCIRepository source) or mount it as an image volume.
-          - **Staged workload example**: \`${WORKLOAD_IMAGE}:${VERSION}\` —
-            one layer per rollout stage plus the migration ladder. Select a
-            stage from a Flux OCIRepository:
+          \`ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}\` — one layer
+          per rollout stage plus the migration ladder. Select a stage from a
+          Flux OCIRepository:
 
-            \`\`\`yaml
-            spec:
-              layerSelector:
-                mediaType: application/vnd.metio.stage.production.tar+gzip
-                operation: extract
-            \`\`\`
-
-            The migration ladder layer
-            (\`application/vnd.metio.migrations.tar+gzip\`) feeds a StageSet's
-            \`spec.migrationsSourceRef\`.
-
-          Both images are signed with cosign keyless; verify with
-
-          \`\`\`shell
-          cosign verify <image>@<digest> \\
-            --certificate-identity-regexp 'https://github.com/${{ github.repository }}/' \\
-            --certificate-oidc-issuer https://token.actions.githubusercontent.com
+          \`\`\`yaml
+          spec:
+            layerSelector:
+              mediaType: application/vnd.metio.stage.production.tar+gzip
+              operation: extract
           \`\`\`
+
+          The migration ladder layer
+          (\`application/vnd.metio.migrations.tar+gzip\`) feeds a StageSet's
+          \`spec.migrationsSourceRef\`. Signed with cosign keyless.
           EOF
-      - name: Create Release
-        uses: softprops/action-gh-release@718ea10b132b3b2eba29c1007bb80653f286566b # v3
-        with:
-          tag_name: ${{ needs.prepare.outputs.version }}
-          name: ${{ needs.prepare.outputs.version }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          draft: false
-          prerelease: false
-          body_path: ${{ steps.notes.outputs.file }}
+          git tag "$tag" "$SHA"
+          git push origin "$tag"
+          gh release create "$tag" --title "$tag" --notes-file notes.md

@@ -45,10 +45,12 @@
             shellcheck # actionlint shells out to it for run: blocks
             markdownlint-cli2
 
-            # Workload artifact publishing: oras pushes the layer-per-stage
-            # OCI image, cosign signs it keyless.
+            # Release plumbing: oras pushes the layer-per-stage OCI image,
+            # cosign signs keyless, git-cliff renders the per-unit release
+            # notes from conventional commits.
             oras
             cosign
+            git-cliff
           ];
         };
       });
