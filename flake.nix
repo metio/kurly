@@ -15,17 +15,17 @@
   description = "kurly development environment";
 
   inputs = {
-    ci.url = "github:metio/ci";
-    nixpkgs.follows = "ci/nixpkgs";
+    devshell.url = "github:metio/nix-devshell";
+    nixpkgs.follows = "devshell/nixpkgs";
     # Lets plain `nix-shell` reuse this flake's devShell via shell.nix.
-    flake-compat.follows = "ci/flake-compat";
+    flake-compat.follows = "devshell/flake-compat";
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      ci,
+      devshell,
       ...
     }:
     let
@@ -91,7 +91,7 @@
               check-tests
               check-examples
             ]
-            ++ ci.lib.lintTools pkgs;
+            ++ devshell.lib.lintTools pkgs;
             text = builtins.readFile ./scripts/verify.sh;
           };
           commands = [
@@ -102,7 +102,7 @@
           ];
         in
         {
-          default = ci.lib.mkDevShell {
+          default = devshell.lib.mkDevShell {
             inherit pkgs;
             packages = kurlyTools ++ commands;
             menu = ''
