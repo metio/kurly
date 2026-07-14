@@ -109,7 +109,7 @@ jobs:
       - id: version
         name: Compute the shared version for this run
         if: steps.changed.outputs.any == 'true'
-        uses: metio/ci/calver@afbf10fe3c5ceb438a1da090e78cc6c0159c4754 # 2026.7.5093733
+        uses: metio/ci/calver@ea61d45334e3168b830e6aff85446858b8e60031 # 2026.7.14190952
   validate:
     name: Test the library and workloads
     needs: discover
@@ -146,7 +146,7 @@ jobs:
           n=$(docker image inspect kurly-verify:latest --format '{{ len .RootFS.Layers }}')
           [ "$n" = "1" ] || { echo "::error::kurly image has $n layers, expected 1"; exit 1; }
       - name: Build, push and sign the image
-        uses: metio/ci/container-release@afbf10fe3c5ceb438a1da090e78cc6c0159c4754 # 2026.7.5093733
+        uses: metio/ci/container-release@ea61d45334e3168b830e6aff85446858b8e60031 # 2026.7.14190952
         with:
           image: ghcr.io/metio/kurly
           version: ${{ needs.discover.outputs.version }}
@@ -156,7 +156,7 @@ jobs:
         run: echo "prev=$(git tag --list 'library-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@afbf10fe3c5ceb438a1da090e78cc6c0159c4754 # 2026.7.5093733
+        uses: metio/ci/release-notes@ea61d45334e3168b830e6aff85446858b8e60031 # 2026.7.14190952
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: library
@@ -243,7 +243,7 @@ jobs:
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@afbf10fe3c5ceb438a1da090e78cc6c0159c4754 # 2026.7.5093733
+        uses: metio/ci/release-notes@ea61d45334e3168b830e6aff85446858b8e60031 # 2026.7.14190952
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: ${{ matrix.workload }}
