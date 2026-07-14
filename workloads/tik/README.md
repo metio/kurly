@@ -10,35 +10,32 @@ serves the read-only board and runs the store's writers (mail ingest, recurring
 tickets, dashboards, effects) over a shared append-only event store — as a
 composable kurly app.
 
-tik is a **single-stage** workload: its manifests have no install-order
-dependency worth gating (the store's PVC binds WaitForFirstConsumer, so it
-applies with the pod that consumes it). It ships one stage, `backend`
-([`backend.libsonnet`](backend.libsonnet)), plus a version-gated
+tik installs in a **single stage**: everything applies together. The store's PVC
+binds when its pod schedules (WaitForFirstConsumer), so the pod and its storage
+come up as one unit. The stage is `backend`
+([`backend.libsonnet`](backend.libsonnet)), alongside a version-gated
 [migration ladder](migrations.jsonnet).
 
 ## 1 · Build the workload
 
-[`backend.libsonnet`](backend.libsonnet) is a **composable app**, not a rendered
-List: it imports the kurly library, composes the supervisor with sensible
-defaults, and returns the app — with **no exposure** baked in, so you route it
-your own way. You adapt it by composing more `+` features, then render with
-`kurly.list`:
+[`backend.libsonnet`](backend.libsonnet) is a **composable app**: it imports the
+kurly library, composes the supervisor with sensible defaults, and returns the
+app for you to adapt. Exposure is yours to choose, so you point it at your own
+host. Adapt it by composing `+` features, then render with `kurly.list`:
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local tik = import 'github.com/metio/kurly/workloads/tik/backend.libsonnet';
 
 kurly.list(
-  tik()                                              // the workload's composable base
-  + kurly.expose.gateway('tik.internal', 'shared-gateway')  // add exposure with your host
-  + kurly.store('/var/lib/tik', '5Gi')               // override the store size — any feature
+  tik()                                                     // the workload's composable base
+  + kurly.expose.gateway('tik.internal', 'shared-gateway')  // route it at your host
+  + kurly.store('/var/lib/tik', '5Gi')                      // set the store size — any feature works
 )
 ```
 
-`+` *is* the parameter system: a workload author never has to enumerate knobs;
-the library's features are the parameters, so you can override or add anything.
-
-Render it locally through the flake devShell:
+`+` is the parameter system: the library's features are the parameters, so you
+override or add anything by composing. Render locally through the flake devShell:
 
 ```sh
 nix develop --command check-examples   # renders + validates every workload with defaults
@@ -48,8 +45,8 @@ nix develop --command check-examples   # renders + validates every workload with
 
 Deploy it in-cluster by making the kurly library and this workload importable as
 `JsonnetLibrary`s, then evaluating a `JsonnetSnippet` that composes and renders
-the app with your values as TLAs. Both OCI images are **single-layer**, so Flux
-pulls them with no `layerSelector` (the JOI/library shape).
+the app with your values as TLAs. Both OCI images are **single-layer**, so a
+plain Flux `OCIRepository` pulls them directly (the JOI/library shape).
 
 ```yaml
 # The kurly library (recipes) and the tik workload (source) images, from their
@@ -100,9 +97,9 @@ spec:
     storeSize: ["5Gi"]
 ```
 
-JaaS publishes the rendered manifests as an `ExternalArtifact`. The workload's
-`version` constant was rewritten from `dev` to the release version when the
-source was packed, so every object carries `app.kubernetes.io/version`.
+JaaS publishes the rendered manifests as an `ExternalArtifact`. The release
+stamps the workload's `version` constant into the packed source, so every object
+carries `app.kubernetes.io/version`.
 
 ## 3 · Deploy it with a StageSet
 
