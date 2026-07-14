@@ -2,58 +2,49 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# Builds the layer set of a workload OCI image: one gzipped tarball per
-# rollout stage (rendered from a stages file — a map of stage name -> kind:
-# List) plus one for the migration ladder. Each layer carries its own media
-# type, so a Flux OCIRepository selects exactly one stage via
-# spec.layerSelector.mediaType:
+# Prepares the build context for a workload's SINGLE-LAYER source image. The
+# workload's jsonnet source is laid out as a vendor tree
+# (github.com/metio/kurly/workloads/<name>/...) — the SAME shape and build as
+# the kurly library and JOI images: a `FROM scratch` image with one COPY, so its
+# single layer extracts to those files and JaaS renders them. This is why the
+# artifact is NOT an oras-pushed tarball: that layer would carry an image.title
+# annotation and be consumed as a file named source.tar.gz, not extracted to a
+# tree, so JaaS would find no source to import. Single-layer also lets Flux's
+# source-controller consume it with no layerSelector.
 #
-#   stage layer:      application/vnd.metio.stage.<stage>.tar+gzip
-#   migrations layer: application/vnd.metio.migrations.tar+gzip
+# The per-stage `version` constant is rewritten from 'dev' to the release
+# version, so the rendered objects carry app.kubernetes.io/version.
 #
-# Tarballs are deterministic (sorted entries, zero timestamps, numeric owner
-# 0:0, gzip -n), so rebuilding unchanged sources yields identical layer
-# digests. The emitted <outdir>/layers.txt lists `file:mediaType` pairs in
-# stable order (stages sorted, migrations last), ready to splat into
-# `oras push`.
-#
-# Usage: build-workload-artifact.sh <stages.jsonnet> <migrations.jsonnet> <outdir>
+# Emits <outdir>/Containerfile and <outdir>/github.com/... for `docker build`.
+# Usage: build-workload-artifact.sh <workload-dir> <version> <outdir>
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-stages_file="$1"
-migrations_file="$2"
+workload_dir="$1"
+version="$2"
 outdir="$3"
-mkdir -p "$outdir"
+name="$(basename "$workload_dir")"
 
-layers="$outdir/layers.txt"
-: > "$layers"
+dest="$outdir/github.com/metio/kurly/workloads/$name"
+mkdir -p "$dest"
 
-pack() {
-  local dir="$1" tarball="$2"
-  tar --create --sort=name --mtime=@0 --owner=0 --group=0 --numeric-owner \
-    --directory "$dir" . | gzip -n > "$tarball"
-}
-
-rendered="$outdir/stages.json"
-jsonnet -J vendor "$stages_file" > "$rendered"
-
-for stage in $(jq -r 'keys_unsorted | sort | .[]' "$rendered"); do
-  stagedir="$outdir/$stage"
-  mkdir -p "$stagedir"
-  jq -c --arg stage "$stage" '.[$stage].items[]' "$rendered" \
-    | split --lines=1 --additional-suffix=.json - "$stagedir/manifest-"
-  pack "$stagedir" "$outdir/$stage.tar.gz"
-  echo "$stage.tar.gz:application/vnd.metio.stage.$stage.tar+gzip" >> "$layers"
-  echo "packed stage '$stage' ($(jq -r --arg stage "$stage" '.[$stage].items | length' "$rendered") manifests)"
+# Copy the jsonnet source (the composable stage apps plus the migration ladder),
+# rewriting the version constant. Non-source files (README) stay out.
+shopt -s nullglob
+for source in "$workload_dir"/*.libsonnet "$workload_dir"/*.jsonnet; do
+  sed "s/^local version = 'dev';/local version = '$version';/" "$source" \
+    > "$dest/$(basename "$source")"
 done
+shopt -u nullglob
 
-# The ladder is JSON on the wire; the .yaml name keeps it valid for YAML-only
-# loaders since every JSON document is a YAML document.
-migrationsdir="$outdir/migrations"
-mkdir -p "$migrationsdir"
-jsonnet -J vendor "$migrations_file" > "$migrationsdir/migrations.yaml"
-pack "$migrationsdir" "$outdir/migrations.tar.gz"
-echo "migrations.tar.gz:application/vnd.metio.migrations.tar+gzip" >> "$layers"
-echo "packed migration ladder ($(jq -r 'length' "$migrationsdir/migrations.yaml") migrations)"
+cat > "$outdir/Containerfile" <<'CONTAINERFILE'
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+# A single-layer vendor-tree image of the workload's jsonnet source, the same
+# shape as the kurly library image, consumed by JaaS via a Flux OCIRepository.
+FROM scratch
+COPY github.com /github.com
+CONTAINERFILE
+
+echo "prepared '$name' source build context at version '$version' ($(find "$dest" -type f | wc -l) files)"

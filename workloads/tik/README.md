@@ -7,133 +7,113 @@ SPDX-License-Identifier: 0BSD
 
 The [`tik backend`](https://github.com/metio/tik) supervisor — one process that
 serves the read-only board and runs the store's writers (mail ingest, recurring
-tickets, dashboards, effects) over a shared append-only event store — declared
-with kurly's composable `+` features.
+tickets, dashboards, effects) over a shared append-only event store — as a
+composable kurly app.
 
 tik is a **single-stage** workload: its manifests have no install-order
 dependency worth gating (the store's PVC binds WaitForFirstConsumer, so it
-applies with the pod that consumes it, and the HTTPRoute simply has no endpoints
-until the board is ready). It ships one rollout stage, `backend`, plus a
-version-gated [migration ladder](migrations.jsonnet).
+applies with the pod that consumes it). It ships one stage, `backend`
+([`backend.libsonnet`](backend.libsonnet)), plus a version-gated
+[migration ladder](migrations.jsonnet).
 
 ## 1 · Build the workload
 
-[`stages.jsonnet`](stages.jsonnet) imports the kurly library and composes the
-supervisor. It is a `function(params)` so JaaS can render it with your own
-values; the artifact pipeline renders the defaults.
+[`backend.libsonnet`](backend.libsonnet) is a **composable app**, not a rendered
+List: it imports the kurly library, composes the supervisor with sensible
+defaults, and returns the app — with **no exposure** baked in, so you route it
+your own way. You adapt it by composing more `+` features, then render with
+`kurly.list`:
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
+local tik = import 'github.com/metio/kurly/workloads/tik/backend.libsonnet';
 
-function(image='ghcr.io/metio/tik:2026.7.14174051', host='tik.example.com', storeSize='1Gi')
-  local tik =
-    kurly.http('tik', image)
-    + kurly.replicas(1)                        // one supervisor: a single writer
-    + kurly.recreate()                         // ReadWriteOnce store — never roll
-    + kurly.port(7777)
-    + kurly.args(['backend', '--config=/etc/tik/pipelines.edn'])
-    + kurly.env({ TIK_ROOT: '/var/lib/tik', TIK_KEY: '/etc/tik-key/id_ed25519' })
-    + kurly.store('/var/lib/tik', storeSize)
-    + kurly.config({ 'pipelines.edn': pipelines }, mountPath='/etc/tik')
-    + kurly.secretMount('tik-signing-key', '/etc/tik-key', optional=true, defaultMode=256)
-    + kurly.scratch('/tmp', '64Mi')
-    + kurly.runAs(12345)
-    + kurly.probes('/tickets.edn')
-    + kurly.expose.gateway(host, 'shared-gateway', gatewayNamespace='infrastructure');
-  { backend: kurly.list(tik) }
+kurly.list(
+  tik()                                              // the workload's composable base
+  + kurly.expose.gateway('tik.internal', 'shared-gateway')  // add exposure with your host
+  + kurly.store('/var/lib/tik', '5Gi')               // override the store size — any feature
+)
 ```
 
-Render it locally through the flake devShell (`jb install` vendors k8s-libsonnet):
+`+` *is* the parameter system: a workload author never has to enumerate knobs;
+the library's features are the parameters, so you can override or add anything.
+
+Render it locally through the flake devShell:
 
 ```sh
-nix develop --command bash -c 'jb install && jsonnet -J vendor workloads/tik/stages.jsonnet'
+nix develop --command check-examples   # renders + validates every workload with defaults
 ```
-
-The published artifact is `ghcr.io/metio/kurly/workloads/tik`, one OCI layer per
-stage plus the migration ladder — see [Deploy without JaaS](#deploy-without-jaas).
 
 ## 2 · Render it with JaaS
 
-To render the workload **in-cluster with your own parameters**, make kurly
-importable as a `JsonnetLibrary` and evaluate a `JsonnetSnippet` that composes
-the workload with your values as TLAs. JaaS publishes the result as an
-`ExternalArtifact` that stageset consumes.
-
-All of kurly's *recipes* are one library, so they publish as **one image and one
-`JsonnetLibrary`** — the single-layer `ghcr.io/metio/kurly` image the release
-pipeline builds (`:latest` plus dated calver tags; pin a dated tag for
-reproducibility). This is distinct from the *workload* image
-(`ghcr.io/metio/kurly/workloads/tik`, one per workload — see
-[Deploy without JaaS](#deploy-without-jaas)): here we import the recipes to
-render tik ourselves, rather than pull tik's pre-rendered manifests.
+Deploy it in-cluster by making the kurly library and this workload importable as
+`JsonnetLibrary`s, then evaluating a `JsonnetSnippet` that composes and renders
+the app with your values as TLAs. Both OCI images are **single-layer**, so Flux
+pulls them with no `layerSelector` (the JOI/library shape).
 
 ```yaml
-# The kurly library image from kurly's release pipeline, pulled by Flux.
+# The kurly library (recipes) and the tik workload (source) images, from their
+# release pipelines. Both single-layer.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata:
-  name: kurly
-  namespace: tik
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly
-  ref:
-    tag: latest   # or a dated tag, e.g. 2026.7.20143022, to pin a revision
+metadata: { name: kurly, namespace: tik }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: tik-workload, namespace: tik }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/tik, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata:
-  name: kurly
-  namespace: tik
-spec:
-  sourceRef:
-    kind: OCIRepository
-    name: kurly
+metadata: { name: kurly, namespace: tik }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: tik-workload, namespace: tik }
+spec: { sourceRef: { kind: OCIRepository, name: tik-workload } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata:
-  name: tik
-  namespace: tik
+metadata: { name: tik, namespace: tik }
 spec:
   serviceAccountName: tik-renderer
-  # The composition, importing kurly by its library import path. This is the
-  # same shape as stages.jsonnet, with the library path in place of the repo's
-  # relative import.
+  # Compose the workload with your environment's features, then render.
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local tik = import 'github.com/metio/kurly/workloads/tik/backend.libsonnet';
       function(host='tik.example.com', storeSize='1Gi')
-        { backend: kurly.list(
-            kurly.http('tik', 'ghcr.io/metio/tik:2026.7.14174051')
-            + kurly.replicas(1) + kurly.recreate() + kurly.port(7777)
-            + kurly.args(['backend', '--config=/etc/tik/pipelines.edn'])
-            + kurly.store('/var/lib/tik', storeSize)
-            + kurly.expose.gateway(host, 'shared-gateway')) }
-  # Make the kurly library importable under the path used above.
+        kurly.list(
+          tik()
+          + kurly.expose.gateway(host, 'shared-gateway')
+          + kurly.store('/var/lib/tik', storeSize)
+        )
+  # Both the recipes and the workload source are importable by canonical path.
   libraries:
-    - kind: JsonnetLibrary
-      name: kurly
-      importPath: github.com/metio/kurly
-  # Your adaptations, passed as top-level arguments to the function.
+    - { kind: JsonnetLibrary, name: kurly,        importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: tik-workload,  importPath: github.com/metio/kurly/workloads/tik }
+  # Your adaptations, as top-level arguments.
   tlas:
     host: ["tik.internal.example.com"]
     storeSize: ["5Gi"]
 ```
 
+JaaS publishes the rendered manifests as an `ExternalArtifact`. The workload's
+`version` constant was rewritten from `dev` to the release version when the
+source was packed, so every object carries `app.kubernetes.io/version`.
+
 ## 3 · Deploy it with a StageSet
 
 A `StageSet` deploys the workload's stages in order, pinning artifact revisions
 at the start of the run and gating each stage before the next. A stage names the
-`JsonnetSnippet` that produced its artifact (the producer-aware reference);
-stageset resolves the snippet's `ExternalArtifact` and applies it.
+`JsonnetSnippet` that produced its artifact (the producer-aware reference).
 
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata:
-  name: tik
-  namespace: tik
+metadata: { name: tik, namespace: tik }
 spec:
   serviceAccountName: tik-deployer   # every apply runs as this tenant SA
   rollbackOnFailure: true            # restore the last-good revision on failure
@@ -148,35 +128,10 @@ spec:
           - apiVersion: apps/v1
             kind: Deployment
             name: tik
-  # The version-gated migration ladder — tik verify / reprocess at boundaries.
+  # The version-gated migration ladder — tik verify / reprocess at boundaries —
+  # rendered from migrations.jsonnet by its own snippet.
   migrationsSourceRef:
     apiVersion: jaas.metio.wtf/v1
     kind: JsonnetSnippet
-    name: tik
+    name: tik-migrations
 ```
-
-## Deploy without JaaS
-
-If you don't need per-cluster parameters, skip the snippet and point Flux
-straight at the pre-rendered workload artifact — one layer per stage, selected
-by media type:
-
-```yaml
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
-metadata:
-  name: tik-backend
-  namespace: tik
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/tik
-  ref:
-    tag: latest
-  layerSelector:
-    mediaType: application/vnd.metio.stage.backend.tar+gzip
-    operation: extract
-```
-
-and reference that `OCIRepository` from the StageSet stage's `sourceRef`
-(`kind: OCIRepository`) instead of the `JsonnetSnippet`. The migration ladder
-rides the `application/vnd.metio.migrations.tar+gzip` layer.

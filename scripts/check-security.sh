@@ -13,27 +13,35 @@
 # hatches, so they are exempt from the security SCORE — but still policy-checked.
 
 # k8s-libsonnet floats at upstream HEAD; vendor it fresh so the gate checks what
-# clusters actually run.
+# clusters actually run, and symlink the repo into the vendor tree so workloads
+# resolve kurly's canonical import path the way JaaS does in-cluster.
 jb install
+mkdir -p vendor/github.com/metio
+ln -sfn ../../.. vendor/github.com/metio/kurly
 
 workdir="$(mktemp -d)"
 trap 'rm -rf "$workdir"' EXIT
 mandir="$workdir/manifests"
 mkdir -p "$mandir"
 
-for source in examples/*.jsonnet workloads/*/stages.jsonnet; do
-  name="$(printf '%s' "${source%.jsonnet}" | tr '/' '-')"
-  rendered="$workdir/$name.rendered.json"
-  jsonnet -J vendor "$source" > "$rendered"
-  if [ "$(jq -r 'if .kind == "List" then "list" else "stagemap" end' "$rendered")" = "list" ]; then
-    jq -c '.items[]' "$rendered" \
-      | split --lines=1 --additional-suffix=.json - "$mandir/$name-"
-  else
-    for stage in $(jq -r 'keys[]' "$rendered"); do
-      jq -c --arg stage "$stage" '.[$stage].items[]' "$rendered" \
-        | split --lines=1 --additional-suffix=.json - "$mandir/$name-$stage-"
-    done
-  fi
+# Examples render to a List directly; a workload stage is a composable app
+# (function), rendered with defaults and wrapped in kurly.list like a consumer's
+# JsonnetSnippet does.
+render() {
+  local src="$1"
+  case "$src" in
+    workloads/*/*.libsonnet)
+      jsonnet -J vendor -e "(import 'github.com/metio/kurly/main.libsonnet').list((import '$src')())" ;;
+    *)
+      jsonnet -J vendor "$src" ;;
+  esac
+}
+
+for source in examples/*.jsonnet workloads/*/*.libsonnet; do
+  name="$(printf '%s' "${source%.*}" | tr '/' '-')"
+  render "$source" \
+    | jq -c '.items[]' \
+    | split --lines=1 --additional-suffix=.json - "$mandir/$name-"
 done
 echo "rendered $(find "$mandir" -name '*.json' | wc -l) manifests"
 

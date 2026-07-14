@@ -43,12 +43,6 @@ local stateful = kurly.http('vault', 'ghcr.io/example/vault:1.0.0')
                  + kurly.secretMount('vault-key', '/etc/vault-keys', optional=true, defaultMode=256)
                  + kurly.scratch('/tmp', '32Mi');
 
-// A workload's stages: an ordered partition of its manifests into gated phases.
-local staged = kurly.stages([
-  kurly.stage('backend', [stateful.configMap, stateful.storeClaim, stateful.deployment, stateful.service]),
-  kurly.stage('edge', [ingressed.ingress]),
-]);
-
 local containerOf(app) = app.deployment.spec.template.spec.containers[0];
 local podOf(app) = app.deployment.spec.template.spec;
 
@@ -406,17 +400,6 @@ local podOf(app) = app.deployment.spec.template.spec;
   security_baseline_on_cron: std.assertEqual(
     std.objectHas((cron + kurly.security.baseline).cronjob.spec.jobTemplate.spec.template.spec, 'securityContext'),
     false
-  ),
-
-  // --- stages ----------------------------------------------------------------
-  // A workload's stages are an ordered partition of its manifests into gated
-  // install phases (not environments); each stage renders a kind: List subset.
-  stages_keys: std.assertEqual(std.objectFields(staged), ['backend', 'edge']),
-  stages_render_lists: std.assertEqual([staged.backend.kind, staged.edge.kind], ['List', 'List']),
-  stages_partition: std.assertEqual([std.length(staged.backend.items), std.length(staged.edge.items)], [4, 1]),
-  stages_manifest_kinds: std.assertEqual(
-    [m.kind for m in staged.backend.items],
-    ['ConfigMap', 'PersistentVolumeClaim', 'Deployment', 'Service']
   ),
 
   // --- migrations ------------------------------------------------------------------

@@ -6,7 +6,7 @@
 // named stage. tik's store is an append-only log whose stage is derived on
 // read, so a migration never rewrites events — it re-derives or verifies.
 // Actions are stageset-controller Action objects, passed through verbatim.
-local kurly = import '../../main.libsonnet';
+local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 [
   // Crossing up to 2.0.0 re-derives the board: a new canonical format version

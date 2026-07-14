@@ -49,25 +49,11 @@
 
   // A workload's stages are the ORDERED, GATED phases of installing ONE
   // application — apply a phase, wait for it to go healthy, then the next — not
-  // environment tiers. Each stage names a SUBSET of the app's manifests (place
-  // a manifest handle like app.deployment or app.storeClaim in the phase it
-  // belongs to); stageset-controller applies them in the order its StageSet
-  // declares, gating between. Order manifests by real dependency, not by kind:
-  // a PVC that binds WaitForFirstConsumer must ride in the same stage as the
-  // pod that consumes it, or it never binds. Many workloads need only ONE stage
-  // — do not manufacture ordering an application does not have.
-  //
-  //   stages([
-  //     stage('data', [app.configMap, app.storeClaim]),
-  //     stage('app', [app.deployment, app.service]),
-  //   ])
-  //
-  // yields the stage-name → kind: List map the workload artifact pipeline packs
-  // one OCI layer per stage from.
-  stage(name, manifests):: { name: name, manifests: manifests },
-
-  stages(stageList):: {
-    [entry.name]: $.listOf(entry.manifests)
-    for entry in stageList
-  },
+  // environment tiers. Each stage is its OWN file under workloads/<name>/: a
+  // `function(params)` returning a COMPOSABLE app (a base with defaults, no
+  // exposure), which a consumer imports, adapts with `+` features, and renders
+  // with kurly.list — one stage file maps to one stageset stage. Many workloads
+  // need only ONE stage; do not manufacture ordering an application lacks.
+  // (A PVC that binds WaitForFirstConsumer must ride with the pod that consumes
+  // it, so it cannot be gated into a stage of its own.)
 } + (import './features.libsonnet')

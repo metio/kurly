@@ -23,6 +23,8 @@
   args(args):: { config+:: { args: args } },
   command(command):: { config+:: { command: command } },
   env(env):: { config+:: { env+: env } },
+  // The workload version, stamped as app.kubernetes.io/version on every object.
+  version(version):: { config+:: { version: version } },
   labels(labels):: { config+:: { labels+: labels } },
   annotations(annotations):: { config+:: { annotations+: annotations } },
   resources(requests=null, limits=null):: {

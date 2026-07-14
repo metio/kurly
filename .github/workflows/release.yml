@@ -29,6 +29,9 @@ on:
       - '*.libsonnet'
       - Containerfile
       - 'workloads/**'
+      # A workload README is documentation, not shipped in the source artifact,
+      # so a README-only edit must not cut a release.
+      - '!workloads/**/README.md'
   workflow_dispatch:
     inputs:
       unit:
@@ -98,7 +101,9 @@ jobs:
             else
               diff="$(git diff --name-only "$BEFORE" "$SHA")"
               echo "$diff" | grep -qE '^([^/]+\.libsonnet|Containerfile)$' && library=true
-              workloads="$(echo "$diff" | grep -oP '^workloads/\K[^/]+' | sort -u || true)"
+              # A README-only change to a workload is not a release (the README
+              # is docs, not part of the shipped source artifact).
+              workloads="$(echo "$diff" | grep -v '/README\.md$' | grep -oP '^workloads/\K[^/]+' | sort -u || true)"
             fi
           fi
           {
@@ -211,34 +216,34 @@ jobs:
         with:
           fetch-depth: 0
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
-      - name: Vendor k8s-libsonnet
-        run: nix develop --command jb install
-      - name: Build one layer per stage plus the migration ladder
-        run: nix develop --command hack/build-workload-artifact.sh "workloads/$WORKLOAD/stages.jsonnet" "workloads/$WORKLOAD/migrations.jsonnet" dist
+      - name: Prepare the source build context (version stamped in)
+        run: nix develop --command hack/build-workload-artifact.sh "workloads/$WORKLOAD" "$VERSION" dist
       - uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - id: push
-        name: Push the layer-per-stage image
+      - id: build
+        name: Build, assert single-layer, and push the source image
+        env:
+          IMAGE: ghcr.io/metio/kurly/workloads/${{ matrix.workload }}
         run: |
-          # The $vars expand inside the devShell's bash, not in this script,
-          # and layers.txt entries are word-split into file:mediaType args
-          # deliberately.
-          # shellcheck disable=SC2016
-          nix develop --command bash -c '
-            cd dist
-            oras push --format json \
-              --artifact-type application/vnd.metio.workload.v1 \
-              --annotation "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
-              --annotation "org.opencontainers.image.revision=$GITHUB_SHA" \
-              "ghcr.io/metio/kurly/workloads/$WORKLOAD:$VERSION,latest" \
-              $(cat layers.txt) > push.json
-          '
-          echo "digest=$(jq -r .digest dist/push.json)" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+          # A FROM-scratch vendor-tree image with one COPY: a single layer that
+          # Flux extracts to the source files (the same shape as the library
+          # image). Assert the single layer — a selector-less OCIRepository and
+          # JaaS's vendor-tree search both depend on it.
+          docker build --file dist/Containerfile --tag "$IMAGE:$VERSION" --tag "$IMAGE:latest" \
+            --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            dist
+          layers="$(docker image inspect "$IMAGE:$VERSION" --format '{{ len .RootFS.Layers }}')"
+          [ "$layers" = "1" ] || { echo "::error::workload image has $layers layers, expected 1"; exit 1; }
+          docker push "$IMAGE:$VERSION"
+          docker push "$IMAGE:latest"
+          echo "digest=$(docker image inspect "$IMAGE:$VERSION" --format '{{ index .RepoDigests 0 }}' | cut -d@ -f2)" >> "$GITHUB_OUTPUT"
       - name: Sign
-        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/workloads/${WORKLOAD}@${{ steps.push.outputs.digest }}"
+        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/workloads/${WORKLOAD}@${{ steps.build.outputs.digest }}"
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
@@ -267,20 +272,14 @@ jobs:
 
           ## Artifacts
 
-          \`ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}\` — one layer
-          per rollout stage plus the migration ladder. Select a stage from a
-          Flux OCIRepository:
-
-          \`\`\`yaml
-          spec:
-            layerSelector:
-              mediaType: application/vnd.metio.stage.production.tar+gzip
-              operation: extract
-          \`\`\`
-
-          The migration ladder layer
-          (\`application/vnd.metio.migrations.tar+gzip\`) feeds a StageSet's
-          \`spec.migrationsSourceRef\`. Signed with cosign keyless.
+          \`ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}\` — the
+          workload's jsonnet SOURCE (single-layer, vendor-tree layout, this
+          version stamped into it), rendered by JaaS with your own parameters.
+          Pull it with a selector-less Flux OCIRepository (it is single-layer,
+          like the library image), reference it from a JaaS JsonnetSnippet
+          (importing the kurly JsonnetLibrary), compose your environment with
+          \`+\` features, and feed the result into a stageset StageSet — see the
+          workload's README. Signed with cosign keyless.
           EOF
           git tag "$tag" "$SHA"
           git push origin "$tag"

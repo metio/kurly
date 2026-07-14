@@ -68,6 +68,10 @@ local exclusionConflicts(exclusive) = [
       command: [],
       args: [],
       env: {},
+      // The workload version, stamped as app.kubernetes.io/version. Left null
+      // by default; a workload sets it from its `version` constant (which the
+      // release pipeline rewrites from 'dev' to the calver).
+      version: null,
       labels: {},
       annotations: {},
       resources: { requests: { cpu: '100m', memory: '128Mi' } },
@@ -112,7 +116,11 @@ local exclusionConflicts(exclusive) = [
 
     labels:: self.selectorLabels {
       'app.kubernetes.io/managed-by': 'kurly',
-    } + self.config.labels,
+    } + (
+      if this.config.version == null
+      then {}
+      else { 'app.kubernetes.io/version': this.config.version }
+    ) + self.config.labels,
 
     // The volume/mount plumbing, computed once from config so the container
     // (mounts) and the pod template (volumes) stay in lockstep, and the owned
