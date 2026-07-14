@@ -28,7 +28,12 @@ namespace="kurly-smoke"
 kubectl create namespace "$namespace" --dry-run=client --output=yaml | kubectl apply --filename=-
 
 echo "== apply the tik workload backend stage (PVC + ConfigMap + Deployment + Service) =="
-jsonnet -J vendor -e "(import 'github.com/metio/kurly/main.libsonnet').list((import 'workloads/tik/backend.libsonnet')())" \
+# kind inside GitHub Actions cannot create nested user namespaces — the runner
+# denies the pod's sysfs mount under hostUsers:false, so the sandbox never
+# starts. Relax that ONE hardening knob for the smoke; the read-only root
+# filesystem, dropped capabilities, seccomp, the PVC/config/secret/scratch
+# mounts, the pinned uid, and Recreate are all still exercised as shipped.
+jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import 'workloads/tik/backend.libsonnet')() + k.hostUsers())" \
   | kubectl apply --namespace="$namespace" --filename=-
 
 echo "== wait for the tik board to become Available =="
