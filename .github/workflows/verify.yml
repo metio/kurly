@@ -80,7 +80,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
-      - uses: metio/ci/policy-check@afbf10fe3c5ceb438a1da090e78cc6c0159c4754 # 2026.7.5093733
+      - uses: metio/ci/policy-check@ea61d45334e3168b830e6aff85446858b8e60031 # 2026.7.14190952
   dco:
     # Developer Certificate of Origin: every commit must carry a Signed-off-by
     # trailer. Skipped for bot-authored PRs (Renovate/Dependabot cannot sign off);
@@ -92,7 +92,7 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           fetch-depth: 0
-      - uses: metio/ci/dco@68ccaa80327a09d6be7ee72fc81ffa370bd73fff # main
+      - uses: metio/ci/dco@ea61d45334e3168b830e6aff85446858b8e60031 # main
   verify:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.
