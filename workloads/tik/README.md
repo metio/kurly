@@ -58,7 +58,7 @@ spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: tik-workload, namespace: tik }
+metadata: { name: kurly-tik, namespace: tik }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/tik, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
@@ -68,8 +68,8 @@ spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: tik-workload, namespace: tik }
-spec: { sourceRef: { kind: OCIRepository, name: tik-workload } }
+metadata: { name: kurly-tik, namespace: tik }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-tik } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
@@ -90,11 +90,25 @@ spec:
   # Both the recipes and the workload source are importable by canonical path.
   libraries:
     - { kind: JsonnetLibrary, name: kurly,        importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: tik-workload,  importPath: github.com/metio/kurly/workloads/tik }
+    - { kind: JsonnetLibrary, name: kurly-tik,  importPath: github.com/metio/kurly/workloads/tik }
   # Your adaptations, as top-level arguments.
   tlas:
     host: ["tik.internal.example.com"]
     storeSize: ["5Gi"]
+---
+# The migration ladder, rendered from the same workload source for the StageSet
+# below to consume via spec.migrationsSourceRef.
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: tik-migrations, namespace: tik }
+spec:
+  serviceAccountName: tik-renderer
+  files:
+    main.jsonnet: |
+      import 'github.com/metio/kurly/workloads/tik/migrations.jsonnet'
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly,      importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-tik,  importPath: github.com/metio/kurly/workloads/tik }
 ```
 
 JaaS publishes the rendered manifests as an `ExternalArtifact`. The release

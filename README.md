@@ -108,10 +108,11 @@ default; compose them *after* a profile to fine-tune it.
 
 ## Workloads
 
-A **workload** is a deployable app built from the recipes, released and deployed
-through the metio stack. Each lives under `workloads/<name>/` as one
-`<stage>.libsonnet` per stage — a `function(params)` returning a **composable
-app** (a base with defaults, no exposure), plus a `migrations.jsonnet` ladder and
+A **workload** is a deployable app built from the recipes, released as its own
+OCI image and deployed by JaaS and stageset-controller. Each lives under
+`workloads/<name>/` as one `<stage>.libsonnet` per stage — a `function(params)`
+returning a **composable app** (a base with sensible defaults, exposure left to
+you), plus a `migrations.jsonnet` ladder and
 a `README.md`. A consumer imports a stage, adapts it with `+` features, and
 renders with `kurly.list`:
 
