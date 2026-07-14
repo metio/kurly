@@ -12,9 +12,9 @@
 # Units and their artifacts:
 # - library → ghcr.io/metio/kurly — single-layer image laid out like a jb
 #   vendor/ tree (Flux OCIRepository source, image-volume mount, jb install).
-# - workloads/<name> → ghcr.io/metio/kurly/workloads/<name> — ONE image whose
-#   layers are the rollout stages plus the migration ladder, each under its
-#   own media type for OCIRepository layerSelector selection.
+# - workloads/<name> → ghcr.io/metio/kurly/workloads/<name> — a SINGLE-LAYER
+#   FROM-scratch vendor-tree image of the workload's jsonnet SOURCE (same shape
+#   as the library image), rendered by JaaS with the consumer's parameters.
 #
 # Change detection covers this push's range only (like helm-charts): a failed
 # run is recovered by re-running via workflow_dispatch, whose empty input
@@ -145,8 +145,8 @@ jobs:
       - name: Assert exactly one layer
         # Single layer is the library-image contract: it serves as both an
         # image-volume mount and a Flux OCIRepository source without a
-        # layerSelector. (Workload images are the deliberate opposite — one
-        # layer PER stage, selected by media type.)
+        # layerSelector. (Workload source images are single-layer for the same
+        # reason — see the workload job below.)
         run: |
           docker build --file Containerfile --tag kurly-verify:latest .
           n=$(docker image inspect kurly-verify:latest --format '{{ len .RootFS.Layers }}')

@@ -20,7 +20,7 @@ kurly.list(
   kurly.http('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
   + kurly.replicas(3)
   + kurly.probes('/')
-  + kurly.expose.gateway('shop.example.com', 'shared-gateway', gatewayNamespace='infrastructure')
+  + kurly.expose.gateway('storefront.example.com', 'shared-gateway', gatewayNamespace='infrastructure')
 )
 ```
 
@@ -106,55 +106,38 @@ wins. For single-knob adjustments the escape-hatch features — `kurly.rootUser`
 `kurly.writableRootFilesystem`, `kurly.hostUsers` — each downgrade exactly one
 default; compose them *after* a profile to fine-tune it.
 
-## Rollout stages and migrations
+## Workloads
 
-A workload deployed through [stageset-controller](https://github.com/metio/stageset-controller)
-installs through ordered, gated stages and may need version-gated migrations at
-boundaries. A workload is authored as a `function(params)` so
-[jaas](https://github.com/metio/jaas) can render it with the deployment's own
-values as TLAs; the artifact pipeline renders the defaults.
-
-Stages are the ordered **install phases of one application** (apply a phase,
-gate it healthy, then the next), not environment tiers. Each stage names a
-subset of the app's manifests — order them by real dependency (a PVC that binds
-WaitForFirstConsumer must ride with the pod that consumes it). Many workloads
-need only **one** stage; don't manufacture ordering an application lacks:
+A **workload** is a deployable app built from the recipes, released and deployed
+through the metio stack. Each lives under `workloads/<name>/` as one
+`<stage>.libsonnet` per stage — a `function(params)` returning a **composable
+app** (a base with defaults, no exposure), plus a `migrations.jsonnet` ladder and
+a `README.md`. A consumer imports a stage, adapts it with `+` features, and
+renders with `kurly.list`:
 
 ```jsonnet
-// single-stage: everything installs together
-{ backend: kurly.list(app) }
-
-// multi-stage: an ordered partition of the app's manifests
-kurly.stages([
-  kurly.stage('database', [db.storeClaim, db.deployment, db.service]),
-  kurly.stage('app', [app.deployment, app.service]),
-])
+local tik = import 'github.com/metio/kurly/workloads/tik/backend.libsonnet';
+kurly.list(tik() + kurly.expose.gateway('tik.internal', 'shared-gateway'))
 ```
 
-A migration ladder is a plain array of
+Stages are the ordered **install phases of one application** (apply a phase,
+gate it healthy, then the next), not environment tiers — one stage file maps to
+one stageset stage. Many workloads need only **one** stage; don't manufacture
+ordering an application lacks (a PVC that binds WaitForFirstConsumer must ride
+with the pod that consumes it, so it can't be gated into a stage of its own). A
+migration ladder is a plain array of
 `kurly.migrations.migration(name, to, from=, stage=, actions=)` entries (actions
 are stageset-controller `Action` objects, passed through verbatim).
 
-Workloads live as directories under `workloads/` (`stages.jsonnet` +
-`migrations.jsonnet`, see `workloads/tik/`), and each is a **release unit of its
-own**: it publishes as `ghcr.io/metio/kurly/workloads/<name>`, tagged and
-changelogged independently of the library and of every other workload. Each
-workload image is **one OCI image with one layer per stage** plus a layer for
-the migration ladder, each under its own media type. A Flux `OCIRepository`
-selects exactly one stage:
-
-```yaml
-spec:
-  layerSelector:
-    mediaType: application/vnd.metio.stage.backend.tar+gzip
-    operation: extract
-```
-
-and the `application/vnd.metio.migrations.tar+gzip` layer feeds a StageSet's
-`spec.migrationsSourceRef`. One image means one version, one signature, and
-one changelog entry covering every stage of a rollout. Always set
-`layerSelector` on these images — without it Flux extracts whichever layer
-comes first.
+Each workload is a **release unit of its own** — it publishes as
+`ghcr.io/metio/kurly/workloads/<name>`, tagged and changelogged independently of
+the library and every other workload. The artifact is the workload's jsonnet
+**SOURCE**, not pre-rendered manifests: a **single-layer** `FROM scratch`
+vendor-tree image (the same shape as the library and JOI images), which JaaS
+renders with the consumer's parameters. It carries a `version` constant the
+release rewrites from `dev` to the calver, stamped as `app.kubernetes.io/version`.
+The full deploy — import → `JsonnetSnippet` → `StageSet` — is in each workload's
+README (see [`workloads/tik/README.md`](workloads/tik/README.md)).
 
 ## Consuming
 

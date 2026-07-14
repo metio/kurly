@@ -5,7 +5,7 @@
 // In-cluster consumers reach it through the Service DNS name; to accept
 // traffic from outside the cluster, compose an exposure feature on top:
 //
-//   kurly.http('shop', image) + kurly.expose.gateway('shop.example.com', 'shared')
+//   kurly.http('storefront', image) + kurly.expose.gateway('storefront.example.com', 'shared')
 local base = import './base.libsonnet';
 
 function(name, image)
