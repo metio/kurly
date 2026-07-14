@@ -2,3 +2,9 @@
 # SPDX-License-Identifier: 0BSD
 [files]
 extend-exclude = ["LICENSES/", "vendor/"]
+
+# `edn` (Clojure's Extensible Data Notation) is the tik workload's config
+# format, not a typo of `end`.
+[default.extend-words]
+edn = "edn"
+EDN = "EDN"

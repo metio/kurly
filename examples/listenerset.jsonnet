@@ -7,8 +7,8 @@
 local kurly = import '../main.libsonnet';
 
 kurly.list(
-  kurly.http.new('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
-  .withReplicas(3)
-  .withHttpProbes('/')
+  kurly.http('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
+  + kurly.replicas(3)
+  + kurly.probes('/')
   + kurly.expose.ownListenerSet('shop.example.com', 'shared-gateway', gatewayNamespace='infrastructure')
 )

@@ -7,8 +7,8 @@
 local kurly = import '../main.libsonnet';
 
 kurly.list(
-  kurly.daemon.new('node-agent', 'ghcr.io/example/node-agent:0.9.2')
-  .withServiceAccount('node-agent')
-  .withHostUsers()
-  .withResources(requests={ cpu: '50m', memory: '64Mi' })
+  kurly.daemon('node-agent', 'ghcr.io/example/node-agent:0.9.2')
+  + kurly.serviceAccount('node-agent')
+  + kurly.hostUsers()
+  + kurly.resources(requests={ cpu: '50m', memory: '64Mi' })
 )

@@ -1,9 +1,9 @@
 // SPDX-FileCopyrightText: The kurly Authors
 // SPDX-License-Identifier: 0BSD
 
-// expose: routing recipes composed onto an HTTP workload with `+`. Exposure
-// is a separate axis from the workload itself — pick the recipe matching the
-// cluster's routing API and ownership model:
+// expose: routing features composed onto an HTTP workload with `+`. Exposure
+// is a separate axis from the workload itself — pick the one recipe matching
+// the cluster's routing API and ownership model:
 //
 //   Ingress API:   ingress(host)
 //   Gateway API:   gateway(host, name)           — route to an existing Gateway
@@ -12,19 +12,22 @@
 //                  ownListenerSet(host, gateway) — own ListenerSet on a shared Gateway + route
 //
 // Every Gateway API recipe emits an HTTPRoute; the own* recipes additionally
-// generate the parent it attaches to. Each recipe captures its host argument
-// lexically, so composing several exposures (e.g. an Ingress→Gateway
-// migration running both) keeps each host independent.
+// generate the parent it attaches to. All five join the `exposure` exclusion
+// group, so composing two of them fails the render — a workload routes one way,
+// and two recipes would emit conflicting or same-named objects. (An
+// Ingress→Gateway migration runs the two as separate apps instead.)
 //
 // The Gateway API objects are written as plain manifests rather than through
 // gateway-api-libsonnet, keeping the render-time dependency closure at
 // k8s-libsonnet alone.
 local k = import './k.libsonnet';
 
-// Exposure needs a Service to route to — composing onto kurly.worker or
-// kurly.cron is a mistake worth failing loudly on.
-local requiresService = {
+// Every exposure recipe needs a Service to route to — composing onto
+// kurly.worker or kurly.cron is a mistake worth failing loudly on — and claims
+// the shared `exposure` exclusion group so no two can coexist.
+local exposure(name) = {
   assert std.objectHas(self, 'service') : 'kurly.expose recipes need a workload with a Service — compose them onto kurly.http',
+  config+:: { exclusive+: { exposure+: [name] } },
 };
 
 local httpRoute(app, host, parent) = {
@@ -51,7 +54,7 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
 
 {
   // ingress routes the host to the workload through the Ingress API.
-  ingress(host, ingressClass=null):: requiresService {
+  ingress(host, ingressClass=null):: exposure('ingress') {
     local app = self,
 
     ingress:
@@ -81,7 +84,7 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
 
   // gateway routes the host through an existing Gateway — the usual setup,
   // where a platform team owns a shared Gateway and workloads attach routes.
-  gateway(host, gateway, gatewayNamespace=null, sectionName=null):: requiresService {
+  gateway(host, gateway, gatewayNamespace=null, sectionName=null):: exposure('gateway') {
     local app = self,
 
     httproute: httpRoute(app, host, std.prune({
@@ -93,7 +96,7 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
 
   // listenerSet routes the host through an existing ListenerSet — for
   // clusters where listener ownership is already delegated per tenant.
-  listenerSet(host, listenerSet, listenerSetNamespace=null, sectionName=null):: requiresService {
+  listenerSet(host, listenerSet, listenerSetNamespace=null, sectionName=null):: exposure('listenerSet') {
     local app = self,
 
     httproute: httpRoute(app, host, listenerSetParent(listenerSet, listenerSetNamespace, sectionName)),
@@ -101,7 +104,7 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
 
   // ownGateway generates a dedicated Gateway for the workload and routes the
   // host through it — for clusters without a shared Gateway to attach to.
-  ownGateway(host, gatewayClass):: requiresService {
+  ownGateway(host, gatewayClass):: exposure('ownGateway') {
     local app = self,
 
     gateway: {
@@ -127,7 +130,7 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
   // listener to a shared Gateway and routes the host through it. Gateways
   // reject ListenerSet attachment by default — the shared Gateway must opt in
   // via spec.allowedListeners.
-  ownListenerSet(host, gateway, gatewayNamespace=null):: requiresService {
+  ownListenerSet(host, gateway, gatewayNamespace=null):: exposure('ownListenerSet') {
     local app = self,
 
     listenerset: {

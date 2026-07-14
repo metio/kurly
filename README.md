@@ -6,8 +6,8 @@ SPDX-License-Identifier: 0BSD
 # kurly
 
 A bookstore of Kubernetes workload recipes, written in Jsonnet on top of
-[k8s-libsonnet](https://github.com/jsonnet-libs/k8s-libsonnet). Pick a kind,
-give it a name and an image, chain modifiers — the result is a set of
+[k8s-libsonnet](https://github.com/jsonnet-libs/k8s-libsonnet). Start from a
+kind, then add capabilities as composable `+` features — the result is a set of
 manifests with the Pod Security Standards `restricted` profile baked in:
 non-root, seccomp `RuntimeDefault`, all capabilities dropped, read-only root
 filesystem, its own user namespace (`hostUsers: false`), and no ServiceAccount
@@ -17,35 +17,61 @@ token unless a ServiceAccount is configured.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 kurly.list(
-  kurly.http.new('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
-  .withReplicas(3)
-  .withHttpProbes('/')
+  kurly.http('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
+  + kurly.replicas(3)
+  + kurly.probes('/')
   + kurly.expose.gateway('shop.example.com', 'shared-gateway', gatewayNamespace='infrastructure')
 )
 ```
 
 renders a Deployment, a Service, and an HTTPRoute attached to the platform
-team's Gateway, ready for `kubectl apply --filename -`.
+team's Gateway, ready for `kubectl apply --filename -`. Every feature is a
+`{ config+:: … }` mixin, so they late-bind against the merged config and compose
+in any order.
 
 ## Workload kinds
+
+Each kind is a `function(name, image)` (cron also takes a schedule) — the base
+"default" you add features onto.
 
 | Kind | Manifests | For |
 |---|---|---|
 | `kurly.http` | Deployment + Service | HTTP workloads; compose an `expose` recipe to accept outside traffic |
 | `kurly.worker` | Deployment | queue consumers, background processors |
-| `kurly.cron` | CronJob | scheduled jobs (`new` requires a schedule) |
+| `kurly.cron` | CronJob | scheduled jobs (`kurly.cron(name, image, schedule)`) |
 | `kurly.daemon` | DaemonSet | per-node agents |
 
-Every kind shares the same modifiers (`withEnv`, `withLabels`,
-`withResources`, `withServiceAccount`, `withHttpProbes`, …) plus per-kind ones
-like `withReplicas` or `withSchedule`.
+## Features
+
+Add capabilities with `+`. Common ones: `kurly.replicas`, `kurly.env`,
+`kurly.args` / `kurly.command`, `kurly.port`, `kurly.probes`,
+`kurly.resources`, `kurly.labels`, `kurly.annotations`,
+`kurly.serviceAccount`. For stateful and configured workloads:
+
+| Feature | Adds |
+|---|---|
+| `kurly.store(mountPath, size, storageClass=, accessModes=)` | an owned PersistentVolumeClaim, mounted |
+| `kurly.config(files, mountPath=)` | a ConfigMap from a filename→content map, mounted read-only |
+| `kurly.secretMount(secretName, mountPath, optional=, defaultMode=)` | mounts an **existing** Secret read-only (kurly never mints key material) |
+| `kurly.scratch(mountPath, sizeLimit=)` | a writable `emptyDir` (the escape valve a read-only root filesystem needs) |
+| `kurly.runAs(uid, gid=, fsGroup=)` | pins a non-root uid/gid and the fsGroup so the pod owns a mounted volume |
+| `kurly.recreate()` | the `Recreate` update strategy — for a single writer on a ReadWriteOnce store |
+
+```jsonnet
+kurly.http('tik', 'ghcr.io/metio/tik:2026.7.14174051')
++ kurly.args(['backend', '--config=/etc/tik/pipelines.edn'])
++ kurly.store('/var/lib/tik', '1Gi')
++ kurly.config({ 'pipelines.edn': pipelines }, mountPath='/etc/tik')
++ kurly.secretMount('tik-signing-key', '/etc/tik-key', optional=true)
++ kurly.runAs(12345)
++ kurly.recreate()
+```
 
 ## Exposure recipes
 
-Exposure is a separate axis from the workload: compose one (or several — an
-Ingress→Gateway migration can run both) onto a `kurly.http` app with `+`.
-Every Gateway API recipe emits an HTTPRoute; the `own*` recipes additionally
-generate the parent it attaches to.
+Exposure is a separate axis from the workload: compose **exactly one** onto a
+`kurly.http` app with `+`. Every Gateway API recipe emits an HTTPRoute; the
+`own*` recipes additionally generate the parent it attaches to.
 
 | Recipe | Emits | For |
 |---|---|---|
@@ -54,6 +80,10 @@ generate the parent it attaches to.
 | `expose.listenerSet(host, name, listenerSetNamespace=, sectionName=)` | HTTPRoute | attaching to an existing ListenerSet |
 | `expose.ownGateway(host, gatewayClass)` | Gateway + HTTPRoute | clusters without a shared Gateway |
 | `expose.ownListenerSet(host, gateway, gatewayNamespace=)` | ListenerSet + HTTPRoute | bringing your own listener to a shared Gateway (it must allow ListenerSets via `spec.allowedListeners`) |
+
+All five join the `exposure` exclusion group, so composing two of them **fails
+the render** — a workload routes one way, and the mistake never reaches a
+cluster. (An Ingress→Gateway migration runs the two as separate apps instead.)
 
 ## Security profiles
 
@@ -68,36 +98,46 @@ genuinely can't run under `restricted`:
 | `security.privileged` | emits no security fields at all |
 
 ```jsonnet
-kurly.http.new('erp', 'ghcr.io/example/erp:5.4.1') + kurly.security.baseline
+kurly.http('erp', 'ghcr.io/example/erp:5.4.1') + kurly.security.baseline
 ```
 
 A profile sets every security knob, so when several compose the last one
-wins. For single-knob adjustments the escape hatches — `withRootUser`,
-`withWritableRootFilesystem`, `withHostUsers` — each downgrade exactly one
-default; chain them *after* a profile to fine-tune it.
+wins. For single-knob adjustments the escape-hatch features — `kurly.rootUser`,
+`kurly.writableRootFilesystem`, `kurly.hostUsers` — each downgrade exactly one
+default; compose them *after* a profile to fine-tune it.
 
 ## Rollout stages and migrations
 
 A workload deployed through [stageset-controller](https://github.com/metio/stageset-controller)
-rolls through stages and may need version-gated migrations at boundaries.
-Both are declared next to the workload:
+installs through ordered, gated stages and may need version-gated migrations at
+boundaries. A workload is authored as a `function(params)` so
+[jaas](https://github.com/metio/jaas) can render it with the deployment's own
+values as TLAs; the artifact pipeline renders the defaults.
+
+Stages are the ordered **install phases of one application** (apply a phase,
+gate it healthy, then the next), not environment tiers. Each stage names a
+subset of the app's manifests — order them by real dependency (a PVC that binds
+WaitForFirstConsumer must ride with the pod that consumes it). Many workloads
+need only **one** stage; don't manufacture ordering an application lacks:
 
 ```jsonnet
-kurly.stageLists(shop, {
-  dev: { config+:: { replicas: 1 } },
-  production: { config+:: { replicas: 3 } }
-              + kurly.expose.gateway('shop.example.com', 'shared-gateway'),
-})
+// single-stage: everything installs together
+{ backend: kurly.list(app) }
+
+// multi-stage: an ordered partition of the app's manifests
+kurly.stages([
+  kurly.stage('database', [db.storeClaim, db.deployment, db.service]),
+  kurly.stage('app', [app.deployment, app.service]),
+])
 ```
 
-renders a map of stage name → `kind: List`, and a migration ladder is a plain
-array of `kurly.migrations.migration(name, to, from=, stage=, actions=)`
-entries (actions are stageset-controller `Action` objects, passed through
-verbatim).
+A migration ladder is a plain array of
+`kurly.migrations.migration(name, to, from=, stage=, actions=)` entries (actions
+are stageset-controller `Action` objects, passed through verbatim).
 
 Workloads live as directories under `workloads/` (`stages.jsonnet` +
-`migrations.jsonnet`, see `workloads/shop/`), and each is a **release unit of
-its own**: it publishes as `ghcr.io/metio/kurly/workloads/<name>`, tagged and
+`migrations.jsonnet`, see `workloads/tik/`), and each is a **release unit of its
+own**: it publishes as `ghcr.io/metio/kurly/workloads/<name>`, tagged and
 changelogged independently of the library and of every other workload. Each
 workload image is **one OCI image with one layer per stage** plus a layer for
 the migration ladder, each under its own media type. A Flux `OCIRepository`
@@ -106,7 +146,7 @@ selects exactly one stage:
 ```yaml
 spec:
   layerSelector:
-    mediaType: application/vnd.metio.stage.production.tar+gzip
+    mediaType: application/vnd.metio.stage.backend.tar+gzip
     operation: extract
 ```
 

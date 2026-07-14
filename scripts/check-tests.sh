@@ -15,8 +15,16 @@ echo "all assertions passed"
 
 # The requiresService assert must fire when an exposure is composed onto a
 # workload with no Service.
-if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.worker.new('w', 'img:1') + kurly.expose.ingress('h.example.com')" >/dev/null 2>&1; then
+if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.worker('w', 'img:1') + kurly.expose.ingress('h.example.com')" >/dev/null 2>&1; then
   echo "composing an exposure onto a worker rendered instead of failing" >&2
   exit 1
 fi
 echo "requiresService assert fired as expected"
+
+# The exclusion assert must fire when two members of one exclusion group are
+# composed — here two exposure recipes on one workload.
+if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 'img:1') + kurly.expose.ingress('h.example.com') + kurly.expose.gateway('h.example.com', 'gw')" >/dev/null 2>&1; then
+  echo "composing two exposures rendered instead of failing" >&2
+  exit 1
+fi
+echo "exposure exclusion assert fired as expected"

@@ -10,11 +10,9 @@
 local kurly = import '../main.libsonnet';
 
 kurly.list(
-  (
-    kurly.http.new('erp', 'ghcr.io/example/erp:5.4.1')
-    .withHttpProbes('/status')
-    + kurly.security.baseline
-  )
-  .withWritableRootFilesystem()
+  kurly.http('erp', 'ghcr.io/example/erp:5.4.1')
+  + kurly.probes('/status')
+  + kurly.security.baseline
+  + kurly.writableRootFilesystem()
   + kurly.expose.ingress('erp.internal.example.com', ingressClass='nginx')
 )

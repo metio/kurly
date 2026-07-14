@@ -16,7 +16,8 @@
 //   privileged — no security fields at all; the manifest constrains nothing.
 //
 // Each profile sets every knob, so when several compose the last one wins,
-// and the single-knob with* hatches still fine-tune afterwards. The
+// and the single-knob hatch features (kurly.writableRootFilesystem, …) still
+// fine-tune afterwards. The
 // ServiceAccount-token automount rule is not part of any profile — a workload
 // without a ServiceAccount never needs apiserver credentials, whatever its
 // PSS level.

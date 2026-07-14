@@ -7,8 +7,8 @@
 local kurly = import '../main.libsonnet';
 
 kurly.list(
-  kurly.worker.new('mailer', 'ghcr.io/example/mailer:1.8.0')
-  .withReplicas(2)
-  .withServiceAccount('mailer')
-  .withEnv({ QUEUE_URL: 'nats://nats.messaging.svc:4222' })
+  kurly.worker('mailer', 'ghcr.io/example/mailer:1.8.0')
+  + kurly.replicas(2)
+  + kurly.serviceAccount('mailer')
+  + kurly.env({ QUEUE_URL: 'nats://nats.messaging.svc:4222' })
 )
