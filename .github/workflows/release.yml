@@ -102,8 +102,12 @@ jobs:
               diff="$(git diff --name-only "$BEFORE" "$SHA")"
               echo "$diff" | grep -qE '^([^/]+\.libsonnet|Containerfile)$' && library=true
               # A README-only change to a workload is not a release (the README
-              # is docs, not part of the shipped source artifact).
-              workloads="$(echo "$diff" | grep -v '/README\.md$' | grep -oP '^workloads/\K[^/]+' | sort -u || true)"
+              # is docs, not part of the shipped source artifact). And only a
+              # workload whose directory still EXISTS is releasable — a DELETED
+              # workload still appears in the diff's paths but has nothing to
+              # release (it would publish a bogus empty image + tag).
+              workloads="$(echo "$diff" | grep -v '/README\.md$' | grep -oP '^workloads/\K[^/]+' | sort -u \
+                | while IFS= read -r w; do [ -n "$w" ] && [ -d "workloads/$w" ] && echo "$w"; done || true)"
             fi
           fi
           {
