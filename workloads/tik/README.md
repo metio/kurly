@@ -59,9 +59,13 @@ importable as a `JsonnetLibrary` and evaluate a `JsonnetSnippet` that composes
 the workload with your values as TLAs. JaaS publishes the result as an
 `ExternalArtifact` that stageset consumes.
 
-All of kurly is one library, so this is **one image and one `JsonnetLibrary`** —
-the single-layer `ghcr.io/metio/kurly` image the kurly release pipeline
-publishes (`:latest` plus dated calver tags; pin a dated tag for reproducibility).
+All of kurly's *recipes* are one library, so they publish as **one image and one
+`JsonnetLibrary`** — the single-layer `ghcr.io/metio/kurly` image the release
+pipeline builds (`:latest` plus dated calver tags; pin a dated tag for
+reproducibility). This is distinct from the *workload* image
+(`ghcr.io/metio/kurly/workloads/tik`, one per workload — see
+[Deploy without JaaS](#deploy-without-jaas)): here we import the recipes to
+render tik ourselves, rather than pull tik's pre-rendered manifests.
 
 ```yaml
 # The kurly library image from kurly's release pipeline, pulled by Flux.

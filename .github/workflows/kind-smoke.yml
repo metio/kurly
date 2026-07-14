@@ -1,0 +1,71 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Applies kurly's rendered output to a throwaway kind cluster and waits for it
+# to become Ready — the real-cluster complement to check-security/kubeconform,
+# which only prove the manifests are valid, not that they run. kind and kubectl
+# come from the flake's devShell (same versions as local), never a marketplace
+# action. Self-gates on a git diff so a docs-only PR skips the cluster spin-up
+# while the required aggregate stays green.
+name: Kind smoke test
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  changes:
+    name: Did this PR touch renderable sources?
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      relevant: ${{ steps.scope.outputs.relevant }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+      - id: scope
+        env:
+          BASE_REF: ${{ github.base_ref || 'main' }}
+        run: |
+          set -uo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || \
+             git diff --name-only "origin/${BASE_REF}" HEAD \
+               | grep -qE '^([^/]+\.libsonnet|examples/|workloads/|scripts/kind-smoke\.sh|\.github/workflows/kind-smoke\.yml)'; then
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "relevant=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No renderable sources changed — the kind smoke job skips (aggregate stays green)."
+          fi
+  smoke:
+    name: Apply to kind and wait for Ready
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Create the kind cluster
+        run: nix develop --command kind create cluster --name kurly-smoke --wait 120s
+      - name: Apply kurly's output and wait for Ready
+        run: nix develop --command kind-smoke
+      - name: Delete the kind cluster
+        if: always()
+        run: nix develop --command kind delete cluster --name kurly-smoke
+  kind-smoke:
+    # Single aggregate covering the jobs above: mark only this one required in
+    # branch protection, and a skipped smoke (docs-only PR) still passes.
+    name: Kind smoke
+    needs: [changes, smoke]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Verify every job succeeded or skipped
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          bad=$(echo "$NEEDS" | jq -r 'to_entries[] | select(.value.result != "success" and .value.result != "skipped") | "\(.key)=\(.value.result)"')
+          [ -z "$bad" ] || { echo "::error::$bad"; exit 1; }
