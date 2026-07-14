@@ -7,6 +7,7 @@
 check-fmt
 check-tests
 check-examples
+check-security
 reuse lint
 yamllint .
 actionlint

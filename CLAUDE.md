@@ -18,8 +18,9 @@ The toolchain and the dev-task commands are defined once in `flake.nix` and vers
 ```shell
 nix develop --command verify           # every gate, serially — the local pre-push check (what CI runs)
 nix develop --command check-fmt        # jsonnetfmt --test across all sources
-nix develop --command check-tests      # jb install + assertion suite + the requiresService negative check
+nix develop --command check-tests      # jb install + assertion suite + the requiresService/exclusion negative checks
 nix develop --command check-examples   # render examples + workloads, validate with kubeconform
+nix develop --command check-security   # kurly's Rego invariants (conftest) + pluto (deprecated APIs) + kubesec
 nix develop --command reuse lint       # the single-tool gates call the tool directly:
 nix develop --command yamllint .
 nix develop --command actionlint       # shellcheck rides in the devShell, so run: blocks are linted too
@@ -32,6 +33,8 @@ Or drop into the shell — `nix develop` prints the command menu on entry, then 
 On this host, `nix` is [nix-portable](https://github.com/DavHau/nix-portable) (`~/.local/bin/nix`, store in `~/.nix-portable` — user-level, no system install) and needs `NP_RUNTIME=bwrap` (exported in `~/.bashrc`; the auto-selected runtime cannot nest the build sandbox's mount namespace here). A system-level nix install is not possible on this Fedora Atomic host (the transient-root workaround broke boot). From a sandboxed shell, where nix-portable's user namespaces are blocked, resolve the same flake through the nix container image: `podman run --rm -v "$PWD:/work:z" -v metio-nix:/nix -w /work docker.io/nixos/nix:latest` with `NIX_CONFIG='experimental-features = nix-command flakes'`. **direnv is not usable here** — nix-portable's store is namespace-local, so an exported devShell env references `/nix` paths the host can't see; `nix develop` is the workflow. A contributor with a real nix install may add a local, gitignored `.envrc` (`use flake`) if they want direnv auto-loading.
 
 jsonnet-lint is deliberately not part of the gate: it cannot resolve the vendored k8s-libsonnet's internal `doc-util` imports (jb `legacyImports: false`) and drowns real findings in vendor noise.
+
+**Kubernetes static analysis (`check-security`)** is weighted toward custom policy. `policy/*.rego` holds kurly's own invariants, run over the RENDERED manifests with **conftest** — Rego reads the JSON jsonnet emits, so it enforces structural guarantees the general tools can't express (the managed-by label, tag-pinned images, stable selectors, volume/mount consistency), green by construction since they hold for every workload regardless of composed features. Backing it are two small, fast, no-config tools: **pluto** (removed/deprecated API detection) and **kubesec** (a security risk score with a floor the hardened defaults clear at 7-11). The heavier best-practice scorers (kube-score/kube-linter/trivy) are deliberately NOT used — they demand a large ignore-list of the deployment-topology checks a workload-recipe library does not emit, and Rego covers kurly's real contract precisely instead. The security-relaxation examples (`legacy`, `cron`) are exempt from the kubesec score (they exist to demonstrate the escape hatches) but still policy-checked.
 
 ## Architecture
 

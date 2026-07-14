@@ -52,6 +52,18 @@
             cosign
           ];
 
+          # Kubernetes static analysis, weighted toward custom policy: conftest
+          # runs kurly's own invariants as Rego over the RENDERED JSON (the layer
+          # jsonnet emits) — precise, no ignore-list upkeep — backed by two
+          # small, fast, no-config tools that earn their cost: pluto (removed /
+          # deprecated API detection) and kubesec (a security risk score).
+          # kubeconform (schema) rides in kurlyTools via check-examples.
+          securityTools = with pkgs; [
+            conftest
+            pluto
+            kubesec
+          ];
+
           # Multi-step gate commands. Each is a plain scripts/<name>.sh that nix
           # wraps with `set -euo pipefail`, shellchecks at build, and runs with
           # its own hermetic runtimeInputs — so a macOS contributor gets nix's
@@ -81,6 +93,17 @@
             ];
             text = builtins.readFile ./scripts/check-examples.sh;
           };
+          check-security = pkgs.writeShellApplication {
+            name = "check-security";
+            runtimeInputs = with pkgs; [
+              go-jsonnet
+              jsonnet-bundler
+              jq
+              coreutils
+            ]
+            ++ securityTools;
+            text = builtins.readFile ./scripts/check-security.sh;
+          };
           # Runs every gate locally (the serial equivalent of CI's parallel
           # jobs); its runtimeInputs are the other commands plus the shared lint
           # gate from the metio/ci flake.
@@ -90,6 +113,7 @@
               check-fmt
               check-tests
               check-examples
+              check-security
             ]
             ++ devshell.lib.lintTools pkgs;
             text = builtins.readFile ./scripts/verify.sh;
@@ -98,18 +122,20 @@
             check-fmt
             check-tests
             check-examples
+            check-security
             verify
           ];
         in
         {
           default = devshell.lib.mkDevShell {
             inherit pkgs;
-            packages = kurlyTools ++ commands;
+            packages = kurlyTools ++ securityTools ++ commands;
             menu = ''
               echo "kurly commands (also: nix develop --command <name>):"
               echo "  check-fmt        jsonnetfmt --test across all sources"
               echo "  check-tests      assertion suite + the requiresService negative check"
               echo "  check-examples   render examples + workloads, validate with kubeconform"
+              echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  verify           run every gate locally (what CI runs)"
             '';
           };
