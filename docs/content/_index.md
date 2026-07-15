@@ -161,6 +161,33 @@ kurly.listOf([
 `kurly.join` is the same drop-and-flatten over a plain array, for assembling any
 value (a set of args, an env list) the same way.
 
+## Customizing beyond the features
+
+Reach for a named feature first — they cover the common needs ergonomically and
+keep your workload a pure function of its config (which is what the
+[Reference](/reference/), the assembler, and the tests all rely on). Pod-only
+labels and annotations, for network policies or sidecar injection, are features:
+
+```jsonnet
+kurly.http('app', image)
++ kurly.podLabels({ 'monitoring/scrape': 'true' })   // pod template only, never the selector
++ kurly.podAnnotations({ 'linkerd.io/inject': 'enabled' })
+```
+
+For the long tail kurly does not model, the escape hatch is plain Jsonnet `+` at
+your own edge — the workload is just an object whose visible fields are its
+manifests:
+
+```jsonnet
+kurly.list(
+  kurly.http('app', image)
+  + { deployment+: { spec+: { minReadySeconds: 30 } } }   // patch any field directly
+)
+```
+
+When you find yourself reaching for the same patch repeatedly, that is the signal
+to promote it to a named feature.
+
 ## Consuming
 
 - **Locally**: `jb install github.com/metio/kurly@main` and render with

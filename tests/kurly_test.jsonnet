@@ -305,6 +305,49 @@ local podOf(app) = app.deployment.spec.template.spec;
   cron_node_selector: std.assertEqual(
     (cron + kurly.nodeSelector({ disktype: 'ssd' })).cronjob.spec.jobTemplate.spec.template.spec.nodeSelector, { disktype: 'ssd' }
   ),
+
+  // --- pod-template extras & owned manifests ---------------------------------
+  // podLabels reach the pod template but never the immutable selector.
+  pod_labels_scoped: std.assertEqual(
+    local a = shop + kurly.podLabels({ tier: 'db' });
+    [a.deployment.spec.template.metadata.labels.tier, std.objectHas(a.deployment.spec.selector.matchLabels, 'tier')],
+    ['db', false]
+  ),
+  // podAnnotations land on the pod template only, not the workload metadata.
+  pod_annotations_scoped: std.assertEqual(
+    local a = shop + kurly.podAnnotations({ 'linkerd.io/inject': 'enabled' });
+    [
+      a.deployment.spec.template.metadata.annotations['linkerd.io/inject'],
+      std.objectHas(a.deployment.metadata, 'annotations'),
+    ],
+    ['enabled', false]
+  ),
+  // imagePullSecrets and priorityClassName reach the pod spec.
+  pod_spec_extras: std.assertEqual(
+    local a = shop + kurly.imagePullSecrets(['regcred']) + kurly.priorityClassName('high');
+    [podOf(a).imagePullSecrets, podOf(a).priorityClassName],
+    [[{ name: 'regcred' }], 'high']
+  ),
+  // Owned manifests select the workload's own pods and ride along in list().
+  pdb_selects_workload: std.assertEqual(
+    (shop + kurly.pdb(minAvailable=1)).pdb.spec,
+    { selector: { matchLabels: { 'app.kubernetes.io/name': 'shop' } }, minAvailable: 1 }
+  ),
+  hpa_targets_deployment: std.assertEqual(
+    local h = (shop + kurly.hpa(2, 10, targetCPU=80)).hpa.spec;
+    [h.scaleTargetRef.kind, h.scaleTargetRef.name, h.minReplicas, h.maxReplicas, h.metrics[0].resource.target.averageUtilization],
+    ['Deployment', 'shop', 2, 10, 80]
+  ),
+  owned_manifests_ride_along: std.assertEqual(
+    std.length(kurly.list(shop + kurly.pdb(maxUnavailable=1) + kurly.serviceMonitor() + kurly.networkPolicy(policyTypes=['Ingress'])).items),
+    5  // Deployment + Service + PDB + ServiceMonitor + NetworkPolicy
+  ),
+  // rbac mints SA + Role + RoleBinding and runs the pod under that SA.
+  rbac_mints_and_wires: std.assertEqual(
+    local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0') + kurly.rbac([{ apiGroups: [''], resources: ['pods'], verbs: ['get'] }]);
+    [std.sort([m.kind for m in kurly.list(a).items]), podOf(a).serviceAccountName],
+    [['Deployment', 'Role', 'RoleBinding', 'ServiceAccount'], 'agent']
+  ),
   // A stateless workload is untouched: no owned manifests, no volumes.
   stateless_no_owned: std.assertEqual([std.length(shop.ownedManifests), shop.storeClaim, std.objectHas(podOf(shop), 'volumes')], [0, null, false]),
   stateless_list_unchanged: std.assertEqual(std.length(kurly.list(shop).items), 2),

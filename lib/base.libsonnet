@@ -35,6 +35,75 @@ local configMapManifest(name, files, labels) = {
   data: files,
 };
 
+// The owned manifests a feature can add beyond the pod controller — each written
+// as a plain manifest (like the PVC/ConfigMap above and the expose recipes) so
+// the render-time dependency closure stays at k8s-libsonnet alone, and so CRD
+// kinds k8s-libsonnet does not model (ServiceMonitor) render the same way. Each
+// selects the workload's own pods by its stable selectorLabels.
+local pdbManifest(name, spec, selectorLabels, labels) = std.prune({
+  apiVersion: 'policy/v1',
+  kind: 'PodDisruptionBudget',
+  metadata: { name: name, labels: labels },
+  spec: {
+    selector: { matchLabels: selectorLabels },
+    minAvailable: spec.minAvailable,
+    maxUnavailable: spec.maxUnavailable,
+  },
+});
+
+local hpaManifest(name, spec, labels) = {
+  apiVersion: 'autoscaling/v2',
+  kind: 'HorizontalPodAutoscaler',
+  metadata: { name: name, labels: labels },
+  spec: {
+    scaleTargetRef: { apiVersion: 'apps/v1', kind: 'Deployment', name: name },
+    minReplicas: spec.minReplicas,
+    maxReplicas: spec.maxReplicas,
+    metrics:
+      local utilization(resource, target) =
+        { type: 'Resource', resource: { name: resource, target: { type: 'Utilization', averageUtilization: target } } };
+      (if spec.targetCPU == null then [] else [utilization('cpu', spec.targetCPU)])
+      + (if spec.targetMemory == null then [] else [utilization('memory', spec.targetMemory)]),
+  },
+};
+
+local networkPolicyManifest(name, spec, selectorLabels, labels) = std.prune({
+  apiVersion: 'networking.k8s.io/v1',
+  kind: 'NetworkPolicy',
+  metadata: { name: name, labels: labels },
+  spec: {
+    podSelector: { matchLabels: selectorLabels },
+    policyTypes: spec.policyTypes,
+    ingress: spec.ingress,
+    egress: spec.egress,
+  },
+});
+
+local serviceMonitorManifest(name, spec, selectorLabels, labels) = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'ServiceMonitor',
+  metadata: { name: name, labels: labels },
+  spec: {
+    selector: { matchLabels: selectorLabels },
+    endpoints: [std.prune({ port: spec.port, path: spec.path, interval: spec.interval })],
+  },
+};
+
+// A ServiceAccount plus a namespaced Role and the RoleBinding tying them
+// together, all named after the workload so its pod runs under an identity that
+// carries exactly the rules it is granted.
+local rbacManifests(name, spec, labels) = [
+  { apiVersion: 'v1', kind: 'ServiceAccount', metadata: { name: name, labels: labels } },
+  { apiVersion: 'rbac.authorization.k8s.io/v1', kind: 'Role', metadata: { name: name, labels: labels }, rules: spec.rules },
+  {
+    apiVersion: 'rbac.authorization.k8s.io/v1',
+    kind: 'RoleBinding',
+    metadata: { name: name, labels: labels },
+    roleRef: { apiGroup: 'rbac.authorization.k8s.io', kind: 'Role', name: name },
+    subjects: [{ kind: 'ServiceAccount', name: name }],
+  },
+];
+
 // The exclusion groups a config has composed conflicting members into: a map
 // of group name -> the feature names that claimed it. A group with more than
 // one distinct member is a composition error (e.g. two exposure recipes).
@@ -103,6 +172,22 @@ local exclusionConflicts(exclusive) = [
       tolerations: [],
       topologySpread: [],
       affinity: {},
+      // Pod-template extras. podLabels/podAnnotations land on the pod template
+      // ONLY (never the workload metadata, never the selector) — for network
+      // policies, log collection, sidecar injection. imagePullSecrets and
+      // priorityClassName go on the pod spec. Empty slots render nothing.
+      podLabels: {},
+      podAnnotations: {},
+      imagePullSecrets: [],
+      priorityClassName: null,
+      // Owned manifests a feature adds beyond the pod controller (null/absent by
+      // default). rbac additionally makes the pod run under the ServiceAccount it
+      // creates (podServiceAccount below).
+      pdb: null,  // { minAvailable, maxUnavailable }
+      hpa: null,  // { minReplicas, maxReplicas, targetCPU, targetMemory }
+      networkPolicy: null,  // { ingress, egress, policyTypes }
+      serviceMonitor: null,  // { port, path, interval }
+      rbac: null,  // { rules }
       // Security knobs, defaulting to the Pod Security Standards `restricted`
       // profile plus extra hardening (read-only root filesystem, user
       // namespaces). Feature functions relax them (one knob, or a whole profile
@@ -169,11 +254,29 @@ local exclusionConflicts(exclusive) = [
       if this.config.store == null then null else pvcManifest(storeName, this.config.store, this.labels),
     configMap::
       if this.config.configFiles == null then null else configMapManifest(configName, this.config.configFiles.files, this.labels),
+    pdb::
+      if this.config.pdb == null then null else pdbManifest(this.config.name, this.config.pdb, this.selectorLabels, this.labels),
+    hpa::
+      if this.config.hpa == null then null else hpaManifest(this.config.name, this.config.hpa, this.labels),
+    networkPolicy::
+      if this.config.networkPolicy == null then null else networkPolicyManifest(this.config.name, this.config.networkPolicy, this.selectorLabels, this.labels),
+    serviceMonitor::
+      if this.config.serviceMonitor == null then null else serviceMonitorManifest(this.config.name, this.config.serviceMonitor, this.selectorLabels, this.labels),
+    // rbac contributes THREE manifests (ServiceAccount, Role, RoleBinding).
+    rbacManifests::
+      if this.config.rbac == null then [] else rbacManifests(this.config.name, this.config.rbac, this.labels),
 
     // The owned manifests as a list, hidden so it stays out of
     // std.objectValues(app); list() appends it explicitly.
     ownedManifests::
-      std.filter(function(manifest) manifest != null, [this.storeClaim, this.configMap]),
+      std.filter(function(manifest) manifest != null, [
+        this.storeClaim,
+        this.configMap,
+        this.pdb,
+        this.hpa,
+        this.networkPolicy,
+        this.serviceMonitor,
+      ]) + this.rbacManifests,
 
     // The pod-level half of the security posture; each workload kind merges
     // this into its pod template spec. The container-level half lives in
@@ -198,8 +301,30 @@ local exclusionConflicts(exclusive) = [
           else { fsGroup: cfg.fsGroup, fsGroupChangePolicy: 'OnRootMismatch' }
         );
       (if securityContext == {} then {} else { securityContext: securityContext })
-      + { automountServiceAccountToken: cfg.serviceAccountName != null }
+      + { automountServiceAccountToken: this.podServiceAccount != null }
       + (if cfg.hostUsers then {} else { hostUsers: false }),
+
+    // The ServiceAccount the pod runs under: the one rbac creates (named after
+    // the workload) when composed, otherwise an explicitly configured one, else
+    // none. The token is mounted only when this is set (see podSecurity).
+    podServiceAccount::
+      if this.config.rbac != null then this.config.name else this.config.serviceAccountName,
+
+    // Pod-template metadata: the workload labels plus pod-only labels, and the
+    // workload annotations plus pod-only annotations. The selector is unaffected
+    // (it keys on selectorLabels alone), so pod labels never reach the immutable
+    // field.
+    podTemplateLabels:: this.labels + this.config.podLabels,
+    podTemplateAnnotations:: this.config.annotations + this.config.podAnnotations,
+
+    // Pod-spec extras every kind merges alongside podSecurity/podVolumes/
+    // podScheduling: image-pull secrets, a priority class, and the resolved
+    // ServiceAccount. Each is omitted when unset.
+    podExtras::
+      local cfg = this.config;
+      (if cfg.imagePullSecrets == [] then {} else { imagePullSecrets: [{ name: s } for s in cfg.imagePullSecrets] })
+      + (if cfg.priorityClassName == null then {} else { priorityClassName: cfg.priorityClassName })
+      + (if this.podServiceAccount == null then {} else { serviceAccountName: this.podServiceAccount }),
 
     // The volumes half of the pod template, kept alongside podSecurity so every
     // Deployment/CronJob/DaemonSet-backed kind merges the same fragment.
@@ -282,29 +407,22 @@ local exclusionConflicts(exclusive) = [
 
     deployment:
       local cfg = self.config;
-      local podSecurity = self.podSecurity;
-      local podVolumes = self.podVolumes;
-      local podScheduling = self.podScheduling;
+      // Captured before the nested `spec+` literal, where `self` would rebind.
+      local podSpec = self.podSecurity + self.podVolumes + self.podScheduling + self.podExtras;
       k.apps.v1.deployment.new(cfg.name, replicas=cfg.replicas, containers=[self.container], podLabels=self.selectorLabels)
       + k.apps.v1.deployment.metadata.withLabels(self.labels)
-      + k.apps.v1.deployment.spec.template.metadata.withLabelsMixin(self.labels)
-      + { spec+: { template+: { spec+: podSecurity + podVolumes + podScheduling } } }
+      + k.apps.v1.deployment.spec.template.metadata.withLabelsMixin(self.podTemplateLabels)
+      + { spec+: { template+: { spec+: podSpec } } }
       + (
         if cfg.strategy == null
         then {}
         else { spec+: { strategy: { type: cfg.strategy } } }
       )
+      + (if cfg.annotations == {} then {} else k.apps.v1.deployment.metadata.withAnnotations(cfg.annotations))
       + (
-        if cfg.annotations == {}
+        if self.podTemplateAnnotations == {}
         then {}
-        else
-          k.apps.v1.deployment.metadata.withAnnotations(cfg.annotations)
-          + k.apps.v1.deployment.spec.template.metadata.withAnnotations(cfg.annotations)
-      )
-      + (
-        if cfg.serviceAccountName == null
-        then {}
-        else k.apps.v1.deployment.spec.template.spec.withServiceAccountName(cfg.serviceAccountName)
+        else k.apps.v1.deployment.spec.template.metadata.withAnnotations(self.podTemplateAnnotations)
       ),
   },
 

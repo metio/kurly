@@ -321,6 +321,40 @@
       {
          "args": [
             {
+               "example": 2,
+               "name": "minReplicas",
+               "required": true,
+               "type": "int"
+            },
+            {
+               "example": 10,
+               "name": "maxReplicas",
+               "required": true,
+               "type": "int"
+            },
+            {
+               "example": 80,
+               "name": "targetCPU",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "name": "targetMemory",
+               "required": false,
+               "type": "int"
+            }
+         ],
+         "group": "reliability",
+         "help": "A HorizontalPodAutoscaler scaling the Deployment on CPU and/or memory utilization.",
+         "id": "hpa",
+         "kinds": [
+            "http",
+            "worker"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": "ghcr.io/acme/app:1.2.3",
                "name": "image",
                "required": true,
@@ -330,6 +364,27 @@
          "group": "container",
          "help": "Overrides the container image.",
          "id": "image",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  "regcred"
+               ],
+               "name": "names",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "container",
+         "help": "Names of existing Secrets the kubelet uses to pull the image.",
+         "id": "imagePullSecrets",
          "kinds": [
             "http",
             "worker",
@@ -361,6 +416,34 @@
       {
          "args": [
             {
+               "name": "ingress",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "egress",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "policyTypes",
+               "required": false,
+               "type": "array"
+            }
+         ],
+         "group": "networking",
+         "help": "A NetworkPolicy firewalling the pods (ingress/egress rules and policyTypes passed through verbatim).",
+         "id": "networkPolicy",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": {
                   "disktype": "ssd"
                },
@@ -372,6 +455,71 @@
          "group": "placement",
          "help": "Restricts the pod to nodes carrying these labels.",
          "id": "nodeSelector",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": 1,
+               "name": "minAvailable",
+               "required": false,
+               "type": "any"
+            },
+            {
+               "name": "maxUnavailable",
+               "required": false,
+               "type": "any"
+            }
+         ],
+         "group": "reliability",
+         "help": "A PodDisruptionBudget capping voluntary disruption. Set one of minAvailable / maxUnavailable.",
+         "id": "pdb",
+         "kinds": [
+            "http",
+            "worker",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "linkerd.io/inject": "enabled"
+               },
+               "name": "podAnnotations",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Annotations on the pod template ONLY — for sidecar injection and scrape hints that are meaningless on the controller object.",
+         "id": "podAnnotations",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "tier": "database"
+               },
+               "name": "podLabels",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Labels on the pod template ONLY (never the workload metadata or the immutable selector) — for network-policy selectors and log collection.",
+         "id": "podLabels",
          "kinds": [
             "http",
             "worker",
@@ -398,6 +546,25 @@
       {
          "args": [
             {
+               "example": "high-priority",
+               "name": "priorityClassName",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "The pod's scheduling priority class.",
+         "id": "priorityClassName",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
                "default": "/healthz",
                "example": "/tickets.edn",
                "name": "path",
@@ -410,6 +577,39 @@
          "id": "probes",
          "kinds": [
             "http"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  {
+                     "apiGroups": [
+                        ""
+                     ],
+                     "resources": [
+                        "configmaps"
+                     ],
+                     "verbs": [
+                        "get",
+                        "list",
+                        "watch"
+                     ]
+                  }
+               ],
+               "name": "rules",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "security",
+         "help": "Mints a ServiceAccount, a namespaced Role with the given rules, and the RoleBinding, and runs the pod under that ServiceAccount.",
+         "id": "rbac",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
          ]
       },
       {
@@ -628,6 +828,33 @@
             "worker",
             "cron",
             "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "default": "http",
+               "name": "port",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "/metrics",
+               "name": "path",
+               "required": false,
+               "type": "path"
+            },
+            {
+               "name": "interval",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "group": "observability",
+         "help": "A Prometheus-Operator ServiceMonitor scraping the workload Service.",
+         "id": "serviceMonitor",
+         "kinds": [
+            "http"
          ]
       },
       {

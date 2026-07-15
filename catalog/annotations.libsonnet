@@ -69,6 +69,18 @@ local deploymentKinds = ['http', 'worker'];
     annotations: d.fn('Extra annotations on metadata and the pod template.', [
       d.arg('annotations', d.T.object, required=true, example={ 'prometheus.io/scrape': 'true' }),
     ]) + { kinds: allKinds, group: 'container' },
+    podLabels: d.fn('Labels on the pod template ONLY (never the workload metadata or the immutable selector) — for network-policy selectors and log collection.', [
+      d.arg('podLabels', d.T.object, required=true, example={ tier: 'database' }),
+    ]) + { kinds: allKinds, group: 'container' },
+    podAnnotations: d.fn('Annotations on the pod template ONLY — for sidecar injection and scrape hints that are meaningless on the controller object.', [
+      d.arg('podAnnotations', d.T.object, required=true, example={ 'linkerd.io/inject': 'enabled' }),
+    ]) + { kinds: allKinds, group: 'container' },
+    imagePullSecrets: d.fn('Names of existing Secrets the kubelet uses to pull the image.', [
+      d.arg('names', d.T.array, required=true, example=['regcred']),
+    ]) + { kinds: allKinds, group: 'container' },
+    priorityClassName: d.fn("The pod's scheduling priority class.", [
+      d.arg('priorityClassName', d.T.string, required=true, example='high-priority'),
+    ]) + { kinds: allKinds, group: 'container' },
     resources: d.fn('Container resource requests and/or limits.', [
       d.arg('requests', d.T.object, example={ cpu: '100m', memory: '128Mi' }),
       d.arg('limits', d.T.object, example={ memory: '256Mi' }),
@@ -146,6 +158,31 @@ local deploymentKinds = ['http', 'worker'];
     affinity: d.fn('A pod/node affinity object, merged onto the pod template.', [
       d.arg('affinity', d.T.object, required=true, example={ nodeAffinity: { requiredDuringSchedulingIgnoredDuringExecution: { nodeSelectorTerms: [{ matchExpressions: [{ key: 'disktype', operator: 'In', values: ['ssd'] }] }] } } }),
     ]) + { kinds: allKinds, group: 'placement' },
+
+    // Owned manifests — each adds a resource that targets the workload's pods.
+    pdb: d.fn('A PodDisruptionBudget capping voluntary disruption. Set one of minAvailable / maxUnavailable.', [
+      d.arg('minAvailable', d.T.any, example=1),
+      d.arg('maxUnavailable', d.T.any),
+    ]) + { kinds: ['http', 'worker', 'daemon'], group: 'reliability' },
+    hpa: d.fn('A HorizontalPodAutoscaler scaling the Deployment on CPU and/or memory utilization.', [
+      d.arg('minReplicas', d.T.int, required=true, example=2),
+      d.arg('maxReplicas', d.T.int, required=true, example=10),
+      d.arg('targetCPU', d.T.int, example=80),
+      d.arg('targetMemory', d.T.int),
+    ]) + { kinds: deploymentKinds, group: 'reliability' },
+    networkPolicy: d.fn('A NetworkPolicy firewalling the pods (ingress/egress rules and policyTypes passed through verbatim).', [
+      d.arg('ingress', d.T.array, default=[]),
+      d.arg('egress', d.T.array, default=[]),
+      d.arg('policyTypes', d.T.array),
+    ]) + { kinds: allKinds, group: 'networking' },
+    serviceMonitor: d.fn('A Prometheus-Operator ServiceMonitor scraping the workload Service.', [
+      d.arg('port', d.T.string, default='http'),
+      d.arg('path', d.T.path, default='/metrics'),
+      d.arg('interval', d.T.string),
+    ]) + { kinds: ['http'], group: 'observability' },
+    rbac: d.fn('Mints a ServiceAccount, a namespaced Role with the given rules, and the RoleBinding, and runs the pod under that ServiceAccount.', [
+      d.arg('rules', d.T.array, required=true, example=[{ apiGroups: [''], resources: ['configmaps'], verbs: ['get', 'list', 'watch'] }]),
+    ]) + { kinds: allKinds, group: 'security' },
   },
 
   // Exposure recipes — a separate axis, composed onto an http workload. All

@@ -18,25 +18,17 @@ function(name, image, schedule)
 
     cronjob:
       local cfg = self.config;
-      local podSecurity = self.podSecurity;
-      local podVolumes = self.podVolumes;
-      local podScheduling = self.podScheduling;
+      local podSpec = self.podSecurity + self.podVolumes + self.podScheduling + self.podExtras;
       k.batch.v1.cronJob.new(cfg.name, cfg.schedule, [self.container])
       + k.batch.v1.cronJob.metadata.withLabels(self.labels)
       + k.batch.v1.cronJob.spec.withConcurrencyPolicy(cfg.concurrencyPolicy)
-      + k.batch.v1.cronJob.spec.jobTemplate.spec.template.metadata.withLabelsMixin(self.labels)
+      + k.batch.v1.cronJob.spec.jobTemplate.spec.template.metadata.withLabelsMixin(self.podTemplateLabels)
       + k.batch.v1.cronJob.spec.jobTemplate.spec.template.spec.withRestartPolicy('OnFailure')
-      + { spec+: { jobTemplate+: { spec+: { template+: { spec+: podSecurity + podVolumes + podScheduling } } } } }
+      + { spec+: { jobTemplate+: { spec+: { template+: { spec+: podSpec } } } } }
+      + (if cfg.annotations == {} then {} else k.batch.v1.cronJob.metadata.withAnnotations(cfg.annotations))
       + (
-        if cfg.annotations == {}
+        if self.podTemplateAnnotations == {}
         then {}
-        else
-          k.batch.v1.cronJob.metadata.withAnnotations(cfg.annotations)
-          + k.batch.v1.cronJob.spec.jobTemplate.spec.template.metadata.withAnnotations(cfg.annotations)
-      )
-      + (
-        if cfg.serviceAccountName == null
-        then {}
-        else k.batch.v1.cronJob.spec.jobTemplate.spec.template.spec.withServiceAccountName(cfg.serviceAccountName)
+        else k.batch.v1.cronJob.spec.jobTemplate.spec.template.metadata.withAnnotations(self.podTemplateAnnotations)
       ),
   }

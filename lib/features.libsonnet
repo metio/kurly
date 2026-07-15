@@ -39,6 +39,16 @@ local resourcePresets = {
   version(version):: { config+:: { version: version } },
   labels(labels):: { config+:: { labels+: labels } },
   annotations(annotations):: { config+:: { annotations+: annotations } },
+  // podLabels/podAnnotations land on the pod template ONLY (never the workload
+  // metadata, never the immutable selector) — for network-policy selectors, log
+  // collection, and sidecar-injection annotations that are meaningless on the
+  // controller object.
+  podLabels(podLabels):: { config+:: { podLabels+: podLabels } },
+  podAnnotations(podAnnotations):: { config+:: { podAnnotations+: podAnnotations } },
+  // imagePullSecrets names existing Secrets the kubelet uses to pull the image;
+  // priorityClassName sets the pod's scheduling priority.
+  imagePullSecrets(names):: { config+:: { imagePullSecrets+: names } },
+  priorityClassName(priorityClassName):: { config+:: { priorityClassName: priorityClassName } },
   resources(requests=null, limits=null):: {
     config+:: {
       resources+:
@@ -118,6 +128,26 @@ local resourcePresets = {
   tolerations(tolerations):: { config+:: { tolerations+: tolerations } },
   topologySpread(constraints):: { config+:: { topologySpread+: constraints } },
   affinity(affinity):: { config+:: { affinity+: affinity } },
+
+  // Owned manifests — each adds a resource beyond the pod controller, targeting
+  // the workload's own pods by its stable selector. pdb caps voluntary
+  // disruption; hpa autoscales the Deployment on CPU/memory; networkPolicy
+  // firewalls the pods (rules passed through verbatim); serviceMonitor wires
+  // Prometheus scraping; rbac mints a ServiceAccount + Role + RoleBinding and
+  // runs the pod under it.
+  pdb(minAvailable=null, maxUnavailable=null):: {
+    config+:: { pdb: { minAvailable: minAvailable, maxUnavailable: maxUnavailable } },
+  },
+  hpa(minReplicas, maxReplicas, targetCPU=null, targetMemory=null):: {
+    config+:: { hpa: { minReplicas: minReplicas, maxReplicas: maxReplicas, targetCPU: targetCPU, targetMemory: targetMemory } },
+  },
+  networkPolicy(ingress=[], egress=[], policyTypes=null):: {
+    config+:: { networkPolicy: { ingress: ingress, egress: egress, policyTypes: policyTypes } },
+  },
+  serviceMonitor(port='http', path='/metrics', interval=null):: {
+    config+:: { serviceMonitor: { port: port, path: path, interval: interval } },
+  },
+  rbac(rules):: { config+:: { rbac: { rules: rules } } },
 
   // Security escape hatches — each downgrades one default for a workload that
   // genuinely needs it. The kurly.security.* mixins relax whole PSS profiles.
