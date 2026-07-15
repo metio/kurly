@@ -202,4 +202,18 @@ local deploymentKinds = ['http', 'worker'];
       d.arg('actions', d.T.array),
     ]),
   },
+
+  // Rendering terminals — turn a composed app or an explicit set of parts into
+  // the output a consumer applies or publishes.
+  helpers: {
+    list: d.fn('Renders one composed app as a kind: List, including its hidden owned manifests (the store PVC, the config ConfigMap).', [
+      d.arg('app', d.T.object, required=true),
+    ]),
+    listOf: d.fn('Renders an explicit set of parts as a kind: List. Joins the parts first, so entries can be null (dropped) or nested arrays (flattened) — build the set with conditionals and optional groups.', [
+      d.arg('parts', d.T.array, required=true),
+    ]),
+    join: d.fn('Builds one flat array from parts that may be null (dropped) or nested arrays (flattened one level), for assembling any value with conditionals and optional groups. A Jsonnet `if` with no else is null when false, so an unmet condition drops out.', [
+      d.arg('parts', d.T.array, required=true),
+    ]),
+  },
 }

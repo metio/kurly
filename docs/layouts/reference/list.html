@@ -24,6 +24,7 @@
     <a href="#features">Features</a>
     <a href="#exposure">Exposure</a>
     <a href="#security">Security</a>
+    <a href="#helpers">Helpers</a>
   </nav>
 
   <section id="workloads">
@@ -102,6 +103,15 @@
       composed wins; single-knob hatches (in Features) fine-tune after it.</p>
     {{ range $cat.security }}
       {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.security.%s" .id) "mixin" true) }}
+    {{ end }}
+  </section>
+
+  <section id="helpers">
+    <h2>Helpers</h2>
+    <p>Rendering terminals — turn a composed app or an explicit set of parts into
+      the output a consumer applies or publishes.</p>
+    {{ range $cat.helpers }}
+      {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.%s" .id)) }}
     {{ end }}
   </section>
 </article>

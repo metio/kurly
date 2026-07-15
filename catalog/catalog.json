@@ -653,6 +653,41 @@
          ]
       }
    ],
+   "helpers": [
+      {
+         "args": [
+            {
+               "name": "parts",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "help": "Builds one flat array from parts that may be null (dropped) or nested arrays (flattened one level), for assembling any value with conditionals and optional groups. A Jsonnet `if` with no else is null when false, so an unmet condition drops out.",
+         "id": "join"
+      },
+      {
+         "args": [
+            {
+               "name": "app",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "help": "Renders one composed app as a kind: List, including its hidden owned manifests (the store PVC, the config ConfigMap).",
+         "id": "list"
+      },
+      {
+         "args": [
+            {
+               "name": "parts",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "help": "Renders an explicit set of parts as a kind: List. Joins the parts first, so entries can be null (dropped) or nested arrays (flattened) — build the set with conditionals and optional groups.",
+         "id": "listOf"
+      }
+   ],
    "kinds": [
       {
          "args": [

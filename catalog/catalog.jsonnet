@@ -81,6 +81,11 @@ local workloadEntries =
   assert reconcile('kinds', std.objectFields(ann.kinds), ['http', 'worker', 'cron', 'daemon']),
   assert std.all([std.objectHasAll(main, kind) for kind in std.objectFields(ann.kinds)]) :
          'kinds: main.libsonnet must expose every annotated kind',
+  // Helpers are top-level fields of main alongside the kinds; assert the
+  // annotated set is exactly the rendering terminals main exposes.
+  assert reconcile('helpers', std.objectFields(ann.helpers), ['join', 'list', 'listOf']),
+  assert std.all([std.objectHasAll(main, helper) for helper in std.objectFields(ann.helpers)]) :
+         'helpers: main.libsonnet must expose every annotated helper',
 
   schemaVersion: 1,
   workloads: workloadEntries,
@@ -88,5 +93,6 @@ local workloadEntries =
   features: entries(ann.features),
   expose: entries(ann.expose),
   security: entries(ann.security),
+  helpers: entries(ann.helpers),
   migrations: entries(ann.migrations),
 }
