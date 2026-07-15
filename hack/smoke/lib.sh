@@ -59,6 +59,14 @@ kurly::diagnose_pipeline() {
   kubectl --namespace="$ns" get stageset valkey -o jsonpath='{.status}' 2>/dev/null || true
   echo
   kubectl --namespace="$ns" describe stageset valkey 2>/dev/null | tail -40 || true
+  # Did the applied workload objects land ANYWHERE? (A kind:List that the applier
+  # never expands, or objects placed in another namespace, both read as NotFound
+  # to the readyChecks.) And what did stageset record as applied?
+  echo "--- valkey workload objects across all namespaces ---"
+  kubectl get deployments,statefulsets,services,pods --all-namespaces 2>/dev/null \
+    | grep -i valkey || echo "(no valkey workload objects found in any namespace)"
+  echo "--- StageInventory (what stageset applied) ---"
+  kubectl --namespace="$ns" get stageinventory -o yaml 2>/dev/null | grep -iE "kind:|name:|namespace:|apiVersion:" | head -40 || true
   # The controllers' own pods and logs — where a hang that never writes a CR
   # condition (an OOMKill, a crash, a stuck fetch) actually shows up.
   echo "--- JaaS operator (pods + logs) ---"
