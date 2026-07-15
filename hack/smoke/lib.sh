@@ -116,6 +116,9 @@ EOF
 # the ImageVolume feature gate they mount through.
 kurly::install_jaas() {
   echo "== install JaaS (helm) =="
+  # The chart's default 64Mi is far too small to render k8s-libsonnet (go-jsonnet
+  # peaks at hundreds of MB), so the operator OOMKills on the first reconcile —
+  # give it room.
   helm upgrade --install jaas oci://ghcr.io/metio/helm-charts/jaas \
     --namespace jaas-system --create-namespace \
     --set operator.enabled=true \
@@ -124,6 +127,7 @@ kurly::install_jaas() {
     --set libraries.grafonnet.enabled=false \
     --set libraries.docsonnet.enabled=false \
     --set libraries.xtd.enabled=false \
+    --set resources.memory=2Gi \
     --wait --timeout 5m
   kubectl -n jaas-system rollout status deploy \
     --selector app.kubernetes.io/name=jaas --timeout=300s || true
