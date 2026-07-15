@@ -797,7 +797,7 @@
             {
                "args": [
                   {
-                     "default": "ghcr.io/metio/tik:2026.7.14174051",
+                     "default": "ghcr.io/metio/tik:2026.7.14194001",
                      "name": "image",
                      "required": false,
                      "type": "string"
