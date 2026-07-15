@@ -1,0 +1,23 @@
+{
+  "name": "kurly",
+  "owner": {
+    "name": "The kurly Authors"
+  },
+  "description": "kurly — a Jsonnet library of composable Kubernetes workload recipes.",
+  "plugins": [
+    {
+      "name": "kurly",
+      "source": "./",
+      "description": "Teach Claude to compose Kubernetes workloads with kurly's base kinds and + features.",
+      "homepage": "https://kurly.projects.metio.wtf/",
+      "license": "0BSD",
+      "keywords": [
+        "kurly",
+        "jsonnet",
+        "kubernetes",
+        "workloads",
+        "gitops"
+      ]
+    }
+  ]
+}

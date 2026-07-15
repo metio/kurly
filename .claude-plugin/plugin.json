@@ -1,0 +1,22 @@
+{
+  "name": "kurly",
+  "displayName": "kurly",
+  "description": "Teach Claude to compose Kubernetes workloads with kurly — start from a base kind (http/worker/cron/daemon), add composable + features, and render with kurly.list.",
+  "author": {
+    "name": "The kurly Authors",
+    "url": "https://github.com/metio/kurly"
+  },
+  "homepage": "https://kurly.projects.metio.wtf/",
+  "repository": "https://github.com/metio/kurly",
+  "license": "0BSD",
+  "keywords": [
+    "kurly",
+    "jsonnet",
+    "kubernetes",
+    "workloads",
+    "k8s-libsonnet",
+    "jaas",
+    "stageset",
+    "gitops"
+  ]
+}

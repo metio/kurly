@@ -35,12 +35,13 @@ precedence = "override"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
 
-# The documentation site. `aggregate` lets a file's own inline header win where
-# it has one (the layouts, CSS, and scripts do); the content markdown and
-# hugo.toml fall back to this. The docs/themes/metio submodule is a separate
-# repo, outside this scope.
+# The documentation site, the Claude skill, and the plugin manifests.
+# `aggregate` lets a file's own inline header win where it has one (the layouts,
+# CSS, scripts, and the skill's reference.md do); the content markdown, JSON
+# manifests, SKILL.md front matter, and hugo.toml fall back to this. The
+# docs/themes/metio submodule is a separate repo, outside this scope.
 [[annotations]]
-path = "docs/**"
+path = ["docs/**", "skills/**", ".claude-plugin/**"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
