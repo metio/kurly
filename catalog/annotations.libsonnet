@@ -57,8 +57,8 @@ local deploymentKinds = ['http', 'worker'];
     command: d.fn('Overrides the image entrypoint entirely.', [
       d.arg('command', d.T.array, required=true, example=['/bin/app']),
     ]) + { kinds: allKinds, group: 'container' },
-    env: d.fn('Appends environment variables (k8s EnvVar entries) to the container.', [
-      d.arg('env', d.T.array, required=true, example=[{ name: 'LOG_LEVEL', value: 'info' }]),
+    env: d.fn('Environment variables as a name→value map, appended to the container.', [
+      d.arg('env', d.T.object, required=true, example={ LOG_LEVEL: 'info' }),
     ]) + { kinds: allKinds, group: 'container' },
     version: d.fn('The workload version, stamped as app.kubernetes.io/version on every object.', [
       d.arg('version', d.T.string, required=true, example='1.2.3'),
@@ -141,10 +141,10 @@ local deploymentKinds = ['http', 'worker'];
       d.arg('tolerations', d.T.array, required=true, example=[{ key: 'gpu', operator: 'Exists', effect: 'NoSchedule' }]),
     ]) + { kinds: allKinds, group: 'placement' },
     topologySpread: d.fn('Topology-spread constraints spreading the pods across a topology domain (keep version-bound labels in the selector so a rollout spreads the new set independently).', [
-      d.arg('constraints', d.T.array, required=true),
+      d.arg('constraints', d.T.array, required=true, example=[{ maxSkew: 1, topologyKey: 'kubernetes.io/hostname', whenUnsatisfiable: 'DoNotSchedule', labelSelector: { matchLabels: { 'app.kubernetes.io/name': 'web' } } }]),
     ]) + { kinds: allKinds, group: 'placement' },
     affinity: d.fn('A pod/node affinity object, merged onto the pod template.', [
-      d.arg('affinity', d.T.object, required=true),
+      d.arg('affinity', d.T.object, required=true, example={ nodeAffinity: { requiredDuringSchedulingIgnoredDuringExecution: { nodeSelectorTerms: [{ matchExpressions: [{ key: 'disktype', operator: 'In', values: ['ssd'] }] }] } } }),
     ]) + { kinds: allKinds, group: 'placement' },
   },
 

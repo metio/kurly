@@ -144,6 +144,25 @@
       {
          "args": [
             {
+               "example": {
+                  "nodeAffinity": {
+                     "requiredDuringSchedulingIgnoredDuringExecution": {
+                        "nodeSelectorTerms": [
+                           {
+                              "matchExpressions": [
+                                 {
+                                    "key": "disktype",
+                                    "operator": "In",
+                                    "values": [
+                                       "ssd"
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               },
                "name": "affinity",
                "required": true,
                "type": "object"
@@ -269,19 +288,16 @@
       {
          "args": [
             {
-               "example": [
-                  {
-                     "name": "LOG_LEVEL",
-                     "value": "info"
-                  }
-               ],
+               "example": {
+                  "LOG_LEVEL": "info"
+               },
                "name": "env",
                "required": true,
-               "type": "array"
+               "type": "object"
             }
          ],
          "group": "container",
-         "help": "Appends environment variables (k8s EnvVar entries) to the container.",
+         "help": "Environment variables as a name→value map, appended to the container.",
          "id": "env",
          "kinds": [
             "http",
@@ -707,6 +723,18 @@
       {
          "args": [
             {
+               "example": [
+                  {
+                     "labelSelector": {
+                        "matchLabels": {
+                           "app.kubernetes.io/name": "web"
+                        }
+                     },
+                     "maxSkew": 1,
+                     "topologyKey": "kubernetes.io/hostname",
+                     "whenUnsatisfiable": "DoNotSchedule"
+                  }
+               ],
                "name": "constraints",
                "required": true,
                "type": "array"

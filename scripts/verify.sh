@@ -8,6 +8,7 @@ check-fmt
 check-catalog
 check-tests
 check-examples
+check-coverage
 check-security
 reuse lint
 yamllint .

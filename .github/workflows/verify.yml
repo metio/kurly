@@ -45,6 +45,15 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - run: nix develop --command check-examples
+  coverage:
+    # The catalog-driven battery: renders every feature/recipe/profile/kind
+    # composition generated from the catalog and validates each with kubeconform.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - run: nix develop --command check-coverage
   security:
     # Kubernetes static analysis over the rendered manifests: kurly's own
     # invariants as conftest/Rego, plus pluto (deprecated APIs) and kubesec.
@@ -116,7 +125,7 @@ jobs:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.
     name: Verify
-    needs: [fmt, catalog, test, examples, security, reuse, yaml, github-actions, markdown, typos, policy, dco]
+    needs: [fmt, catalog, test, examples, coverage, security, reuse, yaml, github-actions, markdown, typos, policy, dco]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 15

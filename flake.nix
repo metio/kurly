@@ -118,6 +118,20 @@
             ];
             text = builtins.readFile ./scripts/check-examples.sh;
           };
+          # The catalog-driven coverage battery: render every feature/recipe/
+          # profile/kind composition generated from the catalog and validate each
+          # manifest with kubeconform.
+          check-coverage = pkgs.writeShellApplication {
+            name = "check-coverage";
+            runtimeInputs = with pkgs; [
+              go-jsonnet
+              jsonnet-bundler
+              jq
+              kubeconform
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/check-coverage.sh;
+          };
           check-security = pkgs.writeShellApplication {
             name = "check-security";
             runtimeInputs = with pkgs; [
@@ -167,6 +181,7 @@
               check-catalog
               check-tests
               check-examples
+              check-coverage
               check-security
             ]
             ++ devshell.lib.lintTools pkgs;
@@ -177,6 +192,7 @@
             check-catalog
             check-tests
             check-examples
+            check-coverage
             check-security
             gen-docs-data
             kind-smoke
@@ -193,6 +209,7 @@
               echo "  check-catalog    regenerate catalog/catalog.json, fail if stale"
               echo "  check-tests      assertion suite + the requiresService negative check"
               echo "  check-examples   render examples + workloads, validate with kubeconform"
+              echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
               echo "  kind-smoke       apply kurly's output to a cluster, wait for Ready"
