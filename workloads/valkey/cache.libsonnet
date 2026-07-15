@@ -27,7 +27,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = 'dev';
 
 function(
-  image='docker.io/valkey/valkey:8.1.8',
+  image='docker.io/valkey/valkey:9.0.3',
   maxMemory='256mb',
   // The sidecar that labels the primary pod — a maintained Alpine image carrying
   // kubectl plus busybox `nc` and `sh` (the role probe needs neither bash nor a

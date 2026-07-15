@@ -58,7 +58,7 @@ kurly.list(valkey(storageSize='5Gi', maxMemory='512mb'))
 
 | Parameter | Default | Notes |
 |---|---|---|
-| `image` | `docker.io/valkey/valkey:8.1.8` | any Redis-compatible server built the same way |
+| `image` | `docker.io/valkey/valkey:9.0.3` | any Redis-compatible server built the same way |
 | `storageSize` | `1Gi` | the per-pod volume for append-only persistence |
 | `storageClass` | cluster default | |
 | `maxMemory` | — | e.g. `512mb`; caps the dataset with `allkeys-lru` eviction. Unset grows to the pod memory limit. |
