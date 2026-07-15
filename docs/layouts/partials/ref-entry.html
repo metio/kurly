@@ -23,6 +23,7 @@
     {{- if $e.requiresService }}<span class="ref-badge ref-badge-warn">requires a Service</span>{{ end -}}
   </div>
   {{- if $e.args }}
+  <div class="ref-table-wrap">
   <table class="ref-args">
     <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Default</th><th>Example</th></tr></thead>
     <tbody>
@@ -37,5 +38,6 @@
     {{- end }}
     </tbody>
   </table>
+  </div>
   {{- end }}
 </div>

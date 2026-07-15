@@ -40,6 +40,7 @@
             <p class="ref-help">{{ .help }}</p>
             <p class="ref-import">Import: <code>import '{{ .importPath }}'</code></p>
             {{ if .args }}
+            <div class="ref-table-wrap">
             <table class="ref-args">
               <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Default</th></tr></thead>
               <tbody>
@@ -53,6 +54,7 @@
               {{ end }}
               </tbody>
             </table>
+            </div>
             {{ end }}
           </div>
         {{ end }}
