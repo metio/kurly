@@ -8,7 +8,7 @@
 
 # Alpine.js drives the assembler page. It is fetched here rather than vendored so
 # a version bump is a one-line Renovate PR, not a hand-committed binary blob.
-ALPINE_VERSION=3.14.9
+ALPINE_VERSION=3.15.12
 
 mkdir -p docs/assets docs/static docs/static/js
 
