@@ -1533,6 +1533,26 @@
                      "type": "string"
                   },
                   {
+                     "default": "256mb",
+                     "name": "maxMemory",
+                     "required": false,
+                     "type": "string"
+                  }
+               ],
+               "help": "An in-memory Valkey cache that upgrades its version with zero downtime and no data loss, on the stock image and no orchestrator — the replication hand-off lives entirely in the pod manifests (headless Service, maxSurge, an initContainer that replicates the running peer, and a preStop failover).",
+               "id": "cache",
+               "importPath": "github.com/metio/kurly/workloads/valkey/cache.libsonnet",
+               "kind": "worker"
+            },
+            {
+               "args": [
+                  {
+                     "default": "docker.io/valkey/valkey:8",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "1Gi",
                      "name": "storageSize",
                      "required": false,

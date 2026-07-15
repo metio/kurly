@@ -25,6 +25,7 @@ local stageImports = {
   'tik/backend': import 'github.com/metio/kurly/workloads/tik/backend.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'valkey/instance': import 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
+  'valkey/cache': import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

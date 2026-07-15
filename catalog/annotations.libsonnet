@@ -303,6 +303,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           kind: 'stateful',
           importPath: 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
         },
+        cache: d.fn('An in-memory Valkey cache that upgrades its version with zero downtime and no data loss, on the stock image and no orchestrator — the replication hand-off lives entirely in the pod manifests (headless Service, maxSurge, an initContainer that replicates the running peer, and a preStop failover).', [
+          d.arg('image', d.T.string, default='docker.io/valkey/valkey:8'),
+          d.arg('maxMemory', d.T.string, default='256mb'),
+        ]) + {
+          kind: 'worker',
+          importPath: 'github.com/metio/kurly/workloads/valkey/cache.libsonnet',
+        },
       },
     },
   },

@@ -15,6 +15,23 @@ it; a Redis-compatible alternative (KeyDB, Dragonfly, …) runs by overriding
 
 Clients reach it at `<pod>.valkey-headless.<namespace>.svc` on port `6379`.
 
+## Variants
+
+- **`instance.libsonnet`** — the persistent single instance above (durable store).
+- **`cache.libsonnet`** — an in-memory cache that **upgrades its version with zero
+  downtime and no data loss**, on the stock image and with **no orchestrator**.
+  The replication hand-off lives entirely in the pod manifests: a headless
+  Service for peer discovery, a `maxSurge: 1` RollingUpdate so the new pod
+  overlaps the old, an initContainer that finds the running peer and boots as its
+  replica, a readiness gate on `master_link_status:up`, and a `preStop` that runs
+  Valkey's own atomic `failover` before the old pod exits. A plain `kubectl
+  apply`, a Helm upgrade, or a stageset roll all trigger it identically.
+
+  ```jsonnet
+  local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
+  kurly.list(valkey(maxMemory='512mb'))
+  ```
+
 ## Compose
 
 ```jsonnet
