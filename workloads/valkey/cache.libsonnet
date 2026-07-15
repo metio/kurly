@@ -82,25 +82,25 @@ function(
 
   // The role labeler: probe the local Valkey's replication role with busybox
   // `nc` (no bash, no Valkey client) and keep this pod's `roleLabel` in sync —
-  // set to `primary` on the master, removed on a replica. A direct merge `patch`
-  // (never `kubectl label`, which GETs first) writes the label, so the sidecar's
-  // Role needs only `patch` on pods — a merge patch with a null value deletes the
-  // key. The primary Service selects that label, so clients always reach the
-  // current master, even across the hand-off. HOME is a writable emptyDir so
-  // kubectl can cache under a read-only root filesystem.
+  // set to `primary` on the master, removed on a replica (a merge patch with a
+  // null value deletes the key). `kubectl patch` reads the pod before writing, so
+  // the sidecar's Role needs `get` and `patch` on pods (nothing more). The primary
+  // Service selects that label, so clients always reach the current master, even
+  // across the hand-off. HOME is a writable emptyDir so kubectl can cache under a
+  // read-only root filesystem.
   local labelerScript = |||
     set -u
     export HOME=/home/labeler
     escaped='%(roleLabel)s'
     while true; do
       if { printf 'INFO replication\r\n'; sleep 1; } | timeout 2 nc 127.0.0.1 6379 2>/dev/null | grep -q 'role:master'; then
-        value='"primary"'; role=master
+        value='"primary"'
       else
-        value=null; role=replica
+        value=null
       fi
-      out="$(kubectl patch pod "$POD_NAME" --type=merge \
-        -p "{\"metadata\":{\"labels\":{\"$escaped\":$value}}}" 2>&1)" || true
-      echo "labeler: role=${role} -> ${out}" >&2
+      kubectl patch pod "$POD_NAME" --type=merge \
+        -p "{\"metadata\":{\"labels\":{\"$escaped\":$value}}}" >/dev/null 2>&1 \
+        || echo "labeler: failed to patch ${escaped} on ${POD_NAME}" >&2
       sleep 3
     done
   ||| % { roleLabel: roleLabel };
@@ -124,14 +124,14 @@ function(
   })
   + kurly.lifecycle(preStop={ exec: { command: ['sh', '-c', preStopScript] } })
   + kurly.readinessProbe({ exec: { command: ['sh', '-c', "valkey-cli info replication | grep -qE 'role:master|master_link_status:up'"] } })
-  // The labeler is a Kubernetes API client: it needs a Role to patch pod labels
-  // AND network egress to the apiserver. apiServerClient declares both as
+  // The labeler is a Kubernetes API client: it needs a Role to read and label its
+  // pod AND network egress to the apiserver. apiServerClient declares both as
   // cross-cutting requirements, so a consumer's own rbac()/networkPolicy() cannot
-  // clobber this grant or firewall off the labeler. `patch` alone (no `get`, no
-  // `list`, no `watch`) is the whole grant — a namespaced Role, scoped to pods. It
-  // cannot be narrowed to this one pod: RBAC `resourceNames` cannot match the
-  // controller's generated pod names, so the patch verb is namespace-wide on pods.
-  + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }])
+  // clobber this grant or firewall off the labeler. `get` + `patch` on pods is the
+  // whole grant (no `list`, `watch`, `create`, or `delete`) — a namespaced Role.
+  // It cannot be narrowed to this one pod: RBAC `resourceNames` cannot match the
+  // controller's generated pod names, so the grant is namespace-wide on pods.
+  + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['get', 'patch'] }])
   // The labeler sidecar (a second container) and the primary Service are this
   // workload's own plumbing, added with the raw `+` escape hatch rather than a
   // library feature.

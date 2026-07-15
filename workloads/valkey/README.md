@@ -34,7 +34,7 @@ Clients reach it at `<pod>.valkey-headless.<namespace>.svc` on port `6379`.
   replica. (`valkey-headless` remains for peer discovery.)
 
   The labeler is a Kubernetes API client, so it carries a namespaced Role with
-  `patch` on pods (nothing else) and needs egress to the apiserver. It declares
+  `get` and `patch` on pods (nothing else) and needs egress to the apiserver. It declares
   both through `kurly.apiServerClient`, so composing your own `kurly.rbac(...)` or
   `kurly.networkPolicy(...)` onto the cache **adds to** the grant rather than
   replacing it — a NetworkPolicy cannot accidentally firewall off the labeler. On
