@@ -21,7 +21,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 
 ns=kurly-valkey-stageset
-branch="${KURLY_GIT_BRANCH:-main}"
 
 # The version ladder: latest patch of each line, ONE major/minor step at a time
 # (operators don't skip majors). The cross-major 7.2->8.0 hop exercises cross-
@@ -59,9 +58,12 @@ spec:
       local cache = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
       function(image='${ref}')
         kurly.list(cache(image=image))
+  # No importPath: both libraries key their files by full vendor path, so the
+  # absolute github.com/... imports resolve through JaaS's vendor search. The
+  # alias (defaulting to the library name) only matters for bare-name imports.
   libraries:
-    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: k8s-libsonnet, importPath: github.com/jsonnet-libs/k8s-libsonnet }
+    - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: k8s-libsonnet }
   tlas:
     image: ["${ref}"]
 EOF
@@ -135,33 +137,37 @@ spec:
   sourceRef: { kind: OCIRepository, name: k8s-libsonnet }
 EOF
 
-echo "== kurly from a Flux GitRepository at the branch under test (${branch}) =="
-kubectl apply --namespace="$ns" --filename=- <<EOF
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata: { name: kurly, namespace: ${ns} }
-spec:
-  interval: 1h
-  url: https://github.com/metio/kurly
-  ref: { branch: ${branch} }
----
-apiVersion: jaas.metio.wtf/v1
-kind: JsonnetLibrary
-metadata: { name: kurly, namespace: ${ns} }
-spec:
-  sourceRef: { kind: GitRepository, name: kurly }
-EOF
-
-echo "== wait for the Flux sources to advertise an artifact =="
-for kind in ocirepository/k8s-libsonnet gitrepository/kurly; do
-  ok=false
-  for _ in $(seq 1 60); do
-    [ -n "$(kubectl --namespace="$ns" get "$kind" -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
-      && { ok=true; break; }
-    sleep 3
+echo "== kurly as an inline vendor-keyed JsonnetLibrary (the checked-out branch) =="
+# JaaS resolves an absolute import like github.com/metio/kurly/main.libsonnet by
+# treating it as a root-relative path and searching every library whose files are
+# keyed by full vendor path (the same way `jsonnet -J vendor` finds a jb tree). So
+# the library's file keys must be the vendor paths, not the repo-root paths a Flux
+# GitRepository would advertise. Build that library inline from the checked-out
+# sources — it tests the exact branch and needs no published artifact.
+emit_kurly_library() {
+  echo "apiVersion: jaas.metio.wtf/v1"
+  echo "kind: JsonnetLibrary"
+  echo "metadata: { name: kurly, namespace: ${ns} }"
+  echo "spec:"
+  echo "  files:"
+  local f
+  for f in main.libsonnet lib/*.libsonnet workloads/valkey/cache.libsonnet; do
+    echo "    \"github.com/metio/kurly/${f}\": |"
+    sed 's/^/      /' "$f"
   done
-  [ "$ok" = true ] || fail "${kind} never advertised an artifact"
+}
+# Server-side apply so the large inline tree is not stored a second time in a
+# last-applied-config annotation.
+emit_kurly_library | kubectl apply --server-side --force-conflicts --namespace="$ns" --filename=-
+
+echo "== wait for the k8s-libsonnet OCI source to advertise an artifact =="
+ok=false
+for _ in $(seq 1 60); do
+  [ -n "$(kubectl --namespace="$ns" get ocirepository/k8s-libsonnet -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
+    && { ok=true; break; }
+  sleep 3
 done
+[ "$ok" = true ] || fail "ocirepository/k8s-libsonnet never advertised an artifact"
 
 initial="${VALKEY_LADDER[0]}"
 echo "== initial deploy: render the cache at $(image_ref "$initial") =="
