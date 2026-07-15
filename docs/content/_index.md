@@ -143,6 +143,24 @@ release rewrites from `dev` to the calver, stamped as `app.kubernetes.io/version
 The full deploy — import → `JsonnetSnippet` → `StageSet` — is in each workload's
 [README on GitHub](https://github.com/metio/kurly/blob/main/workloads/tik/README.md).
 
+## Assembling with conditionals
+
+`kurly.list(app)` renders one composed app. To build a set from several parts —
+some optional, some themselves lists — use `kurly.listOf`, which drops `null`
+entries and flattens nested arrays. A Jsonnet `if` with no `else` is `null` when
+false, so an unmet condition simply drops out:
+
+```jsonnet
+kurly.listOf([
+  kurly.list(app).items,                  // a group, flattened in
+  if enableBackup then backupCronJob,     // dropped when the flag is false
+  sharedConfigMap,
+])
+```
+
+`kurly.join` is the same drop-and-flatten over a plain array, for assembling any
+value (a set of args, an env list) the same way.
+
 ## Consuming
 
 - **Locally**: `jb install github.com/metio/kurly@main` and render with

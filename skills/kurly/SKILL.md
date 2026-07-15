@@ -38,7 +38,11 @@ visible fields are the manifests, computed from that config. A feature is a
 `{ config+:: … }` mixin — it only ever writes `config`, never a manifest — so the
 manifests **late-bind against the merged config regardless of compose order**.
 `kurly.list(app)` wraps every manifest (including hidden owned ones like the
-store PVC and config ConfigMap) in a `kind: List`.
+store PVC and config ConfigMap) in a `kind: List`. To assemble several parts
+into one list, use `kurly.listOf([...])`, which drops `null` entries and
+flattens nested arrays — so `if cond then manifest` (null when false) and nested
+groups compose cleanly. `kurly.join` is the same drop-and-flatten over a plain
+array.
 
 ## The docs are the source of truth
 

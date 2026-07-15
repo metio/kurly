@@ -16,6 +16,16 @@
 // late-bind against the merged config regardless of compose order. Exposed as
 // a JsonnetLibrary for JaaS: author a workload as `function(params) …` and
 // JaaS feeds the parameters as TLAs.
+
+// Builds one flat array from parts that may be null (dropped) or nested arrays
+// (flattened in one level), so a caller assembles a set with conditionals and
+// optional groups. `if cond then value` with no else is null when cond is
+// false, so an unmet condition simply drops out.
+local join(parts) =
+  local flatten(acc, part) =
+    if std.isArray(part) then acc + part else acc + [part];
+  std.foldl(flatten, std.filter(function(part) part != null, parts), []);
+
 {
   // Base kinds — each a `function(name, image)` (cron also takes a schedule).
   http: import './lib/http.libsonnet',
@@ -39,12 +49,25 @@
            + (if std.objectHasAll(app, 'ownedManifests') then app.ownedManifests else []),
   },
 
-  // listOf renders an explicit set of manifests as a `kind: List`, dropping any
-  // null entries (an absent owned manifest, e.g. a workload with no store).
-  listOf(manifests):: {
+  // join builds one flat array from parts that may be null or nested arrays —
+  // assemble the parts of a value (a list of manifests, a set of args) with
+  // conditionals and optional groups:
+  //
+  //   kurly.join([
+  //     alwaysThis,
+  //     if enabled then optionalThis,   // dropped when `enabled` is false
+  //     [aGroupOfThings],               // flattened in
+  //   ])
+  join(parts):: join(parts),
+
+  // listOf renders an explicit set of manifests as a `kind: List`. It joins the
+  // parts first, so entries can be null (dropped — e.g. an absent owned
+  // manifest) or nested arrays (flattened), letting a consumer build the set
+  // with the same conditionals and optional groups as join.
+  listOf(parts):: {
     apiVersion: 'v1',
     kind: 'List',
-    items: std.filter(function(manifest) manifest != null, manifests),
+    items: std.filter(function(manifest) manifest != null, join(parts)),
   },
 
   // A workload's stages are the ORDERED, GATED phases of installing ONE
