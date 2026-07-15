@@ -10,7 +10,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 
 # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-CNPG_VERSION="1.24.1"
+CNPG_VERSION="1.30.0"
 
 echo "== install the CloudNativePG operator ${CNPG_VERSION} =="
 kubectl apply --server-side --force-conflicts \
