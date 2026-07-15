@@ -94,12 +94,13 @@ function(
     escaped='%(roleLabel)s'
     while true; do
       if { printf 'INFO replication\r\n'; sleep 1; } | timeout 2 nc 127.0.0.1 6379 2>/dev/null | grep -q 'role:master'; then
-        value='"primary"'
+        value='"primary"'; role=master
       else
-        value=null
+        value=null; role=replica
       fi
-      kubectl patch pod "$POD_NAME" --type=merge \
-        -p "{\"metadata\":{\"labels\":{\"$escaped\":$value}}}" >/dev/null 2>&1 || true
+      out="$(kubectl patch pod "$POD_NAME" --type=merge \
+        -p "{\"metadata\":{\"labels\":{\"$escaped\":$value}}}" 2>&1)" || true
+      echo "labeler: role=${role} -> ${out}" >&2
       sleep 3
     done
   ||| % { roleLabel: roleLabel };

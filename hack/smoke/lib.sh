@@ -37,6 +37,7 @@ kurly::diagnose() {
   local ns="$1"
   echo "::group::diagnostics ($ns)"
   kubectl --namespace="$ns" get all,pvc,endpoints 2>/dev/null || true
+  kubectl --namespace="$ns" get pods --show-labels 2>/dev/null || true
   kubectl --namespace="$ns" describe pods 2>/dev/null | tail -120 || true
   kubectl --namespace="$ns" logs --selector=app.kubernetes.io/managed-by=kurly --all-containers=true --tail=100 2>/dev/null || true
   kubectl --namespace="$ns" get events --sort-by=.lastTimestamp 2>/dev/null | tail -40 || true
