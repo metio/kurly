@@ -56,8 +56,17 @@ spec:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
       local cache = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
+      // kurly renders namespace-less objects (the consumer places them); stageset
+      // has no targetNamespace yet, so stamp the target namespace here so the
+      // objects land where the StageSet's readyChecks look for them.
       function(image='${ref}')
-        kurly.list(cache(image=image))
+        local rendered = kurly.list(cache(image=image));
+        rendered {
+          items: [
+            item { metadata+: { namespace: '${ns}' } }
+            for item in rendered.items
+          ],
+        }
   # No importPath: both libraries key their files by full vendor path, so the
   # absolute github.com/... imports resolve through JaaS's vendor search. The
   # alias (defaulting to the library name) only matters for bare-name imports.
