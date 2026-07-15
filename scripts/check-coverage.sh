@@ -45,6 +45,6 @@ done < "$workdir/cases.tsv"
 # (Gateway API) against the community catalog, exactly as check-examples does.
 kubeconform -strict -summary \
   -schema-location default \
-  -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+  -schema-location 'https://raw.githubusercontent.com/CustomResourceDefinition/catalog/main/schema/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
   -ignore-missing-schemas \
   "$manifests"/*.json

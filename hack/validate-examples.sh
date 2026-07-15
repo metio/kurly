@@ -59,12 +59,12 @@ for example in examples/*.jsonnet workloads/*/*.libsonnet workloads/*/migrations
   rm "$rendered"
 done
 
-# Gateway API kinds are CRDs, validated against the community CRD schema
+# Gateway API kinds are CRDs, validated against  the CustomResourceDefinition/catalog schema
 # catalog. -ignore-missing-schemas covers kinds the catalog has not picked up
 # yet; the summary line reports how many manifests were skipped, so a silent
 # gap stays visible.
 kubeconform -strict -summary \
   -schema-location default \
-  -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+  -schema-location 'https://raw.githubusercontent.com/CustomResourceDefinition/catalog/main/schema/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
   -ignore-missing-schemas \
   "$workdir"/*.json
