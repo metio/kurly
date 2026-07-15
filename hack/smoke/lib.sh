@@ -149,6 +149,12 @@ rules:
   - apiGroups: ["jaas.metio.wtf"]
     resources: ["jsonnetlibraries"]
     verbs: ["get", "list", "watch"]
+  # A source-backed JsonnetLibrary (ours: k8s-libsonnet from an OCIRepository)
+  # makes the operator read that source CR for its artifact URL, so grant read on
+  # the Flux source kinds (git/bucket too, so the helper generalizes).
+  - apiGroups: ["source.toolkit.fluxcd.io"]
+    resources: ["ocirepositories", "gitrepositories", "buckets"]
+    verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
