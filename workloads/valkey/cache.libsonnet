@@ -29,8 +29,13 @@ local version = 'dev';
 function(
   image='docker.io/valkey/valkey:8',
   maxMemory='256mb',
+  // The sidecar that labels the primary pod (needs a k8s client + bash for the
+  // /dev/tcp role probe); overridable. Only this workload's plumbing runs it —
+  // the Valkey data container stays the stock image.
+  kubectlImage='docker.io/bitnami/kubectl:1.31',
 )
   local headless = 'valkey-headless';
+  local roleLabel = 'kurly.dev/valkey-role';
 
   // Discover a running peer via the headless Service and, when one is found,
   // write a config that replicates it. The whole server config is generated
@@ -74,6 +79,28 @@ function(
     seccompProfile: { type: 'RuntimeDefault' },
   };
 
+  // The role labeler: read the local Valkey's replication role over a bash
+  // /dev/tcp socket and keep this pod's `roleLabel` in sync — set to `primary`
+  // on the master, removed on a replica. The primary Service selects that label,
+  // so clients always reach the current master, even across the hand-off.
+  local labelerScript = |||
+    set -u
+    while true; do
+      role=replica
+      if exec 3<>/dev/tcp/127.0.0.1/6379 2>/dev/null; then
+        printf 'INFO replication\r\n' >&3
+        if timeout 2 cat <&3 2>/dev/null | grep -q 'role:master'; then role=master; fi
+        exec 3>&- 3<&- 2>/dev/null || true
+      fi
+      if [ "$role" = master ]; then
+        kubectl label pod "$POD_NAME" '%(roleLabel)s=primary' --overwrite >/dev/null 2>&1 || true
+      else
+        kubectl label pod "$POD_NAME" '%(roleLabel)s-' >/dev/null 2>&1 || true
+      fi
+      sleep 3
+    done
+  ||| % { roleLabel: roleLabel };
+
   kurly.worker('valkey', image)
   + kurly.version(version)
   + kurly.runAs(999)
@@ -93,3 +120,37 @@ function(
   })
   + kurly.lifecycle(preStop={ exec: { command: ['sh', '-c', preStopScript] } })
   + kurly.readinessProbe({ exec: { command: ['sh', '-c', "valkey-cli info replication | grep -qE 'role:master|master_link_status:up'"] } })
+  // A ServiceAccount + Role + RoleBinding letting the labeler patch this pod's
+  // labels, and the pod runs under it.
+  + kurly.rbac([{ apiGroups: [''], resources: ['pods'], verbs: ['get', 'patch'] }])
+  // The labeler sidecar (a second container) and the primary Service are this
+  // workload's own plumbing, added with the raw `+` escape hatch rather than a
+  // library feature.
+  + {
+    deployment+: {
+      spec+: { template+: { spec+: { containers+: [{
+        name: 'role-labeler',
+        image: kubectlImage,
+        command: ['bash', '-c', labelerScript],
+        env: [{ name: 'POD_NAME', valueFrom: { fieldRef: { fieldPath: 'metadata.name' } } }],
+        resources: { requests: { cpu: '10m', memory: '32Mi' }, limits: { memory: '32Mi' } },
+        securityContext: {
+          readOnlyRootFilesystem: true,
+          allowPrivilegeEscalation: false,
+          runAsNonRoot: true,
+          capabilities: { drop: ['ALL'] },
+          seccompProfile: { type: 'RuntimeDefault' },
+        },
+      }] } } },
+    },
+    // Clients connect here; it resolves only to the pod the labeler marks primary.
+    service: {
+      apiVersion: 'v1',
+      kind: 'Service',
+      metadata: { name: 'valkey', labels: { 'app.kubernetes.io/name': 'valkey', 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/version': version } },
+      spec: {
+        selector: { 'app.kubernetes.io/name': 'valkey', [roleLabel]: 'primary' },
+        ports: [{ name: 'redis', port: 6379, targetPort: 6379 }],
+      },
+    },
+  }

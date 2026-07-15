@@ -27,6 +27,12 @@ Clients reach it at `<pod>.valkey-headless.<namespace>.svc` on port `6379`.
   Valkey's own atomic `failover` before the old pod exits. A plain `kubectl
   apply`, a Helm upgrade, or a stageset roll all trigger it identically.
 
+  Clients connect to the **`valkey`** Service, which follows the current primary:
+  a sidecar labels its own pod `kurly.dev/valkey-role=primary` while it is the
+  master (removing the label on a replica), and the Service selects that label —
+  so writes always reach the master, even mid-hand-off, with no window on the
+  replica. (`valkey-headless` remains for peer discovery.)
+
   ```jsonnet
   local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
   kurly.list(valkey(maxMemory='512mb'))
