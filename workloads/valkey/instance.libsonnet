@@ -17,7 +17,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // way runs by overriding `image`. The official image is used verbatim — kurly
 // does not ship a customized build.
 function(
-  image='docker.io/valkey/valkey:8.1.8',
+  image='docker.io/valkey/valkey:9.0.3',
   storageSize='1Gi',
   storageClass=null,
   maxMemory=null,
