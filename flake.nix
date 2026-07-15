@@ -71,7 +71,8 @@
             kubesec
           ];
 
-          # The kind smoke test's toolchain: a throwaway cluster and kubectl.
+          # The e2e toolchain: a throwaway kind cluster and kubectl, used by the
+          # per-workload e2e scenarios (hack/smoke/) via nix develop.
           # Applies kurly's rendered output and waits for it to become Ready —
           # proving the manifests run, not just that they validate.
           smokeTools = with pkgs; [
@@ -156,21 +157,6 @@
             ];
             text = builtins.readFile ./scripts/gen-docs-data.sh;
           };
-          # Applies kurly's output to a running cluster and waits for Ready. Not
-          # part of `verify` (it needs a cluster); the kind-smoke workflow owns
-          # creating the throwaway kind cluster around it.
-          kind-smoke = pkgs.writeShellApplication {
-            name = "kind-smoke";
-            runtimeInputs = with pkgs; [
-              go-jsonnet
-              jsonnet-bundler
-              jq
-              kubectl
-              coreutils
-              cacert
-            ];
-            text = builtins.readFile ./scripts/kind-smoke.sh;
-          };
           # Runs every gate locally (the serial equivalent of CI's parallel
           # jobs); its runtimeInputs are the other commands plus the shared lint
           # gate from the metio/ci flake.
@@ -195,7 +181,6 @@
             check-coverage
             check-security
             gen-docs-data
-            kind-smoke
             verify
           ];
         in
@@ -212,7 +197,6 @@
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
-              echo "  kind-smoke       apply kurly's output to a cluster, wait for Ready"
               echo "  verify           run every gate locally (what CI runs)"
             '';
           };

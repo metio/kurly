@@ -1,6 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>metio/renovate-config"],
+  "extends": [
+    "github>metio/renovate-config"
+  ],
   "nix": {
     "enabled": true
   },
@@ -22,7 +24,9 @@
         "/^catalog/annotations\\.libsonnet$/",
         "/^catalog/catalog\\.json$/"
       ],
-      "matchStrings": ["ghcr\\.io/metio/tik:(?<currentValue>[0-9][0-9A-Za-z._-]+)"]
+      "matchStrings": [
+        "ghcr\\.io/metio/tik:(?<currentValue>[0-9][0-9A-Za-z._-]+)"
+      ]
     },
     {
       "description": "The nginx image the examples and docs render with, so the illustrative manifests never pin a stale tag. Placeholder images (ghcr.io/acme/*, ghcr.io/example/*) carry no real tags and are deliberately not matched.",
@@ -34,15 +38,31 @@
         "/^docs/content/.+\\.md$/",
         "/^README\\.md$/"
       ],
-      "matchStrings": ["docker\\.io/nginxinc/nginx-unprivileged:(?<currentValue>[0-9][0-9A-Za-z._-]+)"]
+      "matchStrings": [
+        "docker\\.io/nginxinc/nginx-unprivileged:(?<currentValue>[0-9][0-9A-Za-z._-]+)"
+      ]
     },
     {
       "description": "Alpine.js, fetched by gen-docs-data at docs-build time from the pinned version so the assembler page always ships the tracked release.",
       "customType": "regex",
       "datasourceTemplate": "npm",
       "depNameTemplate": "alpinejs",
-      "managerFilePatterns": ["/^scripts/gen-docs-data\\.sh$/"],
-      "matchStrings": ["ALPINE_VERSION=(?<currentValue>[0-9][0-9A-Za-z._-]+)"]
+      "managerFilePatterns": [
+        "/^scripts/gen-docs-data\\.sh$/"
+      ],
+      "matchStrings": [
+        "ALPINE_VERSION=(?<currentValue>[0-9][0-9A-Za-z._-]+)"
+      ]
+    },
+    {
+      "description": "Operator versions the e2e scenarios install, pinned in hack/smoke/*.sh via a `# renovate:` comment above a `<TOOL>_VERSION=\"...\"` line.",
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^hack/smoke/.+\\.sh$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\s+[A-Z0-9_]+_VERSION=\"(?<currentValue>[^\"]+)\""
+      ]
     }
   ]
 }

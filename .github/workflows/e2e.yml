@@ -1,0 +1,112 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Reusable per-workload e2e: on the newest four Kubernetes minors (fetched
+# dynamically, so a new release is tested with no edit), spin a throwaway kind
+# cluster, run one workload's scenario (install its operator, render it as a
+# consumer would, apply it, wait for it to become healthy), and tear the cluster
+# down. Each workload calls this from its own thin workflow with a `paths` regex
+# scoped to that workload (plus the shared library + this file), and self-gates on
+# a diff — so a change to one workload never runs or blocks another's e2e, and the
+# per-workload aggregate stays green-by-skip when its sources are untouched.
+#
+# kind and kubectl come from the flake devShell (same versions as local), never a
+# marketplace action. fail-fast is off so one bad k8s minor never masks the others.
+name: E2E
+on:
+  workflow_call:
+    inputs:
+      workload:
+        description: The workload name (for job titles).
+        required: true
+        type: string
+      paths:
+        description: Regex of changed paths that make this workload's e2e relevant.
+        required: true
+        type: string
+      scenario:
+        description: The scenario script under hack/smoke/ to run.
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  changes:
+    name: Did this PR touch ${{ inputs.workload }}?
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      relevant: ${{ steps.scope.outputs.relevant }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+      - id: scope
+        env:
+          BASE_REF: ${{ github.base_ref || 'main' }}
+          PATHS: ${{ inputs.paths }}
+        run: |
+          set -uo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || \
+             git diff --name-only "origin/${BASE_REF}" HEAD | grep -qE "$PATHS"; then
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "relevant=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::${{ inputs.workload }} sources untouched — its e2e skips (aggregate stays green)."
+          fi
+  discover:
+    name: Discover the newest Kubernetes versions
+    needs: changes
+    if: needs.changes.outputs.relevant == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      k8s: ${{ steps.versions.outputs.k8s }}
+    steps:
+      - id: versions
+        run: |
+          set -uo pipefail
+          # Newest 4 kindest/node minors, latest patch each. If kind cannot run a
+          # brand-new minor yet, that surfaces as a failure — the signal to bump
+          # the flake's kind, not silent staleness.
+          k8s=$(curl -fsSL "https://hub.docker.com/v2/repositories/kindest/node/tags?page_size=100" \
+            | jq -r '.results[].name' | grep -E '^v1\.[0-9]+\.[0-9]+$' \
+            | awk -F. '{print $1"."$2" "$0}' | sort -k1,1V -k2,2V \
+            | awk '{l[$1]=$2} END{for(m in l)print l[m]}' | sort -V | tail -4 \
+            | jq -R . | jq -cs . 2>/dev/null || echo '[]')
+          [ "$(jq 'length' <<<"$k8s" 2>/dev/null || echo 0)" -gt 0 ] || k8s='["v1.33.1"]'
+          echo "k8s=$k8s" >> "$GITHUB_OUTPUT"
+          echo "k8s=$k8s"
+  smoke:
+    name: ${{ inputs.workload }} on k8s ${{ matrix.k8s_version }}
+    needs: [changes, discover]
+    if: needs.changes.outputs.relevant == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s_version: ${{ fromJSON(needs.discover.outputs.k8s) }}
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Create the kind cluster (k8s ${{ matrix.k8s_version }})
+        run: nix develop --command kind create cluster --name kurly-e2e --image kindest/node:${{ matrix.k8s_version }} --wait 180s
+      - name: Run the ${{ inputs.workload }} scenario
+        run: nix develop --command bash ${{ inputs.scenario }}
+      - name: Delete the kind cluster
+        if: always()
+        run: nix develop --command kind delete cluster --name kurly-e2e
+  e2e:
+    name: E2E ${{ inputs.workload }}
+    needs: [changes, discover, smoke]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Verify every job succeeded or skipped
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: |
+          bad=$(echo "$NEEDS" | jq -r 'to_entries[] | select(.value.result != "success" and .value.result != "skipped") | "\(.key)=\(.value.result)"')
+          [ -z "$bad" ] || { echo "::error::$bad"; exit 1; }

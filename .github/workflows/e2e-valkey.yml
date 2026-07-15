@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for valkey. Self-gates on a diff scoped to this workload (plus
+# the shared library and the e2e machinery), so a change to another workload never
+# runs or blocks it; the aggregate stays green-by-skip when valkey's sources are
+# untouched. Delegates the matrix + run to the reusable e2e workflow.
+name: E2E valkey
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  valkey:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: valkey
+      paths: '^(workloads/valkey/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-valkey)\.sh|\.github/workflows/e2e)'
+      scenario: hack/smoke/scenario-valkey.sh

@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for cnpg-cluster. Self-gates on a diff scoped to this workload (plus
+# the shared library and the e2e machinery), so a change to another workload never
+# runs or blocks it; the aggregate stays green-by-skip when cnpg-cluster's sources are
+# untouched. Delegates the matrix + run to the reusable e2e workflow.
+name: E2E cnpg
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cnpg:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: cnpg-cluster
+      paths: '^(workloads/cnpg-cluster/|main\.libsonnet|hack/smoke/(lib|scenario-cnpg)\.sh|\.github/workflows/e2e)'
+      scenario: hack/smoke/scenario-cnpg.sh
