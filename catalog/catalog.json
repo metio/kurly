@@ -1527,7 +1527,7 @@
             {
                "args": [
                   {
-                     "default": "docker.io/valkey/valkey:8",
+                     "default": "docker.io/valkey/valkey:8.1.8",
                      "name": "image",
                      "required": false,
                      "type": "string"
@@ -1547,7 +1547,7 @@
             {
                "args": [
                   {
-                     "default": "docker.io/valkey/valkey:8",
+                     "default": "docker.io/valkey/valkey:8.1.8",
                      "name": "image",
                      "required": false,
                      "type": "string"

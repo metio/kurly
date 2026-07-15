@@ -27,7 +27,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = 'dev';
 
 function(
-  image='docker.io/valkey/valkey:8',
+  image='docker.io/valkey/valkey:8.1.8',
   maxMemory='256mb',
   // The sidecar that labels the primary pod (needs a k8s client + bash for the
   // /dev/tcp role probe); overridable. Only this workload's plumbing runs it —
