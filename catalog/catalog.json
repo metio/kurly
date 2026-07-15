@@ -207,6 +207,48 @@
          "args": [
             {
                "example": [
+                  {
+                     "apiGroups": [
+                        ""
+                     ],
+                     "resources": [
+                        "pods"
+                     ],
+                     "verbs": [
+                        "patch"
+                     ]
+                  }
+               ],
+               "name": "rules",
+               "required": true,
+               "type": "array"
+            },
+            {
+               "default": [
+                  443,
+                  6443
+               ],
+               "name": "ports",
+               "required": false,
+               "type": "array"
+            }
+         ],
+         "group": "security",
+         "help": "Declares a pod as a Kubernetes API client: adds the given Role rules AND best-effort NetworkPolicy egress to the apiserver, both as cross-cutting requirements that compose with (never clobber) a consumer own rbac()/networkPolicy().",
+         "id": "apiServerClient",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
                   "backend",
                   "--config=/etc/tik/pipelines.edn"
                ],

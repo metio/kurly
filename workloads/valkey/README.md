@@ -33,6 +33,15 @@ Clients reach it at `<pod>.valkey-headless.<namespace>.svc` on port `6379`.
   so writes always reach the master, even mid-hand-off, with no window on the
   replica. (`valkey-headless` remains for peer discovery.)
 
+  The labeler is a Kubernetes API client, so it carries a namespaced Role with
+  `patch` on pods (nothing else) and needs egress to the apiserver. It declares
+  both through `kurly.apiServerClient`, so composing your own `kurly.rbac(...)` or
+  `kurly.networkPolicy(...)` onto the cache **adds to** the grant rather than
+  replacing it — a NetworkPolicy cannot accidentally firewall off the labeler. On
+  vanilla NetworkPolicy the apiserver egress is a best-effort TCP 443/6443 allow
+  (the API has no way to name the apiserver); on Calico or Cilium you can tighten
+  it to the apiserver entity.
+
   ```jsonnet
   local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
   kurly.list(valkey(maxMemory='512mb'))

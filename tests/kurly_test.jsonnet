@@ -345,8 +345,55 @@ local podOf(app) = app.deployment.spec.template.spec;
   // rbac mints SA + Role + RoleBinding and runs the pod under that SA.
   rbac_mints_and_wires: std.assertEqual(
     local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0') + kurly.rbac([{ apiGroups: [''], resources: ['pods'], verbs: ['get'] }]);
-    [std.sort([m.kind for m in kurly.list(a).items]), podOf(a).serviceAccountName],
+    [
+      std.sort([m.kind for m in kurly.list(a).items]),
+      podOf(a).serviceAccountName,
+    ],
     [['Deployment', 'Role', 'RoleBinding', 'ServiceAccount'], 'agent']
+  ),
+
+  // apiServerClient mints the RBAC (SA + Role + RoleBinding) and runs the pod
+  // under it even without an explicit rbac(), the Role carrying the declared rules.
+  api_server_client_mints_rbac: std.assertEqual(
+    local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }]);
+    local role = [m for m in kurly.list(a).items if m.kind == 'Role'][0];
+    [std.sort([m.kind for m in kurly.list(a).items]), podOf(a).serviceAccountName, role.rules],
+    [
+      ['Deployment', 'Role', 'RoleBinding', 'ServiceAccount'],
+      'agent',
+      [{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }],
+    ]
+  ),
+  // A consumer's own rbac() and a capability's requiredRbac union into one Role —
+  // neither clobbers the other, regardless of compose order.
+  required_rbac_unions_with_rbac: std.assertEqual(
+    local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.rbac([{ apiGroups: [''], resources: ['configmaps'], verbs: ['get'] }])
+              + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }]);
+    [m for m in kurly.list(a).items if m.kind == 'Role'][0].rules,
+    [
+      { apiGroups: [''], resources: ['configmaps'], verbs: ['get'] },
+      { apiGroups: [''], resources: ['pods'], verbs: ['patch'] },
+    ]
+  ),
+  // requiredEgress a capability declared is always allowed by a consumer's
+  // NetworkPolicy, and Egress joins an ingress-only policyTypes so it takes effect.
+  required_egress_survives_network_policy: std.assertEqual(
+    local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }])
+              + kurly.networkPolicy(ingress=[{ from: [{ podSelector: {} }] }], policyTypes=['Ingress']);
+    local np = [m for m in kurly.list(a).items if m.kind == 'NetworkPolicy'][0].spec;
+    [np.policyTypes, np.egress],
+    [['Ingress', 'Egress'], [{ ports: [{ protocol: 'TCP', port: 443 }, { protocol: 'TCP', port: 6443 }] }]]
+  ),
+  // Without a NetworkPolicy, requiredEgress mints nothing — egress is allow-all,
+  // so the requirement is moot and no policy object appears.
+  required_egress_mints_no_policy_alone: std.assertEqual(
+    local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }]);
+    std.length([m for m in kurly.list(a).items if m.kind == 'NetworkPolicy']),
+    0
   ),
 
   // --- stateful & job kinds ---------------------------------------------------

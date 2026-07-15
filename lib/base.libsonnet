@@ -219,6 +219,16 @@ local exclusionConflicts(exclusive) = [
       networkPolicy: null,  // { ingress, egress, policyTypes }
       serviceMonitor: null,  // { port, path, interval }
       rbac: null,  // { rules }
+      // Cross-cutting requirements a capability declares so the manifest that
+      // owns the concern honors them without the capabilities reaching into each
+      // other — they meet here in config. requiredRbac accumulates Role rules the
+      // rbac manifests union in (so a feature's grant survives a consumer's own
+      // rbac()); requiredEgress accumulates NetworkPolicy egress rules the policy
+      // manifest always allows (so a consumer's networkPolicy() cannot cut off a
+      // sidecar's apiserver access). A non-empty requiredRbac also mints the
+      // ServiceAccount even when the consumer never calls rbac().
+      requiredRbac: [],  // [ {apiGroups, resources, verbs}, … ]
+      requiredEgress: [],  // [ egress rule, … ]
       // Security knobs, defaulting to the Pod Security Standards `restricted`
       // profile plus extra hardening (read-only root filesystem, user
       // namespaces). Feature functions relax them (one knob, or a whole profile
@@ -289,15 +299,31 @@ local exclusionConflicts(exclusive) = [
       if this.config.pdb == null then null else pdbManifest(this.config.name, this.config.pdb, this.selectorLabels, this.labels),
     hpa::
       if this.config.hpa == null then null else hpaManifest(this.config.name, this.config.hpa, this.labels),
+    // The NetworkPolicy always allows the requiredEgress a sidecar declared (e.g.
+    // apiserver access), unioned into the consumer's egress; when that adds egress
+    // to an otherwise ingress-only policy, Egress joins policyTypes so the rules
+    // take effect (a null policyTypes lets Kubernetes infer it from the fields).
     networkPolicy::
-      if this.config.networkPolicy == null then null else networkPolicyManifest(this.config.name, this.config.networkPolicy, this.selectorLabels, this.labels),
+      if this.config.networkPolicy == null then null else
+        local np = this.config.networkPolicy;
+        local egress = np.egress + this.config.requiredEgress;
+        local policyTypes =
+          if np.policyTypes != null && this.config.requiredEgress != [] && !std.member(np.policyTypes, 'Egress')
+          then np.policyTypes + ['Egress'] else np.policyTypes;
+        networkPolicyManifest(this.config.name, np { egress: egress, policyTypes: policyTypes }, this.selectorLabels, this.labels),
     serviceMonitor::
       if this.config.serviceMonitor == null then null else serviceMonitorManifest(this.config.name, this.config.serviceMonitor, this.selectorLabels, this.labels),
     headlessService::
       if this.config.headlessService == null then null else headlessServiceManifest(this.config.name, this.config.headlessService, this.selectorLabels, this.labels),
-    // rbac contributes THREE manifests (ServiceAccount, Role, RoleBinding).
+    // The Role's rules are the consumer's rbac() grant (if any) plus every
+    // requiredRbac rule a capability declared, so a feature's grant survives a
+    // consumer calling rbac() and neither clobbers the other.
+    rbacRules::
+      (if this.config.rbac == null then [] else this.config.rbac.rules) + this.config.requiredRbac,
+    // rbac contributes THREE manifests (ServiceAccount, Role, RoleBinding),
+    // minted whenever any rule exists — an explicit rbac() or a requiredRbac.
     rbacManifests::
-      if this.config.rbac == null then [] else rbacManifests(this.config.name, this.config.rbac, this.labels),
+      if this.rbacRules == [] then [] else rbacManifests(this.config.name, { rules: this.rbacRules }, this.labels),
 
     // The owned manifests as a list, hidden so it stays out of
     // std.objectValues(app); list() appends it explicitly.
@@ -338,11 +364,12 @@ local exclusionConflicts(exclusive) = [
       + { automountServiceAccountToken: this.podServiceAccount != null }
       + (if cfg.hostUsers then {} else { hostUsers: false }),
 
-    // The ServiceAccount the pod runs under: the one rbac creates (named after
-    // the workload) when composed, otherwise an explicitly configured one, else
-    // none. The token is mounted only when this is set (see podSecurity).
+    // The ServiceAccount the pod runs under: the one the rbac manifests create
+    // (named after the workload) whenever any Role rule exists — an explicit
+    // rbac() or a capability's requiredRbac — otherwise an explicitly configured
+    // one, else none. The token is mounted only when this is set (see podSecurity).
     podServiceAccount::
-      if this.config.rbac != null then this.config.name else this.config.serviceAccountName,
+      if this.rbacRules != [] then this.config.name else this.config.serviceAccountName,
 
     // Pod-template metadata: the workload labels plus pod-only labels, and the
     // workload annotations plus pod-only annotations. The selector is unaffected

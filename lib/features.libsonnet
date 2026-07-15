@@ -171,6 +171,18 @@ local resourcePresets = {
     config+:: { serviceMonitor: { port: port, path: path, interval: interval } },
   },
   rbac(rules):: { config+:: { rbac: { rules: rules } } },
+  // Declares that a pod (or one of its sidecars) is a Kubernetes API client: it
+  // needs the given Role `rules` AND network egress to the apiserver. Both travel
+  // as cross-cutting requirements, so a consumer's own rbac() and networkPolicy()
+  // compose with — rather than clobber — this grant. The egress is best-effort on
+  // vanilla NetworkPolicy (it cannot name the apiserver, so it allows the given
+  // TCP ports to any destination); operators on Calico/Cilium can tighten it.
+  apiServerClient(rules, ports=[443, 6443]):: {
+    config+:: {
+      requiredRbac+: rules,
+      requiredEgress+: [{ ports: [{ protocol: 'TCP', port: port } for port in ports] }],
+    },
+  },
 
   // Security escape hatches — each downgrades one default for a workload that
   // genuinely needs it. The kurly.security.* mixins relax whole PSS profiles.

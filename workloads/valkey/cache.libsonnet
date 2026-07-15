@@ -29,10 +29,11 @@ local version = 'dev';
 function(
   image='docker.io/valkey/valkey:8.1.8',
   maxMemory='256mb',
-  // The sidecar that labels the primary pod (needs a k8s client + bash for the
-  // /dev/tcp role probe); overridable. Only this workload's plumbing runs it —
-  // the Valkey data container stays the stock image.
-  kubectlImage='docker.io/bitnami/kubectl:1.31',
+  // The sidecar that labels the primary pod — a maintained Alpine image carrying
+  // kubectl plus busybox `nc` and `sh` (the role probe needs neither bash nor a
+  // Valkey client); overridable. Only this workload's plumbing runs it — the
+  // Valkey data container stays the stock image.
+  kubectlImage='docker.io/alpine/k8s:1.36.2',
 )
   local headless = 'valkey-headless';
   local roleLabel = 'kurly.dev/valkey-role';
@@ -79,24 +80,26 @@ function(
     seccompProfile: { type: 'RuntimeDefault' },
   };
 
-  // The role labeler: read the local Valkey's replication role over a bash
-  // /dev/tcp socket and keep this pod's `roleLabel` in sync — set to `primary`
-  // on the master, removed on a replica. The primary Service selects that label,
-  // so clients always reach the current master, even across the hand-off.
+  // The role labeler: probe the local Valkey's replication role with busybox
+  // `nc` (no bash, no Valkey client) and keep this pod's `roleLabel` in sync —
+  // set to `primary` on the master, removed on a replica. A direct merge `patch`
+  // (never `kubectl label`, which GETs first) writes the label, so the sidecar's
+  // Role needs only `patch` on pods — a merge patch with a null value deletes the
+  // key. The primary Service selects that label, so clients always reach the
+  // current master, even across the hand-off. HOME is a writable emptyDir so
+  // kubectl can cache under a read-only root filesystem.
   local labelerScript = |||
     set -u
+    export HOME=/home/labeler
+    escaped='%(roleLabel)s'
     while true; do
-      role=replica
-      if exec 3<>/dev/tcp/127.0.0.1/6379 2>/dev/null; then
-        printf 'INFO replication\r\n' >&3
-        if timeout 2 cat <&3 2>/dev/null | grep -q 'role:master'; then role=master; fi
-        exec 3>&- 3<&- 2>/dev/null || true
-      fi
-      if [ "$role" = master ]; then
-        kubectl label pod "$POD_NAME" '%(roleLabel)s=primary' --overwrite >/dev/null 2>&1 || true
+      if printf 'INFO replication\r\n' | nc -w 2 127.0.0.1 6379 2>/dev/null | grep -q 'role:master'; then
+        value='"primary"'
       else
-        kubectl label pod "$POD_NAME" '%(roleLabel)s-' >/dev/null 2>&1 || true
+        value=null
       fi
+      kubectl patch pod "$POD_NAME" --type=merge \
+        -p "{\"metadata\":{\"labels\":{\"$escaped\":$value}}}" >/dev/null 2>&1 || true
       sleep 3
     done
   ||| % { roleLabel: roleLabel };
@@ -120,28 +123,40 @@ function(
   })
   + kurly.lifecycle(preStop={ exec: { command: ['sh', '-c', preStopScript] } })
   + kurly.readinessProbe({ exec: { command: ['sh', '-c', "valkey-cli info replication | grep -qE 'role:master|master_link_status:up'"] } })
-  // A ServiceAccount + Role + RoleBinding letting the labeler patch this pod's
-  // labels, and the pod runs under it.
-  + kurly.rbac([{ apiGroups: [''], resources: ['pods'], verbs: ['get', 'patch'] }])
+  // The labeler is a Kubernetes API client: it needs a Role to patch pod labels
+  // AND network egress to the apiserver. apiServerClient declares both as
+  // cross-cutting requirements, so a consumer's own rbac()/networkPolicy() cannot
+  // clobber this grant or firewall off the labeler. `patch` alone (no `get`, no
+  // `list`, no `watch`) is the whole grant — a namespaced Role, scoped to pods. It
+  // cannot be narrowed to this one pod: RBAC `resourceNames` cannot match the
+  // controller's generated pod names, so the patch verb is namespace-wide on pods.
+  + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }])
   // The labeler sidecar (a second container) and the primary Service are this
   // workload's own plumbing, added with the raw `+` escape hatch rather than a
   // library feature.
   + {
     deployment+: {
-      spec+: { template+: { spec+: { containers+: [{
-        name: 'role-labeler',
-        image: kubectlImage,
-        command: ['bash', '-c', labelerScript],
-        env: [{ name: 'POD_NAME', valueFrom: { fieldRef: { fieldPath: 'metadata.name' } } }],
-        resources: { requests: { cpu: '10m', memory: '32Mi' }, limits: { memory: '32Mi' } },
-        securityContext: {
-          readOnlyRootFilesystem: true,
-          allowPrivilegeEscalation: false,
-          runAsNonRoot: true,
-          capabilities: { drop: ['ALL'] },
-          seccompProfile: { type: 'RuntimeDefault' },
-        },
-      }] } } },
+      spec+: { template+: { spec+: {
+        containers+: [{
+          name: 'role-labeler',
+          image: kubectlImage,
+          command: ['sh', '-c', labelerScript],
+          env: [{ name: 'POD_NAME', valueFrom: { fieldRef: { fieldPath: 'metadata.name' } } }],
+          resources: { requests: { cpu: '10m', memory: '32Mi' }, limits: { memory: '32Mi' } },
+          // A writable HOME so kubectl can cache under the read-only root
+          // filesystem; the pod fsGroup (999) owns the emptyDir.
+          volumeMounts: [{ name: 'labeler-home', mountPath: '/home/labeler' }],
+          securityContext: {
+            readOnlyRootFilesystem: true,
+            allowPrivilegeEscalation: false,
+            runAsNonRoot: true,
+            runAsUser: 999,
+            capabilities: { drop: ['ALL'] },
+            seccompProfile: { type: 'RuntimeDefault' },
+          },
+        }],
+        volumes+: [{ name: 'labeler-home', emptyDir: {} }],
+      } } },
     },
     // Clients connect here; it resolves only to the pod the labeler marks primary.
     service: {

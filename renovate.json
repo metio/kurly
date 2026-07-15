@@ -83,12 +83,12 @@
       "description": "The kubectl sidecar image the valkey cache uses for its primary-following labeler.",
       "customType": "regex",
       "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/bitnami/kubectl",
+      "depNameTemplate": "docker.io/alpine/k8s",
       "managerFilePatterns": [
         "/^workloads/valkey/cache\\.libsonnet$/"
       ],
       "matchStrings": [
-        "docker\\.io/bitnami/kubectl:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
+        "docker\\.io/alpine/k8s:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
       ]
     }
   ]

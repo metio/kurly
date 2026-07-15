@@ -218,6 +218,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     rbac: d.fn('Mints a ServiceAccount, a namespaced Role with the given rules, and the RoleBinding, and runs the pod under that ServiceAccount.', [
       d.arg('rules', d.T.array, required=true, example=[{ apiGroups: [''], resources: ['configmaps'], verbs: ['get', 'list', 'watch'] }]),
     ]) + { kinds: allKinds, group: 'security' },
+    apiServerClient: d.fn('Declares a pod as a Kubernetes API client: adds the given Role rules AND best-effort NetworkPolicy egress to the apiserver, both as cross-cutting requirements that compose with (never clobber) a consumer own rbac()/networkPolicy().', [
+      d.arg('rules', d.T.array, required=true, example=[{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }]),
+      d.arg('ports', d.T.array, default=[443, 6443]),
+    ]) + { kinds: allKinds, group: 'security' },
   },
 
   // Exposure recipes — a separate axis, composed onto an http workload. All
