@@ -18,15 +18,15 @@
 // JaaS feeds the parameters as TLAs.
 {
   // Base kinds — each a `function(name, image)` (cron also takes a schedule).
-  http: import './http.libsonnet',
-  worker: import './worker.libsonnet',
-  cron: import './cron.libsonnet',
-  daemon: import './daemon.libsonnet',
+  http: import './lib/http.libsonnet',
+  worker: import './lib/worker.libsonnet',
+  cron: import './lib/cron.libsonnet',
+  daemon: import './lib/daemon.libsonnet',
 
   // Composable axes.
-  expose: import './expose.libsonnet',
-  security: import './security.libsonnet',
-  migrations: import './migrations.libsonnet',
+  expose: import './lib/expose.libsonnet',
+  security: import './lib/security.libsonnet',
+  migrations: import './lib/migrations.libsonnet',
 
   // list renders every manifest of an app as a single `kind: List`, ready for
   // `kubectl apply --filename -` or as a JsonnetSnippet's published output.
@@ -56,4 +56,4 @@
   // need only ONE stage; do not manufacture ordering an application lacks.
   // (A PVC that binds WaitForFirstConsumer must ride with the pod that consumes
   // it, so it cannot be gated into a stage of its own.)
-} + (import './features.libsonnet')
+} + (import './lib/features.libsonnet')
