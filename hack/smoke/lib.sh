@@ -59,6 +59,16 @@ kurly::diagnose_pipeline() {
   kubectl --namespace="$ns" get stageset valkey -o jsonpath='{.status}' 2>/dev/null || true
   echo
   kubectl --namespace="$ns" describe stageset valkey 2>/dev/null | tail -40 || true
+  # The controllers' own pods and logs — where a hang that never writes a CR
+  # condition (an OOMKill, a crash, a stuck fetch) actually shows up.
+  echo "--- JaaS operator (pods + logs) ---"
+  kubectl --namespace=jaas-system get pods -o wide 2>/dev/null || true
+  kubectl --namespace=jaas-system logs --selector=app.kubernetes.io/instance=jaas \
+    --all-containers=true --tail=80 --prefix 2>/dev/null || true
+  echo "--- stageset-controller (pods + logs) ---"
+  kubectl --namespace=stageset-system get pods -o wide 2>/dev/null || true
+  kubectl --namespace=stageset-system logs --selector=app.kubernetes.io/instance=stageset \
+    --all-containers=true --tail=80 --prefix 2>/dev/null || true
   echo "::endgroup::"
 }
 

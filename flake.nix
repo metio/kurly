@@ -80,6 +80,7 @@
             kubectl
             kubernetes-helm
             curl
+            minikube
           ];
 
           # Multi-step gate commands. Each is a plain scripts/<name>.sh that nix
