@@ -1279,6 +1279,44 @@
    ],
    "workloads": [
       {
+         "id": "cnpg-cluster",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "postgres",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 3,
+                     "name": "instances",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "app",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  }
+               ],
+               "help": "The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind).",
+               "id": "cluster",
+               "importPath": "github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet",
+               "kind": "cnpg"
+            }
+         ],
+         "summary": "A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator."
+      },
+      {
          "id": "tik",
          "stages": [
             {

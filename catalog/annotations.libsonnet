@@ -255,6 +255,20 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'cnpg-cluster': {
+      summary: 'A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator.',
+      stages: {
+        cluster: d.fn('The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind).', [
+          d.arg('name', d.T.string, default='postgres'),
+          d.arg('instances', d.T.int, default=3),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('database', d.T.string, default='app'),
+        ]) + {
+          kind: 'cnpg',
+          importPath: 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
