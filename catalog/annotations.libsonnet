@@ -183,7 +183,7 @@ local deploymentKinds = ['http', 'worker'];
       summary: "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store.",
       stages: {
         backend: d.fn('The tik backend supervisor: a single-writer http app over a ReadWriteOnce store (one replica, recreated to avoid deadlocking on the volume). Compose an exposure recipe to serve the board.', [
-          d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.14174051'),
+          d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.14194001'),
         ]) + {
           kind: 'http',
           importPath: 'github.com/metio/kurly/workloads/tik/backend.libsonnet',

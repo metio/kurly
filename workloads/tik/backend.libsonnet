@@ -30,7 +30,7 @@ local pipelines = |||
     {:id :dashboard :every "PT6H" :run ["probe"] :as "tik-backend"}]}
 |||;
 
-function(image='ghcr.io/metio/tik:2026.7.14174051')
+function(image='ghcr.io/metio/tik:2026.7.14194001')
   kurly.http('tik', image)
   + kurly.version(version)
   + kurly.replicas(1)
