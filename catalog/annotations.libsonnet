@@ -269,6 +269,18 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    valkey: {
+      summary: 'A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image.',
+      stages: {
+        instance: d.fn('The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app).', [
+          d.arg('image', d.T.string, default='docker.io/valkey/valkey:8'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+        ]) + {
+          kind: 'stateful',
+          importPath: 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
