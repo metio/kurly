@@ -79,6 +79,21 @@ local networkPolicyManifest(name, spec, selectorLabels, labels) = std.prune({
   },
 });
 
+// A headless Service (clusterIP: None) selecting the workload's pods, for
+// peer discovery by DNS. publishNotReadyAddresses lists pods before they are
+// Ready, so peers stay discoverable across a rollout.
+local headlessServiceManifest(name, spec, selectorLabels, labels) = {
+  apiVersion: 'v1',
+  kind: 'Service',
+  metadata: { name: name + '-headless', labels: labels },
+  spec: std.prune({
+    clusterIP: 'None',
+    selector: selectorLabels,
+    publishNotReadyAddresses: (if spec.publishNotReadyAddresses then true else null),
+    ports: (if spec.port == null then null else [{ name: 'tcp', port: spec.port, targetPort: spec.port }]),
+  }),
+};
+
 local serviceMonitorManifest(name, spec, selectorLabels, labels) = {
   apiVersion: 'monitoring.coreos.com/v1',
   kind: 'ServiceMonitor',
@@ -146,6 +161,22 @@ local exclusionConflicts(exclusive) = [
       resources: { requests: { cpu: '100m', memory: '128Mi' } },
       serviceAccountName: null,
       probePath: null,
+      // Probes and container lifecycle. probePath renders the default http
+      // readiness+liveness probes; readinessProbe/livenessProbe are full probe
+      // specs (exec, tcpSocket, …) that override it when set. lifecycle carries
+      // postStart/preStop handlers, initContainers a list of extra containers
+      // that run before the main one — all passed through verbatim.
+      readinessProbe: null,
+      livenessProbe: null,
+      lifecycle: {},
+      initContainers: [],
+      terminationGracePeriodSeconds: null,
+      // A headless Service ({ port, publishNotReadyAddresses }) selecting the
+      // workload's pods, for peer discovery by DNS (clusterIP: None).
+      headlessService: null,
+      // RollingUpdate tuning ({ maxSurge, maxUnavailable }); with strategy
+      // 'RollingUpdate' it lets a new pod surge alongside the old.
+      rollingUpdate: null,
       // Exclusion-group membership (group name -> [feature names]); asserted above.
       exclusive: {},
       // Storage and mounts. A workload has at most one store (its owned PVC)
@@ -262,6 +293,8 @@ local exclusionConflicts(exclusive) = [
       if this.config.networkPolicy == null then null else networkPolicyManifest(this.config.name, this.config.networkPolicy, this.selectorLabels, this.labels),
     serviceMonitor::
       if this.config.serviceMonitor == null then null else serviceMonitorManifest(this.config.name, this.config.serviceMonitor, this.selectorLabels, this.labels),
+    headlessService::
+      if this.config.headlessService == null then null else headlessServiceManifest(this.config.name, this.config.headlessService, this.selectorLabels, this.labels),
     // rbac contributes THREE manifests (ServiceAccount, Role, RoleBinding).
     rbacManifests::
       if this.config.rbac == null then [] else rbacManifests(this.config.name, this.config.rbac, this.labels),
@@ -276,6 +309,7 @@ local exclusionConflicts(exclusive) = [
         this.hpa,
         this.networkPolicy,
         this.serviceMonitor,
+        this.headlessService,
       ]) + this.rbacManifests,
 
     // The pod-level half of the security posture; each workload kind merges
@@ -324,6 +358,8 @@ local exclusionConflicts(exclusive) = [
       local cfg = this.config;
       (if cfg.imagePullSecrets == [] then {} else { imagePullSecrets: [{ name: s } for s in cfg.imagePullSecrets] })
       + (if cfg.priorityClassName == null then {} else { priorityClassName: cfg.priorityClassName })
+      + (if cfg.initContainers == [] then {} else { initContainers: cfg.initContainers })
+      + (if cfg.terminationGracePeriodSeconds == null then {} else { terminationGracePeriodSeconds: cfg.terminationGracePeriodSeconds })
       + (if this.podServiceAccount == null then {} else { serviceAccountName: this.podServiceAccount }),
 
     // The volumes half of the pod template, kept alongside podSecurity so every
@@ -372,15 +408,21 @@ local exclusionConflicts(exclusive) = [
         then {}
         else k.core.v1.container.withVolumeMountsMixin(self.volumeMounts)
       )
+      // Readiness/liveness: an explicit probe spec (exec, tcpSocket, …) wins;
+      // otherwise probePath renders the default http probes on the named port.
       + (
-        if cfg.probePath == null
-        then {}
-        else
-          k.core.v1.container.readinessProbe.httpGet.withPath(cfg.probePath)
-          + k.core.v1.container.readinessProbe.httpGet.withPort('http')
-          + k.core.v1.container.livenessProbe.httpGet.withPath(cfg.probePath)
-          + k.core.v1.container.livenessProbe.httpGet.withPort('http')
+        if cfg.readinessProbe != null then { readinessProbe: cfg.readinessProbe }
+        else if cfg.probePath == null then {}
+        else k.core.v1.container.readinessProbe.httpGet.withPath(cfg.probePath)
+             + k.core.v1.container.readinessProbe.httpGet.withPort('http')
       )
+      + (
+        if cfg.livenessProbe != null then { livenessProbe: cfg.livenessProbe }
+        else if cfg.probePath == null then {}
+        else k.core.v1.container.livenessProbe.httpGet.withPath(cfg.probePath)
+             + k.core.v1.container.livenessProbe.httpGet.withPort('http')
+      )
+      + (if cfg.lifecycle == {} then {} else { lifecycle: cfg.lifecycle })
       + (
         if cfg.allowPrivilegeEscalation
         then {}
@@ -416,7 +458,7 @@ local exclusionConflicts(exclusive) = [
       + (
         if cfg.strategy == null
         then {}
-        else { spec+: { strategy: { type: cfg.strategy } } }
+        else { spec+: { strategy: { type: cfg.strategy } + (if cfg.rollingUpdate == null then {} else { rollingUpdate: cfg.rollingUpdate }) } }
       )
       + (if cfg.annotations == {} then {} else k.apps.v1.deployment.metadata.withAnnotations(cfg.annotations))
       + (
