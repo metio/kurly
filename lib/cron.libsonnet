@@ -20,12 +20,13 @@ function(name, image, schedule)
       local cfg = self.config;
       local podSecurity = self.podSecurity;
       local podVolumes = self.podVolumes;
+      local podScheduling = self.podScheduling;
       k.batch.v1.cronJob.new(cfg.name, cfg.schedule, [self.container])
       + k.batch.v1.cronJob.metadata.withLabels(self.labels)
       + k.batch.v1.cronJob.spec.withConcurrencyPolicy(cfg.concurrencyPolicy)
       + k.batch.v1.cronJob.spec.jobTemplate.spec.template.metadata.withLabelsMixin(self.labels)
       + k.batch.v1.cronJob.spec.jobTemplate.spec.template.spec.withRestartPolicy('OnFailure')
-      + { spec+: { jobTemplate+: { spec+: { template+: { spec+: podSecurity + podVolumes } } } } }
+      + { spec+: { jobTemplate+: { spec+: { template+: { spec+: podSecurity + podVolumes + podScheduling } } } } }
       + (
         if cfg.annotations == {}
         then {}

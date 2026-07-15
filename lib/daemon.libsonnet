@@ -12,10 +12,11 @@ function(name, image)
       local cfg = self.config;
       local podSecurity = self.podSecurity;
       local podVolumes = self.podVolumes;
+      local podScheduling = self.podScheduling;
       k.apps.v1.daemonSet.new(cfg.name, [self.container], self.selectorLabels)
       + k.apps.v1.daemonSet.metadata.withLabels(self.labels)
       + k.apps.v1.daemonSet.spec.template.metadata.withLabelsMixin(self.labels)
-      + { spec+: { template+: { spec+: podSecurity + podVolumes } } }
+      + { spec+: { template+: { spec+: podSecurity + podVolumes + podScheduling } } }
       + (
         if cfg.annotations == {}
         then {}

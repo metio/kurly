@@ -144,6 +144,24 @@
       {
          "args": [
             {
+               "name": "affinity",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "placement",
+         "help": "A pod/node affinity object, merged onto the pod template.",
+         "id": "affinity",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": {
                   "prometheus.io/scrape": "true"
                },
@@ -327,6 +345,27 @@
       {
          "args": [
             {
+               "example": {
+                  "disktype": "ssd"
+               },
+               "name": "nodeSelector",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "placement",
+         "help": "Restricts the pod to nodes carrying these labels.",
+         "id": "nodeSelector",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": 8080,
                "name": "port",
                "required": true,
@@ -382,6 +421,25 @@
          "kinds": [
             "http",
             "worker"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "small",
+               "name": "preset",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "A named resource size (nano/micro/small/medium/large) — a memory request equal to its limit and a CPU request with no limit. Replaces resources wholesale.",
+         "id": "resourcePreset",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
          ]
       },
       {
@@ -619,6 +677,49 @@
          "kinds": [
             "http",
             "worker"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  {
+                     "effect": "NoSchedule",
+                     "key": "gpu",
+                     "operator": "Exists"
+                  }
+               ],
+               "name": "tolerations",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "placement",
+         "help": "Tolerations letting the pod schedule onto tainted nodes.",
+         "id": "tolerations",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "name": "constraints",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "placement",
+         "help": "Topology-spread constraints spreading the pods across a topology domain (keep version-bound labels in the selector so a rollout spreads the new set independently).",
+         "id": "topologySpread",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
          ]
       },
       {

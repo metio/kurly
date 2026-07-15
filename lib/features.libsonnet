@@ -13,6 +13,18 @@
 //   + kurly.config({ 'pipelines.edn': edn })
 //   + kurly.runAs(12345)
 //   + kurly.recreate()
+// Named resource presets — a memory request equal to its limit (a Guaranteed
+// memory footprint) and a CPU request with no limit (CPU throttling is usually
+// worse than letting a pod burst). resourcePreset picks one; resources sets an
+// explicit pair.
+local resourcePresets = {
+  nano: { requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '64Mi' } },
+  micro: { requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '128Mi' } },
+  small: { requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '256Mi' } },
+  medium: { requests: { cpu: '500m', memory: '512Mi' }, limits: { memory: '512Mi' } },
+  large: { requests: { cpu: '1', memory: '1Gi' }, limits: { memory: '1Gi' } },
+};
+
 {
   // Container basics.
   image(image):: { config+:: { image: image } },
@@ -34,6 +46,10 @@
         + (if limits == null then {} else { limits: limits }),
     },
   },
+  // resourcePreset picks a named size (nano/micro/small/medium/large) instead of
+  // spelling out requests and limits; it replaces the resources wholesale, so
+  // compose it before any single-knob resources() tweak.
+  resourcePreset(preset):: { config+:: { resources: resourcePresets[preset] } },
   serviceAccount(serviceAccountName):: { config+:: { serviceAccountName: serviceAccountName } },
   // HTTP readiness+liveness probes on the named `http` port.
   probes(path='/healthz'):: { config+:: { probePath: path } },
@@ -93,6 +109,15 @@
   // holds it, so a rolling update would deadlock.
   strategy(strategy):: { config+:: { strategy: strategy } },
   recreate():: { config+:: { strategy: 'Recreate' } },
+
+  // Pod scheduling and placement. Each is merged onto the pod template verbatim
+  // — kurly does not model the Kubernetes schema (it would drift), the same
+  // pass-through stance as migration actions. nodeSelector and tolerations
+  // accumulate; topologySpread appends constraints; affinity merges the object.
+  nodeSelector(nodeSelector):: { config+:: { nodeSelector+: nodeSelector } },
+  tolerations(tolerations):: { config+:: { tolerations+: tolerations } },
+  topologySpread(constraints):: { config+:: { topologySpread+: constraints } },
+  affinity(affinity):: { config+:: { affinity+: affinity } },
 
   // Security escape hatches — each downgrades one default for a workload that
   // genuinely needs it. The kurly.security.* mixins relax whole PSS profiles.

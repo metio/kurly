@@ -73,6 +73,9 @@ local deploymentKinds = ['http', 'worker'];
       d.arg('requests', d.T.object, example={ cpu: '100m', memory: '128Mi' }),
       d.arg('limits', d.T.object, example={ memory: '256Mi' }),
     ]) + { kinds: allKinds, group: 'container' },
+    resourcePreset: d.fn('A named resource size (nano/micro/small/medium/large) — a memory request equal to its limit and a CPU request with no limit. Replaces resources wholesale.', [
+      d.arg('preset', d.T.string, required=true, example='small'),
+    ]) + { kinds: allKinds, group: 'container' },
     serviceAccount: d.fn('Runs the pod under a named ServiceAccount (also gates token automount).', [
       d.arg('serviceAccountName', d.T.string, required=true, example='storefront'),
     ]) + { kinds: allKinds, group: 'container' },
@@ -129,6 +132,20 @@ local deploymentKinds = ['http', 'worker'];
       d.arg('strategy', d.T.string, required=true, example='RollingUpdate'),
     ]) + { kinds: deploymentKinds, group: 'container' },
     recreate: d.fn('The single-writer strategy: tears the old pod down before starting the new one, so a ReadWriteOnce store never deadlocks a rollout.', []) + { kinds: deploymentKinds, group: 'container' },
+
+    // Pod placement — merged onto the pod template verbatim.
+    nodeSelector: d.fn('Restricts the pod to nodes carrying these labels.', [
+      d.arg('nodeSelector', d.T.object, required=true, example={ disktype: 'ssd' }),
+    ]) + { kinds: allKinds, group: 'placement' },
+    tolerations: d.fn('Tolerations letting the pod schedule onto tainted nodes.', [
+      d.arg('tolerations', d.T.array, required=true, example=[{ key: 'gpu', operator: 'Exists', effect: 'NoSchedule' }]),
+    ]) + { kinds: allKinds, group: 'placement' },
+    topologySpread: d.fn('Topology-spread constraints spreading the pods across a topology domain (keep version-bound labels in the selector so a rollout spreads the new set independently).', [
+      d.arg('constraints', d.T.array, required=true),
+    ]) + { kinds: allKinds, group: 'placement' },
+    affinity: d.fn('A pod/node affinity object, merged onto the pod template.', [
+      d.arg('affinity', d.T.object, required=true),
+    ]) + { kinds: allKinds, group: 'placement' },
   },
 
   // Exposure recipes — a separate axis, composed onto an http workload. All

@@ -278,6 +278,33 @@ local podOf(app) = app.deployment.spec.template.spec;
   ),
   // kurly.recreate sets the Deployment strategy.
   recreate_strategy: std.assertEqual(stateful.deployment.spec.strategy.type, 'Recreate'),
+
+  // --- scheduling & placement -------------------------------------------------
+  // A bare workload carries no scheduling stanza at all.
+  scheduling_absent_by_default: std.assertEqual(
+    [std.objectHas(podOf(shop), f) for f in ['nodeSelector', 'tolerations', 'topologySpreadConstraints', 'affinity']],
+    [false, false, false, false]
+  ),
+  // resourcePreset replaces the container resources with the named size.
+  resource_preset: std.assertEqual(
+    (shop + kurly.resourcePreset('small')).deployment.spec.template.spec.containers[0].resources,
+    { requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '256Mi' } }
+  ),
+  // The placement features land on the pod template verbatim.
+  node_selector: std.assertEqual(podOf(shop + kurly.nodeSelector({ disktype: 'ssd' })).nodeSelector, { disktype: 'ssd' }),
+  tolerations_set: std.assertEqual(
+    std.length(podOf(shop + kurly.tolerations([{ key: 'gpu', operator: 'Exists' }])).tolerations), 1
+  ),
+  topology_spread_set: std.assertEqual(
+    podOf(shop + kurly.topologySpread([{ maxSkew: 1, topologyKey: 'kubernetes.io/hostname', whenUnsatisfiable: 'DoNotSchedule' }])).topologySpreadConstraints[0].maxSkew, 1
+  ),
+  affinity_set: std.assertEqual(
+    std.objectHas(podOf(shop + kurly.affinity({ nodeAffinity: {} })), 'affinity'), true
+  ),
+  // Scheduling composes onto the CronJob pod template too, not just Deployments.
+  cron_node_selector: std.assertEqual(
+    (cron + kurly.nodeSelector({ disktype: 'ssd' })).cronjob.spec.jobTemplate.spec.template.spec.nodeSelector, { disktype: 'ssd' }
+  ),
   // A stateless workload is untouched: no owned manifests, no volumes.
   stateless_no_owned: std.assertEqual([std.length(shop.ownedManifests), shop.storeClaim, std.objectHas(podOf(shop), 'volumes')], [0, null, false]),
   stateless_list_unchanged: std.assertEqual(std.length(kurly.list(shop).items), 2),

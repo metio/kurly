@@ -94,6 +94,15 @@ local exclusionConflicts(exclusive) = [
       // a ReadWriteOnce store, where a rolling update would deadlock on the
       // volume). null leaves the Kubernetes default (RollingUpdate).
       strategy: null,
+      // Pod scheduling. Each is passed to the pod template verbatim (kurly does
+      // not model the Kubernetes schema, which would drift): a node-label map, a
+      // toleration list, a topology-spread-constraint list, and an affinity
+      // object. Empty slots render nothing, so a workload with no scheduling
+      // constraints is untouched.
+      nodeSelector: {},
+      tolerations: [],
+      topologySpread: [],
+      affinity: {},
       // Security knobs, defaulting to the Pod Security Standards `restricted`
       // profile plus extra hardening (read-only root filesystem, user
       // namespaces). Feature functions relax them (one knob, or a whole profile
@@ -197,6 +206,18 @@ local exclusionConflicts(exclusive) = [
     podVolumes::
       if this.volumes == [] then {} else { volumes: this.volumes },
 
+    // The scheduling half of the pod template — node selector, tolerations,
+    // topology-spread constraints, and affinity — merged into the pod spec by
+    // every kind alongside podSecurity and podVolumes. Each field is omitted
+    // when its config slot is empty, so a workload with no constraints renders
+    // no scheduling stanza at all.
+    podScheduling::
+      local cfg = this.config;
+      (if cfg.nodeSelector == {} then {} else { nodeSelector: cfg.nodeSelector })
+      + (if cfg.tolerations == [] then {} else { tolerations: cfg.tolerations })
+      + (if cfg.topologySpread == [] then {} else { topologySpreadConstraints: cfg.topologySpread })
+      + (if cfg.affinity == {} then {} else { affinity: cfg.affinity }),
+
     container::
       local cfg = self.config;
       k.core.v1.container.new(cfg.name, cfg.image)
@@ -263,10 +284,11 @@ local exclusionConflicts(exclusive) = [
       local cfg = self.config;
       local podSecurity = self.podSecurity;
       local podVolumes = self.podVolumes;
+      local podScheduling = self.podScheduling;
       k.apps.v1.deployment.new(cfg.name, replicas=cfg.replicas, containers=[self.container], podLabels=self.selectorLabels)
       + k.apps.v1.deployment.metadata.withLabels(self.labels)
       + k.apps.v1.deployment.spec.template.metadata.withLabelsMixin(self.labels)
-      + { spec+: { template+: { spec+: podSecurity + podVolumes } } }
+      + { spec+: { template+: { spec+: podSecurity + podVolumes + podScheduling } } }
       + (
         if cfg.strategy == null
         then {}
