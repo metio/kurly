@@ -78,6 +78,8 @@
           smokeTools = with pkgs; [
             kind
             kubectl
+            kubernetes-helm
+            curl
           ];
 
           # Multi-step gate commands. Each is a plain scripts/<name>.sh that nix
