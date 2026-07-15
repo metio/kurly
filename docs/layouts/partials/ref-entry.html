@@ -1,0 +1,41 @@
+{{- /*
+  Renders one catalog callable as a reference entry: its signature, help,
+  composition facets, and a parameter table. Expects a dict:
+    entry  — the catalog map (id, help, args, and any facets)
+    call   — the call prefix, e.g. "kurly.store" or "kurly.expose.ingress"
+    mixin  — true for a value composed without a call (a security profile)
+*/ -}}
+{{- $e := .entry -}}
+{{- $call := .call -}}
+{{- $anchor := .call | anchorize -}}
+{{- $sig := $call -}}
+{{- if not .mixin -}}
+  {{- $names := slice -}}
+  {{- range $e.args -}}{{- $names = $names | append .name -}}{{- end -}}
+  {{- $sig = printf "%s(%s)" $call (delimit $names ", ") -}}
+{{- end -}}
+<div class="ref-entry" id="{{ $anchor }}">
+  <h4><a href="#{{ $anchor }}"><code>{{ $sig }}</code></a></h4>
+  <p class="ref-help">{{ $e.help }}</p>
+  <div class="ref-facets">
+    {{- with $e.kinds }}<span class="ref-badge">kinds: {{ delimit . ", " }}</span>{{ end -}}
+    {{- with $e.exclusiveGroup }}<span class="ref-badge ref-badge-warn">exclusive: {{ . }}</span>{{ end -}}
+    {{- if $e.requiresService }}<span class="ref-badge ref-badge-warn">requires a Service</span>{{ end -}}
+  </div>
+  {{- if $e.args }}
+  <table class="ref-args">
+    <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Default</th><th>Example</th></tr></thead>
+    <tbody>
+    {{- range $e.args }}
+      <tr>
+        <td><code>{{ .name }}</code></td>
+        <td>{{ .type }}</td>
+        <td>{{ if .required }}yes{{ else }}—{{ end }}</td>
+        <td>{{ if isset . "default" }}<code>{{ jsonify .default }}</code>{{ else }}—{{ end }}</td>
+        <td>{{ with .example }}<code>{{ jsonify . }}</code>{{ else }}—{{ end }}</td>
+      </tr>
+    {{- end }}
+    </tbody>
+  </table>
+  {{- end }}
+</div>

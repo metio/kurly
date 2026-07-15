@@ -7,6 +7,10 @@
 # committed catalog/catalog.json — kept fresh by the check-catalog gate — is the
 # single source of truth; this is a copy, not a second one.
 
-mkdir -p docs/assets
+mkdir -p docs/assets docs/static
+# assets/ — read by resources.Get and embedded into the assembler + reference
+# pages at build; static/ — published verbatim at /catalog.json for programmatic
+# consumers (and linked from the reference page and llms.txt).
 cp catalog/catalog.json docs/assets/catalog.json
-echo "staged docs/assets/catalog.json"
+cp catalog/catalog.json docs/static/catalog.json
+echo "staged docs/assets/catalog.json and docs/static/catalog.json"

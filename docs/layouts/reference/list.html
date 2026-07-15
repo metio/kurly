@@ -1,0 +1,106 @@
+{{- /*
+  The API reference, rendered server-side from catalog/catalog.json (staged into
+  assets by gen-docs-data). It reads the same catalog the assembler does, so it
+  never drifts from the library — check-catalog keeps the catalog in step with
+  the code. Features are grouped by their palette group; every other section is
+  emitted in catalog order.
+*/ -}}
+{{ define "head" }}
+  {{ $css := resources.Get "/css/reference.css" | minify | fingerprint "sha512" }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ end }}
+
+{{ define "title" }}{{ .Title }} · {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+{{ $cat := resources.Get "catalog.json" | transform.Unmarshal }}
+<article class="ref">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+
+  <nav class="ref-toc">
+    <a href="#workloads">Workloads</a>
+    <a href="#kinds">Kinds</a>
+    <a href="#features">Features</a>
+    <a href="#exposure">Exposure</a>
+    <a href="#security">Security</a>
+  </nav>
+
+  <section id="workloads">
+    <h2>Workloads</h2>
+    <p>Deployable starting points. Import a stage by its canonical path, compose
+      <code>+</code> features, and render with <code>kurly.list</code>.</p>
+    {{ range $cat.workloads }}
+      <div class="ref-entry">
+        <h3 id="{{ printf "workload-%s" .id }}"><code>{{ .id }}</code></h3>
+        <p class="ref-help">{{ .summary }}</p>
+        {{ range .stages }}
+          <div class="ref-stage">
+            <h4><code>{{ .id }}</code> <span class="ref-badge">{{ .kind }}</span></h4>
+            <p class="ref-help">{{ .help }}</p>
+            <p class="ref-import">Import: <code>import '{{ .importPath }}'</code></p>
+            {{ if .args }}
+            <table class="ref-args">
+              <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Default</th></tr></thead>
+              <tbody>
+              {{ range .args }}
+                <tr>
+                  <td><code>{{ .name }}</code></td>
+                  <td>{{ .type }}</td>
+                  <td>{{ if .required }}yes{{ else }}—{{ end }}</td>
+                  <td>{{ if isset . "default" }}<code>{{ jsonify .default }}</code>{{ else }}—{{ end }}</td>
+                </tr>
+              {{ end }}
+              </tbody>
+            </table>
+            {{ end }}
+          </div>
+        {{ end }}
+      </div>
+    {{ end }}
+  </section>
+
+  <section id="kinds">
+    <h2>Kinds</h2>
+    <p>The base workload each recipe starts from.</p>
+    {{ range $cat.kinds }}
+      {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.%s" .id)) }}
+    {{ end }}
+  </section>
+
+  <section id="features">
+    <h2>Features</h2>
+    <p>Composable <code>+</code> capabilities. Each contributes only to the merged
+      config, so features late-bind regardless of compose order.</p>
+    {{- $byGroup := dict -}}
+    {{- range $cat.features -}}
+      {{- $existing := index $byGroup .group | default slice -}}
+      {{- $byGroup = merge $byGroup (dict .group ($existing | append .)) -}}
+    {{- end -}}
+    {{ range $group, $items := $byGroup }}
+      <h3 id="{{ printf "feature-group-%s" $group }}">{{ $group }}</h3>
+      {{ range $items }}
+        {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.%s" .id)) }}
+      {{ end }}
+    {{ end }}
+  </section>
+
+  <section id="exposure">
+    <h2>Exposure</h2>
+    <p>Routing recipes composed onto an <code>http</code> workload. All join the
+      <code>exposure</code> exclusion group — one exposure per workload.</p>
+    {{ range $cat.expose }}
+      {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.expose.%s" .id)) }}
+    {{ end }}
+  </section>
+
+  <section id="security">
+    <h2>Security</h2>
+    <p>Pod Security Standards profiles, composed as mixins. The last profile
+      composed wins; single-knob hatches (in Features) fine-tune after it.</p>
+    {{ range $cat.security }}
+      {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.security.%s" .id) "mixin" true) }}
+    {{ end }}
+  </section>
+</article>
+{{ end }}

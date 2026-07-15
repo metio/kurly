@@ -1,8 +1,8 @@
 ---
 title: Reference
-description: The kurly library API — kinds, features, exposure recipes, and security profiles.
+description: The kurly library API — every kind, feature, exposure recipe, and security profile, generated from the catalog.
 ---
 
-The **[Assembler](/assembler/)** is the fastest way to compose a workload. This
-section will grow into a full API reference generated from the same catalog the
-assembler reads.
+Every callable in the library, generated from the same catalog the
+[Assembler](/assembler/) reads — so it never drifts from the code. The catalog
+itself is published at [`/catalog.json`](/catalog.json) for programmatic use.

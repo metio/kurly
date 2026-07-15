@@ -17,6 +17,7 @@ jsonnetfile.lock.json
 docs/public/
 docs/resources/
 docs/.hugo_build.lock
-# The catalog is copied into assets/ by gen-docs-data; the source of truth is
-# catalog/catalog.json (the assembler.css beside it stays tracked).
+# The catalog is copied into assets/ and static/ by gen-docs-data; the source of
+# truth is catalog/catalog.json (the assembler.css beside it stays tracked).
 docs/assets/catalog.json
+docs/static/catalog.json
