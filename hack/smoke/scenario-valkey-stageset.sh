@@ -26,7 +26,9 @@ branch="${KURLY_GIT_BRANCH:-main}"
 # The version ladder: latest patch of each line, ONE major/minor step at a time
 # (operators don't skip majors). The cross-major 7.2->8.0 hop exercises cross-
 # version replication in the hand-off. Kept as an easy-to-edit array so a hop can
-# be trimmed if a cross-major replication incompatibility ever surfaces.
+# be trimmed if a cross-major replication incompatibility ever surfaces. These
+# versions are intentionally pinned — the lower rungs must not float — so a
+# packageRule in renovate.json disables all updates for this file.
 VALKEY_LADDER=(7.2.13 8.0.9 8.1.8)
 image_ref() { printf 'docker.io/valkey/valkey:%s' "$1"; }
 
