@@ -28,6 +28,11 @@ on:
         description: The scenario script under hack/smoke/ to run.
         required: true
         type: string
+      max_versions:
+        description: How many of the newest Kubernetes minors to run the matrix on.
+        required: false
+        type: string
+        default: '4'
 permissions:
   contents: read
 jobs:
@@ -64,15 +69,17 @@ jobs:
       k8s: ${{ steps.versions.outputs.k8s }}
     steps:
       - id: versions
+        env:
+          MAX: ${{ inputs.max_versions }}
         run: |
           set -uo pipefail
-          # Newest 4 kindest/node minors, latest patch each. If kind cannot run a
+          # Newest N kindest/node minors, latest patch each. If kind cannot run a
           # brand-new minor yet, that surfaces as a failure — the signal to bump
           # the flake's kind, not silent staleness.
           k8s=$(curl -fsSL "https://hub.docker.com/v2/repositories/kindest/node/tags?page_size=100" \
             | jq -r '.results[].name' | grep -E '^v1\.[0-9]+\.[0-9]+$' \
             | awk -F. '{print $1"."$2" "$0}' | sort -k1,1V -k2,2V \
-            | awk '{l[$1]=$2} END{for(m in l)print l[m]}' | sort -V | tail -4 \
+            | awk '{l[$1]=$2} END{for(m in l)print l[m]}' | sort -V | tail -"${MAX}" \
             | jq -R . | jq -cs . 2>/dev/null || echo '[]')
           [ "$(jq 'length' <<<"$k8s" 2>/dev/null || echo 0)" -gt 0 ] || k8s='["v1.33.1"]'
           echo "k8s=$k8s" >> "$GITHUB_OUTPUT"
@@ -93,6 +100,8 @@ jobs:
       - name: Create the kind cluster (k8s ${{ matrix.k8s_version }})
         run: nix develop --command kind create cluster --name kurly-e2e --image kindest/node:${{ matrix.k8s_version }} --wait 180s
       - name: Run the ${{ inputs.workload }} scenario
+        env:
+          KURLY_GIT_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: nix develop --command bash ${{ inputs.scenario }}
       - name: Delete the kind cluster
         if: always()

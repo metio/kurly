@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for valkey through the real Flux + JaaS + stageset-controller
+# pipeline: a JsonnetSnippet renders the cache, JaaS publishes the ExternalArtifact,
+# and a StageSet rolls it — then a multi-hop version walk proves zero-downtime
+# upgrades. Self-gates on a diff scoped to this workload (plus the shared library
+# and the e2e machinery), so a change to another workload never runs or blocks it.
+# This heavy integration scenario runs on the newest k8s minor only (max_versions:
+# '1'); scenario-valkey.sh already covers all four minors with a raw apply.
+name: E2E valkey (stageset)
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  valkey-stageset:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: valkey-stageset
+      paths: '^(workloads/valkey/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-valkey-stageset)\.sh|\.github/workflows/e2e)'
+      scenario: hack/smoke/scenario-valkey-stageset.sh
+      max_versions: '1'
