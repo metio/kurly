@@ -1,7 +1,10 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 [files]
-extend-exclude = ["LICENSES/", "vendor/"]
+# docs/themes/metio is a separate submodule with its own CI, and alpine.min.js
+# is vendored third-party minified code — both trip the spell-checker on tokens
+# they don't own.
+extend-exclude = ["LICENSES/", "vendor/", "docs/themes/", "docs/static/js/alpine.min.js"]
 
 # `edn` (Clojure's Extensible Data Notation) is the tik workload's config
 # format, not a typo of `end`.

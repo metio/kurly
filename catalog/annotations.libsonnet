@@ -171,6 +171,27 @@ local deploymentKinds = ['http', 'worker'];
     privileged: d.fn('Emits no security fields at all — the manifest constrains nothing.', []),
   },
 
+  // Deployable workloads — the starting point the assembler composes onto. Each
+  // stage is a `function(params)` app (a base kind with defaults, no exposure); a
+  // consumer imports it by its canonical path, adds `+` features (chiefly an
+  // exposure recipe), and renders with kurly.list. `kind` is the base the stage
+  // builds on, so the UI knows which features are legal; `importPath` is the path
+  // the snippet imports. catalog.jsonnet asserts each importPath resolves to a
+  // function.
+  workloads: {
+    tik: {
+      summary: "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store.",
+      stages: {
+        backend: d.fn('The tik backend supervisor: a single-writer http app over a ReadWriteOnce store (one replica, recreated to avoid deadlocking on the volume). Compose an exposure recipe to serve the board.', [
+          d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.14174051'),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/tik/backend.libsonnet',
+        },
+      },
+    },
+  },
+
   // The stageset-controller migration-ladder builder.
   migrations: {
     migration: d.fn('Builds one entry of a stageset-controller migration ladder (a plain array of these). Actions are passed through verbatim.', [

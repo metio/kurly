@@ -10,6 +10,12 @@
 # The generator imports the library, which imports k8s-libsonnet; vendor it.
 jb install
 
+# The workloads section imports each stage by kurly's canonical path
+# (github.com/metio/kurly/...); resolve it locally by symlinking the repo into
+# the vendor tree, exactly as check-examples does.
+mkdir -p vendor/github.com/metio
+ln -sfn ../../.. vendor/github.com/metio/kurly
+
 generated="$(jsonnet -J vendor catalog/catalog.jsonnet)"
 
 if ! diff -u catalog/catalog.json <(printf '%s\n' "$generated") >/dev/null; then

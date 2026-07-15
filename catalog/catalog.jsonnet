@@ -17,6 +17,14 @@ local security = import '../lib/security.libsonnet';
 local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 
+// Each workload stage, imported by the canonical path a consumer's snippet uses
+// (resolved via the vendor/github.com/metio/kurly symlink check-catalog creates).
+// A stage that is renamed or removed fails the import here; the reconcile below
+// fails if this map and the annotations fall out of step.
+local stageImports = {
+  'tik/backend': import 'github.com/metio/kurly/workloads/tik/backend.libsonnet',
+};
+
 // Fails if the annotated names and the exported names are not the same set,
 // naming exactly which side is out of step.
 local reconcile(section, annotated, exported) =
@@ -36,6 +44,32 @@ local entries(section) = [
   for name in std.objectFields(section)
 ];
 
+// Flattens the annotated workloads into catalog entries, checking every stage
+// against stageImports: the annotated stage keys and the imported stage keys
+// must be the same set, and each import must resolve to a function.
+local stageKeys = std.set([
+  workload + '/' + stage
+  for workload in std.objectFields(ann.workloads)
+  for stage in std.objectFields(ann.workloads[workload].stages)
+]);
+local workloadEntries =
+  assert reconcile('workload stages', stageKeys, std.objectFields(stageImports));
+  assert std.all([
+    std.isFunction(stageImports[key])
+    for key in std.objectFields(stageImports)
+  ]) : 'workloads: every stage import must resolve to a function(params) app';
+  [
+    {
+      id: workload,
+      summary: ann.workloads[workload].summary,
+      stages: [
+        { id: stage } + ann.workloads[workload].stages[stage]
+        for stage in std.objectFields(ann.workloads[workload].stages)
+      ],
+    }
+    for workload in std.objectFields(ann.workloads)
+  ];
+
 {
   // Drift gates — object-level asserts fire when this object is manifested.
   assert reconcile('features', std.objectFields(ann.features), std.objectFieldsAll(features)),
@@ -49,6 +83,7 @@ local entries(section) = [
          'kinds: main.libsonnet must expose every annotated kind',
 
   schemaVersion: 1,
+  workloads: workloadEntries,
   kinds: entries(ann.kinds),
   features: entries(ann.features),
   expose: entries(ann.expose),

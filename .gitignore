@@ -10,3 +10,13 @@ jsonnetfile.lock.json
 # direnv nix-direnv build cache (contributors with real nix may add a
 # local, gitignored .envrc: `use flake`).
 .direnv/
+
+# Hugo's build output and the generated data it reads (staged from committed
+# source by gen-docs-data). The published site is always generated, never
+# committed.
+docs/public/
+docs/resources/
+docs/.hugo_build.lock
+# The catalog is copied into assets/ by gen-docs-data; the source of truth is
+# catalog/catalog.json (the assembler.css beside it stays tracked).
+docs/assets/catalog.json

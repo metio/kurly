@@ -1,0 +1,160 @@
+{{- /*
+  The assembler page. Loads its own stylesheet, the catalog data (from
+  docs/data/catalog.json via .Site.Data.catalog), and Alpine + the component.
+  Alpine and assembler.js both use `defer`, so assembler.js registers the
+  component before Alpine fires `alpine:init`.
+*/ -}}
+{{ define "head" }}
+  {{ $css := resources.Get "/css/assembler.css" | minify | fingerprint "sha512" }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{ $catalog := resources.Get "catalog.json" }}
+  <script type="application/json" id="kurly-catalog">{{ $catalog.Content | safeJS }}</script>
+  <script defer src="{{ "/js/assembler.js" | relURL }}"></script>
+  <script defer src="{{ "/js/alpine.min.js" | relURL }}"></script>
+{{ end }}
+
+{{ define "title" }}{{ .Title }} · {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+<article class="asm" x-data="assembler">
+  <header class="asm-intro">
+    <h1>{{ .Title }}</h1>
+    <p>Start from a published workload, add kurly features, and copy out the
+      Jsonnet snippet and JaaS manifests to deploy it. Every input is either a
+      hard-coded value or a pass-through parameter your own JaaS snippet supplies.</p>
+  </header>
+
+  <!-- Step 1 — pick a workload -->
+  <section class="asm-pick" x-show="!selected">
+    <h2>Choose a workload</h2>
+    <div class="asm-cards">
+      <template x-for="w in catalog.workloads" :key="w.id">
+        <template x-for="s in w.stages" :key="s.id">
+          <button type="button" class="asm-workload" @click="select(w, s)">
+            <span class="asm-workload-id" x-text="w.id + ' / ' + s.id"></span>
+            <span class="asm-workload-kind" x-text="s.kind"></span>
+            <span class="asm-workload-help" x-text="s.help"></span>
+          </button>
+        </template>
+      </template>
+    </div>
+  </section>
+
+  <!-- Step 2 — compose -->
+  <div class="asm-grid" x-show="selected" x-cloak>
+    <div class="asm-build">
+      <header class="asm-hub">
+        <div>
+          <strong x-text="selected && (selected.workload.id + ' / ' + selected.stage.id)"></strong>
+          <span class="asm-badge" x-text="kind"></span>
+        </div>
+        <button type="button" class="asm-link" @click="reset()">change workload</button>
+      </header>
+
+      <!-- Workload parameters -->
+      <section class="asm-section" x-show="selected && selected.stage.args && selected.stage.args.length">
+        <h2>Workload parameters</h2>
+        <template x-for="a in (selected ? selected.stage.args : [])" :key="a.name">
+          <div class="asm-arg">
+            <div class="asm-arg-head">
+              <code x-text="a.name"></code>
+              <span class="asm-type" x-text="a.type"></span>
+              <span class="asm-req" x-show="a.required">required</span>
+            </div>
+            <p class="asm-help" x-text="a.help"></p>
+            <div class="asm-modes">
+              <label x-show="!a.required"><input type="radio" value="default" x-model="workloadArgs[a.name].mode"> default</label>
+              <label><input type="radio" value="value" x-model="workloadArgs[a.name].mode"> hard-code</label>
+              <label><input type="radio" value="tla" x-model="workloadArgs[a.name].mode"> pass-through</label>
+            </div>
+            <input class="asm-input" x-show="workloadArgs[a.name].mode === 'value'" x-model="workloadArgs[a.name].value" :placeholder="a.example != null ? a.example : a.type">
+            <input class="asm-input" x-show="workloadArgs[a.name].mode === 'tla'" x-model="workloadArgs[a.name].tla" placeholder="TLA name">
+          </div>
+        </template>
+      </section>
+
+      <!-- Composed features -->
+      <section class="asm-section" x-show="composed.length">
+        <h2>Composed features</h2>
+        <template x-for="(c, idx) in composed" :key="c.key">
+          <div class="asm-feature">
+            <div class="asm-feature-head">
+              <code x-text="callExpr(c).replace(/\(.*/, '')"></code>
+              <button type="button" class="asm-link" @click="remove(idx)">remove</button>
+            </div>
+            <p class="asm-help" x-text="c.feature.help"></p>
+            <template x-for="a in (c.feature.args || [])" :key="a.name">
+              <div class="asm-arg">
+                <div class="asm-arg-head">
+                  <code x-text="a.name"></code>
+                  <span class="asm-type" x-text="a.type"></span>
+                  <span class="asm-req" x-show="a.required">required</span>
+                </div>
+                <div class="asm-modes">
+                  <label x-show="!a.required"><input type="radio" value="default" x-model="c.args[a.name].mode"> default</label>
+                  <label><input type="radio" value="value" x-model="c.args[a.name].mode"> hard-code</label>
+                  <label><input type="radio" value="tla" x-model="c.args[a.name].mode"> pass-through</label>
+                </div>
+                <input class="asm-input" x-show="c.args[a.name].mode === 'value'" x-model="c.args[a.name].value" :placeholder="a.example != null ? a.example : a.type">
+                <input class="asm-input" x-show="c.args[a.name].mode === 'tla'" x-model="c.args[a.name].tla" placeholder="TLA name">
+              </div>
+            </template>
+          </div>
+        </template>
+      </section>
+
+      <!-- Palette -->
+      <section class="asm-section asm-palette">
+        <h2>Add a feature</h2>
+        <template x-for="grp in featureGroups" :key="grp.group">
+          <div class="asm-palette-group">
+            <h3 x-text="grp.group"></h3>
+            <div class="asm-chips">
+              <template x-for="f in grp.items" :key="f.id">
+                <button type="button" class="asm-chip" :disabled="!!blockedReason('feature', f)" :title="blockedReason('feature', f) || f.help" @click="add('feature', f)" x-text="f.id"></button>
+              </template>
+            </div>
+          </div>
+        </template>
+        <div class="asm-palette-group" x-show="exposeItems.length">
+          <h3>exposure</h3>
+          <div class="asm-chips">
+            <template x-for="f in exposeItems" :key="f.id">
+              <button type="button" class="asm-chip" :disabled="!!blockedReason('expose', f)" :title="blockedReason('expose', f) || f.help" @click="add('expose', f)" x-text="f.id"></button>
+            </template>
+          </div>
+        </div>
+        <div class="asm-palette-group">
+          <h3>security</h3>
+          <div class="asm-chips">
+            <template x-for="f in securityItems" :key="f.id">
+              <button type="button" class="asm-chip" :title="f.help" @click="add('security', f)" x-text="f.id"></button>
+            </template>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Output -->
+    <aside class="asm-output">
+      <div class="asm-out-block">
+        <div class="asm-out-head"><h2>Jsonnet snippet</h2><button type="button" class="asm-link" @click="copy(snippet)">copy</button></div>
+        <pre class="asm-code"><code x-text="snippet"></code></pre>
+      </div>
+      <div class="asm-out-block">
+        <div class="asm-out-head"><h2>JaaS manifests</h2><button type="button" class="asm-link" @click="copy(jaas)">copy</button></div>
+        <pre class="asm-code"><code x-text="jaas"></code></pre>
+      </div>
+      <div class="asm-out-block">
+        <h2>Pass-through inputs</h2>
+        <p class="asm-help" x-show="!tlas.length">No pass-through parameters — every value is hard-coded.</p>
+        <ul class="asm-tlas" x-show="tlas.length">
+          <template x-for="t in tlas" :key="t.name">
+            <li><code x-text="t.name"></code> <span class="asm-type" x-text="t.arg.type"></span> — your JaaS snippet must supply this as a TLA.</li>
+          </template>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</article>
+{{ end }}

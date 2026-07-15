@@ -52,6 +52,13 @@
             cosign
           ];
 
+          # The documentation site: Hugo builds the static site (the metio theme
+          # is a git submodule under docs/themes/), and the assembler page reads
+          # catalog/catalog.json copied into docs/data/ by gen-docs-data.
+          docsTools = with pkgs; [
+            hugo
+          ];
+
           # Kubernetes static analysis, weighted toward custom policy: conftest
           # runs kurly's own invariants as Rego over the RENDERED JSON (the layer
           # jsonnet emits) — precise, no ignore-list upkeep — backed by two
@@ -96,6 +103,7 @@
               go-jsonnet
               jsonnet-bundler
               diffutils
+              coreutils
             ];
             text = builtins.readFile ./scripts/check-catalog.sh;
           };
@@ -120,6 +128,15 @@
             ]
             ++ securityTools;
             text = builtins.readFile ./scripts/check-security.sh;
+          };
+          # Stages the generated data the docs site reads into docs/data/
+          # (gitignored) — currently the assembler catalog. Run before `hugo`;
+          # the docs workflow runs it too, so the published site is always built
+          # from the committed catalog rather than a stale copy.
+          gen-docs-data = pkgs.writeShellApplication {
+            name = "gen-docs-data";
+            runtimeInputs = with pkgs; [ coreutils ];
+            text = builtins.readFile ./scripts/gen-docs-data.sh;
           };
           # Applies kurly's output to a running cluster and waits for Ready. Not
           # part of `verify` (it needs a cluster); the kind-smoke workflow owns
@@ -157,6 +174,7 @@
             check-tests
             check-examples
             check-security
+            gen-docs-data
             kind-smoke
             verify
           ];
@@ -164,7 +182,7 @@
         {
           default = devshell.lib.mkDevShell {
             inherit pkgs;
-            packages = kurlyTools ++ securityTools ++ smokeTools ++ commands;
+            packages = kurlyTools ++ securityTools ++ smokeTools ++ docsTools ++ commands;
             menu = ''
               echo "kurly commands (also: nix develop --command <name>):"
               echo "  check-fmt        jsonnetfmt --test across all sources"
@@ -172,6 +190,7 @@
               echo "  check-tests      assertion suite + the requiresService negative check"
               echo "  check-examples   render examples + workloads, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
+              echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
               echo "  kind-smoke       apply kurly's output to a cluster, wait for Ready"
               echo "  verify           run every gate locally (what CI runs)"
             '';

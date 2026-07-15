@@ -1,0 +1,49 @@
+baseURL = "https://kurly.projects.metio.wtf/"
+locale = "en"
+defaultContentLanguage = "en"
+theme = "metio"
+title = "kurly"
+
+enableGitInfo = true
+enableRobotsTXT = true
+enableInlineShortcodes = true
+pygmentsUseClasses = true
+
+# The assembler page embeds inline HTML/SVG driven by Alpine; Goldmark must pass
+# it through rather than strip it.
+[markup.goldmark.renderer]
+  unsafe = true
+
+[outputs]
+  home = ["HTML", "RSS", "ATOM", "HUMANS", "FOAF", "LLMS", "LLMSINDEX"]
+  section = ["HTML", "RSS", "ATOM"]
+  term = ["HTML", "RSS", "ATOM"]
+
+[params]
+  mainSections = ["assembler", "reference"]
+  author = "metio.wtf"
+  github = "metio/kurly"
+  favicons = false
+  fediverseCreator = "@sebhoss@mastodon.online"
+  editContentPath = "docs/content"
+  editBranch = "main"
+  work = "kurly.projects.metio.wtf"
+  description = "a Jsonnet library of composable Kubernetes workload recipes"
+  relatedProjects = [
+    { name = "jaas", url = "https://jaas.projects.metio.wtf/" },
+    { name = "stageset-controller", url = "https://stageset.projects.metio.wtf/" },
+  ]
+
+# Navigation — a reader's journey, most important first. Each group is a content
+# section under docs/content of the same name, so a page's URL matches the menu.
+[menu]
+  [[menu.main]]
+    identifier = "assembler"
+    name = "Assembler"
+    url = "/assembler/"
+    weight = 10
+  [[menu.main]]
+    identifier = "reference"
+    name = "Reference"
+    url = "/reference/"
+    weight = 20

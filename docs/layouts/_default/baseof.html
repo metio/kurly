@@ -1,0 +1,32 @@
+{{- /*
+  Mirrors the metio theme's baseof with one addition: a `head` block so a page
+  layout can contribute its own stylesheet and scripts (the assembler loads its
+  CSS and Alpine here). The block is empty by default, so every other page
+  renders exactly as the theme intends.
+*/ -}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{ partial "head/metadata.html" . }}
+    {{ partial "head/social.html" . }}
+    {{ partial "head/json-ld.html" . }}
+    {{ partial "head/links.html" . }}
+    {{ partial "head/styles.html" . }}
+    {{ block "head" . }}{{ end }}
+    <title>
+        {{ block "title" . }}
+        {{ .Site.Title }}
+        {{ end }}
+    </title>
+</head>
+<body id="site">
+{{ partial "body/site-header.html" . }}
+{{ partial "body/site-navigation.html" . }}
+<main id="content">
+    {{ block "main" . }}
+    <!-- The part of the page that begins to differ between templates -->
+    {{ end }}
+</main>
+{{ partial "body/site-footer.html" . }}
+</body>
+</html>

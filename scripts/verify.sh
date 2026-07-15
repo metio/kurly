@@ -12,6 +12,6 @@ check-security
 reuse lint
 yamllint .
 actionlint
-markdownlint-cli2 "**/*.md" "#vendor"
+markdownlint-cli2 "**/*.md" "#vendor" "#docs/themes"
 typos
 echo "all gates passed"

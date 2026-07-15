@@ -34,3 +34,27 @@ path = "flake.lock"
 precedence = "override"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
+
+# The documentation site. `aggregate` lets a file's own inline header win where
+# it has one (the layouts, CSS, and scripts do); the content markdown and
+# hugo.toml fall back to this. The docs/themes/metio submodule is a separate
+# repo, outside this scope.
+[[annotations]]
+path = "docs/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The kurly Authors"
+SPDX-License-Identifier = "0BSD"
+
+# Alpine.js is vendored third-party; its own license governs it.
+[[annotations]]
+path = "docs/static/js/alpine.min.js"
+precedence = "override"
+SPDX-FileCopyrightText = "Caleb Porzio and contributors"
+SPDX-License-Identifier = "MIT"
+
+# .gitmodules registers the docs theme git submodule; it has no comment syntax.
+[[annotations]]
+path = ".gitmodules"
+precedence = "override"
+SPDX-FileCopyrightText = "The kurly Authors"
+SPDX-License-Identifier = "0BSD"
