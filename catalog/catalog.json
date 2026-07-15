@@ -319,6 +319,31 @@
          ]
       },
       {
+         "args": [
+            {
+               "example": 6379,
+               "name": "port",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "default": false,
+               "name": "publishNotReady",
+               "required": false,
+               "type": "bool"
+            }
+         ],
+         "group": "networking",
+         "help": "A headless Service (clusterIP: None) selecting the pods, for DNS peer discovery — the discovery a replication hand-off needs.",
+         "id": "headlessService",
+         "kinds": [
+            "http",
+            "worker",
+            "daemon",
+            "stateful"
+         ]
+      },
+      {
          "args": [ ],
          "group": "security",
          "help": "Shares the host user namespace (relaxes hostUsers=false).",
@@ -414,6 +439,35 @@
          "args": [
             {
                "example": {
+                  "command": [
+                     "sh",
+                     "-c",
+                     "echo ready"
+                  ],
+                  "image": "busybox:1",
+                  "name": "setup"
+               },
+               "name": "container",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "An init container run to completion before the main one — the full container spec, passed through. Composes more than once.",
+         "id": "initContainer",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
                   "team": "payments"
                },
                "name": "labels",
@@ -424,6 +478,65 @@
          "group": "container",
          "help": "Extra labels on metadata and the pod template (never on immutable selectors).",
          "id": "labels",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "exec": {
+                     "command": [
+                        "sh",
+                        "-c",
+                        "valkey-cli failover"
+                     ]
+                  }
+               },
+               "name": "preStop",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "name": "postStart",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Container lifecycle handlers (postStart / preStop), passed through verbatim.",
+         "id": "lifecycle",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "tcpSocket": {
+                     "port": 6379
+                  }
+               },
+               "name": "probe",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "An explicit liveness probe spec (exec/tcpSocket/httpGet), overriding the default http probe.",
+         "id": "livenessProbe",
          "kinds": [
             "http",
             "worker",
@@ -646,6 +759,35 @@
          ]
       },
       {
+         "args": [
+            {
+               "example": {
+                  "exec": {
+                     "command": [
+                        "sh",
+                        "-c",
+                        "valkey-cli ping"
+                     ]
+                  }
+               },
+               "name": "probe",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "An explicit readiness probe spec (exec/tcpSocket/httpGet), overriding the default http probe.",
+         "id": "readinessProbe",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
          "args": [ ],
          "group": "container",
          "help": "The single-writer strategy: tears the old pod down before starting the new one, so a ReadWriteOnce store never deadlocks a rollout.",
@@ -724,6 +866,28 @@
             "daemon",
             "stateful",
             "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": 1,
+               "name": "maxSurge",
+               "required": false,
+               "type": "any"
+            },
+            {
+               "name": "maxUnavailable",
+               "required": false,
+               "type": "any"
+            }
+         ],
+         "group": "container",
+         "help": "RollingUpdate tuning so a new pod surges alongside the old during an update — the overlap a replication hand-off needs.",
+         "id": "rollingUpdate",
+         "kinds": [
+            "http",
+            "worker"
          ]
       },
       {
@@ -970,6 +1134,27 @@
          "kinds": [
             "http",
             "worker"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": 120,
+               "name": "seconds",
+               "required": true,
+               "type": "int"
+            }
+         ],
+         "group": "container",
+         "help": "How long the pod gets to shut down gracefully (a preStop hook's window).",
+         "id": "terminationGracePeriod",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {

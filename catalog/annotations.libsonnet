@@ -105,6 +105,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     probes: d.fn('HTTP readiness and liveness probes on the named http port.', [
       d.arg('path', d.T.path, default='/healthz', example='/tickets.edn'),
     ]) + { kinds: ['http'], group: 'container' },
+    readinessProbe: d.fn('An explicit readiness probe spec (exec/tcpSocket/httpGet), overriding the default http probe.', [
+      d.arg('probe', d.T.object, required=true, example={ exec: { command: ['sh', '-c', 'valkey-cli ping'] } }),
+    ]) + { kinds: allKinds, group: 'container' },
+    livenessProbe: d.fn('An explicit liveness probe spec (exec/tcpSocket/httpGet), overriding the default http probe.', [
+      d.arg('probe', d.T.object, required=true, example={ tcpSocket: { port: 6379 } }),
+    ]) + { kinds: allKinds, group: 'container' },
+    lifecycle: d.fn('Container lifecycle handlers (postStart / preStop), passed through verbatim.', [
+      d.arg('preStop', d.T.object, example={ exec: { command: ['sh', '-c', 'valkey-cli failover'] } }),
+      d.arg('postStart', d.T.object),
+    ]) + { kinds: allKinds, group: 'container' },
+    initContainer: d.fn('An init container run to completion before the main one — the full container spec, passed through. Composes more than once.', [
+      d.arg('container', d.T.object, required=true, example={ name: 'setup', image: 'busybox:1', command: ['sh', '-c', 'echo ready'] }),
+    ]) + { kinds: allKinds, group: 'container' },
+    terminationGracePeriod: d.fn("How long the pod gets to shut down gracefully (a preStop hook's window).", [
+      d.arg('seconds', d.T.int, required=true, example=120),
+    ]) + { kinds: allKinds, group: 'container' },
+    rollingUpdate: d.fn('RollingUpdate tuning so a new pod surges alongside the old during an update — the overlap a replication hand-off needs.', [
+      d.arg('maxSurge', d.T.any, example=1),
+      d.arg('maxUnavailable', d.T.any),
+    ]) + { kinds: deploymentKinds, group: 'container' },
 
     // Scheduling (CronJob tuning — only kurly.cron reads these).
     schedule: d.fn('The cron schedule expression.', [
@@ -186,6 +206,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('egress', d.T.array, default=[]),
       d.arg('policyTypes', d.T.array),
     ]) + { kinds: allKinds, group: 'networking' },
+    headlessService: d.fn('A headless Service (clusterIP: None) selecting the pods, for DNS peer discovery — the discovery a replication hand-off needs.', [
+      d.arg('port', d.T.int, example=6379),
+      d.arg('publishNotReady', d.T.bool, default=false),
+    ]) + { kinds: ['http', 'worker', 'daemon', 'stateful'], group: 'networking' },
     serviceMonitor: d.fn('A Prometheus-Operator ServiceMonitor scraping the workload Service.', [
       d.arg('port', d.T.string, default='http'),
       d.arg('path', d.T.path, default='/metrics'),

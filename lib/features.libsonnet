@@ -63,6 +63,29 @@ local resourcePresets = {
   serviceAccount(serviceAccountName):: { config+:: { serviceAccountName: serviceAccountName } },
   // HTTP readiness+liveness probes on the named `http` port.
   probes(path='/healthz'):: { config+:: { probePath: path } },
+  // Explicit probe specs (exec, tcpSocket, httpGet, …) that override the default
+  // http probes — passed through verbatim.
+  readinessProbe(probe):: { config+:: { readinessProbe: probe } },
+  livenessProbe(probe):: { config+:: { livenessProbe: probe } },
+  // Container lifecycle handlers (postStart / preStop), passed through verbatim.
+  lifecycle(preStop=null, postStart=null):: {
+    config+:: { lifecycle+: std.prune({ preStop: preStop, postStart: postStart }) },
+  },
+  // An init container that runs to completion before the main one starts —
+  // the full container spec, passed through. Composes more than once.
+  initContainer(container):: { config+:: { initContainers+: [container] } },
+  // How long the pod gets to shut down gracefully (a preStop hook's window).
+  terminationGracePeriod(seconds):: { config+:: { terminationGracePeriodSeconds: seconds } },
+  // A headless Service (clusterIP: None) selecting the pods, for DNS peer
+  // discovery. publishNotReady lists pods before they are Ready.
+  headlessService(port=null, publishNotReady=false):: {
+    config+:: { headlessService: { port: port, publishNotReadyAddresses: publishNotReady } },
+  },
+  // RollingUpdate tuning so a new pod can surge alongside the old during an
+  // update — the overlap a replication hand-off needs.
+  rollingUpdate(maxSurge=null, maxUnavailable=null):: {
+    config+:: { strategy: 'RollingUpdate', rollingUpdate: std.prune({ maxSurge: maxSurge, maxUnavailable: maxUnavailable }) },
+  },
 
   // CronJob tuning (only kurly.cron reads these).
   schedule(schedule):: { config+:: { schedule: schedule } },
