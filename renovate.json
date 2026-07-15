@@ -12,6 +12,15 @@
   "git-submodules": {
     "enabled": true
   },
+  "packageRules": [
+    {
+      "description": "The valkey stageset e2e walks a FIXED version ladder (old -> newer) to prove multi-hop zero-downtime upgrades; the lower rungs must stay pinned, so no manager may bump anything in this scenario. The cache's own default image stays Renovate-tracked in workloads/valkey/cache.libsonnet.",
+      "matchFileNames": [
+        "hack/smoke/scenario-valkey-stageset.sh"
+      ],
+      "enabled": false
+    }
+  ],
   "customManagers": [
     {
       "description": "The tik workload's default image, pinned in the stage, its catalog annotation, and the generated catalog.json. Matching all three keeps them in lockstep so the check-catalog gate stays green on the bump PR.",
