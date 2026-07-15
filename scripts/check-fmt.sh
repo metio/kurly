@@ -3,4 +3,4 @@
 
 # jsonnetfmt in check mode across every source (empty output == clean). The
 # file set lives here, so CI and a local run format-check the same files.
-jsonnetfmt --test ./*.libsonnet ./lib/*.libsonnet ./examples/*.jsonnet ./workloads/*/*.jsonnet ./tests/*.jsonnet
+jsonnetfmt --test ./*.libsonnet ./lib/*.libsonnet ./catalog/*.libsonnet ./catalog/*.jsonnet ./examples/*.jsonnet ./workloads/*/*.jsonnet ./tests/*.jsonnet

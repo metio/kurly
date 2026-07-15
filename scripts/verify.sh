@@ -5,6 +5,7 @@
 # CI runs these as parallel jobs for granular failure attribution; this is the
 # serial local equivalent. Keep it in step with verify.yml's jobs.
 check-fmt
+check-catalog
 check-tests
 check-examples
 check-security

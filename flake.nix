@@ -90,6 +90,15 @@
             ];
             text = builtins.readFile ./scripts/check-tests.sh;
           };
+          check-catalog = pkgs.writeShellApplication {
+            name = "check-catalog";
+            runtimeInputs = with pkgs; [
+              go-jsonnet
+              jsonnet-bundler
+              diffutils
+            ];
+            text = builtins.readFile ./scripts/check-catalog.sh;
+          };
           check-examples = pkgs.writeShellApplication {
             name = "check-examples";
             runtimeInputs = with pkgs; [
@@ -134,6 +143,7 @@
             name = "verify";
             runtimeInputs = [
               check-fmt
+              check-catalog
               check-tests
               check-examples
               check-security
@@ -143,6 +153,7 @@
           };
           commands = [
             check-fmt
+            check-catalog
             check-tests
             check-examples
             check-security
@@ -157,6 +168,7 @@
             menu = ''
               echo "kurly commands (also: nix develop --command <name>):"
               echo "  check-fmt        jsonnetfmt --test across all sources"
+              echo "  check-catalog    regenerate catalog/catalog.json, fail if stale"
               echo "  check-tests      assertion suite + the requiresService negative check"
               echo "  check-examples   render examples + workloads, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"

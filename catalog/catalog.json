@@ -1,0 +1,793 @@
+{
+   "expose": [
+      {
+         "args": [
+            {
+               "example": "storefront.example.com",
+               "name": "host",
+               "required": true,
+               "type": "hostname"
+            },
+            {
+               "example": "shared",
+               "name": "gateway",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "name": "gatewayNamespace",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "sectionName",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "exclusiveGroup": "exposure",
+         "help": "Attaches an HTTPRoute to an existing shared Gateway (the usual platform-team setup).",
+         "id": "gateway",
+         "kinds": [
+            "http"
+         ],
+         "requiresService": true
+      },
+      {
+         "args": [
+            {
+               "example": "storefront.example.com",
+               "name": "host",
+               "required": true,
+               "type": "hostname"
+            },
+            {
+               "name": "ingressClass",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "exclusiveGroup": "exposure",
+         "help": "Routes the host to the workload through the Ingress API.",
+         "id": "ingress",
+         "kinds": [
+            "http"
+         ],
+         "requiresService": true
+      },
+      {
+         "args": [
+            {
+               "example": "storefront.example.com",
+               "name": "host",
+               "required": true,
+               "type": "hostname"
+            },
+            {
+               "example": "tenant-a",
+               "name": "listenerSet",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "name": "listenerSetNamespace",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "sectionName",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "exclusiveGroup": "exposure",
+         "help": "Attaches an HTTPRoute to an existing ListenerSet (per-tenant listener ownership).",
+         "id": "listenerSet",
+         "kinds": [
+            "http"
+         ],
+         "requiresService": true
+      },
+      {
+         "args": [
+            {
+               "example": "storefront.example.com",
+               "name": "host",
+               "required": true,
+               "type": "hostname"
+            },
+            {
+               "example": "istio",
+               "name": "gatewayClass",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "exclusiveGroup": "exposure",
+         "help": "Generates a dedicated Gateway plus the HTTPRoute — for clusters with no shared Gateway to attach to.",
+         "id": "ownGateway",
+         "kinds": [
+            "http"
+         ],
+         "requiresService": true
+      },
+      {
+         "args": [
+            {
+               "example": "storefront.example.com",
+               "name": "host",
+               "required": true,
+               "type": "hostname"
+            },
+            {
+               "example": "shared",
+               "name": "gateway",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "name": "gatewayNamespace",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "exclusiveGroup": "exposure",
+         "help": "Generates a ListenerSet that adds the workload's own listener to a shared Gateway, plus the HTTPRoute. The Gateway must opt in via spec.allowedListeners.",
+         "id": "ownListenerSet",
+         "kinds": [
+            "http"
+         ],
+         "requiresService": true
+      }
+   ],
+   "features": [
+      {
+         "args": [
+            {
+               "example": {
+                  "prometheus.io/scrape": "true"
+               },
+               "name": "annotations",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Extra annotations on metadata and the pod template.",
+         "id": "annotations",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  "backend",
+                  "--config=/etc/tik/pipelines.edn"
+               ],
+               "name": "args",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "container",
+         "help": "Appends arguments to the image's own entrypoint — typically a subcommand selecting the workload.",
+         "id": "args",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  "/bin/app"
+               ],
+               "name": "command",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "container",
+         "help": "Overrides the image entrypoint entirely.",
+         "id": "command",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "Forbid",
+               "name": "concurrencyPolicy",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "scheduling",
+         "help": "How to treat a job that is still running when the next is due (Allow/Forbid/Replace).",
+         "id": "concurrencyPolicy",
+         "kinds": [
+            "cron"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "app.conf": "key = value"
+               },
+               "name": "files",
+               "required": true,
+               "type": "object"
+            },
+            {
+               "default": "/etc/config",
+               "name": "mountPath",
+               "required": false,
+               "type": "path"
+            }
+         ],
+         "group": "storage",
+         "help": "Renders a ConfigMap from a filename→content map and mounts it read-only.",
+         "id": "config",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  {
+                     "name": "LOG_LEVEL",
+                     "value": "info"
+                  }
+               ],
+               "name": "env",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "container",
+         "help": "Appends environment variables (k8s EnvVar entries) to the container.",
+         "id": "env",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [ ],
+         "group": "security",
+         "help": "Shares the host user namespace (relaxes hostUsers=false).",
+         "id": "hostUsers",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "ghcr.io/acme/app:1.2.3",
+               "name": "image",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "Overrides the container image.",
+         "id": "image",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "team": "payments"
+               },
+               "name": "labels",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Extra labels on metadata and the pod template (never on immutable selectors).",
+         "id": "labels",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": 8080,
+               "name": "port",
+               "required": true,
+               "type": "int"
+            }
+         ],
+         "group": "container",
+         "help": "The container port the workload listens on (also the Service target).",
+         "id": "port",
+         "kinds": [
+            "http"
+         ]
+      },
+      {
+         "args": [
+            {
+               "default": "/healthz",
+               "example": "/tickets.edn",
+               "name": "path",
+               "required": false,
+               "type": "path"
+            }
+         ],
+         "group": "container",
+         "help": "HTTP readiness and liveness probes on the named http port.",
+         "id": "probes",
+         "kinds": [
+            "http"
+         ]
+      },
+      {
+         "args": [ ],
+         "group": "container",
+         "help": "The single-writer strategy: tears the old pod down before starting the new one, so a ReadWriteOnce store never deadlocks a rollout.",
+         "id": "recreate",
+         "kinds": [
+            "http",
+            "worker"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": 3,
+               "name": "replicas",
+               "required": true,
+               "type": "int"
+            }
+         ],
+         "group": "container",
+         "help": "The desired number of pod replicas.",
+         "id": "replicas",
+         "kinds": [
+            "http",
+            "worker"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
+               "name": "requests",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "example": {
+                  "memory": "256Mi"
+               },
+               "name": "limits",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Container resource requests and/or limits.",
+         "id": "resources",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [ ],
+         "group": "security",
+         "help": "Allows the container to run as root (relaxes runAsNonRoot).",
+         "id": "rootUser",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": 12345,
+               "name": "uid",
+               "required": true,
+               "type": "int"
+            },
+            {
+               "name": "gid",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "name": "fsGroup",
+               "required": false,
+               "type": "int"
+            }
+         ],
+         "group": "security",
+         "help": "Pins the run-as user/group (and matching fsGroup) for images that do not declare a non-root USER.",
+         "id": "runAs",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "0 2 * * *",
+               "name": "schedule",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "scheduling",
+         "help": "The cron schedule expression.",
+         "id": "schedule",
+         "kinds": [
+            "cron"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "/tmp",
+               "name": "mountPath",
+               "required": true,
+               "type": "path"
+            },
+            {
+               "name": "sizeLimit",
+               "required": false,
+               "type": "quantity"
+            }
+         ],
+         "group": "storage",
+         "help": "A writable emptyDir — the escape valve a read-only root filesystem needs for /tmp and the like.",
+         "id": "scratch",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "tik-tls",
+               "name": "secretName",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "/etc/tls",
+               "name": "mountPath",
+               "required": true,
+               "type": "path"
+            },
+            {
+               "default": true,
+               "name": "readOnly",
+               "required": false,
+               "type": "bool"
+            },
+            {
+               "default": false,
+               "name": "optional",
+               "required": false,
+               "type": "bool"
+            },
+            {
+               "name": "defaultMode",
+               "required": false,
+               "type": "int"
+            }
+         ],
+         "group": "storage",
+         "help": "Mounts an EXISTING Secret (kurly never mints key material).",
+         "id": "secretMount",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "storefront",
+               "name": "serviceAccountName",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "Runs the pod under a named ServiceAccount (also gates token automount).",
+         "id": "serviceAccount",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "/var/lib/tik",
+               "name": "mountPath",
+               "required": true,
+               "type": "path"
+            },
+            {
+               "example": "1Gi",
+               "name": "size",
+               "required": true,
+               "type": "quantity"
+            },
+            {
+               "default": [
+                  "ReadWriteOnce"
+               ],
+               "name": "accessModes",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "storageClass",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "selector",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "name": "annotations",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "group": "storage",
+         "help": "The workload's own PersistentVolumeClaim, mounted at a path.",
+         "id": "store",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "RollingUpdate",
+               "name": "strategy",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "The Deployment update strategy.",
+         "id": "strategy",
+         "kinds": [
+            "http",
+            "worker"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "1.2.3",
+               "name": "version",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "The workload version, stamped as app.kubernetes.io/version on every object.",
+         "id": "version",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      },
+      {
+         "args": [ ],
+         "group": "security",
+         "help": "Makes the root filesystem writable (relaxes readOnlyRootFilesystem).",
+         "id": "writableRootFilesystem",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon"
+         ]
+      }
+   ],
+   "kinds": [
+      {
+         "args": [
+            {
+               "example": "nightly-report",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "ghcr.io/acme/report:1.2.3",
+               "name": "image",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "0 2 * * *",
+               "name": "schedule",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "hasService": false,
+         "help": "A scheduled job: a CronJob that runs to completion on a cron schedule.",
+         "id": "cron"
+      },
+      {
+         "args": [
+            {
+               "example": "node-exporter",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "ghcr.io/acme/node-agent:1.2.3",
+               "name": "image",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "hasService": false,
+         "help": "A per-node agent: a DaemonSet running one pod on every node.",
+         "id": "daemon"
+      },
+      {
+         "args": [
+            {
+               "example": "storefront",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "ghcr.io/acme/storefront:1.2.3",
+               "name": "image",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "hasService": true,
+         "help": "An HTTP workload: a Deployment (2 replicas) and a ClusterIP Service. Compose an exposure feature to accept traffic from outside the cluster.",
+         "id": "http"
+      },
+      {
+         "args": [
+            {
+               "example": "indexer",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "ghcr.io/acme/indexer:1.2.3",
+               "name": "image",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "hasService": false,
+         "help": "A background worker: a Deployment with no Service. Reaches out (queues, schedules) rather than serving traffic.",
+         "id": "worker"
+      }
+   ],
+   "migrations": [
+      {
+         "args": [
+            {
+               "example": "2026.5.25",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "2026.5.25",
+               "name": "to",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "name": "from",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "stage",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "actions",
+               "required": false,
+               "type": "array"
+            }
+         ],
+         "help": "Builds one entry of a stageset-controller migration ladder (a plain array of these). Actions are passed through verbatim.",
+         "id": "migration"
+      }
+   ],
+   "schemaVersion": 1,
+   "security": [
+      {
+         "args": [ ],
+         "help": "Relaxes what only restricted requires (root allowed, default capabilities kept, privilege escalation and unpinned seccomp permitted); keeps the read-only root filesystem and user namespaces.",
+         "id": "baseline"
+      },
+      {
+         "args": [ ],
+         "help": "Emits no security fields at all — the manifest constrains nothing.",
+         "id": "privileged"
+      },
+      {
+         "args": [ ],
+         "help": "The default posture, written out. Compose after another profile to re-tighten.",
+         "id": "restricted"
+      }
+   ]
+}

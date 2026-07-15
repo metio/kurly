@@ -18,6 +18,16 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - run: nix develop --command check-fmt
+  catalog:
+    # Regenerates catalog/catalog.json from the library annotations and fails if
+    # the committed copy is stale — which also runs the drift asserts that fail
+    # when a feature and its annotation fall out of step.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - run: nix develop --command check-catalog
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -106,7 +116,7 @@ jobs:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.
     name: Verify
-    needs: [fmt, test, examples, security, reuse, yaml, github-actions, markdown, typos, policy, dco]
+    needs: [fmt, catalog, test, examples, security, reuse, yaml, github-actions, markdown, typos, policy, dco]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 15
