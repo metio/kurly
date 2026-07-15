@@ -143,6 +143,12 @@ rules:
   - apiGroups: ["source.toolkit.fluxcd.io"]
     resources: ["externalartifacts", "externalartifacts/status"]
     verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  # The operator impersonates the tenant SA to READ the JsonnetLibrary resources
+  # the snippet references, so grant read access to them too. (Inline-only
+  # snippets don't need this; ours references the kurly + k8s-libsonnet libs.)
+  - apiGroups: ["jaas.metio.wtf"]
+    resources: ["jsonnetlibraries"]
+    verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
