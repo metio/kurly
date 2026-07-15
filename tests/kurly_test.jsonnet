@@ -348,6 +348,48 @@ local podOf(app) = app.deployment.spec.template.spec;
     [std.sort([m.kind for m in kurly.list(a).items]), podOf(a).serviceAccountName],
     [['Deployment', 'Role', 'RoleBinding', 'ServiceAccount'], 'agent']
   ),
+
+  // --- stateful & job kinds ---------------------------------------------------
+  // stateful emits a StatefulSet + a headless Service naming it; the store
+  // becomes a per-pod volumeClaimTemplate, not a shared owned PVC.
+  stateful_shape: std.assertEqual(
+    local s = kurly.stateful('db', 'ghcr.io/example/db:16') + kurly.replicas(3) + kurly.store('/var/lib/db', '5Gi');
+    [
+      std.sort([m.kind for m in kurly.list(s).items]),
+      s.statefulset.spec.serviceName,
+      s.service.spec.clusterIP,
+      s.statefulset.spec.volumeClaimTemplates[0].spec.resources.requests.storage,
+      s.storeClaim,  // no separate owned PVC
+      s.statefulset.spec.replicas,
+    ],
+    [['Service', 'StatefulSet'], 'db-headless', 'None', '5Gi', null, 3]
+  ),
+  // The store still mounts at its path, sourced from the template's 'store' volume.
+  stateful_store_mount: std.assertEqual(
+    local s = kurly.stateful('db', 'ghcr.io/example/db:16') + kurly.store('/var/lib/db', '5Gi');
+    [m.mountPath for m in s.statefulset.spec.template.spec.containers[0].volumeMounts if m.name == 'store'],
+    ['/var/lib/db']
+  ),
+  // job runs to completion (restartPolicy OnFailure), no Service; store is a
+  // shared PVC as on the other pod kinds.
+  job_shape: std.assertEqual(
+    local j = kurly.job('migrate', 'ghcr.io/example/migrate:1.0.0') + kurly.store('/scratch', '1Gi');
+    [
+      std.sort([m.kind for m in kurly.list(j).items]),
+      j.job.spec.template.spec.restartPolicy,
+      [v.persistentVolumeClaim.claimName for v in j.job.spec.template.spec.volumes if v.name == 'store'],
+    ],
+    [['Job', 'PersistentVolumeClaim'], 'OnFailure', ['migrate-store']]
+  ),
+  // The hardened posture applies to the new kinds too.
+  stateful_restricted: std.assertEqual(
+    (kurly.stateful('db', 'ghcr.io/example/db:16')).statefulset.spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem,
+    true
+  ),
+  job_restricted: std.assertEqual(
+    (kurly.job('m', 'ghcr.io/example/m:1.0.0')).job.spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem,
+    true
+  ),
   // A stateless workload is untouched: no owned manifests, no volumes.
   stateless_no_owned: std.assertEqual([std.length(shop.ownedManifests), shop.storeClaim, std.objectHas(podOf(shop), 'volumes')], [0, null, false]),
   stateless_list_unchanged: std.assertEqual(std.length(kurly.list(shop).items), 2),

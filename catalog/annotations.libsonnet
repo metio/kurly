@@ -11,10 +11,13 @@
 local d = import './docs.libsonnet';
 
 // Every workload kind, for features with no kind-specific constraint.
-local allKinds = ['http', 'worker', 'cron', 'daemon'];
-// The Deployment-backed kinds — the only ones with replicas or an update
-// strategy (cron runs Jobs, daemon runs one pod per node).
+local allKinds = ['http', 'worker', 'cron', 'daemon', 'stateful', 'job'];
+// The Deployment-backed kinds — the only ones with an update strategy or an HPA
+// that scales a Deployment (cron/job run to completion, daemon runs one pod per
+// node, stateful is a StatefulSet).
 local deploymentKinds = ['http', 'worker'];
+// The kinds with a replica count (Deployments and the StatefulSet).
+local replicatedKinds = ['http', 'worker', 'stateful'];
 
 {
   // Base kinds — each a `function(...)` you start from and add features onto.
@@ -36,6 +39,14 @@ local deploymentKinds = ['http', 'worker'];
       d.arg('name', d.T.string, required=true, example='node-exporter'),
       d.arg('image', d.T.string, required=true, example='ghcr.io/acme/node-agent:1.2.3'),
     ]) + { hasService: false },
+    stateful: d.fn('A workload with stable identity and per-pod storage: a StatefulSet plus the headless Service that names it. The store feature renders as a per-pod volumeClaimTemplate.', [
+      d.arg('name', d.T.string, required=true, example='postgres'),
+      d.arg('image', d.T.string, required=true, example='ghcr.io/acme/postgres:16'),
+    ]) + { hasService: true },
+    job: d.fn('A one-off task that runs to completion: a Job with restartPolicy OnFailure. No Service, no replicas.', [
+      d.arg('name', d.T.string, required=true, example='db-migrate'),
+      d.arg('image', d.T.string, required=true, example='ghcr.io/acme/migrate:1.2.3'),
+    ]) + { hasService: false },
   },
 
   // Composable capabilities. `group` buckets the palette; `kinds` is the
@@ -50,7 +61,7 @@ local deploymentKinds = ['http', 'worker'];
     ]) + { kinds: ['http'], group: 'container' },
     replicas: d.fn('The desired number of pod replicas.', [
       d.arg('replicas', d.T.int, required=true, example=3),
-    ]) + { kinds: deploymentKinds, group: 'container' },
+    ]) + { kinds: replicatedKinds, group: 'container' },
     args: d.fn("Appends arguments to the image's own entrypoint — typically a subcommand selecting the workload.", [
       d.arg('args', d.T.array, required=true, example=['backend', '--config=/etc/tik/pipelines.edn']),
     ]) + { kinds: allKinds, group: 'container' },
@@ -163,7 +174,7 @@ local deploymentKinds = ['http', 'worker'];
     pdb: d.fn('A PodDisruptionBudget capping voluntary disruption. Set one of minAvailable / maxUnavailable.', [
       d.arg('minAvailable', d.T.any, example=1),
       d.arg('maxUnavailable', d.T.any),
-    ]) + { kinds: ['http', 'worker', 'daemon'], group: 'reliability' },
+    ]) + { kinds: ['http', 'worker', 'daemon', 'stateful'], group: 'reliability' },
     hpa: d.fn('A HorizontalPodAutoscaler scaling the Deployment on CPU and/or memory utilization.', [
       d.arg('minReplicas', d.T.int, required=true, example=2),
       d.arg('maxReplicas', d.T.int, required=true, example=10),

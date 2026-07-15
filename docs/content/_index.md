@@ -42,6 +42,8 @@ Each kind is a `function(name, image)` (cron also takes a schedule) — the base
 | `kurly.worker` | Deployment | queue consumers, background processors |
 | `kurly.cron` | CronJob | scheduled jobs (`kurly.cron(name, image, schedule)`) |
 | `kurly.daemon` | DaemonSet | per-node agents |
+| `kurly.stateful` | StatefulSet + headless Service | stable identity and per-pod storage (`store` becomes a volumeClaimTemplate) |
+| `kurly.job` | Job | one-off tasks that run to completion |
 
 ## Features
 

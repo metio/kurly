@@ -78,7 +78,7 @@ local workloadEntries =
   assert reconcile('migrations', std.objectFields(ann.migrations), std.objectFieldsAll(migrations)),
   // Kinds live in separate files; assert the annotated set is exactly the four
   // main exposes as callables.
-  assert reconcile('kinds', std.objectFields(ann.kinds), ['http', 'worker', 'cron', 'daemon']),
+  assert reconcile('kinds', std.objectFields(ann.kinds), ['http', 'worker', 'cron', 'daemon', 'stateful', 'job']),
   assert std.all([std.objectHasAll(main, kind) for kind in std.objectFields(ann.kinds)]) :
          'kinds: main.libsonnet must expose every annotated kind',
   // Helpers are top-level fields of main alongside the kinds; assert the

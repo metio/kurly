@@ -175,7 +175,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -196,7 +198,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -218,7 +222,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -239,7 +245,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -282,7 +290,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -303,7 +313,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -315,7 +327,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -368,7 +382,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -389,7 +405,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -410,7 +428,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -438,7 +458,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -459,7 +481,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -482,7 +506,8 @@
          "kinds": [
             "http",
             "worker",
-            "daemon"
+            "daemon",
+            "stateful"
          ]
       },
       {
@@ -503,7 +528,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -524,7 +551,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -559,7 +588,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -609,7 +640,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -636,7 +669,8 @@
          "id": "replicas",
          "kinds": [
             "http",
-            "worker"
+            "worker",
+            "stateful"
          ]
       },
       {
@@ -655,7 +689,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -685,7 +721,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -697,7 +735,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -726,7 +766,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -766,7 +808,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -808,7 +852,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -827,7 +873,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -902,7 +950,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -944,7 +994,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -974,7 +1026,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -993,7 +1047,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       },
       {
@@ -1005,7 +1061,9 @@
             "http",
             "worker",
             "cron",
-            "daemon"
+            "daemon",
+            "stateful",
+            "job"
          ]
       }
    ],
@@ -1107,6 +1165,44 @@
          "hasService": true,
          "help": "An HTTP workload: a Deployment (2 replicas) and a ClusterIP Service. Compose an exposure feature to accept traffic from outside the cluster.",
          "id": "http"
+      },
+      {
+         "args": [
+            {
+               "example": "db-migrate",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "ghcr.io/acme/migrate:1.2.3",
+               "name": "image",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "hasService": false,
+         "help": "A one-off task that runs to completion: a Job with restartPolicy OnFailure. No Service, no replicas.",
+         "id": "job"
+      },
+      {
+         "args": [
+            {
+               "example": "postgres",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "ghcr.io/acme/postgres:16",
+               "name": "image",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "hasService": true,
+         "help": "A workload with stable identity and per-pod storage: a StatefulSet plus the headless Service that names it. The store feature renders as a per-pod volumeClaimTemplate.",
+         "id": "stateful"
       },
       {
          "args": [

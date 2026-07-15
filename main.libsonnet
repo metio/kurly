@@ -32,6 +32,8 @@ local join(parts) =
   worker: import './lib/worker.libsonnet',
   cron: import './lib/cron.libsonnet',
   daemon: import './lib/daemon.libsonnet',
+  stateful: import './lib/stateful.libsonnet',
+  job: import './lib/job.libsonnet',
 
   // Composable axes.
   expose: import './lib/expose.libsonnet',

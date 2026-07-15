@@ -15,15 +15,19 @@ local apps = [
   kurly.worker('queue', 'ghcr.io/example/queue:1.0.0') + kurly.replicas(2) + kurly.resourcePreset('small'),
   kurly.cron('nightly', 'ghcr.io/example/nightly:1.0.0', '0 2 * * *'),
   kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0') + kurly.nodeSelector({ role: 'edge' }),
-  kurly.http('stateful', 'ghcr.io/example/stateful:1.0.0') + kurly.store('/data', '1Gi') + kurly.recreate() + kurly.config({ 'a.conf': 'x' }),
+  kurly.http('stateful-http', 'ghcr.io/example/stateful:1.0.0') + kurly.store('/data', '1Gi') + kurly.recreate() + kurly.config({ 'a.conf': 'x' }),
+  kurly.stateful('database', 'ghcr.io/example/database:1.0.0') + kurly.replicas(3) + kurly.store('/data', '1Gi'),
+  kurly.job('once', 'ghcr.io/example/once:1.0.0') + kurly.args(['run']),
 ];
 
 local allManifests = std.flattenArrays([kurly.list(a).items for a in apps]);
 
-// The one pod-bearing manifest of an app (Deployment/CronJob/DaemonSet).
+// The one pod-bearing manifest of an app, across every kind.
 local podSpecOf(app) =
   if std.objectHas(app, 'deployment') then app.deployment.spec.template.spec
   else if std.objectHas(app, 'cronjob') then app.cronjob.spec.jobTemplate.spec.template.spec
+  else if std.objectHas(app, 'statefulset') then app.statefulset.spec.template.spec
+  else if std.objectHas(app, 'job') then app.job.spec.template.spec
   else app.daemonset.spec.template.spec;
 local mainContainerOf(app) = podSpecOf(app).containers[0];
 
