@@ -21,3 +21,6 @@ docs/.hugo_build.lock
 # truth is catalog/catalog.json (the assembler.css beside it stays tracked).
 docs/assets/catalog.json
 docs/static/catalog.json
+# Alpine.js is fetched by gen-docs-data at a Renovate-pinned version, never
+# committed.
+docs/static/js/alpine.min.js

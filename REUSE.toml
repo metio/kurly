@@ -46,13 +46,6 @@ precedence = "aggregate"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
 
-# Alpine.js is vendored third-party; its own license governs it.
-[[annotations]]
-path = "docs/static/js/alpine.min.js"
-precedence = "override"
-SPDX-FileCopyrightText = "Caleb Porzio and contributors"
-SPDX-License-Identifier = "MIT"
-
 # .gitmodules registers the docs theme git submodule; it has no comment syntax.
 [[annotations]]
 path = ".gitmodules"

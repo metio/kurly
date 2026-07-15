@@ -6,5 +6,43 @@
   },
   "lockFileMaintenance": {
     "enabled": true
-  }
+  },
+  "git-submodules": {
+    "enabled": true
+  },
+  "customManagers": [
+    {
+      "description": "The tik workload's default image, pinned in the stage, its catalog annotation, and the generated catalog.json. Matching all three keeps them in lockstep so the check-catalog gate stays green on the bump PR.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/metio/tik",
+      "versioningTemplate": "loose",
+      "managerFilePatterns": [
+        "/^workloads/.+\\.libsonnet$/",
+        "/^catalog/annotations\\.libsonnet$/",
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": ["ghcr\\.io/metio/tik:(?<currentValue>[0-9][0-9A-Za-z._-]+)"]
+    },
+    {
+      "description": "The nginx image the examples and docs render with, so the illustrative manifests never pin a stale tag. Placeholder images (ghcr.io/acme/*, ghcr.io/example/*) carry no real tags and are deliberately not matched.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/nginxinc/nginx-unprivileged",
+      "managerFilePatterns": [
+        "/^examples/.+\\.jsonnet$/",
+        "/^docs/content/.+\\.md$/",
+        "/^README\\.md$/"
+      ],
+      "matchStrings": ["docker\\.io/nginxinc/nginx-unprivileged:(?<currentValue>[0-9][0-9A-Za-z._-]+)"]
+    },
+    {
+      "description": "Alpine.js, fetched by gen-docs-data at docs-build time from the pinned version so the assembler page always ships the tracked release.",
+      "customType": "regex",
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "alpinejs",
+      "managerFilePatterns": ["/^scripts/gen-docs-data\\.sh$/"],
+      "matchStrings": ["ALPINE_VERSION=(?<currentValue>[0-9][0-9A-Za-z._-]+)"]
+    }
+  ]
 }

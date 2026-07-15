@@ -135,7 +135,11 @@
           # from the committed catalog rather than a stale copy.
           gen-docs-data = pkgs.writeShellApplication {
             name = "gen-docs-data";
-            runtimeInputs = with pkgs; [ coreutils ];
+            runtimeInputs = with pkgs; [
+              coreutils
+              curl
+              cacert
+            ];
             text = builtins.readFile ./scripts/gen-docs-data.sh;
           };
           # Applies kurly's output to a running cluster and waits for Ready. Not
