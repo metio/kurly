@@ -93,7 +93,7 @@ function(
     export HOME=/home/labeler
     escaped='%(roleLabel)s'
     while true; do
-      if { printf 'INFO replication\r\n'; sleep 1; } | nc 127.0.0.1 6379 2>/dev/null | grep -q 'role:master'; then
+      if { printf 'INFO replication\r\n'; sleep 1; } | timeout 2 nc 127.0.0.1 6379 2>/dev/null | grep -q 'role:master'; then
         value='"primary"'
       else
         value=null
