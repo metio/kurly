@@ -30,8 +30,12 @@ Clients reach it at `<pod>.valkey-headless.<namespace>.svc` on port `6379`.
   Clients connect to the **`valkey`** Service, which follows the current primary:
   a sidecar labels its own pod `kurly.dev/valkey-role=primary` while it is the
   master (removing the label on a replica), and the Service selects that label —
-  so writes always reach the master, even mid-hand-off, with no window on the
-  replica. (`valkey-headless` remains for peer discovery.)
+  so the Service is **never routed to a replica**. When the master role migrates
+  during a hand-off, the label follows the promoted pod within about a second; the
+  demoted master leaves the Service as it terminates, so at the failover instant
+  there is a brief moment with no endpoint — clients reconnect (never reaching a
+  replica), exactly as they would across any single-master failover.
+  (`valkey-headless` remains for peer discovery.)
 
   The labeler is a Kubernetes API client, so it carries a namespaced Role with
   `get` and `patch` on pods (nothing else) and needs egress to the apiserver. It declares

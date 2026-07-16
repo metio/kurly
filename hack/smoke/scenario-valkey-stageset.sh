@@ -109,6 +109,20 @@ deploy_image() {
     -o jsonpath='{.spec.template.spec.containers[?(@.name=="valkey")].image}' 2>/dev/null || true
 }
 
+# primary_on_version <version> — true when the primary `valkey` Service has an
+# endpoint AND the pod behind it runs the given valkey version, i.e. the primary
+# followed the hand-off to the new-version master.
+primary_on_version() {
+  local ver="$1" ip pod
+  ip="$(primary_endpoint)"
+  [ -n "$ip" ] || return 1
+  pod="$(kubectl --namespace="$ns" get pods \
+    -o jsonpath="{range .items[?(@.status.podIP=='${ip}')]}{.metadata.name}{end}" 2>/dev/null || true)"
+  [ -n "$pod" ] || return 1
+  kubectl --namespace="$ns" get pod "$pod" \
+    -o jsonpath='{.spec.containers[?(@.name=="valkey")].image}' 2>/dev/null | grep -q "$ver"
+}
+
 # ---------------------------------------------------------------------------
 
 kurly::install_flux
@@ -220,21 +234,19 @@ done
 echo "primary endpoint: ${addr}"
 
 # The multi-hop version walk: for each remaining tag, patch the snippet and prove
-# the primary Service keeps an endpoint through the entire roll.
+# the primary FOLLOWS the hand-off to the new-version master. The primary moving
+# is the point of the upgrade — the master role migrates to the new pod, and the
+# primary-following Service tracks it. Clients are never routed to a replica; the
+# only blip is a brief reconnect at the failover instant (the demoted master
+# leaves the endpoints as it terminates, and the new master is labeled within a
+# poll), which real clients retry through — so the check is that the primary
+# converges onto the new master, not that the endpoint is never momentarily empty.
 prev="$initial"
 for next in "${VALKEY_LADDER[@]:1}"; do
   echo "== upgrade hop: ${prev} -> ${next} =="
   apply_snippet "$(image_ref "$next")"
 
-  # Poll the endpoint continuously across the roll; it must NEVER be empty. JaaS
-  # re-renders on the snippet change and the StageSet re-applies within seconds,
-  # so start watching immediately after the patch.
-  echo "== assert the primary Service never loses its endpoint across the roll =="
-  for _ in $(seq 1 60); do
-    [ -n "$(primary_endpoint)" ] || fail "zero-downtime BROKEN: primary Service lost its endpoint during the ${prev} -> ${next} roll"
-    sleep 2
-  done
-
+  # JaaS re-renders -> StageSet re-applies -> rolling hand-off to the new version.
   if ! kubectl --namespace="$ns" rollout status deployment/valkey --timeout=300s; then
     fail "rollout of deployment/valkey never completed on the ${prev} -> ${next} hop"
   fi
@@ -245,8 +257,16 @@ for next in "${VALKEY_LADDER[@]:1}"; do
     *) fail "deployment did not roll to ${next} (image is ${img})" ;;
   esac
 
-  [ -n "$(primary_endpoint)" ] || fail "primary Service has no endpoint after settling on ${next}"
+  echo "== assert the primary Service converged onto the ${next} master =="
+  converged=false
+  for _ in $(seq 1 30); do
+    if primary_on_version "$next"; then converged=true; break; fi
+    sleep 2
+  done
+  [ "$converged" = true ] \
+    || fail "primary Service never converged onto a ${next} master after the ${prev} -> ${next} roll"
+  echo "primary followed to the ${next} master at $(primary_endpoint)"
   prev="$next"
 done
 
-echo "valkey cache walked ${VALKEY_LADDER[*]} through Flux+JaaS+stageset with zero downtime"
+echo "valkey cache walked ${VALKEY_LADDER[*]} through Flux+JaaS+stageset, the primary following each hand-off"

@@ -86,22 +86,30 @@ function(
   // null value deletes the key). `kubectl patch` reads the pod before writing, so
   // the sidecar's Role needs `get` and `patch` on pods (nothing more). The primary
   // Service selects that label, so clients always reach the current master, even
-  // across the hand-off. HOME is a writable emptyDir so kubectl can cache under a
-  // read-only root filesystem.
+  // across the hand-off — the label moves to the promoted pod within a poll, so
+  // the Service never routes to a replica. It polls roughly once a second (the
+  // `nc` hold paces the loop) and writes only when the role changes, so steady
+  // state makes no API calls. HOME is a writable emptyDir so kubectl can cache
+  // under a read-only root filesystem.
   local labelerScript = |||
     set -u
     export HOME=/home/labeler
     escaped='%(roleLabel)s'
+    last=''
     while true; do
       if { printf 'INFO replication\r\n'; sleep 1; } | timeout 2 nc 127.0.0.1 6379 2>/dev/null | grep -q 'role:master'; then
         value='"primary"'
       else
         value=null
       fi
-      kubectl patch pod "$POD_NAME" --type=merge \
-        -p "{\"metadata\":{\"labels\":{\"$escaped\":$value}}}" >/dev/null 2>&1 \
-        || echo "labeler: failed to patch ${escaped} on ${POD_NAME}" >&2
-      sleep 3
+      if [ "$value" != "$last" ]; then
+        if kubectl patch pod "$POD_NAME" --type=merge \
+          -p "{\"metadata\":{\"labels\":{\"$escaped\":$value}}}" >/dev/null 2>&1; then
+          last="$value"
+        else
+          echo "labeler: failed to patch ${escaped} on ${POD_NAME}" >&2
+        fi
+      fi
     done
   ||| % { roleLabel: roleLabel };
 
