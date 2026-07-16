@@ -1,0 +1,451 @@
+#!/usr/bin/env bash
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# e2e for the cnpg workloads through the REAL production pipeline (Flux + JaaS +
+# stageset-controller), proving the third thing neither other stageset scenario
+# can: an INDIRECT roll driven by a custom resource a DIFFERENT operator owns.
+#
+# valkey proves zero-downtime rolls of kurly's own pods; tik proves versioned
+# migrations. Both move a workload by changing the workload. This one changes
+# something else entirely: a cnpg-image-catalog lists one PostgreSQL image per
+# major, two clusters pin that major, and bumping the catalog's image rolls both
+# clusters WITHOUT touching either Cluster CR.
+#
+# The whole story runs as one StageSet, on an EMPTY cluster:
+#
+#   operator (upstream Flux GitRepository)  ->  images (kurly)  ->  clusters (kurly)
+#
+# Three theses:
+#
+#   1. STAGE ORDERING — every arrow is a real dependency. The CRDs do not exist
+#      until the operator stage applies them, so a stage that ran early or
+#      concurrently would fail with "no matches for kind". The operator comes
+#      from upstream's own release manifest: kurly authors intent, not other
+#      people's release artifacts.
+#   2. INDIRECT ROLL  — stageset's stage gating must hold for a roll it did not
+#      cause. The Cluster CRs are byte-identical across the bump, so a stage
+#      that reports Ready on "the CR applied cleanly" rather than "CNPG
+#      converged" would go green over a Postgres that is still restarting.
+#   3. BLAST RADIUS   — one catalog line rolls EVERY cluster on that major. That
+#      is the feature and the risk, so it is asserted rather than assumed: both
+#      clusters must land on the new image, not just the one we happen to poll.
+#
+# Deliberately NO migrations: a catalog bump never moves
+# app.kubernetes.io/version, so it crosses no migration boundary by design (the
+# workload label stamps kurly, not the resolved PostgreSQL image). That
+# decoupling is exactly why tik owns the migration scenario and this one does
+# not.
+cd "$(dirname "$0")/../.."
+# shellcheck source=hack/smoke/lib.sh
+source hack/smoke/lib.sh
+
+ns=kurly-cnpg-stageset
+
+# renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
+CNPG_VERSION="1.30.0"
+
+# The bump the walk performs. Two patches of the same major: same major keeps
+# this an image roll rather than a (slow, failure-prone) major upgrade, which is
+# what the catalog pattern is actually for.
+PG_MAJOR="17"
+PG_FROM="ghcr.io/cloudnative-pg/postgresql:17.2"
+PG_TO="ghcr.io/cloudnative-pg/postgresql:17.4"
+
+# Two clusters on the one catalog: one is not enough to show a blast radius.
+CLUSTERS=(orders-db billing-db)
+
+fail() {
+  echo "::error::$*"
+  kurly::diagnose "$ns"
+  kurly::diagnose_pipeline "$ns"
+  echo "::group::cnpg state"
+  # The operator arrives as stage 1, so its source and its CRDs are part of the
+  # failure surface: a stalled GitRepository or an unestablished CRD stops the
+  # ladder before any kurly stage runs.
+  kubectl --namespace="$ns" get gitrepository/cnpg-operator -o yaml 2>/dev/null | tail -25 || true
+  kubectl get crd 2>/dev/null | grep -i cnpg || echo "(no cnpg CRDs — the operator stage never applied)"
+  kubectl --namespace="$ns" get imagecatalog,cluster -o wide 2>/dev/null || true
+  kubectl --namespace="$ns" get imagecatalog postgres -o yaml 2>/dev/null | tail -20 || true
+  local c
+  for c in "${CLUSTERS[@]}"; do
+    kubectl --namespace="$ns" get cluster "$c" -o yaml 2>/dev/null | tail -40 || true
+  done
+  kubectl --namespace=cnpg-system logs --selector=app.kubernetes.io/name=cloudnative-pg \
+    --tail=80 --prefix 2>/dev/null || true
+  echo "::endgroup::"
+  exit 1
+}
+
+# ---------------------------------------------------------------------------
+# Renderers
+# ---------------------------------------------------------------------------
+
+# apply_catalog <image> — (re)renders the image catalog with one image for
+# PG_MAJOR. This is the ONLY thing the walk ever changes.
+apply_catalog() {
+  local image="$1"
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata:
+  name: cnpg-catalog
+  namespace: ${ns}
+spec:
+  serviceAccountName: default
+  entryFile: main.jsonnet
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local catalog = import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet';
+      function(image='${image}')
+        local rendered = kurly.list(catalog(name='postgres', images={ '${PG_MAJOR}': image }));
+        rendered {
+          items: [
+            item { metadata+: { namespace: '${ns}' } }
+            for item in rendered.items
+          ],
+        }
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: k8s-libsonnet }
+  tlas:
+    image: ["${image}"]
+EOF
+}
+
+# apply_clusters — renders both clusters, each pinning PG_MAJOR from the
+# catalog. Applied once and never re-rendered: the whole point is that the roll
+# happens with these CRs untouched.
+#
+# Single-instance, tiny volumes: kind has one node, and this scenario is about
+# the catalog interaction, not CNPG's own failover (scenario-cnpg.sh covers the
+# CR reconciling at all).
+apply_clusters() {
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata:
+  name: cnpg-clusters
+  namespace: ${ns}
+spec:
+  serviceAccountName: default
+  entryFile: main.jsonnet
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local cluster = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
+      local one(name) = cluster(
+        name=name,
+        instances=1,
+        storageSize='256Mi',
+        catalog='postgres',
+        major=${PG_MAJOR},
+        // A PodMonitor needs the Prometheus Operator CRDs, which this throwaway
+        // cluster does not install.
+        enablePodMonitor=false,
+      );
+      local rendered = kurly.listOf([
+        one('${CLUSTERS[0]}').cluster,
+        one('${CLUSTERS[1]}').cluster,
+      ]);
+      rendered {
+        items: [
+          item { metadata+: { namespace: '${ns}' } }
+          for item in rendered.items
+        ],
+      }
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: k8s-libsonnet }
+EOF
+}
+
+# ---------------------------------------------------------------------------
+# Probes
+# ---------------------------------------------------------------------------
+
+ready_status() {
+  kubectl --namespace="$ns" get "$1" "$2" \
+    -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}' 2>/dev/null || true
+}
+
+wait_ready() {
+  local kind="$1" name="$2" polls="${3:-60}" i
+  for i in $(seq 1 "$polls"); do
+    [ "$(ready_status "$kind" "$name")" = "True" ] && { echo "${kind}/${name} Ready=True after ${i} polls"; return 0; }
+    sleep 5
+  done
+  fail "${kind}/${name} never reached Ready=True"
+}
+
+# The image CNPG resolved for a cluster — the catalog's answer, not a CR field.
+cluster_image() {
+  kubectl --namespace="$ns" get cluster "$1" \
+    -o jsonpath='{.status.image}' 2>/dev/null || true
+}
+
+# The generation of a Cluster CR. The blast-radius proof needs this to NOT move
+# across the bump: a changed generation would mean the CR itself was rewritten,
+# and the roll would prove nothing about catalog-driven upgrades.
+cluster_generation() {
+  kubectl --namespace="$ns" get cluster "$1" \
+    -o jsonpath='{.metadata.generation}' 2>/dev/null || true
+}
+
+cluster_healthy() {
+  case "$(kubectl --namespace="$ns" get cluster "$1" -o jsonpath='{.status.phase}' 2>/dev/null || true)" in
+    *healthy*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# await_all_healthy <polls> — every cluster reports a healthy phase.
+await_all_healthy() {
+  local polls="$1" c i ok
+  for i in $(seq 1 "$polls"); do
+    ok=true
+    for c in "${CLUSTERS[@]}"; do
+      cluster_healthy "$c" || ok=false
+    done
+    [ "$ok" = true ] && return 0
+    sleep 5
+  done
+  return 1
+}
+
+# await_all_on_image <image> <polls> — every cluster resolved to the image.
+await_all_on_image() {
+  local want="$1" polls="$2" c i ok
+  for i in $(seq 1 "$polls"); do
+    ok=true
+    for c in "${CLUSTERS[@]}"; do
+      [ "$(cluster_image "$c")" = "$want" ] || ok=false
+    done
+    [ "$ok" = true ] && return 0
+    sleep 5
+  done
+  return 1
+}
+
+# ---------------------------------------------------------------------------
+# Pipeline
+# ---------------------------------------------------------------------------
+
+kurly::install_flux
+kurly::install_jaas
+kurly::install_stageset
+
+kurly::namespace "$ns"
+kurly::grant_tenant_publish_rbac "$ns" default
+
+echo "== deployer ServiceAccount for the StageSet (cluster-admin, e2e simplicity) =="
+kubectl apply --filename=- <<EOF
+apiVersion: v1
+kind: ServiceAccount
+metadata: { name: stageset-deployer, namespace: ${ns} }
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata: { name: kurly-cnpg-stageset-deployer }
+subjects:
+  - { kind: ServiceAccount, name: stageset-deployer, namespace: ${ns} }
+roleRef: { apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: cluster-admin }
+EOF
+
+echo "== k8s-libsonnet from the JOI OCI image (the production dependency path) =="
+kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: k8s-libsonnet, namespace: ${ns} }
+spec:
+  interval: 1h
+  url: oci://ghcr.io/metio/joi-jsonnet-libs-k8s-libsonnet
+  ref: { tag: latest }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: k8s-libsonnet, namespace: ${ns} }
+spec:
+  sourceRef: { kind: OCIRepository, name: k8s-libsonnet }
+EOF
+
+echo "== kurly as an inline vendor-keyed JsonnetLibrary (the checked-out branch) =="
+emit_kurly_library() {
+  echo "apiVersion: jaas.metio.wtf/v1"
+  echo "kind: JsonnetLibrary"
+  echo "metadata: { name: kurly, namespace: ${ns} }"
+  echo "spec:"
+  echo "  files:"
+  local f
+  for f in main.libsonnet lib/*.libsonnet \
+    workloads/cnpg-cluster/cluster.libsonnet \
+    workloads/cnpg-image-catalog/namespaced.libsonnet; do
+    echo "    \"github.com/metio/kurly/${f}\": |"
+    sed 's/^/      /' "$f"
+  done
+}
+emit_kurly_library | kubectl apply --server-side --force-conflicts --namespace="$ns" --filename=-
+
+echo "== wait for the k8s-libsonnet OCI source to advertise an artifact =="
+ok=false
+for _ in $(seq 1 60); do
+  [ -n "$(kubectl --namespace="$ns" get ocirepository/k8s-libsonnet -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
+    && { ok=true; break; }
+  sleep 3
+done
+[ "$ok" = true ] || fail "ocirepository/k8s-libsonnet never advertised an artifact"
+
+# ---------------------------------------------------------------------------
+# Phase 1 — install: catalog first, then the clusters that pin it
+# ---------------------------------------------------------------------------
+
+echo "== phase 1: install the catalog at ${PG_FROM} and two clusters pinning major ${PG_MAJOR} =="
+apply_catalog "$PG_FROM"
+apply_clusters
+wait_ready jsonnetsnippet cnpg-catalog 90
+wait_ready jsonnetsnippet cnpg-clusters 90
+
+# The CloudNativePG operator, from UPSTREAM's own release manifest — kurly does
+# not author it. That manifest is ~21k lines, all but a thousand of them the 11
+# CRDs, and it is CNPG's release artifact rather than anyone's intent to model:
+# re-authoring it in Jsonnet would be a fork that has to be re-vendored every
+# release. Flux consumes it in place, tagged and immutable, and kurly's stages
+# ride behind it.
+#
+# `ignore` prunes the clone to the one manifest so the stage applies that file
+# and nothing else in the repository.
+echo "== the CNPG operator ${CNPG_VERSION} as an upstream Flux source =="
+kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata: { name: cnpg-operator, namespace: ${ns} }
+spec:
+  interval: 12h
+  url: https://github.com/cloudnative-pg/cloudnative-pg
+  ref: { tag: v${CNPG_VERSION} }
+  ignore: |
+    /*
+    !/releases/cnpg-${CNPG_VERSION}.yaml
+EOF
+
+echo "== wait for the operator GitRepository to advertise an artifact =="
+ok=false
+for _ in $(seq 1 60); do
+  [ -n "$(kubectl --namespace="$ns" get gitrepository/cnpg-operator -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
+    && { ok=true; break; }
+  sleep 5
+done
+[ "$ok" = true ] || fail "gitrepository/cnpg-operator never advertised an artifact"
+
+# The three-stage ordering, and the reason this scenario is worth its runtime:
+# every arrow below is a REAL dependency, not a preference.
+#
+#   operator -> images:   the catalog is a postgresql.cnpg.io CR, so its CRD must
+#                         be Established before the manifest can even be applied.
+#   images   -> clusters: a cluster cannot resolve an image for a major the
+#                         catalog does not list yet.
+#
+# Nothing here pre-creates the CRDs — the cluster starts empty. So if stageset
+# ran these stages concurrently, or advanced before the operator's CRDs were
+# Established, the images stage would fail outright with "no matches for kind".
+# A green StageSet IS the ordering proof; it cannot pass by luck.
+#
+# The operator stage's readyChecks name the CRDs explicitly rather than only the
+# Deployment: kstatus reports a CRD Ready on its Established condition, which is
+# the thing the next stage actually needs. A running controller-manager whose
+# CRDs are not yet Established would still fail the apply behind it.
+echo "== StageSet: operator (upstream) -> images (kurly) -> clusters (kurly) =="
+kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: stages.metio.wtf/v1
+kind: StageSet
+metadata: { name: postgres, namespace: ${ns} }
+spec:
+  interval: 1m
+  serviceAccountName: stageset-deployer
+  stages:
+    - name: operator
+      sourceRef: { kind: GitRepository, name: cnpg-operator }
+      path: ./releases
+      readyChecks:
+        timeout: 5m
+        checks:
+          - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: clusters.postgresql.cnpg.io }
+          - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: imagecatalogs.postgresql.cnpg.io }
+          - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: clusterimagecatalogs.postgresql.cnpg.io }
+          - { apiVersion: apps/v1, kind: Deployment, name: cnpg-controller-manager, namespace: cnpg-system }
+    - name: images
+      sourceRef: { name: cnpg-catalog }
+      readyChecks:
+        checks:
+          - { apiVersion: postgresql.cnpg.io/v1, kind: ImageCatalog, name: postgres, namespace: ${ns} }
+    - name: clusters
+      sourceRef: { name: cnpg-clusters }
+      readyChecks:
+        timeout: 10m
+        checks:
+          - { apiVersion: postgresql.cnpg.io/v1, kind: Cluster, name: ${CLUSTERS[0]}, namespace: ${ns} }
+          - { apiVersion: postgresql.cnpg.io/v1, kind: Cluster, name: ${CLUSTERS[1]}, namespace: ${ns} }
+EOF
+
+echo "== wait for the whole ladder: the operator installs, then kurly's stages =="
+wait_ready stageset postgres 180
+
+echo "== assert: stageset installed the operator (nothing else did) =="
+kubectl --namespace=cnpg-system rollout status deployment/cnpg-controller-manager --timeout=60s \
+  || fail "the operator stage went Ready without a running controller-manager"
+
+echo "== wait for both clusters to come up healthy on ${PG_FROM} =="
+await_all_healthy 120 || fail "the clusters never became healthy on the initial ${PG_FROM}"
+await_all_on_image "$PG_FROM" 60 \
+  || fail "the clusters did not resolve ${PG_FROM} from the catalog (got: $(cluster_image "${CLUSTERS[0]}") / $(cluster_image "${CLUSTERS[1]}"))"
+
+# Record what the CRs look like before the bump — the untouched-CR proof.
+declare -A GEN_BEFORE
+for c in "${CLUSTERS[@]}"; do
+  GEN_BEFORE["$c"]="$(cluster_generation "$c")"
+  echo "${c}: image=$(cluster_image "$c") generation=${GEN_BEFORE[$c]}"
+done
+
+# ---------------------------------------------------------------------------
+# Phase 2 — the indirect roll: bump ONLY the catalog
+# ---------------------------------------------------------------------------
+
+echo "== phase 2: bump the catalog ${PG_FROM} -> ${PG_TO} (no Cluster CR is touched) =="
+apply_catalog "$PG_TO"
+
+echo "== assert: the catalog itself carries the new image =="
+bumped=false
+for _ in $(seq 1 60); do
+  [ "$(kubectl --namespace="$ns" get imagecatalog postgres \
+    -o jsonpath="{.spec.images[?(@.major==${PG_MAJOR})].image}" 2>/dev/null || true)" = "$PG_TO" ] \
+    && { bumped=true; break; }
+  sleep 3
+done
+[ "$bumped" = true ] || fail "stageset never applied the ${PG_TO} image to the catalog"
+
+echo "== assert: BOTH clusters roll onto ${PG_TO} (the blast radius) =="
+await_all_on_image "$PG_TO" 120 \
+  || fail "not every cluster followed the catalog to ${PG_TO} (got: $(cluster_image "${CLUSTERS[0]}") / $(cluster_image "${CLUSTERS[1]}"))"
+for c in "${CLUSTERS[@]}"; do
+  echo "${c} followed the catalog to $(cluster_image "$c")"
+done
+
+echo "== assert: both clusters converge back to healthy =="
+await_all_healthy 120 || fail "the clusters never returned to healthy after the catalog bump"
+
+# The heart of the scenario: the clusters rolled, and their CRs never moved. A
+# changed generation would mean something rewrote the Cluster — and the upgrade
+# would have come from the CR, not the catalog.
+echo "== assert: the Cluster CRs were never touched =="
+for c in "${CLUSTERS[@]}"; do
+  now="$(cluster_generation "$c")"
+  [ "$now" = "${GEN_BEFORE[$c]}" ] \
+    || fail "${c}'s CR was rewritten across the bump (generation ${GEN_BEFORE[$c]} -> ${now}) — the roll did not come from the catalog"
+done
+echo "both Cluster CRs unchanged (generation ${GEN_BEFORE[${CLUSTERS[0]}]}) — the roll came from the catalog alone"
+
+echo "== assert: the StageSet is Ready with both clusters converged =="
+wait_ready stageset postgres 60
+
+echo "cnpg: one catalog line rolled ${#CLUSTERS[@]} clusters from ${PG_FROM} to ${PG_TO} through Flux+JaaS+stageset, with no Cluster CR touched"

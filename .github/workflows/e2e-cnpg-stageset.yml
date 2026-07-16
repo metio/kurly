@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for the cnpg workloads through the real Flux + JaaS +
+# stageset-controller pipeline: an image catalog and two clusters pinning it,
+# where bumping ONLY the catalog rolls both clusters with no Cluster CR touched.
+# Proves stageset gates a roll driven by another operator's custom resource, and
+# pins the fleet-wide blast radius as intended behaviour. The raw-apply
+# complement lives in scenario-cnpg.sh. Self-gates on a diff scoped to these
+# workloads (plus the shared library and the e2e machinery). Heavy integration
+# scenario, so the newest k8s minor only (max_versions: '1').
+name: E2E cnpg (stageset)
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cnpg-stageset:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: cnpg-stageset
+      paths: '^(workloads/cnpg-(cluster|image-catalog)/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cnpg-stageset)\.sh|\.github/workflows/e2e)'
+      scenario: hack/smoke/scenario-cnpg-stageset.sh
+      max_versions: '1'
