@@ -246,7 +246,20 @@ for next in "${VALKEY_LADDER[@]:1}"; do
   echo "== upgrade hop: ${prev} -> ${next} =="
   apply_snippet "$(image_ref "$next")"
 
-  # JaaS re-renders -> StageSet re-applies -> rolling hand-off to the new version.
+  # JaaS re-renders and stageset re-applies within seconds; wait for the new image
+  # to reach the Deployment spec first. A bare `rollout status` would otherwise
+  # return immediately against the still-current old revision, before the new one
+  # is applied.
+  echo "== wait for stageset to apply the ${next} Deployment =="
+  applied=false
+  for _ in $(seq 1 60); do
+    case "$(deploy_image)" in *"${next}"*) applied=true; break ;; esac
+    sleep 2
+  done
+  [ "$applied" = true ] \
+    || fail "stageset never applied the ${next} image to the Deployment on the ${prev} -> ${next} hop"
+
+  # Then wait for the rolling hand-off to the new version to complete.
   if ! kubectl --namespace="$ns" rollout status deployment/valkey --timeout=300s; then
     fail "rollout of deployment/valkey never completed on the ${prev} -> ${next} hop"
   fi
