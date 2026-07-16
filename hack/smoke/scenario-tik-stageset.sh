@@ -15,8 +15,8 @@
 #
 #   1. BASELINE   — the first install records status.version and runs NO
 #                   migrations (the deployment already IS that version).
-#   2. CROSSING   — a hop across a migration's `to` boundary runs its job, and
-#                   the job is recorded in status.executedMigrations.
+#   2. CROSSING   — a hop across a migration's `to` boundary runs its job, the
+#                   migration completes, and only then does the stage advance.
 #   3. IDEMPOTENCY— a re-render that does not move the version does not re-run
 #                   an already-executed migration.
 #   4. BLOCKING   — a migration whose job FAILS halts its anchoring stage as
@@ -72,6 +72,12 @@ fail() {
   echo
   kubectl --namespace="$ns" get jobs -o wide 2>/dev/null || true
   kubectl --namespace="$ns" logs --selector=job-name --all-containers=true --tail=60 --prefix 2>/dev/null || true
+  # The migration events are what the phases assert on, and they outlive the
+  # Jobs above — which stageset names with a digest suffix and reaps seconds
+  # after they finish, so the listing is usually empty by the time this runs.
+  echo "--- migration events ---"
+  kubectl --namespace="$ns" get events --field-selector involvedObject.kind=StageSet \
+    --sort-by=.lastTimestamp -o custom-columns=COUNT:.count,REASON:.reason,MESSAGE:.message 2>/dev/null || true
   echo "::endgroup::"
   exit 1
 }
@@ -257,48 +263,32 @@ stageset_version() {
   kubectl --namespace="$ns" get stageset tik -o jsonpath='{.status.version}' 2>/dev/null || true
 }
 
-# The migration names stageset has recorded as executed, space-separated.
-executed_migrations() {
-  kubectl --namespace="$ns" get stageset tik \
-    -o jsonpath='{range .status.executedMigrations[*]}{.name}{" "}{end}' 2>/dev/null || true
+# stageset records migration progress as Kubernetes EVENTS, and that is the only
+# durable observable. status.executedMigrations looks like a history but is
+# in-flight state the controller CLEARS the moment the version lands ("a fully
+# successful run advances the recorded version and clears the in-flight
+# migration ledger"), and its entries are name@digest keys rather than names.
+# The Job is no better: it lives a few seconds and stageset creates it under a
+# digest-suffixed name, so polling for it races the job away. Events outlive
+# both.
+#
+# migration_event_count <reason> <substring> — total occurrences of a migration
+# event whose message contains the substring. Events coalesce repeats into
+# .count, so a re-run increments rather than adding an item: summing .count (not
+# counting items) is what makes the idempotency assertion honest.
+migration_event_count() {
+  local reason="$1" needle="${2:-}"
+  kubectl --namespace="$ns" get events -o json 2>/dev/null \
+    | jq -r --arg r "$reason" --arg n "$needle" \
+        '[.items[]
+          | select(.involvedObject.kind == "StageSet" and .involvedObject.name == "tik")
+          | select(.reason == $r)
+          | select($n == "" or (.message | contains($n)))
+          | (.count // 1)] | add // 0'
 }
 
-# stageset does not create the Job under the name the manifest carries: it
-# appends a content digest of the action, so `tik-migration-ok` lands as
-# `tik-migration-ok-2b182926`. Everything below therefore resolves the object by
-# prefix — an exact-name lookup silently matches nothing forever.
-job_name() {
-  kubectl --namespace="$ns" get jobs \
-    -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null \
-    | grep "^$1-" | head -1
-}
-
-# True once the named migration job has a successful completion.
-job_succeeded() {
-  local j
-  j="$(job_name "$1")"
-  [ -n "$j" ] || return 1
-  [ "$(kubectl --namespace="$ns" get job "$j" -o jsonpath='{.status.succeeded}' 2>/dev/null || true)" = "1" ]
-}
-
-# True once the named migration job has recorded a failure.
-job_failed() {
-  local j
-  j="$(job_name "$1")"
-  [ -n "$j" ] || return 1
-  [ -n "$(kubectl --namespace="$ns" get job "$j" -o jsonpath='{.status.failed}' 2>/dev/null || true)" ]
-}
-
-# How many Pods a migration job has spawned — the idempotency probe. A migration
-# that re-runs would create another pod generation.
-job_pod_count() {
-  kubectl --namespace="$ns" get pods \
-    -o jsonpath='{range .items[*]}{.metadata.labels.job-name}{"\n"}{end}' 2>/dev/null \
-    | grep -c "^$1-" || true
-}
-
-# The StageSet's Ready condition reason — MigrationDirty is the halt this
-# scenario's blocking phase waits for.
+# The StageSet's Ready condition reason — MigrationDirty is the halt the
+# blocking phase waits for.
 stageset_reason() {
   kubectl --namespace="$ns" get stageset tik \
     -o jsonpath='{.status.conditions[?(@.type=="Ready")].reason}' 2>/dev/null || true
@@ -439,14 +429,19 @@ done
 [ "$(stageset_version)" = "$V1" ] \
   || fail "stageset recorded version '$(stageset_version)', expected the baseline ${V1}"
 
-# The install is not a boundary crossing: the deployment already IS V1, so a
-# migration gated on V2 must not have fired, and neither must anything else.
-ran="$(executed_migrations)"
-[ -z "${ran// /}" ] \
-  || fail "the first install executed migrations (${ran}) — it must baseline silently"
-[ "$(job_pod_count tik-migration-ok)" -eq 0 ] \
-  || fail "the migration job ran during baselining"
-echo "baselined at ${V1}, no migrations executed"
+# Baselining is an explicit event, not merely the absence of one — asserting the
+# event fires distinguishes "adopted the version and deliberately ran nothing"
+# from "the ladder never loaded", which look identical from the outside and is
+# exactly how a broken migrationsSourceRef would pass this phase unnoticed.
+[ "$(migration_event_count MigrationsBaselined "baselined at ${V1}")" -ge 1 ] \
+  || fail "stageset never emitted MigrationsBaselined for ${V1} — the ladder may not have loaded at all"
+
+# The install is not a boundary crossing: the deployment already IS V1, so no
+# migration may start.
+started="$(migration_event_count MigrationStarted)"
+[ "$started" -eq 0 ] \
+  || fail "the first install started ${started} migration(s) — it must baseline silently"
+echo "baselined at ${V1}, no migrations started"
 
 # ---------------------------------------------------------------------------
 # Phase 2 — CROSSING: the boundary hop runs the migration
@@ -455,13 +450,18 @@ echo "baselined at ${V1}, no migrations executed"
 echo "== phase 2: hop ${V1} -> ${V2}, crossing the migration boundary =="
 apply_snippet "$V2"
 
-echo "== assert: the migration job runs =="
+# The Job is created under a digest-suffixed name and lives only a few seconds,
+# so the crossing is asserted on the migration's own completion event rather
+# than by racing kubectl against the Job's lifetime.
+echo "== assert: the migration runs and completes =="
 completed=false
 for _ in $(seq 1 60); do
-  job_succeeded tik-migration-ok && { completed=true; break; }
+  [ "$(migration_event_count MigrationCompleted "reprocess-on-${V2}")" -ge 1 ] && { completed=true; break; }
+  [ "$(migration_event_count MigrationFailed "reprocess-on-${V2}")" -ge 1 ] \
+    && fail "the migration failed on the ${V1} -> ${V2} hop"
   sleep 5
 done
-[ "$completed" = true ] || fail "the migration job never completed on the ${V1} -> ${V2} hop"
+[ "$completed" = true ] || fail "the migration never completed on the ${V1} -> ${V2} hop"
 
 echo "== assert: the stage advanced to ${V2} after the migration =="
 await_deploy_image "$V2" 60 || fail "stageset never applied the ${V2} image after the migration"
@@ -470,26 +470,25 @@ if ! kubectl --namespace="$ns" rollout status deployment/tik --timeout=300s; the
 fi
 
 for _ in $(seq 1 20); do
-  case " $(executed_migrations) " in *" reprocess-on-${V2} "*) break ;; esac
+  [ "$(stageset_version)" = "$V2" ] && break
   sleep 3
 done
-case " $(executed_migrations) " in
-  *" reprocess-on-${V2} "*) echo "migration reprocess-on-${V2} recorded as executed" ;;
-  *) fail "stageset did not record reprocess-on-${V2} (executed: $(executed_migrations))" ;;
-esac
+[ "$(stageset_version)" = "$V2" ] \
+  || fail "stageset recorded version '$(stageset_version)' after the hop, expected ${V2}"
+echo "migration reprocess-on-${V2} completed and the stage advanced to ${V2}"
 
 # ---------------------------------------------------------------------------
 # Phase 3 — IDEMPOTENCY: a re-render does not re-run it
 # ---------------------------------------------------------------------------
 
 echo "== phase 3: re-render at ${V2} — an executed migration must not re-run =="
-pods_before="$(job_pod_count tik-migration-ok)"
+started_before="$(migration_event_count MigrationStarted "reprocess-on-${V2}")"
 apply_snippet "$V2"
 sleep 30 # let at least one reconcile pass over the unchanged version
-pods_after="$(job_pod_count tik-migration-ok)"
-[ "$pods_before" = "$pods_after" ] \
-  || fail "the migration re-ran on a no-op re-render (${pods_before} -> ${pods_after} job pods)"
-echo "migration not re-run (${pods_after} job pod, unchanged)"
+started_after="$(migration_event_count MigrationStarted "reprocess-on-${V2}")"
+[ "$started_before" = "$started_after" ] \
+  || fail "the migration re-ran on a no-op re-render (MigrationStarted ${started_before} -> ${started_after})"
+echo "migration not re-run (MigrationStarted still ${started_after})"
 
 # ---------------------------------------------------------------------------
 # Phase 4 — BLOCKING: a failing migration halts its stage
@@ -504,10 +503,10 @@ apply_snippet "$V3"
 echo "== assert: the failing migration is observed =="
 observed=false
 for _ in $(seq 1 60); do
-  job_failed tik-migration-fail && { observed=true; break; }
+  [ "$(migration_event_count MigrationFailed "reprocess-on-${V3}")" -ge 1 ] && { observed=true; break; }
   sleep 5
 done
-[ "$observed" = true ] || fail "the failing migration job never reported a failure"
+[ "$observed" = true ] || fail "the failing migration never reported a failure"
 
 # stageset retries a failing migration a few times and then deliberately stops,
 # halting the stage as MigrationDirty rather than retrying a destructive action
@@ -541,7 +540,6 @@ echo "== repair the migration and clear the halt (the documented recovery) =="
 # the runbook's recovery, and the reason this phase exists rather than a plain
 # "it fails" assertion.
 #   https://stageset.projects.metio.wtf/runbooks/migrationdirty/
-kubectl --namespace="$ns" delete job "$(job_name tik-migration-fail)" --ignore-not-found
 apply_migration_job tik-migration-fail 0
 wait_ready jsonnetsnippet tik-migration-fail 60
 
@@ -560,9 +558,9 @@ if ! kubectl --namespace="$ns" rollout status deployment/tik --timeout=300s; the
   fail "rollout to ${V3} never completed after the migration was repaired"
 fi
 
-# The ${V2} rung is still in the ladder and still executed: walking past it must
-# not replay it, or every ladder would re-run its whole history on each release.
-[ "$(job_pod_count tik-migration-ok)" -eq "$pods_after" ] \
+# The ${V2} rung is still in the ladder: walking past it to ${V3} must not
+# replay it, or every ladder would re-run its whole history on each release.
+[ "$(migration_event_count MigrationStarted "reprocess-on-${V2}")" = "$started_after" ] \
   || fail "the already-executed ${V2} migration replayed while crossing to ${V3}"
 
 echo "tik walked ${V1} -> ${V2} -> ${V3} through Flux+JaaS+stageset: baselined silently, ran its migration once, and blocked the stage on a failing one"
