@@ -414,14 +414,13 @@ fi
 # No stage lists readyChecks.checks, because none needs to: stageset's kstatus
 # wait already covers every object a stage applied. The operator stage applies
 # the CRDs and the controller Deployment, so it is gated on them — an explicit
-# check would only restate what the stage already waits for.
+# check would only restate what the stage already waits for, and would have to be
+# kept in step with a 21k-line upstream manifest to stay true. checks are for
+# gating on something a stage did NOT apply; only `timeout` is set here.
 #
-# Naming them explicitly is in fact WORSE than redundant for cluster-scoped
-# objects: readyChecks.checks are NamespacedObjectKindReferences, and an omitted
-# namespace is defaulted to the StageSet's namespace with no scope awareness. A
-# CRD check therefore resolves to a namespaced CRD that cannot exist, and the
-# stage waits on 'Unknown' until it times out — while the real, cluster-scoped
-# CRDs sit Established a few lines away in kubectl. Only `timeout` is set here.
+# The clusters stage is the exception that shows the rule: what it waits for
+# (CNPG converging a Cluster) is not something kstatus can infer, so that gate is
+# spelled out in CEL below.
 echo "== StageSet: operator (upstream) -> images (kurly) -> clusters (kurly) =="
 kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: stages.metio.wtf/v1
