@@ -23,13 +23,24 @@
 #      concurrently would fail with "no matches for kind". The operator comes
 #      from upstream's own release manifest: kurly authors intent, not other
 #      people's release artifacts.
-#   2. INDIRECT ROLL  — stageset's stage gating must hold for a roll it did not
-#      cause. The Cluster CRs are byte-identical across the bump, so a stage
-#      that reports Ready on "the CR applied cleanly" rather than "CNPG
-#      converged" would go green over a Postgres that is still restarting.
-#   3. BLAST RADIUS   — one catalog line rolls EVERY cluster on that major. That
-#      is the feature and the risk, so it is asserted rather than assumed: both
-#      clusters must land on the new image, not just the one we happen to poll.
+#   2. CONVERGENCE GATING — the clusters stage must open on the operator's
+#      verdict, not on the apply returning. kstatus reads a freshly-applied
+#      Cluster as Current (it knows the kstatus condition conventions; a Cluster
+#      reports its own), so without the stage's CEL exprs the gate opens while
+#      PostgreSQL is still bootstrapping, and a later stage in a real release
+#      would start against a database that is not up. Asserted with no wait of
+#      its own, so a gate that opens early fails here instead of being papered
+#      over by a poll loop.
+#   3. BLAST RADIUS   — one catalog line rolls EVERY cluster on that major, with
+#      no Cluster CR touched. That is the feature and the risk, so both clusters
+#      must land on the new image, and both CRs must keep the generation they
+#      started with — a moved generation would mean something rewrote the
+#      Cluster and the roll did not come from the catalog at all.
+#
+# Note what the bump does NOT test: a catalog change touches no Cluster CR, so
+# stageset never re-evaluates the clusters stage across it. The convergence gate
+# above is proved on the initial install, where the stage genuinely has
+# something to wait for.
 #
 # Deliberately NO migrations: a catalog bump never moves
 # app.kubernetes.io/version, so it crosses no migration boundary by design (the
@@ -436,6 +447,16 @@ spec:
       readyChecks:
         # Two PostgreSQL instances bootstrap from scratch behind this gate.
         timeout: 10m
+        # kstatus cannot know when a CNPG Cluster has converged. It understands
+        # the kstatus condition conventions, and a Cluster reports its own, so a
+        # freshly-applied Cluster reads as Current and the stage goes Ready
+        # seconds after the CRs land — while PostgreSQL is still bootstrapping.
+        # Expressing the gate in CEL is what exprs are for: the stage now waits
+        # for the operator's verdict rather than for the apply to return.
+        exprs:
+          - apiVersion: postgresql.cnpg.io/v1
+            kind: Cluster
+            current: "has(status.conditions) && status.conditions.exists(c, c.type == 'Ready' && c.status == 'True')"
 EOF
 
 # Walk the ladder rung by rung. The stages have wildly different budgets — the
@@ -446,6 +467,20 @@ echo "== wait for the ladder: operator -> images -> clusters =="
 await_stage operator 150
 await_stage images 60
 await_stage clusters 180
+
+# The gate is only worth having if it means what it says. Check convergence with
+# NO wait of its own, the instant the stage reports Ready: if the clusters are
+# not healthy right now, the stage opened on "the CRs applied" rather than "the
+# operator converged", and every later stage in a real release would start
+# against a PostgreSQL that is not up. Polling here instead would hide exactly
+# that — the scenario would go green either way.
+echo "== assert: the clusters stage opened only after CNPG converged =="
+for c in "${CLUSTERS[@]}"; do
+  cluster_healthy "$c" \
+    || fail "stage clusters went Ready while ${c} reports '$(kubectl --namespace="$ns" get cluster "$c" -o jsonpath='{.status.phase}' 2>/dev/null)' — the gate did not wait for the operator"
+done
+echo "both clusters were healthy the moment the stage opened"
+
 wait_ready stageset postgres 60
 
 echo "== assert: stageset installed the operator (nothing else did) =="
