@@ -60,6 +60,9 @@ fail() {
   kurly::diagnose "$ns"
   kurly::diagnose_pipeline "$ns"
   echo "::group::cnpg state"
+  # The ladder's own account of itself: which stage is stuck, and what it says.
+  kubectl --namespace="$ns" get stageset postgres \
+    -o jsonpath='{range .status.stages[*]}{.name}{" -> "}{.phase}{" | "}{.message}{"\n"}{end}' 2>/dev/null || true
   # The operator arrives as stage 1, so its source and its CRDs are part of the
   # failure surface: a stalled GitRepository or an unestablished CRD stops the
   # ladder before any kurly stage runs.
@@ -168,6 +171,33 @@ EOF
 ready_status() {
   kubectl --namespace="$ns" get "$1" "$2" \
     -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}' 2>/dev/null || true
+}
+
+# The phase and message stageset reports for ONE stage. Waiting on the StageSet
+# as a whole only ever reports that something, somewhere, is not Ready; the
+# ladder has three stages with very different failure modes, so each is waited
+# on by name.
+stage_phase() {
+  kubectl --namespace="$ns" get stageset postgres \
+    -o jsonpath="{range .status.stages[?(@.name=='$1')]}{.phase}{end}" 2>/dev/null || true
+}
+stage_message() {
+  kubectl --namespace="$ns" get stageset postgres \
+    -o jsonpath="{range .status.stages[?(@.name=='$1')]}{.message}{end}" 2>/dev/null || true
+}
+
+# await_stage <name> <polls> — block until a stage is Ready, naming the stage
+# and its own message on failure instead of timing out anonymously.
+await_stage() {
+  local name="$1" polls="$2" i
+  for i in $(seq 1 "$polls"); do
+    case "$(stage_phase "$name")" in
+      Ready) echo "stage ${name}: Ready after ${i} polls"; return 0 ;;
+      Failed) fail "stage ${name} failed: $(stage_message "$name")" ;;
+    esac
+    sleep 5
+  done
+  fail "stage ${name} never became Ready (phase: '$(stage_phase "$name")', message: '$(stage_message "$name")')"
 }
 
 wait_ready() {
@@ -387,7 +417,9 @@ spec:
       sourceRef: { kind: GitRepository, name: cnpg-operator }
       path: ./releases
       readyChecks:
-        timeout: 5m
+        # The operator image is a few hundred MB and 11 CRDs must establish, on a
+        # kind node with a cold image cache.
+        timeout: 10m
         checks:
           - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: clusters.postgresql.cnpg.io }
           - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: imagecatalogs.postgresql.cnpg.io }
@@ -407,8 +439,15 @@ spec:
           - { apiVersion: postgresql.cnpg.io/v1, kind: Cluster, name: ${CLUSTERS[1]}, namespace: ${ns} }
 EOF
 
-echo "== wait for the whole ladder: the operator installs, then kurly's stages =="
-wait_ready stageset postgres 180
+# Walk the ladder rung by rung. The stages have wildly different budgets — the
+# operator pulls a large image and establishes 11 CRDs, the clusters bootstrap
+# two PostgreSQL instances from scratch — and a single wait on the StageSet
+# would collapse all three into one anonymous timeout.
+echo "== wait for the ladder: operator -> images -> clusters =="
+await_stage operator 150
+await_stage images 60
+await_stage clusters 180
+wait_ready stageset postgres 60
 
 echo "== assert: stageset installed the operator (nothing else did) =="
 kubectl --namespace=cnpg-system rollout status deployment/cnpg-controller-manager --timeout=60s \
