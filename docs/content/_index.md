@@ -15,7 +15,7 @@ token unless a ServiceAccount is configured.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 kurly.list(
-  kurly.http('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.29')
+  kurly.http('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.30')
   + kurly.replicas(3)
   + kurly.probes('/')
   + kurly.expose.gateway('storefront.example.com', 'shared-gateway', gatewayNamespace='infrastructure')
