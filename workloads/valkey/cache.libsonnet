@@ -38,13 +38,33 @@ function(
   local headless = 'valkey-headless';
   local roleLabel = 'kurly.dev/valkey-role';
 
-  // Discover a running peer via the headless Service and, when one is found,
-  // write a config that replicates it. The whole server config is generated
-  // here so the stock image needs no baked-in scripts.
+  // Discover the peer that is actually the primary and write a config that
+  // replicates it. The whole server config is generated here so the stock image
+  // needs no baked-in scripts; the probe uses the image's own valkey-cli.
+  //
+  // Every peer is probed rather than trusting the first name the headless
+  // Service resolves. The Service lists a pod until its endpoint is withdrawn,
+  // which lags the pod's death by seconds — so during a roll the set can still
+  // name the previous generation's pod, and a replica pointed at a terminating
+  // peer never syncs and never becomes ready. An unreachable peer fails the
+  // probe and is skipped; a replica reports role:slave and is skipped.
+  //
+  // The fallback matters as much as the preference: with peers alive but none
+  // yet a primary (the instant between a hand-off and the new primary taking
+  // the role), replicating the first reachable peer chains behind whoever wins
+  // and converges. Starting as a primary there would strand a second writer.
   local initScript = |||
     set -eu
     my_ip="$(hostname -i | awk '{print $1}')"
-    primary="$(getent hosts %(headless)s | awk '{print $1}' | grep -v "^${my_ip}$" | head -1)"
+    primary=''
+    reachable=''
+    for ip in $(getent hosts %(headless)s | awk '{print $1}' | grep -v "^${my_ip}$" || true); do
+      info="$(timeout 2 valkey-cli -h "$ip" info replication 2>/dev/null || true)"
+      [ -n "$info" ] || continue
+      [ -n "$reachable" ] || reachable="$ip"
+      if printf '%%s' "$info" | grep -q 'role:master'; then primary="$ip"; break; fi
+    done
+    [ -n "$primary" ] || primary="$reachable"
     {
       echo 'dir /gen'
       echo 'save ""'
