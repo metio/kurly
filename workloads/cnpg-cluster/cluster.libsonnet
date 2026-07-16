@@ -28,12 +28,25 @@ function(
   storageSize='10Gi',
   storageClass=null,
   imageName=null,
+  catalog=null,
+  catalogScope='namespaced',
+  major=null,
   database='app',
   owner='app',
   parameters={},
   resources=null,
   enablePodMonitor=true,
 )
+  // CNPG resolves the image from exactly one source. Naming both is a config
+  // error the operator rejects, so fail the render instead of the apply.
+  assert !(imageName != null && catalog != null) :
+         'cnpg-cluster: imageName and catalog are mutually exclusive — the image comes from one source';
+  // A catalog lists one image per major, so the reference has to say which
+  // major this cluster pins; without it the operator cannot resolve an image.
+  assert catalog == null || major != null :
+         'cnpg-cluster: catalog requires major (the PostgreSQL major version this cluster pins)';
+  assert catalogScope == 'namespaced' || catalogScope == 'cluster' :
+         "cnpg-cluster: catalogScope must be 'namespaced' or 'cluster', got '" + catalogScope + "'";
   {
     cluster: {
       apiVersion: 'postgresql.cnpg.io/v1',
@@ -48,6 +61,19 @@ function(
         instances: instances,
         // null lets the operator pick the PostgreSQL image matching its version.
         imageName: imageName,
+        // Referencing a catalog moves the image choice out of this CR: the
+        // catalog owns the patch for the pinned major, so a fleet-wide bump
+        // never touches a Cluster. Note that the version this cluster runs then
+        // no longer follows app.kubernetes.io/version — the label stamps the
+        // kurly workload, not the PostgreSQL image the catalog resolves.
+        imageCatalogRef: (
+          if catalog == null then null else {
+            apiGroup: 'postgresql.cnpg.io',
+            kind: if catalogScope == 'cluster' then 'ClusterImageCatalog' else 'ImageCatalog',
+            name: catalog,
+            major: major,
+          }
+        ),
         storage: std.prune({
           size: storageSize,
           storageClass: storageClass,

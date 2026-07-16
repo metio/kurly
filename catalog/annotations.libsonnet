@@ -286,7 +286,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     'cnpg-cluster': {
       summary: 'A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator.',
       stages: {
-        cluster: d.fn('The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind).', [
+        cluster: d.fn('The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind). Point it at a cnpg-image-catalog with catalog/major to keep the image choice in one place, or pin imageName directly; the two are mutually exclusive.', [
           d.arg('name', d.T.string, default='postgres'),
           d.arg('instances', d.T.int, default=3),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
@@ -294,6 +294,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + {
           kind: 'cnpg',
           importPath: 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
+        },
+      },
+    },
+    'cnpg-image-catalog': {
+      summary: 'The PostgreSQL images a fleet of CloudNativePG clusters may run, as an ImageCatalog or ClusterImageCatalog custom resource — one image per major, so a patch bump is one line and rolls every cluster on that major. Requires the CloudNativePG operator.',
+      stages: {
+        namespaced: d.fn('A namespaced ImageCatalog, owned by the team that owns the databases. Keys of `images` are PostgreSQL major versions; a cnpg-cluster pins one with catalog/major and the catalog owns the patch.', [
+          d.arg('name', d.T.string, default='postgres'),
+          d.arg('images', d.T.object, default={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' }),
+        ]) + {
+          kind: 'cnpg',
+          importPath: 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
+        },
+        cluster: d.fn('A cluster-scoped ClusterImageCatalog, serving every namespace from one object. Identical spec to the namespaced stage; a cnpg-cluster points at it with catalogScope=cluster.', [
+          d.arg('name', d.T.string, default='postgres'),
+          d.arg('images', d.T.object, default={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' }),
+        ]) + {
+          kind: 'cnpg',
+          importPath: 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
         },
       },
     },
