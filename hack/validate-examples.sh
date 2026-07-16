@@ -14,6 +14,10 @@
 # List items are split into one file per manifest because kubeconform validates
 # plain manifests, not List wrappers.
 set -euo pipefail
+# An unmatched glob must expand to nothing rather than to its own pattern: no
+# workload ships a migration ladder today, and the literal pattern would reach
+# jsonnet as a filename and fail the gate.
+shopt -s nullglob
 
 cd "$(dirname "$0")/.."
 

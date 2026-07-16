@@ -13,8 +13,7 @@ composable kurly app.
 tik installs in a **single stage**: everything applies together. The store's PVC
 binds when its pod schedules (WaitForFirstConsumer), so the pod and its storage
 come up as one unit. The stage is `backend`
-([`backend.libsonnet`](backend.libsonnet)), alongside a version-gated
-[migration ladder](migrations.jsonnet).
+([`backend.libsonnet`](backend.libsonnet)).
 
 ## 1 · Build the workload
 
@@ -95,20 +94,6 @@ spec:
   tlas:
     host: ["tik.internal.example.com"]
     storeSize: ["5Gi"]
----
-# The migration ladder, rendered from the same workload source for the StageSet
-# below to consume via spec.migrationsSourceRef.
-apiVersion: jaas.metio.wtf/v1
-kind: JsonnetSnippet
-metadata: { name: tik-migrations, namespace: tik }
-spec:
-  serviceAccountName: tik-renderer
-  files:
-    main.jsonnet: |
-      import 'github.com/metio/kurly/workloads/tik/migrations.jsonnet'
-  libraries:
-    - { kind: JsonnetLibrary, name: kurly,      importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-tik,  importPath: github.com/metio/kurly/workloads/tik }
 ```
 
 JaaS publishes the rendered manifests as an `ExternalArtifact`. The release
@@ -139,10 +124,4 @@ spec:
           - apiVersion: apps/v1
             kind: Deployment
             name: tik
-  # The version-gated migration ladder — tik verify / reprocess at boundaries —
-  # rendered from migrations.jsonnet by its own snippet.
-  migrationsSourceRef:
-    apiVersion: jaas.metio.wtf/v1
-    kind: JsonnetSnippet
-    name: tik-migrations
 ```
