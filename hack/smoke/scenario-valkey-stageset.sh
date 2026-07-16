@@ -59,8 +59,11 @@ spec:
       // kurly renders namespace-less objects (the consumer places them); stageset
       // has no targetNamespace yet, so stamp the target namespace here so the
       // objects land where the StageSet's readyChecks look for them.
+      // kurly.hostUsers() shares the host user namespace: kind-in-CI can't nest
+      // user namespaces, so the default hostUsers=false fails pod sandbox creation
+      // (sysfs mount denied) — the same relaxation scenario-valkey.sh applies.
       function(image='${ref}')
-        local rendered = kurly.list(cache(image=image));
+        local rendered = kurly.list(cache(image=image) + kurly.hostUsers());
         rendered {
           items: [
             item { metadata+: { namespace: '${ns}' } }
