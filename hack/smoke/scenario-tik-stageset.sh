@@ -19,10 +19,13 @@
 #                   the job is recorded in status.executedMigrations.
 #   3. IDEMPOTENCY— a re-render that does not move the version does not re-run
 #                   an already-executed migration.
-#   4. BLOCKING   — a migration whose job FAILS halts its anchoring stage: the
-#                   Deployment must NOT advance to the new image. Repairing the
-#                   job lets the stage proceed. This is the failure path nothing
-#                   else in the repo covers, and the reason to have this file.
+#   4. BLOCKING   — a migration whose job FAILS halts its anchoring stage as
+#                   MigrationDirty: the Deployment must NOT advance to the new
+#                   image. The halt is deliberate and does not clear itself —
+#                   repairing the job is necessary but not sufficient, so the
+#                   phase walks the documented recovery (republish, then ask for
+#                   a reconcile). This is the failure path nothing else in the
+#                   repo covers, and the reason to have this file.
 #
 # stageset reads the deployed version from an object's
 # metadata.labels['app.kubernetes.io/version'] (spec.version.fromObject), which
@@ -42,6 +45,11 @@ ns=kurly-tik-stageset
 # stageset's `to` boundary and `from` constraint require.
 TIK_IMAGE="${TIK_IMAGE:-ghcr.io/metio/tik}"
 image_ref() { printf '%s:%s' "$TIK_IMAGE" "$1"; }
+
+# The stand-in image the migration jobs run. Needs nothing but a shell to exit
+# with a chosen code.
+# renovate: datasource=docker depName=busybox
+MIGRATION_JOB_IMAGE="docker.io/library/busybox:1.37.0"
 
 # Echoes the newest three calver tags of the tik image, ascending. Anonymous
 # pull tokens are enough for a public GHCR repository.
@@ -134,6 +142,12 @@ EOF
 # ExternalArtifact for a migration action to reference. Exit code 0 stands in
 # for a real `tik reprocess` / `tik verify`; a non-zero code is how the BLOCKING
 # phase forces a migration failure without waiting for a genuinely broken store.
+#
+# The job runs busybox rather than the tik image for two reasons: the tik image
+# is distroless and has no shell to script an exit code with, and a real
+# `tik verify` would have to mount the store — which is ReadWriteOnce and held
+# by the running backend pod, so the job would deadlock on the volume. What is
+# under test is stageset's gating, not tik's own commands.
 apply_migration_job() {
   local name="$1" code="$2"
   kubectl apply --namespace="$ns" --filename=- <<EOF
@@ -158,7 +172,7 @@ spec:
               restartPolicy: 'Never',
               containers: [{
                 name: 'migrate',
-                image: '$(image_ref "$V1")',
+                image: '${MIGRATION_JOB_IMAGE}',
                 command: ['/bin/sh', '-c', 'exit ${code}'],
               }],
             },
@@ -178,9 +192,9 @@ EOF
 # re-publishing a ladder does not replay a rung already in the executed ledger.
 # Pass an empty argument to publish the V2 rung alone.
 #
-# The boundaries are the DISCOVERED tags rather than the illustrative constants
-# in workloads/tik/migrations.jsonnet: those name calver releases chosen to
-# document the pattern, and a version walk has to gate on versions that exist.
+# The boundaries are the DISCOVERED tags, so the walk always gates on versions
+# that actually exist: a boundary naming an unreleased calver could never be
+# crossed, and the phases below assert on real crossings.
 apply_migrations() {
   local v3job="${1:-}"
   local v3rung=""
@@ -249,11 +263,45 @@ executed_migrations() {
     -o jsonpath='{range .status.executedMigrations[*]}{.name}{" "}{end}' 2>/dev/null || true
 }
 
-# How many Pods a given migration Job has spawned — the idempotency probe. A
-# migration that re-runs would create a second Job/Pod generation.
+# stageset does not create the Job under the name the manifest carries: it
+# appends a content digest of the action, so `tik-migration-ok` lands as
+# `tik-migration-ok-2b182926`. Everything below therefore resolves the object by
+# prefix — an exact-name lookup silently matches nothing forever.
+job_name() {
+  kubectl --namespace="$ns" get jobs \
+    -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null \
+    | grep "^$1-" | head -1
+}
+
+# True once the named migration job has a successful completion.
+job_succeeded() {
+  local j
+  j="$(job_name "$1")"
+  [ -n "$j" ] || return 1
+  [ "$(kubectl --namespace="$ns" get job "$j" -o jsonpath='{.status.succeeded}' 2>/dev/null || true)" = "1" ]
+}
+
+# True once the named migration job has recorded a failure.
+job_failed() {
+  local j
+  j="$(job_name "$1")"
+  [ -n "$j" ] || return 1
+  [ -n "$(kubectl --namespace="$ns" get job "$j" -o jsonpath='{.status.failed}' 2>/dev/null || true)" ]
+}
+
+# How many Pods a migration job has spawned — the idempotency probe. A migration
+# that re-runs would create another pod generation.
 job_pod_count() {
-  kubectl --namespace="$ns" get pods --selector="job-name=$1" \
-    -o jsonpath='{.items[*].metadata.name}' 2>/dev/null | wc -w
+  kubectl --namespace="$ns" get pods \
+    -o jsonpath='{range .items[*]}{.metadata.labels.job-name}{"\n"}{end}' 2>/dev/null \
+    | grep -c "^$1-" || true
+}
+
+# The StageSet's Ready condition reason — MigrationDirty is the halt this
+# scenario's blocking phase waits for.
+stageset_reason() {
+  kubectl --namespace="$ns" get stageset tik \
+    -o jsonpath='{.status.conditions[?(@.type=="Ready")].reason}' 2>/dev/null || true
 }
 
 # Blocks until the Deployment carries an image containing $1; echoes 1 on timeout
@@ -410,8 +458,7 @@ apply_snippet "$V2"
 echo "== assert: the migration job runs =="
 completed=false
 for _ in $(seq 1 60); do
-  [ "$(kubectl --namespace="$ns" get job tik-migration-ok \
-    -o jsonpath='{.status.succeeded}' 2>/dev/null || true)" = "1" ] && { completed=true; break; }
+  job_succeeded tik-migration-ok && { completed=true; break; }
   sleep 5
 done
 [ "$completed" = true ] || fail "the migration job never completed on the ${V1} -> ${V2} hop"
@@ -457,11 +504,23 @@ apply_snippet "$V3"
 echo "== assert: the failing migration is observed =="
 observed=false
 for _ in $(seq 1 60); do
-  [ "$(kubectl --namespace="$ns" get job tik-migration-fail \
-    -o jsonpath='{.status.failed}' 2>/dev/null || true)" != "" ] && { observed=true; break; }
+  job_failed tik-migration-fail && { observed=true; break; }
   sleep 5
 done
 [ "$observed" = true ] || fail "the failing migration job never reported a failure"
+
+# stageset retries a failing migration a few times and then deliberately stops,
+# halting the stage as MigrationDirty rather than retrying a destructive action
+# forever. Waiting for that terminal reason (rather than sleeping) makes the
+# blocking assertion below deterministic.
+echo "== assert: the stage halts as MigrationDirty =="
+dirty=false
+for _ in $(seq 1 60); do
+  [ "$(stageset_reason)" = "MigrationDirty" ] && { dirty=true; break; }
+  sleep 5
+done
+[ "$dirty" = true ] \
+  || fail "the failing migration never halted the stage (reason: $(stageset_reason))"
 
 # The point of the whole phase: the stage must NOT advance while its migration
 # is failing. A Deployment carrying V3 here means stageset applied manifests it
@@ -475,13 +534,28 @@ case "$(deploy_image)" in
   *) fail "deployment left an unexpected image while blocked: $(deploy_image)" ;;
 esac
 
-echo "== repair the migration and assert the stage proceeds =="
-# Republishing the job as a success is the operator's fix; the per-action ledger
-# resumes at the failed action rather than replaying the ladder.
-kubectl --namespace="$ns" delete job tik-migration-fail --ignore-not-found
+echo "== repair the migration and clear the halt (the documented recovery) =="
+# A dirty halt does not clear itself: fixing the job is necessary but NOT
+# sufficient, because the controller has stopped retrying on purpose. The
+# operator republishes the fixed job and then explicitly asks for a reconcile —
+# the runbook's recovery, and the reason this phase exists rather than a plain
+# "it fails" assertion.
+#   https://stageset.projects.metio.wtf/runbooks/migrationdirty/
+kubectl --namespace="$ns" delete job "$(job_name tik-migration-fail)" --ignore-not-found
 apply_migration_job tik-migration-fail 0
+wait_ready jsonnetsnippet tik-migration-fail 60
 
-await_deploy_image "$V3" 90 || fail "stageset never advanced to ${V3} after the migration was repaired"
+# Nothing has asked the controller to try again yet, so the stage must still be
+# sitting at V2 — proof the halt is a real stop rather than a slow retry.
+case "$(deploy_image)" in
+  *"${V2}"*) echo "still halted at ${V2} with the job repaired — the halt needs an explicit clear" ;;
+  *) fail "deployment moved off ${V2} before the halt was cleared: $(deploy_image)" ;;
+esac
+
+kubectl --namespace="$ns" annotate stageset tik \
+  "reconcile.fluxcd.io/requestedAt=$(date +%s)" --overwrite
+
+await_deploy_image "$V3" 90 || fail "stageset never advanced to ${V3} after the halt was cleared"
 if ! kubectl --namespace="$ns" rollout status deployment/tik --timeout=300s; then
   fail "rollout to ${V3} never completed after the migration was repaired"
 fi
