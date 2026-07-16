@@ -313,8 +313,15 @@ wait_ready jsonnetsnippet cnpg-clusters 90
 # release. Flux consumes it in place, tagged and immutable, and kurly's stages
 # ride behind it.
 #
-# `ignore` prunes the clone to the one manifest so the stage applies that file
-# and nothing else in the repository.
+# `ignore` prunes the artifact to the one manifest so the stage applies that file
+# and nothing else — releases/ also holds older manifests and a .go file, all of
+# which the stage would otherwise apply.
+#
+# The four lines are gitignore semantics, not redundancy: a file cannot be
+# re-included once its parent directory is excluded, so `/*` + the `!` for the
+# file alone would exclude releases/ wholesale and publish an EMPTY artifact.
+# The directory has to be re-included, then its contents excluded, then the one
+# file re-included.
 echo "== the CNPG operator ${CNPG_VERSION} as an upstream Flux source =="
 kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -326,6 +333,8 @@ spec:
   ref: { tag: v${CNPG_VERSION} }
   ignore: |
     /*
+    !/releases/
+    /releases/*
     !/releases/cnpg-${CNPG_VERSION}.yaml
 EOF
 
@@ -337,6 +346,16 @@ for _ in $(seq 1 60); do
   sleep 5
 done
 [ "$ok" = true ] || fail "gitrepository/cnpg-operator never advertised an artifact"
+
+# An artifact is published whether or not it contains anything, so its existence
+# proves nothing about the ignore rules above. Flux reports the archive size —
+# an empty tree would sail past the check above and only surface 5 minutes later
+# as the operator stage's readyChecks timing out on CRDs that never arrive.
+size="$(kubectl --namespace="$ns" get gitrepository/cnpg-operator -o jsonpath='{.status.artifact.size}' 2>/dev/null || true)"
+echo "operator artifact size: ${size:-unknown} bytes"
+if [ -z "$size" ] || [ "$size" -lt 10000 ]; then
+  fail "the operator artifact is empty or tiny (${size:-unknown} bytes) — the ignore rules pruned away the manifest"
+fi
 
 # The three-stage ordering, and the reason this scenario is worth its runtime:
 # every arrow below is a REAL dependency, not a preference.
