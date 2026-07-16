@@ -400,10 +400,17 @@ fi
 # Established, the images stage would fail outright with "no matches for kind".
 # A green StageSet IS the ordering proof; it cannot pass by luck.
 #
-# The operator stage's readyChecks name the CRDs explicitly rather than only the
-# Deployment: kstatus reports a CRD Ready on its Established condition, which is
-# the thing the next stage actually needs. A running controller-manager whose
-# CRDs are not yet Established would still fail the apply behind it.
+# No stage lists readyChecks.checks, because none needs to: stageset's kstatus
+# wait already covers every object a stage applied. The operator stage applies
+# the CRDs and the controller Deployment, so it is gated on them — an explicit
+# check would only restate what the stage already waits for.
+#
+# Naming them explicitly is in fact WORSE than redundant for cluster-scoped
+# objects: readyChecks.checks are NamespacedObjectKindReferences, and an omitted
+# namespace is defaulted to the StageSet's namespace with no scope awareness. A
+# CRD check therefore resolves to a namespaced CRD that cannot exist, and the
+# stage waits on 'Unknown' until it times out — while the real, cluster-scoped
+# CRDs sit Established a few lines away in kubectl. Only `timeout` is set here.
 echo "== StageSet: operator (upstream) -> images (kurly) -> clusters (kurly) =="
 kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: stages.metio.wtf/v1
@@ -420,23 +427,15 @@ spec:
         # The operator image is a few hundred MB and 11 CRDs must establish, on a
         # kind node with a cold image cache.
         timeout: 10m
-        checks:
-          - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: clusters.postgresql.cnpg.io }
-          - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: imagecatalogs.postgresql.cnpg.io }
-          - { apiVersion: apiextensions.k8s.io/v1, kind: CustomResourceDefinition, name: clusterimagecatalogs.postgresql.cnpg.io }
-          - { apiVersion: apps/v1, kind: Deployment, name: cnpg-controller-manager, namespace: cnpg-system }
     - name: images
       sourceRef: { name: cnpg-catalog }
       readyChecks:
-        checks:
-          - { apiVersion: postgresql.cnpg.io/v1, kind: ImageCatalog, name: postgres, namespace: ${ns} }
+        timeout: 5m
     - name: clusters
       sourceRef: { name: cnpg-clusters }
       readyChecks:
+        # Two PostgreSQL instances bootstrap from scratch behind this gate.
         timeout: 10m
-        checks:
-          - { apiVersion: postgresql.cnpg.io/v1, kind: Cluster, name: ${CLUSTERS[0]}, namespace: ${ns} }
-          - { apiVersion: postgresql.cnpg.io/v1, kind: Cluster, name: ${CLUSTERS[1]}, namespace: ${ns} }
 EOF
 
 # Walk the ladder rung by rung. The stages have wildly different budgets — the
