@@ -22,14 +22,28 @@ source hack/smoke/lib.sh
 
 ns=kurly-valkey-stageset
 
-# The version ladder: latest patch of each line, ONE major/minor step at a time
-# (operators don't skip majors). The cross-major 7.2->8.0 hop exercises cross-
-# version replication in the hand-off. Kept as an easy-to-edit array so a hop can
-# be trimmed if a cross-major replication incompatibility ever surfaces. These
-# versions are intentionally pinned — the lower rungs must not float — so a
-# packageRule in renovate.json disables all updates for this file.
-VALKEY_LADDER=(7.2.13 8.0.9 8.1.8)
+# The version ladder is discovered at run time: the latest patch of each valkey
+# major from VALKEY_START_MAJOR up to the newest published, so the walk always
+# runs through to the current latest valkey with no edits here (when valkey 10
+# ships it is picked up automatically). One entry per major = a major jump per
+# hop, the way operators upgrade — each hop's new pod replicates across a major
+# boundary before the atomic failover. Override the floor with VALKEY_START_MAJOR.
+VALKEY_START_MAJOR="${VALKEY_START_MAJOR:-7}"
 image_ref() { printf 'docker.io/valkey/valkey:%s' "$1"; }
+
+# Echoes the latest X.Y.Z patch of each valkey major >= $1, ascending. Works off
+# the Docker Hub tag list (sorted, so the last seen per major is the newest).
+compute_valkey_ladder() {
+  local start="$1" tags
+  tags="$(
+    for p in 1 2 3 4 5 6; do
+      curl -fsSL "https://hub.docker.com/v2/repositories/valkey/valkey/tags?page_size=100&page=${p}" 2>/dev/null || true
+    done | grep -oE '"name":"[0-9]+\.[0-9]+\.[0-9]+"' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | sort -u -V
+  )"
+  printf '%s\n' "$tags" \
+    | awk -F. -v s="$start" '$1 + 0 >= s + 0 { latest[$1] = $0 } END { for (m in latest) print latest[m] }' \
+    | sort -V
+}
 
 fail() {
   echo "::error::$*"
@@ -37,6 +51,16 @@ fail() {
   kurly::diagnose_pipeline "$ns"
   exit 1
 }
+
+# Build the ladder up front (before spinning anything up) so a discovery hiccup
+# fails fast. Two majors are the minimum for a hand-off; if valkey has aged out of
+# the fetched tag pages, raise the page count in compute_valkey_ladder.
+mapfile -t VALKEY_LADDER < <(compute_valkey_ladder "$VALKEY_START_MAJOR")
+if [ "${#VALKEY_LADDER[@]}" -lt 2 ]; then
+  echo "::error::could not build a valkey version ladder from major ${VALKEY_START_MAJOR} (got: ${VALKEY_LADDER[*]:-none})"
+  exit 1
+fi
+echo "valkey version ladder (dynamic): ${VALKEY_LADDER[*]}"
 
 # Applies (creates or updates) the JsonnetSnippet rendering the cache at $1. Both
 # the main.jsonnet default and the tlas.image drive the render depending on how
