@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for tik through the real Flux + JaaS + stageset-controller
+# pipeline, covering the versioned-migration contract: baselining on install, a
+# boundary crossing running its action ladder, idempotency on a no-op re-render,
+# and a failing migration blocking its stage. The raw-apply complement lives in
+# scenario-tik.sh. Self-gates on a diff scoped to this workload (plus the shared
+# library and the e2e machinery), so a change to another workload never runs or
+# blocks it. Like the valkey stageset walk, this heavy integration scenario runs
+# on the newest k8s minor only (max_versions: '1').
+name: E2E tik (stageset)
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  tik-stageset:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: tik-stageset
+      paths: '^(workloads/tik/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tik-stageset)\.sh|\.github/workflows/e2e)'
+      scenario: hack/smoke/scenario-tik-stageset.sh
+      max_versions: '1'
