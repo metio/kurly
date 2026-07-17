@@ -90,6 +90,21 @@
       "matchStrings": [
         "docker\\.io/alpine/k8s:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
       ]
+    },
+    {
+      "description": "The OpenTelemetry Collector (contrib) image the otel-collector agent runs, pinned in its stage, catalog, and README so a bump is a visible Renovate PR.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/otel/opentelemetry-collector-contrib",
+      "managerFilePatterns": [
+        "/^workloads/otel-collector/.+\\.libsonnet$/",
+        "/^workloads/otel-collector/README\\.md$/",
+        "/^catalog/annotations\\.libsonnet$/",
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "docker\\.io/otel/opentelemetry-collector-contrib:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
+      ]
     }
   ]
 }
