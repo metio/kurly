@@ -27,6 +27,8 @@ function(
   instances=3,
   storageSize='10Gi',
   storageClass=null,
+  walSize=null,
+  walStorageClass=null,
   imageName=null,
   catalog=null,
   catalogScope='namespaced',
@@ -96,6 +98,17 @@ function(
           size: storageSize,
           storageClass: storageClass,
         }),
+        // PostgreSQL writes its WAL sequentially and its data randomly, so a
+        // production cluster usually wants the WAL on its own volume — often a
+        // faster class. Left unset, the WAL shares the data volume, which is
+        // CNPG's default and fine for small clusters.
+        walStorage: (
+          if walSize == null && walStorageClass == null then null
+          else std.prune({
+            size: walSize,
+            storageClass: walStorageClass,
+          })
+        ),
         // A fresh cluster is bootstrapped with an application database and owner
         // role; the operator mints the credentials as a Secret.
         bootstrap: {

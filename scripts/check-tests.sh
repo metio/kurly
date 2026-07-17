@@ -75,6 +75,49 @@ for stage in workloads/*/*.libsonnet; do
   echo "pod labels and annotations reach every pod template in $stage"
 done
 
+# A PVC without a settable storage class is a workload that only runs on the
+# cluster it was written for: classes differ per cluster, and the default one is
+# rarely the right one for a database. Every workload that renders a PVC must
+# therefore let a consumer choose the class — through a parameter, or by
+# re-composing kurly.store, which a composable app always allows.
+#
+# The gate renders each workload TWICE: once as it ships, once with the class
+# overridden through whichever mechanism it offers, and fails if the rendered
+# PVC did not move. Rendering only the default would prove nothing — the field
+# is absent either way when nobody sets it.
+echo "== every workload's PVCs take a storage class =="
+for stage in workloads/*/*.libsonnet; do
+  # The mount path is the workload's own, so read it back from the default
+  # render rather than assuming one: re-composing kurly.store needs it, and a
+  # wrong path would mount a second volume instead of replacing the store.
+  default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")"
+  claims="$(printf '%s' "$default" | jq '[.. | objects | select(.kind? == "PersistentVolumeClaim")] | length')"
+  vct="$(printf '%s' "$default" | jq '[.. | objects | select(has("volumeClaimTemplates")) | .volumeClaimTemplates[]?] | length')"
+  crstore="$(printf '%s' "$default" | jq '[.. | objects | select(has("storage") and (.storage | type == "object") and (.storage | has("size")))] | length')"
+  if [ "$claims" = "0" ] && [ "$vct" = "0" ] && [ "$crstore" = "0" ]; then
+    echo "no PVC in $stage"
+    continue
+  fi
+
+  mount="$(printf '%s' "$default" | jq -r '[.. | objects | select(.name? == "store") | .mountPath?] | map(select(. != null)) | first // ""')"
+  if [ -n "$mount" ]; then
+    over="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')() + k.store('${mount}', '7Gi', storageClass='kurly-test-class'))")"
+  else
+    # A custom resource: its storage is a field of someone else's API, so the
+    # class can only come from the workload's own parameter.
+    over="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')(storageClass='kurly-test-class'))" 2>/dev/null || true)"
+    if [ -z "$over" ]; then
+      echo "::error::${stage}: renders a PVC but takes no storageClass parameter, and has no kurly.store to re-compose" >&2
+      exit 1
+    fi
+  fi
+  if ! printf '%s' "$over" | grep -q 'kurly-test-class'; then
+    echo "::error::${stage}: renders a PVC whose storage class cannot be set" >&2
+    exit 1
+  fi
+  echo "storage class is settable in $stage"
+done
+
 # Dragonfly exits at startup when maxmemory is under 256MiB per io thread, so
 # the workload asserts the floor at render — the pod would otherwise CrashLoop
 # with the reason buried in its log. An assert can only be observed by failing,

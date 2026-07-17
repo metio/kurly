@@ -30,7 +30,11 @@ local pipelines = |||
     {:id :dashboard :every "PT6H" :run ["probe"] :as "tik-backend"}]}
 |||;
 
-function(image='ghcr.io/metio/tik:2026.7.14194001')
+function(
+  image='ghcr.io/metio/tik:2026.7.14194001',
+  storageSize='1Gi',
+  storageClass=null,
+)
   kurly.http('tik', image)
   + kurly.version(version)
   + kurly.replicas(1)
@@ -38,7 +42,7 @@ function(image='ghcr.io/metio/tik:2026.7.14194001')
   + kurly.port(7777)
   + kurly.args(['backend', '--config=/etc/tik/pipelines.edn'])
   + kurly.env({ TIK_ROOT: '/var/lib/tik', TIK_KEY: '/etc/tik-key/id_ed25519' })
-  + kurly.store('/var/lib/tik', '1Gi')
+  + kurly.store('/var/lib/tik', storageSize, storageClass=storageClass)
   + kurly.config({ 'pipelines.edn': pipelines }, mountPath='/etc/tik')
   + kurly.secretMount('tik-signing-key', '/etc/tik-key', optional=true, defaultMode=256)
   + kurly.scratch('/tmp', '64Mi')
