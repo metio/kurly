@@ -99,8 +99,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     resourcePreset: d.fn('A named resource size (nano/micro/small/medium/large) — a memory request equal to its limit and a CPU request with no limit. Replaces resources wholesale.', [
       d.arg('preset', d.T.string, required=true, example='small'),
     ]) + { kinds: allKinds, group: 'container' },
-    serviceAccount: d.fn('Runs the pod under a named ServiceAccount (also gates token automount).', [
+    serviceAccount: d.fn("Runs the pod under a named ServiceAccount (also gates token automount). Yours wins over the one a workload's RBAC would mint, and kurly then mints none — the account is yours to own and annotate.", [
       d.arg('serviceAccountName', d.T.string, required=true, example='storefront'),
+    ]) + { kinds: allKinds, group: 'container' },
+    serviceAccountAnnotations: d.fn('Annotations for the ServiceAccount kurly mints for a workload that declares RBAC — where cloud workload identity is wired (eks.amazonaws.com/role-arn, iam.gke.io/gcp-service-account). Moot when you bring your own account with serviceAccount().', [
+      d.arg('annotations', d.T.object, required=true, example={ 'eks.amazonaws.com/role-arn': 'arn:aws:iam::123456789012:role/storefront' }),
     ]) + { kinds: allKinds, group: 'container' },
     probes: d.fn('HTTP readiness and liveness probes on the named http port.', [
       d.arg('path', d.T.path, default='/healthz', example='/tickets.edn'),

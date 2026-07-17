@@ -755,4 +755,37 @@ local podOf(app) = app.deployment.spec.template.spec;
     .cluster.spec.nodeMaintenanceWindow,
     { inProgress: false }
   ),
+  // A consumer's ServiceAccount wins over the one a workload's RBAC would mint.
+  // They are usually bringing an account annotated for cloud workload identity,
+  // which kurly cannot know about — and a grant bound to some other account
+  // would leave the pod without the rules the workload needs.
+  an_explicit_service_account_wins_over_rbac: std.assertEqual(
+    local a = kurly.worker('w', 'img:1')
+              + kurly.rbac([{ apiGroups: [''], resources: ['pods'], verbs: ['get'] }])
+              + kurly.serviceAccount('my-irsa-sa');
+    local binding = [m for m in a.ownedManifests if m.kind == 'RoleBinding'][0];
+    [
+      a.deployment.spec.template.spec.serviceAccountName,
+      binding.subjects[0].name,
+      // kurly mints none: the account is the consumer's to own.
+      std.length([m for m in a.ownedManifests if m.kind == 'ServiceAccount']),
+    ],
+    ['my-irsa-sa', 'my-irsa-sa', 0]
+  ),
+  // Without one, kurly still mints an account named after the workload, and it
+  // can carry the annotation cloud workload identity is wired through.
+  a_minted_service_account_takes_annotations: std.assertEqual(
+    local a = kurly.worker('w', 'img:1')
+              + kurly.rbac([{ apiGroups: [''], resources: ['pods'], verbs: ['get'] }])
+              + kurly.serviceAccountAnnotations({ 'eks.amazonaws.com/role-arn': 'arn:aws:iam::1:role/w' });
+    local sa = [m for m in a.ownedManifests if m.kind == 'ServiceAccount'][0];
+    [sa.metadata.name, sa.metadata.annotations['eks.amazonaws.com/role-arn']],
+    ['w', 'arn:aws:iam::1:role/w']
+  ),
+  // The token is mounted for whichever account the pod ends up running under.
+  an_explicit_service_account_still_mounts_its_token: std.assertEqual(
+    (kurly.worker('w', 'img:1') + kurly.serviceAccount('mine'))
+    .deployment.spec.template.spec.automountServiceAccountToken,
+    true
+  ),
 }

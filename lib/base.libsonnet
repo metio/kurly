@@ -104,20 +104,35 @@ local serviceMonitorManifest(name, spec, selectorLabels, labels) = {
   },
 };
 
-// A ServiceAccount plus a namespaced Role and the RoleBinding tying them
-// together, all named after the workload so its pod runs under an identity that
-// carries exactly the rules it is granted.
-local rbacManifests(name, spec, labels) = [
-  { apiVersion: 'v1', kind: 'ServiceAccount', metadata: { name: name, labels: labels } },
-  { apiVersion: 'rbac.authorization.k8s.io/v1', kind: 'Role', metadata: { name: name, labels: labels }, rules: spec.rules },
-  {
-    apiVersion: 'rbac.authorization.k8s.io/v1',
-    kind: 'RoleBinding',
-    metadata: { name: name, labels: labels },
-    roleRef: { apiGroup: 'rbac.authorization.k8s.io', kind: 'Role', name: name },
-    subjects: [{ kind: 'ServiceAccount', name: name }],
-  },
-];
+// A namespaced Role and the RoleBinding tying it to the identity the pod runs
+// under, plus the ServiceAccount itself when kurly is the one creating it.
+//
+// The binding follows the RESOLVED account rather than the workload's name: a
+// consumer who brings their own ServiceAccount is usually doing it to carry an
+// annotation kurly cannot know — an IRSA role ARN, a GKE or Azure workload
+// identity — and a grant bound to some other account would leave the pod without
+// the rules the workload needs. When they bring one, kurly does not mint a
+// second: the account is theirs to own.
+local rbacManifests(name, spec, labels, account, mint, accountAnnotations) =
+  (
+    if !mint then []
+    else [{
+      apiVersion: 'v1',
+      kind: 'ServiceAccount',
+      metadata: { name: account, labels: labels }
+                + (if accountAnnotations == {} then {} else { annotations: accountAnnotations }),
+    }]
+  )
+  + [
+    { apiVersion: 'rbac.authorization.k8s.io/v1', kind: 'Role', metadata: { name: name, labels: labels }, rules: spec.rules },
+    {
+      apiVersion: 'rbac.authorization.k8s.io/v1',
+      kind: 'RoleBinding',
+      metadata: { name: name, labels: labels },
+      roleRef: { apiGroup: 'rbac.authorization.k8s.io', kind: 'Role', name: name },
+      subjects: [{ kind: 'ServiceAccount', name: account }],
+    },
+  ];
 
 // The exclusion groups a config has composed conflicting members into: a map
 // of group name -> the feature names that claimed it. A group with more than
@@ -171,6 +186,10 @@ local exclusionConflicts(exclusive) = [
       annotations: {},
       resources: { requests: { cpu: '100m', memory: '128Mi' } },
       serviceAccountName: null,
+      // Annotations for the ServiceAccount kurly mints — where cloud workload
+      // identity is wired (eks.amazonaws.com/role-arn, iam.gke.io/…). Ignored
+      // when the consumer brings their own account, which is theirs to annotate.
+      serviceAccountAnnotations: {},
       probePath: null,
       // Probes and container lifecycle. probePath renders the default http
       // readiness+liveness probes; readinessProbe/livenessProbe are full probe
@@ -337,7 +356,16 @@ local exclusionConflicts(exclusive) = [
     // rbac contributes THREE manifests (ServiceAccount, Role, RoleBinding),
     // minted whenever any rule exists — an explicit rbac() or a requiredRbac.
     rbacManifests::
-      if this.rbacRules == [] then [] else rbacManifests(this.config.name, { rules: this.rbacRules }, this.labels),
+      if this.rbacRules == [] then []
+      else rbacManifests(
+        this.config.name,
+        { rules: this.rbacRules },
+        this.labels,
+        this.podServiceAccount,
+        // Mint one only when the consumer did not bring their own.
+        this.config.serviceAccountName == null,
+        this.config.serviceAccountAnnotations,
+      ),
 
     // The owned manifests as a list, hidden so it stays out of
     // std.objectValues(app); list() appends it explicitly.
@@ -378,12 +406,18 @@ local exclusionConflicts(exclusive) = [
       + { automountServiceAccountToken: this.podServiceAccount != null }
       + (if cfg.hostUsers then {} else { hostUsers: false }),
 
-    // The ServiceAccount the pod runs under: the one the rbac manifests create
-    // (named after the workload) whenever any Role rule exists — an explicit
-    // rbac() or a capability's requiredRbac — otherwise an explicitly configured
-    // one, else none. The token is mounted only when this is set (see podSecurity).
+    // The ServiceAccount the pod runs under. A consumer's explicit choice wins:
+    // they are usually bringing an account that carries an annotation kurly
+    // cannot know (an IRSA role ARN, a GKE or Azure workload identity), and a
+    // workload that declares RBAC used to override it silently — which made
+    // cloud workload identity unusable on every such workload while the
+    // manifests looked right. Otherwise, any Role rule (an explicit rbac() or a
+    // capability's requiredRbac) means kurly mints one named after the workload.
+    // The token is mounted only when this is set (see podSecurity).
     podServiceAccount::
-      if this.rbacRules != [] then this.config.name else this.config.serviceAccountName,
+      if this.config.serviceAccountName != null then this.config.serviceAccountName
+      else if this.rbacRules != [] then this.config.name
+      else null,
 
     // Pod-template metadata: the workload labels plus pod-only labels, and the
     // workload annotations plus pod-only annotations. The selector is unaffected

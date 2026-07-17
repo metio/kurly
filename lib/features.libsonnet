@@ -61,6 +61,10 @@ local resourcePresets = {
   // compose it before any single-knob resources() tweak.
   resourcePreset(preset):: { config+:: { resources: resourcePresets[preset] } },
   serviceAccount(serviceAccountName):: { config+:: { serviceAccountName: serviceAccountName } },
+  // Annotations for the ServiceAccount kurly mints for a workload that declares
+  // RBAC — the usual home of cloud workload identity. Bringing your own account
+  // with kurly.serviceAccount() instead makes this moot: kurly then mints none.
+  serviceAccountAnnotations(annotations):: { config+:: { serviceAccountAnnotations+: annotations } },
   // HTTP readiness+liveness probes on the named `http` port.
   probes(path='/healthz'):: { config+:: { probePath: path } },
   // Explicit probe specs (exec, tcpSocket, httpGet, …) that override the default

@@ -1073,8 +1073,31 @@
             }
          ],
          "group": "container",
-         "help": "Runs the pod under a named ServiceAccount (also gates token automount).",
+         "help": "Runs the pod under a named ServiceAccount (also gates token automount). Yours wins over the one a workload's RBAC would mint, and kurly then mints none — the account is yours to own and annotate.",
          "id": "serviceAccount",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": {
+                  "eks.amazonaws.com/role-arn": "arn:aws:iam::123456789012:role/storefront"
+               },
+               "name": "annotations",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Annotations for the ServiceAccount kurly mints for a workload that declares RBAC — where cloud workload identity is wired (eks.amazonaws.com/role-arn, iam.gke.io/gcp-service-account). Moot when you bring your own account with serviceAccount().",
+         "id": "serviceAccountAnnotations",
          "kinds": [
             "http",
             "worker",
