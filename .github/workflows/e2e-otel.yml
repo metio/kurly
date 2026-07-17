@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for otel-collector. The collector's config is the whole
+# workload, rendered verbatim from Jsonnet, and a collector validates that config
+# on boot — so a DaemonSet that reaches Ready is proof the rendered YAML is a
+# real, valid collector config, not just text the render gates accept. The
+# scenario also POSTs an OTLP/HTTP trace and follows it to the debug exporter,
+# which only a running collector can show. Self-gates on a diff scoped to this
+# workload plus the shared library.
+name: E2E otel-collector
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  otel-collector:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: otel-collector
+      paths: '^(workloads/otel-collector/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-otel)\.sh|\.github/workflows/e2e(-otel)?\.yml)'
+      scenario: hack/smoke/scenario-otel.sh
