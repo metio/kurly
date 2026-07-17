@@ -2111,6 +2111,37 @@
          "summary": "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace."
       },
       {
+         "id": "otel-collector",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "otel-collector",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/otel/opentelemetry-collector-contrib:0.119.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "config",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The per-node collector. config is the collector's own document, rendered straight into the mounted config file; the default receives OTLP on 4317/4318, guards memory, batches, and exports to the debug logger, with a health_check extension on 13133 backing the probes. Replace config for real pipelines, and move the probes if it drops health_check.",
+               "id": "agent",
+               "importPath": "github.com/metio/kurly/workloads/otel-collector/agent.libsonnet",
+               "kind": "daemon"
+            }
+         ],
+         "summary": "An OpenTelemetry Collector as a per-node agent (a DaemonSet), so local workloads send telemetry to a collector on their own node. The collector config — receivers, processors, exporters, and the pipelines wiring them — is passed verbatim (it is the collector's schema, not kurly's); the default is a working OTLP agent that receives, batches, and prints. Fully restricted by default: node-log collection needs a hostPath and is a documented opt-in."
+      },
+      {
          "id": "tik",
          "stages": [
             {
