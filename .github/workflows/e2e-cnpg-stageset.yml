@@ -21,6 +21,7 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: cnpg-stageset
-      paths: '^(workloads/cnpg-(cluster|image-catalog)/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cnpg-stageset)\.sh|\.github/workflows/e2e(-cnpg-stageset)?\.yml)'
+      paths: '^(workloads/cnpg-(cluster|image-catalog)/|lib/|main\.libsonnet|(workload\.)?Containerfile|hack/smoke/(lib|scenario-cnpg-stageset)\.sh|hack/smoke/kind-registry-config\.yaml|\.github/workflows/e2e(-cnpg-stageset)?\.yml)'
       scenario: hack/smoke/scenario-cnpg-stageset.sh
       max_versions: '1'
+      registry: true

@@ -137,6 +137,7 @@ spec:
         }
   libraries:
     - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: kurly-tik }
     - { kind: JsonnetLibrary, name: k8s-libsonnet }
   tlas:
     - name: image
@@ -349,32 +350,21 @@ spec:
   sourceRef: { kind: OCIRepository, name: k8s-libsonnet }
 EOF
 
-echo "== kurly as an inline vendor-keyed JsonnetLibrary (the checked-out branch) =="
-# JaaS resolves absolute github.com/... imports by searching libraries whose file
-# keys are full vendor paths, so key them that way — this tests the branch under
-# review with no published artifact.
-emit_kurly_library() {
-  echo "apiVersion: jaas.metio.wtf/v1"
-  echo "kind: JsonnetLibrary"
-  echo "metadata: { name: kurly, namespace: ${ns} }"
-  echo "spec:"
-  echo "  files:"
-  local f
-  for f in main.libsonnet lib/*.libsonnet workloads/tik/*.libsonnet workloads/tik/version.txt; do
-    echo "    \"github.com/metio/kurly/${f}\": |"
-    sed 's/^/      /' "$f"
-  done
-}
-emit_kurly_library | kubectl apply --server-side --force-conflicts --namespace="$ns" --filename=-
+echo "== kurly + workload through the OCIRepository path (branch-built images) =="
+# The prime consumption path: build THIS branch's library and tik images, push
+# them to the in-cluster registry, and let Flux pull them as OCIRepositories —
+# so the image packaging is proven here, not only at release. The library and the
+# workload are separate images (only the tik snippet imports the workload; the
+# migration-ladder snippet needs the library alone).
+kurly::install_registry
+kurly::publish_images tik
+kurly::emit_oci_library "$ns" kurly kurly
+kurly::emit_oci_library "$ns" kurly-tik kurly-tik
 
-echo "== wait for the k8s-libsonnet OCI source to advertise an artifact =="
-ok=false
-for _ in $(seq 1 60); do
-  [ -n "$(kubectl --namespace="$ns" get ocirepository/k8s-libsonnet -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
-    && { ok=true; break; }
-  sleep 3
-done
-[ "$ok" = true ] || fail "ocirepository/k8s-libsonnet never advertised an artifact"
+echo "== wait for every OCI source to advertise an artifact =="
+kurly::wait_ocirepository "$ns" k8s-libsonnet
+kurly::wait_ocirepository "$ns" kurly
+kurly::wait_ocirepository "$ns" kurly-tik
 
 # ---------------------------------------------------------------------------
 # Phase 1 — BASELINE: the first install runs no migrations

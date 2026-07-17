@@ -122,6 +122,7 @@ spec:
         }
   libraries:
     - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: kurly-cnpg-image-catalog }
     - { kind: JsonnetLibrary, name: k8s-libsonnet }
   tlas:
     - name: image
@@ -172,6 +173,7 @@ spec:
       }
   libraries:
     - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: kurly-cnpg-cluster }
     - { kind: JsonnetLibrary, name: k8s-libsonnet }
 EOF
 }
@@ -312,31 +314,23 @@ spec:
   sourceRef: { kind: OCIRepository, name: k8s-libsonnet }
 EOF
 
-echo "== kurly as an inline vendor-keyed JsonnetLibrary (the checked-out branch) =="
-emit_kurly_library() {
-  echo "apiVersion: jaas.metio.wtf/v1"
-  echo "kind: JsonnetLibrary"
-  echo "metadata: { name: kurly, namespace: ${ns} }"
-  echo "spec:"
-  echo "  files:"
-  local f
-  for f in main.libsonnet lib/*.libsonnet \
-    workloads/cnpg-cluster/*.libsonnet workloads/cnpg-cluster/version.txt \
-    workloads/cnpg-image-catalog/*.libsonnet workloads/cnpg-image-catalog/version.txt; do
-    echo "    \"github.com/metio/kurly/${f}\": |"
-    sed 's/^/      /' "$f"
-  done
-}
-emit_kurly_library | kubectl apply --server-side --force-conflicts --namespace="$ns" --filename=-
+echo "== kurly + workloads through the OCIRepository path (branch-built images) =="
+# The prime consumption path: build THIS branch's library and both cnpg workload
+# images, push them to the in-cluster registry, and let Flux pull them as
+# OCIRepositories — so the image packaging is proven here, not only at release.
+# Each snippet imports only its own workload (the catalog snippet the image
+# catalog, the cluster snippet the cluster), so each references just that one.
+kurly::install_registry
+kurly::publish_images cnpg-cluster cnpg-image-catalog
+kurly::emit_oci_library "$ns" kurly kurly
+kurly::emit_oci_library "$ns" kurly-cnpg-cluster kurly-cnpg-cluster
+kurly::emit_oci_library "$ns" kurly-cnpg-image-catalog kurly-cnpg-image-catalog
 
-echo "== wait for the k8s-libsonnet OCI source to advertise an artifact =="
-ok=false
-for _ in $(seq 1 60); do
-  [ -n "$(kubectl --namespace="$ns" get ocirepository/k8s-libsonnet -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
-    && { ok=true; break; }
-  sleep 3
-done
-[ "$ok" = true ] || fail "ocirepository/k8s-libsonnet never advertised an artifact"
+echo "== wait for every OCI source to advertise an artifact =="
+kurly::wait_ocirepository "$ns" k8s-libsonnet
+kurly::wait_ocirepository "$ns" kurly
+kurly::wait_ocirepository "$ns" kurly-cnpg-cluster
+kurly::wait_ocirepository "$ns" kurly-cnpg-image-catalog
 
 # ---------------------------------------------------------------------------
 # Phase 1 — install: catalog first, then the clusters that pin it
