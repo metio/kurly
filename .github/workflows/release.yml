@@ -169,11 +169,15 @@ jobs:
         # lib/ passes the count check but fails the first `import './lib/…'` — so
         # this render, not the count, is what proves the artifact is consumable.
         run: |
-          docker build --file Containerfile --tag kurly-verify:latest .
+          set -euo pipefail
+          docker buildx build --load --file Containerfile --tag kurly-verify:latest .
           n=$(docker image inspect kurly-verify:latest --format '{{ len .RootFS.Layers }}')
           [ "$n" = "1" ] || { echo "::error::kurly image has $n layers, expected 1"; exit 1; }
           tree="$(mktemp -d)"
-          cid="$(docker create kurly-verify:latest)"
+          # A FROM-scratch image carries no command, and `docker create` rejects
+          # that ("No command specified") — pass a throwaway one; it is never run,
+          # the container exists only to export its filesystem.
+          cid="$(docker create kurly-verify:latest /nonexistent)"
           docker export "$cid" | tar -xf - -C "$tree"
           docker rm "$cid" >/dev/null
           # k8s-libsonnet is not in the image (JaaS supplies it); vendor it here
@@ -267,12 +271,16 @@ jobs:
         # carry this run's version — proof the stamp above reached the image.
         run: |
           set -euo pipefail
-          docker build --file workload.Containerfile --build-arg "WORKLOAD=$WORKLOAD" --tag kurly-wl-verify:latest .
+          docker buildx build --load --file workload.Containerfile --build-arg "WORKLOAD=$WORKLOAD" --tag kurly-wl-verify:latest .
           n="$(docker image inspect kurly-wl-verify:latest --format '{{ len .RootFS.Layers }}')"
           [ "$n" = "1" ] || { echo "::error::workload image has $n layers, expected 1"; exit 1; }
-          cid="$(docker create kurly-wl-verify:latest)"
-          stamped="$(docker export "$cid" | tar -xO "github.com/metio/kurly/workloads/$WORKLOAD/version.txt" | tr -d '[:space:]')"
+          tree="$(mktemp -d)"
+          # A FROM-scratch image has no command; `docker create` needs one named
+          # (never run — the container only exists to export its filesystem).
+          cid="$(docker create kurly-wl-verify:latest /nonexistent)"
+          docker export "$cid" | tar -xf - -C "$tree"
           docker rm "$cid" >/dev/null
+          stamped="$(tr -d '[:space:]' < "$tree/github.com/metio/kurly/workloads/$WORKLOAD/version.txt")"
           [ "$stamped" = "$VERSION" ] || { echo "::error::workload image version.txt is '$stamped', expected '$VERSION'"; exit 1; }
       - id: build
         name: Build, push and sign the image
