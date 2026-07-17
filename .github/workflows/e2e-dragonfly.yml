@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for dragonfly. Dragonfly runs one io thread per core it can
+# see — the node's, not the pod's CPU limit — and exits at startup unless
+# maxmemory covers 256MiB per thread, so an unpinned instance on a many-core node
+# is absent rather than slow. The render gates assert the arithmetic; only a
+# cluster shows that the pinned configuration comes up on a node with more cores
+# than the pod may use. The scenario also round-trips RESP, which is what makes
+# the workload swappable with valkey for a consumer that holds an endpoint.
+# Self-gates on a diff scoped to this workload plus the shared library.
+name: E2E dragonfly
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  dragonfly:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: dragonfly
+      paths: '^(workloads/dragonfly/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-dragonfly)\.sh|\.github/workflows/e2e(-dragonfly)?\.yml)'
+      scenario: hack/smoke/scenario-dragonfly.sh
