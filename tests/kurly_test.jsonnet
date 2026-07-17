@@ -821,4 +821,39 @@ local podOf(app) = app.deployment.spec.template.spec;
     [f for f in ['affinity', 'topologySpreadConstraints', 'priorityClassName', 'schedulerName'] if std.objectHas(spec, f)],
     []
   ),
+  // Several CSI drivers take their configuration through PVC annotations and
+  // nothing else, so a dropped annotation provisions a DIFFERENT volume rather
+  // than the same one with less decoration. The stateful path used to stop them
+  // at the volumeClaimTemplate while the Deployment path carried them through.
+  store_annotations_reach_a_volume_claim_template: std.assertEqual(
+    (kurly.stateful('s', 'img:1') + kurly.store('/data', '5Gi', annotations={ 'ebs.csi.aws.com/iops': '3000' }))
+    .statefulset.spec.volumeClaimTemplates[0].metadata,
+    { name: 'store', annotations: { 'ebs.csi.aws.com/iops': '3000' } }
+  ),
+  // A volumeClaimTemplate is immutable, so a store with no annotations must
+  // render exactly as before or every stateful workload already running would
+  // fail its next apply.
+  a_plain_volume_claim_template_is_unchanged: std.assertEqual(
+    (kurly.stateful('s', 'img:1') + kurly.store('/data', '5Gi'))
+    .statefulset.spec.volumeClaimTemplates[0].metadata,
+    { name: 'store' }
+  ),
+  // Kubernetes keys a pod's volumes by name and a container's mounts by path, so
+  // re-declaring one the workload already has must override it — not collide
+  // with it, which the apiserver rejects outright and no consumer can work
+  // around short of forking the recipe.
+  re_declaring_a_scratch_overrides_it: std.assertEqual(
+    local pod = (kurly.worker('w', 'img:1') + kurly.scratch('/gen', '64Mi') + kurly.scratch('/gen', '256Mi'))
+                .deployment.spec.template.spec;
+    [std.length(pod.volumes), pod.volumes[0].emptyDir.sizeLimit, std.length(pod.containers[0].volumeMounts)],
+    [1, '256Mi', 1]
+  ),
+  // One Secret at two paths is one volume and two mounts — the additive case the
+  // dedupe must not eat.
+  one_secret_at_two_paths_is_one_volume: std.assertEqual(
+    local pod = (kurly.worker('w', 'img:1') + kurly.secretMount('s', '/a') + kurly.secretMount('s', '/b'))
+                .deployment.spec.template.spec;
+    [[v.name for v in pod.volumes], [m.mountPath for m in pod.containers[0].volumeMounts]],
+    [['s'], ['/a', '/b']]
+  ),
 }

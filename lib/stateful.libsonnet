@@ -36,7 +36,18 @@ function(name, image)
       local volumeClaimTemplates =
         if cfg.store == null then []
         else [{
-          metadata: { name: 'store' },
+          // Annotations reach the claim here exactly as they do on the Deployment
+          // path: several CSI drivers take their configuration through PVC
+          // annotations alone, so losing them provisions a different volume
+          // rather than the same one with less decoration.
+          //
+          // Labels are deliberately NOT added, unlike the Deployment path. A
+          // StatefulSet's volumeClaimTemplates are immutable, so emitting labels
+          // would change the template of every stateful workload already running
+          // and make the next `kubectl apply` fail — a breaking change bought
+          // for decoration. Annotations only change the template of a consumer
+          // who asked for them, and who is getting nothing today.
+          metadata: { name: 'store' } + base.storeAnnotations(cfg.store),
           spec: std.prune({
             accessModes: cfg.store.accessModes,
             resources: { requests: { storage: cfg.store.size } },

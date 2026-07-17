@@ -16,11 +16,15 @@ local volumeName(path) = std.strReplace(std.lstripChars(path, '/'), '/', '-');
 // The PersistentVolumeClaim backing a store, and the ConfigMap holding a
 // workload's config files, are written as plain manifests (like the expose
 // recipes) so the render-time dependency closure stays at k8s-libsonnet alone.
+// The annotations a store's PVC carries. Several CSI drivers are configured
+// through PVC annotations and nothing else, so dropping them does not degrade a
+// volume — it provisions a different one.
+local storeAnnotations(spec) = if spec.annotations == {} then {} else { annotations: spec.annotations };
+
 local pvcManifest(name, spec, labels) = {
   apiVersion: 'v1',
   kind: 'PersistentVolumeClaim',
-  metadata: { name: name, labels: labels }
-            + (if spec.annotations == {} then {} else { annotations: spec.annotations }),
+  metadata: { name: name, labels: labels } + storeAnnotations(spec),
   spec: {
           accessModes: spec.accessModes,
           resources: { requests: { storage: spec.size } },
@@ -134,6 +138,20 @@ local rbacManifests(name, spec, labels, account, mint, accountAnnotations) =
     },
   ];
 
+// Keeps the LAST entry per key, dropping earlier ones — the list form of kurly's
+// late binding, where a later compose wins. Kubernetes constrains these lists
+// itself (a pod's volumes are unique by name, a container's mounts unique by
+// mountPath), so without this a consumer re-declaring a mount the workload
+// already has produces a duplicate the apiserver rejects outright, with no way
+// to adapt it short of forking the recipe.
+local dedupeLast(items, key) =
+  local n = std.length(items);
+  [
+    items[i]
+    for i in std.range(0, n - 1)
+    if !std.member([key(items[j]) for j in std.range(i + 1, n - 1)], key(items[i]))
+  ];
+
 // The exclusion groups a config has composed conflicting members into: a map
 // of group name -> the feature names that claimed it. A group with more than
 // one distinct member is a composition error (e.g. two exposure recipes).
@@ -144,6 +162,11 @@ local exclusionConflicts(exclusive) = [
 ];
 
 {
+  // Exposed so the StatefulSet path renders a store's PVC metadata by the same
+  // rule as the Deployment path — the two drifted, and the annotations silently
+  // stopped at the volumeClaimTemplate.
+  storeAnnotations:: storeAnnotations,
+
   // core carries everything common to all workload kinds.
   core(name, image):: {
     // Late-bound handle on the composed app object, for fields whose value is
@@ -301,29 +324,39 @@ local exclusionConflicts(exclusive) = [
     local storeName = this.config.name + '-store',
     local configName = this.config.name + '-config',
 
+    // Mounts are unique per mountPath, so re-declaring one the workload already
+    // has overrides it rather than colliding with it. Mounting the same Secret at
+    // two paths still yields two mounts, which is what Kubernetes wants.
     volumeMounts::
       local cfg = this.config;
-      (if cfg.store == null then [] else [{ name: 'store', mountPath: cfg.store.mountPath }])
-      + (if cfg.configFiles == null then [] else [{ name: 'config', mountPath: cfg.configFiles.mountPath, readOnly: true }])
-      + [{ name: m.secretName, mountPath: m.mountPath, readOnly: m.readOnly } for m in cfg.secretMounts]
-      + [{ name: volumeName(s.mountPath), mountPath: s.mountPath } for s in cfg.scratch],
+      dedupeLast(
+        (if cfg.store == null then [] else [{ name: 'store', mountPath: cfg.store.mountPath }])
+        + (if cfg.configFiles == null then [] else [{ name: 'config', mountPath: cfg.configFiles.mountPath, readOnly: true }])
+        + [{ name: m.secretName, mountPath: m.mountPath, readOnly: m.readOnly } for m in cfg.secretMounts]
+        + [{ name: volumeName(s.mountPath), mountPath: s.mountPath } for s in cfg.scratch],
+        function(m) m.mountPath
+      ),
 
+    // Volumes are unique per name, for the same reason.
     volumes::
       local cfg = this.config;
-      (if cfg.store == null then [] else [{ name: 'store', persistentVolumeClaim: { claimName: storeName } }])
-      + (if cfg.configFiles == null then [] else [{ name: 'config', configMap: { name: configName } }])
-      + [
-        { name: m.secretName, secret: std.prune({
-          secretName: m.secretName,
-          optional: if m.optional then true else null,
-          defaultMode: m.defaultMode,
-        }) }
-        for m in cfg.secretMounts
-      ]
-      + [
-        { name: volumeName(s.mountPath), emptyDir: (if s.sizeLimit == null then {} else { sizeLimit: s.sizeLimit }) }
-        for s in cfg.scratch
-      ],
+      dedupeLast(
+        (if cfg.store == null then [] else [{ name: 'store', persistentVolumeClaim: { claimName: storeName } }])
+        + (if cfg.configFiles == null then [] else [{ name: 'config', configMap: { name: configName } }])
+        + [
+          { name: m.secretName, secret: std.prune({
+            secretName: m.secretName,
+            optional: if m.optional then true else null,
+            defaultMode: m.defaultMode,
+          }) }
+          for m in cfg.secretMounts
+        ]
+        + [
+          { name: volumeName(s.mountPath), emptyDir: (if s.sizeLimit == null then {} else { sizeLimit: s.sizeLimit }) }
+          for s in cfg.scratch
+        ],
+        function(v) v.name
+      ),
 
     // The manifests a workload owns beyond its pod controller, exposed as named
     // handles so an author can place each into a stage: the store's PVC and the
