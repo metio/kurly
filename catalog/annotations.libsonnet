@@ -302,6 +302,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('database', d.T.string, default='app'),
           d.arg('labels', d.T.object, default={}, example={ team: 'payments' }),
           d.arg('annotations', d.T.object, default={}),
+          d.arg('affinity', d.T.object, example={ nodeSelector: { workload: 'database' }, podAntiAffinityType: 'required' }),
+          d.arg('topologySpreadConstraints', d.T.array, default=[]),
+          d.arg('priorityClassName', d.T.string),
         ]) + {
           kind: 'cnpg',
           importPath: 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',

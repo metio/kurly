@@ -47,6 +47,40 @@ kurly.list(cnpg(
 | `enablePodMonitor` | `true` | a PodMonitor for the Prometheus Operator |
 | `imagePullSecrets` | `[]` | names of existing Secrets the operator pulls PostgreSQL with |
 | `labels` / `annotations` | `{}` | applied to the Cluster and inherited by every object it generates, pods included |
+| `affinity` | — | CNPG's own affinity schema, passed verbatim (see below) |
+| `topologySpreadConstraints` | `[]` | passed verbatim |
+| `priorityClassName` / `schedulerName` | — | |
+
+## Placement
+
+Databases usually live on their own nodes, behind a taint that keeps everything
+else off. That is the cluster's business, so it is passed through rather than
+modelled:
+
+```jsonnet
+cnpg(
+  name='orders-db',
+  affinity={
+    nodeSelector: { workload: 'database' },
+    tolerations: [{ key: 'dedicated', operator: 'Equal', value: 'database', effect: 'NoSchedule' }],
+    podAntiAffinityType: 'required',
+    topologyKey: 'topology.kubernetes.io/zone',
+  },
+  priorityClassName='database-critical',
+)
+```
+
+`affinity` is **CNPG's** schema, not Kubernetes' — it carries `nodeSelector`,
+`tolerations`, `podAntiAffinityType`, `topologyKey` and
+`additionalPodAffinity`/`additionalPodAntiAffinity` — so consult the
+[CNPG API reference](https://cloudnative-pg.io/docs/current/cloudnative-pg.v1/#postgresql-cnpg-io-v1-AffinityConfiguration)
+for the fields. kurly passes it verbatim rather than mirroring it, because a
+second-hand copy drifts against the operator's and lies about what it accepts.
+
+**`instances: 3` alone does not survive a node loss.** CNPG's anti-affinity is
+`preferred` unless told otherwise, so nothing stops all three instances landing
+on one node. `podAntiAffinityType: 'required'` makes it a rule — at the price of
+instances staying Pending when no node satisfies it.
 
 ## Labelling the PostgreSQL pods
 

@@ -798,4 +798,27 @@ local podOf(app) = app.deployment.spec.template.spec;
     ],
     ['gvisor', false]
   ),
+  // Placement reaches a CNPG Cluster verbatim: `affinity` is CNPG's own schema,
+  // not Kubernetes', so kurly passes it through rather than modelling a foreign
+  // API it would only drift against.
+  cnpg_cluster_takes_placement_verbatim: std.assertEqual(
+    (import '../workloads/cnpg-cluster/cluster.libsonnet')(
+      affinity={ nodeSelector: { workload: 'database' }, podAntiAffinityType: 'required' },
+      priorityClassName='database-critical',
+      topologySpreadConstraints=[{ maxSkew: 1, topologyKey: 'topology.kubernetes.io/zone', whenUnsatisfiable: 'DoNotSchedule' }],
+      schedulerName='custom',
+    ).cluster.spec,
+    (import '../workloads/cnpg-cluster/cluster.libsonnet')().cluster.spec {
+      affinity: { nodeSelector: { workload: 'database' }, podAntiAffinityType: 'required' },
+      priorityClassName: 'database-critical',
+      topologySpreadConstraints: [{ maxSkew: 1, topologyKey: 'topology.kubernetes.io/zone', whenUnsatisfiable: 'DoNotSchedule' }],
+      schedulerName: 'custom',
+    }
+  ),
+  // Unset, none of it is emitted.
+  cnpg_cluster_prunes_absent_placement: std.assertEqual(
+    local spec = (import '../workloads/cnpg-cluster/cluster.libsonnet')().cluster.spec;
+    [f for f in ['affinity', 'topologySpreadConstraints', 'priorityClassName', 'schedulerName'] if std.objectHas(spec, f)],
+    []
+  ),
 }

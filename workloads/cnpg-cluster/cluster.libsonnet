@@ -41,6 +41,10 @@ function(
   imagePullSecrets=[],
   labels={},
   annotations={},
+  affinity=null,
+  topologySpreadConstraints=[],
+  priorityClassName=null,
+  schedulerName=null,
 )
   // CNPG resolves the image from exactly one source. Naming both is a config
   // error the operator rejects, so fail the render instead of the apply.
@@ -118,8 +122,12 @@ function(
             annotations: (if annotations == {} then null else annotations),
           })
         ),
-        // Three instances give one primary and two hot-standby replicas, so a
-        // single node loss keeps the cluster writable.
+        // Three instances give one primary and two hot-standby replicas. Whether
+        // a node loss actually costs one of them is a scheduling question, not a
+        // count: CNPG's pod anti-affinity is 'preferred' unless told otherwise,
+        // so nothing stops all three landing on one node. Pass
+        // affinity={ podAntiAffinityType: 'required' } to make it a rule — at
+        // the price of instances staying Pending when no node satisfies it.
         instances: instances,
         // null lets the operator pick the PostgreSQL image matching its version.
         imageName: imageName,
@@ -164,6 +172,20 @@ function(
         resources: resources,
         // A PodMonitor for the Prometheus Operator, on by default.
         monitoring: (if enablePodMonitor then { enablePodMonitor: true } else null),
+        // Placement is the cluster's business — which nodes carry databases,
+        // what taints keep everything else off them, which zones exist — and a
+        // Cluster that cannot express it does not land on a dedicated node pool
+        // at all.
+        //
+        // Passed VERBATIM: `affinity` here is CNPG's own schema (nodeSelector,
+        // tolerations, podAntiAffinityType, topologyKey, additionalPodAffinity),
+        // not Kubernetes' affinity, and kurly does not model foreign APIs — a
+        // second-hand copy would drift against the operator's and lie about what
+        // it accepts. See the CNPG API reference for the fields.
+        affinity: affinity,
+        topologySpreadConstraints: (if topologySpreadConstraints == [] then null else topologySpreadConstraints),
+        priorityClassName: priorityClassName,
+        schedulerName: schedulerName,
         // The operator pulls PostgreSQL itself, so the pull secrets belong to
         // the Cluster: kurly.imagePullSecrets() is a pod-level feature and there
         // is no pod here to attach it to. Without this a cluster on a private

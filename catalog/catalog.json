@@ -1631,6 +1631,27 @@
                      "name": "annotations",
                      "required": false,
                      "type": "object"
+                  },
+                  {
+                     "example": {
+                        "nodeSelector": {
+                           "workload": "database"
+                        },
+                        "podAntiAffinityType": "required"
+                     },
+                     "name": "affinity",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "topologySpreadConstraints",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "priorityClassName",
+                     "required": false,
+                     "type": "string"
                   }
                ],
                "help": "The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind). Point it at a cnpg-image-catalog with catalog/major to keep the image choice in one place, or pin imageName directly; the two are mutually exclusive.",
