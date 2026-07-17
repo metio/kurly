@@ -53,23 +53,30 @@ echo "exposure exclusion assert fired as expected"
 # rule — those carry their own params and their own assertions in the suite.
 echo "== every workload's pods accept labels and annotations =="
 for stage in workloads/*/*.libsonnet; do
+  # Decide the shape BEFORE composing anything: a custom-resource workload now
+  # REJECTS a composed feature (it would silently do nothing), so composing one
+  # here to find out would fail for the right reason and look like the wrong one.
+  default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
+    || { echo "::error::${stage}: does not render" >&2; exit 1; }
+  templates="$(printf '%s' "$default" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec")))] | length')"
+  if [ "$templates" = "0" ]; then
+    echo "no pod template in $stage (a custom resource) — its own params carry pod metadata"
+    continue
+  fi
+
   rendered="$(
-    jsonnet -J vendor -e       "local k = import 'github.com/metio/kurly/main.libsonnet';
+    jsonnet -J vendor -e \
+      "local k = import 'github.com/metio/kurly/main.libsonnet';
        k.list((import '${stage}')()
          + k.podLabels({ 'kurly.test/label': 'set' })
          + k.podAnnotations({ 'kurly.test/annotation': 'set' }))"
   )" || { echo "::error::${stage}: failed to render with podLabels/podAnnotations" >&2; exit 1; }
 
-  templates="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec"))) | .template.metadata]')"
-  count="$(printf '%s' "$templates" | jq 'length')"
-  if [ "$count" = "0" ]; then
-    echo "no pod template in $stage (a custom resource) — its own params carry pod metadata"
-    continue
-  fi
-  missing="$(printf '%s' "$templates" | jq -r '[.[] | select((.labels["kurly.test/label"] != "set") or (.annotations["kurly.test/annotation"] != "set"))] | length')"
+  metas="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec"))) | .template.metadata]')"
+  count="$(printf '%s' "$metas" | jq 'length')"
+  missing="$(printf '%s' "$metas" | jq -r '[.[] | select((.labels["kurly.test/label"] != "set") or (.annotations["kurly.test/annotation"] != "set"))] | length')"
   if [ "$missing" != "0" ]; then
     echo "::error::${stage}: ${missing} of ${count} pod template(s) dropped podLabels/podAnnotations" >&2
-    printf '%s' "$templates" | jq . >&2
     exit 1
   fi
   echo "pod labels and annotations reach every pod template in $stage"
@@ -118,6 +125,32 @@ for stage in workloads/*/*.libsonnet; do
   echo "storage class is settable in $stage"
 done
 
+# A workload that renders no pod template authors a custom resource, and a kurly
+# feature composed onto one CANNOT work: features write a hidden config that a
+# BASE KIND reads, and there is no base here. Left alone that renders cleanly and
+# does nothing — a green render and a cluster that behaves differently from the
+# source, which is the worst failure this library has. Such a stage must reject a
+# composed feature outright, while still honouring its own params and the raw `+`
+# escape hatch (which touches no config).
+echo "== custom-resource workloads reject features instead of swallowing them =="
+for stage in workloads/*/*.libsonnet; do
+  rendered="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
+    || { echo "::error::${stage}: does not render" >&2; exit 1; }
+  templates="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec")))] | length')"
+  [ "$templates" = "0" ] || continue   # a pod workload: features are its business
+
+  if jsonnet -J vendor -e \
+      "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')() + k.podLabels({ 'kurly.test/label': 'set' }))" >/dev/null 2>&1; then
+    echo "::error::${stage}: renders no pod template, yet accepted kurly.podLabels() — the feature silently does nothing here; assert against a composed config instead" >&2
+    exit 1
+  fi
+  # The escape hatch patches the resource itself and must keep working.
+  jsonnet -J vendor -e \
+    "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')() + { kurlyTestProbe:: true })" >/dev/null 2>&1 \
+    || { echo "::error::${stage}: rejects the raw + escape hatch, which touches no config" >&2; exit 1; }
+  echo "features are rejected (and params/raw + still work) in $stage"
+done
+
 # Every container in a workload's pod must follow the composed uid — not just the
 # one the recipe thinks of as its own. A uid written as a literal into an
 # initContainer or a sidecar is beyond the reach of kurly.runAs() and the
@@ -130,6 +163,16 @@ done
 # its own choosing. Glob-driven, so a workload added tomorrow is covered.
 echo "== every container follows the composed uid =="
 for stage in workloads/*/*.libsonnet; do
+  # A custom-resource workload rejects a composed feature on purpose (it would
+  # otherwise vanish), and its containers are the operator's to create, so there
+  # is no uid here to follow. Decide the shape before composing.
+  default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
+    || { echo "::error::${stage}: does not render" >&2; exit 1; }
+  if [ "$(printf '%s' "$default" | jq '[.. | objects | select(has("containers"))] | length')" = "0" ]; then
+    echo "no containers in $stage (a custom resource) — the operator creates them"
+    continue
+  fi
+
   rendered="$(jsonnet -J vendor -e \
     "local k = import 'github.com/metio/kurly/main.libsonnet';
      k.list((import '${stage}')() + k.runAs(1000700000))")" || {
@@ -144,8 +187,6 @@ for stage in workloads/*/*.libsonnet; do
     echo "::error::${stage}: container(s) keep a uid of their own after kurly.runAs(): ${strays}" >&2
     exit 1
   fi
-  # A stage rendering no containers at all (a custom resource) has nothing to say
-  # here; it is covered by its own params.
   echo "every container follows the composed uid in $stage"
 done
 

@@ -744,4 +744,15 @@ local podOf(app) = app.deployment.spec.template.spec;
     ),
     false
   ),
+  // Composing a feature onto a custom-resource workload cannot work: features
+  // write a hidden config that a BASE KIND reads, and there is no base here. It
+  // used to render cleanly and drop the labels — a green render and a cluster
+  // that behaves differently from the source. Now it fails, and the raw `+`
+  // escape hatch (which touches no config) still patches the resource.
+  cnpg_cluster_takes_the_raw_escape_hatch: std.assertEqual(
+    ((import '../workloads/cnpg-cluster/cluster.libsonnet')()
+     + { cluster+: { spec+: { nodeMaintenanceWindow: { inProgress: false } } } })
+    .cluster.spec.nodeMaintenanceWindow,
+    { inProgress: false }
+  ),
 }

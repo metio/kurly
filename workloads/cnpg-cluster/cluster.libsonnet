@@ -79,6 +79,22 @@ function(
          + 'Limits: ' + std.toString({ [k]: limits[k] for k in hugeLimits })
          + ', requests: ' + std.toString({ [k]: requests[k] for k in hugeRequests });
   {
+
+    // A kurly feature composed onto this workload cannot work, and the failure is
+    // invisible: features contribute to a hidden `config` that a BASE KIND reads
+    // when it computes its manifests, and this workload has no base — it authors
+    // a custom resource whose pods belong to an operator. So
+    // `cnpg-cluster() + kurly.podLabels({…})` renders cleanly, exit 0, and the labels
+    // are simply gone. That is the worst outcome available: a clean render and a
+    // cluster that behaves differently than the source says.
+    //
+    // The presence of `config` is exactly the fingerprint of a composed feature,
+    // so the render fails and names the parameters that do work. The raw `+`
+    // escape hatch still patches the resource itself, since that touches no
+    // config.
+    assert !std.objectHasAll(self, 'config') :
+           'cnpg-cluster: kurly features do not apply to a custom resource — they write a config that no base reads here, so composing one would silently do nothing. '
+           + "Use this workload's own parameters instead (labels/annotations for pod metadata, imagePullSecrets, resources, storageClass), which are wired to the fields the operator honours.",
     cluster: {
       apiVersion: 'postgresql.cnpg.io/v1',
       kind: 'Cluster',
