@@ -27,6 +27,7 @@ on:
     branches: [main]
     paths:
       - '*.libsonnet'
+      - 'lib/**'
       - Containerfile
       - 'workloads/**'
       # A workload README is documentation, not shipped in the source artifact,
@@ -100,7 +101,10 @@ jobs:
               workloads="$(all_workloads)"
             else
               diff="$(git diff --name-only "$BEFORE" "$SHA")"
-              echo "$diff" | grep -qE '^([^/]+\.libsonnet|Containerfile)$' && library=true
+              # The library unit is main.libsonnet plus the recipe modules under
+              # lib/ (and its Containerfile). Matching only root-level *.libsonnet
+              # would miss every lib/ change and silently skip a library release.
+              echo "$diff" | grep -qE '^([^/]+\.libsonnet|lib/.*\.libsonnet|Containerfile)$' && library=true
               # A README-only change to a workload is not a release (the README
               # is docs, not part of the shipped source artifact). And only a
               # workload whose directory still EXISTS is releasable — a DELETED
@@ -146,15 +150,33 @@ jobs:
         with:
           fetch-depth: 0
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
-      - name: Assert exactly one layer
+      - name: Assert single layer and render from the built image
         # Single layer is the library-image contract: it serves as both an
         # image-volume mount and a Flux OCIRepository source without a
         # layerSelector. (Workload source images are single-layer for the same
         # reason — see the workload job below.)
+        #
+        # And the layer must carry the WHOLE library, not just main.libsonnet:
+        # render kurly.http straight out of the image's own tree, with
+        # k8s-libsonnet supplied separately the way JaaS does. A layer missing
+        # lib/ passes the count check but fails the first `import './lib/…'` — so
+        # this render, not the count, is what proves the artifact is consumable.
         run: |
           docker build --file Containerfile --tag kurly-verify:latest .
           n=$(docker image inspect kurly-verify:latest --format '{{ len .RootFS.Layers }}')
           [ "$n" = "1" ] || { echo "::error::kurly image has $n layers, expected 1"; exit 1; }
+          tree="$(mktemp -d)"
+          cid="$(docker create kurly-verify:latest)"
+          docker export "$cid" | tar -xf - -C "$tree"
+          docker rm "$cid" >/dev/null
+          # k8s-libsonnet is not in the image (JaaS supplies it); vendor it here
+          # and drop just its tree beside the extracted library.
+          nix develop --command jb install
+          cp -r vendor/github.com/jsonnet-libs "$tree/github.com/"
+          kind="$(nix develop --command jsonnet -J "$tree" -e \
+            "local kurly = import 'github.com/metio/kurly/main.libsonnet'; kurly.list(kurly.http('probe', 'img:1')).items[0].kind")"
+          [ "$kind" = '"Deployment"' ] || { echo "::error::library image did not render kurly.http (got: $kind) — the layer is missing lib/"; exit 1; }
+          echo "library image renders kurly.http from its own tree"
       - name: Build, push and sign the image
         uses: metio/ci/container-release@749a4d81adf23ed252c309fa8bd94aec0e6b03c7 # 2026.7.15145237
         with:
@@ -175,7 +197,7 @@ jobs:
           previous: ${{ steps.prev.outputs.prev }}
           # Path-scoped notes since this unit's last tag; tag-pattern keeps
           # another unit's tag inside the range from splitting the notes.
-          include-paths: '*.libsonnet Containerfile'
+          include-paths: '*.libsonnet lib Containerfile'
           tag-pattern: ^library-
       - name: Tag and publish the GitHub Release
         env:
