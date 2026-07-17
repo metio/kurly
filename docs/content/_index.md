@@ -108,9 +108,26 @@ kurly.http('erp', 'ghcr.io/example/erp:5.4.1') + kurly.security.baseline
 ```
 
 A profile sets every security knob, so when several compose the last one
-wins. For single-knob adjustments the escape-hatch features — `kurly.rootUser`,
-`kurly.writableRootFilesystem`, `kurly.hostUsers` — each downgrade exactly one
-default; compose them *after* a profile to fine-tune it.
+wins. For single-knob adjustments the escape-hatch features each downgrade
+exactly one default; compose them *after* a profile to fine-tune it.
+
+| Hatch | What it relaxes | What to know |
+|---|---|---|
+| `kurly.rootUser` | drops `runAsNonRoot` | it does **not** set a uid — the container runs as the image's own `USER`. To pin uid 0 explicitly, add `kurly.runAs(0)`; `kurly.runAs(0)` on its own fails the render, because a zero uid under `runAsNonRoot` is a container the kubelet refuses to start. |
+| `kurly.writableRootFilesystem` | drops `readOnlyRootFilesystem` | the container may write anywhere in its image, not only into mounted volumes. |
+| `kurly.hostUsers` | drops `hostUsers: false` | the pod then shares the **host** user namespace — see the portability note below. |
+
+### The user-namespace default and where it doesn't run
+
+Every kind sets `hostUsers: false`, so a pod runs in its **own** user
+namespace: its root maps to an unprivileged host uid, and a container breakout
+lands as nobody on the node. This is the one hardening default that depends on
+the node. It needs a Linux node whose kernel and kubelet support user
+namespaces; a **Windows node cannot honour it**, and a cluster with the feature
+gate off rejects the field. On those nodes compose `kurly.hostUsers` to drop
+back to the shared namespace — the pod loses that isolation but schedules.
+`security.baseline` keeps `hostUsers: false`; only `security.privileged`, which
+emits no security fields at all, leaves it off without the hatch.
 
 ## Workloads
 

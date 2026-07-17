@@ -423,7 +423,7 @@
       {
          "args": [ ],
          "group": "security",
-         "help": "Shares the host user namespace (relaxes hostUsers=false).",
+         "help": "Shares the host user namespace instead of an own one — needed on Windows nodes and where user namespaces are unavailable (relaxes hostUsers=false).",
          "id": "hostUsers",
          "kinds": [
             "http",
@@ -1000,7 +1000,7 @@
       {
          "args": [ ],
          "group": "security",
-         "help": "Allows the container to run as root (relaxes runAsNonRoot).",
+         "help": "Drops runAsNonRoot so the container may run as the image USER; add runAs(0) to pin uid 0.",
          "id": "rootUser",
          "kinds": [
             "http",

@@ -188,9 +188,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('gid', d.T.int),
       d.arg('fsGroup', d.T.int),
     ]) + { kinds: allKinds, group: 'security' },
-    rootUser: d.fn('Allows the container to run as root (relaxes runAsNonRoot).', []) + { kinds: allKinds, group: 'security' },
+    rootUser: d.fn('Drops runAsNonRoot so the container may run as the image USER; add runAs(0) to pin uid 0.', []) + { kinds: allKinds, group: 'security' },
     writableRootFilesystem: d.fn('Makes the root filesystem writable (relaxes readOnlyRootFilesystem).', []) + { kinds: allKinds, group: 'security' },
-    hostUsers: d.fn('Shares the host user namespace (relaxes hostUsers=false).', []) + { kinds: allKinds, group: 'security' },
+    hostUsers: d.fn('Shares the host user namespace instead of an own one — needed on Windows nodes and where user namespaces are unavailable (relaxes hostUsers=false).', []) + { kinds: allKinds, group: 'security' },
 
     // Update strategy.
     strategy: d.fn('The Deployment update strategy.', [
