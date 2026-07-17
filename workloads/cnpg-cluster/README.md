@@ -46,6 +46,7 @@ kurly.list(cnpg(
 | `resources` | — | container requests/limits |
 | `enablePodMonitor` | `true` | a PodMonitor for the Prometheus Operator |
 | `imagePullSecrets` | `[]` | names of existing Secrets the operator pulls PostgreSQL with |
+| `serviceAccountAnnotations` | `{}` | annotations for the ServiceAccount the operator runs the cluster under — where cloud IAM for object-storage backups is wired (IRSA, GKE/Azure workload identity) |
 | `labels` / `annotations` | `{}` | applied to the Cluster and inherited by every object it generates, pods included |
 | `affinity` | — | CNPG's own affinity schema, passed verbatim (see below) |
 | `topologySpreadConstraints` | `[]` | passed verbatim |

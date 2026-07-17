@@ -177,6 +177,57 @@ for stage in workloads/*/*.libsonnet; do
   echo "every Service follows the composed IP families in $stage"
 done
 
+# Pod-level supplemental groups and name-resolution overrides must reach the pod
+# template of every kind — they are how a workload gets to shared-GID storage and
+# to names no cluster DNS serves, and a kind that quietly drops them leaves the
+# consumer's manifest saying one thing and the pod doing another. Custom-resource
+# workloads carry these through their own params (the operator owns the pod), so
+# they are exempt exactly where there is no pod template to check.
+echo "== supplementalGroups and dns reach every pod template =="
+for stage in workloads/*/*.libsonnet; do
+  # A custom-resource workload rejects composed features by design, and has no
+  # pod template to check — detect that from the default render and skip before
+  # composing anything onto it.
+  default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
+    || { echo "::error::${stage}: does not render" >&2; exit 1; }
+  if [ "$(printf '%s' "$default" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec")))] | length')" = "0" ]; then
+    echo "no pod template in $stage (a custom resource) — its own params carry pod fields"
+    continue
+  fi
+
+  rendered="$(jsonnet -J vendor -e \
+    "local k = import 'github.com/metio/kurly/main.libsonnet';
+     k.list((import '${stage}')()
+       + k.supplementalGroups([4242])
+       + k.dns(config={ nameservers: ['10.0.0.10'] }, hostAliases=[{ ip: '10.0.0.5', hostnames: ['db.internal'] }]))")" \
+    || { echo "::error::${stage}: failed to render with supplementalGroups/dns" >&2; exit 1; }
+  specs="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec"))) | .template.spec]')"
+  count="$(printf '%s' "$specs" | jq 'length')"
+  missing="$(printf '%s' "$specs" | jq -r '[.[] | select((.securityContext.supplementalGroups != [4242]) or (.dnsConfig.nameservers != ["10.0.0.10"]) or ((.hostAliases | length) != 1))] | length')"
+  if [ "$missing" != "0" ]; then
+    echo "::error::${stage}: ${missing} of ${count} pod template(s) dropped supplementalGroups/dns" >&2
+    exit 1
+  fi
+  echo "supplementalGroups and dns reach every pod template in $stage"
+done
+
+# CNPG runs the cluster's pods and backup jobs under a ServiceAccount it creates,
+# so the only way an IAM binding for object-storage backups reaches that account
+# is the operator's serviceAccountTemplate — the pod-level feature cannot. Prove
+# the cnpg-cluster param wires it, since a silent drop means backups fail to
+# authenticate at runtime, not at render.
+echo "== cnpg-cluster wires serviceAccountAnnotations to serviceAccountTemplate =="
+sat="$(jsonnet -J vendor -e \
+  "local k = import 'github.com/metio/kurly/main.libsonnet';
+   k.list((import 'workloads/cnpg-cluster/cluster.libsonnet')(
+     serviceAccountAnnotations={ 'eks.amazonaws.com/role-arn': 'arn:aws:iam::1:role/pg' }))" \
+  | jq -r '[.. | objects | select(.kind? == "Cluster") | .spec.serviceAccountTemplate.metadata.annotations["eks.amazonaws.com/role-arn"]][0]')"
+if [ "$sat" != "arn:aws:iam::1:role/pg" ]; then
+  echo "::error::cnpg-cluster: serviceAccountAnnotations did not reach spec.serviceAccountTemplate (got '${sat}')" >&2
+  exit 1
+fi
+echo "cnpg-cluster wires serviceAccountAnnotations to serviceAccountTemplate"
+
 # Every container in a workload's pod must follow the composed uid — not just the
 # one the recipe thinks of as its own. A uid written as a literal into an
 # initContainer or a sidecar is beyond the reach of kurly.runAs() and the
@@ -266,6 +317,13 @@ positive "runAs(0) + security.baseline" "$K k.list(k.worker('w', 'img:1') + k.ru
 positive "runAs(0) + security.privileged" "$K k.list(k.worker('w', 'img:1') + k.runAs(0) + k.security.privileged)"
 # An arbitrary high uid is what OpenShift assigns; it must never trip the guard.
 positive "an OpenShift-style arbitrary uid" "$K k.list(k.worker('w', 'img:1') + k.runAs(1000700000))"
+
+# dnsPolicy 'None' replaces resolv.conf wholesale, so a pod with no nameservers
+# of its own has no resolver at all — the apiserver rejects it.
+negative "dnsPolicy None with no nameservers" \
+  "$K k.list(k.worker('w', 'img:1') + k.dns(policy='None'))"
+positive "dnsPolicy None with its own nameservers" \
+  "$K k.list(k.worker('w', 'img:1') + k.dns(policy='None', config={ nameservers: ['10.0.0.10'] }))"
 
 # tik is one writer on one ReadWriteOnce volume; a second pod cannot attach it.
 negative "tik scaled past its single writer" \

@@ -39,6 +39,7 @@ function(
   resources=null,
   enablePodMonitor=true,
   imagePullSecrets=[],
+  serviceAccountAnnotations={},
   labels={},
   annotations={},
   affinity=null,
@@ -193,6 +194,18 @@ function(
         imagePullSecrets: (
           if imagePullSecrets == [] then null
           else [{ name: s } for s in imagePullSecrets]
+        ),
+        // The operator runs the cluster's pods and its backup jobs under a
+        // ServiceAccount it creates itself, so kurly.serviceAccountAnnotations()
+        // — a pod-level feature — cannot reach it, and there is no pod here to
+        // attach one to anyway. CNPG's serviceAccountTemplate is the operator's
+        // own hook: it stamps these annotations onto that account, which is how
+        // a cloud IAM binding (IRSA, GKE/Azure workload identity) reaches the
+        // backup path so WAL and base backups can write to object storage
+        // without static keys.
+        serviceAccountTemplate: (
+          if serviceAccountAnnotations == {} then null
+          else { metadata: { annotations: serviceAccountAnnotations } }
         ),
       }),
     },

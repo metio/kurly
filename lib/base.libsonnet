@@ -285,6 +285,13 @@ local exclusionConflicts(exclusive) = [
       // exist, and whether any is required, is the cluster's business — a
       // workload that cannot name one cannot run where sandboxing is mandatory.
       runtimeClassName: null,
+      // Pod name-resolution overrides, each omitted when unset. dnsPolicy picks
+      // the resolver source (e.g. 'None' to take resolv.conf entirely from
+      // dnsConfig); dnsConfig adds nameservers/searches/options; hostAliases
+      // writes extra /etc/hosts lines for names no DNS serves.
+      dnsPolicy: null,
+      dnsConfig: null,  // { nameservers, searches, options }
+      hostAliases: [],  // [ { ip, hostnames }, … ]
       // Owned manifests a feature adds beyond the pod controller (null/absent by
       // default). rbac additionally makes the pod run under the ServiceAccount it
       // creates (podServiceAccount below).
@@ -312,6 +319,10 @@ local exclusionConflicts(exclusive) = [
       runAsUser: null,
       runAsGroup: null,
       fsGroup: null,
+      // Extra group memberships every container in the pod carries, on top of
+      // its primary group — how a pod reaches storage owned by a fixed GID it
+      // does not run as (a shared NFS/CephFS export). Empty by default.
+      supplementalGroups: [],
       seccompProfile: 'RuntimeDefault',
       allowPrivilegeEscalation: false,
       dropAllCapabilities: true,
@@ -452,7 +463,8 @@ local exclusionConflicts(exclusive) = [
           if cfg.fsGroup == null
           then {}
           else { fsGroup: cfg.fsGroup, fsGroupChangePolicy: 'OnRootMismatch' }
-        );
+        )
+        + (if cfg.supplementalGroups == [] then {} else { supplementalGroups: cfg.supplementalGroups });
       (if securityContext == {} then {} else { securityContext: securityContext })
       + { automountServiceAccountToken: this.podServiceAccount != null }
       + (if cfg.hostUsers then {} else { hostUsers: false }),
@@ -499,6 +511,9 @@ local exclusionConflicts(exclusive) = [
         }
       )
       + (if cfg.terminationGracePeriodSeconds == null then {} else { terminationGracePeriodSeconds: cfg.terminationGracePeriodSeconds })
+      + (if cfg.dnsPolicy == null then {} else { dnsPolicy: cfg.dnsPolicy })
+      + (if cfg.dnsConfig == null then {} else { dnsConfig: cfg.dnsConfig })
+      + (if cfg.hostAliases == [] then {} else { hostAliases: cfg.hostAliases })
       + (if this.podServiceAccount == null then {} else { serviceAccountName: this.podServiceAccount }),
 
     // The volumes half of the pod template, kept alongside podSecurity so every

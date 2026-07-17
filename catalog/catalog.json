@@ -375,6 +375,53 @@
       {
          "args": [
             {
+               "example": "None",
+               "name": "policy",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "example": {
+                  "nameservers": [
+                     "10.0.0.10"
+                  ],
+                  "searches": [
+                     "corp.local"
+                  ]
+               },
+               "name": "config",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "example": [
+                  {
+                     "hostnames": [
+                        "db.internal"
+                     ],
+                     "ip": "10.0.0.5"
+                  }
+               ],
+               "name": "hostAliases",
+               "required": false,
+               "type": "array"
+            }
+         ],
+         "group": "container",
+         "help": "Pod name resolution: a resolver policy, extra nameservers/searches/options, and static /etc/hosts entries for names no DNS serves. dnsPolicy 'None' takes resolv.conf entirely from config, so it must bring its own nameservers — a render-time check enforces that.",
+         "id": "dns",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": {
                   "LOG_LEVEL": "info"
                },
@@ -1364,6 +1411,29 @@
       {
          "args": [
             {
+               "example": [
+                  2000
+               ],
+               "name": "groups",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "group": "security",
+         "help": "Extra group memberships for every container in the pod — how a pod reaches storage owned by a fixed GID it does not run as (a shared NFS/CephFS export). Distinct from fsGroup, which changes ownership of the pod's own volumes.",
+         "id": "supplementalGroups",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": 120,
                "name": "seconds",
                "required": true,
@@ -1804,6 +1874,14 @@
                      "name": "imagePullSecrets",
                      "required": false,
                      "type": "array"
+                  },
+                  {
+                     "example": {
+                        "eks.amazonaws.com/role-arn": "arn:aws:iam::123456789012:role/pg-backup"
+                     },
+                     "name": "serviceAccountAnnotations",
+                     "required": false,
+                     "type": "object"
                   },
                   {
                      "example": {

@@ -219,4 +219,28 @@ local resourcePresets = {
   rootUser():: { config+:: { runAsNonRoot: false } },
   writableRootFilesystem():: { config+:: { readOnlyRootFilesystem: false } },
   hostUsers():: { config+:: { hostUsers: true } },
+
+  // Extra group memberships for every container in the pod — the way to reach
+  // storage owned by a fixed GID the pod does not run as (a shared NFS/CephFS
+  // export whose files are group-owned). Distinct from fsGroup, which changes
+  // the ownership of the pod's OWN volumes; these grant access to groups that
+  // already exist.
+  supplementalGroups(groups):: { config+:: { supplementalGroups: groups } },
+
+  // Pod name resolution: a resolver policy, extra nameservers/searches/options,
+  // and static /etc/hosts entries for names no DNS serves. dnsPolicy 'None'
+  // replaces the pod's resolv.conf wholesale, so it MUST bring its own
+  // nameservers — the apiserver rejects the pod otherwise, which this catches at
+  // render.
+  dns(policy=null, config=null, hostAliases=[])::
+    assert policy != 'None' || (config != null && std.length(std.get(config, 'nameservers', [])) > 0) :
+           "kurly.dns: dnsPolicy 'None' needs config.nameservers — with no resolver the pod is rejected. "
+           + 'Pass config={ nameservers: [ … ] }, or use a different dnsPolicy.';
+    {
+      config+:: std.prune({
+        dnsPolicy: policy,
+        dnsConfig: config,
+        hostAliases: if hostAliases == [] then null else hostAliases,
+      }),
+    },
 }

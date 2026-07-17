@@ -892,6 +892,29 @@ local podOf(app) = app.deployment.spec.template.spec;
     std.objectHas(kurly.http('web', 'img:1').service.spec, 'ipFamilies'),
     false
   ),
+  // supplementalGroups grants access to groups that already own shared storage;
+  // it lands in the POD securityContext, alongside runAsNonRoot, not per-container.
+  supplemental_groups_reach_pod_security: std.assertEqual(
+    kurly.list(kurly.http('web', 'img:1') + kurly.supplementalGroups([2000, 3000]))
+    .items[0].spec.template.spec.securityContext.supplementalGroups,
+    [2000, 3000]
+  ),
+  // dns writes the three pod-level name-resolution fields and nothing when unset.
+  dns_writes_pod_fields: std.assertEqual(
+    local spec = kurly.list(kurly.http('web', 'img:1')
+                            + kurly.dns(
+                              policy='None',
+                              config={ nameservers: ['10.0.0.10'], searches: ['corp.local'] },
+                              hostAliases=[{ ip: '10.0.0.5', hostnames: ['db.internal'] }],
+                            )).items[0].spec.template.spec;
+    [spec.dnsPolicy, spec.dnsConfig.nameservers, spec.hostAliases[0].ip],
+    ['None', ['10.0.0.10'], '10.0.0.5']
+  ),
+  dns_fields_absent_by_default: std.assertEqual(
+    local spec = kurly.list(kurly.http('web', 'img:1')).items[0].spec.template.spec;
+    [std.objectHas(spec, 'dnsPolicy'), std.objectHas(spec, 'dnsConfig'), std.objectHas(spec, 'hostAliases')],
+    [false, false, false]
+  ),
   // A workload named for its ENGINE leaks that engine into every consumer: a
   // client pointed at `valkey-headless` cannot be moved to dragonfly without
   // touching the client. Naming it for its ROLE is what makes the two
