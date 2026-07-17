@@ -40,6 +40,16 @@ if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 
 fi
 echo "exposure exclusion assert fired as expected"
 
+# Dragonfly exits at startup when maxmemory is under 256MiB per io thread, so
+# the workload asserts the floor at render — the pod would otherwise CrashLoop
+# with the reason buried in its log. An assert can only be observed by failing,
+# which an assertion suite cannot express.
+if jsonnet -J vendor -e "(import 'workloads/dragonfly/instance.libsonnet')(threads=4, maxMemoryMB=512)" >/dev/null 2>&1; then
+  echo "dragonfly rendered below its memory floor instead of failing" >&2
+  exit 1
+fi
+echo "dragonfly memory-floor assert fired as expected"
+
 # Every image a workload renders must follow kurly.mirror onto the private
 # registry. The assertion suite can only check mirror against apps it writes
 # itself, which is precisely the blind spot that let kurly.image() redirect the

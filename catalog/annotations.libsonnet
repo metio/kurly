@@ -316,6 +316,20 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    dragonfly: {
+      summary: "A RESP-speaking in-memory store with a per-pod PVC and a headless Service. Answers the same protocol as Valkey, but is not a fork of it: it rejects Redis flags, persists through snapshots, and runs one io thread per core it can see — which in a container is the node's, so the thread count is pinned and the memory floor it demands (256MiB per thread) is asserted at render.",
+      stages: {
+        instance: d.fn('The Dragonfly server. threads pins --proactor_threads and sizes the CPU (Dragonfly runs a thread per core); maxMemoryMB must be at least 256 per thread or Dragonfly exits at startup, so the render fails first. Name it for its role and a consumer never learns which RESP store it got.', [
+          d.arg('name', d.T.string, default='dragonfly'),
+          d.arg('image', d.T.string, default='ghcr.io/dragonflydb/dragonfly:v1.39.0'),
+          d.arg('maxMemoryMB', d.T.int, default=512),
+          d.arg('threads', d.T.int, default=2),
+        ]) + {
+          kind: 'stateful',
+          importPath: 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
+        },
+      },
+    },
     memcached: {
       summary: "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace.",
       stages: {
@@ -332,7 +346,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     valkey: {
       summary: 'A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image.',
       stages: {
-        instance: d.fn('The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app).', [
+        instance: d.fn('The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app). `image` also accepts a Redis build — Valkey is its BSD fork and takes the same configuration — so name the workload for its role rather than its engine, and a consumer holding an endpoint never learns which it got.', [
+          d.arg('name', d.T.string, default='valkey'),
           d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.0.3'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
         ]) + {

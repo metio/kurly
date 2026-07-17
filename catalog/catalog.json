@@ -1611,6 +1611,44 @@
          "summary": "The PostgreSQL images a fleet of CloudNativePG clusters may run, as an ImageCatalog or ClusterImageCatalog custom resource — one image per major, so a patch bump is one line and rolls every cluster on that major. Requires the CloudNativePG operator."
       },
       {
+         "id": "dragonfly",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "dragonfly",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/dragonflydb/dragonfly:v1.39.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 512,
+                     "name": "maxMemoryMB",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 2,
+                     "name": "threads",
+                     "required": false,
+                     "type": "int"
+                  }
+               ],
+               "help": "The Dragonfly server. threads pins --proactor_threads and sizes the CPU (Dragonfly runs a thread per core); maxMemoryMB must be at least 256 per thread or Dragonfly exits at startup, so the render fails first. Name it for its role and a consumer never learns which RESP store it got.",
+               "id": "instance",
+               "importPath": "github.com/metio/kurly/workloads/dragonfly/instance.libsonnet",
+               "kind": "stateful"
+            }
+         ],
+         "summary": "A RESP-speaking in-memory store with a per-pod PVC and a headless Service. Answers the same protocol as Valkey, but is not a fork of it: it rejects Redis flags, persists through snapshots, and runs one io thread per core it can see — which in a container is the node's, so the thread count is pinned and the memory floor it demands (256MiB per thread) is asserted at render."
+      },
+      {
          "id": "memcached",
          "stages": [
             {
@@ -1688,6 +1726,12 @@
             {
                "args": [
                   {
+                     "default": "valkey",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "docker.io/valkey/valkey:9.0.3",
                      "name": "image",
                      "required": false,
@@ -1700,7 +1744,7 @@
                      "type": "quantity"
                   }
                ],
-               "help": "The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app).",
+               "help": "The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app). `image` also accepts a Redis build — Valkey is its BSD fork and takes the same configuration — so name the workload for its role rather than its engine, and a consumer holding an endpoint never learns which it got.",
                "id": "instance",
                "importPath": "github.com/metio/kurly/workloads/valkey/instance.libsonnet",
                "kind": "stateful"

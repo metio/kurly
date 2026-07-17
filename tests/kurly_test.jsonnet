@@ -650,4 +650,27 @@ local podOf(app) = app.deployment.spec.template.spec;
     ),
     false
   ),
+  // Dragonfly counts the cores it can SEE, which in a container is the node's,
+  // so the thread count is always pinned rather than left to it.
+  dragonfly_pins_its_thread_count: std.assertEqual(
+    local args = (import '../workloads/dragonfly/instance.libsonnet')(threads=4, maxMemoryMB=1024).statefulset
+                 .spec.template.spec.containers[0].args;
+    args[std.find('--proactor_threads', args)[0] + 1],
+    '4'
+  ),
+  // Dragonfly's own floor: below 256MiB per io thread it exits at startup, so
+  // the CPU follows the thread count and the memory is checked before apply.
+  dragonfly_sizes_cpu_from_threads: std.assertEqual(
+    (import '../workloads/dragonfly/instance.libsonnet')(threads=4, maxMemoryMB=1024).statefulset
+    .spec.template.spec.containers[0].resources.requests.cpu,
+    '4'
+  ),
+  // It speaks RESP, not Redis's command line: --appendonly is an unknown flag
+  // and an unknown flag is fatal, so the recipe must never emit one.
+  dragonfly_emits_no_redis_flags: std.assertEqual(
+    std.length(std.find('--appendonly',
+                        (import '../workloads/dragonfly/instance.libsonnet')().statefulset
+                        .spec.template.spec.containers[0].args)),
+    0
+  ),
 }
