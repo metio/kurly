@@ -300,6 +300,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         backend: d.fn('The tik backend supervisor: a single-writer http app over a ReadWriteOnce store (one replica, recreated to avoid deadlocking on the volume). Compose an exposure recipe to serve the board.', [
           d.arg('name', d.T.string, default='tik'),
           d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.14194001'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
         ]) + {
           kind: 'http',
           importPath: 'github.com/metio/kurly/workloads/tik/backend.libsonnet',
@@ -314,6 +316,19 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('instances', d.T.int, default=3),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('database', d.T.string, default='app'),
+          d.arg('storageClass', d.T.string),
+          d.arg('walSize', d.T.quantity, example='5Gi'),
+          d.arg('walStorageClass', d.T.string, example='fast-nvme'),
+          d.arg('imageName', d.T.string),
+          d.arg('catalog', d.T.string, example='postgres'),
+          d.arg('catalogScope', d.T.string, default='namespaced'),
+          d.arg('major', d.T.int, example=17),
+          d.arg('owner', d.T.string, default='app'),
+          d.arg('parameters', d.T.object, default={}, example={ huge_pages: 'on', shared_buffers: '1800MB' }),
+          d.arg('resources', d.T.object),
+          d.arg('enablePodMonitor', d.T.bool, default=true),
+          d.arg('imagePullSecrets', d.T.array, default=[]),
+          d.arg('schedulerName', d.T.string),
           d.arg('labels', d.T.object, default={}, example={ team: 'payments' }),
           d.arg('annotations', d.T.object, default={}),
           d.arg('affinity', d.T.object, example={ nodeSelector: { workload: 'database' }, podAntiAffinityType: 'required' }),
@@ -331,6 +346,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         namespaced: d.fn('A namespaced ImageCatalog, owned by the team that owns the databases. Keys of `images` are PostgreSQL major versions; a cnpg-cluster pins one with catalog/major and the catalog owns the patch.', [
           d.arg('name', d.T.string, default='postgres'),
           d.arg('images', d.T.object, default={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' }),
+          d.arg('componentImages', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
         ]) + {
           kind: 'cnpg',
           importPath: 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
@@ -338,6 +356,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         cluster: d.fn('A cluster-scoped ClusterImageCatalog, serving every namespace from one object. Identical spec to the namespaced stage; a cnpg-cluster points at it with catalogScope=cluster.', [
           d.arg('name', d.T.string, default='postgres'),
           d.arg('images', d.T.object, default={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' }),
+          d.arg('componentImages', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
         ]) + {
           kind: 'cnpg',
           importPath: 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
@@ -352,6 +373,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('image', d.T.string, default='ghcr.io/dragonflydb/dragonfly:v1.39.0'),
           d.arg('maxMemoryMB', d.T.int, default=512),
           d.arg('threads', d.T.int, default=2),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('snapshotCron', d.T.string, example='0 */6 * * *'),
         ]) + {
           kind: 'stateful',
           importPath: 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
@@ -366,6 +390,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('image', d.T.string, default='docker.io/library/memcached:1.6.45'),
           d.arg('replicas', d.T.int, default=3),
           d.arg('memoryMB', d.T.int, default=64),
+          d.arg('maxConnections', d.T.int, default=1024),
         ]) + {
           kind: 'stateful',
           importPath: 'github.com/metio/kurly/workloads/memcached/cache.libsonnet',
@@ -379,6 +404,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('name', d.T.string, default='valkey'),
           d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.0.3'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('maxMemory', d.T.string, example='512mb'),
         ]) + {
           kind: 'stateful',
           importPath: 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
@@ -387,6 +414,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('name', d.T.string, default='valkey'),
           d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.0.3'),
           d.arg('maxMemory', d.T.string, default='256mb'),
+          d.arg('kubectlImage', d.T.string, default='docker.io/alpine/k8s:1.36.2'),
         ]) + {
           kind: 'worker',
           importPath: 'github.com/metio/kurly/workloads/valkey/cache.libsonnet',

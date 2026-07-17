@@ -26,3 +26,38 @@ if ! diff -u catalog/catalog.json <(printf '%s\n' "$generated") >/dev/null; then
   exit 1
 fi
 echo "catalog is in sync with the library"
+
+# The catalog claims to be the machine-readable model of kurly's public API — the
+# Assembler builds snippets from it and the Reference site renders it — and
+# catalog.jsonnet already fails when a FEATURE is exported without an annotation.
+# A workload stage's PARAMETERS had no such check, and drifted: 27 of them went
+# undocumented, including every knob added to cnpg-cluster for storage, placement
+# and pull secrets. A parameter the catalog omits is a parameter nobody can find,
+# which makes it a private API however well it works.
+#
+# jsonnet cannot introspect a function's parameters, so the signature is read
+# from the source. That is reliable precisely because check-fmt enforces the
+# layout: jsonnetfmt puts one parameter per line, indented two spaces.
+echo "== every workload parameter is annotated =="
+fail=0
+for stage in workloads/*/*.libsonnet; do
+  workload="$(basename "$(dirname "$stage")")"
+  id="$(basename "$stage" .libsonnet)"
+
+  actual="$(sed -n '/^function(/,/^)/p' "$stage" | grep -oE '^  [a-zA-Z][a-zA-Z0-9]*=' | tr -d ' =' | sort -u)"
+  documented="$(jq -r --arg w "$workload" --arg s "$id" \
+    '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?.name' catalog/catalog.json | sort -u)"
+
+  missing="$(comm -23 <(printf '%s\n' "$actual") <(printf '%s\n' "$documented") | tr '\n' ' ')"
+  stale="$(comm -13 <(printf '%s\n' "$actual") <(printf '%s\n' "$documented") | tr '\n' ' ')"
+  if [ -n "${missing// /}" ]; then
+    echo "::error::${stage}: parameter(s) not annotated in catalog/annotations.libsonnet: ${missing}" >&2
+    fail=1
+  fi
+  if [ -n "${stale// /}" ]; then
+    echo "::error::${stage}: annotated parameter(s) the function does not take: ${stale}" >&2
+    fail=1
+  fi
+  [ -n "${missing// /}${stale// /}" ] || echo "every parameter annotated: $stage"
+done
+[ "$fail" -eq 0 ] || exit 1

@@ -1700,6 +1700,82 @@
                      "type": "string"
                   },
                   {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "5Gi",
+                     "name": "walSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "example": "fast-nvme",
+                     "name": "walStorageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "imageName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "postgres",
+                     "name": "catalog",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "namespaced",
+                     "name": "catalogScope",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": 17,
+                     "name": "major",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "app",
+                     "name": "owner",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": {
+                        "huge_pages": "on",
+                        "shared_buffers": "1800MB"
+                     },
+                     "name": "parameters",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": true,
+                     "name": "enablePodMonitor",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "imagePullSecrets",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "schedulerName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "example": {
                         "team": "payments"
                      },
@@ -1760,6 +1836,21 @@
                      "name": "images",
                      "required": false,
                      "type": "object"
+                  },
+                  {
+                     "name": "componentImages",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
                   }
                ],
                "help": "A cluster-scoped ClusterImageCatalog, serving every namespace from one object. Identical spec to the namespaced stage; a cnpg-cluster points at it with catalogScope=cluster.",
@@ -1780,6 +1871,21 @@
                         "17": "ghcr.io/cloudnative-pg/postgresql:17.2"
                      },
                      "name": "images",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "componentImages",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
                      "required": false,
                      "type": "object"
                   }
@@ -1820,6 +1926,23 @@
                      "name": "threads",
                      "required": false,
                      "type": "int"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "0 */6 * * *",
+                     "name": "snapshotCron",
+                     "required": false,
+                     "type": "string"
                   }
                ],
                "help": "The Dragonfly server. threads pins --proactor_threads and sizes the CPU (Dragonfly runs a thread per core); maxMemoryMB must be at least 256 per thread or Dragonfly exits at startup, so the render fails first. Name it for its role and a consumer never learns which RESP store it got.",
@@ -1858,6 +1981,12 @@
                      "name": "memoryMB",
                      "required": false,
                      "type": "int"
+                  },
+                  {
+                     "default": 1024,
+                     "name": "maxConnections",
+                     "required": false,
+                     "type": "int"
                   }
                ],
                "help": "The memcached shards: a StatefulSet (for stable DNS names, not storage) and the headless Service that names them. Clients consistent-hash keys over memcached-0..N-1; scaling reshuffles that ring, so treat replicas as part of the client configuration. The container memory limit is derived from memoryMB, since -m caps only the item cache.",
@@ -1882,6 +2011,17 @@
                   {
                      "default": "ghcr.io/metio/tik:2026.7.14194001",
                      "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
                      "required": false,
                      "type": "string"
                   }
@@ -1916,6 +2056,12 @@
                      "name": "maxMemory",
                      "required": false,
                      "type": "string"
+                  },
+                  {
+                     "default": "docker.io/alpine/k8s:1.36.2",
+                     "name": "kubectlImage",
+                     "required": false,
+                     "type": "string"
                   }
                ],
                "help": "An in-memory Valkey cache that upgrades its version with zero downtime and no data loss, on the stock image and no orchestrator — the replication hand-off lives entirely in the pod manifests (headless Service, maxSurge, an initContainer that replicates the running peer, and a preStop failover).",
@@ -1942,6 +2088,17 @@
                      "name": "storageSize",
                      "required": false,
                      "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "512mb",
+                     "name": "maxMemory",
+                     "required": false,
+                     "type": "string"
                   }
                ],
                "help": "The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app). `image` also accepts a Redis build — Valkey is its BSD fork and takes the same configuration — so name the workload for its role rather than its engine, and a consumer holding an endpoint never learns which it got.",
