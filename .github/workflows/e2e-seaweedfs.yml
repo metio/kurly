@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for seaweedfs. The render gates confirm the manifest; only a
+# cluster shows the all-in-one `weed server -s3` comes up on its PVC and actually
+# serves S3. The scenario PUTs an object and GETs it back through the S3 API — the
+# endpoint a cnpg-cluster backs up to — which is the whole point of the workload.
+# Self-gates on a diff scoped to this workload plus the shared library.
+name: E2E seaweedfs
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  seaweedfs:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: seaweedfs
+      paths: '^(workloads/seaweedfs/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-seaweedfs)\.sh|\.github/workflows/e2e(-seaweedfs)?\.yml)'
+      scenario: hack/smoke/scenario-seaweedfs.sh
