@@ -15,4 +15,8 @@ kurly.list(
     LOG_LEVEL: 'info',
   })
   + kurly.resources(limits={ memory: '256Mi' })
+  // The API serves its metrics on the same port it serves traffic, so the
+  // ServiceMonitor scrapes the workload's named `http` port — the pairing the
+  // cross-manifest policy checks stays green here.
+  + kurly.serviceMonitor(path='/metrics')
 )

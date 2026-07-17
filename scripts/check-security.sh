@@ -48,6 +48,31 @@ echo "rendered $(find "$mandir" -name '*.json' | wc -l) manifests"
 echo "== conftest (kurly Rego invariants) =="
 conftest test --policy policy "$mandir"/*.json
 
+# The cross-manifest invariants read every rendered object at once (--combine),
+# under their own namespace so the per-object rules above are unaffected. A
+# ServiceMonitor pointed at a port no selected Service exposes is caught here and
+# nowhere else — the workload's own config cannot see a port a consumer adds to
+# the Service by hand.
+echo "== conftest (cross-manifest invariants) =="
+conftest test --combine --namespace combined --policy policy "$mandir"/*.json
+
+# Prove that pass actually bites: a ServiceMonitor scraping a port no Service
+# exposes must FAIL it. jsonnet has no try/catch and this is a render-time
+# cluster fault, not a jsonnet assert, so the only way to observe the guard is to
+# feed it a broken pair and require a non-zero exit.
+echo "== the cross-manifest ServiceMonitor guard fires on a bad port =="
+badpair="$(mktemp -d)"
+trap 'rm -rf "$workdir" "$badpair"' EXIT
+jsonnet -J vendor -e \
+  "local k = import 'github.com/metio/kurly/main.libsonnet';
+   k.list(k.http('probe', 'img:1') + k.serviceMonitor(port='nonexistent'))" \
+  | jq -c '.items[]' | split --lines=1 --additional-suffix=.json - "$badpair/probe-"
+if conftest test --combine --namespace combined --policy policy "$badpair"/*.json >/dev/null 2>&1; then
+  echo "::error::cross-manifest guard passed a ServiceMonitor scraping a port no Service exposes" >&2
+  exit 1
+fi
+echo "the guard fires on a ServiceMonitor whose port no Service exposes"
+
 echo "== pluto (removed / deprecated APIs) =="
 pluto detect-files --directory "$mandir" --target-versions k8s=v1.31.0
 
