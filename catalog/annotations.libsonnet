@@ -409,6 +409,20 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    seaweedfs: {
+      summary: "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups.",
+      stages: {
+        server: d.fn('The all-in-one server. Serves S3 on 8333 over the data volume at /data; the master/volume/filer ports serve the cluster itself. The default allows anonymous access, fine inside a trusted namespace. Splitting the roles into dedicated tiers is a different topology, not more replicas, so it would be its own stage.', [
+          d.arg('name', d.T.string, default='seaweedfs'),
+          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.39'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+        ]) + {
+          kind: 'stateful',
+          importPath: 'github.com/metio/kurly/workloads/seaweedfs/server.libsonnet',
+        },
+      },
+    },
     memcached: {
       summary: "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace.",
       stages: {
