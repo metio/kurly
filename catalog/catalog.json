@@ -2122,7 +2122,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/otel/opentelemetry-collector-contrib:0.119.0",
+                     "default": "docker.io/otel/opentelemetry-collector-contrib:0.156.0",
                      "name": "image",
                      "required": false,
                      "type": "string"

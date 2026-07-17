@@ -22,7 +22,7 @@ kurly.list(agent())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `otel-collector` | |
-| `image` | `docker.io/otel/opentelemetry-collector-contrib:0.119.0` | the contrib distribution (all receivers/exporters) |
+| `image` | `docker.io/otel/opentelemetry-collector-contrib:0.156.0` | the contrib distribution (all receivers/exporters) |
 | `config` | a working OTLP agent | the collector config, **verbatim** — see below |
 
 The default receives OTLP on `4317` (gRPC) and `4318` (HTTP), guards memory,

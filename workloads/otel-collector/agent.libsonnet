@@ -56,7 +56,7 @@ local defaultConfig = {
 
 function(
   name='otel-collector',
-  image='docker.io/otel/opentelemetry-collector-contrib:0.119.0',
+  image='docker.io/otel/opentelemetry-collector-contrib:0.156.0',
   config=defaultConfig,
 )
   kurly.daemon(name, image)
