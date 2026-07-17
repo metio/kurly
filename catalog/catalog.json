@@ -1594,6 +1594,38 @@
          "summary": "The PostgreSQL images a fleet of CloudNativePG clusters may run, as an ImageCatalog or ClusterImageCatalog custom resource — one image per major, so a patch bump is one line and rolls every cluster on that major. Requires the CloudNativePG operator."
       },
       {
+         "id": "memcached",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "docker.io/library/memcached:1.6.45",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 3,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 64,
+                     "name": "memoryMB",
+                     "required": false,
+                     "type": "int"
+                  }
+               ],
+               "help": "The memcached shards: a StatefulSet (for stable DNS names, not storage) and the headless Service that names them. Clients consistent-hash keys over memcached-0..N-1; scaling reshuffles that ring, so treat replicas as part of the client configuration. The container memory limit is derived from memoryMB, since -m caps only the item cache.",
+               "id": "cache",
+               "importPath": "github.com/metio/kurly/workloads/memcached/cache.libsonnet",
+               "kind": "stateful"
+            }
+         ],
+         "summary": "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace."
+      },
+      {
          "id": "tik",
          "stages": [
             {

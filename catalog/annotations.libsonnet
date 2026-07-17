@@ -316,6 +316,19 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    memcached: {
+      summary: "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace.",
+      stages: {
+        cache: d.fn('The memcached shards: a StatefulSet (for stable DNS names, not storage) and the headless Service that names them. Clients consistent-hash keys over memcached-0..N-1; scaling reshuffles that ring, so treat replicas as part of the client configuration. The container memory limit is derived from memoryMB, since -m caps only the item cache.', [
+          d.arg('image', d.T.string, default='docker.io/library/memcached:1.6.45'),
+          d.arg('replicas', d.T.int, default=3),
+          d.arg('memoryMB', d.T.int, default=64),
+        ]) + {
+          kind: 'stateful',
+          importPath: 'github.com/metio/kurly/workloads/memcached/cache.libsonnet',
+        },
+      },
+    },
     valkey: {
       summary: 'A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image.',
       stages: {

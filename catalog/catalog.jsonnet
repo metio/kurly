@@ -26,6 +26,7 @@ local stageImports = {
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
+  'memcached/cache': import 'github.com/metio/kurly/workloads/memcached/cache.libsonnet',
   'valkey/instance': import 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
   'valkey/cache': import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet',
 };
