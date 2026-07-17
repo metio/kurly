@@ -104,6 +104,59 @@ and pull secrets belong to whatever installs it. Between them, `PULL_SECRET_NAME
 and this workload's `imagePullSecrets` overlap: either will do for the clusters
 kurly renders, and the operator-wide one also covers clusters it does not.
 
+## Huge pages
+
+PostgreSQL maps `shared_buffers` into **every** backend, and it is a
+process-per-connection server. At 4KB pages an 8GB `shared_buffers` is ~2M page
+table entries per backend — megabytes of page tables each, multiplied by the
+connection count, and a badly thrashed TLB. 2MB huge pages cut that by 512×.
+
+Nothing in CNPG or kurly mediates this: huge pages are an ordinary Kubernetes
+resource and PostgreSQL uses them natively, so the existing parameters express it.
+
+```jsonnet
+cnpg(
+  name='orders-db',
+  resources={
+    requests: { cpu: '2', memory: '4Gi', 'hugepages-2Mi': '2Gi' },
+    limits:   { cpu: '2', memory: '4Gi', 'hugepages-2Mi': '2Gi' },
+  },
+  parameters={ huge_pages: 'on', shared_buffers: '1800MB' },
+)
+```
+
+Four things decide whether that works:
+
+- **The node must have them pre-allocated** (`vm.nr_hugepages`, or a boot
+  parameter). Kubernetes only schedules against huge pages a node already
+  reports; it never allocates them. Without them the pod stays Pending.
+- **Request must equal limit.** Huge pages are not overcommittable, and
+  Kubernetes rejects the pod otherwise — so the render rejects it first.
+- **They do not count toward `memory`.** It is a separate resource, so `memory`
+  still has to cover everything that is not `shared_buffers`. Sizing `memory` to
+  include the huge pages under-provisions the rest.
+- **`huge_pages: 'on'` means PostgreSQL refuses to start without them**, which is
+  the reason to set it — the default `'try'` falls back to 4KB silently, so you
+  believe you have huge pages and do not. The render therefore fails if `'on'` is
+  set with no allocation.
+
+Size the allocation from PostgreSQL rather than from arithmetic: from 15 it
+computes the answer itself.
+
+```console
+$ postgres -C shared_memory_size_in_huge_pages
+1094
+```
+
+That is the number of 2MB pages the server actually wants for the configured
+`shared_buffers` — shared memory is more than the buffers alone, so a guess of
+`shared_buffers` plus a percentage is how allocations end up slightly too small.
+
+Transparent Huge Pages are a different thing and worth disabling: khugepaged's
+background compaction is a common source of the latency spikes blamed on running
+PostgreSQL in a container. That is a node-level setting — neither CNPG nor kurly
+can reach it from a pod spec.
+
 ## Deploy through JaaS and stageset
 
 ```yaml

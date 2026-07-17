@@ -52,3 +52,17 @@ function(
     requests={ cpu: '200m', memory: '320Mi', 'ephemeral-storage': '256Mi' },
     limits={ cpu: '200m', memory: '320Mi', 'ephemeral-storage': '256Mi' },
   )
+  + {
+    // One writer, one volume. The store is a single append-only log on a
+    // ReadWriteOnce claim, so a second replica is not more capacity: the pods
+    // land on different nodes and only one can attach the volume, while any that
+    // did attach would have two processes writing one log. Scaling this is a
+    // reasonable thing to try and a certain way to break it, so it fails the
+    // render — asserted against the MERGED config, since the replica count
+    // arrives by composition (`tik() + kurly.replicas(3)`) rather than as a
+    // parameter here.
+    assert self.config.replicas == 1 :
+           'tik: replicas must be 1 — the backend is a single writer over a ReadWriteOnce store, '
+           + 'so a second pod either cannot attach the volume or corrupts the log. Got '
+           + std.toString(self.config.replicas) + '.',
+  }

@@ -52,6 +52,32 @@ function(
          'cnpg-cluster: catalog requires major (the PostgreSQL major version this cluster pins)';
   assert catalogScope == 'namespaced' || catalogScope == 'cluster' :
          "cnpg-cluster: catalogScope must be 'namespaced' or 'cluster', got '" + catalogScope + "'";
+
+  // Huge pages are worth having — PostgreSQL maps shared_buffers into EVERY
+  // backend, so at 4KB a large shared_buffers costs megabytes of page tables per
+  // connection and thrashes the TLB — but they are also easy to ask for in a way
+  // that cannot start. Both mistakes below are certain failures, so they fail the
+  // render rather than a pod.
+  local limits = if resources == null || !std.objectHas(resources, 'limits') then {} else resources.limits;
+  local requests = if resources == null || !std.objectHas(resources, 'requests') then {} else resources.requests;
+  local hugeLimits = [k for k in std.objectFields(limits) if std.startsWith(k, 'hugepages-')];
+  local hugeRequests = [k for k in std.objectFields(requests) if std.startsWith(k, 'hugepages-')];
+
+  // huge_pages=on tells PostgreSQL to refuse to start rather than fall back to
+  // 4KB pages — which is the point of setting it, and why it must be paired with
+  // an allocation. (The default, 'try', falls back silently: you believe you have
+  // huge pages and do not.)
+  assert !(std.objectHas(parameters, 'huge_pages') && parameters.huge_pages == 'on') || hugeLimits != [] :
+         "cnpg-cluster: huge_pages='on' needs a hugepages-* resource limit, or PostgreSQL refuses to start. "
+         + 'Add e.g. resources.limits["hugepages-2Mi"], and note the node must have them pre-allocated — '
+         + 'Kubernetes only schedules against huge pages a node already reports.';
+
+  // Kubernetes rejects the pod outright when a hugepages request and limit differ:
+  // the resource is not overcommittable, so the two must match exactly.
+  assert std.all([std.objectHas(requests, k) && requests[k] == limits[k] for k in hugeLimits]) :
+         'cnpg-cluster: every hugepages-* request must equal its limit (Kubernetes rejects the pod otherwise). '
+         + 'Limits: ' + std.toString({ [k]: limits[k] for k in hugeLimits })
+         + ', requests: ' + std.toString({ [k]: requests[k] for k in hugeRequests });
   {
     cluster: {
       apiVersion: 'postgresql.cnpg.io/v1',

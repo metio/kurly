@@ -118,6 +118,54 @@ for stage in workloads/*/*.libsonnet; do
   echo "storage class is settable in $stage"
 done
 
+# Combinations that CANNOT start belong in the render, not in a CrashLoop. Each
+# of these is a certain failure on a real cluster, and jsonnet has no try/catch,
+# so an assert can only be observed by failing — which an assertion suite cannot
+# express.
+negative() { # <description> <expression that MUST fail to render>
+  if jsonnet -J vendor -e "$2" >/dev/null 2>&1; then
+    echo "$1: rendered instead of failing" >&2
+    exit 1
+  fi
+  echo "assert fired as expected: $1"
+}
+positive() { # <description> <expression that MUST render>
+  if ! jsonnet -J vendor -e "$2" >/dev/null 2>&1; then
+    echo "$1: failed to render, but this combination is legitimate" >&2
+    exit 1
+  fi
+  echo "renders as expected: $1"
+}
+
+K="local k = import 'github.com/metio/kurly/main.libsonnet';"
+# uid 0 under runAsNonRoot: the kubelet refuses the container before it starts.
+negative "runAsUser 0 contradicts runAsNonRoot" \
+  "$K k.list(k.worker('w', 'img:1') + k.runAs(0))"
+# Every honest way to actually run as root must still work, or the assert is a
+# wall rather than a guard.
+positive "runAs(0) + rootUser()" "$K k.list(k.worker('w', 'img:1') + k.runAs(0) + k.rootUser())"
+positive "runAs(0) + security.baseline" "$K k.list(k.worker('w', 'img:1') + k.runAs(0) + k.security.baseline)"
+positive "runAs(0) + security.privileged" "$K k.list(k.worker('w', 'img:1') + k.runAs(0) + k.security.privileged)"
+# An arbitrary high uid is what OpenShift assigns; it must never trip the guard.
+positive "an OpenShift-style arbitrary uid" "$K k.list(k.worker('w', 'img:1') + k.runAs(1000700000))"
+
+# tik is one writer on one ReadWriteOnce volume; a second pod cannot attach it.
+negative "tik scaled past its single writer" \
+  "$K k.list((import 'workloads/tik/backend.libsonnet')() + k.replicas(3))"
+positive "tik at its one replica" \
+  "$K k.list((import 'workloads/tik/backend.libsonnet')() + k.replicas(1))"
+
+# huge_pages=on without an allocation: PostgreSQL refuses to start, by design.
+negative "huge_pages=on with no hugepages resource" \
+  "(import 'workloads/cnpg-cluster/cluster.libsonnet')(parameters={huge_pages: 'on'})"
+# Kubernetes rejects a pod whose hugepages request and limit differ.
+negative "a hugepages request that differs from its limit" \
+  "(import 'workloads/cnpg-cluster/cluster.libsonnet')(resources={limits: {'hugepages-2Mi': '2Gi'}, requests: {'hugepages-2Mi': '1Gi'}})"
+positive "huge_pages=on with a matching allocation" \
+  "(import 'workloads/cnpg-cluster/cluster.libsonnet')(parameters={huge_pages: 'on'}, resources={limits: {'hugepages-2Mi': '2Gi'}, requests: {'hugepages-2Mi': '2Gi'}})"
+positive "huge_pages=try with no allocation" \
+  "(import 'workloads/cnpg-cluster/cluster.libsonnet')(parameters={huge_pages: 'try'})"
+
 # Dragonfly exits at startup when maxmemory is under 256MiB per io thread, so
 # the workload asserts the floor at render — the pod would otherwise CrashLoop
 # with the reason buried in its log. An assert can only be observed by failing,

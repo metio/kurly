@@ -145,6 +145,17 @@ local exclusionConflicts(exclusive) = [
       for group in exclusionConflicts(this.config.exclusive)
     ]),
 
+    // Asking for uid 0 while promising the kubelet a non-root user is a pod that
+    // never starts: admission accepts it and the kubelet then refuses the
+    // container with "has runAsNonRoot and image will run as root". The two knobs
+    // are set by different features (runAs and the security profiles), so the
+    // contradiction usually arrives by composition rather than on purpose —
+    // which is why it is asserted here, against the MERGED config, rather than
+    // in whichever feature was written last.
+    assert !(this.config.runAsNonRoot && this.config.runAsUser == 0) :
+           'kurly: runAsUser 0 contradicts runAsNonRoot — the kubelet refuses the container before it starts. '
+           + 'Run as a non-zero uid, or compose kurly.rootUser() (or kurly.security.baseline/privileged) to drop the non-root requirement.',
+
     config:: {
       name: name,
       image: image,
