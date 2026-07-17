@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for memcached, measuring the property memcached has instead of
+# the one valkey has: it cannot replicate, so an upgrade always starts cold, and
+# what matters is that the loss is BOUNDED. The scenario rolls the shards and
+# asserts that exactly one is down at a time, that the pod names (the client's
+# hash ring) survive, and that the data does not. Authored as a Deployment the
+# manifests would look the same and drop the whole cache on every roll — a
+# difference only a live roll can show, which is why this is an e2e and not a
+# render test. Self-gates on a diff scoped to this workload plus the shared
+# library. No stageset variant: valkey, tik and cnpg already prove that pipeline
+# from three angles, and a fourth would only re-run it.
+name: E2E memcached
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  memcached:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: memcached
+      paths: '^(workloads/memcached/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-memcached)\.sh|\.github/workflows/e2e)'
+      scenario: hack/smoke/scenario-memcached.sh
