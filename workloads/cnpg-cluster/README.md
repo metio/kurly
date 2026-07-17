@@ -60,6 +60,31 @@ kurly.mirror('harbor.internal/dockerhub', kurly.list(
 ))
 ```
 
+That covers the images in this CR — `imageName`, or whichever the
+[catalog](../cnpg-image-catalog/) resolves for the pinned major.
+
+**It is not enough on its own.** CloudNativePG adds its instance manager to every
+PostgreSQL pod through an init container running the **operator's own image**, and
+that reference comes from the operator's configuration rather than from any
+Cluster. Nothing renders it here, so `kurly.mirror` cannot reach it: mirror the
+Cluster alone and the pods still fail to pull an init container you never wrote.
+
+The operator's side is operator-wide, set in the `cnpg-controller-manager-config`
+ConfigMap (or Secret) in its namespace — see
+[Operator configuration](https://cloudnative-pg.io/docs/current/operator_conf/):
+
+| Setting | Covers |
+|---|---|
+| `OPERATOR_IMAGE_NAME` | the image bootstrapping every PostgreSQL pod |
+| `POSTGRES_IMAGE_NAME` | the default for clusters that pin no image |
+| `PGBOUNCER_IMAGE_NAME` | Poolers |
+| `PULL_SECRET_NAME` | a pull secret the operator copies into every cluster it creates |
+
+The operator's own Deployment is installed from upstream's manifest, so its image
+and pull secrets belong to whatever installs it. Between them, `PULL_SECRET_NAME`
+and this workload's `imagePullSecrets` overlap: either will do for the clusters
+kurly renders, and the operator-wide one also covers clusters it does not.
+
 ## Deploy through JaaS and stageset
 
 ```yaml

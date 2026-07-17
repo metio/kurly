@@ -48,6 +48,12 @@ containers and the sidecars together. A custom resource has no pod to attach it
 to, so those carry their own knob — see
 [cnpg-cluster](workloads/cnpg-cluster/#pulling-from-a-private-registry).
 
+`mirror` reaches every image kurly renders, which for a custom resource is every
+image in the resource — but an operator may pull images the resource never names.
+CloudNativePG bootstraps each PostgreSQL pod with its own image, configured on
+the operator rather than on the Cluster, so a workload backed by an operator
+needs that operator pointed at the registry too.
+
 If the private registry is a **transparent mirror** — a containerd registry
 mirror, or a pull-through cache configured on the nodes — none of this is needed:
 the nodes redirect `docker.io/…` themselves, and rewriting references only adds
