@@ -21,6 +21,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: tik-stageset
-      paths: '^(workloads/tik/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tik-stageset)\.sh|\.github/workflows/e2e)'
+      paths: '^(workloads/tik/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tik-stageset)\.sh|\.github/workflows/e2e(-tik-stageset)?\.yml)'
       scenario: hack/smoke/scenario-tik-stageset.sh
       max_versions: '1'

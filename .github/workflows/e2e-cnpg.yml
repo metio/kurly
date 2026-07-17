@@ -17,5 +17,5 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: cnpg-cluster
-      paths: '^(workloads/cnpg-cluster/|main\.libsonnet|hack/smoke/(lib|scenario-cnpg)\.sh|\.github/workflows/e2e)'
+      paths: '^(workloads/cnpg-cluster/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cnpg)\.sh|\.github/workflows/e2e(-cnpg)?\.yml)'
       scenario: hack/smoke/scenario-cnpg.sh

@@ -20,6 +20,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: valkey-stageset
-      paths: '^(workloads/valkey/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-valkey-stageset)\.sh|\.github/workflows/e2e)'
+      paths: '^(workloads/valkey/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-valkey-stageset)\.sh|\.github/workflows/e2e(-valkey-stageset)?\.yml)'
       scenario: hack/smoke/scenario-valkey-stageset.sh
       max_versions: '1'

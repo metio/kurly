@@ -17,5 +17,5 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: valkey
-      paths: '^(workloads/valkey/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-valkey)\.sh|\.github/workflows/e2e)'
+      paths: '^(workloads/valkey/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-valkey)\.sh|\.github/workflows/e2e(-valkey)?\.yml)'
       scenario: hack/smoke/scenario-valkey.sh

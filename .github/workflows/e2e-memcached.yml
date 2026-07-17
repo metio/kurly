@@ -23,5 +23,5 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: memcached
-      paths: '^(workloads/memcached/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-memcached)\.sh|\.github/workflows/e2e)'
+      paths: '^(workloads/memcached/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-memcached)\.sh|\.github/workflows/e2e(-memcached)?\.yml)'
       scenario: hack/smoke/scenario-memcached.sh
