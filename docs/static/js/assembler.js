@@ -118,21 +118,21 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
-    // The expression for each provided argument, in signature order. Uses
-    // positional form for a contiguous provided prefix, then named form for any
-    // argument that follows an omitted one — always valid Jsonnet.
+    // The expression for each provided argument, ALWAYS named.
+    //
+    // A positional call binds by order, which would make the catalog's argument
+    // order part of the contract: list two arguments in an order the function
+    // does not declare and every value lands in the wrong parameter, producing a
+    // snippet that renders and means something else. Jsonnet has no types to
+    // catch it, so it surfaces only where a schema happens to disagree — and not
+    // at all between two neighbouring strings. Named calls make order irrelevant.
     argExprs(argSpecs, bindings) {
       const out = [];
-      let sawGap = false;
       (argSpecs || []).forEach((a) => {
         const b = bindings[a.name];
-        const provided = b && (b.mode === 'value' || b.mode === 'tla');
-        if (!provided) {
-          sawGap = true;
-          return;
-        }
+        if (!b || (b.mode !== 'value' && b.mode !== 'tla')) return;
         const expr = b.mode === 'tla' ? b.tla : this.fmtValue(a.type, b.value);
-        out.push(sawGap ? `${a.name}=${expr}` : expr);
+        out.push(`${a.name}=${expr}`);
       });
       return out;
     },

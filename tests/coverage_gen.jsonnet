@@ -15,19 +15,24 @@ local catalog = import '../catalog/catalog.json';
 local lit(v) = std.manifestJsonEx(v, '', '', ': ');
 
 // An argument's value is its example, else its default; it is "provided" when it
-// has either. Provided args render positionally while every earlier arg is also
-// provided, then switch to named once an optional one is skipped — the same rule
-// the assembler uses, always valid Jsonnet.
+// has either. EVERY provided argument renders named, never positional — the same
+// rule the assembler uses.
+//
+// Named is not a style preference here. A positional call binds by ORDER, so the
+// catalog's arg order silently becomes part of the contract: list two arguments
+// in an order the function does not declare and every value lands in the wrong
+// parameter, rendering a manifest that is valid and means something else.
+// Jsonnet has no types to catch it — d.T.string is documentation, not a check —
+// so it surfaces only where a schema happens to disagree, and not at all where
+// two neighbouring arguments are both strings. Named calls make the order
+// irrelevant and delete the whole class.
 local argValue(a) = if std.objectHas(a, 'example') then a.example else a.default;
 local provided(a) = std.objectHas(a, 'example') || std.objectHas(a, 'default');
-local argExprs(args) =
-  std.foldl(
-    function(acc, a)
-      if !provided(a) then acc { gap: true }
-      else acc { exprs+: [(if acc.gap then a.name + '=' else '') + lit(argValue(a))] },
-    args,
-    { exprs: [], gap: false }
-  ).exprs;
+local argExprs(args) = [
+  a.name + '=' + lit(argValue(a))
+  for a in args
+  if provided(a)
+];
 local call(prefix, entry) = prefix + '(' + std.join(', ', argExprs(entry.args)) + ')';
 
 local kindById = { [k.id]: k for k in catalog.kinds };

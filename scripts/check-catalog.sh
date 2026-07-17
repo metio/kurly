@@ -44,10 +44,12 @@ for stage in workloads/*/*.libsonnet; do
   workload="$(basename "$(dirname "$stage")")"
   id="$(basename "$stage" .libsonnet)"
 
-  # ORDER matters as much as membership: the Assembler and the coverage generator
-  # bind these positionally, so a catalog listing the same names in a different
-  # order renders every value into the wrong parameter — which schema validation
-  # catches only when the types happen to disagree.
+  # Order is checked so the Reference site and the Assembler present a stage's
+  # parameters as its signature declares them; a reader comparing the two should
+  # not have to reconcile a shuffle. It is no longer a correctness matter — every
+  # generated call names its arguments, so binding does not depend on order —
+  # which is exactly why it is worth keeping cheap and stated plainly rather than
+  # dressed up as a safety check.
   actual="$(sed -n '/^function(/,/^)/p' "$stage" | grep -oE '^  [a-zA-Z][a-zA-Z0-9]*=' | tr -d ' =')"
   documented="$(jq -r --arg w "$workload" --arg s "$id" \
     '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?.name' catalog/catalog.json)"
