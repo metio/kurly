@@ -45,6 +45,20 @@ kurly.list(cnpg(
 | `parameters` | `{}` | extra `postgresql.conf` parameters |
 | `resources` | — | container requests/limits |
 | `enablePodMonitor` | `true` | a PodMonitor for the Prometheus Operator |
+| `imagePullSecrets` | `[]` | names of existing Secrets the operator pulls PostgreSQL with |
+
+## Pulling from a private registry
+
+The operator pulls PostgreSQL itself, so the pull secrets belong to the Cluster —
+`kurly.imagePullSecrets()` is a pod-level feature and there is no pod here to
+attach it to. Point the images at the registry with
+[`kurly.mirror`](../../#private-registries) and name the secrets on the cluster:
+
+```jsonnet
+kurly.mirror('harbor.internal/dockerhub', kurly.list(
+  cnpg(name='orders-db', catalog='postgres', major=17, imagePullSecrets=['regcred'])
+))
+```
 
 ## Deploy through JaaS and stageset
 

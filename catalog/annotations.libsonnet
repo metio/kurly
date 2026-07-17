@@ -364,6 +364,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   // Rendering terminals — turn a composed app or an explicit set of parts into
   // the output a consumer applies or publishes.
   helpers: {
+    mirror: d.fn("Points every image in already-rendered manifests at another registry, for a cluster that pulls from a private one. Rewrites the rendered output, not config: an initContainer, a grafted-on sidecar and a custom resource's image are all unreachable from config, so a config-level knob would redirect the main container and leave the rest pulling from the internet. Only the registry (the first path segment) changes; repository, tag and digest are untouched.", [
+      d.arg('registry', d.T.string, required=true, example='harbor.internal/dockerhub'),
+      d.arg('manifests', d.T.object, required=true),
+    ]),
     list: d.fn('Renders one composed app as a kind: List, including its hidden owned manifests (the store PVC, the config ConfigMap).', [
       d.arg('app', d.T.object, required=true),
     ]),

@@ -36,6 +36,7 @@ function(
   parameters={},
   resources=null,
   enablePodMonitor=true,
+  imagePullSecrets=[],
 )
   // CNPG resolves the image from exactly one source. Naming both is a config
   // error the operator rejects, so fail the render instead of the apply.
@@ -91,6 +92,14 @@ function(
         resources: resources,
         // A PodMonitor for the Prometheus Operator, on by default.
         monitoring: (if enablePodMonitor then { enablePodMonitor: true } else null),
+        // The operator pulls PostgreSQL itself, so the pull secrets belong to
+        // the Cluster: kurly.imagePullSecrets() is a pod-level feature and there
+        // is no pod here to attach it to. Without this a cluster on a private
+        // registry cannot pull at all, whatever the images are pointed at.
+        imagePullSecrets: (
+          if imagePullSecrets == [] then null
+          else [{ name: s } for s in imagePullSecrets]
+        ),
       }),
     },
   }

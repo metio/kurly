@@ -597,4 +597,41 @@ local podOf(app) = app.deployment.spec.template.spec;
     ),
     ['a', 'b']
   ),
+  // mirror rewrites the registry of every image in RENDERED manifests — the
+  // reason it works on the output rather than the config is that an
+  // initContainer's spec is passed through verbatim and a sidecar can be
+  // grafted on with the raw + escape hatch, so config never sees either.
+  mirror_rewrites_every_container: std.assertEqual(
+    local rendered = kurly.mirror('harbor.internal/dockerhub', kurly.list(
+      kurly.worker('app', 'docker.io/library/busybox:1.37.0')
+      + kurly.initContainer({ name: 'init', image: 'ghcr.io/acme/init:1.0' })
+      + { deployment+: { spec+: { template+: { spec+: { containers+: [
+        { name: 'sidecar', image: 'quay.io/acme/sidecar:2.0' },
+      ] } } } } }
+    ));
+    local pod = rendered.items[0].spec.template.spec;
+    [pod.initContainers[0].image, pod.containers[0].image, pod.containers[1].image],
+    [
+      'harbor.internal/dockerhub/acme/init:1.0',
+      'harbor.internal/dockerhub/library/busybox:1.37.0',
+      'harbor.internal/dockerhub/acme/sidecar:2.0',
+    ]
+  ),
+  // Only the registry moves: repository, tag and digest are carried through.
+  mirror_keeps_repository_tag_and_digest: std.assertEqual(
+    kurly.mirror('r.internal', { a: { image: 'ghcr.io/acme/app@sha256:abc' }, b: { imageName: 'docker.io/library/pg:17.2' } }),
+    { a: { image: 'r.internal/acme/app@sha256:abc' }, b: { imageName: 'r.internal/library/pg:17.2' } }
+  ),
+  // A reference carrying no registry has nothing to replace, so it is left as
+  // it is rather than guessed at.
+  mirror_leaves_a_registryless_reference_alone: std.assertEqual(
+    kurly.mirror('r.internal', { image: 'busybox:1.37.0' }),
+    { image: 'busybox:1.37.0' }
+  ),
+  // A ConfigMap's payload is the application's data, not the kubelet's: a key
+  // called image in there must survive untouched.
+  mirror_does_not_touch_configmap_data: std.assertEqual(
+    kurly.mirror('r.internal', { kind: 'ConfigMap', data: { image: 'docker.io/team/ref:1.0' } }),
+    { kind: 'ConfigMap', data: { image: 'docker.io/team/ref:1.0' } }
+  ),
 }

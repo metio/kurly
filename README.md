@@ -21,6 +21,39 @@ kurly.list(
 )
 ```
 
+## Private registries
+
+A cluster that pulls from a private registry needs two things: the images pointed
+at it, and the credentials to pull them.
+
+```jsonnet
+kurly.mirror('harbor.internal/dockerhub', kurly.list(
+  cache() + kurly.imagePullSecrets(['regcred'])
+))
+```
+
+`kurly.mirror` swaps the registry on every image in the rendered output —
+`docker.io/valkey/valkey:9.0.3` becomes
+`harbor.internal/dockerhub/valkey/valkey:9.0.3`, with the repository, tag and
+digest carried through. It works on the rendered manifests rather than on the
+config because a workload's images are not all reachable from config: an
+initContainer's spec is passed through verbatim, a sidecar can be grafted on with
+the raw `+` escape hatch, and a custom resource's image is a field of someone
+else's API. `kurly.image()` reaches none of those — it changes the main container
+and leaves the rest pulling from the public internet, which on a private-registry
+cluster means the pod never starts.
+
+`kurly.imagePullSecrets` is pod-level, so it covers the main container, the init
+containers and the sidecars together. A custom resource has no pod to attach it
+to, so those carry their own knob — see
+[cnpg-cluster](workloads/cnpg-cluster/#pulling-from-a-private-registry).
+
+If the private registry is a **transparent mirror** — a containerd registry
+mirror, or a pull-through cache configured on the nodes — none of this is needed:
+the nodes redirect `docker.io/…` themselves, and rewriting references only adds
+drift. Reach for `mirror` when the registry renames the path, as a proxy-cache
+project does, or when the copy is air-gapped.
+
 ## Documentation
 
 The full documentation lives at **<https://kurly.projects.metio.wtf/>**:

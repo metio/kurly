@@ -72,6 +72,62 @@ local join(parts) =
     items: std.filter(function(manifest) manifest != null, join(parts)),
   },
 
+  // mirror points every image in already-rendered manifests at another
+  // registry, for a cluster that pulls from a private one:
+  //
+  //   kurly.mirror('harbor.internal/dockerhub', kurly.list(app))
+  //
+  //   docker.io/valkey/valkey:9.0.3
+  //     -> harbor.internal/dockerhub/valkey/valkey:9.0.3
+  //
+  // It rewrites the rendered output rather than the config on purpose, because
+  // a workload's images are not all reachable from config. An initContainer's
+  // spec is passed through verbatim, a sidecar can be grafted on with the raw
+  // `+` escape hatch, and a custom resource's image is a field of someone
+  // else's API — kurly.image() reaches none of them, so a config-level knob
+  // would silently redirect the main container and leave the rest pulling from
+  // the public internet. On a private-registry cluster that is not a partial
+  // success: the pod does not start.
+  //
+  // Only the registry changes. Every image kurly renders is fully qualified
+  // (docker.io/library/… , never library/…), so the registry is always the
+  // first path segment and swapping it needs no reference parsing — the
+  // repository, tag and digest are carried through untouched. `registry` may
+  // itself carry a path (`harbor.internal/dockerhub`), which is what a
+  // proxy-cache project wants.
+  //
+  // A transparent registry mirror configured on the nodes does this without
+  // touching manifests at all, and is the better answer where it applies; this
+  // is for a registry that renames the path, or an air-gapped copy.
+  mirror(registry, manifests)::
+    // Only `image` (containers, initContainers, sidecars, an ImageCatalog's
+    // entries) and `imageName` (a CNPG Cluster) are rewritten. Rewriting every
+    // field that merely looks like an image would reach into ConfigMap data and
+    // arbitrary CR fields that happen to share a name.
+    local rewriteRef(ref) =
+      local slash = std.findSubstr('/', ref);
+      // A reference with no slash carries no registry to replace, so it is left
+      // alone rather than guessed at.
+      if std.length(slash) == 0 then ref
+      else registry + std.substr(ref, slash[0], std.length(ref) - slash[0]);
+    local walk(node) =
+      if std.isObject(node) then {
+        [k]:
+          // A ConfigMap's or Secret's payload is opaque application data that
+          // happens to sit in a Kubernetes object; a key called `image` in there
+          // is the application's, not the kubelet's. Descending into it would
+          // rewrite a config value the moment it contained a slash — and
+          // kurly.config({ image: 'foo/bar' }) is an ordinary thing to write.
+          if k == 'data' || k == 'stringData' then node[k]
+          else if (k == 'image' || k == 'imageName') && std.isString(node[k])
+          then rewriteRef(node[k])
+          else walk(node[k])
+        for k in std.objectFields(node)
+      }
+      else if std.isArray(node) then [walk(item) for item in node]
+      else node;
+    walk(manifests),
+
   // A workload's stages are the ORDERED, GATED phases of installing ONE
   // application — apply a phase, wait for it to go healthy, then the next — not
   // environment tiers. Each stage is its OWN file under workloads/<name>/: a
