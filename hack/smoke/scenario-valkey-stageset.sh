@@ -101,7 +101,8 @@ spec:
     - { kind: JsonnetLibrary, name: kurly }
     - { kind: JsonnetLibrary, name: k8s-libsonnet }
   tlas:
-    image: ["${ref}"]
+    - name: image
+      value: "${ref}"
 EOF
 }
 

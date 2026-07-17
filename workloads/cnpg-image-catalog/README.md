@@ -131,7 +131,8 @@ spec:
     - { kind: JsonnetLibrary, name: kurly,                     importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-cnpg-image-catalog,  importPath: github.com/metio/kurly/workloads/cnpg-image-catalog }
   tlas:
-    pg17: ["ghcr.io/cloudnative-pg/postgresql:17.2"]
+    - name: pg17
+      value: ghcr.io/cloudnative-pg/postgresql:17.2
 ---
 apiVersion: stages.metio.wtf/v1
 kind: StageSet

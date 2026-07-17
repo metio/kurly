@@ -92,8 +92,10 @@ spec:
     - { kind: JsonnetLibrary, name: kurly-tik,  importPath: github.com/metio/kurly/workloads/tik }
   # Your adaptations, as top-level arguments.
   tlas:
-    host: ["tik.internal.example.com"]
-    storeSize: ["5Gi"]
+    - name: host
+      value: tik.internal.example.com
+    - name: storeSize
+      value: "5Gi"
 ```
 
 JaaS publishes the rendered manifests as an `ExternalArtifact`. The release

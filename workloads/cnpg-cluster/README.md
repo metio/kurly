@@ -85,8 +85,10 @@ spec:
     - { kind: JsonnetLibrary, name: kurly,               importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-cnpg-cluster,  importPath: github.com/metio/kurly/workloads/cnpg-cluster }
   tlas:
-    instances: ["3"]
-    storageSize: ["20Gi"]
+    - name: instances
+      value: "3"
+    - name: storageSize
+      value: "20Gi"
 ---
 apiVersion: stages.metio.wtf/v1
 kind: StageSet

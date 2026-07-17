@@ -200,9 +200,12 @@ document.addEventListener('alpine:init', () => {
         .split('\n')
         .map((l) => (l ? `      ${l}` : ''))
         .join('\n');
+      // A TLA is one list entry keyed by name. Values bind as strings, which is
+      // what every parameter here wants — a snippet taking a number parses it
+      // itself, so nothing needs `code: true`.
       const tlaLines = this.tlas.map((t) => {
         const example = t.arg.example != null ? t.arg.example : t.arg.default != null ? t.arg.default : '';
-        return `    ${t.name}: ["${example}"]`;
+        return `    - name: ${t.name}\n      value: "${example}"`;
       });
       const tlaBlock = tlaLines.length ? `  tlas:\n${tlaLines.join('\n')}\n` : '';
       return `apiVersion: source.toolkit.fluxcd.io/v1

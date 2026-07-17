@@ -65,8 +65,10 @@ spec:
     - { kind: JsonnetLibrary, name: kurly,     importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-tik, importPath: github.com/metio/kurly/workloads/tik }
   tlas:
-    host: ["tik.internal.example.com"]
-    storeSize: ["5Gi"]
+    - name: host
+      value: tik.internal.example.com
+    - name: storeSize
+      value: "5Gi"
 ---
 # 4 — stageset applies the rendered output, gated per stage.
 apiVersion: stages.metio.wtf/v1

@@ -109,8 +109,10 @@ spec:
     - { kind: JsonnetLibrary, name: kurly,         importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-valkey,  importPath: github.com/metio/kurly/workloads/valkey }
   tlas:
-    storageSize: ["5Gi"]
-    maxMemory: ["512mb"]
+    - name: storageSize
+      value: "5Gi"
+    - name: maxMemory
+      value: 512mb
 ---
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
