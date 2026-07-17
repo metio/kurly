@@ -22,8 +22,8 @@
 //
 // Clients address the pods directly by their stable DNS names:
 //
-//   memcached-0.memcached-headless:11211
-//   memcached-1.memcached-headless:11211
+//   <name>-0.<name>-headless:11211
+//   <name>-1.<name>-headless:11211
 //
 // Scaling changes the server list and therefore reshuffles the ring, so treat
 // `replicas` as part of the client's configuration, not a free-running knob.
@@ -39,6 +39,7 @@ local version = 'dev';
 local port = 11211;
 
 function(
+  name='memcached',
   image='docker.io/library/memcached:1.6.45',
   replicas=3,
   memoryMB=64,
@@ -56,7 +57,7 @@ function(
   // -m raised without the limit following it.
   local memoryLimitMB = std.ceil(memoryMB * 1.25) + 32;
 
-  kurly.stateful('memcached', image)
+  kurly.stateful(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
   // The image declares `USER memcache` — a name, not a number — and the

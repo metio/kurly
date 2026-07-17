@@ -31,11 +31,12 @@ local pipelines = |||
 |||;
 
 function(
+  name='tik',
   image='ghcr.io/metio/tik:2026.7.14194001',
   storageSize='1Gi',
   storageClass=null,
 )
-  kurly.http('tik', image)
+  kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(1)
   + kurly.recreate()

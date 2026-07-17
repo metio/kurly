@@ -892,4 +892,28 @@ local podOf(app) = app.deployment.spec.template.spec;
     std.objectHas(kurly.http('web', 'img:1').service.spec, 'ipFamilies'),
     false
   ),
+  // A workload named for its ENGINE leaks that engine into every consumer: a
+  // client pointed at `valkey-headless` cannot be moved to dragonfly without
+  // touching the client. Naming it for its ROLE is what makes the two
+  // interchangeable — and it is also what lets a namespace hold two of them.
+  valkey_cache_can_be_named_for_its_role: std.assertEqual(
+    local items = kurly.list((import '../workloads/valkey/cache.libsonnet')(name='cache')).items;
+    std.set([o.metadata.name for o in items]),
+    ['cache', 'cache-headless']
+  ),
+  // The name reaches the plumbing too, not just the metadata: the init container
+  // discovers peers through the headless Service BY NAME, so a half-renamed
+  // workload looks right and never forms a replica set.
+  a_renamed_cache_discovers_its_own_peers: std.assertEqual(
+    local init = (import '../workloads/valkey/cache.libsonnet')(name='cache')
+                 .deployment.spec.template.spec.initContainers[0];
+    std.length(std.findSubstr('getent hosts cache-headless', init.command[2])) == 1,
+    true
+  ),
+  // Two of the same workload in one namespace no longer collide.
+  two_caches_coexist_in_one_namespace: std.assertEqual(
+    local names(n) = [o.metadata.name for o in kurly.list((import '../workloads/valkey/cache.libsonnet')(name=n)).items];
+    std.set(names('sessions') + names('fragments')),
+    ['fragments', 'fragments-headless', 'sessions', 'sessions-headless']
+  ),
 }

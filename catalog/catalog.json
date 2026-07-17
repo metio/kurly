@@ -1836,6 +1836,12 @@
             {
                "args": [
                   {
+                     "default": "memcached",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "docker.io/library/memcached:1.6.45",
                      "name": "image",
                      "required": false,
@@ -1868,6 +1874,12 @@
             {
                "args": [
                   {
+                     "default": "tik",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "ghcr.io/metio/tik:2026.7.14194001",
                      "name": "image",
                      "required": false,
@@ -1887,6 +1899,12 @@
          "stages": [
             {
                "args": [
+                  {
+                     "default": "valkey",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
                   {
                      "default": "docker.io/valkey/valkey:9.0.3",
                      "name": "image",

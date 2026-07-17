@@ -187,6 +187,26 @@ done
 #
 # 1000700000 is the shape of an OpenShift-assigned uid; nothing may keep a uid of
 # its own choosing. Glob-driven, so a workload added tomorrow is covered.
+# Every workload must take a name, and everything it renders must follow it.
+# Two reasons, and the second is the one that bites: a namespace can hold two of
+# the same workload only if their object names differ, and a workload named for
+# its ENGINE rather than its ROLE leaks that engine into every consumer — a
+# client pointed at `valkey-headless` cannot be moved to dragonfly without
+# touching the client. A recipe that writes its own name as a literal (valkey's
+# cache writes its primary Service by hand) silently keeps it.
+echo "== every workload takes a name, and everything follows it =="
+for stage in workloads/*/*.libsonnet; do
+  rendered="$(jsonnet -J vendor -e \
+    "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')(name='kurlytest'))")" \
+    || { echo "::error::${stage}: does not take a name parameter" >&2; exit 1; }
+  strays="$(printf '%s' "$rendered" | jq -r '[.items[] | select(.metadata.name | startswith("kurlytest") | not) | "\(.kind)/\(.metadata.name)"] | join(" ")')"
+  if [ -n "$strays" ]; then
+    echo "::error::${stage}: object(s) kept a name of their own after name=kurlytest: ${strays}" >&2
+    exit 1
+  fi
+  echo "every object follows the workload name in $stage"
+done
+
 echo "== every container follows the composed uid =="
 for stage in workloads/*/*.libsonnet; do
   # A custom-resource workload rejects a composed feature on purpose (it would

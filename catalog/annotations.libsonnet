@@ -298,6 +298,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       summary: "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store.",
       stages: {
         backend: d.fn('The tik backend supervisor: a single-writer http app over a ReadWriteOnce store (one replica, recreated to avoid deadlocking on the volume). Compose an exposure recipe to serve the board.', [
+          d.arg('name', d.T.string, default='tik'),
           d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.14194001'),
         ]) + {
           kind: 'http',
@@ -361,6 +362,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       summary: "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace.",
       stages: {
         cache: d.fn('The memcached shards: a StatefulSet (for stable DNS names, not storage) and the headless Service that names them. Clients consistent-hash keys over memcached-0..N-1; scaling reshuffles that ring, so treat replicas as part of the client configuration. The container memory limit is derived from memoryMB, since -m caps only the item cache.', [
+          d.arg('name', d.T.string, default='memcached'),
           d.arg('image', d.T.string, default='docker.io/library/memcached:1.6.45'),
           d.arg('replicas', d.T.int, default=3),
           d.arg('memoryMB', d.T.int, default=64),
@@ -382,6 +384,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           importPath: 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
         },
         cache: d.fn('An in-memory Valkey cache that upgrades its version with zero downtime and no data loss, on the stock image and no orchestrator — the replication hand-off lives entirely in the pod manifests (headless Service, maxSurge, an initContainer that replicates the running peer, and a preStop failover).', [
+          d.arg('name', d.T.string, default='valkey'),
           d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.0.3'),
           d.arg('maxMemory', d.T.string, default='256mb'),
         ]) + {

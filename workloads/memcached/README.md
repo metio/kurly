@@ -34,6 +34,7 @@ kurly.list(memcached(replicas=3, memoryMB=256))
 
 | Parameter | Default | Notes |
 |---|---|---|
+| `name` | `memcached` | names every object, and the DNS the client list is built from |
 | `image` | `docker.io/library/memcached:1.6.45` | |
 | `replicas` | `3` | the shard count — part of the client's configuration (see below) |
 | `memoryMB` | `64` | `-m`, the item cache size; also derives the container memory limit |
@@ -49,6 +50,9 @@ memcached-0.memcached-headless:11211
 memcached-1.memcached-headless:11211
 memcached-2.memcached-headless:11211
 ```
+
+Those names follow `name`, so `memcached(name='sessions')` publishes
+`sessions-0.sessions-headless` and a namespace can hold more than one cache.
 
 Give that list to a client that consistent-hashes over it (pymemcache's
 `HashClient`, `spymemcached`, `Enyim`, …).

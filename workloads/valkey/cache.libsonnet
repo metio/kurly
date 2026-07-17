@@ -27,6 +27,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = 'dev';
 
 function(
+  name='valkey',
   image='docker.io/valkey/valkey:9.0.3',
   maxMemory='256mb',
   // The sidecar that labels the primary pod — a maintained Alpine image carrying
@@ -35,7 +36,7 @@ function(
   // Valkey data container stays the stock image.
   kubectlImage='docker.io/alpine/k8s:1.36.2',
 )
-  local headless = 'valkey-headless';
+  local headless = name + '-headless';
   local roleLabel = 'kurly.dev/valkey-role';
 
   // Discover the peer that is actually the primary and write a config that
@@ -124,7 +125,7 @@ function(
     done
   ||| % { roleLabel: roleLabel };
 
-  kurly.worker('valkey', image)
+  kurly.worker(name, image)
   + kurly.version(version)
   + kurly.runAs(999)
   // A writable scratch for the generated config (and Valkey's working dir); the
@@ -180,13 +181,13 @@ function(
     service: {
       apiVersion: 'v1',
       kind: 'Service',
-      metadata: { name: 'valkey', labels: { 'app.kubernetes.io/name': 'valkey', 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/version': version } },
+      metadata: { name: name, labels: { 'app.kubernetes.io/name': name, 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/version': version } },
       // The IP families come from the same fragment every other Service uses:
       // written by hand they would hold the cluster's default while the headless
       // Service beside them followed the consumer, and clients would reach the
       // primary over a family the rest of the workload does not speak.
       spec: {
-        selector: { 'app.kubernetes.io/name': 'valkey', [roleLabel]: 'primary' },
+        selector: { 'app.kubernetes.io/name': name, [roleLabel]: 'primary' },
         ports: [{ name: 'redis', port: 6379, targetPort: 6379 }],
       } + this.ipFamilySpec,
     },
