@@ -63,6 +63,24 @@ local resourcePresets = {
   // spelling out requests and limits; it replaces the resources wholesale, so
   // compose it before any single-knob resources() tweak.
   resourcePreset(preset):: { config+:: { resources: resourcePresets[preset] } },
+  // The Service's port — the contract with clients, not with the container.
+  servicePort(port):: { config+:: { servicePort: port } },
+  // Its type. LoadBalancer and NodePort exist only where the cluster provides
+  // them, so kurly names none.
+  serviceType(type):: { config+:: { serviceType: type } },
+  // Annotations on the Service. A cloud load balancer is configured through
+  // these and nothing else, and the keys differ per provider — kurly cannot know
+  // them, and a Service that cannot carry them cannot be a working LoadBalancer.
+  serviceAnnotations(annotations):: { config+:: { serviceAnnotations+: annotations } },
+  // The IP families every Service kurly renders should ask for. A cluster is
+  // single-stack IPv4, single-stack IPv6, or dual-stack; pinning the family it
+  // does not have gets the Service rejected, so there is no default.
+  ipFamilies(families, policy=null):: {
+    config+:: {
+      ipFamilies: families,
+      [if policy != null then 'ipFamilyPolicy']: policy,
+    },
+  },
   serviceAccount(serviceAccountName):: { config+:: { serviceAccountName: serviceAccountName } },
   // Annotations for the ServiceAccount kurly mints for a workload that declares
   // RBAC — the usual home of cloud workload identity. Bringing your own account

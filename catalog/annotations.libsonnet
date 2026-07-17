@@ -102,6 +102,19 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     resourcePreset: d.fn('A named resource size (nano/micro/small/medium/large) — a memory request equal to its limit and a CPU request with no limit. Replaces resources wholesale.', [
       d.arg('preset', d.T.string, required=true, example='small'),
     ]) + { kinds: allKinds, group: 'container' },
+    servicePort: d.fn('The port the Service publishes — the contract with clients, which the container port need not match.', [
+      d.arg('port', d.T.int, required=true, example=443),
+    ]) + { kinds: ['http'], group: 'container' },
+    serviceType: d.fn('The Service type. LoadBalancer and NodePort exist only where the cluster provides them, so there is no default.', [
+      d.arg('type', d.T.string, required=true, example='LoadBalancer'),
+    ]) + { kinds: ['http'], group: 'container' },
+    serviceAnnotations: d.fn('Annotations on the Service. A cloud load balancer is configured through these and nothing else, and the keys differ per provider — without them a LoadBalancer cannot be shaped on any managed cloud.', [
+      d.arg('annotations', d.T.object, required=true, example={ 'service.beta.kubernetes.io/aws-load-balancer-type': 'nlb' }),
+    ]) + { kinds: ['http'], group: 'container' },
+    ipFamilies: d.fn('The IP families EVERY Service the workload renders asks for. A cluster is single-stack IPv4, single-stack IPv6, or dual-stack; pinning a family it lacks gets the Service rejected, so kurly names none and lets the cluster decide.', [
+      d.arg('families', d.T.array, required=true, example=['IPv4', 'IPv6']),
+      d.arg('policy', d.T.string, example='RequireDualStack'),
+    ]) + { kinds: allKinds, group: 'container' },
     serviceAccount: d.fn("Runs the pod under a named ServiceAccount (also gates token automount). Yours wins over the one a workload's RBAC would mint, and kurly then mints none — the account is yours to own and annotate.", [
       d.arg('serviceAccountName', d.T.string, required=true, example='storefront'),
     ]) + { kinds: allKinds, group: 'container' },

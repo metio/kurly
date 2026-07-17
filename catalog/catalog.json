@@ -509,6 +509,36 @@
       {
          "args": [
             {
+               "example": [
+                  "IPv4",
+                  "IPv6"
+               ],
+               "name": "families",
+               "required": true,
+               "type": "array"
+            },
+            {
+               "example": "RequireDualStack",
+               "name": "policy",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "The IP families EVERY Service the workload renders asks for. A cluster is single-stack IPv4, single-stack IPv6, or dual-stack; pinning a family it lacks gets the Service rejected, so kurly names none and lets the cluster decide.",
+         "id": "ipFamilies",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": {
                   "team": "payments"
                },
@@ -1131,6 +1161,24 @@
       {
          "args": [
             {
+               "example": {
+                  "service.beta.kubernetes.io/aws-load-balancer-type": "nlb"
+               },
+               "name": "annotations",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Annotations on the Service. A cloud load balancer is configured through these and nothing else, and the keys differ per provider — without them a LoadBalancer cannot be shaped on any managed cloud.",
+         "id": "serviceAnnotations",
+         "kinds": [
+            "http"
+         ]
+      },
+      {
+         "args": [
+            {
                "default": "http",
                "name": "port",
                "required": false,
@@ -1151,6 +1199,38 @@
          "group": "observability",
          "help": "A Prometheus-Operator ServiceMonitor scraping the workload Service.",
          "id": "serviceMonitor",
+         "kinds": [
+            "http"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": 443,
+               "name": "port",
+               "required": true,
+               "type": "int"
+            }
+         ],
+         "group": "container",
+         "help": "The port the Service publishes — the contract with clients, which the container port need not match.",
+         "id": "servicePort",
+         "kinds": [
+            "http"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "LoadBalancer",
+               "name": "type",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "The Service type. LoadBalancer and NodePort exist only where the cluster provides them, so there is no default.",
+         "id": "serviceType",
          "kinds": [
             "http"
          ]

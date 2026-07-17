@@ -856,4 +856,40 @@ local podOf(app) = app.deployment.spec.template.spec;
     [[v.name for v in pod.volumes], [m.mountPath for m in pod.containers[0].volumeMounts]],
     [['s'], ['/a', '/b']]
   ),
+  // A cloud load balancer is configured through Service annotations and nothing
+  // else, and the keys differ per provider — kurly cannot know them, so a
+  // Service that cannot carry them cannot be a working LoadBalancer anywhere.
+  service_takes_a_type_and_annotations: std.assertEqual(
+    local svc = (kurly.http('web', 'img:1')
+                 + kurly.serviceType('LoadBalancer')
+                 + kurly.serviceAnnotations({ 'service.beta.kubernetes.io/aws-load-balancer-type': 'nlb' })).service;
+    [svc.spec.type, svc.metadata.annotations],
+    ['LoadBalancer', { 'service.beta.kubernetes.io/aws-load-balancer-type': 'nlb' }]
+  ),
+  // The Service port is the contract with clients; the container port is not.
+  service_port_is_separate_from_the_container_port: std.assertEqual(
+    local a = kurly.http('web', 'img:1') + kurly.port(8080) + kurly.servicePort(443);
+    [a.service.spec.ports[0].port, a.service.spec.ports[0].targetPort, a.deployment.spec.template.spec.containers[0].ports[0].containerPort],
+    [443, 'http', 8080]
+  ),
+  // Default unchanged: no type, no annotations, port 80.
+  a_plain_service_is_unchanged: std.assertEqual(
+    kurly.http('web', 'img:1').service.spec,
+    { ports: [{ name: 'http', port: 80, targetPort: 'http' }], selector: { 'app.kubernetes.io/name': 'web' } }
+  ),
+  // Every Service a workload renders must agree on its families, including one a
+  // workload writes for itself — a cluster that lacks the family rejects it, and
+  // a Service left on the cluster default while its neighbours follow the
+  // consumer is reachable over a family the rest of the workload does not speak.
+  ip_families_reach_every_service: std.assertEqual(
+    local items = kurly.list((import '../workloads/valkey/cache.libsonnet')()
+                             + kurly.ipFamilies(['IPv6'], 'SingleStack')).items;
+    [[s.metadata.name, s.spec.ipFamilies, s.spec.ipFamilyPolicy] for s in items if s.kind == 'Service'],
+    [['valkey', ['IPv6'], 'SingleStack'], ['valkey-headless', ['IPv6'], 'SingleStack']]
+  ),
+  // Unset, kurly names none and the cluster's own default stands.
+  ip_families_are_absent_by_default: std.assertEqual(
+    std.objectHas(kurly.http('web', 'img:1').service.spec, 'ipFamilies'),
+    false
+  ),
 }

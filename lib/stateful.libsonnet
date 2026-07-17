@@ -75,11 +75,17 @@ function(name, image)
     // workload declares one.
     service:
       local cfg = self.config;
+      // Captured out here: inside the object literal below, `self` would bind to
+      // that literal rather than to the app.
+      local ipFamilies = self.ipFamilySpec;
       k.core.v1.service.new(
         headlessName(cfg.name),
         self.selectorLabels,
         if cfg.port == null then [] else [k.core.v1.servicePort.newNamed('http', 80, 'http')],
       )
       + k.core.v1.service.metadata.withLabels(self.labels)
-      + k.core.v1.service.spec.withClusterIP('None'),
+      + k.core.v1.service.spec.withClusterIP('None')
+      // Every Service kurly renders agrees on its IP families, or a dual-stack
+      // consumer fixes one and silently keeps the cluster's default on the rest.
+      + { spec+: ipFamilies },
   }

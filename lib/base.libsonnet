@@ -86,7 +86,7 @@ local networkPolicyManifest(name, spec, selectorLabels, labels) = std.prune({
 // A headless Service (clusterIP: None) selecting the workload's pods, for
 // peer discovery by DNS. publishNotReadyAddresses lists pods before they are
 // Ready, so peers stay discoverable across a rollout.
-local headlessServiceManifest(name, spec, selectorLabels, labels) = {
+local headlessServiceManifest(name, spec, selectorLabels, labels, ipFamilies) = {
   apiVersion: 'v1',
   kind: 'Service',
   metadata: { name: name + '-headless', labels: labels },
@@ -95,7 +95,7 @@ local headlessServiceManifest(name, spec, selectorLabels, labels) = {
     selector: selectorLabels,
     publishNotReadyAddresses: (if spec.publishNotReadyAddresses then true else null),
     ports: (if spec.port == null then null else [{ name: 'tcp', port: spec.port, targetPort: spec.port }]),
-  }),
+  }) + ipFamilies,
 };
 
 local serviceMonitorManifest(name, spec, selectorLabels, labels) = {
@@ -208,6 +208,20 @@ local exclusionConflicts(exclusive) = [
       labels: {},
       annotations: {},
       resources: { requests: { cpu: '100m', memory: '128Mi' } },
+      // The Service in front of the workload. Its port is the contract with
+      // clients; its type and annotations are the cluster's business — a cloud
+      // load balancer is configured through Service ANNOTATIONS and nothing
+      // else, and those keys differ per provider, so a Service that cannot be
+      // annotated cannot be a working LoadBalancer anywhere.
+      servicePort: 80,
+      serviceType: null,
+      serviceAnnotations: {},
+      // Which IP families a Service asks for. A cluster is single-stack IPv4,
+      // single-stack IPv6, or dual-stack, and a Service that pins the wrong one
+      // is rejected — so kurly names none and lets the cluster's default stand
+      // unless a consumer says otherwise.
+      ipFamilies: [],
+      ipFamilyPolicy: null,
       serviceAccountName: null,
       // Annotations for the ServiceAccount kurly mints — where cloud workload
       // identity is wired (eks.amazonaws.com/role-arn, iam.gke.io/…). Ignored
@@ -384,7 +398,7 @@ local exclusionConflicts(exclusive) = [
     serviceMonitor::
       if this.config.serviceMonitor == null then null else serviceMonitorManifest(this.config.name, this.config.serviceMonitor, this.selectorLabels, this.labels),
     headlessService::
-      if this.config.headlessService == null then null else headlessServiceManifest(this.config.name, this.config.headlessService, this.selectorLabels, this.labels),
+      if this.config.headlessService == null then null else headlessServiceManifest(this.config.name, this.config.headlessService, this.selectorLabels, this.labels, this.ipFamilySpec),
     // The Role's rules are the consumer's rbac() grant (if any) plus every
     // requiredRbac rule a capability declared, so a feature's grant survives a
     // consumer calling rbac() and neither clobbers the other.
@@ -504,6 +518,18 @@ local exclusionConflicts(exclusive) = [
       + (if cfg.topologySpread == [] then {} else { topologySpreadConstraints: cfg.topologySpread })
       + (if cfg.affinity == {} then {} else { affinity: cfg.affinity }),
 
+    // The IP-family fields a Service carries, derived from config so EVERY
+    // Service kurly renders agrees — the routable one, the headless one, and any
+    // a workload writes for itself (valkey/cache's primary Service does). A
+    // workload reaching this instead of writing the fields itself is what keeps
+    // one Service from quietly holding a family the others do not: a cluster is
+    // single-stack IPv4, single-stack IPv6, or dual-stack, and a Service pinning
+    // a family the cluster lacks is rejected. Empty unless asked for.
+    ipFamilySpec:: std.prune({
+      ipFamilies: (if this.config.ipFamilies == [] then null else this.config.ipFamilies),
+      ipFamilyPolicy: this.config.ipFamilyPolicy,
+    }),
+
     // The container-level security posture, derived from config so that EVERY
     // container in the pod can carry it — not just the workload's own. A recipe
     // that writes these fields as literals into an initContainer or a sidecar
@@ -608,9 +634,13 @@ local exclusionConflicts(exclusive) = [
   // service adds a ClusterIP Service in front of the workload's named `http`
   // container port. Composed onto core by the HTTP-facing kind.
   service:: {
+    local this = self,
     service:
       local cfg = self.config;
-      k.core.v1.service.new(cfg.name, self.selectorLabels, [k.core.v1.servicePort.newNamed('http', 80, 'http')])
-      + k.core.v1.service.metadata.withLabels(self.labels),
+      k.core.v1.service.new(cfg.name, self.selectorLabels, [k.core.v1.servicePort.newNamed('http', cfg.servicePort, 'http')])
+      + k.core.v1.service.metadata.withLabels(self.labels)
+      + (if cfg.serviceAnnotations == {} then {} else { metadata+: { annotations: cfg.serviceAnnotations } })
+      + (if cfg.serviceType == null then {} else { spec+: { type: cfg.serviceType } })
+      + { spec+: this.ipFamilySpec },
   },
 }

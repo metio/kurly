@@ -170,6 +170,7 @@ function(
   // The primary Service is this workload's own plumbing, added with the raw `+`
   // escape hatch rather than a library feature.
   + {
+    local this = self,
     deployment+: {
       spec+: { template+: { spec+: {
         volumes+: [{ name: 'labeler-home', emptyDir: {} }],
@@ -180,9 +181,13 @@ function(
       apiVersion: 'v1',
       kind: 'Service',
       metadata: { name: 'valkey', labels: { 'app.kubernetes.io/name': 'valkey', 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/version': version } },
+      // The IP families come from the same fragment every other Service uses:
+      // written by hand they would hold the cluster's default while the headless
+      // Service beside them followed the consumer, and clients would reach the
+      // primary over a family the rest of the workload does not speak.
       spec: {
         selector: { 'app.kubernetes.io/name': 'valkey', [roleLabel]: 'primary' },
         ports: [{ name: 'redis', port: 6379, targetPort: 6379 }],
-      },
+      } + this.ipFamilySpec,
     },
   }

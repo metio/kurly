@@ -151,6 +151,32 @@ for stage in workloads/*/*.libsonnet; do
   echo "features are rejected (and params/raw + still work) in $stage"
 done
 
+# A cluster is single-stack IPv4, single-stack IPv6, or dual-stack, and a Service
+# pinning a family the cluster lacks is rejected. So when a consumer names the
+# families, EVERY Service a workload renders must follow — a workload that writes
+# a Service by hand (valkey/cache writes its primary one) otherwise keeps the
+# cluster's default on that Service while the rest follow the consumer, and
+# clients reach it over a family the workload does not speak elsewhere.
+echo "== every Service follows the composed IP families =="
+for stage in workloads/*/*.libsonnet; do
+  default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
+    || { echo "::error::${stage}: does not render" >&2; exit 1; }
+  # Custom-resource workloads reject features by design, and their Services are
+  # the operator's to create.
+  [ "$(printf '%s' "$default" | jq '[.. | objects | select(.kind? == "Service")] | length')" != "0" ] || {
+    echo "no Service in $stage"; continue; }
+
+  strays="$(jsonnet -J vendor -e \
+    "local k = import 'github.com/metio/kurly/main.libsonnet';
+     k.list((import '${stage}')() + k.ipFamilies(['IPv6'], 'SingleStack'))" \
+    | jq -r '[.. | objects | select(.kind? == "Service") | select(.spec.ipFamilies != ["IPv6"]) | .metadata.name] | join(" ")')"
+  if [ -n "$strays" ]; then
+    echo "::error::${stage}: Service(s) ignored the composed IP families: ${strays}" >&2
+    exit 1
+  fi
+  echo "every Service follows the composed IP families in $stage"
+done
+
 # Every container in a workload's pod must follow the composed uid — not just the
 # one the recipe thinks of as its own. A uid written as a literal into an
 # initContainer or a sidecar is beyond the reach of kurly.runAs() and the
