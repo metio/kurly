@@ -401,7 +401,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         agent: d.fn("The per-node collector. config is the collector's own document, rendered straight into the mounted config file; the default receives OTLP on 4317/4318, guards memory, batches, and exports to the debug logger, with a health_check extension on 13133 backing the probes. Replace config for real pipelines, and move the probes if it drops health_check.", [
           d.arg('name', d.T.string, default='otel-collector'),
-          d.arg('image', d.T.string, default='docker.io/otel/opentelemetry-collector-contrib:0.119.0'),
+          d.arg('image', d.T.string, default='docker.io/otel/opentelemetry-collector-contrib:0.156.0'),
           d.arg('config', d.T.object, example={ receivers: {}, exporters: {}, service: { pipelines: {} } }),
         ]) + {
           kind: 'daemon',
