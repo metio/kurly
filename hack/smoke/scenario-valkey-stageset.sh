@@ -202,7 +202,7 @@ emit_kurly_library() {
   echo "spec:"
   echo "  files:"
   local f
-  for f in main.libsonnet lib/*.libsonnet workloads/valkey/cache.libsonnet; do
+  for f in main.libsonnet lib/*.libsonnet workloads/valkey/*.libsonnet workloads/valkey/version.txt; do
     echo "    \"github.com/metio/kurly/${f}\": |"
     sed 's/^/      /' "$f"
   done

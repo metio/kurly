@@ -29,6 +29,7 @@ on:
       - '*.libsonnet'
       - 'lib/**'
       - Containerfile
+      - workload.Containerfile
       - 'workloads/**'
       # A workload README is documentation, not shipped in the source artifact,
       # so a README-only edit must not cut a release.
@@ -112,6 +113,12 @@ jobs:
               # release (it would publish a bogus empty image + tag).
               workloads="$(echo "$diff" | grep -v '/README\.md$' | grep -oP '^workloads/\K[^/]+' | sort -u \
                 | while IFS= read -r w; do [ -n "$w" ] && [ -d "workloads/$w" ] && echo "$w"; done || true)"
+              # The shared workload Containerfile packages EVERY workload, so a
+              # change to it must re-release all of them — otherwise editing the
+              # build would silently rebuild nothing.
+              if echo "$diff" | grep -qx 'workload.Containerfile'; then
+                workloads="$(all_workloads)"
+              fi
             fi
           fi
           {
@@ -242,34 +249,39 @@ jobs:
         with:
           fetch-depth: 0
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
-      - name: Prepare the source build context (version stamped in)
-        run: nix develop --command hack/build-workload-artifact.sh "workloads/$WORKLOAD" "$VERSION" dist
-      - uses: docker/login-action@af1e73f918a031802d376d3c8bbc3fe56130a9b0 # v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - id: build
-        name: Build, assert single-layer, and push the source image
-        env:
-          IMAGE: ghcr.io/metio/kurly/workloads/${{ matrix.workload }}
+      - name: Stamp the release version into the workload's version.txt
+        # The image ships SOURCE, and a stage reads its version with
+        # `importstr './version.txt'`, so the release version has to be in that
+        # file before the build — nothing renders here to inject it later. It is a
+        # data file (no SPDX header, or the header would land inside the version
+        # string), covered by REUSE.toml. Writing it whole keeps the build a plain
+        # COPY.
         run: |
           set -euo pipefail
-          # A FROM-scratch vendor-tree image with one COPY: a single layer that
-          # Flux extracts to the source files (the same shape as the library
-          # image). Assert the single layer — a selector-less OCIRepository and
-          # JaaS's vendor-tree search both depend on it.
-          docker build --file dist/Containerfile --tag "$IMAGE:$VERSION" --tag "$IMAGE:latest" \
-            --label "org.opencontainers.image.source=https://github.com/$GITHUB_REPOSITORY" \
-            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
-            dist
-          layers="$(docker image inspect "$IMAGE:$VERSION" --format '{{ len .RootFS.Layers }}')"
-          [ "$layers" = "1" ] || { echo "::error::workload image has $layers layers, expected 1"; exit 1; }
-          docker push "$IMAGE:$VERSION"
-          docker push "$IMAGE:latest"
-          echo "digest=$(docker image inspect "$IMAGE:$VERSION" --format '{{ index .RepoDigests 0 }}' | cut -d@ -f2)" >> "$GITHUB_OUTPUT"
-      - name: Sign
-        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/workloads/${WORKLOAD}@${{ steps.build.outputs.digest }}"
+          printf '%s\n' "$VERSION" > "workloads/$WORKLOAD/version.txt"
+      - name: Assert single layer and the version stamped in
+        # container-release builds and pushes the multi-arch image; do a local
+        # single-arch build first to check the contract cheaply: one COPY of one
+        # directory is one layer (a selector-less OCIRepository and JaaS's
+        # vendor-tree search both depend on it), and the shipped version.txt must
+        # carry this run's version — proof the stamp above reached the image.
+        run: |
+          set -euo pipefail
+          docker build --file workload.Containerfile --build-arg "WORKLOAD=$WORKLOAD" --tag kurly-wl-verify:latest .
+          n="$(docker image inspect kurly-wl-verify:latest --format '{{ len .RootFS.Layers }}')"
+          [ "$n" = "1" ] || { echo "::error::workload image has $n layers, expected 1"; exit 1; }
+          cid="$(docker create kurly-wl-verify:latest)"
+          stamped="$(docker export "$cid" | tar -xO "github.com/metio/kurly/workloads/$WORKLOAD/version.txt" | tr -d '[:space:]')"
+          docker rm "$cid" >/dev/null
+          [ "$stamped" = "$VERSION" ] || { echo "::error::workload image version.txt is '$stamped', expected '$VERSION'"; exit 1; }
+      - id: build
+        name: Build, push and sign the image
+        uses: metio/ci/container-release@749a4d81adf23ed252c309fa8bd94aec0e6b03c7 # 2026.7.15145237
+        with:
+          image: ghcr.io/metio/kurly/workloads/${{ matrix.workload }}
+          version: ${{ needs.discover.outputs.version }}
+          file: ./workload.Containerfile
+          build-args: WORKLOAD=${{ matrix.workload }}
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"

@@ -18,7 +18,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 // The workload version, stamped as app.kubernetes.io/version. 'dev' locally; the
 // release pipeline rewrites it to the calver before packing the source.
-local version = 'dev';
+local version = std.rstripChars(importstr './version.txt', '\n');
 
 // The pipelines the supervisor runs, passed via --config as an EDN document in
 // the mounted ConfigMap. The board serves continuously; the recur and probe

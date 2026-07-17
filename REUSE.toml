@@ -46,6 +46,15 @@ precedence = "aggregate"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
 
+# Each workload carries its release version as data in a version.txt (its stages
+# read it with importstr), overwritten with the calver at release. Plain text
+# holds no inline header, and a comment would end up inside the version string.
+[[annotations]]
+path = "workloads/*/version.txt"
+precedence = "override"
+SPDX-FileCopyrightText = "The kurly Authors"
+SPDX-License-Identifier = "0BSD"
+
 # .gitmodules registers the docs theme git submodule; it has no comment syntax.
 [[annotations]]
 path = ".gitmodules"

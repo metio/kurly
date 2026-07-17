@@ -360,7 +360,7 @@ emit_kurly_library() {
   echo "spec:"
   echo "  files:"
   local f
-  for f in main.libsonnet lib/*.libsonnet workloads/tik/backend.libsonnet; do
+  for f in main.libsonnet lib/*.libsonnet workloads/tik/*.libsonnet workloads/tik/version.txt; do
     echo "    \"github.com/metio/kurly/${f}\": |"
     sed 's/^/      /' "$f"
   done

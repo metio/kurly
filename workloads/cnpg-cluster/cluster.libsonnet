@@ -12,7 +12,7 @@
 //   kurly.list(cnpg(name='orders-db', instances=3, storageSize='20Gi'))
 //
 // PREREQUISITE: the CloudNativePG operator must be installed in the cluster.
-local version = 'dev';
+local version = std.rstripChars(importstr './version.txt', '\n');
 
 // The kurly label convention, applied to the CR so the same ownership marker and
 // version stamp ride on it as on every other kurly manifest.

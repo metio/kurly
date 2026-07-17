@@ -321,8 +321,8 @@ emit_kurly_library() {
   echo "  files:"
   local f
   for f in main.libsonnet lib/*.libsonnet \
-    workloads/cnpg-cluster/cluster.libsonnet \
-    workloads/cnpg-image-catalog/namespaced.libsonnet; do
+    workloads/cnpg-cluster/*.libsonnet workloads/cnpg-cluster/version.txt \
+    workloads/cnpg-image-catalog/*.libsonnet workloads/cnpg-image-catalog/version.txt; do
     echo "    \"github.com/metio/kurly/${f}\": |"
     sed 's/^/      /' "$f"
   done
