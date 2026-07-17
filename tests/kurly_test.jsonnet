@@ -710,4 +710,38 @@ local podOf(app) = app.deployment.spec.template.spec;
     [m.labels.team, m.annotations.a],
     ['payments', 'b']
   ),
+  // A uid written as a literal into a sidecar or an initContainer is beyond the
+  // reach of kurly.runAs() and the security profiles — and on a cluster that
+  // ASSIGNS uids (OpenShift gives each namespace a range and rejects anything
+  // else) one stray literal strands the whole pod.
+  sidecars_and_init_containers_follow_the_composed_uid: std.assertEqual(
+    local a = kurly.worker('w', 'img:1')
+              + kurly.initContainer({ name: 'init', image: 'img:1' })
+              + kurly.sidecar({ name: 'agent', image: 'img:1' })
+              + kurly.runAs(1000700000);
+    local pod = a.deployment.spec.template.spec;
+    [
+      pod.initContainers[0].securityContext.runAsUser,
+      pod.containers[0].securityContext.runAsUser,
+      pod.containers[1].securityContext.runAsUser,
+    ],
+    [1000700000, 1000700000, 1000700000]
+  ),
+  // A sidecar that means it can still say so; its own securityContext wins.
+  a_sidecar_may_override_the_posture: std.assertEqual(
+    (kurly.worker('w', 'img:1')
+     + kurly.sidecar({ name: 'agent', image: 'img:1', securityContext: { runAsUser: 4242 } })
+     + kurly.runAs(1000700000)).deployment.spec.template.spec.containers[1].securityContext.runAsUser,
+    4242
+  ),
+  // security.privileged emits no security fields at all, so no container carries
+  // a securityContext — the sidecar must not resurrect one.
+  privileged_leaves_sidecars_bare: std.assertEqual(
+    std.objectHas(
+      (kurly.worker('w', 'img:1') + kurly.sidecar({ name: 'agent', image: 'img:1' }) + kurly.security.privileged)
+      .deployment.spec.template.spec.containers[1],
+      'securityContext'
+    ),
+    false
+  ),
 }

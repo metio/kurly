@@ -118,6 +118,37 @@ for stage in workloads/*/*.libsonnet; do
   echo "storage class is settable in $stage"
 done
 
+# Every container in a workload's pod must follow the composed uid — not just the
+# one the recipe thinks of as its own. A uid written as a literal into an
+# initContainer or a sidecar is beyond the reach of kurly.runAs() and the
+# security profiles, and the pod then half-obeys the posture it was composed
+# with. That is not cosmetic: OpenShift assigns each namespace an arbitrary uid
+# range and REJECTS a container asking for anything else, so one stray literal
+# makes the whole workload unrunnable there.
+#
+# 1000700000 is the shape of an OpenShift-assigned uid; nothing may keep a uid of
+# its own choosing. Glob-driven, so a workload added tomorrow is covered.
+echo "== every container follows the composed uid =="
+for stage in workloads/*/*.libsonnet; do
+  rendered="$(jsonnet -J vendor -e \
+    "local k = import 'github.com/metio/kurly/main.libsonnet';
+     k.list((import '${stage}')() + k.runAs(1000700000))")" || {
+    echo "::error::${stage}: failed to render with kurly.runAs()" >&2; exit 1; }
+
+  strays="$(printf '%s' "$rendered" | jq -r '
+    [.. | objects | select(has("containers") or has("initContainers"))
+       | ((.initContainers // []) + (.containers // []))[]
+       | select(.securityContext.runAsUser != null and .securityContext.runAsUser != 1000700000)
+       | "\(.name)=\(.securityContext.runAsUser)"] | unique | join(" ")')"
+  if [ -n "$strays" ]; then
+    echo "::error::${stage}: container(s) keep a uid of their own after kurly.runAs(): ${strays}" >&2
+    exit 1
+  fi
+  # A stage rendering no containers at all (a custom resource) has nothing to say
+  # here; it is covered by its own params.
+  echo "every container follows the composed uid in $stage"
+done
+
 # Combinations that CANNOT start belong in the render, not in a CrashLoop. Each
 # of these is a certain failure on a real cluster, and jsonnet has no try/catch,
 # so an assert can only be observed by failing — which an assertion suite cannot

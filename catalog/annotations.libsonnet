@@ -115,6 +115,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('preStop', d.T.object, example={ exec: { command: ['sh', '-c', 'valkey-cli failover'] } }),
       d.arg('postStart', d.T.object),
     ]) + { kinds: allKinds, group: 'container' },
+    sidecar: d.fn("An extra container beside the workload's own, sharing the pod. It inherits the composed security posture unless it carries its own securityContext — so a sidecar does not restate a uid, and does not silently keep one when the consumer changes it.", [
+      d.arg('container', d.T.object, required=true, example={ name: 'agent', image: 'ghcr.io/acme/agent:1.0' }),
+    ]) + { kinds: allKinds, group: 'container' },
     initContainer: d.fn('An init container run to completion before the main one — the full container spec, passed through. Composes more than once.', [
       d.arg('container', d.T.object, required=true, example={ name: 'setup', image: 'busybox:1', command: ['sh', '-c', 'echo ready'] }),
     ]) + { kinds: allKinds, group: 'container' },

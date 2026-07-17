@@ -91,15 +91,6 @@ function(
     done
   |||;
 
-  local hardened = {
-    readOnlyRootFilesystem: true,
-    allowPrivilegeEscalation: false,
-    runAsNonRoot: true,
-    runAsUser: 999,
-    capabilities: { drop: ['ALL'] },
-    seccompProfile: { type: 'RuntimeDefault' },
-  };
-
   // The role labeler: probe the local Valkey's replication role with busybox
   // `nc` (no bash, no Valkey client) and keep this pod's `roleLabel` in sync —
   // set to `primary` on the master, removed on a replica (a merge patch with a
@@ -143,12 +134,15 @@ function(
   + kurly.headlessService(port=6379, publishNotReady=true)
   + kurly.rollingUpdate(maxSurge=1, maxUnavailable=0)
   + kurly.terminationGracePeriod(120)
+  // No securityContext here: the init container inherits the workload's composed
+  // posture, so kurly.runAs() and the security profiles reach it. Pinning a uid
+  // here would leave it behind on a cluster where uids are assigned rather than
+  // chosen.
   + kurly.initContainer({
     name: 'discover-primary',
     image: image,
     command: ['sh', '-c', initScript],
     volumeMounts: [{ name: 'gen', mountPath: '/gen' }],
-    securityContext: hardened,
   })
   + kurly.lifecycle(preStop={ exec: { command: ['sh', '-c', preStopScript] } })
   + kurly.readinessProbe({ exec: { command: ['sh', '-c', "valkey-cli info replication | grep -qE 'role:master|master_link_status:up'"] } })
@@ -160,30 +154,24 @@ function(
   // It cannot be narrowed to this one pod: RBAC `resourceNames` cannot match the
   // controller's generated pod names, so the grant is namespace-wide on pods.
   + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['get', 'patch'] }])
-  // The labeler sidecar (a second container) and the primary Service are this
-  // workload's own plumbing, added with the raw `+` escape hatch rather than a
-  // library feature.
+  // The labeler runs beside Valkey as a sidecar, so it inherits the composed
+  // security posture instead of restating one — a uid written here would ignore
+  // kurly.runAs() and strand the pod on a cluster that assigns uids.
+  + kurly.sidecar({
+    name: 'role-labeler',
+    image: kubectlImage,
+    command: ['sh', '-c', labelerScript],
+    env: [{ name: 'POD_NAME', valueFrom: { fieldRef: { fieldPath: 'metadata.name' } } }],
+    resources: { requests: { cpu: '10m', memory: '32Mi' }, limits: { memory: '32Mi' } },
+    // A writable HOME so kubectl can cache under the read-only root filesystem;
+    // the pod's fsGroup owns the emptyDir.
+    volumeMounts: [{ name: 'labeler-home', mountPath: '/home/labeler' }],
+  })
+  // The primary Service is this workload's own plumbing, added with the raw `+`
+  // escape hatch rather than a library feature.
   + {
     deployment+: {
       spec+: { template+: { spec+: {
-        containers+: [{
-          name: 'role-labeler',
-          image: kubectlImage,
-          command: ['sh', '-c', labelerScript],
-          env: [{ name: 'POD_NAME', valueFrom: { fieldRef: { fieldPath: 'metadata.name' } } }],
-          resources: { requests: { cpu: '10m', memory: '32Mi' }, limits: { memory: '32Mi' } },
-          // A writable HOME so kubectl can cache under the read-only root
-          // filesystem; the pod fsGroup (999) owns the emptyDir.
-          volumeMounts: [{ name: 'labeler-home', mountPath: '/home/labeler' }],
-          securityContext: {
-            readOnlyRootFilesystem: true,
-            allowPrivilegeEscalation: false,
-            runAsNonRoot: true,
-            runAsUser: 999,
-            capabilities: { drop: ['ALL'] },
-            seccompProfile: { type: 'RuntimeDefault' },
-          },
-        }],
         volumes+: [{ name: 'labeler-home', emptyDir: {} }],
       } } },
     },

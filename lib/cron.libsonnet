@@ -19,7 +19,7 @@ function(name, image, schedule)
     cronjob:
       local cfg = self.config;
       local podSpec = self.podSecurity + self.podVolumes + self.podScheduling + self.podExtras;
-      k.batch.v1.cronJob.new(cfg.name, cfg.schedule, [self.container])
+      k.batch.v1.cronJob.new(cfg.name, cfg.schedule, self.podContainers)
       + k.batch.v1.cronJob.metadata.withLabels(self.labels)
       + k.batch.v1.cronJob.spec.withConcurrencyPolicy(cfg.concurrencyPolicy)
       + k.batch.v1.cronJob.spec.jobTemplate.spec.template.metadata.withLabelsMixin(self.podTemplateLabels)

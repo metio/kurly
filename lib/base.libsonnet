@@ -181,6 +181,9 @@ local exclusionConflicts(exclusive) = [
       livenessProbe: null,
       lifecycle: {},
       initContainers: [],
+      // Extra containers beside the workload's own. Like initContainers they are
+      // passed through, but both inherit containerSecurity first.
+      sidecars: [],
       terminationGracePeriodSeconds: null,
       // A headless Service ({ port, publishNotReadyAddresses }) selecting the
       // workload's pods, for peer discovery by DNS (clusterIP: None).
@@ -396,7 +399,19 @@ local exclusionConflicts(exclusive) = [
       local cfg = this.config;
       (if cfg.imagePullSecrets == [] then {} else { imagePullSecrets: [{ name: s } for s in cfg.imagePullSecrets] })
       + (if cfg.priorityClassName == null then {} else { priorityClassName: cfg.priorityClassName })
-      + (if cfg.initContainers == [] then {} else { initContainers: cfg.initContainers })
+      + (
+        if cfg.initContainers == []
+        then {}
+        // The posture goes UNDER the container, so a spec that sets its own
+        // securityContext still wins — but one that says nothing now follows the
+        // consumer's uid instead of whatever the recipe's author had in mind.
+        else {
+          initContainers: [
+            (if this.containerSecurity == {} then {} else { securityContext: this.containerSecurity }) + c
+            for c in cfg.initContainers
+          ],
+        }
+      )
       + (if cfg.terminationGracePeriodSeconds == null then {} else { terminationGracePeriodSeconds: cfg.terminationGracePeriodSeconds })
       + (if this.podServiceAccount == null then {} else { serviceAccountName: this.podServiceAccount }),
 
@@ -416,6 +431,34 @@ local exclusionConflicts(exclusive) = [
       + (if cfg.tolerations == [] then {} else { tolerations: cfg.tolerations })
       + (if cfg.topologySpread == [] then {} else { topologySpreadConstraints: cfg.topologySpread })
       + (if cfg.affinity == {} then {} else { affinity: cfg.affinity }),
+
+    // The container-level security posture, derived from config so that EVERY
+    // container in the pod can carry it — not just the workload's own. A recipe
+    // that writes these fields as literals into an initContainer or a sidecar
+    // puts them beyond reach of kurly.runAs() and the security profiles, and the
+    // pod then half-obeys the composed posture: exactly what stops a workload
+    // running where uids are not the consumer's to choose (OpenShift assigns an
+    // arbitrary uid per namespace and rejects anything else).
+    //
+    // A relaxed knob omits its field rather than writing the Kubernetes default,
+    // so security.privileged produces {} here and no container carries a
+    // securityContext at all.
+    containerSecurity::
+      local cfg = self.config;
+      std.prune({
+        allowPrivilegeEscalation: if cfg.allowPrivilegeEscalation then null else false,
+        readOnlyRootFilesystem: if cfg.readOnlyRootFilesystem then true else null,
+        capabilities: if cfg.dropAllCapabilities then { drop: ['ALL'] } else null,
+        runAsUser: cfg.runAsUser,
+        runAsGroup: cfg.runAsGroup,
+      }),
+
+    // The workload's container followed by any sidecars, each inheriting the
+    // composed security posture unless it carries its own. Every kind builds its
+    // pod from this, so a sidecar is not a Deployment-only privilege.
+    podContainers::
+      local inherited = if this.containerSecurity == {} then {} else { securityContext: this.containerSecurity };
+      [this.container] + [inherited + s for s in this.config.sidecars],
 
     container::
       local cfg = self.config;
@@ -461,23 +504,7 @@ local exclusionConflicts(exclusive) = [
              + k.core.v1.container.livenessProbe.httpGet.withPort('http')
       )
       + (if cfg.lifecycle == {} then {} else { lifecycle: cfg.lifecycle })
-      + (
-        if cfg.allowPrivilegeEscalation
-        then {}
-        else k.core.v1.container.securityContext.withAllowPrivilegeEscalation(false)
-      )
-      + (
-        if cfg.readOnlyRootFilesystem
-        then k.core.v1.container.securityContext.withReadOnlyRootFilesystem(true)
-        else {}
-      )
-      + (
-        if cfg.dropAllCapabilities
-        then k.core.v1.container.securityContext.capabilities.withDrop(['ALL'])
-        else {}
-      )
-      + (if cfg.runAsUser == null then {} else k.core.v1.container.securityContext.withRunAsUser(cfg.runAsUser))
-      + (if cfg.runAsGroup == null then {} else k.core.v1.container.securityContext.withRunAsGroup(cfg.runAsGroup)),
+      + (if this.containerSecurity == {} then {} else { securityContext: this.containerSecurity }),
   },
 
   // deployment adds the Deployment manifest plus a replica count knob. Composed
@@ -489,7 +516,7 @@ local exclusionConflicts(exclusive) = [
       local cfg = self.config;
       // Captured before the nested `spec+` literal, where `self` would rebind.
       local podSpec = self.podSecurity + self.podVolumes + self.podScheduling + self.podExtras;
-      k.apps.v1.deployment.new(cfg.name, replicas=cfg.replicas, containers=[self.container], podLabels=self.selectorLabels)
+      k.apps.v1.deployment.new(cfg.name, replicas=cfg.replicas, containers=self.podContainers, podLabels=self.selectorLabels)
       + k.apps.v1.deployment.metadata.withLabels(self.labels)
       + k.apps.v1.deployment.spec.template.metadata.withLabelsMixin(self.podTemplateLabels)
       + { spec+: { template+: { spec+: podSpec } } }

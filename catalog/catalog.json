@@ -1114,6 +1114,30 @@
       {
          "args": [
             {
+               "example": {
+                  "image": "ghcr.io/acme/agent:1.0",
+                  "name": "agent"
+               },
+               "name": "container",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "An extra container beside the workload's own, sharing the pod. It inherits the composed security posture unless it carries its own securityContext — so a sidecar does not restate a uid, and does not silently keep one when the consumer changes it.",
+         "id": "sidecar",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": "/var/lib/tik",
                "name": "mountPath",
                "required": true,

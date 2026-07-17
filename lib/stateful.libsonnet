@@ -24,7 +24,7 @@ function(name, image)
     statefulset:
       local cfg = self.config;
       // Captured before the nested literals below, where `self` would rebind.
-      local container = self.container;
+      local containers = self.podContainers;
       // The store's volume is supplied by the template; keep every other volume.
       local nonStoreVolumes = [v for v in self.volumes if v.name != 'store'];
       local podSpec =
@@ -32,7 +32,7 @@ function(name, image)
         + (if nonStoreVolumes == [] then {} else { volumes: nonStoreVolumes })
         + self.podScheduling
         + self.podExtras
-        + { containers: [container] };
+        + { containers: containers };
       local volumeClaimTemplates =
         if cfg.store == null then []
         else [{

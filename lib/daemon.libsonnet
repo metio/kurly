@@ -11,7 +11,7 @@ function(name, image)
     daemonset:
       local cfg = self.config;
       local podSpec = self.podSecurity + self.podVolumes + self.podScheduling + self.podExtras;
-      k.apps.v1.daemonSet.new(cfg.name, [self.container], self.selectorLabels)
+      k.apps.v1.daemonSet.new(cfg.name, self.podContainers, self.selectorLabels)
       + k.apps.v1.daemonSet.metadata.withLabels(self.labels)
       + k.apps.v1.daemonSet.spec.template.metadata.withLabelsMixin(self.podTemplateLabels)
       + { spec+: { template+: { spec+: podSpec } } }

@@ -74,6 +74,11 @@ local resourcePresets = {
   // An init container that runs to completion before the main one starts —
   // the full container spec, passed through. Composes more than once.
   initContainer(container):: { config+:: { initContainers+: [container] } },
+  // An extra container beside the workload's own, sharing the pod. It inherits
+  // the composed security posture unless it carries its own securityContext —
+  // so a sidecar does not have to restate a uid, and does not silently keep one
+  // when the consumer changes it.
+  sidecar(container):: { config+:: { sidecars+: [container] } },
   // How long the pod gets to shut down gracefully (a preStop hook's window).
   terminationGracePeriod(seconds):: { config+:: { terminationGracePeriodSeconds: seconds } },
   // A headless Service (clusterIP: None) selecting the pods, for DNS peer
