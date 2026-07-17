@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# The library and workload images COPY only main.libsonnet + lib/ and one
+# workloads/<name>/ dir, so nothing else belongs in the build context. vendor/ is
+# the important exclusion: the e2e scenarios symlink vendor/github.com/metio/kurly
+# back to the repo root (so jsonnet resolves kurly's canonical path), and taring
+# that self-referential symlink into the context would loop.
+vendor/
+.git/
+docs/
+node_modules/

@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# kind cluster for the OCI-source e2e scenarios: maps a host port to the fixed
+# NodePort (30500) the in-cluster registry Service publishes, so the runner can
+# `docker push localhost:5001/...` into a registry that Flux pulls over the
+# cluster network. The node image is set on the command line (--image), so this
+# config carries only the port map.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30500
+        hostPort: 5001
+        protocol: TCP

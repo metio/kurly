@@ -99,6 +99,7 @@ spec:
   # alias (defaulting to the library name) only matters for bare-name imports.
   libraries:
     - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: kurly-valkey }
     - { kind: JsonnetLibrary, name: k8s-libsonnet }
   tlas:
     - name: image
@@ -188,37 +189,22 @@ spec:
   sourceRef: { kind: OCIRepository, name: k8s-libsonnet }
 EOF
 
-echo "== kurly as an inline vendor-keyed JsonnetLibrary (the checked-out branch) =="
-# JaaS resolves an absolute import like github.com/metio/kurly/main.libsonnet by
-# treating it as a root-relative path and searching every library whose files are
-# keyed by full vendor path (the same way `jsonnet -J vendor` finds a jb tree). So
-# the library's file keys must be the vendor paths, not the repo-root paths a Flux
-# GitRepository would advertise. Build that library inline from the checked-out
-# sources — it tests the exact branch and needs no published artifact.
-emit_kurly_library() {
-  echo "apiVersion: jaas.metio.wtf/v1"
-  echo "kind: JsonnetLibrary"
-  echo "metadata: { name: kurly, namespace: ${ns} }"
-  echo "spec:"
-  echo "  files:"
-  local f
-  for f in main.libsonnet lib/*.libsonnet workloads/valkey/*.libsonnet workloads/valkey/version.txt; do
-    echo "    \"github.com/metio/kurly/${f}\": |"
-    sed 's/^/      /' "$f"
-  done
-}
-# Server-side apply so the large inline tree is not stored a second time in a
-# last-applied-config annotation.
-emit_kurly_library | kubectl apply --server-side --force-conflicts --namespace="$ns" --filename=-
+echo "== kurly + workload through the OCIRepository path (branch-built images) =="
+# The prime consumption path: build THIS branch's library and workload source
+# images, push them to the in-cluster registry, and let Flux pull them as
+# OCIRepositories — the same way a real deployment consumes kurly, so the image
+# packaging (the Containerfiles, the single layer, the vendor-tree layout) is
+# proven here, not only at release. The library and each workload are separate
+# images (separate OCIRepositories and JsonnetLibraries), exactly as published.
+kurly::install_registry
+kurly::publish_images valkey
+kurly::emit_oci_library "$ns" kurly kurly
+kurly::emit_oci_library "$ns" kurly-valkey kurly-valkey
 
-echo "== wait for the k8s-libsonnet OCI source to advertise an artifact =="
-ok=false
-for _ in $(seq 1 60); do
-  [ -n "$(kubectl --namespace="$ns" get ocirepository/k8s-libsonnet -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
-    && { ok=true; break; }
-  sleep 3
-done
-[ "$ok" = true ] || fail "ocirepository/k8s-libsonnet never advertised an artifact"
+echo "== wait for every OCI source to advertise an artifact =="
+kurly::wait_ocirepository "$ns" k8s-libsonnet
+kurly::wait_ocirepository "$ns" kurly
+kurly::wait_ocirepository "$ns" kurly-valkey
 
 initial="${VALKEY_LADDER[0]}"
 echo "== initial deploy: render the cache at $(image_ref "$initial") =="

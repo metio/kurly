@@ -33,6 +33,15 @@ on:
         required: false
         type: string
         default: '4'
+      registry:
+        description: >-
+          Create the kind cluster with a host port-map (localhost:5001 → NodePort
+          30500) so a scenario can stand up an in-cluster registry and serve
+          branch-built images to Flux over an OCIRepository. Off by default; the
+          stageset scenarios set it.
+        required: false
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -98,7 +107,18 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - name: Create the kind cluster (k8s ${{ matrix.k8s_version }})
-        run: nix develop --command kind create cluster --name kurly-e2e --image kindest/node:${{ matrix.k8s_version }} --wait 180s
+        env:
+          REGISTRY: ${{ inputs.registry }}
+        run: |
+          set -euo pipefail
+          args=(--name kurly-e2e --image "kindest/node:${{ matrix.k8s_version }}" --wait 180s)
+          # For OCI-source scenarios, the committed config maps a host port to a
+          # fixed NodePort so the runner can push branch-built images into an
+          # in-cluster registry that Flux then pulls over the cluster network.
+          if [ "$REGISTRY" = "true" ]; then
+            args+=(--config hack/smoke/kind-registry-config.yaml)
+          fi
+          nix develop --command kind create cluster "${args[@]}"
       - name: Run the ${{ inputs.workload }} scenario
         env:
           KURLY_GIT_BRANCH: ${{ github.head_ref || github.ref_name }}

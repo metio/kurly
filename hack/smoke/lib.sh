@@ -186,3 +186,122 @@ subjects:
 roleRef: { apiGroup: rbac.authorization.k8s.io, kind: Role, name: jaas-tenant-publish }
 EOF
 }
+
+# The in-cluster registry that serves the branch-built images to Flux. The
+# stageset scenarios consume kurly through the SAME path a real deployment does —
+# an OCIRepository — instead of an inline JsonnetLibrary, so the image packaging
+# (the Containerfiles, the single layer, the vendor-tree layout) is exercised on
+# every run, not just at release. Building from the checkout keeps the "tests the
+# exact branch" property the inline library had.
+#
+# One registry, reached two ways: the host pushes over a NodePort the e2e
+# workflow maps to localhost:5001 (registry:true), and source-controller pulls
+# over the ClusterIP by DNS. Plain HTTP, so the host push relies on Docker
+# trusting localhost and the OCIRepository sets `insecure: true`.
+KURLY_REGISTRY_PUSH="localhost:5001"
+KURLY_REGISTRY_PULL="registry.registry.svc.cluster.local:5000"
+KURLY_IMAGE_TAG="e2e"
+
+# Deploys registry:2 in its own namespace with a fixed NodePort, and waits for it
+# to serve. The NodePort (30500) is the one the workflow's kind config maps to the
+# host, so a scenario that calls this MUST run under a `registry: true` e2e job.
+kurly::install_registry() {
+  echo "== install in-cluster registry =="
+  kubectl apply --filename=- <<'EOF'
+apiVersion: v1
+kind: Namespace
+metadata: { name: registry }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: registry, namespace: registry }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: registry } }
+  template:
+    metadata: { labels: { app: registry } }
+    spec:
+      containers:
+        - name: registry
+          image: docker.io/library/registry:2
+          ports:
+            - { containerPort: 5000 }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: registry, namespace: registry }
+spec:
+  type: NodePort
+  selector: { app: registry }
+  ports:
+    - { port: 5000, targetPort: 5000, nodePort: 30500, protocol: TCP }
+EOF
+  kubectl -n registry rollout status deploy/registry --timeout=180s
+}
+
+# Builds the branch's library and workload images and pushes them to the registry
+# through the host port-map. Usage: kurly::publish_images <workload>...
+# The library is always published (every stage imports it); each named workload's
+# source image is published too. Push is retried, since the NodePort route can lag
+# the pod becoming Ready.
+kurly::publish_images() {
+  local push
+  _push() {
+    local ref="$1" i
+    for i in $(seq 1 12); do
+      docker push "$ref" && return 0
+      echo "push $ref failed (attempt $i) — retrying"
+      sleep 5
+    done
+    echo "push $ref never succeeded" >&2
+    return 1
+  }
+  echo "== build and push the kurly library image =="
+  push="${KURLY_REGISTRY_PUSH}/kurly:${KURLY_IMAGE_TAG}"
+  docker build --file Containerfile --tag "$push" .
+  _push "$push"
+  local wl
+  for wl in "$@"; do
+    echo "== build and push the ${wl} workload image =="
+    push="${KURLY_REGISTRY_PUSH}/kurly-${wl}:${KURLY_IMAGE_TAG}"
+    docker build --file workload.Containerfile --build-arg "WORKLOAD=${wl}" --tag "$push" .
+    _push "$push"
+  done
+}
+
+# Emits an OCIRepository (pulling from the in-cluster registry, insecure HTTP) and
+# the JsonnetLibrary that sources it. Usage:
+#   kurly::emit_oci_library <ns> <library-name> <image-repo>
+# e.g. `kurly::emit_oci_library cache kurly kurly` and
+#      `kurly::emit_oci_library cache kurly-valkey kurly-valkey`.
+kurly::emit_oci_library() {
+  local ns="$1" name="$2" repo="$3"
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: ${name}, namespace: ${ns} }
+spec:
+  interval: 1h
+  insecure: true
+  url: oci://${KURLY_REGISTRY_PULL}/${repo}
+  ref: { tag: ${KURLY_IMAGE_TAG} }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: ${name}, namespace: ${ns} }
+spec:
+  sourceRef: { kind: OCIRepository, name: ${name} }
+EOF
+}
+
+# Blocks until an OCIRepository advertises a fetched artifact (or fails loudly).
+kurly::wait_ocirepository() {
+  local ns="$1" name="$2" i
+  for i in $(seq 1 60); do
+    [ -n "$(kubectl --namespace="$ns" get ocirepository/"$name" -o jsonpath='{.status.artifact.url}' 2>/dev/null || true)" ] \
+      && { echo "ocirepository/${name} has an artifact"; return 0; }
+    sleep 3
+  done
+  echo "ocirepository/${name} never advertised an artifact" >&2
+  return 1
+}
