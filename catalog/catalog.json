@@ -2227,7 +2227,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/valkey/valkey:9.0.3",
+                     "default": "docker.io/valkey/valkey:9.1.0",
                      "name": "image",
                      "required": false,
                      "type": "string"
@@ -2259,7 +2259,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/valkey/valkey:9.0.3",
+                     "default": "docker.io/valkey/valkey:9.1.0",
                      "name": "image",
                      "required": false,
                      "type": "string"

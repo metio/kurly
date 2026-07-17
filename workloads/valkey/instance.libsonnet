@@ -28,7 +28,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // swaps between engines by editing one manifest.
 function(
   name='valkey',
-  image='docker.io/valkey/valkey:9.0.3',
+  image='docker.io/valkey/valkey:9.1.0',
   storageSize='1Gi',
   storageClass=null,
   maxMemory=null,

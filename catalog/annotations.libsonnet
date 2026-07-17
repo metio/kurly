@@ -443,7 +443,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         instance: d.fn('The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app). `image` also accepts a Redis build — Valkey is its BSD fork and takes the same configuration — so name the workload for its role rather than its engine, and a consumer holding an endpoint never learns which it got.', [
           d.arg('name', d.T.string, default='valkey'),
-          d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.0.3'),
+          d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.1.0'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('maxMemory', d.T.string, example='512mb'),
@@ -453,7 +453,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         cache: d.fn('An in-memory Valkey cache that upgrades its version with zero downtime and no data loss, on the stock image and no orchestrator — the replication hand-off lives entirely in the pod manifests (headless Service, maxSurge, an initContainer that replicates the running peer, and a preStop failover).', [
           d.arg('name', d.T.string, default='valkey'),
-          d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.0.3'),
+          d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.1.0'),
           d.arg('maxMemory', d.T.string, default='256mb'),
           d.arg('kubectlImage', d.T.string, default='docker.io/alpine/k8s:1.36.2'),
         ]) + {
