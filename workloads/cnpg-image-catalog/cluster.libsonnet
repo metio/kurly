@@ -28,6 +28,8 @@ function(
   name='postgres',
   images={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' },
   componentImages={},
+  labels={},
+  annotations={},
 )
-  namespaced(name=name, images=images, componentImages=componentImages)
+  namespaced(name=name, images=images, componentImages=componentImages, labels=labels, annotations=annotations)
   { catalog+: { kind: 'ClusterImageCatalog' } }

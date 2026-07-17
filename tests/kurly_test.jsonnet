@@ -673,4 +673,41 @@ local podOf(app) = app.deployment.spec.template.spec;
                         .spec.template.spec.containers[0].args)),
     0
   ),
+  // A CR workload has no pod template, so kurly.podLabels() composed onto it
+  // lands in a config nothing reads and vanishes WITHOUT error. CNPG's own
+  // inheritedMetadata is the way through: the operator copies it onto every
+  // object it generates, pods included.
+  cnpg_cluster_pod_metadata_reaches_the_pods: std.assertEqual(
+    (import '../workloads/cnpg-cluster/cluster.libsonnet')(
+      labels={ team: 'payments' },
+      annotations={ 'linkerd.io/inject': 'enabled' },
+    ).cluster.spec.inheritedMetadata,
+    { labels: { team: 'payments' }, annotations: { 'linkerd.io/inject': 'enabled' } }
+  ),
+  // They land on the Cluster itself too, merged over kurly's own identity
+  // labels rather than replacing them.
+  cnpg_cluster_labels_merge_with_kurlys: std.assertEqual(
+    (import '../workloads/cnpg-cluster/cluster.libsonnet')(labels={ team: 'payments' })
+    .cluster.metadata.labels,
+    {
+      'app.kubernetes.io/name': 'postgres',
+      'app.kubernetes.io/managed-by': 'kurly',
+      'app.kubernetes.io/version': 'dev',
+      team: 'payments',
+    }
+  ),
+  // Unset, neither field is emitted empty.
+  cnpg_cluster_prunes_absent_pod_metadata: std.assertEqual(
+    local spec = (import '../workloads/cnpg-cluster/cluster.libsonnet')().cluster;
+    [std.objectHas(spec.spec, 'inheritedMetadata'), std.objectHas(spec.metadata, 'annotations')],
+    [false, false]
+  ),
+  // A catalog generates no pods, so its metadata is its own.
+  cnpg_catalog_takes_labels_and_annotations: std.assertEqual(
+    local m = (import '../workloads/cnpg-image-catalog/namespaced.libsonnet')(
+      labels={ team: 'payments' }, annotations={ a: 'b' }
+    ).catalog.metadata;
+    [m.labels.team, m.annotations.a],
+    ['payments', 'b']
+  ),
 }

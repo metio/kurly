@@ -291,6 +291,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('instances', d.T.int, default=3),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('database', d.T.string, default='app'),
+          d.arg('labels', d.T.object, default={}, example={ team: 'payments' }),
+          d.arg('annotations', d.T.object, default={}),
         ]) + {
           kind: 'cnpg',
           importPath: 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',

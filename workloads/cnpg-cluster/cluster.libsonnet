@@ -37,6 +37,8 @@ function(
   resources=null,
   enablePodMonitor=true,
   imagePullSecrets=[],
+  labels={},
+  annotations={},
 )
   // CNPG resolves the image from exactly one source. Naming both is a config
   // error the operator rejects, so fail the render instead of the apply.
@@ -52,11 +54,26 @@ function(
     cluster: {
       apiVersion: 'postgresql.cnpg.io/v1',
       kind: 'Cluster',
-      metadata: {
+      metadata: std.prune({
         name: name,
-        labels: labelsFor(name),
-      },
+        labels: labelsFor(name) + labels,
+        annotations: (if annotations == {} then null else annotations),
+      }),
       spec: std.prune({
+        // The pods here belong to the operator, not to kurly: there is no pod
+        // template to attach metadata to, so kurly.podLabels() composed onto
+        // this workload would land in a config nothing reads and vanish without
+        // error. inheritedMetadata is CNPG's own answer — the operator copies it
+        // onto every object it generates for this Cluster, pods included — so
+        // network-policy selectors, sidecar injection and scrape hints reach the
+        // PostgreSQL pods through it.
+        inheritedMetadata: (
+          if labels == {} && annotations == {} then null
+          else std.prune({
+            labels: (if labels == {} then null else labels),
+            annotations: (if annotations == {} then null else annotations),
+          })
+        ),
         // Three instances give one primary and two hot-standby replicas, so a
         // single node loss keeps the cluster writable.
         instances: instances,

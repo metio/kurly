@@ -46,6 +46,25 @@ kurly.list(cnpg(
 | `resources` | — | container requests/limits |
 | `enablePodMonitor` | `true` | a PodMonitor for the Prometheus Operator |
 | `imagePullSecrets` | `[]` | names of existing Secrets the operator pulls PostgreSQL with |
+| `labels` / `annotations` | `{}` | applied to the Cluster and inherited by every object it generates, pods included |
+
+## Labelling the PostgreSQL pods
+
+The pods belong to the operator, so there is no pod template to attach metadata
+to and `kurly.podLabels()` composed onto this workload would land in a config
+nothing reads — rendering cleanly and doing nothing. Use the parameters, which
+CNPG propagates through `spec.inheritedMetadata`:
+
+```jsonnet
+cnpg(
+  name='orders-db',
+  labels={ team: 'payments' },
+  annotations={ 'linkerd.io/inject': 'enabled' },
+)
+```
+
+Network-policy selectors, sidecar injection and scrape hints reach the
+PostgreSQL pods that way.
 
 ## Pulling from a private registry
 

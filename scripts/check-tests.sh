@@ -40,6 +40,41 @@ if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 
 fi
 echo "exposure exclusion assert fired as expected"
 
+# Every workload that renders pods must let a consumer put labels and
+# annotations on them: network-policy selectors, sidecar injection, log
+# collection and scrape hints are the operator's business, not kurly's, and a
+# workload that swallows them is unusable without forking it. The feature tests
+# only prove the BASE KINDS honour podLabels — they say nothing about whether a
+# given workload passes them through, which is the thing that actually breaks.
+#
+# The glob is the point: a workload added tomorrow is covered without editing
+# this file. A workload rendering no pod template (a custom resource, whose pods
+# belong to an operator) has nothing to assert here and is skipped by the same
+# rule — those carry their own params and their own assertions in the suite.
+echo "== every workload's pods accept labels and annotations =="
+for stage in workloads/*/*.libsonnet; do
+  rendered="$(
+    jsonnet -J vendor -e       "local k = import 'github.com/metio/kurly/main.libsonnet';
+       k.list((import '${stage}')()
+         + k.podLabels({ 'kurly.test/label': 'set' })
+         + k.podAnnotations({ 'kurly.test/annotation': 'set' }))"
+  )" || { echo "::error::${stage}: failed to render with podLabels/podAnnotations" >&2; exit 1; }
+
+  templates="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec"))) | .template.metadata]')"
+  count="$(printf '%s' "$templates" | jq 'length')"
+  if [ "$count" = "0" ]; then
+    echo "no pod template in $stage (a custom resource) — its own params carry pod metadata"
+    continue
+  fi
+  missing="$(printf '%s' "$templates" | jq -r '[.[] | select((.labels["kurly.test/label"] != "set") or (.annotations["kurly.test/annotation"] != "set"))] | length')"
+  if [ "$missing" != "0" ]; then
+    echo "::error::${stage}: ${missing} of ${count} pod template(s) dropped podLabels/podAnnotations" >&2
+    printf '%s' "$templates" | jq . >&2
+    exit 1
+  fi
+  echo "pod labels and annotations reach every pod template in $stage"
+done
+
 # Dragonfly exits at startup when maxmemory is under 256MiB per io thread, so
 # the workload asserts the floor at render — the pod would otherwise CrashLoop
 # with the reason buried in its log. An assert can only be observed by failing,

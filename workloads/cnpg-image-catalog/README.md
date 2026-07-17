@@ -46,6 +46,7 @@ parameters are identical.
 | `name` | `postgres` | catalog (and CR) name; a cluster's `catalog=` refers to it |
 | `images` | `{ '17': … }` | `{ '<major>': '<image>' }`; keys must be major version numbers |
 | `componentImages` | `{}` | sidecar/component image overrides, keyed by component name |
+| `labels` / `annotations` | `{}` | applied to the catalog object; it generates no pods, so there is nothing to inherit |
 
 ## Pointing a cluster at it
 

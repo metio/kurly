@@ -38,6 +38,8 @@ function(
   name='postgres',
   images={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' },
   componentImages={},
+  labels={},
+  annotations={},
 )
   // An empty catalog is always a mistake: a Cluster referencing it cannot
   // resolve an image for its major and the operator leaves it unreconciled.
@@ -55,10 +57,13 @@ function(
     catalog: {
       apiVersion: 'postgresql.cnpg.io/v1',
       kind: 'ImageCatalog',
-      metadata: {
+      // A catalog generates no pods, so there is no pod metadata to inherit —
+      // these land on the object itself, for whatever selects or annotates it.
+      metadata: std.prune({
         name: name,
-        labels: labelsFor(name),
-      },
+        labels: labelsFor(name) + labels,
+        annotations: (if annotations == {} then null else annotations),
+      }),
       spec: std.prune({
         // Sorted by major so the rendered catalog diffs stably as entries come
         // and go.
