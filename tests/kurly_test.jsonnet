@@ -634,4 +634,20 @@ local podOf(app) = app.deployment.spec.template.spec;
     kurly.mirror('r.internal', { kind: 'ConfigMap', data: { image: 'docker.io/team/ref:1.0' } }),
     { kind: 'ConfigMap', data: { image: 'docker.io/team/ref:1.0' } }
   ),
+  // A CNPG Cluster carries its own pull secrets: the operator pulls PostgreSQL,
+  // so there is no pod for kurly.imagePullSecrets() to attach to.
+  cnpg_cluster_takes_pull_secrets: std.assertEqual(
+    (import '../workloads/cnpg-cluster/cluster.libsonnet')(
+      imagePullSecrets=['regcred', 'other']
+    ).cluster.spec.imagePullSecrets,
+    [{ name: 'regcred' }, { name: 'other' }]
+  ),
+  // Unset, the field is pruned rather than emitted empty.
+  cnpg_cluster_prunes_absent_pull_secrets: std.assertEqual(
+    std.objectHas(
+      (import '../workloads/cnpg-cluster/cluster.libsonnet')().cluster.spec,
+      'imagePullSecrets'
+    ),
+    false
+  ),
 }

@@ -9,6 +9,12 @@
 # images); vendor it fresh so the suites test what clusters actually run.
 jb install
 
+# The workload stages below import kurly by its canonical path — the one JaaS
+# resolves in a cluster — so resolve it locally through the vendor tree, as
+# check-examples and check-catalog do.
+mkdir -p vendor/github.com/metio
+ln -sfn ../../.. vendor/github.com/metio/kurly
+
 # Every tests/*_test.jsonnet is an assertion suite whose every field is a
 # std.assertEqual (unit tests, plus the order-independence, invariant, and
 # metamorphic batteries); assert all fields evaluate true.
@@ -33,3 +39,34 @@ if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 
   exit 1
 fi
 echo "exposure exclusion assert fired as expected"
+
+# Every image a workload renders must follow kurly.mirror onto the private
+# registry. The assertion suite can only check mirror against apps it writes
+# itself, which is precisely the blind spot that let kurly.image() redirect the
+# valkey cache's main container while its initContainer and sidecar kept pulling
+# from docker.io. So render each REAL workload through mirror and look for a
+# public registry surviving anywhere in the output — that catches an image
+# mirror cannot see (an initContainer, a grafted-on sidecar, a custom resource's
+# own field) rather than only the fields it already knows about.
+#
+# The glob is the point: a workload added tomorrow is covered without editing
+# this file, and a workload that hides an image somewhere new fails here.
+#
+# ConfigMap and Secret payloads are dropped first: mirror deliberately leaves
+# application data alone, so a registry-looking string in there is not a leak.
+echo "== mirror redirects every image in every workload =="
+for stage in workloads/*/*.libsonnet; do
+  leaked="$(
+    jsonnet -J vendor -e \
+      "local k = import 'github.com/metio/kurly/main.libsonnet'; k.mirror('registry.test', k.list((import '${stage}')()))" \
+      | jq 'del(.. | objects | select(.kind == "ConfigMap" or .kind == "Secret") | .data)' \
+      | grep -oE '(docker\.io|ghcr\.io|quay\.io|gcr\.io|registry\.k8s\.io|public\.ecr\.aws)/[^"]*' \
+      | sort -u || true
+  )"
+  if [ -n "$leaked" ]; then
+    echo "::error::${stage}: kurly.mirror left these on a public registry:" >&2
+    printf '  %s\n' "$leaked" >&2
+    exit 1
+  fi
+  echo "mirror covers every image in $stage"
+done
