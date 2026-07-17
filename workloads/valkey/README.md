@@ -63,7 +63,7 @@ kurly.list(valkey(storageSize='5Gi', maxMemory='512mb'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `valkey` | names every object; name it for its ROLE and a consumer never learns which store it got |
-| `image` | `docker.io/valkey/valkey:9.0.3` | any Redis-compatible server built the same way |
+| `image` | `docker.io/valkey/valkey:9.1.0` | any Redis-compatible server built the same way |
 | `storageSize` | `1Gi` | the per-pod volume for append-only persistence |
 | `storageClass` | cluster default | |
 | `maxMemory` | — | e.g. `512mb`; caps the dataset with `allkeys-lru` eviction. Unset grows to the pod memory limit. |
