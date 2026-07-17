@@ -44,20 +44,29 @@ for stage in workloads/*/*.libsonnet; do
   workload="$(basename "$(dirname "$stage")")"
   id="$(basename "$stage" .libsonnet)"
 
-  actual="$(sed -n '/^function(/,/^)/p' "$stage" | grep -oE '^  [a-zA-Z][a-zA-Z0-9]*=' | tr -d ' =' | sort -u)"
+  # ORDER matters as much as membership: the Assembler and the coverage generator
+  # bind these positionally, so a catalog listing the same names in a different
+  # order renders every value into the wrong parameter — which schema validation
+  # catches only when the types happen to disagree.
+  actual="$(sed -n '/^function(/,/^)/p' "$stage" | grep -oE '^  [a-zA-Z][a-zA-Z0-9]*=' | tr -d ' =')"
   documented="$(jq -r --arg w "$workload" --arg s "$id" \
-    '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?.name' catalog/catalog.json | sort -u)"
+    '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?.name' catalog/catalog.json)"
 
-  missing="$(comm -23 <(printf '%s\n' "$actual") <(printf '%s\n' "$documented") | tr '\n' ' ')"
-  stale="$(comm -13 <(printf '%s\n' "$actual") <(printf '%s\n' "$documented") | tr '\n' ' ')"
+  missing="$(comm -23 <(printf '%s\n' "$actual" | sort -u) <(printf '%s\n' "$documented" | sort -u) | tr '\n' ' ')"
+  stale="$(comm -13 <(printf '%s\n' "$actual" | sort -u) <(printf '%s\n' "$documented" | sort -u) | tr '\n' ' ')"
   if [ -n "${missing// /}" ]; then
     echo "::error::${stage}: parameter(s) not annotated in catalog/annotations.libsonnet: ${missing}" >&2
     fail=1
-  fi
-  if [ -n "${stale// /}" ]; then
+  elif [ -n "${stale// /}" ]; then
     echo "::error::${stage}: annotated parameter(s) the function does not take: ${stale}" >&2
     fail=1
+  elif [ "$actual" != "$documented" ]; then
+    echo "::error::${stage}: annotated parameters are in a different order than the function declares them —" >&2
+    echo "  function: $(printf '%s' "$actual" | tr '\n' ' ')" >&2
+    echo "  catalog:  $(printf '%s' "$documented" | tr '\n' ' ')" >&2
+    fail=1
+  else
+    echo "every parameter annotated, in order: $stage"
   fi
-  [ -n "${missing// /}${stale// /}" ] || echo "every parameter annotated: $stage"
 done
 [ "$fail" -eq 0 ] || exit 1

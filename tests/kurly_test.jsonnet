@@ -916,4 +916,52 @@ local podOf(app) = app.deployment.spec.template.spec;
     std.set(names('sessions') + names('fragments')),
     ['fragments', 'fragments-headless', 'sessions', 'sessions-headless']
   ),
+  // An Ingress controller takes its per-route configuration from annotations and
+  // nothing else, and the keys belong to whichever controller the cluster runs —
+  // cert-manager, ingress-nginx, an AWS ALB. Without them the route renders and
+  // the cluster does something other than what was asked.
+  ingress_takes_annotations_and_tls: std.assertEqual(
+    local ing = (kurly.http('web', 'img:1')
+                 + kurly.expose.ingress('shop.example.com',
+                                        ingressClass='nginx',
+                                        annotations={ 'cert-manager.io/cluster-issuer': 'letsencrypt' },
+                                        tls='shop-tls')).ingress;
+    [ing.metadata.annotations, ing.spec.tls],
+    [{ 'cert-manager.io/cluster-issuer': 'letsencrypt' }, [{ hosts: ['shop.example.com'], secretName: 'shop-tls' }]]
+  ),
+  // Naming no certificate leaves the route plain HTTP — a choice, not a default
+  // worth hiding, and the same manifest as before.
+  a_plain_ingress_is_unchanged: std.assertEqual(
+    local spec = (kurly.http('web', 'img:1') + kurly.expose.ingress('shop.example.com')).ingress.spec;
+    [std.objectHas(spec, 'tls'), std.length(spec.rules)],
+    [false, 1]
+  ),
+  // A workload owning its listener and unable to terminate TLS cannot serve
+  // HTTPS at all; the certificate is the cluster's to mint, so kurly only names it.
+  own_gateway_terminates_tls_when_given_a_certificate: std.assertEqual(
+    (kurly.http('web', 'img:1') + kurly.expose.ownGateway('shop.example.com', 'istio', tls='shop-tls'))
+    .gateway.spec.listeners[0],
+    {
+      name: 'https',
+      protocol: 'HTTPS',
+      port: 443,
+      hostname: 'shop.example.com',
+      tls: { mode: 'Terminate', certificateRefs: [{ kind: 'Secret', name: 'shop-tls' }] },
+      allowedRoutes: { namespaces: { from: 'Same' } },
+    }
+  ),
+  own_listener_set_terminates_tls_when_given_a_certificate: std.assertEqual(
+    (kurly.http('web', 'img:1') + kurly.expose.ownListenerSet('shop.example.com', 'shared', tls='shop-tls'))
+    .listenerset.spec.listeners[0].protocol,
+    'HTTPS'
+  ),
+  // A dedicated Gateway provisions a real load balancer, configured through
+  // annotations whose keys belong to the implementation.
+  own_gateway_takes_annotations: std.assertEqual(
+    (kurly.http('web', 'img:1') + kurly.expose.ownGateway('shop.example.com',
+                                                          'istio',
+                                                          annotations={ 'networking.gke.io/x': 'y' }))
+    .gateway.metadata.annotations,
+    { 'networking.gke.io/x': 'y' }
+  ),
 }

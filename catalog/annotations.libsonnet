@@ -252,7 +252,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   expose: {
     ingress: d.fn('Routes the host to the workload through the Ingress API.', [
       d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
-      d.arg('ingressClass', d.T.string),
+      d.arg('ingressClass', d.T.string, example='nginx'),
+      d.arg('annotations', d.T.object, default={}, example={ 'cert-manager.io/cluster-issuer': 'letsencrypt' }),
+      d.arg('tls', d.T.string, example='storefront-tls'),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
     gateway: d.fn('Attaches an HTTPRoute to an existing shared Gateway (the usual platform-team setup).', [
       d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
@@ -269,11 +271,14 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     ownGateway: d.fn('Generates a dedicated Gateway plus the HTTPRoute — for clusters with no shared Gateway to attach to.', [
       d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
       d.arg('gatewayClass', d.T.string, required=true, example='istio'),
+      d.arg('annotations', d.T.object, default={}, example={ 'service.beta.kubernetes.io/aws-load-balancer-type': 'nlb' }),
+      d.arg('tls', d.T.string, example='storefront-tls'),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
     ownListenerSet: d.fn("Generates a ListenerSet that adds the workload's own listener to a shared Gateway, plus the HTTPRoute. The Gateway must opt in via spec.allowedListeners.", [
       d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
       d.arg('gateway', d.T.string, required=true, example='shared'),
       d.arg('gatewayNamespace', d.T.string),
+      d.arg('tls', d.T.string, example='storefront-tls'),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
   },
 
@@ -315,7 +320,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('name', d.T.string, default='postgres'),
           d.arg('instances', d.T.int, default=3),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
-          d.arg('database', d.T.string, default='app'),
           d.arg('storageClass', d.T.string),
           d.arg('walSize', d.T.quantity, example='5Gi'),
           d.arg('walStorageClass', d.T.string, example='fast-nvme'),
@@ -323,17 +327,18 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('catalog', d.T.string, example='postgres'),
           d.arg('catalogScope', d.T.string, default='namespaced'),
           d.arg('major', d.T.int, example=17),
+          d.arg('database', d.T.string, default='app'),
           d.arg('owner', d.T.string, default='app'),
           d.arg('parameters', d.T.object, default={}, example={ huge_pages: 'on', shared_buffers: '1800MB' }),
           d.arg('resources', d.T.object),
           d.arg('enablePodMonitor', d.T.bool, default=true),
           d.arg('imagePullSecrets', d.T.array, default=[]),
-          d.arg('schedulerName', d.T.string),
           d.arg('labels', d.T.object, default={}, example={ team: 'payments' }),
           d.arg('annotations', d.T.object, default={}),
           d.arg('affinity', d.T.object, example={ nodeSelector: { workload: 'database' }, podAntiAffinityType: 'required' }),
           d.arg('topologySpreadConstraints', d.T.array, default=[]),
           d.arg('priorityClassName', d.T.string),
+          d.arg('schedulerName', d.T.string),
         ]) + {
           kind: 'cnpg',
           importPath: 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
@@ -371,10 +376,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         instance: d.fn('The Dragonfly server. threads pins --proactor_threads and sizes the CPU (Dragonfly runs a thread per core); maxMemoryMB must be at least 256 per thread or Dragonfly exits at startup, so the render fails first. Name it for its role and a consumer never learns which RESP store it got.', [
           d.arg('name', d.T.string, default='dragonfly'),
           d.arg('image', d.T.string, default='ghcr.io/dragonflydb/dragonfly:v1.39.0'),
-          d.arg('maxMemoryMB', d.T.int, default=512),
-          d.arg('threads', d.T.int, default=2),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
+          d.arg('maxMemoryMB', d.T.int, default=512),
+          d.arg('threads', d.T.int, default=2),
           d.arg('snapshotCron', d.T.string, example='0 */6 * * *'),
         ]) + {
           kind: 'stateful',

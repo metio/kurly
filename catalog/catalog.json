@@ -42,7 +42,22 @@
                "type": "hostname"
             },
             {
+               "example": "nginx",
                "name": "ingressClass",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "example": {
+                  "cert-manager.io/cluster-issuer": "letsencrypt"
+               },
+               "name": "annotations",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "example": "storefront-tls",
+               "name": "tls",
                "required": false,
                "type": "string"
             }
@@ -101,6 +116,20 @@
                "name": "gatewayClass",
                "required": true,
                "type": "string"
+            },
+            {
+               "example": {
+                  "service.beta.kubernetes.io/aws-load-balancer-type": "nlb"
+               },
+               "name": "annotations",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "example": "storefront-tls",
+               "name": "tls",
+               "required": false,
+               "type": "string"
             }
          ],
          "exclusiveGroup": "exposure",
@@ -127,6 +156,12 @@
             },
             {
                "name": "gatewayNamespace",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "example": "storefront-tls",
+               "name": "tls",
                "required": false,
                "type": "string"
             }
@@ -1694,12 +1729,6 @@
                      "type": "quantity"
                   },
                   {
-                     "default": "app",
-                     "name": "database",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
                      "name": "storageClass",
                      "required": false,
                      "type": "string"
@@ -1741,6 +1770,12 @@
                   },
                   {
                      "default": "app",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "app",
                      "name": "owner",
                      "required": false,
                      "type": "string"
@@ -1769,11 +1804,6 @@
                      "name": "imagePullSecrets",
                      "required": false,
                      "type": "array"
-                  },
-                  {
-                     "name": "schedulerName",
-                     "required": false,
-                     "type": "string"
                   },
                   {
                      "example": {
@@ -1806,6 +1836,11 @@
                   },
                   {
                      "name": "priorityClassName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "schedulerName",
                      "required": false,
                      "type": "string"
                   }
@@ -1916,6 +1951,17 @@
                      "type": "string"
                   },
                   {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": 512,
                      "name": "maxMemoryMB",
                      "required": false,
@@ -1926,17 +1972,6 @@
                      "name": "threads",
                      "required": false,
                      "type": "int"
-                  },
-                  {
-                     "default": "1Gi",
-                     "name": "storageSize",
-                     "required": false,
-                     "type": "quantity"
-                  },
-                  {
-                     "name": "storageClass",
-                     "required": false,
-                     "type": "string"
                   },
                   {
                      "example": "0 */6 * * *",

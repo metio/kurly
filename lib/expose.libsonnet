@@ -52,18 +52,60 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
   sectionName: sectionName,
 });
 
+// The listener a generated Gateway or ListenerSet publishes for `host`. Naming a
+// certificate Secret makes it HTTPS on 443 and terminates there; naming none
+// leaves it HTTP on 80. A workload that owns its listener and cannot terminate
+// TLS is a workload that cannot serve HTTPS at all — the certificate is the
+// cluster's (cert-manager writes the Secret, or a platform team mints it), so
+// kurly cannot supply one, but it must let one be named.
+local listener(host, tls) =
+  if tls == null then {
+    name: 'http',
+    protocol: 'HTTP',
+    port: 80,
+    hostname: host,
+  } else {
+    name: 'https',
+    protocol: 'HTTPS',
+    port: 443,
+    hostname: host,
+    tls: {
+      mode: 'Terminate',
+      certificateRefs: [{ kind: 'Secret', name: tls }],
+    },
+  };
+
 {
   // ingress routes the host to the workload through the Ingress API.
-  ingress(host, ingressClass=null):: exposure('ingress') {
+  //
+  // `annotations` is not decoration: an Ingress controller takes its per-route
+  // configuration from annotations and nothing else, and the keys belong to the
+  // controller the cluster runs — cert-manager mints a certificate from
+  // `cert-manager.io/cluster-issuer`, ingress-nginx reads
+  // `nginx.ingress.kubernetes.io/*`, an AWS ALB reads `alb.ingress.kubernetes.io/*`.
+  // kurly cannot know which controller is in front, so without them the route
+  // renders and the cluster does something other than what was asked.
+  //
+  // `tls` names the Secret holding the certificate for `host`; with cert-manager
+  // it is the Secret the issuer writes INTO, and need not exist beforehand.
+  // Omitted, the route is plain HTTP — which is a choice, not a default worth
+  // hiding.
+  ingress(host, ingressClass=null, annotations={}, tls=null):: exposure('ingress') {
     local app = self,
 
     ingress:
       k.networking.v1.ingress.new(app.config.name)
       + k.networking.v1.ingress.metadata.withLabels(app.labels)
+      + (if annotations == {} then {} else k.networking.v1.ingress.metadata.withAnnotations(annotations))
       + (
         if ingressClass == null
         then {}
         else k.networking.v1.ingress.spec.withIngressClassName(ingressClass)
+      )
+      + (
+        if tls == null
+        then {}
+        else k.networking.v1.ingress.spec.withTls([{ hosts: [host], secretName: tls }])
       )
       + k.networking.v1.ingress.spec.withRules([{
         host: host,
@@ -104,22 +146,23 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
 
   // ownGateway generates a dedicated Gateway for the workload and routes the
   // host through it — for clusters without a shared Gateway to attach to.
-  ownGateway(host, gatewayClass):: exposure('ownGateway') {
+  //
+  // A dedicated Gateway usually provisions a real load balancer, which is
+  // configured through ANNOTATIONS whose keys belong to the implementation
+  // (an AWS NLB, a GKE forwarding rule, an Istio deployment) — so they are the
+  // consumer's to supply. `tls` names the Secret holding the certificate for
+  // `host`; without one the listener is plain HTTP.
+  ownGateway(host, gatewayClass, annotations={}, tls=null):: exposure('ownGateway') {
     local app = self,
 
     gateway: {
       apiVersion: 'gateway.networking.k8s.io/v1',
       kind: 'Gateway',
-      metadata: { name: app.config.name, labels: app.labels },
+      metadata: { name: app.config.name, labels: app.labels }
+                + (if annotations == {} then {} else { annotations: annotations }),
       spec: {
         gatewayClassName: gatewayClass,
-        listeners: [{
-          name: 'http',
-          protocol: 'HTTP',
-          port: 80,
-          hostname: host,
-          allowedRoutes: { namespaces: { from: 'Same' } },
-        }],
+        listeners: [listener(host, tls) + { allowedRoutes: { namespaces: { from: 'Same' } } }],
       },
     },
 
@@ -130,7 +173,9 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
   // listener to a shared Gateway and routes the host through it. Gateways
   // reject ListenerSet attachment by default — the shared Gateway must opt in
   // via spec.allowedListeners.
-  ownListenerSet(host, gateway, gatewayNamespace=null):: exposure('ownListenerSet') {
+  // Owning the listener is the whole point of a ListenerSet, so the certificate
+  // for `host` is the consumer's to name; without one it is plain HTTP.
+  ownListenerSet(host, gateway, gatewayNamespace=null, tls=null):: exposure('ownListenerSet') {
     local app = self,
 
     listenerset: {
@@ -144,12 +189,7 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
           name: gateway,
           namespace: gatewayNamespace,
         }),
-        listeners: [{
-          name: 'http',
-          protocol: 'HTTP',
-          port: 80,
-          hostname: host,
-        }],
+        listeners: [listener(host, tls)],
       },
     },
 
