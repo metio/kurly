@@ -238,6 +238,25 @@ positive "huge_pages=on with a matching allocation" \
 positive "huge_pages=try with no allocation" \
   "(import 'workloads/cnpg-cluster/cluster.libsonnet')(parameters={huge_pages: 'try'})"
 
+# An app's memory flag and the container limit are two views of one number, and
+# only the limit is enforced by the kernel. kurly.resources() REPLACES the limits
+# object rather than merging, so composing it for an unrelated reason drops the
+# derived limit and leaves the cache unbounded — and overriding it directly makes
+# the flag and the cgroup disagree, which is an OOMKill at exactly the moment the
+# cache fills.
+negative "memcached with a hand-set memory limit" \
+  "$K k.list((import 'workloads/memcached/cache.libsonnet')(memoryMB=1024) + k.resources(limits={memory: '128Mi'}))"
+negative "memcached losing its derived limit to an unrelated one" \
+  "$K k.list((import 'workloads/memcached/cache.libsonnet')(memoryMB=1024) + k.resources(limits={'ephemeral-storage': '1Gi'}))"
+negative "dragonfly with a hand-set memory limit" \
+  "$K k.list((import 'workloads/dragonfly/instance.libsonnet')(maxMemoryMB=2048, threads=4) + k.resources(limits={memory: '256Mi'}))"
+# Sizing through the workload's own knob must keep working — the assert is a
+# guard, not a wall.
+positive "memcached sized through memoryMB" \
+  "$K k.list((import 'workloads/memcached/cache.libsonnet')(memoryMB=4096))"
+positive "dragonfly sized through maxMemoryMB" \
+  "$K k.list((import 'workloads/dragonfly/instance.libsonnet')(maxMemoryMB=4096, threads=4))"
+
 # Dragonfly exits at startup when maxmemory is under 256MiB per io thread, so
 # the workload asserts the floor at render — the pod would otherwise CrashLoop
 # with the reason buried in its log. An assert can only be observed by failing,

@@ -77,6 +77,28 @@ function(
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + {
+    // -m and the memory limit are two views of one number, and only one of them
+    // is enforced by the kernel. kurly.resources() REPLACES the limits object
+    // rather than merging into it, so composing it for an unrelated reason —
+    // a CPU request, an ephemeral-storage limit — drops the derived memory
+    // limit entirely and leaves memcached told to cache memoryMB MB with no bound
+    // at all. Overriding it directly is no better: the flag still names the old
+    // number and the pod is OOMKilled at exactly the moment the cache fills,
+    // which looks like a memcached bug rather than a manifest one.
+    //
+    // Asserted against the MERGED config, since the override arrives by
+    // composition. To size the cache, move memoryMB: both follow it.
+    local wanted = '%dMi' % memoryLimitMB,
+    assert std.objectHas(self.config.resources, 'limits')
+           && std.objectHas(self.config.resources.limits, 'memory')
+           && self.config.resources.limits.memory == wanted :
+           'memcached: the memory limit is derived from memoryMB (-m %d needs %s) and must not be set by hand — '
+           % [memoryMB, wanted]
+           + 'kurly.resources() replaces the whole limits object, so it drops or contradicts the derived limit and the pod is OOMKilled when the cache fills. '
+           + 'Set memoryMB instead; it moves -m and the limit together. Got: '
+           + std.toString(if std.objectHas(self.config.resources, 'limits') then self.config.resources.limits else {}) + '.',
+  }
+  + {
     // The stateful kind gives its headless Service the http port (80). Nothing
     // routes through a headless Service — DNS answers with pod IPs and the
     // client dials the pod itself — but a memcached manifest advertising port 80

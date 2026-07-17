@@ -93,6 +93,29 @@ function(
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + {
+    // --maxmemory and the memory limit are two views of one number, and only one
+    // of them is enforced by the kernel. kurly.resources() REPLACES the limits
+    // object rather than merging into it, so composing it for an unrelated
+    // reason drops the derived limit entirely and leaves Dragonfly told to hold
+    // a dataset with no bound at all; overriding it directly is no better, since
+    // --maxmemory still names the old number and the pod is OOMKilled exactly
+    // when the dataset fills. Dragonfly's own floor check does not help here —
+    // it compares maxmemory against its THREAD count, and knows nothing about
+    // the cgroup it runs in.
+    //
+    // Asserted against the MERGED config, since the override arrives by
+    // composition. To size it, move maxMemoryMB: both follow it.
+    local wanted = '%dMi' % memoryLimitMB,
+    assert std.objectHas(self.config.resources, 'limits')
+           && std.objectHas(self.config.resources.limits, 'memory')
+           && self.config.resources.limits.memory == wanted :
+           'dragonfly: the memory limit is derived from maxMemoryMB (--maxmemory %dmb needs %s) and must not be set by hand — '
+           % [maxMemoryMB, wanted]
+           + 'kurly.resources() replaces the whole limits object, so it drops or contradicts the derived limit and the pod is OOMKilled when the dataset fills. '
+           + 'Set maxMemoryMB instead; it moves --maxmemory and the limit together. Got: '
+           + std.toString(if std.objectHas(self.config.resources, 'limits') then self.config.resources.limits else {}) + '.',
+  }
+  + {
     // The stateful kind gives its headless Service the http port (80); nothing
     // routes through a headless Service, but a RESP manifest advertising port 80
     // reads as a mistake.
