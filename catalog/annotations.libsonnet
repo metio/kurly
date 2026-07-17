@@ -92,6 +92,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     priorityClassName: d.fn("The pod's scheduling priority class.", [
       d.arg('priorityClassName', d.T.string, required=true, example='high-priority'),
     ]) + { kinds: allKinds, group: 'container' },
+    runtimeClassName: d.fn('The sandbox the pod runs under (gVisor, Kata). The class names belong to the cluster, so there is no default — a workload that cannot name one cannot run where sandboxing is mandatory.', [
+      d.arg('runtimeClassName', d.T.string, required=true, example='gvisor'),
+    ]) + { kinds: allKinds, group: 'container' },
     resources: d.fn('Container resource requests and/or limits.', [
       d.arg('requests', d.T.object, example={ cpu: '100m', memory: '128Mi' }),
       d.arg('limits', d.T.object, example={ memory: '256Mi' }),

@@ -244,6 +244,10 @@ local exclusionConflicts(exclusive) = [
       podAnnotations: {},
       imagePullSecrets: [],
       priorityClassName: null,
+      // The sandbox a cluster runs pods under (gVisor, Kata). Which classes
+      // exist, and whether any is required, is the cluster's business — a
+      // workload that cannot name one cannot run where sandboxing is mandatory.
+      runtimeClassName: null,
       // Owned manifests a feature adds beyond the pod controller (null/absent by
       // default). rbac additionally makes the pod run under the ServiceAccount it
       // creates (podServiceAccount below).
@@ -433,6 +437,7 @@ local exclusionConflicts(exclusive) = [
       local cfg = this.config;
       (if cfg.imagePullSecrets == [] then {} else { imagePullSecrets: [{ name: s } for s in cfg.imagePullSecrets] })
       + (if cfg.priorityClassName == null then {} else { priorityClassName: cfg.priorityClassName })
+      + (if cfg.runtimeClassName == null then {} else { runtimeClassName: cfg.runtimeClassName })
       + (
         if cfg.initContainers == []
         then {}

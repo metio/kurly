@@ -49,6 +49,9 @@ local resourcePresets = {
   // priorityClassName sets the pod's scheduling priority.
   imagePullSecrets(names):: { config+:: { imagePullSecrets+: names } },
   priorityClassName(priorityClassName):: { config+:: { priorityClassName: priorityClassName } },
+  // runtimeClassName picks the sandbox the pod runs under (gVisor, Kata). The
+  // class names are the cluster's, so kurly cannot default one.
+  runtimeClassName(runtimeClassName):: { config+:: { runtimeClassName: runtimeClassName } },
   resources(requests=null, limits=null):: {
     config+:: {
       resources+:

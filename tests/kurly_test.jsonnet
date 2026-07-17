@@ -788,4 +788,14 @@ local podOf(app) = app.deployment.spec.template.spec;
     .deployment.spec.template.spec.automountServiceAccountToken,
     true
   ),
+  // Which sandbox classes exist is the cluster's business, so it is set and
+  // absent-by-default like the priority class beside it.
+  runtime_class_reaches_the_pod_spec: std.assertEqual(
+    local a = kurly.worker('w', 'img:1') + kurly.runtimeClassName('gvisor');
+    [
+      a.deployment.spec.template.spec.runtimeClassName,
+      std.objectHas(kurly.worker('w', 'img:1').deployment.spec.template.spec, 'runtimeClassName'),
+    ],
+    ['gvisor', false]
+  ),
 }

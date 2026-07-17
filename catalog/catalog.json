@@ -980,6 +980,27 @@
       {
          "args": [
             {
+               "example": "gvisor",
+               "name": "runtimeClassName",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "The sandbox the pod runs under (gVisor, Kata). The class names belong to the cluster, so there is no default — a workload that cannot name one cannot run where sandboxing is mandatory.",
+         "id": "runtimeClassName",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": "0 2 * * *",
                "name": "schedule",
                "required": true,
