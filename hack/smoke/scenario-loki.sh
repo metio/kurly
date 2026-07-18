@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: 0BSD
 
 # e2e for the loki workload, and for the logs pillar of the o11y story: Grafana
-# Loki in microservices mode over object storage. It installs cert-manager (the
-# loki-operator webhook needs it), the loki-operator, and the kurly seaweedfs
-# workload as the S3 store, then applies the LokiStack and proves the two things
+# Loki in microservices mode over object storage. It installs the loki-operator
+# (via its webhook-less development overlay, so no cert-manager) and the kurly
+# seaweedfs workload as the S3 store, then applies the LokiStack and proves the
 # the render gates cannot — the operator reconciles the CR into a whole running
 # microservices topology, and a log line pushed to the distributor is queryable
 # back out. That round-trip exercises the write path (distributor -> ingester)
@@ -19,8 +19,6 @@ cd "$(dirname "$0")/../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 
-# renovate: datasource=github-releases depName=cert-manager/cert-manager
-CERT_MANAGER_VERSION="v1.16.2"
 # renovate: datasource=github-releases depName=grafana/loki extractVersion=^operator/(?<version>.+)$
 LOKI_OPERATOR_VERSION="v0.10.2"
 
@@ -39,33 +37,34 @@ fail() {
   kubectl --namespace="$ns" get lokistack,deployment,statefulset,pods -o wide 2>/dev/null || true
   kubectl --namespace="$ns" get lokistack loki -o jsonpath='{.status}' 2>/dev/null || true
   echo
-  kubectl --namespace=loki-operator logs --selector=app.kubernetes.io/name=loki-operator --tail=40 2>/dev/null || true
+  kubectl --namespace=default logs --selector=app.kubernetes.io/name=loki-operator --tail=40 2>/dev/null || true
   echo "::endgroup::"
   exit 1
 }
 
-echo "== install cert-manager ${CERT_MANAGER_VERSION} (the operator webhook needs it) =="
-kubectl apply -f "https://github.com/cert-manager/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.yaml"
-# All three must be up before the operator installs: the operator's serving cert
-# is issued by cert-manager (controller), the CA injected by the cainjector, and
-# the webhook admits the Certificate — a not-yet-ready cert-manager leaves the
-# operator pod stuck waiting for its cert secret.
-for d in cert-manager cert-manager-cainjector cert-manager-webhook; do
-  kubectl --namespace=cert-manager rollout status "deployment/${d}" --timeout=180s
-done
-
 echo "== install the loki-operator ${LOKI_OPERATOR_VERSION} =="
-# The community overlay stamps everything into the loki-operator namespace but
-# does not create it, so its namespaced resources fail until it exists.
-kubectl create namespace loki-operator --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply -k "github.com/grafana/loki/operator/config/overlays/community?ref=operator/${LOKI_OPERATOR_VERSION}"
-# The pod waits on its cert-manager-issued serving cert, then pulls its image, so
-# give it room; dump why on timeout.
-kubectl --namespace=loki-operator rollout status deployment/loki-operator-controller-manager --timeout=300s || {
+# The `community` overlay is the OLM bundle source — its webhook is wired for OLM
+# to reconcile the serving cert, and its image is the OpenShift build — so a plain
+# `kubectl apply -k` leaves the operator stuck on a cert Secret that never comes.
+# The `development` overlay installs directly: no webhook (so no cert-manager) and
+# just the CRDs, RBAC, and manager. It leaves the operator image as the kustomize
+# `controller` placeholder, so pin it to the published upstream image. It deploys
+# to `default` (with a bundled MinIO we ignore) and watches every namespace.
+kdir="$(mktemp -d)"
+cat > "$kdir/kustomization.yaml" <<EOF
+resources:
+  - github.com/grafana/loki/operator/config/overlays/development?ref=operator/${LOKI_OPERATOR_VERSION}
+images:
+  - name: controller
+    newName: docker.io/grafana/loki-operator
+    newTag: "${LOKI_OPERATOR_VERSION#v}"
+EOF
+kubectl apply -k "$kdir"
+kubectl --namespace=default rollout status deployment \
+  --selector app.kubernetes.io/name=loki-operator --timeout=300s || {
   echo "::group::loki-operator did not start"
-  kubectl --namespace=loki-operator get pods -o wide 2>/dev/null || true
-  kubectl --namespace=loki-operator describe pods 2>/dev/null | tail -60 || true
-  kubectl --namespace=loki-operator get certificate,secret 2>/dev/null || true
+  kubectl --namespace=default get pods -o wide 2>/dev/null || true
+  kubectl --namespace=default describe deploy --selector app.kubernetes.io/name=loki-operator 2>/dev/null | tail -40 || true
   echo "::endgroup::"
   exit 1
 }
