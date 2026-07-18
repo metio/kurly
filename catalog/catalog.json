@@ -1551,6 +1551,34 @@
       {
          "args": [
             {
+               "example": "loki-storage",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "name": "secretStoreRef",
+               "required": true,
+               "type": "object"
+            },
+            {
+               "name": "data",
+               "required": true,
+               "type": "array"
+            },
+            {
+               "default": "1h",
+               "name": "refreshInterval",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "help": "Authors an External Secrets Operator ExternalSecret — the CR ESO reconciles into a Kubernetes Secret by pulling values from an external store (Vault, AWS/GCP Secrets Manager). kurly never mints key material (a policy invariant), so any named Secret a workload references can be filled by ESO instead of applied by hand. The target Secret takes the ExternalSecret's own name, matching the name the workload parameter points at. secretStoreRef and the data entries pass through verbatim — kurly does not model ESO's remoteRef schema, which would drift against its API.",
+         "id": "externalSecret"
+      },
+      {
+         "args": [
+            {
                "name": "parts",
                "required": true,
                "type": "array"

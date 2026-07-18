@@ -128,6 +128,40 @@ local join(parts) =
       else node;
     walk(manifests),
 
+  // externalSecret authors an External Secrets Operator (ESO) ExternalSecret —
+  // the CR ESO reconciles INTO a Kubernetes Secret by pulling the values from an
+  // external store (Vault, AWS/GCP Secrets Manager, …). kurly never mints key
+  // material: every workload names the Secret it needs (imagePullSecrets, a
+  // secretMount, a LokiStack's storage Secret) and authors none — a policy
+  // invariant, not a convention (see policy/secret.rego). So ANY named Secret a
+  // workload references can be filled by ESO instead of applied by hand:
+  //
+  //   kurly.externalSecret('loki-storage', { name: 'vault', kind: 'ClusterSecretStore' }, [
+  //     { secretKey: 'access_key_id',     remoteRef: { key: 'loki/s3', property: 'access_key_id' } },
+  //     { secretKey: 'access_key_secret', remoteRef: { key: 'loki/s3', property: 'access_key_secret' } },
+  //   ])
+  //
+  // The target Secret takes the ExternalSecret's own name, so it matches the
+  // name the workload parameter points at (storageSecret, …) with nothing to
+  // wire up. secretStoreRef and the data entries pass through VERBATIM — kurly
+  // does not model ESO's remoteRef schema (dataFrom, generators, template,
+  // rewrites), which would drift against its API, the same restraint migrations()
+  // takes with stageset Actions.
+  externalSecret(name, secretStoreRef, data, refreshInterval='1h'):: {
+    apiVersion: 'external-secrets.io/v1',
+    kind: 'ExternalSecret',
+    metadata: {
+      name: name,
+      labels: { 'app.kubernetes.io/managed-by': 'kurly' },
+    },
+    spec: {
+      refreshInterval: refreshInterval,
+      secretStoreRef: secretStoreRef,
+      target: { name: name },
+      data: data,
+    },
+  },
+
   // A workload's stages are the ORDERED, GATED phases of installing ONE
   // application — apply a phase, wait for it to go healthy, then the next — not
   // environment tiers. Each stage is its OWN file under workloads/<name>/: a

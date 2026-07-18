@@ -56,6 +56,9 @@ Create the `loki` bucket on SeaweedFS first. Reach Loki at the operator's gatewa
 Service, `lokistack-gateway-http` (or the per-component Services for direct push
 and query).
 
+Rather than applying that Secret by hand, fill it from your secrets store with
+`kurly.externalSecret('loki-storage', …)` — see [Secrets](../../#secrets).
+
 ## Air-gapped / private registry
 
 The `LokiStack` CR carries **no image** — the loki-operator chooses the Loki and

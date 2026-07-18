@@ -73,6 +73,20 @@ if conftest test --combine --namespace combined --policy policy "$badpair"/*.jso
 fi
 echo "the guard fires on a ServiceMonitor whose port no Service exposes"
 
+# Prove the no-Secret invariant bites too: a rendered Secret of any shape must
+# FAIL the per-object policy. No workload authors one, so the only way to observe
+# the guard is to feed it a Secret and require a non-zero exit.
+echo "== the no-Secret guard fires on a rendered Secret =="
+badsecret="$(mktemp -d)"
+trap 'rm -rf "$workdir" "$badpair" "$badsecret"' EXIT
+printf '{"apiVersion":"v1","kind":"Secret","metadata":{"name":"leaked"},"stringData":{"token":"hunter2"}}' \
+  > "$badsecret/secret.json"
+if conftest test --policy policy "$badsecret"/secret.json >/dev/null 2>&1; then
+  echo "::error::no-Secret guard passed a rendered Secret" >&2
+  exit 1
+fi
+echo "the guard fires on a rendered Secret"
+
 echo "== pluto (removed / deprecated APIs) =="
 pluto detect-files --directory "$mandir" --target-versions k8s=v1.31.0
 

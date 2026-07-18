@@ -978,6 +978,30 @@ local podOf(app) = app.deployment.spec.template.spec;
     .listenerset.spec.listeners[0].protocol,
     'HTTPS'
   ),
+  // externalSecret authors an ESO ExternalSecret whose target Secret takes the
+  // CR's own name, so it fills the exact name a workload parameter points at.
+  // secretStoreRef and the data entries pass through verbatim.
+  external_secret_targets_its_own_name: std.assertEqual(
+    kurly.externalSecret('loki-storage', { name: 'vault', kind: 'ClusterSecretStore' }, [
+      { secretKey: 'access_key_id', remoteRef: { key: 'loki/s3', property: 'access_key_id' } },
+    ]),
+    {
+      apiVersion: 'external-secrets.io/v1',
+      kind: 'ExternalSecret',
+      metadata: { name: 'loki-storage', labels: { 'app.kubernetes.io/managed-by': 'kurly' } },
+      spec: {
+        refreshInterval: '1h',
+        secretStoreRef: { name: 'vault', kind: 'ClusterSecretStore' },
+        target: { name: 'loki-storage' },
+        data: [{ secretKey: 'access_key_id', remoteRef: { key: 'loki/s3', property: 'access_key_id' } }],
+      },
+    }
+  ),
+  external_secret_refresh_interval_is_overridable: std.assertEqual(
+    kurly.externalSecret('s', { name: 'v' }, [], refreshInterval='15m').spec.refreshInterval,
+    '15m'
+  ),
+
   // A dedicated Gateway provisions a real load balancer, configured through
   // annotations whose keys belong to the implementation.
   own_gateway_takes_annotations: std.assertEqual(

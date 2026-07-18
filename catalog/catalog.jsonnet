@@ -99,7 +99,7 @@ local workloadEntries =
          'kinds: main.libsonnet must expose every annotated kind',
   // Helpers are top-level fields of main alongside the kinds; assert the
   // annotated set is exactly the rendering terminals main exposes.
-  assert reconcile('helpers', std.objectFields(ann.helpers), ['join', 'list', 'listOf', 'mirror']),
+  assert reconcile('helpers', std.objectFields(ann.helpers), ['externalSecret', 'join', 'list', 'listOf', 'mirror']),
   assert std.all([std.objectHasAll(main, helper) for helper in std.objectFields(ann.helpers)]) :
          'helpers: main.libsonnet must expose every annotated helper',
 

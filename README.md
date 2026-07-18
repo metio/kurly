@@ -60,6 +60,38 @@ the nodes redirect `docker.io/…` themselves, and rewriting references only add
 drift. Reach for `mirror` when the registry renames the path, as a proxy-cache
 project does, or when the copy is air-gapped.
 
+## Secrets
+
+kurly never creates a Secret. Every workload that needs one names it and expects
+someone — or something — else to author it: the cluster operator, an operator
+that mints its own credentials (CloudNativePG, Grafana), a sealed secret, or
+External Secrets Operator. This is a policy invariant, not a convention — a
+recipe that rendered a Secret would fail the build. Referencing by name is what
+makes any Secret swappable: whatever fills the named Secret, the workload is
+indifferent.
+
+That makes the [External Secrets Operator](https://external-secrets.io/) a
+first-class fit. Point `kurly.externalSecret` at the same name a workload
+references, and ESO reconciles the values in from your store (Vault, AWS/GCP
+Secrets Manager, …):
+
+```jsonnet
+kurly.listOf([
+  loki(storageSecret='loki-storage'),
+  kurly.externalSecret('loki-storage', { name: 'vault', kind: 'ClusterSecretStore' }, [
+    { secretKey: 'access_key_id',     remoteRef: { key: 'loki/s3', property: 'access_key_id' } },
+    { secretKey: 'access_key_secret', remoteRef: { key: 'loki/s3', property: 'access_key_secret' } },
+  ]),
+])
+```
+
+The target Secret takes the ExternalSecret's own name, so it lands as exactly the
+`loki-storage` the workload names — nothing else to wire. The `secretStoreRef`
+and the data entries pass through verbatim; kurly does not model ESO's remoteRef
+schema (`dataFrom`, generators, `template`), which would only drift against its
+API. The **prerequisite** is that ESO and a `SecretStore`/`ClusterSecretStore`
+are already installed in the cluster.
+
 ## Documentation
 
 The full documentation lives at **<https://kurly.projects.metio.wtf/>**:

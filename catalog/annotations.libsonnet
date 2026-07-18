@@ -614,5 +614,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     join: d.fn('Builds one flat array from parts that may be null (dropped) or nested arrays (flattened one level), for assembling any value with conditionals and optional groups. A Jsonnet `if` with no else is null when false, so an unmet condition drops out.', [
       d.arg('parts', d.T.array, required=true),
     ]),
+    externalSecret: d.fn("Authors an External Secrets Operator ExternalSecret — the CR ESO reconciles into a Kubernetes Secret by pulling values from an external store (Vault, AWS/GCP Secrets Manager). kurly never mints key material (a policy invariant), so any named Secret a workload references can be filled by ESO instead of applied by hand. The target Secret takes the ExternalSecret's own name, matching the name the workload parameter points at. secretStoreRef and the data entries pass through verbatim — kurly does not model ESO's remoteRef schema, which would drift against its API.", [
+      d.arg('name', d.T.string, required=true, example='loki-storage'),
+      d.arg('secretStoreRef', d.T.object, required=true),
+      d.arg('data', d.T.array, required=true),
+      d.arg('refreshInterval', d.T.string, default='1h'),
+    ]),
   },
 }
