@@ -60,11 +60,13 @@ images:
     newTag: "${LOKI_OPERATOR_VERSION#v}"
 EOF
 kubectl apply -k "$kdir"
-kubectl --namespace=default rollout status deployment \
-  --selector app.kubernetes.io/name=loki-operator --timeout=300s || {
+# The overlay's label transformer stamps app.kubernetes.io/name=loki-operator onto
+# its bundled MinIO too, so wait on the operator Deployment by name, not a label.
+kubectl --namespace=default rollout status deployment/controller-manager --timeout=300s || {
   echo "::group::loki-operator did not start"
   kubectl --namespace=default get pods -o wide 2>/dev/null || true
-  kubectl --namespace=default describe deploy --selector app.kubernetes.io/name=loki-operator 2>/dev/null | tail -40 || true
+  echo "operator image: $(kubectl --namespace=default get deployment/controller-manager -o jsonpath='{.spec.template.spec.containers[0].image}' 2>/dev/null)"
+  kubectl --namespace=default describe pods --selector app.kubernetes.io/part-of=loki-operator 2>/dev/null | grep -A6 -iE 'Events:|Warning|Failed' | head -30 || true
   echo "::endgroup::"
   exit 1
 }
