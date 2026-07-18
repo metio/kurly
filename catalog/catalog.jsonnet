@@ -28,6 +28,7 @@ local stageImports = {
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
   'otel-collector/agent': import 'github.com/metio/kurly/workloads/otel-collector/agent.libsonnet',
+  'prometheus/server': import 'github.com/metio/kurly/workloads/prometheus/server.libsonnet',
   'seaweedfs/server': import 'github.com/metio/kurly/workloads/seaweedfs/server.libsonnet',
   'seaweedfs/master': import 'github.com/metio/kurly/workloads/seaweedfs/master.libsonnet',
   'seaweedfs/volume': import 'github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet',

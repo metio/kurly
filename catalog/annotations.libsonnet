@@ -410,6 +410,34 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    prometheus: {
+      summary: 'A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace.',
+      stages: {
+        server: d.fn('The Prometheus server. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. The selectors (verbatim operator schema) default to selecting everything; scope them to narrow what it scrapes. Query it at prometheus-operated.<namespace>.svc:9090.', [
+          d.arg('name', d.T.string, default='prometheus'),
+          d.arg('namespace', d.T.string, default='monitoring'),
+          d.arg('image', d.T.string, default='docker.io/prom/prometheus:v3.13.1'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('retention', d.T.string, default='15d'),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('scrapeInterval', d.T.string, default='30s'),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('externalLabels', d.T.object, default={}, example={ cluster: 'prod' }),
+          d.arg('serviceMonitorSelector', d.T.object, default={}),
+          d.arg('podMonitorSelector', d.T.object, default={}),
+          d.arg('ruleSelector', d.T.object, default={}),
+          d.arg('probeSelector', d.T.object, default={}),
+          d.arg('namespaceSelector', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('spec', d.T.object, default={}, example={ enableRemoteWriteReceiver: true }),
+        ]) + {
+          kind: 'prometheus',
+          importPath: 'github.com/metio/kurly/workloads/prometheus/server.libsonnet',
+        },
+      },
+    },
     seaweedfs: {
       summary: "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups.",
       stages: {

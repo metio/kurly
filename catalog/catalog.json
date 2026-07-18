@@ -2153,6 +2153,132 @@
          "summary": "An OpenTelemetry Collector as a per-node agent (a DaemonSet), so local workloads send telemetry to a collector on their own node. The collector config — receivers, processors, exporters, and the pipelines wiring them — is passed verbatim (it is the collector's schema, not kurly's); the default is a working OTLP agent that receives, batches, and prints. Fully restricted by default: node-log collection needs a hostPath and is a documented opt-in."
       },
       {
+         "id": "prometheus",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "prometheus",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "monitoring",
+                     "name": "namespace",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/prom/prometheus:v3.13.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "15d",
+                     "name": "retention",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "50Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "30s",
+                     "name": "scrapeInterval",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "500m",
+                           "memory": "2Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "example": {
+                        "cluster": "prod"
+                     },
+                     "name": "externalLabels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "serviceMonitorSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "podMonitorSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "ruleSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "probeSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "namespaceSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "example": {
+                        "enableRemoteWriteReceiver": true
+                     },
+                     "name": "spec",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Prometheus server. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. The selectors (verbatim operator schema) default to selecting everything; scope them to narrow what it scrapes. Query it at prometheus-operated.<namespace>.svc:9090.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/prometheus/server.libsonnet",
+               "kind": "prometheus"
+            }
+         ],
+         "summary": "A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace."
+      },
+      {
          "id": "seaweedfs",
          "stages": [
             {
