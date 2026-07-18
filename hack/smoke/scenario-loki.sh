@@ -47,15 +47,16 @@ echo "== install the loki-operator ${LOKI_OPERATOR_VERSION} =="
 # to reconcile the serving cert, and its image is the OpenShift build — so a plain
 # `kubectl apply -k` leaves the operator stuck on a cert Secret that never comes.
 # The `development` overlay installs directly: no webhook (so no cert-manager) and
-# just the CRDs, RBAC, and manager. It leaves the operator image as the kustomize
-# `controller` placeholder, so pin it to the published upstream image. It deploys
-# to `default` (with a bundled MinIO we ignore) and watches every namespace.
+# just the CRDs, RBAC, and manager. It pins the operator image to the old
+# OpenShift build (quay.io/openshift-logging/loki-operator:0.1.0, which does not
+# pull here), so override THAT name to the published upstream image. It deploys to
+# `default` (with a bundled MinIO we ignore) and watches every namespace.
 kdir="$(mktemp -d)"
 cat > "$kdir/kustomization.yaml" <<EOF
 resources:
   - github.com/grafana/loki/operator/config/overlays/development?ref=operator/${LOKI_OPERATOR_VERSION}
 images:
-  - name: controller
+  - name: quay.io/openshift-logging/loki-operator
     newName: docker.io/grafana/loki-operator
     newTag: "${LOKI_OPERATOR_VERSION#v}"
 EOF
