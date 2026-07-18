@@ -51,13 +51,35 @@ kubectl --namespace=envoy-gateway-system rollout status deployment/envoy-gateway
 
 echo "== a GatewayClass and a shared Gateway with an HTTP listener =="
 kubectl create namespace "$gw_ns" --dry-run=client -o yaml | kubectl apply -f -
+# kind has no load balancer, so the default LoadBalancer data-plane Service stays
+# <pending> forever and Envoy Gateway never assigns the Gateway an address —
+# leaving it Programmed=False despite a healthy data plane. Provision the Service
+# as ClusterIP (reachable in-cluster, which is all the probes need) via an
+# EnvoyProxy config the GatewayClass points at.
 kubectl apply -f - <<EOF
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: clusterip-proxy
+  namespace: ${gw_ns}
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        type: ClusterIP
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
 metadata:
   name: eg
 spec:
   controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: clusterip-proxy
+    namespace: ${gw_ns}
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
