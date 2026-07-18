@@ -47,11 +47,35 @@ echo "== install the loki-operator ${LOKI_OPERATOR_VERSION} =="
 # to reconcile the serving cert, and its image is the OpenShift build — so a plain
 # `kubectl apply -k` leaves the operator stuck on a cert Secret that never comes.
 # The `development` overlay installs directly: no webhook (so no cert-manager) and
-# just the CRDs, RBAC, and manager. It pins the operator image to the old
-# OpenShift build (quay.io/openshift-logging/loki-operator:0.1.0, which does not
-# pull here), so override THAT name to the published upstream image. It deploys to
-# `default` (with a bundled MinIO we ignore) and watches every namespace.
+# just the CRDs, RBAC, and manager. Three fixes on top: pin the operator image
+# (the overlay uses the old OpenShift build, which does not pull here) to the
+# published upstream one, and turn off three feature gates in the manager config —
+# lokiStackGateway (else the LokiStack demands a tenants config for the gateway we
+# bypass) and http/grpcEncryption (inter-component mTLS, which would need
+# cert-manager). It deploys to `default` (with a bundled MinIO we ignore) and
+# watches every namespace.
 kdir="$(mktemp -d)"
+cat > "$kdir/controller_manager_config.yaml" <<'CFG'
+apiVersion: config.loki.grafana.com/v1
+kind: ProjectConfig
+health:
+  healthProbeBindAddress: :8081
+metrics:
+  bindAddress: :8080
+  secure: false
+leaderElection:
+  leaderElect: true
+  resourceName: loki-operator.grafana.com
+featureGates:
+  httpEncryption: false
+  grpcEncryption: false
+  lokiStackGateway: false
+  restrictedPodSecurityStandard: false
+  lokiStackWebhook: false
+  alertingRuleWebhook: false
+  recordingRuleWebhook: false
+  rulerConfigWebhook: false
+CFG
 cat > "$kdir/kustomization.yaml" <<EOF
 resources:
   - github.com/grafana/loki/operator/config/overlays/development?ref=operator/${LOKI_OPERATOR_VERSION}
@@ -59,6 +83,13 @@ images:
   - name: quay.io/openshift-logging/loki-operator
     newName: docker.io/grafana/loki-operator
     newTag: "${LOKI_OPERATOR_VERSION#v}"
+generatorOptions:
+  disableNameSuffixHash: true
+configMapGenerator:
+  - name: manager-config
+    behavior: replace
+    files:
+      - controller_manager_config.yaml
 EOF
 kubectl apply -k "$kdir"
 # The overlay's label transformer stamps app.kubernetes.io/name=loki-operator onto
