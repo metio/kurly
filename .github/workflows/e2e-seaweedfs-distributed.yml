@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for the SPLIT seaweedfs (master/volume/filer). The render
+# gates confirm each manifest; only a cluster shows the three form a working
+# store — and the thing that most easily breaks on Kubernetes: a volume server
+# registering with the master under a routable pod IP. The scenario stands up all
+# three, waits for the volume servers to register, and round-trips an object
+# through the filer's S3 gateway. Self-gates on a diff scoped to the workload plus
+# the shared library.
+name: E2E seaweedfs (distributed)
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  seaweedfs-distributed:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: seaweedfs-distributed
+      paths: '^(workloads/seaweedfs/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-seaweedfs-distributed)\.sh|\.github/workflows/e2e(-seaweedfs-distributed)?\.yml)'
+      scenario: hack/smoke/scenario-seaweedfs-distributed.sh
+      max_versions: '2'
