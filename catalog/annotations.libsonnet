@@ -348,6 +348,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('topologySpreadConstraints', d.T.array, default=[]),
           d.arg('priorityClassName', d.T.string),
           d.arg('schedulerName', d.T.string),
+          d.arg('backup', d.T.object, example={ barmanObjectStore: { destinationPath: 's3://backups/', endpointURL: 'http://seaweedfs:8333' } }),
         ]) + {
           kind: 'cnpg',
           importPath: 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',

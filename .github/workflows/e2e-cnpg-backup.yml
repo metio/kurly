@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Cross-workload e2e: a cnpg-cluster backs up to a seaweedfs S3 gateway, the
+# pairing the two workloads exist to enable. It installs the CloudNativePG
+# operator, stands up both workloads, and drives a real base backup through
+# CNPG's barman over S3 into SeaweedFS's volume — a backup that reaches
+# `completed` is the proof the seam holds. Self-gates on a diff touching either
+# workload, the scenario, or the shared library. Heavy (operator + two workloads
+# + a backup), so the newest k8s minor only.
+name: E2E cnpg-backup
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cnpg-backup:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: cnpg-backup
+      paths: '^(workloads/(seaweedfs|cnpg-cluster)/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cnpg-backup)\.sh|\.github/workflows/e2e(-cnpg-backup)?\.yml)'
+      scenario: hack/smoke/scenario-cnpg-backup.sh
+      max_versions: '1'
