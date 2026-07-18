@@ -415,7 +415,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Grafana instance. config is grafana.ini (operator sections of string values), merged over defaults that silence phone-home traffic. prometheusUrl points the default datasource at the prometheus workload's prometheus-operated Service; prometheusDatasource=false authors none. The operator mints a random admin password into <name>-admin-credentials.", [
           d.arg('name', d.T.string, default='grafana'),
-          d.arg('image', d.T.string, default='docker.io/grafana/grafana:12.4.5'),
+          d.arg('image', d.T.string, default='docker.io/grafana/grafana:13.1.0'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('config', d.T.object, default={}, example={ server: { root_url: 'https://grafana.example.com' } }),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
