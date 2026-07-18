@@ -2252,6 +2252,75 @@
          "summary": "A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed."
       },
       {
+         "id": "loki",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "loki",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1x.demo",
+                     "name": "size",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "loki-storage",
+                     "name": "storageSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "v13",
+                     "name": "schemaVersion",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2024-01-01",
+                     "name": "schemaEffectiveDate",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "example": {
+                        "tenants": {
+                           "mode": "static"
+                        }
+                     },
+                     "name": "spec",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The LokiStack. size is the operator's t-shirt scaling (1x.demo is the smallest, for a test cluster; production wants 1x.extra-small+). storageSecret names the object-storage Secret you create (keys bucketnames/endpoint/access_key_id/access_key_secret/region) — point it at the seaweedfs workload's S3. The operator chooses the Loki image, so there is none to pin. Reach it at the gateway Service lokistack-gateway-http.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/loki/server.libsonnet",
+               "kind": "loki"
+            }
+         ],
+         "summary": "Grafana Loki in microservices mode as a loki-operator `LokiStack` custom resource: one CR reconciles the whole distributed topology (distributor, ingester, querier, query-frontend, compactor, index-gateway, gateway), with `size` scaling the replicas. Authors the CR (like cnpg-cluster) for the operator to own the components, config, and ring. Requires the loki-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3."
+      },
+      {
          "id": "memcached",
          "stages": [
             {
