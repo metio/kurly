@@ -51,8 +51,20 @@ local featureCases = [
   for f in catalog.features
   for kindId in f.kinds
 ];
+// A modifier that adds rules to an HTTPRoute (guard) needs an exposure present to
+// attach to, so prepend a representative one; the true exposures and the
+// Service-only modifiers (referenceGrant) render on a bare http.
 local exposeCases = [
-  { name: 'expose-' + e.id, snippet: snippetFor('http', ' + ' + call('kurly.expose.' + e.id, e)) }
+  {
+    name: 'expose-' + e.id,
+    snippet: snippetFor(
+      'http',
+      (if std.objectHas(e, 'requiresExposure') && e.requiresExposure
+       then " + kurly.expose.gateway('coverage.example.com', 'shared')"
+       else '')
+      + ' + ' + call('kurly.expose.' + e.id, e)
+    ),
+  }
   for e in catalog.expose
 ];
 local securityCases = [

@@ -978,6 +978,64 @@ local podOf(app) = app.deployment.spec.template.spec;
     .listenerset.spec.listeners[0].protocol,
     'HTTPS'
   ),
+  // guard sinks the given prefixes to a responder Service as a rule BEFORE the
+  // catch-all; Gateway API's most-specific match makes the guarded prefix win.
+  guard_prepends_a_sink_rule: std.assertEqual(
+    (kurly.http('pad', 'img:1')
+     + kurly.expose.listenerSet('pad.example.com', 'shared')
+     + kurly.expose.guard(['/admin', '/stats'], 'not-found', serviceNamespace='shared-http-services'))
+    .httproute.spec.rules,
+    [
+      {
+        matches: [
+          { path: { type: 'PathPrefix', value: '/admin' } },
+          { path: { type: 'PathPrefix', value: '/stats' } },
+        ],
+        backendRefs: [{ name: 'not-found', namespace: 'shared-http-services', port: 5678 }],
+      },
+      {
+        matches: [{ path: { type: 'PathPrefix', value: '/' } }],
+        backendRefs: [{ name: 'pad', port: 80 }],
+      },
+    ]
+  ),
+  // Composed twice, guard adds one rule per call — different paths, different
+  // responders. A same-namespace responder drops the namespace from the backendRef.
+  guard_composes_more_than_once: std.assertEqual(
+    std.length((kurly.http('pad', 'img:1')
+                + kurly.expose.gateway('pad.example.com', 'shared')
+                + kurly.expose.guard(['/admin'], 'forbidden')
+                + kurly.expose.guard(['/metrics'], 'not-found')).httproute.spec.rules),
+    3
+  ),
+  guard_same_namespace_omits_the_backend_namespace: std.assertEqual(
+    (kurly.http('pad', 'img:1')
+     + kurly.expose.gateway('pad.example.com', 'shared')
+     + kurly.expose.guard(['/admin'], 'forbidden')).httproute.spec.rules[0].backendRefs[0],
+    { name: 'forbidden', port: 5678 }
+  ),
+  // referenceGrant grants cross-namespace HTTPRoutes access to the workload's
+  // Service, one `from` per namespace, the `to` fixed on the Service.
+  reference_grant_lists_every_from_namespace: std.assertEqual(
+    (kurly.http('not-found', 'img:1') + kurly.expose.referenceGrant(['team-a', 'team-b']))
+    .referencegrant.spec,
+    {
+      from: [
+        { group: 'gateway.networking.k8s.io', kind: 'HTTPRoute', namespace: 'team-a' },
+        { group: 'gateway.networking.k8s.io', kind: 'HTTPRoute', namespace: 'team-b' },
+      ],
+      to: [{ group: '', kind: 'Service', name: 'not-found' }],
+    }
+  ),
+
+  // The catch-all backendRef follows a servicePort override, so an exposure onto
+  // a workload publishing a non-80 Service routes to the port that Service exposes.
+  exposure_catch_all_follows_the_service_port: std.assertEqual(
+    (kurly.http('api', 'img:1') + kurly.servicePort(8443) + kurly.expose.gateway('api.example.com', 'shared'))
+    .httproute.spec.rules[0].backendRefs[0],
+    { name: 'api', port: 8443 }
+  ),
+
   // externalSecret authors an ESO ExternalSecret whose target Secret takes the
   // CR's own name, so it fills the exact name a workload parameter points at.
   // secretStoreRef and the data entries pass through verbatim.

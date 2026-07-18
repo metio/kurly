@@ -92,6 +92,33 @@ schema (`dataFrom`, generators, `template`), which would only drift against its
 API. The **prerequisite** is that ESO and a `SecretStore`/`ClusterSecretStore`
 are already installed in the cluster.
 
+## Protecting paths on a Gateway API route
+
+To take a path off the public internet — return 403 on `/admin` while the rest of
+the workload serves normally — `ingress-nginx` has configuration-snippet
+annotations, but Gateway API has no portable equivalent. The empty-`backendRefs`
+trick the spec says returns 404 is honoured inconsistently (Envoy Gateway returns
+500), so the dependable answer is to route the path to a small service that always
+answers the same way.
+
+The [status-responder](workloads/status-responder/) workload is that service, and
+two `expose` modifiers wire it in. Deploy the responder once, globally, and
+`kurly.expose.guard` sinks the protected prefixes on the workload's `HTTPRoute` to
+it:
+
+```jsonnet
+kurly.http('etherpad', image)
++ kurly.expose.listenerSet('pad.example.com', 'shared')
++ kurly.expose.guard(['/admin', '/stats'], 'not-found', serviceNamespace='shared-http-services')
+```
+
+Gateway API resolves overlapping matches by specificity, so the guarded prefix
+wins over the catch-all for those requests; everything else reaches the workload,
+whose own Service stays reachable in-cluster (a `port-forward` still hits
+`/admin`). A cross-namespace responder needs consent, granted on its side with
+`kurly.expose.referenceGrant(['team-a', 'team-b'])` — see
+[status-responder](workloads/status-responder/) for the full pairing.
+
 ## Documentation
 
 The full documentation lives at **<https://kurly.projects.metio.wtf/>**:

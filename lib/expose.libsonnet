@@ -30,6 +30,10 @@ local exposure(name) = {
   config+:: { exclusive+: { exposure+: [name] } },
 };
 
+// Guard rules (from kurly.expose.guard) come FIRST, the catch-all to the
+// workload LAST. Gateway API resolves overlapping matches by specificity, not
+// order, so a guarded `/admin` prefix wins over `/` for those requests
+// regardless — the ordering is for the reader, not the router.
 local httpRoute(app, host, parent) = {
   apiVersion: 'gateway.networking.k8s.io/v1',
   kind: 'HTTPRoute',
@@ -37,10 +41,12 @@ local httpRoute(app, host, parent) = {
   spec: {
     parentRefs: [parent],
     hostnames: [host],
-    rules: [{
-      matches: [{ path: { type: 'PathPrefix', value: '/' } }],
-      backendRefs: [{ name: app.config.name, port: 80 }],
-    }],
+    rules:
+      std.get(app.config, 'guards', [])
+      + [{
+        matches: [{ path: { type: 'PathPrefix', value: '/' } }],
+        backendRefs: [{ name: app.config.name, port: app.config.servicePort }],
+      }],
   },
 };
 
@@ -194,5 +200,63 @@ local listener(host, tls) =
     },
 
     httproute: httpRoute(app, host, listenerSetParent(app.config.name)),
+  },
+
+  // guard sinks specific path prefixes on the workload's HTTPRoute to a
+  // status-responder Service instead of the workload — the portable way to take
+  // a path OFF the public internet (answer 403/404) while the workload stays
+  // reachable in-cluster. Compose it AFTER a Gateway API exposure; it adds a rule
+  // to that exposure's HTTPRoute rather than emitting its own, so it is a
+  // modifier, not an exposure, and joins no exclusion group. Gateway API resolves
+  // overlapping matches by specificity, so the guarded prefix wins over the
+  // catch-all for those requests.
+  //
+  // `service` is usually the shared kurly status-responder in another namespace;
+  // a cross-namespace backendRef needs a ReferenceGrant on that side (see
+  // referenceGrant). All the given paths share one rule (one responder); compose
+  // guard twice to sink different paths to different responders (an /admin 403
+  // and a /metrics 404).
+  //
+  //   kurly.http('etherpad', image)
+  //   + kurly.expose.listenerSet('pad.example.com', 'shared')
+  //   + kurly.expose.guard(['/admin', '/stats'], 'not-found', serviceNamespace='shared-http-services')
+  guard(paths, service, serviceNamespace=null, port=5678):: {
+    assert std.objectHas(self, 'httproute') :
+           'kurly.expose.guard adds rules to a Gateway API HTTPRoute — compose it after gateway/listenerSet/ownGateway/ownListenerSet',
+    config+:: {
+      guards+: [{
+        matches: [{ path: { type: 'PathPrefix', value: p } } for p in paths],
+        backendRefs: [std.prune({ name: service, namespace: serviceNamespace, port: port })],
+      }],
+    },
+  },
+
+  // referenceGrant lets HTTPRoutes in OTHER namespaces route to this workload's
+  // Service — the cross-namespace consent Gateway API requires, granted on the
+  // Service (the `to`) side and naming the namespaces allowed to reach it. This
+  // is what makes a shared status-responder usable from tenant namespaces: deploy
+  // the responder once, grant the tenants, and their guard rules can target its
+  // Service. Like guard it is a modifier (needs a Service to grant, joins no
+  // exclusion group), composed onto the responder:
+  //
+  //   responder(name='not-found', statusCode=404, message='not found')
+  //   + kurly.expose.referenceGrant(['team-a', 'team-b'])
+  referenceGrant(fromNamespaces):: {
+    assert std.objectHas(self, 'service') :
+           'kurly.expose.referenceGrant grants access to a workload Service — compose it onto kurly.http (or another kind with a Service)',
+    local app = self,
+
+    referencegrant: {
+      apiVersion: 'gateway.networking.k8s.io/v1',
+      kind: 'ReferenceGrant',
+      metadata: { name: app.config.name, labels: app.labels },
+      spec: {
+        from: [
+          { group: 'gateway.networking.k8s.io', kind: 'HTTPRoute', namespace: namespace }
+          for namespace in fromNamespaces
+        ],
+        to: [{ group: '', kind: 'Service', name: app.config.name }],
+      },
+    },
   },
 }

@@ -288,6 +288,15 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('gatewayNamespace', d.T.string),
       d.arg('tls', d.T.string, example='storefront-tls'),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
+    guard: d.fn('Sinks specific path prefixes on the HTTPRoute to a status-responder Service instead of the workload — the portable way to take a path off the public internet (answer 403/404) while the workload stays reachable in-cluster. A modifier composed after a Gateway API exposure, not an exposure itself; a cross-namespace responder needs a ReferenceGrant on that side. Compose it more than once to sink different paths to different responders.', [
+      d.arg('paths', d.T.array, required=true, example=['/admin', '/stats']),
+      d.arg('service', d.T.string, required=true, example='not-found'),
+      d.arg('serviceNamespace', d.T.string, example='shared-http-services'),
+      d.arg('port', d.T.int, default=5678),
+    ]) + { kinds: ['http'], requiresExposure: true },
+    referenceGrant: d.fn("Lets HTTPRoutes in other namespaces route to this workload's Service — the cross-namespace consent Gateway API requires, granted on the Service side and naming the allowed namespaces. Deploy a shared status-responder once, grant the tenant namespaces, and their guard rules can target its Service. A modifier, not an exposure.", [
+      d.arg('fromNamespaces', d.T.array, required=true, example=['team-a', 'team-b']),
+    ]) + { kinds: ['http'], requiresService: true },
   },
 
   // Pod Security Standards profiles — a mixin that relaxes the default
@@ -307,6 +316,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   // the snippet imports. catalog.jsonnet asserts each importPath resolves to a
   // function.
   workloads: {
+    'status-responder': {
+      summary: 'A tiny HTTP service that answers every request with one fixed status code and message. Deploy it once, globally, and route protected paths to it from a Gateway API HTTPRoute (kurly.expose.guard) to take them off the public internet — the portable substitute for the fixed-response filter Gateway API lacks.',
+      stages: {
+        responder: d.fn('One fixed-status responder (hashicorp/http-echo). Pair with kurly.expose.guard on the protected workload and kurly.expose.referenceGrant here for cross-namespace routing.', [
+          d.arg('name', d.T.string, default='forbidden'),
+          d.arg('statusCode', d.T.int, default=403),
+          d.arg('message', d.T.string, default='forbidden'),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
+        },
+      },
+    },
     tik: {
       summary: "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store.",
       stages: {

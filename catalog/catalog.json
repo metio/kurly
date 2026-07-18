@@ -36,6 +36,43 @@
       {
          "args": [
             {
+               "example": [
+                  "/admin",
+                  "/stats"
+               ],
+               "name": "paths",
+               "required": true,
+               "type": "array"
+            },
+            {
+               "example": "not-found",
+               "name": "service",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "shared-http-services",
+               "name": "serviceNamespace",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": 5678,
+               "name": "port",
+               "required": false,
+               "type": "int"
+            }
+         ],
+         "help": "Sinks specific path prefixes on the HTTPRoute to a status-responder Service instead of the workload — the portable way to take a path off the public internet (answer 403/404) while the workload stays reachable in-cluster. A modifier composed after a Gateway API exposure, not an exposure itself; a cross-namespace responder needs a ReferenceGrant on that side. Compose it more than once to sink different paths to different responders.",
+         "id": "guard",
+         "kinds": [
+            "http"
+         ],
+         "requiresExposure": true
+      },
+      {
+         "args": [
+            {
                "example": "storefront.example.com",
                "name": "host",
                "required": true,
@@ -169,6 +206,25 @@
          "exclusiveGroup": "exposure",
          "help": "Generates a ListenerSet that adds the workload's own listener to a shared Gateway, plus the HTTPRoute. The Gateway must opt in via spec.allowedListeners.",
          "id": "ownListenerSet",
+         "kinds": [
+            "http"
+         ],
+         "requiresService": true
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  "team-a",
+                  "team-b"
+               ],
+               "name": "fromNamespaces",
+               "required": true,
+               "type": "array"
+            }
+         ],
+         "help": "Lets HTTPRoutes in other namespaces route to this workload's Service — the cross-namespace consent Gateway API requires, granted on the Service side and naming the allowed namespaces. Deploy a shared status-responder once, grant the tenant namespaces, and their guard rules can target its Service. A modifier, not an exposure.",
+         "id": "referenceGrant",
          "kinds": [
             "http"
          ],
@@ -2714,6 +2770,48 @@
             }
          ],
          "summary": "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups."
+      },
+      {
+         "id": "status-responder",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "forbidden",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 403,
+                     "name": "statusCode",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "forbidden",
+                     "name": "message",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "One fixed-status responder (hashicorp/http-echo). Pair with kurly.expose.guard on the protected workload and kurly.expose.referenceGrant here for cross-namespace routing.",
+               "id": "responder",
+               "importPath": "github.com/metio/kurly/workloads/status-responder/responder.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A tiny HTTP service that answers every request with one fixed status code and message. Deploy it once, globally, and route protected paths to it from a Gateway API HTTPRoute (kurly.expose.guard) to take them off the public internet — the portable substitute for the fixed-response filter Gateway API lacks."
       },
       {
          "id": "tik",

@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for status-responder, and for kurly's Gateway API path
+# protection (kurly.expose.guard + referenceGrant, which live in the shared
+# library). Installs Envoy Gateway, then drives real traffic through a gateway to
+# prove a guarded /admin is sunk to a clean 404 while the app stays reachable
+# in-cluster. Self-gates on a diff touching the workload, the library, or the e2e
+# machinery. Heavy (a full gateway control+data plane), so the newest k8s minor
+# only.
+name: E2E status-responder
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  status-responder:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: status-responder
+      paths: '^(workloads/status-responder/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-status-responder)\.sh|\.github/workflows/e2e(-status-responder)?\.yml)'
+      scenario: hack/smoke/scenario-status-responder.sh
+      max_versions: '1'
