@@ -49,9 +49,10 @@ kurly::namespace "$ns"
 
 echo "== install the grafana-operator ${GRAFANA_OPERATOR_VERSION} =="
 # Installed into the target namespace so it reconciles objects there whether it
-# is cluster- or namespace-scoped.
+# is cluster- or namespace-scoped. The helm chart's SemVer drops the release
+# tag's leading 'v' (chart 5.24.0 == operator v5.24.0), so strip it.
 helm upgrade --install grafana-operator oci://ghcr.io/grafana/helm-charts/grafana-operator \
-  --version "${GRAFANA_OPERATOR_VERSION}" --namespace "$ns" --wait --timeout 5m
+  --version "${GRAFANA_OPERATOR_VERSION#v}" --namespace "$ns" --wait --timeout 5m
 kubectl --namespace="$ns" rollout status deployment \
   --selector app.kubernetes.io/name=grafana-operator --timeout=180s || true
 
