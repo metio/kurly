@@ -312,7 +312,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         backend: d.fn('The tik backend supervisor: a single-writer http app over a ReadWriteOnce store (one replica, recreated to avoid deadlocking on the volume). Compose an exposure recipe to serve the board.', [
           d.arg('name', d.T.string, default='tik'),
-          d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.18115134'),
+          d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.18213457'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
         ]) + {
