@@ -49,6 +49,9 @@ kubectl apply -f "https://github.com/cert-manager/cert-manager/releases/download
 kubectl --namespace=cert-manager rollout status deployment/cert-manager-webhook --timeout=180s
 
 echo "== install the loki-operator ${LOKI_OPERATOR_VERSION} =="
+# The community overlay stamps everything into the loki-operator namespace but
+# does not create it, so its namespaced resources fail until it exists.
+kubectl create namespace loki-operator --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -k "github.com/grafana/loki/operator/config/overlays/community?ref=operator/${LOKI_OPERATOR_VERSION}"
 kubectl --namespace=loki-operator rollout status deployment \
   --selector app.kubernetes.io/name=loki-operator --timeout=180s
