@@ -410,6 +410,28 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    alertmanager: {
+      summary: 'An Alertmanager as a prometheus-operator `Alertmanager` custom resource: it receives alerts from a Prometheus, groups and deduplicates them, and routes them to receivers. Authors the CR (like prometheus) for the operator to reconcile into a StatefulSet and the `alertmanager-operated` Service. Requires the prometheus-operator installed. Routing comes from the AlertmanagerConfig objects it selects.',
+      stages: {
+        server: d.fn("The Alertmanager. alertmanagerConfigSelector (verbatim operator schema) decides which AlertmanagerConfig objects supply routing/receivers; {} selects everything, none runs the operator default. Wire a Prometheus to it through that workload's spec escape (alerting.alertmanagers -> alertmanager-operated:web). Reach it at alertmanager-operated.<namespace>.svc:9093.", [
+          d.arg('name', d.T.string, default='alertmanager'),
+          d.arg('image', d.T.string, default='docker.io/prom/alertmanager:v0.33.1'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('retention', d.T.string, default='120h'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('alertmanagerConfigSelector', d.T.object, default={}),
+          d.arg('namespaceSelector', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('spec', d.T.object, default={}, example={ externalUrl: 'https://alertmanager.example.com' }),
+        ]) + {
+          kind: 'alertmanager',
+          importPath: 'github.com/metio/kurly/workloads/alertmanager/server.libsonnet',
+        },
+      },
+    },
     grafana: {
       summary: 'A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed.',
       stages: {

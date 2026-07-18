@@ -1776,6 +1776,97 @@
    ],
    "workloads": [
       {
+         "id": "alertmanager",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "alertmanager",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/prom/alertmanager:v0.33.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "120h",
+                     "name": "retention",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "alertmanagerConfigSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "namespaceSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "example": {
+                        "externalUrl": "https://alertmanager.example.com"
+                     },
+                     "name": "spec",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Alertmanager. alertmanagerConfigSelector (verbatim operator schema) decides which AlertmanagerConfig objects supply routing/receivers; {} selects everything, none runs the operator default. Wire a Prometheus to it through that workload's spec escape (alerting.alertmanagers -> alertmanager-operated:web). Reach it at alertmanager-operated.<namespace>.svc:9093.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/alertmanager/server.libsonnet",
+               "kind": "alertmanager"
+            }
+         ],
+         "summary": "An Alertmanager as a prometheus-operator `Alertmanager` custom resource: it receives alerts from a Prometheus, groups and deduplicates them, and routes them to receivers. Authors the CR (like prometheus) for the operator to reconcile into a StatefulSet and the `alertmanager-operated` Service. Requires the prometheus-operator installed. Routing comes from the AlertmanagerConfig objects it selects."
+      },
+      {
          "id": "cnpg-cluster",
          "stages": [
             {
