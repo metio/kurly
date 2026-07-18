@@ -46,15 +46,29 @@ fail() {
 
 echo "== install cert-manager ${CERT_MANAGER_VERSION} (the operator webhook needs it) =="
 kubectl apply -f "https://github.com/cert-manager/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.yaml"
-kubectl --namespace=cert-manager rollout status deployment/cert-manager-webhook --timeout=180s
+# All three must be up before the operator installs: the operator's serving cert
+# is issued by cert-manager (controller), the CA injected by the cainjector, and
+# the webhook admits the Certificate — a not-yet-ready cert-manager leaves the
+# operator pod stuck waiting for its cert secret.
+for d in cert-manager cert-manager-cainjector cert-manager-webhook; do
+  kubectl --namespace=cert-manager rollout status "deployment/${d}" --timeout=180s
+done
 
 echo "== install the loki-operator ${LOKI_OPERATOR_VERSION} =="
 # The community overlay stamps everything into the loki-operator namespace but
 # does not create it, so its namespaced resources fail until it exists.
 kubectl create namespace loki-operator --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -k "github.com/grafana/loki/operator/config/overlays/community?ref=operator/${LOKI_OPERATOR_VERSION}"
-kubectl --namespace=loki-operator rollout status deployment \
-  --selector app.kubernetes.io/name=loki-operator --timeout=180s
+# The pod waits on its cert-manager-issued serving cert, then pulls its image, so
+# give it room; dump why on timeout.
+kubectl --namespace=loki-operator rollout status deployment/loki-operator-controller-manager --timeout=300s || {
+  echo "::group::loki-operator did not start"
+  kubectl --namespace=loki-operator get pods -o wide 2>/dev/null || true
+  kubectl --namespace=loki-operator describe pods 2>/dev/null | tail -60 || true
+  kubectl --namespace=loki-operator get certificate,secret 2>/dev/null || true
+  echo "::endgroup::"
+  exit 1
+}
 
 kurly::vendor
 kurly::namespace "$ns"
