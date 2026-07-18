@@ -46,6 +46,7 @@ function(
   topologySpreadConstraints=[],
   priorityClassName=null,
   schedulerName=null,
+  backup=null,
 )
   // CNPG resolves the image from exactly one source. Naming both is a config
   // error the operator rejects, so fail the render instead of the apply.
@@ -173,6 +174,13 @@ function(
         resources: resources,
         // A PodMonitor for the Prometheus Operator, on by default.
         monitoring: (if enablePodMonitor then { enablePodMonitor: true } else null),
+        // Where the cluster archives WAL and writes base backups. Passed VERBATIM:
+        // `backup` is CNPG's own schema (barmanObjectStore with its destinationPath,
+        // endpointURL, s3Credentials/azureCredentials, wal/data compression, and
+        // retention, or the barman-cloud plugin), which kurly does not model — a
+        // copy would drift against the operator's. Left unset, the cluster keeps no
+        // backups. See the CNPG API reference for the fields.
+        backup: backup,
         // Placement is the cluster's business — which nodes carry databases,
         // what taints keep everything else off them, which zones exist — and a
         // Cluster that cannot express it does not land on a dedicated node pool
