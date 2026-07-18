@@ -67,15 +67,15 @@ kubectl apply --server-side -f \
   "https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml"
 
 echo "== install the Envoy Gateway CRDs =="
-# EG's own CRDs only — small enough for a Helm release. The Gateway API CRDs are
-# already installed above, so the controller chart installs none (crds.enabled
-# would pull in the Gateway API set too and overflow the release Secret).
-helm upgrade --install eg-crds oci://docker.io/envoyproxy/gateway-crds-helm \
+# EG's own CRDs only (the Gateway API set is installed above). EG 1.8 templates
+# its CRDs into the release manifest, and gzip'd they too overflow Helm's 1 MiB
+# release Secret — so render them and apply with kubectl, no release object and no
+# size cap, the same way the Gateway API CRDs went on.
+helm template eg-crds oci://docker.io/envoyproxy/gateway-crds-helm \
   --version "$ENVOY_GATEWAY_VERSION" \
-  --namespace envoy-gateway-system --create-namespace \
   --set crds.gatewayAPI.enabled=false \
   --set crds.envoyGateway.enabled=true \
-  --wait --timeout 5m
+  | kubectl apply --server-side -f -
 
 echo "== install Envoy Gateway ${ENVOY_GATEWAY_VERSION} (controller only) =="
 helm upgrade --install eg oci://docker.io/envoyproxy/gateway-helm \
