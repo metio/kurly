@@ -11,13 +11,16 @@
 # whose HTTPRoute guards /admin by routing it to that responder cross-namespace.
 # It drives real traffic through the gateway.
 #
-# Four assertions, over one live gateway:
+# Five assertions, over one live gateway:
 #   1. GET / through the gateway reaches the app (200).
 #   2. GET /admin through the gateway is sunk to the responder (404, not 500) —
 #      the path is off the public route.
 #   3. The 404 body is the responder's, proving the guard routed there.
 #   4. GET /admin on the app's own Service still returns 200 — the workload stays
 #      reachable in-cluster; only the public route is blocked.
+#   5. expose.ownListenerSet grafts a second app's own listener onto the shared
+#      Gateway (ListenerSet, standard channel since Gateway API 1.5) and traffic
+#      to its hostname routes through it.
 cd "$(dirname "$0")/../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
@@ -39,7 +42,7 @@ fail() {
   kurly::diagnose "$shared_ns"
   echo "::group::gateway state"
   kubectl --namespace="$gw_ns" get gateway,httproute -o wide 2>/dev/null || true
-  kubectl --namespace="$app_ns" get httproute -o yaml 2>/dev/null || true
+  kubectl --namespace="$app_ns" get httproute,listenerset -o yaml 2>/dev/null || true
   kubectl --namespace=envoy-gateway-system get pods,svc 2>/dev/null || true
   kubectl --namespace=envoy-gateway-system logs --selector=control-plane=envoy-gateway --tail=60 2>/dev/null || true
   echo "::endgroup::"
@@ -109,6 +112,11 @@ metadata:
   namespace: ${gw_ns}
 spec:
   gatewayClassName: eg
+  # Opt in to ListenerSet attachment (Gateways reject it by default) so the
+  # ownListenerSet check below can graft its own listener onto this Gateway.
+  allowedListeners:
+    namespaces:
+      from: All
   listeners:
     - name: http
       protocol: HTTP
@@ -210,4 +218,37 @@ case "$internal" in
   *) fail "the app's own Service did not serve /admin (got '${internal}') — internal reachability is broken" ;;
 esac
 
-echo "status-responder works end to end: /admin is sunk to a clean 404 on the public gateway route while the app still serves it in-cluster — the portable Gateway API path protection the fixed-response filter would give, on an implementation that returns 500 for the native trick"
+# ---------------------------------------------------------------------------
+# Assertion 5 — expose.ownListenerSet grafts a workload's own listener onto the
+# shared Gateway and routes through it. ListenerSet is standard-channel as of
+# Gateway API 1.5, so this exercises kurly's newest exposure recipe on a real
+# runtime: the Gateway opted in via allowedListeners above, and traffic to the
+# ListenerSet's own hostname must reach the workload through the same Gateway.
+# ---------------------------------------------------------------------------
+
+ls_host=owned.example.com
+echo "== 5: deploy an app exposed through its OWN ListenerSet on the shared Gateway =="
+jsonnet -J vendor -e \
+  "local k = import 'github.com/metio/kurly/main.libsonnet';
+   k.list((import 'workloads/status-responder/responder.libsonnet')(name='owned-app', statusCode=200, message='owned')
+          + k.expose.ownListenerSet('${ls_host}', 'shared-gw', gatewayNamespace='${gw_ns}')
+          + k.hostUsers())" \
+  | kubectl apply --namespace="$app_ns" --filename=-
+kubectl --namespace="$app_ns" rollout status deployment/owned-app --timeout=180s \
+  || fail "the ownListenerSet app never became Available"
+kubectl --namespace="$app_ns" wait --for=condition=Accepted listenerset/owned-app --timeout=120s \
+  || fail "the ListenerSet was not Accepted by the shared Gateway — the allowedListeners opt-in or the attachment is broken"
+kubectl --namespace="$app_ns" wait --for=condition=Accepted httproute/owned-app --timeout=120s \
+  || fail "the ownListenerSet HTTPRoute was not Accepted"
+
+owned=false
+for _ in $(seq 1 24); do
+  resp="$(probe "${gw}/" "$ls_host")"
+  case "$resp" in 200*owned*) owned=true; break ;; esac
+  echo "  ListenerSet route not serving yet (got '${resp}'), retrying"
+  sleep 5
+done
+[ "$owned" = true ] || fail "GET / on the ListenerSet's own hostname never reached the app (got '${resp:-}')"
+echo "  GET / (owned listener) -> ${resp}"
+
+echo "status-responder works end to end: /admin is sunk to a clean 404 on the public gateway route while the app still serves it in-cluster — the portable Gateway API path protection the fixed-response filter would give, on an implementation that returns 500 for the native trick — and a second app routes through its own ListenerSet grafted onto the shared Gateway"
