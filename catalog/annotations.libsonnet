@@ -452,6 +452,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    loki: {
+      summary: 'Grafana Loki in microservices mode as a loki-operator `LokiStack` custom resource: one CR reconciles the whole distributed topology (distributor, ingester, querier, query-frontend, compactor, index-gateway, gateway), with `size` scaling the replicas. Authors the CR (like cnpg-cluster) for the operator to own the components, config, and ring. Requires the loki-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3.',
+      stages: {
+        server: d.fn("The LokiStack. size is the operator's t-shirt scaling (1x.demo is the smallest, for a test cluster; production wants 1x.extra-small+). storageSecret names the object-storage Secret you create (keys bucketnames/endpoint/access_key_id/access_key_secret/region) — point it at the seaweedfs workload's S3. The operator chooses the Loki image, so there is none to pin. Reach it at the gateway Service lokistack-gateway-http.", [
+          d.arg('name', d.T.string, default='loki'),
+          d.arg('size', d.T.string, default='1x.demo'),
+          d.arg('storageSecret', d.T.string, default='loki-storage'),
+          d.arg('storageClass', d.T.string),
+          d.arg('schemaVersion', d.T.string, default='v13'),
+          d.arg('schemaEffectiveDate', d.T.string, default='2024-01-01'),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('spec', d.T.object, default={}, example={ tenants: { mode: 'static' } }),
+        ]) + {
+          kind: 'loki',
+          importPath: 'github.com/metio/kurly/workloads/loki/server.libsonnet',
+        },
+      },
+    },
     prometheus: {
       summary: 'A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace.',
       stages: {

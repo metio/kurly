@@ -29,6 +29,7 @@ local stageImports = {
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
   'otel-collector/agent': import 'github.com/metio/kurly/workloads/otel-collector/agent.libsonnet',
   'alertmanager/server': import 'github.com/metio/kurly/workloads/alertmanager/server.libsonnet',
+  'loki/server': import 'github.com/metio/kurly/workloads/loki/server.libsonnet',
   'grafana/server': import 'github.com/metio/kurly/workloads/grafana/server.libsonnet',
   'prometheus/server': import 'github.com/metio/kurly/workloads/prometheus/server.libsonnet',
   'seaweedfs/server': import 'github.com/metio/kurly/workloads/seaweedfs/server.libsonnet',
