@@ -25,9 +25,14 @@ cd "$(dirname "$0")/../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 
-# Envoy Gateway 1.8 is the runtime that supports Gateway API 1.5; its charts pin
-# the CRD bundle to that release. One version drives both the CRDs chart and the
-# controller chart, so they never drift.
+# The Gateway API release whose STANDARD channel CRDs the cluster gets — the
+# stable channel, latest release, the only surface kurly targets.
+# renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
+GATEWAY_API_VERSION="v1.5.1"
+
+# Envoy Gateway is the runtime; 1.8 is the first line that supports Gateway API
+# 1.5. It supplies only its own CRDs here — the Gateway API CRDs come from the
+# release above, not from EG's bundle.
 # renovate: datasource=docker depName=docker.io/envoyproxy/gateway-helm
 ENVOY_GATEWAY_VERSION="v1.8.2"
 
@@ -49,18 +54,26 @@ fail() {
   exit 1
 }
 
-echo "== install the Gateway API STANDARD-channel CRDs (+ Envoy Gateway CRDs) =="
+echo "== install the Gateway API ${GATEWAY_API_VERSION} STANDARD-channel CRDs =="
 # kurly targets the Gateway API stable channel, latest release — so the cluster
 # gets exactly the standard-channel CRDs, never the experimental ones. A manifest
 # that strayed to an experimental-only kind (or an apiVersion only served there)
-# would fail to apply here, which is the point. The controller chart's crds toggle
-# is all-or-nothing, so the CRDs come from the dedicated crds chart with its
-# channel set to standard, and the controller chart installs none.
+# would fail to apply here, which is the point. Applied straight from the Gateway
+# API release, not from a runtime's bundle, so the version is pinned and stable.
+# Server-side apply: these CRD schemas exceed the last-applied-configuration
+# annotation a client-side apply would write (and they are far too large for a
+# Helm chart, whose release Secret caps at 1 MiB).
+kubectl apply --server-side -f \
+  "https://github.com/kubernetes-sigs/gateway-api/releases/download/${GATEWAY_API_VERSION}/standard-install.yaml"
+
+echo "== install the Envoy Gateway CRDs =="
+# EG's own CRDs only — small enough for a Helm release. The Gateway API CRDs are
+# already installed above, so the controller chart installs none (crds.enabled
+# would pull in the Gateway API set too and overflow the release Secret).
 helm upgrade --install eg-crds oci://docker.io/envoyproxy/gateway-crds-helm \
   --version "$ENVOY_GATEWAY_VERSION" \
   --namespace envoy-gateway-system --create-namespace \
-  --set crds.gatewayAPI.enabled=true \
-  --set crds.gatewayAPI.channel=standard \
+  --set crds.gatewayAPI.enabled=false \
   --set crds.envoyGateway.enabled=true \
   --wait --timeout 5m
 
