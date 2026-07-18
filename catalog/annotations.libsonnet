@@ -410,6 +410,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    grafana: {
+      summary: 'A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed.',
+      stages: {
+        server: d.fn("The Grafana instance. config is grafana.ini (operator sections of string values), merged over defaults that silence phone-home traffic. prometheusUrl points the default datasource at the prometheus workload's prometheus-operated Service; prometheusDatasource=false authors none. The operator mints a random admin password into <name>-admin-credentials.", [
+          d.arg('name', d.T.string, default='grafana'),
+          d.arg('image', d.T.string, default='docker.io/grafana/grafana:12.4.5'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('config', d.T.object, default={}, example={ server: { root_url: 'https://grafana.example.com' } }),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('prometheusDatasource', d.T.bool, default=true),
+          d.arg('prometheusUrl', d.T.string, default='http://prometheus-operated:9090'),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('spec', d.T.object, default={}, example={ ingress: { spec: {} } }),
+        ]) + {
+          kind: 'grafana',
+          importPath: 'github.com/metio/kurly/workloads/grafana/server.libsonnet',
+        },
+      },
+    },
     prometheus: {
       summary: 'A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace.',
       stages: {

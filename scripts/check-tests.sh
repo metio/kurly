@@ -51,6 +51,14 @@ echo "exposure exclusion assert fired as expected"
 # this file. A workload rendering no pod template (a custom resource, whose pods
 # belong to an operator) has nothing to assert here and is skipped by the same
 # rule — those carry their own params and their own assertions in the suite.
+# The pod templates a kurly workload actually renders — found only on the
+# controller kinds it emits (a Deployment/StatefulSet/DaemonSet/Job's
+# .spec.template, a CronJob's .spec.jobTemplate.spec.template), NEVER on a
+# template a custom resource embeds (a Grafana's deployment override, a Prometheus
+# CR): those belong to an operator and no kurly feature reaches them. Reads a
+# kind:List on stdin, emits the array of pod-template objects.
+pod_templates='[.items[]? | if .kind == "CronJob" then .spec.jobTemplate.spec.template elif (.kind == "Deployment" or .kind == "StatefulSet" or .kind == "DaemonSet" or .kind == "Job") then .spec.template else empty end | select(. != null)]'
+
 echo "== every workload's pods accept labels and annotations =="
 for stage in workloads/*/*.libsonnet; do
   # Decide the shape BEFORE composing anything: a custom-resource workload now
@@ -58,7 +66,7 @@ for stage in workloads/*/*.libsonnet; do
   # here to find out would fail for the right reason and look like the wrong one.
   default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
     || { echo "::error::${stage}: does not render" >&2; exit 1; }
-  templates="$(printf '%s' "$default" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec")))] | length')"
+  templates="$(printf '%s' "$default" | jq "$pod_templates | length")"
   if [ "$templates" = "0" ]; then
     echo "no pod template in $stage (a custom resource) — its own params carry pod metadata"
     continue
@@ -72,7 +80,7 @@ for stage in workloads/*/*.libsonnet; do
          + k.podAnnotations({ 'kurly.test/annotation': 'set' }))"
   )" || { echo "::error::${stage}: failed to render with podLabels/podAnnotations" >&2; exit 1; }
 
-  metas="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec"))) | .template.metadata]')"
+  metas="$(printf '%s' "$rendered" | jq "$pod_templates | map(.metadata)")"
   count="$(printf '%s' "$metas" | jq 'length')"
   missing="$(printf '%s' "$metas" | jq -r '[.[] | select((.labels["kurly.test/label"] != "set") or (.annotations["kurly.test/annotation"] != "set"))] | length')"
   if [ "$missing" != "0" ]; then
@@ -136,7 +144,7 @@ echo "== custom-resource workloads reject features instead of swallowing them ==
 for stage in workloads/*/*.libsonnet; do
   rendered="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
     || { echo "::error::${stage}: does not render" >&2; exit 1; }
-  templates="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec")))] | length')"
+  templates="$(printf '%s' "$rendered" | jq "$pod_templates | length")"
   [ "$templates" = "0" ] || continue   # a pod workload: features are its business
 
   if jsonnet -J vendor -e \
@@ -190,7 +198,7 @@ for stage in workloads/*/*.libsonnet; do
   # composing anything onto it.
   default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
     || { echo "::error::${stage}: does not render" >&2; exit 1; }
-  if [ "$(printf '%s' "$default" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec")))] | length')" = "0" ]; then
+  if [ "$(printf '%s' "$default" | jq "$pod_templates | length")" = "0" ]; then
     echo "no pod template in $stage (a custom resource) — its own params carry pod fields"
     continue
   fi
@@ -201,7 +209,7 @@ for stage in workloads/*/*.libsonnet; do
        + k.supplementalGroups([4242])
        + k.dns(config={ nameservers: ['10.0.0.10'] }, hostAliases=[{ ip: '10.0.0.5', hostnames: ['db.internal'] }]))")" \
     || { echo "::error::${stage}: failed to render with supplementalGroups/dns" >&2; exit 1; }
-  specs="$(printf '%s' "$rendered" | jq '[.. | objects | select(has("template") and (.template | type == "object") and (.template | has("spec"))) | .template.spec]')"
+  specs="$(printf '%s' "$rendered" | jq "$pod_templates | map(.spec)")"
   count="$(printf '%s' "$specs" | jq 'length')"
   missing="$(printf '%s' "$specs" | jq -r '[.[] | select((.securityContext.supplementalGroups != [4242]) or (.dnsConfig.nameservers != ["10.0.0.10"]) or ((.hostAliases | length) != 1))] | length')"
   if [ "$missing" != "0" ]; then
@@ -265,7 +273,7 @@ for stage in workloads/*/*.libsonnet; do
   # is no uid here to follow. Decide the shape before composing.
   default="$(jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())")" \
     || { echo "::error::${stage}: does not render" >&2; exit 1; }
-  if [ "$(printf '%s' "$default" | jq '[.. | objects | select(has("containers"))] | length')" = "0" ]; then
+  if [ "$(printf '%s' "$default" | jq "$pod_templates | length")" = "0" ]; then
     echo "no containers in $stage (a custom resource) — the operator creates them"
     continue
   fi
