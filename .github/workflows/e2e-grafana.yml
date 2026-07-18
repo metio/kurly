@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Cross-workload e2e for the o11y pairing: a kurly Grafana visualising a kurly
+# Prometheus. Installs both operators and both workloads, then proves what the
+# render gates cannot — the Grafana CR reconciles into a Ready Deployment, the
+# default Prometheus datasource is imported into it, and Grafana's datasource
+# health check actually reaches the kurly Prometheus. Self-gates on a diff
+# touching grafana, prometheus, or the shared library. Heavy (two operators + two
+# workloads), so the newest two k8s minors.
+name: E2E grafana
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  grafana:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: grafana
+      paths: '^(workloads/(grafana|prometheus)/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-grafana)\.sh|\.github/workflows/e2e(-grafana)?\.yml)'
+      scenario: hack/smoke/scenario-grafana.sh
+      max_versions: '2'
