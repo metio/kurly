@@ -246,12 +246,10 @@ local listener(host, tls) =
            'kurly.expose.referenceGrant grants access to a workload Service — compose it onto kurly.http (or another kind with a Service)',
     local app = self,
 
-    // v1beta1, not v1: ReferenceGrant graduated to v1 only in Gateway API 1.5's
-    // standard channel, but v1beta1 has been served since 0.6 and is still served
-    // alongside v1 on 1.5 clusters — so it is the version that routes on every
-    // installed CRD set, old and new.
+    // v1: ReferenceGrant is in the Gateway API standard channel as of 1.5, the
+    // release line kurly targets. (It served only v1beta1 before 1.5.)
     referencegrant: {
-      apiVersion: 'gateway.networking.k8s.io/v1beta1',
+      apiVersion: 'gateway.networking.k8s.io/v1',
       kind: 'ReferenceGrant',
       metadata: { name: app.config.name, labels: app.labels },
       spec: {

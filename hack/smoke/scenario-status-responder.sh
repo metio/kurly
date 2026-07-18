@@ -3,11 +3,13 @@
 # SPDX-License-Identifier: 0BSD
 
 # e2e for the status-responder workload and kurly's Gateway API path protection.
-# It installs Envoy Gateway (the implementation that returns 500 for the empty-
-# backendRefs "404" trick — so proving a clean 404 here is the whole point), then
-# renders the pattern a consumer would: a shared not-found responder with a
-# ReferenceGrant, and an app whose HTTPRoute guards /admin by routing it to that
-# responder cross-namespace. It drives real traffic through the gateway.
+# It installs the Gateway API standard-channel CRDs (the stable channel, latest
+# release — the only surface kurly targets) and Envoy Gateway as the runtime (the
+# implementation that returns 500 for the empty-backendRefs "404" trick, so
+# proving a clean 404 here is the whole point), then renders the pattern a
+# consumer would: a shared not-found responder with a ReferenceGrant, and an app
+# whose HTTPRoute guards /admin by routing it to that responder cross-namespace.
+# It drives real traffic through the gateway.
 #
 # Four assertions, over one live gateway:
 #   1. GET / through the gateway reaches the app (200).
@@ -20,8 +22,11 @@ cd "$(dirname "$0")/../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 
+# Envoy Gateway 1.8 is the runtime that supports Gateway API 1.5; its charts pin
+# the CRD bundle to that release. One version drives both the CRDs chart and the
+# controller chart, so they never drift.
 # renovate: datasource=docker depName=docker.io/envoyproxy/gateway-helm
-ENVOY_GATEWAY_VERSION="v1.5.4"
+ENVOY_GATEWAY_VERSION="v1.8.2"
 
 gw_ns=gateway-infra
 shared_ns=shared-http-services
@@ -41,10 +46,26 @@ fail() {
   exit 1
 }
 
-echo "== install Envoy Gateway ${ENVOY_GATEWAY_VERSION} (brings the Gateway API CRDs) =="
+echo "== install the Gateway API STANDARD-channel CRDs (+ Envoy Gateway CRDs) =="
+# kurly targets the Gateway API stable channel, latest release — so the cluster
+# gets exactly the standard-channel CRDs, never the experimental ones. A manifest
+# that strayed to an experimental-only kind (or an apiVersion only served there)
+# would fail to apply here, which is the point. The controller chart's crds toggle
+# is all-or-nothing, so the CRDs come from the dedicated crds chart with its
+# channel set to standard, and the controller chart installs none.
+helm upgrade --install eg-crds oci://docker.io/envoyproxy/gateway-crds-helm \
+  --version "$ENVOY_GATEWAY_VERSION" \
+  --namespace envoy-gateway-system --create-namespace \
+  --set crds.gatewayAPI.enabled=true \
+  --set crds.gatewayAPI.channel=standard \
+  --set crds.envoyGateway.enabled=true \
+  --wait --timeout 5m
+
+echo "== install Envoy Gateway ${ENVOY_GATEWAY_VERSION} (controller only) =="
 helm upgrade --install eg oci://docker.io/envoyproxy/gateway-helm \
   --version "$ENVOY_GATEWAY_VERSION" \
   --namespace envoy-gateway-system --create-namespace \
+  --set crds.enabled=false \
   --wait --timeout 5m
 kubectl --namespace=envoy-gateway-system rollout status deployment/envoy-gateway --timeout=300s \
   || fail "Envoy Gateway did not start"
