@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Cross-workload e2e for the alerting path: a kurly Prometheus wired to a kurly
+# Alertmanager. Installs the prometheus-operator and both workloads, points
+# Prometheus's alerting at the Alertmanager, and proves what the render gates
+# cannot — the Alertmanager CR reconciles into a Ready StatefulSet, and Prometheus
+# discovers and connects to it (activeAlertmanagers > 0). Self-gates on a diff
+# touching alertmanager, prometheus, or the shared library. Heavy (operator + two
+# workloads), so the newest two k8s minors.
+name: E2E alertmanager
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  alertmanager:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: alertmanager
+      paths: '^(workloads/(alertmanager|prometheus)/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-alertmanager)\.sh|\.github/workflows/e2e(-alertmanager)?\.yml)'
+      scenario: hack/smoke/scenario-alertmanager.sh
+      max_versions: '2'
