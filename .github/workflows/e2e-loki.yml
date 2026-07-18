@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Cross-workload e2e for the logs pillar: Grafana Loki in microservices mode over
+# the kurly seaweedfs S3 store. Installs cert-manager (the loki-operator webhook
+# needs it), the loki-operator, and seaweedfs, then applies the LokiStack and
+# proves what the render gates cannot — the operator reconciles the CR into a
+# whole running microservices topology connected to seaweedfs, and a log line
+# pushed to the distributor is queryable back out. Self-gates on a diff touching
+# loki, seaweedfs, or the shared library. Very heavy (cert-manager + operator +
+# seaweedfs + ~7 Loki components), so the newest k8s minor only.
+name: E2E loki
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  loki:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: loki
+      paths: '^(workloads/(loki|seaweedfs)/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-loki)\.sh|\.github/workflows/e2e(-loki)?\.yml)'
+      scenario: hack/smoke/scenario-loki.sh
+      max_versions: '1'
