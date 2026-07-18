@@ -110,45 +110,50 @@ function(
         labels: labelsFor(name) + labels,
         annotations: (if annotations == {} then null else annotations),
       }),
-      spec: std.prune({
-        image: image,
-        replicas: replicas,
-        retention: retention,
-        scrapeInterval: scrapeInterval,
-        serviceAccountName: name,
-        // EndpointSlices are the current discovery source; the legacy Endpoints
-        // role is being retired.
-        serviceDiscoveryRole: 'EndpointSlice',
-        externalLabels: (if externalLabels == {} then null else externalLabels),
-        // Copy the kurly ownership labels onto the pods the operator creates.
-        podMetadata: { labels: labelsFor(name) + labels },
-        serviceMonitorSelector: serviceMonitorSelector,
-        podMonitorSelector: podMonitorSelector,
-        ruleSelector: ruleSelector,
-        probeSelector: probeSelector,
-        serviceMonitorNamespaceSelector: namespaceSelector,
-        podMonitorNamespaceSelector: namespaceSelector,
-        ruleNamespaceSelector: namespaceSelector,
-        probeNamespaceSelector: namespaceSelector,
-        resources: resources,
-        // The pod-level hardening kurly applies everywhere, expressed in the CR
-        // the operator honours; it manages the container securityContext itself.
-        securityContext: {
-          runAsNonRoot: true,
-          runAsUser: 1000,
-          runAsGroup: 2000,
-          fsGroup: 2000,
-          seccompProfile: { type: 'RuntimeDefault' },
-        },
-        storage: {
-          volumeClaimTemplate: {
-            spec: std.prune({
-              accessModes: ['ReadWriteOnce'],
-              resources: { requests: { storage: storageSize } },
-              storageClassName: storageClass,
-            }),
-          },
-        },
-      }) + spec,
+      // NOT std.prune-d: the selectors below are {} by default, and to the
+      // operator an EMPTY selector means "match everything" while an ABSENT one
+      // means "match nothing" — pruning the empty objects would silently turn the
+      // central-monitoring default into a Prometheus that scrapes nothing. Only
+      // the genuinely optional fields are dropped, and by hand.
+      spec: {
+              image: image,
+              replicas: replicas,
+              retention: retention,
+              scrapeInterval: scrapeInterval,
+              serviceAccountName: name,
+              // EndpointSlices are the current discovery source; the legacy Endpoints
+              // role is being retired.
+              serviceDiscoveryRole: 'EndpointSlice',
+              // Copy the kurly ownership labels onto the pods the operator creates.
+              podMetadata: { labels: labelsFor(name) + labels },
+              serviceMonitorSelector: serviceMonitorSelector,
+              podMonitorSelector: podMonitorSelector,
+              ruleSelector: ruleSelector,
+              probeSelector: probeSelector,
+              serviceMonitorNamespaceSelector: namespaceSelector,
+              podMonitorNamespaceSelector: namespaceSelector,
+              ruleNamespaceSelector: namespaceSelector,
+              probeNamespaceSelector: namespaceSelector,
+              resources: resources,
+              // The pod-level hardening kurly applies everywhere, expressed in the CR
+              // the operator honours; it manages the container securityContext itself.
+              securityContext: {
+                runAsNonRoot: true,
+                runAsUser: 1000,
+                runAsGroup: 2000,
+                fsGroup: 2000,
+                seccompProfile: { type: 'RuntimeDefault' },
+              },
+              storage: {
+                volumeClaimTemplate: {
+                  spec: {
+                    accessModes: ['ReadWriteOnce'],
+                    resources: { requests: { storage: storageSize } },
+                  } + (if storageClass == null then {} else { storageClassName: storageClass }),
+                },
+              },
+            }
+            + (if externalLabels == {} then {} else { externalLabels: externalLabels })
+            + spec,
     },
   }
