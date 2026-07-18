@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for prometheus. Installs the prometheus-operator, applies the
+# CR and its scrape RBAC, and proves what the render gates cannot: the operator
+# reconciles the CR into a Ready Prometheus, and Prometheus actually SCRAPES —
+# given a ServiceMonitor it discovers the target (exercising the cluster RBAC and
+# the select-everything default) and reports up == 1. Self-gates on a diff scoped
+# to the workload plus the shared library. Heavy (operator + CR + a scrape), so
+# the newest two k8s minors.
+name: E2E prometheus
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prometheus:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: prometheus
+      paths: '^(workloads/prometheus/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-prometheus)\.sh|\.github/workflows/e2e(-prometheus)?\.yml)'
+      scenario: hack/smoke/scenario-prometheus.sh
+      max_versions: '2'
