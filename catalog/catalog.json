@@ -2158,6 +2158,86 @@
             {
                "args": [
                   {
+                     "default": "seaweedfs-filer",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/chrislusf/seaweedfs:4.39",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "seaweedfs-master-0.seaweedfs-master-headless:9333",
+                     "name": "masterEndpoint",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": true,
+                     "name": "s3",
+                     "required": false,
+                     "type": "bool"
+                  }
+               ],
+               "help": "The access tier of a SPLIT SeaweedFS: `weed filer` puts a filesystem and (s3=true) an S3 gateway on 8333 over the volume servers, keeping its own metadata. Point it at the master with masterEndpoint.",
+               "id": "filer",
+               "importPath": "github.com/metio/kurly/workloads/seaweedfs/filer.libsonnet",
+               "kind": "stateful"
+            },
+            {
+               "args": [
+                  {
+                     "default": "seaweedfs-master",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/chrislusf/seaweedfs:4.39",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "000",
+                     "name": "defaultReplication",
+                     "required": false,
+                     "type": "string"
+                  }
+               ],
+               "help": "The coordinator of a SPLIT SeaweedFS: `weed master` holds the topology, assigns file IDs, and directs clients to volume servers. defaultReplication is the cluster-wide policy it owns ('000' keeps one copy). Deploy it, then point the volume and filer stages at it.",
+               "id": "master",
+               "importPath": "github.com/metio/kurly/workloads/seaweedfs/master.libsonnet",
+               "kind": "stateful"
+            },
+            {
+               "args": [
+                  {
                      "default": "seaweedfs",
                      "name": "name",
                      "required": false,
@@ -2184,6 +2264,55 @@
                "help": "The all-in-one server. Serves S3 on 8333 over the data volume at /data; the master/volume/filer ports serve the cluster itself. The default allows anonymous access, fine inside a trusted namespace. Splitting the roles into dedicated tiers is a different topology, not more replicas, so it would be its own stage.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/server.libsonnet",
+               "kind": "stateful"
+            },
+            {
+               "args": [
+                  {
+                     "default": "seaweedfs-volume",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/chrislusf/seaweedfs:4.39",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "seaweedfs-master-0.seaweedfs-master-headless:9333",
+                     "name": "masterEndpoint",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 100,
+                     "name": "maxVolumes",
+                     "required": false,
+                     "type": "int"
+                  }
+               ],
+               "help": "The data tier of a SPLIT SeaweedFS: `weed volume` stores file content and registers with the master, advertising its pod IP so reads reach it. Scale by replicas for capacity, each a pod with its own PVC. Point it at the master with masterEndpoint.",
+               "id": "volume",
+               "importPath": "github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet",
                "kind": "stateful"
             }
          ],

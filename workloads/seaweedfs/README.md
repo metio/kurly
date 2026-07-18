@@ -43,13 +43,41 @@ cluster's backup at the gateway and wire the IAM the operator's ServiceAccount
 carries (`cnpg-cluster(serviceAccountAnnotations=…)`), or a static credentials
 Secret, to authenticate.
 
-## The all-in-one shape
+## The all-in-one shape, or the split
 
-`weed server -s3` runs every SeaweedFS role in one process against one `-dir`,
-which is the quick-start topology and the right one for a modest in-cluster S3.
-Splitting the roles into dedicated master, volume, and filer tiers is a different
-deployment — not more replicas of this one, since these roles do not scale by
-replication — so it belongs in its own stage rather than a replica count here.
+`server` runs every SeaweedFS role in one process against one `-dir` — the
+quick-start topology, and the right one for a modest in-cluster S3.
+
+For a store that grows, the roles split into three stages you deploy together —
+each a normal `kurly.stateful` workload, so every kurly feature composes onto it:
+
+| Stage | Role | Scale by |
+|---|---|---|
+| `master` | coordinates topology, assigns file IDs | (usually one) |
+| `volume` | stores the file data | **replicas** — each a pod with its own PVC |
+| `filer` | filesystem + S3 gateway over the volumes | replicas |
+
+The volume and filer stages take the master's address, so the wiring is explicit:
+
+```jsonnet
+local master = import 'github.com/metio/kurly/workloads/seaweedfs/master.libsonnet';
+local volume = import 'github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet';
+local filer  = import 'github.com/metio/kurly/workloads/seaweedfs/filer.libsonnet';
+
+local endpoint = 'seaweedfs-master-0.seaweedfs-master-headless:9333';  // the default
+kurly.list(master())
+kurly.list(volume(replicas=3, storageSize='100Gi', masterEndpoint=endpoint))
+kurly.list(filer(masterEndpoint=endpoint))
+```
+
+Clients reach the S3 gateway at `seaweedfs-filer-0.seaweedfs-filer-headless:8333`.
+Each volume server advertises its **pod IP** to the master (through the downward
+API) so a read is handed a routable address rather than an unresolvable short
+hostname — the one thing a split SeaweedFS on Kubernetes must get right.
+
+Capacity is the split's whole point: the all-in-one has a single data process, so
+scaling it means a bigger volume; the split scales the volume tier out by adding
+servers. That is why these are separate stages, not a replica count on `server`.
 
 ## Deploy through JaaS and stageset
 
