@@ -46,7 +46,7 @@ local baseConfig = {
 
 function(
   name='grafana',
-  image='docker.io/grafana/grafana:12.4.5',
+  image='docker.io/grafana/grafana:13.1.0',
   replicas=1,
   config={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

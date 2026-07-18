@@ -27,7 +27,7 @@ kurly.list(grafana(prometheusUrl='http://prometheus-operated.monitoring.svc:9090
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `grafana` | |
-| `image` | `docker.io/grafana/grafana:12.4.5` | |
+| `image` | `docker.io/grafana/grafana:13.1.0` | |
 | `replicas` | `1` | |
 | `config` | `{}` | grafana.ini overrides, merged over the defaults |
 | `resources` | `100m` / `256Mi` | request/limit |

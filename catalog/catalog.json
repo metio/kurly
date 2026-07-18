@@ -2089,7 +2089,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/grafana/grafana:12.4.5",
+                     "default": "docker.io/grafana/grafana:13.1.0",
                      "name": "image",
                      "required": false,
                      "type": "string"
