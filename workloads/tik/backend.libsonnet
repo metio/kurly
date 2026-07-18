@@ -32,7 +32,7 @@ local pipelines = |||
 
 function(
   name='tik',
-  image='ghcr.io/metio/tik:2026.7.18115134',
+  image='ghcr.io/metio/tik:2026.7.18213457',
   storageSize='1Gi',
   storageClass=null,
 )
