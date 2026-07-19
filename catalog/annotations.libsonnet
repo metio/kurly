@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    shiori: {
+      summary: 'A Shiori server (a simple, self-hosted bookmarks manager with web-page archiving). A plain composable http workload that keeps its bookmarks and archived pages in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080.',
+      stages: {
+        server: d.fn('The Shiori server (runs `shiori serve`). Keeps its SQLite database and archives at /shiori on the volume. Point SHIORI_DATABASE_URL at external PostgreSQL/MySQL through env to scale past SQLite. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='shiori'),
+          d.arg('image', d.T.string, default='ghcr.io/go-shiori/shiori:v1.8.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/shiori/server.libsonnet' },
+      },
+    },
     linkding: {
       summary: 'A linkding server (a minimal, self-hosted bookmark manager). A plain composable http workload that keeps its bookmarks in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :9090.',
       stages: {

@@ -65,6 +65,7 @@ local stageImports = {
   'ntfy/server': import 'github.com/metio/kurly/workloads/ntfy/server.libsonnet',
   'gotify/server': import 'github.com/metio/kurly/workloads/gotify/server.libsonnet',
   'linkding/server': import 'github.com/metio/kurly/workloads/linkding/server.libsonnet',
+  'shiori/server': import 'github.com/metio/kurly/workloads/shiori/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
