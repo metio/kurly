@@ -362,7 +362,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     vaultwarden: {
       summary: 'A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080.',
       stages: {
-        server: d.fn("The Vaultwarden server. domain is the public URL — WebAuthn/passkeys, attachment links, and email all need it. signupsAllowed is off by default (turn on to bootstrap, then off). env carries extra settings (ADMIN_TOKEN, SMTP_*, or DATABASE_URL to move to external Postgres) — the admin token and any DB password should come from a Secret, kurly mints none. Compose an exposure onto the HTTP port.", [
+        server: d.fn('The Vaultwarden server. domain is the public URL — WebAuthn/passkeys, attachment links, and email all need it. signupsAllowed is off by default (turn on to bootstrap, then off). env carries extra settings (ADMIN_TOKEN, SMTP_*, or DATABASE_URL to move to external Postgres) — the admin token and any DB password should come from a Secret, kurly mints none. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='vaultwarden'),
           d.arg('image', d.T.string, default='docker.io/vaultwarden/server:1.36.0'),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
@@ -376,6 +376,50 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + {
           kind: 'http',
           importPath: 'github.com/metio/kurly/workloads/vaultwarden/server.libsonnet',
+        },
+      },
+    },
+    netbox: {
+      summary: 'A NetBox server (the IPAM/DCIM source of truth: IP address management, data-center infrastructure modelling, and a full REST/GraphQL API). Two composable stages on the community image — server (the web front end) and worker (the RQ background task worker) — with PostgreSQL and Redis external. Pairs with the cnpg-cluster and valkey workloads. Single writer over a ReadWriteOnce media volume: the server is one replica, recreated; the worker scales horizontally.',
+      stages: {
+        server: d.fn('The NetBox web front end, serving the UI and API on :8080. dbHost/dbName/dbUser default to a cnpg-cluster named netbox-db; redisHost to a valkey named netbox-cache (queue on Redis DB 0, cache on DB 1). secretName is the Secret the image reads at /run/secrets — secret_key (Django SECRET_KEY, keep it stable), db_password, and superuser_password on first boot. allowedHosts is Django ALLOWED_HOSTS. kurly authors no Secret. Compose an exposure onto the HTTP port; run a worker alongside.', [
+          d.arg('name', d.T.string, default='netbox'),
+          d.arg('image', d.T.string, default='docker.io/netboxcommunity/netbox:v4.6.5'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='netbox-db-rw'),
+          d.arg('dbName', d.T.string, default='netbox'),
+          d.arg('dbUser', d.T.string, default='netbox'),
+          d.arg('redisHost', d.T.string, default='netbox-cache'),
+          d.arg('secretName', d.T.string, default='netbox-secrets'),
+          d.arg('allowedHosts', d.T.string, default='*'),
+          d.arg('superuserName', d.T.string, default='admin'),
+          d.arg('superuserEmail', d.T.string, default='admin@example.com'),
+          d.arg('skipSuperuser', d.T.bool, default=false),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '300m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/netbox/server.libsonnet',
+        },
+        worker: d.fn('The NetBox RQ background worker, draining the high/default/low queues (webhooks, report/script runs, housekeeping). Same image and Secret as the server, no Service. dbHost/dbName/dbUser/redisHost/secretName match the server. Scales horizontally via replicas — workers coordinate through the shared Redis queue. A NetBox deployment needs at least one.', [
+          d.arg('name', d.T.string, default='netbox-worker'),
+          d.arg('image', d.T.string, default='docker.io/netboxcommunity/netbox:v4.6.5'),
+          d.arg('dbHost', d.T.string, default='netbox-db-rw'),
+          d.arg('dbName', d.T.string, default='netbox'),
+          d.arg('dbUser', d.T.string, default='netbox'),
+          d.arg('redisHost', d.T.string, default='netbox-cache'),
+          d.arg('secretName', d.T.string, default='netbox-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'worker',
+          importPath: 'github.com/metio/kurly/workloads/netbox/worker.libsonnet',
         },
       },
     },

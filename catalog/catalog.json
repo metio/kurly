@@ -2887,6 +2887,211 @@
          "summary": "The Kubernetes Metrics Server: it scrapes CPU/memory usage from every node's kubelet and serves it through the aggregated metrics.k8s.io API — what kubectl top and Horizontal Pod Autoscalers read. A plain composable http workload that registers an APIService and carries the aggregation RBAC (ServiceAccount, ClusterRoles/Bindings, the kube-system auth-reader RoleBinding)."
       },
       {
+         "id": "netbox",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "netbox",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/netboxcommunity/netbox:v4.6.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox-cache",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "*",
+                     "name": "allowedHosts",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "admin",
+                     "name": "superuserName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "admin@example.com",
+                     "name": "superuserEmail",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": false,
+                     "name": "skipSuperuser",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "300m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The NetBox web front end, serving the UI and API on :8080. dbHost/dbName/dbUser default to a cnpg-cluster named netbox-db; redisHost to a valkey named netbox-cache (queue on Redis DB 0, cache on DB 1). secretName is the Secret the image reads at /run/secrets — secret_key (Django SECRET_KEY, keep it stable), db_password, and superuser_password on first boot. allowedHosts is Django ALLOWED_HOSTS. kurly authors no Secret. Compose an exposure onto the HTTP port; run a worker alongside.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/netbox/server.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "netbox-worker",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/netboxcommunity/netbox:v4.6.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox-cache",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "netbox-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The NetBox RQ background worker, draining the high/default/low queues (webhooks, report/script runs, housekeeping). Same image and Secret as the server, no Service. dbHost/dbName/dbUser/redisHost/secretName match the server. Scales horizontally via replicas — workers coordinate through the shared Redis queue. A NetBox deployment needs at least one.",
+               "id": "worker",
+               "importPath": "github.com/metio/kurly/workloads/netbox/worker.libsonnet",
+               "kind": "worker"
+            }
+         ],
+         "summary": "A NetBox server (the IPAM/DCIM source of truth: IP address management, data-center infrastructure modelling, and a full REST/GraphQL API). Two composable stages on the community image — server (the web front end) and worker (the RQ background task worker) — with PostgreSQL and Redis external. Pairs with the cnpg-cluster and valkey workloads. Single writer over a ReadWriteOnce media volume: the server is one replica, recreated; the worker scales horizontally."
+      },
+      {
          "id": "opencost",
          "stages": [
             {
