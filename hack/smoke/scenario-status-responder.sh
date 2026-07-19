@@ -60,8 +60,8 @@ fail() {
 # A route parented to a ListenerSet reports Accepted here only once that parent
 # admits it, so this doubles as the ListenerSet-attachment check.
 route_accepted() {
-  local ns=$1 name=$2 i acc
-  for i in $(seq 1 24); do
+  local ns=$1 name=$2 acc
+  for _ in $(seq 1 24); do
     acc="$(kubectl --namespace="$ns" get httproute "$name" \
       -o jsonpath='{.status.parents[0].conditions[?(@.type=="Accepted")].status}' 2>/dev/null || true)"
     [ "$acc" = "True" ] && return 0
