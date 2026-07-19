@@ -19,6 +19,19 @@ source "${here}/lib.sh"
 
 kurly::vendor
 
+# This scenario installs cluster-wide ValidatingAdmissionPolicies, so refuse to run
+# against anything but a kind cluster (the e2e workflow creates `kind-kurly-e2e`).
+# A stray local run must never reach a real cluster whose current-context happens
+# to be selected.
+context="$(kubectl config current-context 2>/dev/null || true)"
+case "$context" in
+  kind-*) ;;
+  *)
+    echo "::error::refusing to run against non-kind context '${context}'; this scenario applies cluster-wide policies"
+    exit 1
+    ;;
+esac
+
 echo "== install the bollwerk policies =="
 jsonnet -J vendor -e 'local b = import "bollwerk/bollwerk.libsonnet"; b.list' \
   | kubectl apply --filename=-
