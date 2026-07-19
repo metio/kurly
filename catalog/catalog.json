@@ -2821,6 +2821,570 @@
          "summary": "Grafana Loki in microservices mode as a loki-operator `LokiStack` custom resource: one CR reconciles the whole distributed topology (distributor, ingester, querier, query-frontend, compactor, index-gateway, gateway), with `size` scaling the replicas. Authors the CR (like cnpg-cluster) for the operator to own the components, config, and ring. Requires the loki-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3."
       },
       {
+         "id": "mailu",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mailu",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mailu/admin:2024.06",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": [
+                        "mail.example.com"
+                     ],
+                     "name": "hostnames",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": "mailu-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-storage",
+                     "name": "storageClaim",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10.0.0.0/8",
+                     "name": "subnet",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-cache",
+                     "name": "redisAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "",
+                     "name": "resolverAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mailu administration service: web admin UI, the internal API the other services query, and the SQLite database and DKIM keys behind them (on the shared volume at /data and /dkim). front proxies /admin to it.",
+               "id": "admin",
+               "importPath": "github.com/metio/kurly/workloads/mailu/admin.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "mailu",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mailu/rspamd:2024.06",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": [
+                        "mail.example.com"
+                     ],
+                     "name": "hostnames",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": "mailu-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-storage",
+                     "name": "storageClaim",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10.0.0.0/8",
+                     "name": "subnet",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-cache",
+                     "name": "redisAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "",
+                     "name": "resolverAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mailu filter (Rspamd): screens mail on :11332, serves its web UI on :11334, and signs outbound mail with the DKIM keys admin generates. Learned state lives at /var/lib/rspamd on the shared volume.",
+               "id": "antispam",
+               "importPath": "github.com/metio/kurly/workloads/mailu/antispam.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "mailu",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mailu/nginx:2024.06",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": [
+                        "mail.example.com"
+                     ],
+                     "name": "hostnames",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": "mailu-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-storage",
+                     "name": "storageClaim",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10.0.0.0/8",
+                     "name": "subnet",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-cache",
+                     "name": "redisAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "",
+                     "name": "resolverAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mail",
+                     "name": "tlsFlavor",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mailu edge (nginx): terminates SMTP/IMAP/POP3/ManageSieve and the web UI and proxies to the other services. The one stage you expose. domain/hostnames identify the mail server; secretName carries SECRET_KEY (envFrom, kurly mints none); storageClaim is the shared RWM volume; redisAddress points at a valkey. Publishes 25/465/587/110/995/143/993/4190/80/443.",
+               "id": "front",
+               "importPath": "github.com/metio/kurly/workloads/mailu/front.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "mailu",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mailu/dovecot:2024.06",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": [
+                        "mail.example.com"
+                     ],
+                     "name": "hostnames",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": "mailu-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-storage",
+                     "name": "storageClaim",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10.0.0.0/8",
+                     "name": "subnet",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-cache",
+                     "name": "redisAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "",
+                     "name": "resolverAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mailu mail store (Dovecot): holds the maildirs at /mail on the shared volume and serves IMAP/POP3 to front and LMTP delivery to postfix.",
+               "id": "imap",
+               "importPath": "github.com/metio/kurly/workloads/mailu/imap.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "mailu",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mailu/postfix:2024.06",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": [
+                        "mail.example.com"
+                     ],
+                     "name": "hostnames",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": "mailu-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-storage",
+                     "name": "storageClaim",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10.0.0.0/8",
+                     "name": "subnet",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-cache",
+                     "name": "redisAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "",
+                     "name": "resolverAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mailu MTA (Postfix): relays mail between the edge, the filter, and the store. The queue is transient; only user overrides live on the shared volume.",
+               "id": "smtp",
+               "importPath": "github.com/metio/kurly/workloads/mailu/smtp.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "mailu",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mailu/webmail:2024.06",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": [
+                        "mail.example.com"
+                     ],
+                     "name": "hostnames",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": "mailu-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-storage",
+                     "name": "storageClaim",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10.0.0.0/8",
+                     "name": "subnet",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mailu-cache",
+                     "name": "redisAddress",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mailu webmail client (Roundcube): front proxies /webmail to it. Optional — drop it if you only want IMAP/SMTP clients. Keeps its settings at /data on the shared volume.",
+               "id": "webmail",
+               "importPath": "github.com/metio/kurly/workloads/mailu/webmail.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Mailu mail server (SMTP, IMAP/POP3, webmail, antispam) as six coordinated http stages — front (the edge), admin (config + API + DB + DKIM), imap (Dovecot), smtp (Postfix), antispam (Rspamd), and webmail (Roundcube). Run all six pointed at the same namePrefix, secretName, and a shared ReadWriteMany storageClaim, plus a Redis (the valkey workload). Mailu images run as root with a writable root filesystem, so these relax kurly restricted defaults while keeping dropped capabilities and no privilege escalation. Each service is one replica, recreated; expose only front."
+      },
+      {
          "id": "memcached",
          "stages": [
             {
