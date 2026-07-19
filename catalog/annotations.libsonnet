@@ -387,6 +387,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    invoiceninja: {
+      summary: 'An Invoice Ninja server (self-hosted invoicing, quotes, and payments) on the official image, backed by an external MySQL/MariaDB, with uploads and PDFs on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Invoice Ninja server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide (DB_CONNECTION=mysql). appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (envFrom). Uploads/PDFs at /var/www/html/storage. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='invoiceninja'),
+          d.arg('image', d.T.string, default='docker.io/invoiceninja/invoiceninja:5.13.26'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='invoiceninja-db'),
+          d.arg('dbName', d.T.string, default='invoiceninja'),
+          d.arg('dbUser', d.T.string, default='invoiceninja'),
+          d.arg('appUrl', d.T.string, example='https://invoicing.example.com'),
+          d.arg('secretName', d.T.string, default='invoiceninja-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/invoiceninja/server.libsonnet' },
+      },
+    },
     'paperless-ngx': {
       summary: 'A Paperless-ngx server (scan, index, and archive documents with OCR and full-text search) backed by an external PostgreSQL and Redis, with its data/media/consume/export trees on a PersistentVolume. The image runs the web server and Celery workers together. Pairs with a cnpg-cluster named paperless-db and a valkey named paperless-cache. The entrypoint writes to the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; secrets come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
       stages: {
