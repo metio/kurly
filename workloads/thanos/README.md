@@ -14,6 +14,7 @@ you need and render with `kurly.list`.
 |---|---|---|
 | [`query`](#query) | the Querier — fans out to StoreAPIs for a deduplicated global view | plain `http` Deployment |
 | [`query-frontend`](#query-frontend) | optional splitting/caching layer in front of the Querier | plain `http` Deployment |
+| [`store`](#store) | serves historical blocks from object storage over the StoreAPI | `stateful` StatefulSet |
 | [`ruler`](#ruler) | recording/alerting rules evaluated against the Querier | prometheus-operator `ThanosRuler` CR |
 
 `query` and `query-frontend` are ordinary Deployments — compose `+` features onto
@@ -34,7 +35,7 @@ local query = import 'github.com/metio/kurly/workloads/thanos/query.libsonnet';
 
 kurly.list(query(endpoints=[
   'dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local',
-  'dnssrv+_grpc._tcp.thanos-store.monitoring.svc.cluster.local',
+  'dnssrv+_grpc._tcp.thanos-store-headless.monitoring.svc.cluster.local',
 ]))
 ```
 
@@ -81,6 +82,53 @@ Querier. For a cache shared across replicas, pass a
 `kurly.config`, backed by the [memcached](../memcached/) or [valkey](../valkey/)
 workload.
 
+## store
+
+The Store Gateway: it serves historical metric blocks from **object storage**
+over the StoreAPI (gRPC), so the Querier reaches data older than the Prometheus
+sidecars still hold. Stateful — a per-pod PVC caches block index headers, and its
+headless Service gives the Querier `dnssrv+` SRV records.
+
+```jsonnet
+local store = import 'github.com/metio/kurly/workloads/thanos/store.libsonnet';
+
+kurly.list(store(objstoreSecret='thanos-objstore'))
+```
+
+| Parameter | Default | Notes |
+|---|---|---|
+| `name` | `thanos-store` | |
+| `objstoreSecret` | `thanos-objstore` | Secret (key `objstore.yaml`) naming the bucket — see below |
+| `replicas` | `1` | |
+| `storageSize` / `storageClass` | `10Gi` / cluster default | the local block cache |
+| `resources` | `100m` / `512Mi`–`1Gi` | |
+| `image` / `labels` / `annotations` / `extraArgs` | | |
+
+Serves the StoreAPI on gRPC `:10901` and metrics/health on HTTP `:10902`. Add it
+to the Querier's endpoints via its headless Service:
+
+```jsonnet
+query(endpoints=['dnssrv+_grpc._tcp.thanos-store-headless.monitoring.svc.cluster.local'])
+```
+
+**Object storage:** the store reads its bucket from a Thanos objstore config — a
+YAML naming the bucket, endpoint, and credentials. kurly never mints the Secret
+holding it: create one with an `objstore.yaml` key and name it in `objstoreSecret`
+(fill it from your secrets store with `kurly.externalSecret`, see the repository
+[README](../../#secrets)). It pairs with the [seaweedfs](../seaweedfs/) workload —
+point the config at its S3 gateway:
+
+```yaml
+# the objstore.yaml key of the Secret
+type: S3
+config:
+  bucket: thanos
+  endpoint: seaweedfs-0.seaweedfs-headless.storage.svc:8333
+  insecure: true
+  access_key: thanos
+  secret_key: thanossecret
+```
+
 ## ruler
 
 A Thanos Ruler as a prometheus-operator `ThanosRuler` custom resource: it loads
@@ -126,7 +174,11 @@ frontend (or the Querier directly).
 
 ```jsonnet
 kurly.listOf([
-  query(endpoints=['dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local']),
+  store(objstoreSecret='thanos-objstore'),
+  query(endpoints=[
+    'dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local',
+    'dnssrv+_grpc._tcp.thanos-store-headless.monitoring.svc.cluster.local',
+  ]),
   frontend(downstreamUrl='http://thanos-query:10902'),
   ruler(queryEndpoints=['dnssrv+_http._tcp.thanos-query-frontend.monitoring.svc.cluster.local']),
 ])

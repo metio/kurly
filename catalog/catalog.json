@@ -3043,6 +3043,78 @@
                "id": "ruler",
                "importPath": "github.com/metio/kurly/workloads/thanos/ruler.libsonnet",
                "kind": "thanos-ruler"
+            },
+            {
+               "args": [
+                  {
+                     "default": "thanos-store",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "quay.io/thanos/thanos:v0.42.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "thanos-objstore",
+                     "name": "objstoreSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "extraArgs",
+                     "required": false,
+                     "type": "array"
+                  }
+               ],
+               "help": "The Thanos Store Gateway (a `thanos store` StatefulSet + headless Service): it serves historical blocks from object storage over the StoreAPI so the Querier reaches data older than the sidecars hold. Stateful — a per-pod PVC caches block index headers. objstoreSecret names a Secret you provide (key objstore.yaml, fillable with kurly.externalSecret) pointing at the bucket; it pairs with the seaweedfs S3 workload. Add it to the Querier with dnssrv+_grpc._tcp.<name>-headless…",
+               "id": "store",
+               "importPath": "github.com/metio/kurly/workloads/thanos/store.libsonnet",
+               "kind": "stateful"
             }
          ],
          "summary": "The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed."

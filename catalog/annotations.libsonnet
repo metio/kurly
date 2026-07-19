@@ -486,6 +486,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           kind: 'http',
           importPath: 'github.com/metio/kurly/workloads/thanos/query-frontend.libsonnet',
         },
+        store: d.fn('The Thanos Store Gateway (a `thanos store` StatefulSet + headless Service): it serves historical blocks from object storage over the StoreAPI so the Querier reaches data older than the sidecars hold. Stateful — a per-pod PVC caches block index headers. objstoreSecret names a Secret you provide (key objstore.yaml, fillable with kurly.externalSecret) pointing at the bucket; it pairs with the seaweedfs S3 workload. Add it to the Querier with dnssrv+_grpc._tcp.<name>-headless…', [
+          d.arg('name', d.T.string, default='thanos-store'),
+          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('objstoreSecret', d.T.string, default='thanos-objstore'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('extraArgs', d.T.array, default=[]),
+        ]) + {
+          kind: 'stateful',
+          importPath: 'github.com/metio/kurly/workloads/thanos/store.libsonnet',
+        },
         ruler: d.fn('The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.', [
           d.arg('name', d.T.string, default='thanos-ruler'),
           d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),

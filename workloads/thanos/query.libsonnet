@@ -12,7 +12,7 @@
 //   local query = import 'github.com/metio/kurly/workloads/thanos/query.libsonnet';
 //   kurly.list(query(endpoints=[
 //     'dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local',
-//     'dnssrv+_grpc._tcp.thanos-store.monitoring.svc.cluster.local',
+//     'dnssrv+_grpc._tcp.thanos-store-headless.monitoring.svc.cluster.local',
 //   ]))
 //
 // Reach the Prometheus-compatible API at the Service on :10902 — point a Grafana
