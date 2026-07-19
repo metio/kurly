@@ -71,6 +71,14 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     env: d.fn('Environment variables as a name→value map, appended to the container.', [
       d.arg('env', d.T.object, required=true, example={ LOG_LEVEL: 'info' }),
     ]) + { kinds: allKinds, group: 'container' },
+    envFromSecret: d.fn('Pull every key of an EXISTING Secret into the environment (envFrom secretRef); kurly mints no Secret. An optional prefix is prepended to each variable name.', [
+      d.arg('secretName', d.T.string, required=true, example='mailu-secrets'),
+      d.arg('prefix', d.T.string),
+    ]) + { kinds: allKinds, group: 'container' },
+    envFromConfigMap: d.fn('Pull every key of an EXISTING ConfigMap into the environment (envFrom configMapRef). An optional prefix is prepended to each variable name.', [
+      d.arg('configMapName', d.T.string, required=true, example='app-config'),
+      d.arg('prefix', d.T.string),
+    ]) + { kinds: allKinds, group: 'container' },
     version: d.fn('The workload version, stamped as app.kubernetes.io/version on every object.', [
       d.arg('version', d.T.string, required=true, example='1.2.3'),
     ]) + { kinds: allKinds, group: 'container' },

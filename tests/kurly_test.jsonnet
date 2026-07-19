@@ -66,6 +66,12 @@ local podOf(app) = app.deployment.spec.template.spec;
     containerOf(shop).env,
     [{ name: 'ALPHA', value: 'first' }, { name: 'ZED', value: 'last' }]
   ),
+  // envFrom sources compose in order and carry an optional prefix; kurly mints
+  // no Secret or ConfigMap — they are the consumer's to provide.
+  env_from_secret_and_configmap: std.assertEqual(
+    containerOf(shop + kurly.envFromSecret('creds') + kurly.envFromConfigMap('cfg', prefix='APP_')).envFrom,
+    [{ secretRef: { name: 'creds' } }, { configMapRef: { name: 'cfg' }, prefix: 'APP_' }]
+  ),
 
   http_probes: std.assertEqual(
     containerOf(shop).readinessProbe.httpGet,

@@ -35,6 +35,17 @@ local resourcePresets = {
   args(args):: { config+:: { args: args } },
   command(command):: { config+:: { command: command } },
   env(env):: { config+:: { env+: env } },
+  // Pull every key of a Secret into the container environment as env vars — for
+  // apps that read their configuration, secrets included, from the environment
+  // (envFrom secretRef) rather than files. kurly mints no Secret; the consumer
+  // provides it. An optional prefix is prepended to each key's variable name.
+  envFromSecret(secretName, prefix=''):: {
+    config+:: { envFrom+: [{ secretRef: { name: secretName } } + (if prefix == '' then {} else { prefix: prefix })] },
+  },
+  // The ConfigMap equivalent — non-secret configuration read from the environment.
+  envFromConfigMap(configMapName, prefix=''):: {
+    config+:: { envFrom+: [{ configMapRef: { name: configMapName } } + (if prefix == '' then {} else { prefix: prefix })] },
+  },
   // The workload version, stamped as app.kubernetes.io/version on every object.
   version(version):: { config+:: { version: version } },
   labels(labels):: { config+:: { labels+: labels } },

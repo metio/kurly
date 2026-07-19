@@ -205,6 +205,10 @@ local exclusionConflicts(exclusive) = [
       command: [],
       args: [],
       env: {},
+      // envFrom sources — Secret/ConfigMap references whose keys become container
+      // environment variables, for apps that read their configuration (secrets
+      // included) from the environment rather than files or explicit env().
+      envFrom: [],
       // The workload version, stamped as app.kubernetes.io/version. Left null
       // by default; a workload sets it from its `version` constant (which the
       // release pipeline rewrites from 'dev' to the calver).
@@ -609,6 +613,7 @@ local exclusionConflicts(exclusive) = [
           for variable in std.objectFields(cfg.env)
         ])
       )
+      + (if cfg.envFrom == [] then {} else { envFrom: cfg.envFrom })
       + (
         if self.volumeMounts == []
         then {}
