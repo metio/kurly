@@ -387,6 +387,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    sonarqube: {
+      summary: 'A SonarQube server (continuous code-quality and static-analysis inspection) on the official Community image, backed by an external PostgreSQL, with data/extensions/search-index on a PersistentVolume. Pairs with a cnpg-cluster named sonarqube-db. Its embedded Elasticsearch needs the node vm.max_map_count >= 262144 (set on the node; kurly injects no privileged initContainer). kurly authors no Secret; SONAR_JDBC_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
+      stages: {
+        server: d.fn('The SonarQube server. dbHost/dbName/dbUser default to a cnpg-cluster named sonarqube-db (SONAR_JDBC_URL is built from them). secretName holds SONAR_JDBC_PASSWORD (envFrom). Data at /opt/sonarqube/data, extensions and logs on the volume. Requires node vm.max_map_count >= 262144. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='sonarqube'),
+          d.arg('image', d.T.string, default='docker.io/library/sonarqube:26.7.0.124771-community'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='sonarqube-db-rw'),
+          d.arg('dbName', d.T.string, default='sonarqube'),
+          d.arg('dbUser', d.T.string, default='sonarqube'),
+          d.arg('secretName', d.T.string, default='sonarqube-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '4Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/sonarqube/server.libsonnet' },
+      },
+    },
     peertube: {
       summary: 'A PeerTube server (a decentralized, federated video platform) on the official image, backed by an external PostgreSQL and Redis, with videos/uploads/config on a PersistentVolume. Pairs with a cnpg-cluster named peertube-db and a valkey named peertube-cache. kurly authors no Secret; PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, and the initial root password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
       stages: {
