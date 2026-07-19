@@ -200,7 +200,7 @@ local podOf(app) = app.deployment.spec.template.spec;
   // Exactly one exposure composes; every recipe claims the `exposure` exclusion
   // group, so a single one renders its one routing object. (Composing two fails
   // the render — the negative check lives in the CI test job.)
-  single_exposure_object_count: std.assertEqual(std.length(kurly.list(routed).items), 3),
+  single_exposure_object_count: std.assertEqual(std.length(kurly.list(routed).items), 4),
 
   // --- worker ----------------------------------------------------------------
   worker_replicas: std.assertEqual(worker.deployment.spec.replicas, 4),
@@ -240,9 +240,9 @@ local podOf(app) = app.deployment.spec.template.spec;
     ['ConfigMap', 'vault-config', '{:mode :append}']
   ),
   // The owned manifests surface as a list and ride along in kurly.list
-  // (Deployment + Service + PVC + ConfigMap = 4).
-  owned_manifests: std.assertEqual(std.length(stateful.ownedManifests), 2),
-  list_includes_owned: std.assertEqual(std.length(kurly.list(stateful).items), 4),
+  // (Deployment + Service + PVC + ConfigMap + ServiceAccount = 5).
+  owned_manifests: std.assertEqual(std.length(stateful.ownedManifests), 3),
+  list_includes_owned: std.assertEqual(std.length(kurly.list(stateful).items), 5),
   // Every source contributes a paired (volume, mount) under one shared name.
   mount_names: std.assertEqual(
     [m.name for m in containerOf(stateful).volumeMounts],
@@ -340,7 +340,7 @@ local podOf(app) = app.deployment.spec.template.spec;
   ),
   owned_manifests_ride_along: std.assertEqual(
     std.length(kurly.list(shop + kurly.pdb(maxUnavailable=1) + kurly.serviceMonitor() + kurly.networkPolicy(policyTypes=['Ingress'])).items),
-    5  // Deployment + Service + PDB + ServiceMonitor + NetworkPolicy
+    6  // Deployment + Service + PDB + ServiceMonitor + NetworkPolicy + ServiceAccount
   ),
   // rbac mints SA + Role + RoleBinding and runs the pod under that SA.
   rbac_mints_and_wires: std.assertEqual(
@@ -409,7 +409,7 @@ local podOf(app) = app.deployment.spec.template.spec;
       s.storeClaim,  // no separate owned PVC
       s.statefulset.spec.replicas,
     ],
-    [['Service', 'StatefulSet'], 'db-headless', 'None', '5Gi', null, 3]
+    [['Service', 'ServiceAccount', 'StatefulSet'], 'db-headless', 'None', '5Gi', null, 3]
   ),
   // The store still mounts at its path, sourced from the template's 'store' volume.
   stateful_store_mount: std.assertEqual(
@@ -426,7 +426,7 @@ local podOf(app) = app.deployment.spec.template.spec;
       j.job.spec.template.spec.restartPolicy,
       [v.persistentVolumeClaim.claimName for v in j.job.spec.template.spec.volumes if v.name == 'store'],
     ],
-    [['Job', 'PersistentVolumeClaim'], 'OnFailure', ['migrate-store']]
+    [['Job', 'PersistentVolumeClaim', 'ServiceAccount'], 'OnFailure', ['migrate-store']]
   ),
   // The hardened posture applies to the new kinds too.
   stateful_restricted: std.assertEqual(
@@ -437,9 +437,10 @@ local podOf(app) = app.deployment.spec.template.spec;
     (kurly.job('m', 'ghcr.io/example/m:1.0.0')).job.spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem,
     true
   ),
-  // A stateless workload is untouched: no owned manifests, no volumes.
-  stateless_no_owned: std.assertEqual([std.length(shop.ownedManifests), shop.storeClaim, std.objectHas(podOf(shop), 'volumes')], [0, null, false]),
-  stateless_list_unchanged: std.assertEqual(std.length(kurly.list(shop).items), 2),
+  // A stateless workload owns only its ServiceAccount (every workload runs under
+  // a dedicated one) — no storage or config, no volumes.
+  stateless_no_owned: std.assertEqual([std.length(shop.ownedManifests), shop.storeClaim, std.objectHas(podOf(shop), 'volumes')], [1, null, false]),
+  stateless_list_unchanged: std.assertEqual(std.length(kurly.list(shop).items), 3),
   // Mounts work on the CronJob pod template too, not just Deployments.
   cron_mounts: std.assertEqual(
     [v.name for v in (cron + kurly.scratch('/work')).cronjob.spec.jobTemplate.spec.template.spec.volumes],
@@ -448,7 +449,7 @@ local podOf(app) = app.deployment.spec.template.spec;
 
   // --- list ------------------------------------------------------------------
   list_kind: std.assertEqual(kurly.list(ingressed).kind, 'List'),
-  list_renders_all_manifests: std.assertEqual(std.length(kurly.list(ingressed).items), 3),
+  list_renders_all_manifests: std.assertEqual(std.length(kurly.list(ingressed).items), 4),
   list_worker_has_only_deployment: std.assertEqual(std.length(kurly.list(worker).items), 1),
   // listOf renders explicit items and drops nulls (an absent owned manifest).
   list_of_drops_nulls: std.assertEqual(std.length(kurly.listOf([shop.deployment, shop.storeClaim, shop.service]).items), 2),
