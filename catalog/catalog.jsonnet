@@ -68,6 +68,7 @@ local stageImports = {
   'shiori/server': import 'github.com/metio/kurly/workloads/shiori/server.libsonnet',
   'readeck/server': import 'github.com/metio/kurly/workloads/readeck/server.libsonnet',
   'dokuwiki/server': import 'github.com/metio/kurly/workloads/dokuwiki/server.libsonnet',
+  'excalidraw/server': import 'github.com/metio/kurly/workloads/excalidraw/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
