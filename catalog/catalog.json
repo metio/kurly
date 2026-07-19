@@ -247,6 +247,51 @@
       {
          "args": [
             {
+               "example": "web.example.com",
+               "name": "host",
+               "required": true,
+               "type": "hostname"
+            },
+            {
+               "default": "http_2xx",
+               "name": "module",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "https",
+               "name": "scheme",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "blackbox-exporter:9115",
+               "name": "prober",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "/probe",
+               "name": "proberPath",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "30s",
+               "name": "interval",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "help": "Attaches a prometheus-operator Probe to the workload, so Prometheus black-box-monitors its public URL through a blackbox-exporter — the outside-in check that complements the in-cluster ServiceMonitor scrape. A modifier composed onto a workload. host is explicit (target a specific health path, any exposure style); prober is the blackbox-exporter address; module selects its check (http_2xx expects a 2xx).",
+         "id": "probe",
+         "kinds": [
+            "http"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": [
                   "team-a",
                   "team-b"

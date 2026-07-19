@@ -303,6 +303,14 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('target', d.T.string, example='ingress.example.net.'),
       d.arg('annotations', d.T.object, default={}),
     ]) + { kinds: ['http'], requiresExposure: true },
+    probe: d.fn('Attaches a prometheus-operator Probe to the workload, so Prometheus black-box-monitors its public URL through a blackbox-exporter — the outside-in check that complements the in-cluster ServiceMonitor scrape. A modifier composed onto a workload. host is explicit (target a specific health path, any exposure style); prober is the blackbox-exporter address; module selects its check (http_2xx expects a 2xx).', [
+      d.arg('host', d.T.hostname, required=true, example='web.example.com'),
+      d.arg('module', d.T.string, default='http_2xx'),
+      d.arg('scheme', d.T.string, default='https'),
+      d.arg('prober', d.T.string, default='blackbox-exporter:9115'),
+      d.arg('proberPath', d.T.string, default='/probe'),
+      d.arg('interval', d.T.string, default='30s'),
+    ]) + { kinds: ['http'] },
   },
 
   // Pod Security Standards profiles — a mixin that relaxes the default

@@ -162,6 +162,29 @@ Ingress one — and `annotations` passes through any provider-specific keys
 (`cloudflare-proxied`, `aws-weight`, …). The **prerequisite** is external-dns
 running with the matching source enabled.
 
+## Black-box probes
+
+`kurly.expose.probe` attaches a prometheus-operator `Probe` to a workload, so
+Prometheus black-box-monitors its public URL through a blackbox-exporter — the
+outside-in check (does the site actually answer over the network?) that
+complements an in-cluster `ServiceMonitor` scrape:
+
+```jsonnet
+kurly.http('web', image)
++ kurly.expose.ownGateway('web.example.com', 'istio', tls='web-tls')
++ kurly.expose.probe('web.example.com')
+```
+
+`host` is explicit — target a specific health path, whatever the exposure style.
+`prober` is the blackbox-exporter address (defaulting to a `blackbox-exporter`
+Service), and `module` selects its check (`http_2xx` expects a 2xx). The
+**prerequisites** are the prometheus-operator and a blackbox-exporter.
+
+Together with [Secrets](#secrets), [TLS certificates](#tls-certificates), and
+[DNS records](#dns-records-external-dns), these are the companions a public-facing
+workload composes alongside its exposure — the Secret it reads, the certificate
+that fills it, the DNS record that points at it, and the probe that watches it.
+
 ## Documentation
 
 The full documentation lives at **<https://kurly.projects.metio.wtf/>**:

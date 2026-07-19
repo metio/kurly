@@ -1036,6 +1036,26 @@ local podOf(app) = app.deployment.spec.template.spec;
     { 'nginx.ingress.kubernetes.io/x': 'y', 'external-dns.alpha.kubernetes.io/hostname': 'alias.example.com' }
   ),
 
+  // probe attaches a Probe black-box-monitoring the given URL through a
+  // blackbox-exporter, inheriting the workload's name and labels.
+  probe_targets_the_url_through_blackbox: std.assertEqual(
+    (kurly.http('web', 'img:1')
+     + kurly.expose.gateway('web.example.com', 'shared')
+     + kurly.expose.probe('web.example.com')).probe,
+    {
+      apiVersion: 'monitoring.coreos.com/v1',
+      kind: 'Probe',
+      metadata: { name: 'web', labels: { 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/name': 'web' } },
+      spec: {
+        jobName: 'web',
+        module: 'http_2xx',
+        interval: '30s',
+        prober: { url: 'blackbox-exporter:9115', path: '/probe' },
+        targets: { staticConfig: { static: ['https://web.example.com'] } },
+      },
+    }
+  ),
+
   // referenceGrant grants cross-namespace HTTPRoutes access to the workload's
   // Service, one `from` per namespace, the `to` fixed on the Service.
   reference_grant_lists_every_from_namespace: std.assertEqual(

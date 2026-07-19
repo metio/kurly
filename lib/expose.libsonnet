@@ -266,6 +266,38 @@ local listener(host, tls) =
     },
   },
 
+  // probe attaches a prometheus-operator Probe to the workload, so Prometheus
+  // black-box-monitors its public URL through a blackbox-exporter — the outside-in
+  // check (does the site actually answer over the network?) that complements the
+  // in-cluster ServiceMonitor scrape. A modifier composed onto a workload, joining
+  // no exclusion group. `host` is taken explicitly rather than inferred from the
+  // exposure, so a probe can target a specific health path and works whichever way
+  // the workload is exposed. `prober` is the blackbox-exporter address (the
+  // blackbox-exporter workload's default Service); `module` selects its check
+  // (http_2xx expects a 2xx response).
+  //
+  //   kurly.http('web', image)
+  //   + kurly.expose.ownGateway('web.example.com', 'istio', tls='web-tls')
+  //   + kurly.expose.probe('web.example.com')
+  probe(host, module='http_2xx', scheme='https', prober='blackbox-exporter:9115', proberPath='/probe', interval='30s'):: {
+    assert std.objectHasAll(self, 'config') :
+           'kurly.expose.probe attaches a Probe to a workload — compose it onto a kurly kind (http, …)',
+    local app = self,
+
+    probe: {
+      apiVersion: 'monitoring.coreos.com/v1',
+      kind: 'Probe',
+      metadata: { name: app.config.name, labels: app.labels },
+      spec: {
+        jobName: app.config.name,
+        module: module,
+        interval: interval,
+        prober: { url: prober, path: proberPath },
+        targets: { staticConfig: { static: [scheme + '://' + host] } },
+      },
+    },
+  },
+
   // referenceGrant lets HTTPRoutes in OTHER namespaces route to this workload's
   // Service — the cross-namespace consent Gateway API requires, granted on the
   // Service (the `to`) side and naming the namespaces allowed to reach it. This
