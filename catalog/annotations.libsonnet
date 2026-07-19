@@ -456,6 +456,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    keycloak: {
+      summary: 'A Keycloak identity server as an official keycloak-operator `Keycloak` custom resource. Authors the CR (like loki and tempo) for the operator to reconcile into a StatefulSet, Services, and the admin credentials Secret. Requires the keycloak-operator (whose recent releases let one operator manage instances across many namespaces) and a PostgreSQL database — pairs with the cnpg-cluster workload.',
+      stages: {
+        server: d.fn("The Keycloak server. It needs a PostgreSQL database: dbHost/dbName/dbSecret default to a cnpg-cluster named keycloak-db (its -rw Service and the -app Secret CNPG mints, keys username/password). hostname is the public URL for production; tlsSecret names the cert Keycloak terminates, or plain HTTP (httpEnabled) behind a TLS-terminating proxy. The operator chooses the Keycloak image unless image pins one. kurly authors no Secret — the database and TLS Secrets are the consumer's.", [
+          d.arg('name', d.T.string, default='keycloak'),
+          d.arg('instances', d.T.int, default=1),
+          d.arg('image', d.T.string, example='quay.io/keycloak/keycloak:26.7.0'),
+          d.arg('dbHost', d.T.string, default='keycloak-db-rw'),
+          d.arg('dbName', d.T.string, default='keycloak'),
+          d.arg('dbSecret', d.T.string, default='keycloak-db-app'),
+          d.arg('hostname', d.T.hostname, example='https://id.example.com'),
+          d.arg('tlsSecret', d.T.string, example='keycloak-tls'),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('spec', d.T.object, default={}, example={ proxy: { headers: 'xforwarded' } }),
+        ]) + {
+          kind: 'keycloak',
+          importPath: 'github.com/metio/kurly/workloads/keycloak/server.libsonnet',
+        },
+      },
+    },
     thanos: {
       summary: 'The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed.',
       stages: {
