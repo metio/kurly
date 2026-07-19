@@ -387,6 +387,22 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    silverbullet: {
+      summary: 'A SilverBullet server (an extensible, self-hosted markdown notebook / personal knowledge base) on the official image. A plain composable http workload — your notes are plain markdown files on a PersistentVolume, no external database. kurly authors no Secret; SB_USER comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The SilverBullet server. Your markdown space lives at /space on the volume. secretName holds SB_USER (user:password, envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='silverbullet'),
+          d.arg('image', d.T.string, default='ghcr.io/silverbulletmd/silverbullet:2.9.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='silverbullet-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/silverbullet/server.libsonnet' },
+      },
+    },
     'code-server': {
       summary: 'A code-server instance (VS Code running in the browser, on a remote server) on the official image. A plain composable http workload — your projects, extensions, and settings live on a PersistentVolume. kurly authors no Secret; PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       stages: {
