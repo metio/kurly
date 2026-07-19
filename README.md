@@ -140,6 +140,28 @@ whose own Service stays reachable in-cluster (a `port-forward` still hits
 `kurly.expose.referenceGrant(['team-a', 'team-b'])` — see
 [status-responder](workloads/status-responder/) for the full pairing.
 
+## DNS records (external-dns)
+
+[external-dns](https://kubernetes-sigs.github.io/external-dns/) already discovers
+the hostname of whatever an exposure emits — an Ingress, or (with its
+`gateway-httproute` source) an HTTPRoute and its parent Gateway's address — and
+creates the record with no help from kurly. Reach for `kurly.expose.dns` only to
+**override** what it infers: a different or additional `hostname`, a `ttl`, or a
+`target` (the address or CNAME the record points at, rather than the gateway's
+own):
+
+```jsonnet
+kurly.http('web', image)
++ kurly.expose.ownGateway('web.example.com', 'istio', tls='web-tls')
++ kurly.expose.dns(target='ingress.example.net.', ttl=300)
+```
+
+It adds the `external-dns.alpha.kubernetes.io/*` annotations to the right resource
+for the exposure — the HTTPRoute for a Gateway API recipe, the Ingress for the
+Ingress one — and `annotations` passes through any provider-specific keys
+(`cloudflare-proxied`, `aws-weight`, …). The **prerequisite** is external-dns
+running with the matching source enabled.
+
 ## Documentation
 
 The full documentation lives at **<https://kurly.projects.metio.wtf/>**:

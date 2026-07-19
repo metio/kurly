@@ -1014,6 +1014,28 @@ local podOf(app) = app.deployment.spec.template.spec;
      + kurly.expose.guard(['/admin'], 'forbidden')).httproute.spec.rules[0].backendRefs[0],
     { name: 'forbidden', port: 5678 }
   ),
+  // dns puts external-dns hints on the HTTPRoute's annotations; ttl stringifies
+  // and a provider-specific passthrough merges in.
+  dns_annotates_the_httproute: std.assertEqual(
+    (kurly.http('web', 'img:1')
+     + kurly.expose.gateway('web.example.com', 'shared')
+     + kurly.expose.dns(target='ingress.example.net.', ttl=300, annotations={ 'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'false' }))
+    .httproute.metadata.annotations,
+    {
+      'external-dns.alpha.kubernetes.io/target': 'ingress.example.net.',
+      'external-dns.alpha.kubernetes.io/ttl': '300',
+      'external-dns.alpha.kubernetes.io/cloudflare-proxied': 'false',
+    }
+  ),
+  // On an Ingress, the external-dns hints merge with the controller annotations.
+  dns_merges_with_ingress_controller_annotations: std.assertEqual(
+    (kurly.http('web', 'img:1')
+     + kurly.expose.ingress('web.example.com', annotations={ 'nginx.ingress.kubernetes.io/x': 'y' })
+     + kurly.expose.dns(hostname='alias.example.com'))
+    .ingress.metadata.annotations,
+    { 'nginx.ingress.kubernetes.io/x': 'y', 'external-dns.alpha.kubernetes.io/hostname': 'alias.example.com' }
+  ),
+
   // referenceGrant grants cross-namespace HTTPRoutes access to the workload's
   // Service, one `from` per namespace, the `to` fixed on the Service.
   reference_grant_lists_every_from_namespace: std.assertEqual(

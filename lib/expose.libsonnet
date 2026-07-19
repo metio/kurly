@@ -34,21 +34,26 @@ local exposure(name) = {
 // workload LAST. Gateway API resolves overlapping matches by specificity, not
 // order, so a guarded `/admin` prefix wins over `/` for those requests
 // regardless — the ordering is for the reader, not the router.
-local httpRoute(app, host, parent) = {
-  apiVersion: 'gateway.networking.k8s.io/v1',
-  kind: 'HTTPRoute',
-  metadata: { name: app.config.name, labels: app.labels },
-  spec: {
-    parentRefs: [parent],
-    hostnames: [host],
-    rules:
-      std.get(app.config, 'guards', [])
-      + [{
-        matches: [{ path: { type: 'PathPrefix', value: '/' } }],
-        backendRefs: [{ name: app.config.name, port: app.config.servicePort }],
-      }],
-  },
-};
+local httpRoute(app, host, parent) =
+  // external-dns (from kurly.expose.dns) reads its record hints off the HTTPRoute,
+  // so they ride in the route's annotations.
+  local dnsAnnotations = std.get(app.config, 'dnsAnnotations', {});
+  {
+    apiVersion: 'gateway.networking.k8s.io/v1',
+    kind: 'HTTPRoute',
+    metadata: { name: app.config.name, labels: app.labels }
+              + (if dnsAnnotations == {} then {} else { annotations: dnsAnnotations }),
+    spec: {
+      parentRefs: [parent],
+      hostnames: [host],
+      rules:
+        std.get(app.config, 'guards', [])
+        + [{
+          matches: [{ path: { type: 'PathPrefix', value: '/' } }],
+          backendRefs: [{ name: app.config.name, port: app.config.servicePort }],
+        }],
+    },
+  };
 
 local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
   group: 'gateway.networking.k8s.io',
@@ -98,11 +103,14 @@ local listener(host, tls) =
   // hiding.
   ingress(host, ingressClass=null, annotations={}, tls=null):: exposure('ingress') {
     local app = self,
+    // The controller annotations plus any external-dns hints from kurly.expose.dns
+    // — both live on the Ingress metadata (external-dns reads its records there).
+    local ingressAnnotations = annotations + std.get(app.config, 'dnsAnnotations', {}),
 
     ingress:
       k.networking.v1.ingress.new(app.config.name)
       + k.networking.v1.ingress.metadata.withLabels(app.labels)
-      + (if annotations == {} then {} else k.networking.v1.ingress.metadata.withAnnotations(annotations))
+      + (if ingressAnnotations == {} then {} else k.networking.v1.ingress.metadata.withAnnotations(ingressAnnotations))
       + (
         if ingressClass == null
         then {}
@@ -228,6 +236,33 @@ local listener(host, tls) =
         matches: [{ path: { type: 'PathPrefix', value: p } } for p in paths],
         backendRefs: [std.prune({ name: service, namespace: serviceNamespace, port: port })],
       }],
+    },
+  },
+
+  // dns adds external-dns annotations to the exposure's DNS-bearing resource (the
+  // HTTPRoute for a Gateway API recipe, the Ingress for the Ingress one), so
+  // external-dns creates the record. A modifier composed AFTER an exposure, not an
+  // exposure itself, and joins no exclusion group. external-dns already discovers
+  // the exposed hostname on its own — reach for this to OVERRIDE: a different or
+  // additional `hostname`, a `ttl`, or a `target` (the address/CNAME the record
+  // points at, rather than the gateway's own). `annotations` passes through any
+  // provider-specific keys (external-dns.alpha.kubernetes.io/cloudflare-proxied,
+  // aws-weight, …).
+  //
+  //   kurly.http('web', image)
+  //   + kurly.expose.ownGateway('web.example.com', 'istio')
+  //   + kurly.expose.dns(target='ingress.example.net.', ttl=300)
+  dns(hostname=null, ttl=null, target=null, annotations={}):: {
+    assert std.objectHas(self, 'httproute') || std.objectHas(self, 'ingress') :
+           'kurly.expose.dns annotates a route or ingress — compose it after an exposure recipe',
+    config+:: {
+      dnsAnnotations+:
+        std.prune({
+          'external-dns.alpha.kubernetes.io/hostname': hostname,
+          'external-dns.alpha.kubernetes.io/ttl': (if ttl == null then null else std.toString(ttl)),
+          'external-dns.alpha.kubernetes.io/target': target,
+        })
+        + annotations,
     },
   },
 

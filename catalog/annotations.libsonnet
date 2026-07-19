@@ -297,6 +297,12 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     referenceGrant: d.fn("Lets HTTPRoutes in other namespaces route to this workload's Service — the cross-namespace consent Gateway API requires, granted on the Service side and naming the allowed namespaces. Deploy a shared status-responder once, grant the tenant namespaces, and their guard rules can target its Service. A modifier, not an exposure.", [
       d.arg('fromNamespaces', d.T.array, required=true, example=['team-a', 'team-b']),
     ]) + { kinds: ['http'], requiresService: true },
+    dns: d.fn('Adds external-dns annotations to the exposure resource (the HTTPRoute for a Gateway API recipe, the Ingress for the Ingress one) so external-dns creates the DNS record. A modifier composed after an exposure. external-dns already discovers the exposed hostname, so reach for this to override — a different/additional hostname, a ttl, or a target (the address the record points at). annotations passes through provider-specific keys.', [
+      d.arg('hostname', d.T.hostname, example='alias.example.com'),
+      d.arg('ttl', d.T.int, example=300),
+      d.arg('target', d.T.string, example='ingress.example.net.'),
+      d.arg('annotations', d.T.object, default={}),
+    ]) + { kinds: ['http'], requiresExposure: true },
   },
 
   // Pod Security Standards profiles — a mixin that relaxes the default

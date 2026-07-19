@@ -3,6 +3,39 @@
       {
          "args": [
             {
+               "example": "alias.example.com",
+               "name": "hostname",
+               "required": false,
+               "type": "hostname"
+            },
+            {
+               "example": 300,
+               "name": "ttl",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "example": "ingress.example.net.",
+               "name": "target",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "annotations",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "help": "Adds external-dns annotations to the exposure resource (the HTTPRoute for a Gateway API recipe, the Ingress for the Ingress one) so external-dns creates the DNS record. A modifier composed after an exposure. external-dns already discovers the exposed hostname, so reach for this to override — a different/additional hostname, a ttl, or a target (the address the record points at). annotations passes through provider-specific keys.",
+         "id": "dns",
+         "kinds": [
+            "http"
+         ],
+         "requiresExposure": true
+      },
+      {
+         "args": [
+            {
                "example": "storefront.example.com",
                "name": "host",
                "required": true,
