@@ -387,6 +387,22 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'code-server': {
+      summary: 'A code-server instance (VS Code running in the browser, on a remote server) on the official image. A plain composable http workload — your projects, extensions, and settings live on a PersistentVolume. kurly authors no Secret; PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
+      stages: {
+        server: d.fn('The code-server editor. Workspace, extensions, and settings at /home/coder on the volume. secretName holds PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='code-server'),
+          d.arg('image', d.T.string, default='docker.io/codercom/code-server:4.129.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='code-server-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/code-server/server.libsonnet' },
+      },
+    },
     beszel: {
       summary: 'A Beszel hub (a lightweight server-monitoring dashboard) on the official image. A plain composable http workload that keeps its data in SQLite on a PersistentVolume — no external database. Beszel agents run on the monitored machines and report to this hub. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090.',
       stages: {
