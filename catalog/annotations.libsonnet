@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    dokuwiki: {
+      summary: 'A DokuWiki server (a simple, database-less wiki that stores its pages as flat files) on the official image. A plain composable http workload — all content lives on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The DokuWiki server. All content lives at /storage on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='dokuwiki'),
+          d.arg('image', d.T.string, default='docker.io/dokuwiki/dokuwiki:2025-05-14b'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/dokuwiki/server.libsonnet' },
+      },
+    },
     readeck: {
       summary: 'A Readeck server (a self-hosted read-it-later and web-bookmarking tool that saves clean, readable copies of pages). A plain composable http workload that keeps its bookmarks and saved articles in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8000.',
       stages: {
