@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    kanboard: {
+      summary: 'A Kanboard server (a minimalist kanban project-management board) on the official image. A plain composable http workload that keeps board data in SQLite and uploads on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, so it relaxes non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Kanboard server. Keeps board data and uploads at /var/www/app/data on the volume. Point DATABASE_URL (env) at external PostgreSQL to scale past SQLite. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='kanboard'),
+          d.arg('image', d.T.string, default='docker.io/kanboard/kanboard:v1.2.52'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kanboard/server.libsonnet' },
+      },
+    },
     znc: {
       summary: 'A ZNC server (an IRC bouncer that stays connected and replays what you missed) on the official image. A plain composable http workload that keeps its configuration, module data, and buffers on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves IRC and the web admin on :6697; needs a znc.conf (with credentials) on the volume before it starts.',
       stages: {
