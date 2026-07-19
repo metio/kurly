@@ -13,3 +13,6 @@ extend-exclude = ["LICENSES/", "vendor/", "docs/themes/", "docs/static/js/alpine
 [default.extend-words]
 edn = "edn"
 EDN = "EDN"
+# `ND` is Navidrome's environment-variable prefix (ND_MUSICFOLDER, ND_PORT, …),
+# not a typo of `AND`.
+ND = "ND"

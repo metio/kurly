@@ -5292,6 +5292,72 @@
          "summary": "A MicroBin server (a tiny, self-contained pastebin and file-sharing service). A plain composable http workload that keeps its pastes and uploaded files on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080."
       },
       {
+         "id": "navidrome",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "navidrome",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/deluan/navidrome:0.63.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "50Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Navidrome server. Database at /data, music library at /music (read-only), both on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/navidrome/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Navidrome server (a modern music server and streamer, compatible with Subsonic/Airsonic clients) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and reads a music library from /music on the same volume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4533."
+      },
+      {
          "id": "netbox",
          "stages": [
             {
