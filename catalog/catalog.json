@@ -2592,6 +2592,79 @@
          "summary": "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace."
       },
       {
+         "id": "opencost",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "opencost",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "opencost",
+                     "name": "namespace",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/opencost/opencost:1.119.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "http://prometheus-operated.monitoring.svc:9090",
+                     "name": "prometheusEndpoint",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The OpenCost cost model. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. prometheusEndpoint points at the prometheus workload (or a Thanos Query); env carries extra pricing/cloud settings. The web UI is a separate image (opencost-ui); this is the model, scraped at :9003.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/opencost/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source."
+      },
+      {
          "id": "otel-collector",
          "stages": [
             {

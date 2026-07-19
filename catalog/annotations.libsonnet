@@ -677,6 +677,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    opencost: {
+      summary: 'OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source.',
+      stages: {
+        server: d.fn('The OpenCost cost model. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. prometheusEndpoint points at the prometheus workload (or a Thanos Query); env carries extra pricing/cloud settings. The web UI is a separate image (opencost-ui); this is the model, scraped at :9003.', [
+          d.arg('name', d.T.string, default='opencost'),
+          d.arg('namespace', d.T.string, default='opencost'),
+          d.arg('image', d.T.string, default='ghcr.io/opencost/opencost:1.119.2'),
+          d.arg('prometheusEndpoint', d.T.string, default='http://prometheus-operated.monitoring.svc:9090'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/opencost/server.libsonnet',
+        },
+      },
+    },
     seaweedfs: {
       summary: "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups.",
       stages: {
