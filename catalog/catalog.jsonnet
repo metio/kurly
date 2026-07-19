@@ -35,6 +35,7 @@ local stageImports = {
   'mailu/webmail': import 'github.com/metio/kurly/workloads/mailu/webmail.libsonnet',
   'uptime-kuma/server': import 'github.com/metio/kurly/workloads/uptime-kuma/server.libsonnet',
   'actualbudget/server': import 'github.com/metio/kurly/workloads/actualbudget/server.libsonnet',
+  'homebox/server': import 'github.com/metio/kurly/workloads/homebox/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
