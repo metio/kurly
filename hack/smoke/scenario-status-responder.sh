@@ -28,7 +28,7 @@ source hack/smoke/lib.sh
 # The Gateway API release whose STANDARD channel CRDs the cluster gets — the
 # stable channel, latest release, the only surface kurly targets.
 # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api
-GATEWAY_API_VERSION="v1.6.0"
+GATEWAY_API_VERSION="v1.6.1"
 
 # Envoy Gateway is the runtime; 1.8 is the first line that supports Gateway API
 # 1.5. It supplies only its own CRDs here — the Gateway API CRDs come from the
