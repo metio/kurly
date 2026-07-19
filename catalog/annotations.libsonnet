@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    trilium: {
+      summary: 'A TriliumNext Notes server (a hierarchical note-taking application for building personal knowledge bases) on the official image. A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :8080.',
+      stages: {
+        server: d.fn('The TriliumNext server. Keeps notes in SQLite at /home/node/trilium-data on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='trilium'),
+          d.arg('image', d.T.string, default='ghcr.io/triliumnext/trilium:v0.104.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/trilium/server.libsonnet' },
+      },
+    },
     silverbullet: {
       summary: 'A SilverBullet server (an extensible, self-hosted markdown notebook / personal knowledge base) on the official image. A plain composable http workload — your notes are plain markdown files on a PersistentVolume, no external database. kurly authors no Secret; SB_USER comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

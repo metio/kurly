@@ -7769,6 +7769,72 @@
          "summary": "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store."
       },
       {
+         "id": "trilium",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "trilium",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/triliumnext/trilium:v0.104.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The TriliumNext server. Keeps notes in SQLite at /home/node/trilium-data on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/trilium/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A TriliumNext Notes server (a hierarchical note-taking application for building personal knowledge bases) on the official image. A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :8080."
+      },
+      {
          "id": "twenty",
          "stages": [
             {
