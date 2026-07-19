@@ -55,6 +55,8 @@ local stageImports = {
   'maybe/server': import 'github.com/metio/kurly/workloads/maybe/server.libsonnet',
   'peertube/server': import 'github.com/metio/kurly/workloads/peertube/server.libsonnet',
   'sonarqube/server': import 'github.com/metio/kurly/workloads/sonarqube/server.libsonnet',
+  'twenty/server': import 'github.com/metio/kurly/workloads/twenty/server.libsonnet',
+  'twenty/worker': import 'github.com/metio/kurly/workloads/twenty/worker.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
