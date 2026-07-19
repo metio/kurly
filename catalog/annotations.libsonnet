@@ -387,6 +387,20 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    excalidraw: {
+      summary: 'An Excalidraw server (a virtual hand-drawn-style whiteboard) on the official image. Excalidraw is a client-side app — the container serves static assets and drawings live in the browser — so this workload is stateless and scales via replicas. The nginx image binds :80 as root, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Serves on :80.',
+      stages: {
+        server: d.fn('The Excalidraw static server on :80 (stateless — scale via replicas). The image tag is an immutable sha (Excalidraw ships no semver tags). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='excalidraw'),
+          d.arg('image', d.T.string, default='docker.io/excalidraw/excalidraw:sha-4bfc5bb'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/excalidraw/server.libsonnet' },
+      },
+    },
     dokuwiki: {
       summary: 'A DokuWiki server (a simple, database-less wiki that stores its pages as flat files) on the official image. A plain composable http workload — all content lives on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
