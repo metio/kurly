@@ -359,6 +359,29 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    forgejo: {
+      summary: 'A Forgejo Git forge (a maintained Gitea fork): repository hosting, issues, pull requests, and a package registry. A plain composable http workload on the rootless image, with its data on a PersistentVolume and its database external — pairs with the cnpg-cluster workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI/git-over-HTTP on :3000 and git-over-SSH on :2222.',
+      stages: {
+        server: d.fn('The Forgejo server. dbHost/dbName/dbUser/dbSecret default to a cnpg-cluster named forgejo-db (its -rw Service and the -app Secret CNPG mints, key password read via a file). rootUrl is the public base URL for links/clone URLs. env carries extra FORGEJO__section__KEY settings — provide SECRET_KEY/JWT_SECRET there (from a Secret) so sessions survive restarts. kurly authors no Secret. Compose an exposure onto the HTTP port; route TCP :2222 for SSH.', [
+          d.arg('name', d.T.string, default='forgejo'),
+          d.arg('image', d.T.string, default='codeberg.org/forgejo/forgejo:16.0-rootless'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='forgejo-db-rw'),
+          d.arg('dbName', d.T.string, default='forgejo'),
+          d.arg('dbUser', d.T.string, default='forgejo'),
+          d.arg('dbSecret', d.T.string, default='forgejo-db-app'),
+          d.arg('rootUrl', d.T.string, example='https://git.example.com/'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/forgejo/server.libsonnet',
+        },
+      },
+    },
     'cnpg-cluster': {
       summary: 'A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator.',
       stages: {
