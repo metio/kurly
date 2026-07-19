@@ -501,6 +501,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           kind: 'stateful',
           importPath: 'github.com/metio/kurly/workloads/thanos/store.libsonnet',
         },
+        compact: d.fn('The Thanos Compactor (a `thanos compact --wait` Deployment): it compacts raw blocks in object storage, builds the 5m/1h downsampled resolutions, and applies retention. A SINGLETON — a second compactor over the same bucket corrupts the data, so replicas is pinned to 1 (asserted) and it rolls with Recreate; shard a large bucket with --selector.relabel-config across separate compactors. Reads the same objstoreSecret as store. retentionRaw/5m/1h bound each resolution (0d = keep forever).', [
+          d.arg('name', d.T.string, default='thanos-compact'),
+          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('objstoreSecret', d.T.string, default='thanos-objstore'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('retentionRaw', d.T.string, default='0d'),
+          d.arg('retention5m', d.T.string, default='0d'),
+          d.arg('retention1h', d.T.string, default='0d'),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('extraArgs', d.T.array, default=[]),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/thanos/compact.libsonnet',
+        },
         ruler: d.fn('The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.', [
           d.arg('name', d.T.string, default='thanos-ruler'),
           d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),

@@ -2819,6 +2819,90 @@
             {
                "args": [
                   {
+                     "default": "thanos-compact",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "quay.io/thanos/thanos:v0.42.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "thanos-objstore",
+                     "name": "objstoreSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "0d",
+                     "name": "retentionRaw",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "0d",
+                     "name": "retention5m",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "0d",
+                     "name": "retention1h",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "extraArgs",
+                     "required": false,
+                     "type": "array"
+                  }
+               ],
+               "help": "The Thanos Compactor (a `thanos compact --wait` Deployment): it compacts raw blocks in object storage, builds the 5m/1h downsampled resolutions, and applies retention. A SINGLETON — a second compactor over the same bucket corrupts the data, so replicas is pinned to 1 (asserted) and it rolls with Recreate; shard a large bucket with --selector.relabel-config across separate compactors. Reads the same objstoreSecret as store. retentionRaw/5m/1h bound each resolution (0d = keep forever).",
+               "id": "compact",
+               "importPath": "github.com/metio/kurly/workloads/thanos/compact.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
                      "default": "thanos-query",
                      "name": "name",
                      "required": false,

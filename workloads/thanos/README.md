@@ -15,6 +15,7 @@ you need and render with `kurly.list`.
 | [`query`](#query) | the Querier — fans out to StoreAPIs for a deduplicated global view | plain `http` Deployment |
 | [`query-frontend`](#query-frontend) | optional splitting/caching layer in front of the Querier | plain `http` Deployment |
 | [`store`](#store) | serves historical blocks from object storage over the StoreAPI | `stateful` StatefulSet |
+| [`compact`](#compact) | compacts, downsamples, and expires blocks in object storage | `http` Deployment (singleton) |
 | [`ruler`](#ruler) | recording/alerting rules evaluated against the Querier | prometheus-operator `ThanosRuler` CR |
 
 `query` and `query-frontend` are ordinary Deployments — compose `+` features onto
@@ -129,6 +130,36 @@ config:
   secret_key: thanossecret
 ```
 
+## compact
+
+The Compactor: it compacts raw blocks in object storage into larger ones, builds
+the 5m and 1h downsampled resolutions, and applies retention — the background
+maintenance that keeps the bucket the [store](#store) reads fast and bounded. It
+reads and writes the **same** object store as the store gateway but serves no
+StoreAPI.
+
+```jsonnet
+local compact = import 'github.com/metio/kurly/workloads/thanos/compact.libsonnet';
+
+kurly.list(compact(objstoreSecret='thanos-objstore', retentionRaw='30d', retention5m='90d', retention1h='1y'))
+```
+
+| Parameter | Default | Notes |
+|---|---|---|
+| `name` | `thanos-compact` | |
+| `objstoreSecret` | `thanos-objstore` | the same bucket Secret `store` reads |
+| `retentionRaw` / `retention5m` / `retention1h` | `0d` | retention per resolution; `0d` keeps forever |
+| `storageSize` / `storageClass` | `10Gi` / cluster default | scratch space for blocks being compacted |
+| `resources` / `image` / `labels` / `annotations` / `extraArgs` | | |
+
+**Singleton.** Exactly one compactor may run against a bucket — a second one runs
+concurrent compaction over the same blocks and **corrupts the data**. So the
+workload pins `replicas` to `1` (composing `+ kurly.replicas(2)` fails the render)
+and rolls with `Recreate` so a deploy never briefly overlaps two. Shard a large
+bucket by running *separate* compactors, each with a
+`--selector.relabel-config` (via `extraArgs`) owning a disjoint slice — never two
+over the same slice.
+
 ## ruler
 
 A Thanos Ruler as a prometheus-operator `ThanosRuler` custom resource: it loads
@@ -175,6 +206,7 @@ frontend (or the Querier directly).
 ```jsonnet
 kurly.listOf([
   store(objstoreSecret='thanos-objstore'),
+  compact(objstoreSecret='thanos-objstore'),
   query(endpoints=[
     'dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local',
     'dnssrv+_grpc._tcp.thanos-store-headless.monitoring.svc.cluster.local',
