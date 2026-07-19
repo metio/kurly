@@ -78,6 +78,7 @@ local stageImports = {
   'navidrome/server': import 'github.com/metio/kurly/workloads/navidrome/server.libsonnet',
   'audiobookshelf/server': import 'github.com/metio/kurly/workloads/audiobookshelf/server.libsonnet',
   'beszel/server': import 'github.com/metio/kurly/workloads/beszel/server.libsonnet',
+  'code-server/server': import 'github.com/metio/kurly/workloads/code-server/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
