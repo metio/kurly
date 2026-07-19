@@ -518,6 +518,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           kind: 'http',
           importPath: 'github.com/metio/kurly/workloads/thanos/compact.libsonnet',
         },
+        receive: d.fn('The Thanos Receiver (a `thanos receive` StatefulSet + headless Service): the push-based ingestion path — Prometheus remote-writes to it (:19291) instead of running a sidecar. It holds recent data in a local TSDB, serves it to the Querier over the StoreAPI (:10901), and uploads blocks to object storage. Receivers form a hashring generated from the replica count; replicationFactor copies each series across pods, each tagged with a receive_replica label the Querier deduplicates. Reads the same objstoreSecret as store.', [
+          d.arg('name', d.T.string, default='thanos-receive'),
+          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('replicationFactor', d.T.int, default=1),
+          d.arg('objstoreSecret', d.T.string, default='thanos-objstore'),
+          d.arg('tsdbRetention', d.T.string, default='15d'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('extraArgs', d.T.array, default=[]),
+        ]) + {
+          kind: 'stateful',
+          importPath: 'github.com/metio/kurly/workloads/thanos/receive.libsonnet',
+        },
         ruler: d.fn('The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.', [
           d.arg('name', d.T.string, default='thanos-ruler'),
           d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),

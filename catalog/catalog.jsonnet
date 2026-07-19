@@ -33,6 +33,7 @@ local stageImports = {
   'thanos/query': import 'github.com/metio/kurly/workloads/thanos/query.libsonnet',
   'thanos/store': import 'github.com/metio/kurly/workloads/thanos/store.libsonnet',
   'thanos/compact': import 'github.com/metio/kurly/workloads/thanos/compact.libsonnet',
+  'thanos/receive': import 'github.com/metio/kurly/workloads/thanos/receive.libsonnet',
   'thanos/query-frontend': import 'github.com/metio/kurly/workloads/thanos/query-frontend.libsonnet',
   'thanos/ruler': import 'github.com/metio/kurly/workloads/thanos/ruler.libsonnet',
   'loki/server': import 'github.com/metio/kurly/workloads/loki/server.libsonnet',

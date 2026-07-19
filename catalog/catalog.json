@@ -3036,6 +3036,90 @@
             {
                "args": [
                   {
+                     "default": "thanos-receive",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "quay.io/thanos/thanos:v0.42.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicationFactor",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "thanos-objstore",
+                     "name": "objstoreSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "15d",
+                     "name": "tsdbRetention",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "extraArgs",
+                     "required": false,
+                     "type": "array"
+                  }
+               ],
+               "help": "The Thanos Receiver (a `thanos receive` StatefulSet + headless Service): the push-based ingestion path — Prometheus remote-writes to it (:19291) instead of running a sidecar. It holds recent data in a local TSDB, serves it to the Querier over the StoreAPI (:10901), and uploads blocks to object storage. Receivers form a hashring generated from the replica count; replicationFactor copies each series across pods, each tagged with a receive_replica label the Querier deduplicates. Reads the same objstoreSecret as store.",
+               "id": "receive",
+               "importPath": "github.com/metio/kurly/workloads/thanos/receive.libsonnet",
+               "kind": "stateful"
+            },
+            {
+               "args": [
+                  {
                      "default": "thanos-ruler",
                      "name": "name",
                      "required": false,

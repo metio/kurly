@@ -16,6 +16,7 @@ you need and render with `kurly.list`.
 | [`query-frontend`](#query-frontend) | optional splitting/caching layer in front of the Querier | plain `http` Deployment |
 | [`store`](#store) | serves historical blocks from object storage over the StoreAPI | `stateful` StatefulSet |
 | [`compact`](#compact) | compacts, downsamples, and expires blocks in object storage | `http` Deployment (singleton) |
+| [`receive`](#receive) | accepts Prometheus remote-write, serves it via the StoreAPI | `stateful` StatefulSet |
 | [`ruler`](#ruler) | recording/alerting rules evaluated against the Querier | prometheus-operator `ThanosRuler` CR |
 
 `query` and `query-frontend` are ordinary Deployments — compose `+` features onto
@@ -159,6 +160,51 @@ and rolls with `Recreate` so a deploy never briefly overlaps two. Shard a large
 bucket by running *separate* compactors, each with a
 `--selector.relabel-config` (via `extraArgs`) owning a disjoint slice — never two
 over the same slice.
+
+## receive
+
+The Receiver: the **push-based** ingestion path. Point Prometheus `remote_write`
+at it (`:19291`) instead of running a Thanos sidecar; it holds recent data in a
+local TSDB, serves it to the Querier over the StoreAPI (`:10901`), and uploads
+completed blocks to object storage. Receivers form a hashring — series are
+distributed across the pods by hash and replicated — so it is a StatefulSet with
+a per-pod TSDB PVC.
+
+```jsonnet
+local receive = import 'github.com/metio/kurly/workloads/thanos/receive.libsonnet';
+
+kurly.list(receive(replicas=3, replicationFactor=2, objstoreSecret='thanos-objstore'))
+```
+
+| Parameter | Default | Notes |
+|---|---|---|
+| `name` | `thanos-receive` | |
+| `replicas` | `1` | each becomes a hashring node |
+| `replicationFactor` | `1` | copies of each series across pods (≤ `replicas`) |
+| `objstoreSecret` | `thanos-objstore` | the same bucket Secret `store` reads |
+| `tsdbRetention` | `15d` | how long the local TSDB keeps data before it lives only in the bucket |
+| `storageSize` / `storageClass` | `10Gi` / cluster default | the per-pod TSDB |
+| `resources` / `image` / `labels` / `annotations` / `extraArgs` | | |
+
+The **hashring** is generated from the replica count — every pod by its stable
+`<name>-<i>.<name>-headless:10901` DNS name — so scaling `replicas` reshapes it.
+Prometheus writes to the `remote-write` port (`:19291`); add it to the Querier as
+a StoreAPI endpoint via its headless Service:
+
+```jsonnet
+query(endpoints=['dnssrv+_grpc._tcp.thanos-receive-headless.monitoring.svc.cluster.local'])
+```
+
+Each replica tags its data with a `receive_replica` external label, so the Querier
+deduplicates the replicated copies — include it in the Querier's dedup labels:
+
+```jsonnet
+query(queryReplicaLabels=['prometheus_replica', 'replica', 'receive_replica'])
+```
+
+This runs the combined router+ingestor mode; splitting into dedicated routers is
+an `--receive.*` `extraArgs` concern. **Object storage** uses the same
+`objstoreSecret` (key `objstore.yaml`) as [store](#store) — kurly never mints it.
 
 ## ruler
 
