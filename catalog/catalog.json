@@ -6597,6 +6597,72 @@
          "summary": "A tiny HTTP service that answers every request with one fixed status code and message. Deploy it once, globally, and route protected paths to it from a Gateway API HTTPRoute (kurly.expose.guard) to take them off the public internet — the portable substitute for the fixed-response filter Gateway API lacks."
       },
       {
+         "id": "stirling-pdf",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "stirling-pdf",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/stirlingtools/stirling-pdf:2.14.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Stirling-PDF server. Keeps configuration and custom files at /configs on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/stirling-pdf/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Stirling-PDF server (a locally-hosted web toolkit for splitting, merging, converting, and editing PDFs) on the official image. A plain composable http workload — it processes files in memory and keeps configuration on a PersistentVolume, no external database. The image runs LibreOffice and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
+      },
+      {
          "id": "tempo",
          "stages": [
             {
