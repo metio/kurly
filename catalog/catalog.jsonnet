@@ -80,6 +80,7 @@ local stageImports = {
   'beszel/server': import 'github.com/metio/kurly/workloads/beszel/server.libsonnet',
   'code-server/server': import 'github.com/metio/kurly/workloads/code-server/server.libsonnet',
   'silverbullet/server': import 'github.com/metio/kurly/workloads/silverbullet/server.libsonnet',
+  'trilium/server': import 'github.com/metio/kurly/workloads/trilium/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
