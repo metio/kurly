@@ -434,6 +434,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'blackbox-exporter': {
+      summary: 'The Prometheus blackbox_exporter: it probes endpoints from the outside (HTTP, TCP, DNS, ICMP) and turns each probe into metrics. A plain composable http workload, deployed once as the prober kurly.expose.probe points a workload Probe at. Serves /probe on :9115.',
+      stages: {
+        server: d.fn('The exporter. modules is rendered as its config.yml; the default covers http_2xx (dual-stack) plus IPv4/IPv6-pinned variants and tcp_connect. Reach it at blackbox-exporter:9115 (the kurly.expose.probe default prober). An ICMP module needs CAP_NET_RAW, so relax the dropped capabilities for it.', [
+          d.arg('name', d.T.string, default='blackbox-exporter'),
+          d.arg('image', d.T.string, default='quay.io/prometheus/blackbox-exporter:v0.28.0'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('modules', d.T.object),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '64Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/blackbox-exporter/server.libsonnet',
+        },
+      },
+    },
     alertmanager: {
       summary: 'An Alertmanager as a prometheus-operator `Alertmanager` custom resource: it receives alerts from a Prometheus, groups and deduplicates them, and routes them to receivers. Authors the CR (like prometheus) for the operator to reconcile into a StatefulSet and the `alertmanager-operated` Service. Requires the prometheus-operator installed. Routing comes from the AlertmanagerConfig objects it selects.',
       stages: {

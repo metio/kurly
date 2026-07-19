@@ -29,6 +29,7 @@ local stageImports = {
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
   'otel-collector/agent': import 'github.com/metio/kurly/workloads/otel-collector/agent.libsonnet',
+  'blackbox-exporter/server': import 'github.com/metio/kurly/workloads/blackbox-exporter/server.libsonnet',
   'alertmanager/server': import 'github.com/metio/kurly/workloads/alertmanager/server.libsonnet',
   'keycloak/server': import 'github.com/metio/kurly/workloads/keycloak/server.libsonnet',
   'thanos/query': import 'github.com/metio/kurly/workloads/thanos/query.libsonnet',
