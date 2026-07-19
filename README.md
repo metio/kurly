@@ -92,6 +92,27 @@ schema (`dataFrom`, generators, `template`), which would only drift against its
 API. The **prerequisite** is that ESO and a `SecretStore`/`ClusterSecretStore`
 are already installed in the cluster.
 
+## TLS certificates
+
+The mint end of the same seam: a workload names the TLS Secret it terminates on
+(an exposure's `tls`, keycloak's `tlsSecret`) and authors none. `kurly.certificate`
+fills that named Secret with a real, auto-renewed certificate by authoring a
+cert-manager `Certificate` — point the workload's `tls` parameter at the same
+name:
+
+```jsonnet
+kurly.listOf([
+  kurly.http('storefront', image)
+  + kurly.expose.ownGateway('storefront.example.com', 'istio', tls='storefront-tls'),
+  kurly.certificate('storefront-tls', ['storefront.example.com'], 'letsencrypt-prod'),
+])
+```
+
+The Certificate's `secretName` defaults to its own name, so it lands as exactly
+the `storefront-tls` the gateway terminates on. `issuerRef` defaults to a
+`ClusterIssuer`; name a namespaced `Issuer` with `issuerKind='Issuer'`. The
+**prerequisite** is that cert-manager and the named issuer are installed.
+
 ## Protecting paths on a Gateway API route
 
 To take a path off the public internet — return 403 on `/admin` while the rest of

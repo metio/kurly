@@ -836,5 +836,14 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('data', d.T.array, required=true),
       d.arg('refreshInterval', d.T.string, default='1h'),
     ]),
+    certificate: d.fn("Authors a cert-manager Certificate — the CR cert-manager reconciles into a TLS Secret by obtaining a certificate for the DNS names from an issuer. The mint end of the same seam as externalSecret: a workload names the tls Secret it terminates on (an exposure's tls, keycloak's tlsSecret) and authors none, so this fills it with a real, auto-renewed certificate. secretName defaults to the Certificate's own name, so a workload's tls parameter pointed at that name lines up. issuerRef defaults to a ClusterIssuer.", [
+      d.arg('name', d.T.string, required=true, example='storefront-tls'),
+      d.arg('dnsNames', d.T.array, required=true, example=['storefront.example.com']),
+      d.arg('issuer', d.T.string, required=true, example='letsencrypt-prod'),
+      d.arg('secretName', d.T.string),
+      d.arg('issuerKind', d.T.string, default='ClusterIssuer'),
+      d.arg('duration', d.T.string),
+      d.arg('renewBefore', d.T.string),
+    ]),
   },
 }

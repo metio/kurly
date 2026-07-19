@@ -162,6 +162,34 @@ local join(parts) =
     },
   },
 
+  // certificate authors a cert-manager Certificate — the CR cert-manager
+  // reconciles INTO a TLS Secret by obtaining a certificate for `dnsNames` from an
+  // issuer (Let's Encrypt, a private CA, …). It is the mint end of the same seam
+  // externalSecret sits on: a workload names the tls Secret it terminates on
+  // (kurly.expose's `tls`, keycloak's tlsSecret, …) and authors none, so this
+  // fills that named Secret with a real, auto-renewed certificate:
+  //
+  //   kurly.certificate('storefront-tls', ['storefront.example.com'], 'letsencrypt-prod')
+  //
+  // The Certificate's `secretName` is the Secret cert-manager writes into, so it
+  // defaults to the Certificate's own name — point a workload's tls parameter at
+  // that same name and the two line up. issuerRef defaults to a ClusterIssuer (the
+  // usual cluster-wide issuer); name a namespaced Issuer with issuerKind='Issuer'.
+  // duration/renewBefore are dropped when null, leaving cert-manager's defaults.
+  certificate(name, dnsNames, issuer, secretName=null, issuerKind='ClusterIssuer', duration=null, renewBefore=null):: {
+    apiVersion: 'cert-manager.io/v1',
+    kind: 'Certificate',
+    metadata: {
+      name: name,
+      labels: { 'app.kubernetes.io/managed-by': 'kurly' },
+    },
+    spec: {
+      secretName: (if secretName == null then name else secretName),
+      issuerRef: { name: issuer, kind: issuerKind, group: 'cert-manager.io' },
+      dnsNames: dnsNames,
+    } + std.prune({ duration: duration, renewBefore: renewBefore }),
+  },
+
   // A workload's stages are the ORDERED, GATED phases of installing ONE
   // application — apply a phase, wait for it to go healthy, then the next — not
   // environment tiers. Each stage is its OWN file under workloads/<name>/: a

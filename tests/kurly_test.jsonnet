@@ -1060,6 +1060,34 @@ local podOf(app) = app.deployment.spec.template.spec;
     '15m'
   ),
 
+  // certificate authors a cert-manager Certificate whose secretName defaults to
+  // its own name, so a workload's tls parameter pointed at that name lines up.
+  certificate_defaults_secret_name_to_its_own: std.assertEqual(
+    kurly.certificate('storefront-tls', ['storefront.example.com'], 'letsencrypt-prod'),
+    {
+      apiVersion: 'cert-manager.io/v1',
+      kind: 'Certificate',
+      metadata: { name: 'storefront-tls', labels: { 'app.kubernetes.io/managed-by': 'kurly' } },
+      spec: {
+        secretName: 'storefront-tls',
+        issuerRef: { name: 'letsencrypt-prod', kind: 'ClusterIssuer', group: 'cert-manager.io' },
+        dnsNames: ['storefront.example.com'],
+      },
+    }
+  ),
+  // A namespaced Issuer and the optional lifetime knobs flow through; unset
+  // duration/renewBefore are pruned rather than rendered null.
+  certificate_takes_issuer_kind_and_lifetime: std.assertEqual(
+    kurly.certificate('c', ['a.example.com'], 'ca', secretName='c-tls', issuerKind='Issuer', duration='2160h', renewBefore='360h').spec,
+    {
+      secretName: 'c-tls',
+      issuerRef: { name: 'ca', kind: 'Issuer', group: 'cert-manager.io' },
+      dnsNames: ['a.example.com'],
+      duration: '2160h',
+      renewBefore: '360h',
+    }
+  ),
+
   // A dedicated Gateway provisions a real load balancer, configured through
   // annotations whose keys belong to the implementation.
   own_gateway_takes_annotations: std.assertEqual(
