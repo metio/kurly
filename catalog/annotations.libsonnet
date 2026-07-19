@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    kavita: {
+      summary: 'A Kavita server (a fast, cross-platform reading server for comics, manga, and ebooks) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /library on the same volume — no external database. The .NET app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.',
+      stages: {
+        server: d.fn('The Kavita server. Database and settings at /kavita/config, library at /library, both on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='kavita'),
+          d.arg('image', d.T.string, default='docker.io/jvmilazz0/kavita:0.9.0.2'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kavita/server.libsonnet' },
+      },
+    },
     komga: {
       summary: 'A Komga server (a media server for comics, manga, and digital books) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /books on the same volume — no external database. The Java app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :25600.',
       stages: {

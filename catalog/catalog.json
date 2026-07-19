@@ -3931,6 +3931,72 @@
          "summary": "A Kanboard server (a minimalist kanban project-management board) on the official image. A plain composable http workload that keeps board data in SQLite and uploads on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, so it relaxes non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "kavita",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "kavita",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/jvmilazz0/kavita:0.9.0.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Kavita server. Database and settings at /kavita/config, library at /library, both on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/kavita/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Kavita server (a fast, cross-platform reading server for comics, manga, and ebooks) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /library on the same volume — no external database. The .NET app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000."
+      },
+      {
          "id": "keycloak",
          "stages": [
             {
