@@ -26,23 +26,22 @@ mkdir -p "$mandir"
 
 # Examples render to a List directly; a workload stage is a composable app
 # (function), rendered with defaults and wrapped in kurly.list like a consumer's
-# JsonnetSnippet does.
-render() {
-  local src="$1"
+# JsonnetSnippet does. Each source is independent, so the whole set renders in
+# parallel across cores — one more workload is one more parallel unit.
+export MANDIR="$mandir"
+render_one() {
+  local src="$1" name
+  name="$(printf '%s' "${src%.*}" | tr '/' '-')"
   case "$src" in
     workloads/*/*.libsonnet)
       jsonnet -J vendor -e "(import 'github.com/metio/kurly/main.libsonnet').list((import '$src')())" ;;
     *)
       jsonnet -J vendor "$src" ;;
-  esac
+  esac | jq -c '.items[]' | split --lines=1 --additional-suffix=.json - "$MANDIR/$name-"
 }
-
-for source in examples/*.jsonnet workloads/*/*.libsonnet; do
-  name="$(printf '%s' "${source%.*}" | tr '/' '-')"
-  render "$source" \
-    | jq -c '.items[]' \
-    | split --lines=1 --additional-suffix=.json - "$mandir/$name-"
-done
+export -f render_one
+# shellcheck disable=SC2016
+printf '%s\n' examples/*.jsonnet workloads/*/*.libsonnet | xargs -P"$(nproc)" -I{} bash -c 'render_one "$1"' _ {}
 echo "rendered $(find "$mandir" -name '*.json' | wc -l) manifests"
 
 echo "== conftest (kurly Rego invariants) =="
@@ -93,26 +92,29 @@ pluto detect-files --directory "$mandir" --target-versions k8s=v1.31.0
 echo "== kubesec (security score of the hardened controllers) =="
 # The hardened examples score 7-11; a drop below this floor is a security
 # regression (a missing readOnlyRootFilesystem / dropped-capabilities / seccomp).
-threshold=6
-kubesec_failed=0
-for manifest in "$mandir"/*.json; do
+# kubesec scans one manifest at a time and is the slowest step, so the scans run
+# in parallel across cores — one more workload is one more parallel scan.
+export THRESHOLD=6
+score_one() {
+  local manifest="$1" score
   case "$manifest" in
-    *examples-legacy-* | *examples-cron-*) continue ;; # escape-hatch demos
+    *examples-legacy-* | *examples-cron-*) return 0 ;; # escape-hatch demos
   esac
   case "$(jq -r '.kind' "$manifest")" in
     Deployment | DaemonSet | CronJob | Pod) ;;
-    *) continue ;;
+    *) return 0 ;;
   esac
   score="$(kubesec scan "$manifest" | jq -r '.[0].score')"
-  if [ "$score" -lt "$threshold" ]; then
-    echo "  FAIL $(basename "$manifest") scored $score (< $threshold)" >&2
-    kubesec_failed=1
-  else
-    echo "  ok   $(basename "$manifest") scored $score"
+  if [ "$score" -lt "$THRESHOLD" ]; then
+    echo "  FAIL $(basename "$manifest") scored $score (< $THRESHOLD)" >&2
+    return 1
   fi
-done
-if [ "$kubesec_failed" -ne 0 ]; then
-  echo "kubesec: a hardened controller scored below $threshold" >&2
+  echo "  ok   $(basename "$manifest") scored $score"
+}
+export -f score_one
+# shellcheck disable=SC2016
+if ! printf '%s\n' "$mandir"/*.json | xargs -P"$(nproc)" -I{} bash -c 'score_one "$1"' _ {}; then
+  echo "kubesec: a hardened controller scored below $THRESHOLD" >&2
   exit 1
 fi
 
