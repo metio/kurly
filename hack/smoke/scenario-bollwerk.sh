@@ -67,8 +67,12 @@ for stage in workloads/*/*.libsonnet; do
     echo "  skip (render needs params) ${stage}"
     continue
   }
+  # Some workloads bake in their own namespace (metrics-server → kube-system,
+  # prometheus → monitoring). bollwerk is cluster-scoped and namespace-blind, so
+  # strip the namespace and admit everything into the one test namespace rather
+  # than standing up each workload's home namespace.
   subset="$(jq -c \
-    "{apiVersion: \"v1\", kind: \"List\", items: [.items[] | select(.kind | test(\"^(${governed})\$\"))]}" \
+    "{apiVersion: \"v1\", kind: \"List\", items: [.items[] | select(.kind | test(\"^(${governed})\$\")) | del(.metadata.namespace)]}" \
     <<<"$rendered")"
   [ "$(jq '.items | length' <<<"$subset")" -gt 0 ] || {
     echo "  skip (no governed kinds) ${stage}"
