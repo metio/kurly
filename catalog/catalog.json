@@ -2814,8 +2814,141 @@
          "summary": "A tiny HTTP service that answers every request with one fixed status code and message. Deploy it once, globally, and route protected paths to it from a Gateway API HTTPRoute (kurly.expose.guard) to take them off the public internet — the portable substitute for the fixed-response filter Gateway API lacks."
       },
       {
-         "id": "thanos-ruler",
+         "id": "thanos",
          "stages": [
+            {
+               "args": [
+                  {
+                     "default": "thanos-query",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "quay.io/thanos/thanos:v0.42.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": [
+                        "dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local"
+                     ],
+                     "name": "endpoints",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": [
+                        "prometheus_replica",
+                        "replica"
+                     ],
+                     "name": "queryReplicaLabels",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "extraArgs",
+                     "required": false,
+                     "type": "array"
+                  }
+               ],
+               "help": "The Thanos Querier (a plain `thanos query` Deployment + Service). endpoints are the StoreAPI targets it fans out to over gRPC (dnssrv+ resolves every replica); queryReplicaLabels deduplicate HA replicas. Serves the Prometheus API on :10902 (gRPC StoreAPI on :10901 for federation). Point a Grafana datasource or the query-frontend at it.",
+               "id": "query",
+               "importPath": "github.com/metio/kurly/workloads/thanos/query.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "thanos-query-frontend",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "quay.io/thanos/thanos:v0.42.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "http://thanos-query:10902",
+                     "name": "downstreamUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "extraArgs",
+                     "required": false,
+                     "type": "array"
+                  }
+               ],
+               "help": "The Thanos Query Frontend (a plain `thanos query-frontend` Deployment + Service): an optional layer that splits long-range queries, caches results (in-memory by default), and forwards to a downstream Querier. downstreamUrl defaults to a thanos-query Service on :10902 in the same namespace. For a shared cache, pass --query-range.response-cache-config-file via extraArgs and back it with the memcached or valkey workload.",
+               "id": "query-frontend",
+               "importPath": "github.com/metio/kurly/workloads/thanos/query-frontend.libsonnet",
+               "kind": "http"
+            },
             {
                "args": [
                   {
@@ -2906,13 +3039,13 @@
                      "type": "object"
                   }
                ],
-               "help": "The Thanos Ruler. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.",
-               "id": "server",
-               "importPath": "github.com/metio/kurly/workloads/thanos-ruler/server.libsonnet",
+               "help": "The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.",
+               "id": "ruler",
+               "importPath": "github.com/metio/kurly/workloads/thanos/ruler.libsonnet",
                "kind": "thanos-ruler"
             }
          ],
-         "summary": "A Thanos Ruler as a prometheus-operator `ThanosRuler` custom resource: it loads recording and alerting rules from PrometheusRule objects, evaluates them against Thanos Query (the global view, not one Prometheus), and sends firing alerts to Alertmanager. Authors the CR (like alertmanager) for the operator to reconcile into a StatefulSet and the `thanos-ruler-operated` Service. Requires the prometheus-operator installed."
+         "summary": "The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed."
       },
       {
          "id": "tik",

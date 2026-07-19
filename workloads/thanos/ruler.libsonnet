@@ -10,7 +10,7 @@
 // governing Service. Import it, adapt with the parameters below, and render with
 // kurly.list:
 //
-//   local ruler = import 'github.com/metio/kurly/workloads/thanos-ruler/server.libsonnet';
+//   local ruler = import 'github.com/metio/kurly/workloads/thanos/ruler.libsonnet';
 //   kurly.list(ruler(
 //     queryEndpoints=['dnssrv+_http._tcp.thanos-query.monitoring.svc.cluster.local'],
 //     alertmanagersUrl=['http://alertmanager-operated.monitoring.svc:9093'],

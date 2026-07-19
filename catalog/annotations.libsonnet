@@ -456,10 +456,37 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
-    'thanos-ruler': {
-      summary: 'A Thanos Ruler as a prometheus-operator `ThanosRuler` custom resource: it loads recording and alerting rules from PrometheusRule objects, evaluates them against Thanos Query (the global view, not one Prometheus), and sends firing alerts to Alertmanager. Authors the CR (like alertmanager) for the operator to reconcile into a StatefulSet and the `thanos-ruler-operated` Service. Requires the prometheus-operator installed.',
+    thanos: {
+      summary: 'The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed.',
       stages: {
-        server: d.fn('The Thanos Ruler. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.', [
+        query: d.fn('The Thanos Querier (a plain `thanos query` Deployment + Service). endpoints are the StoreAPI targets it fans out to over gRPC (dnssrv+ resolves every replica); queryReplicaLabels deduplicate HA replicas. Serves the Prometheus API on :10902 (gRPC StoreAPI on :10901 for federation). Point a Grafana datasource or the query-frontend at it.', [
+          d.arg('name', d.T.string, default='thanos-query'),
+          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('endpoints', d.T.array, default=[], example=['dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local']),
+          d.arg('queryReplicaLabels', d.T.array, default=['prometheus_replica', 'replica']),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('extraArgs', d.T.array, default=[]),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/thanos/query.libsonnet',
+        },
+        'query-frontend': d.fn('The Thanos Query Frontend (a plain `thanos query-frontend` Deployment + Service): an optional layer that splits long-range queries, caches results (in-memory by default), and forwards to a downstream Querier. downstreamUrl defaults to a thanos-query Service on :10902 in the same namespace. For a shared cache, pass --query-range.response-cache-config-file via extraArgs and back it with the memcached or valkey workload.', [
+          d.arg('name', d.T.string, default='thanos-query-frontend'),
+          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('downstreamUrl', d.T.string, default='http://thanos-query:10902'),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('extraArgs', d.T.array, default=[]),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/thanos/query-frontend.libsonnet',
+        },
+        ruler: d.fn('The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.', [
           d.arg('name', d.T.string, default='thanos-ruler'),
           d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
           d.arg('replicas', d.T.int, default=1),
@@ -475,7 +502,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('spec', d.T.object, default={}, example={ alertQueryUrl: 'https://thanos-ruler.example.com' }),
         ]) + {
           kind: 'thanos-ruler',
-          importPath: 'github.com/metio/kurly/workloads/thanos-ruler/server.libsonnet',
+          importPath: 'github.com/metio/kurly/workloads/thanos/ruler.libsonnet',
         },
       },
     },
