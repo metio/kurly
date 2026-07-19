@@ -21,6 +21,21 @@
 //   bollwerk.policies['015-disallow-privileged-containers']   // one [VAP, Binding]
 
 {
+  // The registries an image may be pulled from (policy 004). The BSI source pins
+  // its single private registry; this is a hidden field so a consumer overrides
+  // it for their environment — `bollwerk { allowedRegistries:: [...] }`. The
+  // default admits the public registries kurly's own workloads ship from, so
+  // kurly manifests pass 004 unmodified; an opencode.de deployment overrides it
+  // back to ['registry.opencode.de'].
+  allowedRegistries:: [
+    'docker.io',
+    'ghcr.io',
+    'quay.io',
+    'registry.k8s.io',
+    'gcr.io',
+    'codeberg.org',
+  ],
+
   // ---- shared matchConstraints resourceRules -----------------------------------
   local writeOps = ['CREATE', 'UPDATE'],
 
@@ -141,16 +156,24 @@
       }],
     }),
 
+    // The source tests `has(container.image.registry)`, but under native VAP
+    // `container.image` is a plain string with no `.registry` field — that
+    // selection does not compile. kurly always writes fully-qualified image refs
+    // (registry.example.com/repo:tag), so the robust native-VAP form is a string
+    // prefix against the allowed-registry list.
     '004-restrict-image-registries': $.policy('004', 'restrict-image-registries', {
       bsi: { requirement: 'SYS.1.6.A6', protection: 'basic', category: 'must' },
-      variables: [$.podSpecVar, $.containersVar],
+      variables: [
+        { name: 'allowedRegistries', expression: '[' + std.join(', ', ["'" + r + "'" for r in $.allowedRegistries]) + ']' },
+        $.podSpecVar,
+        $.containersVar,
+      ],
       action: 'Audit',
       validations: [{
         expression: |||
           variables.containers.all(container,
-            has(container.image.registry) ?
-            container.image.registry == 'registry.opencode.de' :
-            container.image.startsWith('registry.opencode.de/')
+            variables.allowedRegistries.exists(registry,
+              container.image.startsWith(registry + '/'))
           )
         |||,
         message: 'Unknown image registry.',
