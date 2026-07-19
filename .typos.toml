@@ -3,8 +3,10 @@
 [files]
 # docs/themes/metio is a separate submodule with its own CI, and alpine.min.js
 # is vendored third-party minified code — both trip the spell-checker on tokens
-# they don't own.
-extend-exclude = ["LICENSES/", "vendor/", "docs/themes/", "docs/static/js/alpine.min.js"]
+# they don't own. bollwerk.libsonnet carries the BSI policy messages verbatim from
+# the opencode.de source, some in German (als, oder, muss, …), which are content,
+# not typos; its README stays English and checked.
+extend-exclude = ["LICENSES/", "vendor/", "docs/themes/", "docs/static/js/alpine.min.js", "bollwerk/bollwerk.libsonnet"]
 
 # `edn` (Clojure's Extensible Data Notation) is the tik workload's config
 # format, not a typo of `end`.
