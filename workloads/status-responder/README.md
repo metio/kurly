@@ -60,6 +60,18 @@ catch-all `/` for those requests and is answered by the responder — everything
 else reaches etherpad. The workload's own Service is untouched, so internal
 clients (a `port-forward`, an in-cluster caller) still reach `/admin` directly.
 
+`guard` composes onto any Gateway API exposure — it adds rules to whichever one
+emits the HTTPRoute. Where the workload owns its listener on a shared Gateway
+rather than attaching to an existing one, `kurly.expose.ownListenerSet` fits the
+same way (the shared Gateway must opt in to ListenerSet attachment via
+`spec.allowedListeners`):
+
+```jsonnet
+kurly.http('etherpad', image)
++ kurly.expose.ownListenerSet('pad.example.com', 'shared-gw', gatewayNamespace='gateway-infra')
++ kurly.expose.guard(['/admin', '/stats'], 'not-found', serviceNamespace='shared-http-services')
+```
+
 When the responder lives in another namespace, the cross-namespace `backendRef`
 needs consent. Grant it here with `kurly.expose.referenceGrant`, naming the
 namespaces allowed to route to this Service:
