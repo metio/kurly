@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Bollwerk conformance e2e: installs the bollwerk ValidatingAdmissionPolicies into
+# a throwaway kind cluster and proves every pod-bearing kurly workload admits under
+# them (with a privileged pod and a default-ServiceAccount pod as deny controls) —
+# so "kurly runs with bollwerk installed" is checked against a real apiserver, not
+# just rendered. Self-gates on a diff touching bollwerk, any workload, the shared
+# library, or the e2e machinery — a change to the base posture or any single
+# workload can break conformance, so all of them are in scope. Fast (admission-only
+# dry-runs, no operators), so the newest k8s minor only.
+name: E2E bollwerk
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bollwerk:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: bollwerk
+      paths: '^(bollwerk/|workloads/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-bollwerk)\.sh|\.github/workflows/e2e(-bollwerk)?\.yml)'
+      scenario: hack/smoke/scenario-bollwerk.sh
+      max_versions: '1'
