@@ -45,6 +45,7 @@ local stageImports = {
   'baikal/server': import 'github.com/metio/kurly/workloads/baikal/server.libsonnet',
   'passwordpusher/server': import 'github.com/metio/kurly/workloads/passwordpusher/server.libsonnet',
   'inspircd/server': import 'github.com/metio/kurly/workloads/inspircd/server.libsonnet',
+  'ejabberd/server': import 'github.com/metio/kurly/workloads/ejabberd/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
