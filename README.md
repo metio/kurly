@@ -15,7 +15,7 @@ kind (`http`, `worker`, `cron`, `daemon`), then add capabilities as composable
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 kurly.list(
-  kurly.http('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.30')
+  kurly.http('storefront', 'docker.io/nginxinc/nginx-unprivileged:1.31')
   + kurly.replicas(3)
   + kurly.expose.gateway('storefront.example.com', 'shared-gateway')
 )
