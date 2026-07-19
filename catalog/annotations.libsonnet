@@ -387,6 +387,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    maybe: {
+      summary: 'A Maybe server (a self-hosted personal finance and net-worth manager) backed by an external PostgreSQL and Redis, with Active Storage uploads on a PersistentVolume. Pairs with a cnpg-cluster named maybe-db and a valkey named maybe-cache. The Rails app writes under /rails, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; POSTGRES_PASSWORD and SECRET_KEY_BASE come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Maybe server. dbHost/dbName/dbUser default to a cnpg-cluster named maybe-db; redisHost to a valkey named maybe-cache. secretName holds POSTGRES_PASSWORD and SECRET_KEY_BASE (envFrom). Uploads at /rails/storage. A separate Sidekiq worker can be added. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='maybe'),
+          d.arg('image', d.T.string, default='ghcr.io/maybe-finance/maybe:0.1.0-alpha.6'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='maybe-db-rw'),
+          d.arg('dbName', d.T.string, default='maybe'),
+          d.arg('dbUser', d.T.string, default='maybe'),
+          d.arg('redisHost', d.T.string, default='maybe-cache'),
+          d.arg('secretName', d.T.string, default='maybe-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/maybe/server.libsonnet' },
+      },
+    },
     mautic: {
       summary: 'A Mautic server (open-source marketing automation) on the official Apache image, backed by an external MySQL/MariaDB, with configuration and media on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MAUTIC_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {

@@ -4213,6 +4213,102 @@
          "summary": "A Mautic server (open-source marketing automation) on the official Apache image, backed by an external MySQL/MariaDB, with configuration and media on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MAUTIC_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "maybe",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "maybe",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/maybe-finance/maybe:0.1.0-alpha.6",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "maybe-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "maybe",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "maybe",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "maybe-cache",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "maybe-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "200m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Maybe server. dbHost/dbName/dbUser default to a cnpg-cluster named maybe-db; redisHost to a valkey named maybe-cache. secretName holds POSTGRES_PASSWORD and SECRET_KEY_BASE (envFrom). Uploads at /rails/storage. A separate Sidekiq worker can be added. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/maybe/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Maybe server (a self-hosted personal finance and net-worth manager) backed by an external PostgreSQL and Redis, with Active Storage uploads on a PersistentVolume. Pairs with a cnpg-cluster named maybe-db and a valkey named maybe-cache. The Rails app writes under /rails, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; POSTGRES_PASSWORD and SECRET_KEY_BASE come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
          "id": "memcached",
          "stages": [
             {
