@@ -1,0 +1,53 @@
+<!--
+SPDX-FileCopyrightText: The kurly Authors
+SPDX-License-Identifier: 0BSD
+-->
+
+# endurain
+
+[Endurain](https://github.com/joaovitoriasilva/endurain) — a self-hosted fitness
+and training-activity tracker. A plain composable `kurly.http` workload backed by
+an external PostgreSQL and Redis, with its uploaded activity files and photos on a
+PersistentVolume.
+
+## Compose
+
+```jsonnet
+local kurly = import 'github.com/metio/kurly/main.libsonnet';
+local endurain = import 'github.com/metio/kurly/workloads/endurain/server.libsonnet';
+local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
+local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
+
+kurly.listOf(kurly.join([
+  kurly.list(cnpg(name='endurain-db', database='endurain')).items,
+  kurly.list(valkey(name='endurain-cache')).items,
+  kurly.list(endurain(endurainHost='https://fitness.example.com')).items,
+]))
+```
+
+| Parameter | Default | Notes |
+|---|---|---|
+| `name` | `endurain` | |
+| `image` | `ghcr.io/joaovitoriasilva/endurain:0.17.7` | |
+| `storageSize` / `storageClass` | `5Gi` / cluster default | uploads (`/app/backend/app`) |
+| `dbHost` / `dbName` / `dbUser` | `endurain-db-rw` / `endurain` / `endurain` | the PostgreSQL database |
+| `redisHost` | `endurain-cache` | the Redis/valkey Service |
+| `endurainHost` | inferred | the public URL |
+| `secretName` | `endurain-secrets` | Secret with `DB_PASSWORD` and `SECRET_KEY` (envFrom) |
+| `env` / `resources` / `labels` / `annotations` | | |
+
+Serves the web app and API on `:8080` — compose an exposure onto it.
+
+## Database, cache, and secrets
+
+Endurain reads its database and cache coordinates and its `SECRET_KEY` from the
+environment. The non-secret coordinates default to a [cnpg-cluster](../cnpg-cluster/)
+named `endurain-db` and a [valkey](../valkey/) `cache` named `endurain-cache`; the
+sensitive values (`DB_PASSWORD`, `SECRET_KEY`) come from a provided Secret via
+`envFrom`. kurly authors **no Secret** — fill `endurain-secrets` with
+[`kurly.externalSecret`](../../main.libsonnet).
+
+## Persistence
+
+Uploaded files and photos live on a ReadWriteOnce volume, so this is **one replica,
+recreated**.
