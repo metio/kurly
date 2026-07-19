@@ -387,6 +387,22 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    flatnotes: {
+      summary: 'A flatnotes server (a self-hosted, database-less note-taking app that stores everything as flat markdown files) on the official image. A plain composable http workload — your notes live on a PersistentVolume, no external database. kurly authors no Secret; the username, password, and secret key come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
+      stages: {
+        server: d.fn('The flatnotes server. Notes live at /data on the volume. secretName holds FLATNOTES_USERNAME, FLATNOTES_PASSWORD, and FLATNOTES_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='flatnotes'),
+          d.arg('image', d.T.string, default='docker.io/dullage/flatnotes:v5.5.4'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='flatnotes-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/flatnotes/server.libsonnet' },
+      },
+    },
     trilium: {
       summary: 'A TriliumNext Notes server (a hierarchical note-taking application for building personal knowledge bases) on the official image. A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :8080.',
       stages: {

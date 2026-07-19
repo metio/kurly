@@ -3530,6 +3530,78 @@
          "summary": "An ExpenseOwl server (a simple, self-hosted expense tracker). A plain composable http workload that keeps its expenses in a file-backed store on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080."
       },
       {
+         "id": "flatnotes",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "flatnotes",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/dullage/flatnotes:v5.5.4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "flatnotes-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "25m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The flatnotes server. Notes live at /data on the volume. secretName holds FLATNOTES_USERNAME, FLATNOTES_PASSWORD, and FLATNOTES_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/flatnotes/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A flatnotes server (a self-hosted, database-less note-taking app that stores everything as flat markdown files) on the official image. A plain composable http workload — your notes live on a PersistentVolume, no external database. kurly authors no Secret; the username, password, and secret key come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
+      },
+      {
          "id": "forgejo",
          "stages": [
             {
