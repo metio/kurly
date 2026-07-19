@@ -3964,6 +3964,84 @@
             }
          ],
          "summary": "A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image."
+      },
+      {
+         "id": "vaultwarden",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "vaultwarden",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/vaultwarden/server:1.36.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://vault.example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": false,
+                     "name": "signupsAllowed",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Vaultwarden server. domain is the public URL — WebAuthn/passkeys, attachment links, and email all need it. signupsAllowed is off by default (turn on to bootstrap, then off). env carries extra settings (ADMIN_TOKEN, SMTP_*, or DATABASE_URL to move to external Postgres) — the admin token and any DB password should come from a Secret, kurly mints none. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/vaultwarden/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080."
       }
    ]
 }

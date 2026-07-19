@@ -359,6 +359,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    vaultwarden: {
+      summary: 'A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080.',
+      stages: {
+        server: d.fn("The Vaultwarden server. domain is the public URL — WebAuthn/passkeys, attachment links, and email all need it. signupsAllowed is off by default (turn on to bootstrap, then off). env carries extra settings (ADMIN_TOKEN, SMTP_*, or DATABASE_URL to move to external Postgres) — the admin token and any DB password should come from a Secret, kurly mints none. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='vaultwarden'),
+          d.arg('image', d.T.string, default='docker.io/vaultwarden/server:1.36.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('domain', d.T.string, example='https://vault.example.com'),
+          d.arg('signupsAllowed', d.T.bool, default=false),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/vaultwarden/server.libsonnet',
+        },
+      },
+    },
     forgejo: {
       summary: 'A Forgejo Git forge (a maintained Gitea fork): repository hosting, issues, pull requests, and a package registry. A plain composable http workload on the rootless image, with its data on a PersistentVolume and its database external — pairs with the cnpg-cluster workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI/git-over-HTTP on :3000 and git-over-SSH on :2222.',
       stages: {
