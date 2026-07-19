@@ -594,6 +594,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    tempo: {
+      summary: 'Grafana Tempo as a tempo-operator `TempoStack` custom resource: one CR reconciles the whole distributed tracing backend (distributor, ingester, querier, query-frontend, compactor) over object storage. Authors the CR (the same shape as loki) for the operator to own the components, config, and Services. Requires the tempo-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3 and the otel-collector workload for span ingestion.',
+      stages: {
+        server: d.fn("The TempoStack. storageSecret names the object-storage Secret you create (keys bucket/endpoint/access_key_id/access_key_secret) — point it at the seaweedfs workload's S3. storageSize is the per-component PVC. The operator chooses the Tempo image, so there is none to pin. Send spans to tempo-<name>-distributor (OTLP :4317/:4318) and read them from Grafana via tempo-<name>-query-frontend:3200.", [
+          d.arg('name', d.T.string, default='tempo'),
+          d.arg('storageSecret', d.T.string, default='tempo-storage'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('spec', d.T.object, default={}, example={ replicationFactor: 2 }),
+        ]) + {
+          kind: 'tempo',
+          importPath: 'github.com/metio/kurly/workloads/tempo/server.libsonnet',
+        },
+      },
+    },
     prometheus: {
       summary: 'A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace.',
       stages: {
