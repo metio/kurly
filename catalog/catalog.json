@@ -2260,6 +2260,216 @@
          "summary": "A Baikal server (a lightweight CalDAV + CardDAV server on sabre/dav) on the maintained ckulka image. A plain composable http workload that keeps its configuration and SQLite database on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "bigcapital",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "bigcapital",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/bigcapitalhq/gateway:v0.25.23",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Bigcapital nginx entry on :80 — the stage you expose. Routes the browser to the webapp and /api to the server, which it reaches by Service names derived from namePrefix. Compose an exposure onto it.",
+               "id": "gateway",
+               "importPath": "github.com/metio/kurly/workloads/bigcapital/gateway.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "bigcapital",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/bigcapitalhq/server:v0.25.23",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "bigcapital-mariadb",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "bigcapital",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "bigcapital-mongo",
+                     "name": "mongoHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "bigcapital-cache",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://accounting.example.com",
+                     "name": "baseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "bigcapital-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "200m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/bigcapital/server.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "bigcapital",
+                     "name": "namePrefix",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/bigcapitalhq/webapp:v0.25.23",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Bigcapital front end (single-page web app) on :80. Stateless — scales via replicas. The gateway proxies to it.",
+               "id": "webapp",
+               "importPath": "github.com/metio/kurly/workloads/bigcapital/webapp.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom."
+      },
+      {
          "id": "blackbox-exporter",
          "stages": [
             {
