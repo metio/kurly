@@ -63,6 +63,7 @@ local stageImports = {
   'overleaf/server': import 'github.com/metio/kurly/workloads/overleaf/server.libsonnet',
   'memos/server': import 'github.com/metio/kurly/workloads/memos/server.libsonnet',
   'ntfy/server': import 'github.com/metio/kurly/workloads/ntfy/server.libsonnet',
+  'gotify/server': import 'github.com/metio/kurly/workloads/gotify/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
