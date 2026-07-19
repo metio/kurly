@@ -258,7 +258,12 @@ for stage in workloads/*/*.libsonnet; do
   rendered="$(jsonnet -J vendor -e \
     "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')(name='kurlytest'))")" \
     || { echo "::error::${stage}: does not take a name parameter" >&2; exit 1; }
-  strays="$(printf '%s' "$rendered" | jq -r '[.items[] | select(.metadata.name | startswith("kurlytest") | not) | "\(.kind)/\(.metadata.name)"] | join(" ")')"
+  # APIService is exempt: the aggregation layer mandates its name be exactly
+  # `<version>.<group>` (metrics-server registers v1beta1.metrics.k8s.io), so it
+  # cannot carry the workload name. The invariant's reasons do not apply — an
+  # APIService is cluster-scoped and singleton, and its name is the API it serves
+  # (a role, not an engine).
+  strays="$(printf '%s' "$rendered" | jq -r '[.items[] | select(.kind != "APIService") | select(.metadata.name | startswith("kurlytest") | not) | "\(.kind)/\(.metadata.name)"] | join(" ")')"
   if [ -n "$strays" ]; then
     echo "::error::${stage}: object(s) kept a name of their own after name=kurlytest: ${strays}" >&2
     exit 1

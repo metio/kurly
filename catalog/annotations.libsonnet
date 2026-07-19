@@ -677,6 +677,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'metrics-server': {
+      summary: "The Kubernetes Metrics Server: it scrapes CPU/memory usage from every node's kubelet and serves it through the aggregated metrics.k8s.io API — what kubectl top and Horizontal Pod Autoscalers read. A plain composable http workload that registers an APIService and carries the aggregation RBAC (ServiceAccount, ClusterRoles/Bindings, the kube-system auth-reader RoleBinding).",
+      stages: {
+        server: d.fn('The metrics server. namespace MUST match where you deploy — the APIService and cluster RBAC name the ServiceAccount by namespace, which cluster-scoped objects cannot inherit later; kube-system is conventional. kubeletInsecureTLS=true skips verifying the kubelet serving cert (needed on kind and many on-prem clusters, or every scrape fails the TLS handshake).', [
+          d.arg('name', d.T.string, default='metrics-server'),
+          d.arg('namespace', d.T.string, default='kube-system'),
+          d.arg('image', d.T.string, default='registry.k8s.io/metrics-server/metrics-server:v0.8.1'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('kubeletInsecureTLS', d.T.bool, default=false),
+          d.arg('metricResolution', d.T.string, default='15s'),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '200Mi' }, limits: { memory: '400Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/metrics-server/server.libsonnet',
+        },
+      },
+    },
     opencost: {
       summary: 'OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source.',
       stages: {

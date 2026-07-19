@@ -2592,6 +2592,80 @@
          "summary": "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace."
       },
       {
+         "id": "metrics-server",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "metrics-server",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "kube-system",
+                     "name": "namespace",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "registry.k8s.io/metrics-server/metrics-server:v0.8.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": false,
+                     "name": "kubeletInsecureTLS",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "default": "15s",
+                     "name": "metricResolution",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "400Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "200Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The metrics server. namespace MUST match where you deploy — the APIService and cluster RBAC name the ServiceAccount by namespace, which cluster-scoped objects cannot inherit later; kube-system is conventional. kubeletInsecureTLS=true skips verifying the kubelet serving cert (needed on kind and many on-prem clusters, or every scrape fails the TLS handshake).",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/metrics-server/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "The Kubernetes Metrics Server: it scrapes CPU/memory usage from every node's kubelet and serves it through the aggregated metrics.k8s.io API — what kubectl top and Horizontal Pod Autoscalers read. A plain composable http workload that registers an APIService and carries the aggregation RBAC (ServiceAccount, ClusterRoles/Bindings, the kube-system auth-reader RoleBinding)."
+      },
+      {
          "id": "opencost",
          "stages": [
             {

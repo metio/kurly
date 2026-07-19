@@ -43,6 +43,7 @@ local stageImports = {
   'grafana/server': import 'github.com/metio/kurly/workloads/grafana/server.libsonnet',
   'prometheus/server': import 'github.com/metio/kurly/workloads/prometheus/server.libsonnet',
   'opencost/server': import 'github.com/metio/kurly/workloads/opencost/server.libsonnet',
+  'metrics-server/server': import 'github.com/metio/kurly/workloads/metrics-server/server.libsonnet',
   'seaweedfs/server': import 'github.com/metio/kurly/workloads/seaweedfs/server.libsonnet',
   'seaweedfs/master': import 'github.com/metio/kurly/workloads/seaweedfs/master.libsonnet',
   'seaweedfs/volume': import 'github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet',
