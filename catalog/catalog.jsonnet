@@ -51,6 +51,7 @@ local stageImports = {
   'wger/server': import 'github.com/metio/kurly/workloads/wger/server.libsonnet',
   'paperless-ngx/server': import 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet',
   'invoiceninja/server': import 'github.com/metio/kurly/workloads/invoiceninja/server.libsonnet',
+  'mautic/server': import 'github.com/metio/kurly/workloads/mautic/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
