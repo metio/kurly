@@ -456,6 +456,29 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'thanos-ruler': {
+      summary: 'A Thanos Ruler as a prometheus-operator `ThanosRuler` custom resource: it loads recording and alerting rules from PrometheusRule objects, evaluates them against Thanos Query (the global view, not one Prometheus), and sends firing alerts to Alertmanager. Authors the CR (like alertmanager) for the operator to reconcile into a StatefulSet and the `thanos-ruler-operated` Service. Requires the prometheus-operator installed.',
+      stages: {
+        server: d.fn('The Thanos Ruler. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.', [
+          d.arg('name', d.T.string, default='thanos-ruler'),
+          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('queryEndpoints', d.T.array, default=[], example=['dnssrv+_http._tcp.thanos-query.monitoring.svc.cluster.local']),
+          d.arg('alertmanagersUrl', d.T.array, default=[], example=['http://alertmanager-operated.monitoring.svc:9093']),
+          d.arg('ruleSelector', d.T.object, default={}),
+          d.arg('ruleNamespaceSelector', d.T.object, default={}),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+          d.arg('spec', d.T.object, default={}, example={ alertQueryUrl: 'https://thanos-ruler.example.com' }),
+        ]) + {
+          kind: 'thanos-ruler',
+          importPath: 'github.com/metio/kurly/workloads/thanos-ruler/server.libsonnet',
+        },
+      },
+    },
     grafana: {
       summary: 'A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed.',
       stages: {

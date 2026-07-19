@@ -2814,6 +2814,107 @@
          "summary": "A tiny HTTP service that answers every request with one fixed status code and message. Deploy it once, globally, and route protected paths to it from a Gateway API HTTPRoute (kurly.expose.guard) to take them off the public internet — the portable substitute for the fixed-response filter Gateway API lacks."
       },
       {
+         "id": "thanos-ruler",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "thanos-ruler",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "quay.io/thanos/thanos:v0.42.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": [
+                        "dnssrv+_http._tcp.thanos-query.monitoring.svc.cluster.local"
+                     ],
+                     "name": "queryEndpoints",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "example": [
+                        "http://alertmanager-operated.monitoring.svc:9093"
+                     ],
+                     "name": "alertmanagersUrl",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "ruleSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "ruleNamespaceSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "example": {
+                        "alertQueryUrl": "https://thanos-ruler.example.com"
+                     },
+                     "name": "spec",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Thanos Ruler. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/thanos-ruler/server.libsonnet",
+               "kind": "thanos-ruler"
+            }
+         ],
+         "summary": "A Thanos Ruler as a prometheus-operator `ThanosRuler` custom resource: it loads recording and alerting rules from PrometheusRule objects, evaluates them against Thanos Query (the global view, not one Prometheus), and sends firing alerts to Alertmanager. Authors the CR (like alertmanager) for the operator to reconcile into a StatefulSet and the `thanos-ruler-operated` Service. Requires the prometheus-operator installed."
+      },
+      {
          "id": "tik",
          "stages": [
             {
