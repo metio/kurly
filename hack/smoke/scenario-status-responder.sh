@@ -54,6 +54,22 @@ fail() {
   exit 1
 }
 
+# Polls an HTTPRoute's Accepted condition. It lives under status.parents[] (one
+# set of conditions per attached parent), not the top-level status.conditions that
+# `kubectl wait --for=condition=Accepted` reads — so kubectl wait can never see it.
+# A route parented to a ListenerSet reports Accepted here only once that parent
+# admits it, so this doubles as the ListenerSet-attachment check.
+route_accepted() {
+  local ns=$1 name=$2 i acc
+  for i in $(seq 1 24); do
+    acc="$(kubectl --namespace="$ns" get httproute "$name" \
+      -o jsonpath='{.status.parents[0].conditions[?(@.type=="Accepted")].status}' 2>/dev/null || true)"
+    [ "$acc" = "True" ] && return 0
+    sleep 5
+  done
+  return 1
+}
+
 echo "== install the Gateway API ${GATEWAY_API_VERSION} STANDARD-channel CRDs =="
 # kurly targets the Gateway API stable channel, latest release — so the cluster
 # gets exactly the standard-channel CRDs, never the experimental ones. A manifest
@@ -175,7 +191,7 @@ jsonnet -J vendor -e \
   | kubectl apply --namespace="$app_ns" --filename=-
 kubectl --namespace="$app_ns" rollout status deployment/app --timeout=180s \
   || fail "the app never became Available"
-kubectl --namespace="$app_ns" wait --for=condition=Accepted httproute/app --timeout=120s \
+route_accepted "$app_ns" app \
   || fail "the app HTTPRoute was not Accepted by the gateway"
 
 echo "== a client pod to drive traffic =="
@@ -254,10 +270,11 @@ jsonnet -J vendor -e \
   | kubectl apply --namespace="$app_ns" --filename=-
 kubectl --namespace="$app_ns" rollout status deployment/owned-app --timeout=180s \
   || fail "the ownListenerSet app never became Available"
-kubectl --namespace="$app_ns" wait --for=condition=Accepted listenerset/owned-app --timeout=120s \
-  || fail "the ListenerSet was not Accepted by the shared Gateway — the allowedListeners opt-in or the attachment is broken"
-kubectl --namespace="$app_ns" wait --for=condition=Accepted httproute/owned-app --timeout=120s \
-  || fail "the ownListenerSet HTTPRoute was not Accepted"
+# The route parents to the generated ListenerSet, so Accepted here means the
+# ListenerSet admitted it; the traffic check below proves the ListenerSet's
+# listener is actually programmed on the shared Gateway and routes.
+route_accepted "$app_ns" owned-app \
+  || fail "the ownListenerSet HTTPRoute was not Accepted — the ListenerSet did not admit it (check the Gateway's allowedListeners opt-in)"
 
 owned=false
 for _ in $(seq 1 24); do
