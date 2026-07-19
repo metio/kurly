@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    memos: {
+      summary: 'A Memos server (a lightweight, self-hosted notes and micro-blogging service). A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :5230.',
+      stages: {
+        server: d.fn('The Memos server. Keeps notes in SQLite at /var/opt/memos on the volume. Point MEMOS_DRIVER at external PostgreSQL through env to scale past SQLite. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='memos'),
+          d.arg('image', d.T.string, default='docker.io/neosmemo/memos:0.29.1'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/memos/server.libsonnet' },
+      },
+    },
     overleaf: {
       summary: 'An Overleaf server (the Community Edition of the collaborative LaTeX editor) on the official monolith image, backed by an external MongoDB (a replica set — it uses transactions) and Redis, with projects and compiles on a PersistentVolume. kurly ships no MongoDB recipe; bring your own (Redis can be the valkey workload). The image spawns TeX compiles and writes across the root filesystem, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; OVERLEAF_MONGO_URL comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
