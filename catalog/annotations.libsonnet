@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    homer: {
+      summary: 'A Homer server (a simple, static dashboard for your self-hosted services) on the official image. A plain composable http workload — its configuration and custom assets live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the dashboard on :8080.',
+      stages: {
+        server: d.fn('The Homer server. Configuration and custom assets live at /www/assets on the volume (edit config.yml there; the image seeds defaults via INIT_ASSETS). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='homer'),
+          d.arg('image', d.T.string, default='docker.io/b4bz/homer:v26.4.2'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '64Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/homer/server.libsonnet' },
+      },
+    },
     excalidraw: {
       summary: 'An Excalidraw server (a virtual hand-drawn-style whiteboard) on the official image. Excalidraw is a client-side app — the container serves static assets and drawings live in the browser — so this workload is stateless and scales via replicas. The nginx image binds :80 as root, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Serves on :80.',
       stages: {

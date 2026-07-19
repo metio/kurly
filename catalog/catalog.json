@@ -3571,6 +3571,72 @@
          "summary": "A Homebox server (a simple home/household inventory and asset manager). A plain composable http workload on the rootless image that keeps its inventory in SQLite and attachments on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :7745."
       },
       {
+         "id": "homer",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "homer",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/b4bz/homer:v26.4.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "64Mi"
+                        },
+                        "requests": {
+                           "cpu": "25m",
+                           "memory": "32Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Homer server. Configuration and custom assets live at /www/assets on the volume (edit config.yml there; the image seeds defaults via INIT_ASSETS). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/homer/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Homer server (a simple, static dashboard for your self-hosted services) on the official image. A plain composable http workload — its configuration and custom assets live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the dashboard on :8080."
+      },
+      {
          "id": "inspircd",
          "stages": [
             {
