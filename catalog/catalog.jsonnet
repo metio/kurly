@@ -37,6 +37,7 @@ local stageImports = {
   'actualbudget/server': import 'github.com/metio/kurly/workloads/actualbudget/server.libsonnet',
   'homebox/server': import 'github.com/metio/kurly/workloads/homebox/server.libsonnet',
   'expenseowl/server': import 'github.com/metio/kurly/workloads/expenseowl/server.libsonnet',
+  'radicale/server': import 'github.com/metio/kurly/workloads/radicale/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
