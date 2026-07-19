@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    beszel: {
+      summary: 'A Beszel hub (a lightweight server-monitoring dashboard) on the official image. A plain composable http workload that keeps its data in SQLite on a PersistentVolume — no external database. Beszel agents run on the monitored machines and report to this hub. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090.',
+      stages: {
+        server: d.fn('The Beszel hub. Keeps its SQLite data at /beszel_data on the volume. Compose an exposure onto the HTTP port; agents on monitored hosts report to it.', [
+          d.arg('name', d.T.string, default='beszel'),
+          d.arg('image', d.T.string, default='ghcr.io/henrygd/beszel/beszel:0.18.7'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/beszel/server.libsonnet' },
+      },
+    },
     audiobookshelf: {
       summary: 'An Audiobookshelf server (a self-hosted audiobook and podcast server) on the official image. A plain composable http workload that keeps its config, metadata, and library on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
