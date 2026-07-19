@@ -70,9 +70,14 @@ echo "== install the Envoy Gateway CRDs =="
 # EG's own CRDs only (the Gateway API set is installed above). EG 1.8 templates
 # its CRDs into the release manifest, and gzip'd they too overflow Helm's 1 MiB
 # release Secret — so render them and apply with kubectl, no release object and no
-# size cap, the same way the Gateway API CRDs went on.
-helm template eg-crds oci://docker.io/envoyproxy/gateway-crds-helm \
-  --version "$ENVOY_GATEWAY_VERSION" \
+# size cap, the same way the Gateway API CRDs went on. Pull first and template the
+# LOCAL copy: `helm template` on an OCI ref writes "Pulled:"/"Digest:" to stdout,
+# which would land in the pipe as a bogus YAML document (no kind) that kubectl
+# rejects.
+eg_crds="$(mktemp -d)"
+helm pull oci://docker.io/envoyproxy/gateway-crds-helm --version "$ENVOY_GATEWAY_VERSION" \
+  --destination "$eg_crds" --untar
+helm template eg-crds "$eg_crds/gateway-crds-helm" \
   --set crds.gatewayAPI.enabled=false \
   --set crds.envoyGateway.enabled=true \
   | kubectl apply --server-side -f -
