@@ -387,6 +387,24 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    etherpad: {
+      summary: 'An Etherpad server (a real-time collaborative document editor) on the official image, backed by an external PostgreSQL. Its documents live in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named etherpad-db. kurly authors no Secret; DB_PASS, ADMIN_PASSWORD, and APIKEY come from a provided Secret via envFrom. Serves on :9001.',
+      stages: {
+        server: d.fn('The Etherpad server. dbHost/dbName/dbUser default to a cnpg-cluster named etherpad-db. secretName holds DB_PASS, ADMIN_PASSWORD, and APIKEY (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='etherpad'),
+          d.arg('image', d.T.string, default='docker.io/etherpad/etherpad:3.3.2'),
+          d.arg('dbHost', d.T.string, default='etherpad-db-rw'),
+          d.arg('dbName', d.T.string, default='etherpad'),
+          d.arg('dbUser', d.T.string, default='etherpad'),
+          d.arg('secretName', d.T.string, default='etherpad-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/etherpad/server.libsonnet' },
+      },
+    },
     hedgedoc: {
       summary: 'A HedgeDoc server (real-time, collaborative markdown notes) on the official image, backed by an external PostgreSQL, with uploaded files on a PersistentVolume. Pairs with a cnpg-cluster named hedgedoc-db. kurly authors no Secret; CMD_DB_URL and CMD_SESSION_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

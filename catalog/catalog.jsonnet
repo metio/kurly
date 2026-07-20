@@ -90,6 +90,7 @@ local stageImports = {
   'vikunja/server': import 'github.com/metio/kurly/workloads/vikunja/server.libsonnet',
   'dex/server': import 'github.com/metio/kurly/workloads/dex/server.libsonnet',
   'hedgedoc/server': import 'github.com/metio/kurly/workloads/hedgedoc/server.libsonnet',
+  'etherpad/server': import 'github.com/metio/kurly/workloads/etherpad/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
