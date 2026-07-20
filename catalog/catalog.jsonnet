@@ -118,6 +118,8 @@ local stageImports = {
   'fider/server': import 'github.com/metio/kurly/workloads/fider/server.libsonnet',
   'monica/server': import 'github.com/metio/kurly/workloads/monica/server.libsonnet',
   'wallabag/server': import 'github.com/metio/kurly/workloads/wallabag/server.libsonnet',
+  'glitchtip/server': import 'github.com/metio/kurly/workloads/glitchtip/server.libsonnet',
+  'glitchtip/worker': import 'github.com/metio/kurly/workloads/glitchtip/worker.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',

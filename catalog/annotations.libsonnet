@@ -1500,6 +1500,34 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    glitchtip: {
+      summary: 'A GlitchTip deployment (an open-source, Sentry-compatible error-tracking and performance-monitoring platform) as two stages — server (the web/ingest API) and worker (the Celery worker with beat) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named glitchtip-db and a valkey named glitchtip-cache. kurly authors no Secret; DATABASE_URL and SECRET_KEY come from a provided Secret via envFrom. The server is stateless and scales via replicas.',
+      stages: {
+        server: d.fn('The GlitchTip web/ingest API on :8080. redisHost defaults to a valkey named glitchtip-cache; domain is the public URL. secretName holds DATABASE_URL (with the DB password) and SECRET_KEY (envFrom). Run a worker alongside. Scales via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='glitchtip'),
+          d.arg('image', d.T.string, default='docker.io/glitchtip/glitchtip:v6.2.2'),
+          d.arg('redisHost', d.T.string, default='glitchtip-cache'),
+          d.arg('domain', d.T.string, example='https://errors.example.com'),
+          d.arg('secretName', d.T.string, default='glitchtip-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/glitchtip/server.libsonnet' },
+        worker: d.fn('The GlitchTip Celery worker (with beat scheduler), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs ./bin/run-celery-with-beat.sh. Scales horizontally via replicas. A GlitchTip deployment needs at least one.', [
+          d.arg('name', d.T.string, default='glitchtip-worker'),
+          d.arg('image', d.T.string, default='docker.io/glitchtip/glitchtip:v6.2.2'),
+          d.arg('redisHost', d.T.string, default='glitchtip-cache'),
+          d.arg('secretName', d.T.string, default='glitchtip-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/glitchtip/worker.libsonnet' },
+      },
+    },
     wallabag: {
       summary: 'A wallabag server (a self-hosted read-it-later app that saves clean, readable copies of web pages) on the official image, backed by an external PostgreSQL, with saved images on a PersistentVolume. Pairs with a cnpg-cluster named wallabag-db. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the DB password and app secret come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
