@@ -17,25 +17,29 @@ function(name, image)
     local this = self,
     config+:: { replicas: 1 },
 
-    // The store's storage is per-pod via volumeClaimTemplates, so there is no
-    // single owned PVC to place — drop it.
+    // The stores' storage is per-pod via volumeClaimTemplates, so there is no
+    // single owned PVC to place — drop both handles.
     storeClaim:: null,
+    storeClaims:: [],
 
     statefulset:
       local cfg = self.config;
       // Captured before the nested literals below, where `self` would rebind.
       local containers = self.podContainers;
-      // The store's volume is supplied by the template; keep every other volume.
-      local nonStoreVolumes = [v for v in self.volumes if v.name != 'store'];
+      // The stores' volumes are supplied by the templates; keep every other volume
+      // (config, secrets, scratch — none of which are PVC-backed).
+      local nonStoreVolumes = [v for v in self.volumes if !std.objectHas(v, 'persistentVolumeClaim')];
       local podSpec =
         self.podSecurity
         + (if nonStoreVolumes == [] then {} else { volumes: nonStoreVolumes })
         + self.podScheduling
         + self.podExtras
         + { containers: containers };
-      local volumeClaimTemplates =
-        if cfg.store == null then []
-        else [{
+      // The first store keeps the historical template name 'store'; additional
+      // stores are named after their mount path, matching the pod's mount names.
+      local storeVol(i, s) = if i == 0 then 'store' else base.volumeName(s.mountPath);
+      local volumeClaimTemplates = [
+        {
           // Annotations reach the claim here exactly as they do on the Deployment
           // path: several CSI drivers take their configuration through PVC
           // annotations alone, so losing them provisions a different volume
@@ -47,14 +51,16 @@ function(name, image)
           // and make the next `kubectl apply` fail — a breaking change bought
           // for decoration. Annotations only change the template of a consumer
           // who asked for them, and who is getting nothing today.
-          metadata: { name: 'store' } + base.storeAnnotations(cfg.store),
+          metadata: { name: storeVol(i, cfg.stores[i]) } + base.storeAnnotations(cfg.stores[i]),
           spec: std.prune({
-            accessModes: cfg.store.accessModes,
-            resources: { requests: { storage: cfg.store.size } },
-            storageClassName: cfg.store.storageClass,
-            selector: (if cfg.store.selector == {} then null else cfg.store.selector),
+            accessModes: cfg.stores[i].accessModes,
+            resources: { requests: { storage: cfg.stores[i].size } },
+            storageClassName: cfg.stores[i].storageClass,
+            selector: (if cfg.stores[i].selector == {} then null else cfg.stores[i].selector),
           }),
-        }];
+        }
+        for i in std.range(0, std.length(cfg.stores) - 1)
+      ];
       k.apps.v1.statefulSet.new(cfg.name)
       + k.apps.v1.statefulSet.metadata.withLabels(self.labels)
       + k.apps.v1.statefulSet.spec.withReplicas(cfg.replicas)

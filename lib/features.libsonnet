@@ -137,16 +137,21 @@ local resourcePresets = {
   // secretMount mounts an EXISTING Secret (kurly never mints key material);
   // scratch adds a writable emptyDir — the escape valve a read-only root
   // filesystem needs for /tmp and the like.
+  //
+  // store may be composed more than once — each call adds a DISTINCT PVC at its own
+  // mount path, for an app that keeps data in several directories. The first store
+  // keeps the historical names (volume 'store', PVC '<name>-store'); the rest are
+  // named after their mount path.
   store(mountPath, size, accessModes=['ReadWriteOnce'], storageClass=null, selector={}, annotations={}):: {
     config+:: {
-      store: {
+      stores+: [{
         mountPath: mountPath,
         size: size,
         accessModes: accessModes,
         storageClass: storageClass,
         selector: selector,
         annotations: annotations,
-      },
+      }],
     },
   },
   // Renders a ConfigMap from a filename->content map and mounts it read-only. By

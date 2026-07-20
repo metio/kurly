@@ -87,8 +87,8 @@ for stage in "${stages[@]}"; do
         + k.dns(config={ nameservers: ['10.0.0.10'] }, hostAliases=[{ ip: '10.0.0.5', hostnames: ['db.internal'] }])
         + k.runAs(1000700000)),
       ipfam: k.list(app + k.ipFamilies(['IPv6'], 'SingleStack')),
-      storeOverride: (if std.objectHas(app.config, 'store') && app.config.store != null
-        then k.list(app + k.store(app.config.store.mountPath, '7Gi', storageClass='kurly-test-class')) else null),
+      storeOverride: (if std.length(app.config.stores) > 0
+        then k.list(app + k.store(app.config.stores[0].mountPath, '7Gi', storageClass='kurly-test-class')) else null),
     } else {})
   ),"
 done

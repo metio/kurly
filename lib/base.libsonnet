@@ -168,8 +168,11 @@ local exclusionConflicts(exclusive) = [
 {
   // Exposed so the StatefulSet path renders a store's PVC metadata by the same
   // rule as the Deployment path — the two drifted, and the annotations silently
-  // stopped at the volumeClaimTemplate.
+  // stopped at the volumeClaimTemplate. volumeName is exposed for the same reason:
+  // the StatefulSet names each volumeClaimTemplate by the same rule the pod's
+  // store volume is named, so mounts and templates stay in lockstep.
   storeAnnotations:: storeAnnotations,
+  volumeName:: volumeName,
 
   // core carries everything common to all workload kinds.
   core(name, image):: {
@@ -264,7 +267,7 @@ local exclusionConflicts(exclusive) = [
       // bare kind. Names: the store's PVC is `<name>-store`, the config's
       // ConfigMap is `<name>-config`; in-pod volume names derive from the mount
       // path (secret volumes from the Secret name).
-      store: null,  // { mountPath, size, accessModes, storageClass, selector, annotations }
+      stores: [],  // [{ mountPath, size, accessModes, storageClass, selector, annotations }] — one PVC each
       configFiles: null,  // { mountPath, files, subPath }
       secretMounts: [],  // [{ secretName, mountPath, readOnly, optional, defaultMode }]
       scratch: [],  // [{ mountPath, sizeLimit }]
@@ -354,7 +357,14 @@ local exclusionConflicts(exclusive) = [
     // (mounts) and the pod template (volumes) stay in lockstep, and the owned
     // PVC/ConfigMap surface as manifests. Every source contributes a matching
     // (volume, mount) pair keyed on the same name.
+    // A workload may compose kurly.store more than once — a distinct PVC per mount.
+    // The FIRST store keeps the historical names (volume 'store', PVC '<name>-store')
+    // so existing single-store workloads render byte-identically; additional stores
+    // are named after their mount path, both for the volume and the PVC.
     local storeName = this.config.name + '-store',
+    local storeVol(i, s) = if i == 0 then 'store' else volumeName(s.mountPath),
+    local storePvc(i, s) = this.config.name + '-' + storeVol(i, s),
+    local storeIndexes = std.range(0, std.length(this.config.stores) - 1),
     local configName = this.config.name + '-config',
 
     // Mounts are unique per mountPath, so re-declaring one the workload already
@@ -363,7 +373,7 @@ local exclusionConflicts(exclusive) = [
     volumeMounts::
       local cfg = this.config;
       dedupeLast(
-        (if cfg.store == null then [] else [{ name: 'store', mountPath: cfg.store.mountPath }])
+        [{ name: storeVol(i, cfg.stores[i]), mountPath: cfg.stores[i].mountPath } for i in storeIndexes]
         + (
           if cfg.configFiles == null then []
           // subPath: one mount per file at mountPath/<filename>, so the files land
@@ -389,7 +399,7 @@ local exclusionConflicts(exclusive) = [
     volumes::
       local cfg = this.config;
       dedupeLast(
-        (if cfg.store == null then [] else [{ name: 'store', persistentVolumeClaim: { claimName: storeName } }])
+        [{ name: storeVol(i, cfg.stores[i]), persistentVolumeClaim: { claimName: storePvc(i, cfg.stores[i]) } } for i in storeIndexes]
         + (if cfg.configFiles == null then [] else [{ name: 'config', configMap: { name: configName } }])
         + [
           { name: m.secretName, secret: std.prune({
@@ -409,8 +419,13 @@ local exclusionConflicts(exclusive) = [
     // The manifests a workload owns beyond its pod controller, exposed as named
     // handles so an author can place each into a stage: the store's PVC and the
     // config's ConfigMap (null when the workload has neither).
+    // Every store's owned PVC. storeClaim is the FIRST (or null) — the historical
+    // single-PVC handle an author may place explicitly; storeClaims is all of them,
+    // which is what list()/ownedManifests emit.
+    storeClaims::
+      [pvcManifest(storePvc(i, this.config.stores[i]), this.config.stores[i], this.labels) for i in storeIndexes],
     storeClaim::
-      if this.config.store == null then null else pvcManifest(storeName, this.config.store, this.labels),
+      if this.config.stores == [] then null else this.storeClaims[0],
     configMap::
       if this.config.configFiles == null then null else configMapManifest(configName, this.config.configFiles.files, this.labels),
     pdb::
@@ -464,8 +479,8 @@ local exclusionConflicts(exclusive) = [
     // The owned manifests as a list, hidden so it stays out of
     // std.objectValues(app); list() appends it explicitly.
     ownedManifests::
-      std.filter(function(manifest) manifest != null, [
-        this.storeClaim,
+      this.storeClaims
+      + std.filter(function(manifest) manifest != null, [
         this.configMap,
         this.pdb,
         this.hpa,
