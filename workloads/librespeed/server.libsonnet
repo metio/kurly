@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: The kurly Authors
 // SPDX-License-Identifier: 0BSD
 
-// librespeed — a A LibreSpeed server server (a lightweight, self-hosted network speed test you run in the browser). A plain composable kurly.http workload on the
+// librespeed — a LibreSpeed server (a lightweight, self-hosted network speed test you run in the browser). A plain composable kurly.http workload on the
 // LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume.
 // Import it, adapt with the parameters below, and render with kurly.list:
 //

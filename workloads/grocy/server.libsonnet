@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: The kurly Authors
 // SPDX-License-Identifier: 0BSD
 
-// grocy — a A Grocy server server (a self-hosted groceries and household management tool: stock, shopping lists, chores and recipes). A plain composable kurly.http workload on the
+// grocy — a Grocy server (a self-hosted groceries and household management tool: stock, shopping lists, chores and recipes). A plain composable kurly.http workload on the
 // LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume.
 // Import it, adapt with the parameters below, and render with kurly.list:
 //

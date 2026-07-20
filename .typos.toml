@@ -11,6 +11,7 @@ extend-exclude = ["LICENSES/", "vendor/", "docs/themes/", "docs/static/js/alpine
 # `edn` (Clojure's Extensible Data Notation) is the tik workload's config
 # format, not a typo of `end`.
 [default.extend-words]
+pyload = "pyload"
 edn = "edn"
 EDN = "EDN"
 # `ND` is Navidrome's environment-variable prefix (ND_MUSICFOLDER, ND_PORT, …),

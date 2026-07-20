@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: The kurly Authors
 // SPDX-License-Identifier: 0BSD
 
-// tautulli — a A Tautulli server server (a monitoring and tracking tool for Plex Media Server: history, statistics and notifications). A plain composable kurly.http workload on the
+// tautulli — a Tautulli server (a monitoring and tracking tool for Plex Media Server: history, statistics and notifications). A plain composable kurly.http workload on the
 // LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume.
 // Import it and render with kurly.list:
 //

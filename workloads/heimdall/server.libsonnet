@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: The kurly Authors
 // SPDX-License-Identifier: 0BSD
 
-// heimdall — a A Heimdall server server (an elegant dashboard and application launcher for your self-hosted services). A plain composable kurly.http workload on the
+// heimdall — a Heimdall server (an elegant dashboard and application launcher for your self-hosted services). A plain composable kurly.http workload on the
 // LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume.
 // Import it, adapt with the parameters below, and render with kurly.list:
 //

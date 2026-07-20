@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: The kurly Authors
 // SPDX-License-Identifier: 0BSD
 
-// ombi — a An Ombi server server (a request-management portal for Plex, Emby and Jellyfin, letting users ask for new media). A plain composable kurly.http workload on the
+// ombi — a An Ombi server (a request-management portal for Plex, Emby and Jellyfin, letting users ask for new media). A plain composable kurly.http workload on the
 // LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume.
 // Import it and render with kurly.list:
 //
