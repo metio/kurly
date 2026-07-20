@@ -1500,6 +1500,103 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    homepage: {
+      summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Homepage server. allowedHosts sets HOMEPAGE_ALLOWED_HOSTS (comma-separated) — required by recent releases. Config at /app/config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='homepage'),
+          d.arg('image', d.T.string, default='ghcr.io/gethomepage/homepage:v1.13.2'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('allowedHosts', d.T.string, example='home.example.com'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/homepage/server.libsonnet' },
+      },
+    },
+    changedetection: {
+      summary: 'A changedetection.io server (self-hosted website change detection: watch pages and get notified when they change) on the official image; its datastore (SQLite plus page snapshots) lives on a PersistentVolume. Fetching JavaScript pages needs a companion Playwright/Chrome service (PLAYWRIGHT_DRIVER_URL); the plain HTTP fetcher works without it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.',
+      stages: {
+        server: d.fn('The changedetection.io server. baseUrl is the public URL (notification links derive from it). Datastore at /datastore. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='changedetection'),
+          d.arg('image', d.T.string, default='ghcr.io/dgtlmoon/changedetection.io:0.55.8'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('baseUrl', d.T.string, example='https://watch.example.com'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/changedetection/server.libsonnet' },
+      },
+    },
+    'calibre-web': {
+      summary: 'A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083.',
+      stages: {
+        server: d.fn('The Calibre-Web server. puid/pgid own the mounted files; timezone sets TZ. Config at /config; point it at an existing Calibre library on first run. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='calibre-web'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/calibre-web:0.6.26'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/calibre-web/server.libsonnet' },
+      },
+    },
+    owncast: {
+      summary: 'An Owncast server (a self-hosted live video streaming and chat server, an open alternative to Twitch) on the official image; its data (SQLite config, chat history, stream segments) lives on a PersistentVolume. Streaming IN uses RTMP on :1935, a separate port this HTTP workload does not expose — add a Service for it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web player on :8080.',
+      stages: {
+        server: d.fn('The Owncast server. Data at /app/data. RTMP ingest (:1935) needs an extra Service composed on. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='owncast'),
+          d.arg('image', d.T.string, default='docker.io/owncast/owncast:0.2.5'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/owncast/server.libsonnet' },
+      },
+    },
+    grav: {
+      summary: 'A Grav server (a modern, flat-file CMS: fast, database-free content management with a Markdown-driven admin) on the LinuxServer.io image; because Grav is flat-file, its whole site (content, config, plugins, cache) lives on a PersistentVolume — no external database. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Grav server. puid/pgid own the mounted files; timezone sets TZ. Site at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='grav'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/grav:2.0.9'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/grav/server.libsonnet' },
+      },
+    },
+    'rss-bridge': {
+      summary: 'An RSS-Bridge server (generates RSS/Atom feeds for sites that do not publish their own, from a large library of community bridges) on the official image. It holds no persistent state — feeds are produced on request — so it is a plain stateless Deployment. The Apache master runs as root then serves as www-data. Serves on :80.',
+      stages: {
+        server: d.fn('The RSS-Bridge server. Stateless; mount a whitelist.txt over /app/whitelist.txt to restrict enabled bridges. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='rss-bridge'),
+          d.arg('image', d.T.string, default='docker.io/rssbridge/rss-bridge:2025-08-05'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rss-bridge/server.libsonnet' },
+      },
+    },
     karakeep: {
       summary: 'A Karakeep server (a self-hosted "bookmark everything" app, formerly Hoarder: save links, notes and images and search them with AI tagging) on the official image; its SQLite database and stored assets live on a PersistentVolume. Expects two companion side services it does not bundle: a Meilisearch instance (MEILI_ADDR + MEILI_MASTER_KEY) and a headless Chrome (BROWSER_WEB_URL). kurly authors no Secret; NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

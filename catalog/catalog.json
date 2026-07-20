@@ -3261,6 +3261,90 @@
          "summary": "A Bugsink server (a self-hosted, Sentry-compatible error tracker: it ingests the same events your existing Sentry SDKs emit) on the official image, backed by an external PostgreSQL or MySQL. Pairs with a cnpg-cluster named bugsink-db. kurly authors no Secret; DATABASE_URL and SECRET_KEY come from a provided Secret via envFrom. Stateless (events live in the DB): a plain rolling Deployment. Serves on :8000."
       },
       {
+         "id": "calibre-web",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "calibre-web",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/calibre-web:0.6.26",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Calibre-Web server. puid/pgid own the mounted files; timezone sets TZ. Config at /config; point it at an existing Calibre library on first run. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/calibre-web/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083."
+      },
+      {
          "id": "cassandra-cluster",
          "stages": [
             {
@@ -3336,6 +3420,78 @@
             }
          ],
          "summary": "A highly-available Apache Cassandra cluster as a cass-operator CassandraDatacenter custom resource. Cassandra is Apache-2.0 — a clean default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires cass-operator; the operator mints the superuser Secret."
+      },
+      {
+         "id": "changedetection",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "changedetection",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/dgtlmoon/changedetection.io:0.55.8",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://watch.example.com",
+                     "name": "baseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The changedetection.io server. baseUrl is the public URL (notification links derive from it). Datastore at /datastore. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/changedetection/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A changedetection.io server (self-hosted website change detection: watch pages and get notified when they change) on the official image; its datastore (SQLite plus page snapshots) lives on a PersistentVolume. Fetching JavaScript pages needs a companion Playwright/Chrome service (PLAYWRIGHT_DRIVER_URL); the plain HTTP fetcher works without it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000."
       },
       {
          "id": "cnpg-cluster",
@@ -5475,6 +5631,90 @@
          "summary": "A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed."
       },
       {
+         "id": "grav",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "grav",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/grav:2.0.9",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Grav server. puid/pgid own the mounted files; timezone sets TZ. Site at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/grav/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Grav server (a modern, flat-file CMS: fast, database-free content management with a Markdown-driven admin) on the LinuxServer.io image; because Grav is flat-file, its whole site (content, config, plugins, cache) lives on a PersistentVolume — no external database. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "greenlight",
          "stages": [
             {
@@ -5756,6 +5996,78 @@
             }
          ],
          "summary": "A Homebox server (a simple home/household inventory and asset manager). A plain composable http workload on the rootless image that keeps its inventory in SQLite and attachments on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :7745."
+      },
+      {
+         "id": "homepage",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "homepage",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/gethomepage/homepage:v1.13.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "home.example.com",
+                     "name": "allowedHosts",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Homepage server. allowedHosts sets HOMEPAGE_ALLOWED_HOSTS (comma-separated) — required by recent releases. Config at /app/config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/homepage/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
          "id": "homer",
@@ -9236,6 +9548,72 @@
          "summary": "An Overleaf server (the Community Edition of the collaborative LaTeX editor) on the official monolith image, backed by an external MongoDB (a replica set — it uses transactions) and Redis, with projects and compiles on a PersistentVolume. kurly ships no MongoDB recipe; bring your own (Redis can be the valkey workload). The image spawns TeX compiles and writes across the root filesystem, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; OVERLEAF_MONGO_URL comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "owncast",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "owncast",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/owncast/owncast:0.2.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Owncast server. Data at /app/data. RTMP ingest (:1935) needs an extra Service composed on. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/owncast/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Owncast server (a self-hosted live video streaming and chat server, an open alternative to Twitch) on the official image; its data (SQLite config, chat history, stream segments) lives on a PersistentVolume. Streaming IN uses RTMP on :1935, a separate port this HTTP workload does not expose — add a Service for it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web player on :8080."
+      },
+      {
          "id": "paisa",
          "stages": [
             {
@@ -10215,6 +10593,67 @@
             }
          ],
          "summary": "A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "rss-bridge",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "rss-bridge",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/rssbridge/rss-bridge:2025-08-05",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The RSS-Bridge server. Stateless; mount a whitelist.txt over /app/whitelist.txt to restrict enabled bridges. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/rss-bridge/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An RSS-Bridge server (generates RSS/Atom feeds for sites that do not publish their own, from a large library of community bridges) on the official image. It holds no persistent state — feeds are produced on request — so it is a plain stateless Deployment. The Apache master runs as root then serves as www-data. Serves on :80."
       },
       {
          "id": "seatsurfing",
