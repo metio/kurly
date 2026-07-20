@@ -40,29 +40,83 @@ if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 
 fi
 echo "exposure exclusion assert fired as expected"
 
-# Every glob-driven per-workload invariant, checked in ONE pass over each stage so
-# the workload is rendered a handful of times, not once per invariant. The stages
-# are independent, so the whole set fans out across cores below — adding a workload
-# adds one parallel unit of work, not a re-render in every loop. Each invariant
-# below is stated where it is asserted; a failure prints ::error:: and returns
-# non-zero, which the parallel driver turns into an overall failure.
+# Every glob-driven per-workload invariant, checked over a SINGLE batched render.
+# Each invariant needs the same workload composed a few different ways (default,
+# named, mirrored, and — for a feature-accepting workload — with pod features and
+# an IP-family override composed on). Rendering those per stage paid ~60ms of
+# jsonnet startup and k8s-libsonnet re-parse EVERY render, so the cost grew with
+# the workload count. Instead, ONE jsonnet process renders every variant for every
+# stage into a keyed blob (k8s-libsonnet parsed once), and check_stage reads its
+# variants from that blob — the assertion logic is unchanged, only the render is
+# shared. The only renders that stay per-stage are the process-exit probes for the
+# handful of hand-authored workloads that must REJECT composition.
+#
+# A workload is classed as feature-ACCEPTING iff it has a hidden `config` (the
+# base kinds do; a hand-authored custom resource or node agent like spegel does
+# not, and composing a feature onto it fires its own assert). That is the same
+# distinction the per-stage podLabels probe drew, read structurally instead.
+stages=(workloads/*/*.libsonnet)
+# Each stage is a top-level field holding its variants object, so `jsonnet -m`
+# writes one small JSON file PER STAGE in a single process — rather than one giant
+# blob every check_stage would have to re-parse to reach its own slice. The file
+# is named by the stage path with slashes turned to double-underscores.
+program="local k = import 'github.com/metio/kurly/main.libsonnet'; {"
+for stage in "${stages[@]}"; do
+  program+="
+  \"${stage//\//__}\": (
+    local app = (import '${stage}')();
+    local accepts = std.objectHasAll(app, 'config');
+    {
+      accepts: accepts,
+      default: k.list(app),
+      named: k.list((import '${stage}')(name='kurlytest')),
+      mirrored: k.mirror('registry.test', k.list(app)),
+    } + (if accepts then {
+      composed: k.list(app
+        + k.podLabels({ 'kurly.test/label': 'set' })
+        + k.podAnnotations({ 'kurly.test/annotation': 'set' })
+        + k.supplementalGroups([4242])
+        + k.dns(config={ nameservers: ['10.0.0.10'] }, hostAliases=[{ ip: '10.0.0.5', hostnames: ['db.internal'] }])
+        + k.runAs(1000700000)),
+      ipfam: k.list(app + k.ipFamilies(['IPv6'], 'SingleStack')),
+      storeOverride: (if std.objectHas(app.config, 'store') && app.config.store != null
+        then k.list(app + k.store(app.config.store.mountPath, '7Gi', storageClass='kurly-test-class')) else null),
+    } else {})
+  ),"
+done
+program+="
+}"
+# The program is too large for `jsonnet -e` (it exceeds ARG_MAX at this scale), so
+# write it to a file. It lives in the repo root, not $TMPDIR, so its relative
+# imports (workloads/*, resolved via -J vendor for the kurly canonical path)
+# resolve against the repo exactly as the per-stage `-e` renders did.
+stagedir="$(mktemp -d)"
+progfile="$(mktemp -p . .check-tests-program-XXXXXX.jsonnet)"
+trap 'rm -rf "$stagedir" "$progfile" "$progfile.err"' EXIT
+printf '%s\n' "$program" >"$progfile"
+if ! jsonnet -J vendor -m "$stagedir" "$progfile" >/dev/null 2>"$progfile.err"; then
+  cat "$progfile.err" >&2
+  for stage in "${stages[@]}"; do
+    jsonnet -J vendor -e "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')())" >/dev/null 2>&1 \
+      || { echo "::error::${stage}: does not render with defaults"; exit 1; }
+  done
+  echo "::error::batched invariant render failed (see above)"; exit 1
+fi
+export STAGEDIR="$stagedir"
+
 check_stage() {
-  local stage="$1" default templates namerender strays mount over rendered metas count missing specs leaked
+  local stage="$1" default templates strays over rendered metas count missing specs leaked accepts
+  local blob="$STAGEDIR/${stage//\//__}"
   local K="local k = import 'github.com/metio/kurly/main.libsonnet';"
   # The pod templates a kurly workload actually renders — found only on the
   # controller kinds it emits (a Deployment/StatefulSet/DaemonSet/Job's
   # .spec.template, a CronJob's .spec.jobTemplate.spec.template), NEVER on a
-  # template a custom resource embeds (a Grafana's deployment override, a
-  # Prometheus CR): those belong to an operator and no kurly feature reaches them.
+  # template a custom resource embeds: those belong to an operator and no kurly
+  # feature reaches them.
   local pod_templates='[.items[]? | if .kind == "CronJob" then .spec.jobTemplate.spec.template elif (.kind == "Deployment" or .kind == "StatefulSet" or .kind == "DaemonSet" or .kind == "Job") then .spec.template else empty end | select(. != null)]'
 
-  # Render the default ONCE and reuse it across every invariant below. The shape
-  # (pod workload vs custom resource) is read from it, so nothing is composed
-  # before it is known — a custom-resource workload REJECTS a composed feature,
-  # and composing one to probe the shape would fail for the right reason yet look
-  # like the wrong one.
-  default="$(jsonnet -J vendor -e "$K k.list((import '${stage}')())")" \
-    || { echo "::error::${stage}: does not render" >&2; return 1; }
+  default="$(jq -c '.default' "$blob")"
+  accepts="$(jq -r '.accepts' "$blob")"
   templates="$(printf '%s' "$default" | jq "$pod_templates | length")"
 
   # Every workload must take a name, and everything it renders must follow it: a
@@ -70,31 +124,25 @@ check_stage() {
   # and a workload named for its ENGINE rather than its ROLE leaks that engine
   # into every consumer. APIService is exempt — the aggregation layer mandates its
   # name be exactly `<version>.<group>`.
-  namerender="$(jsonnet -J vendor -e "$K k.list((import '${stage}')(name='kurlytest'))")" \
-    || { echo "::error::${stage}: does not take a name parameter" >&2; return 1; }
-  strays="$(printf '%s' "$namerender" | jq -r '[.items[] | select(.kind != "APIService") | select(.metadata.name | startswith("kurlytest") | not) | "\(.kind)/\(.metadata.name)"] | join(" ")')"
+  strays="$(jq -r '[.named.items[] | select(.kind != "APIService") | select(.metadata.name | startswith("kurlytest") | not) | "\(.kind)/\(.metadata.name)"] | join(" ")' "$blob")"
   [ -z "$strays" ] || { echo "::error::${stage}: object(s) kept a name of their own after name=kurlytest: ${strays}" >&2; return 1; }
 
   # Every image a workload renders must follow kurly.mirror onto the private
   # registry — including an initContainer's, a grafted-on sidecar's, or a custom
-  # resource's own field, which the mirror helper's field-aware rewrite can miss.
-  # ConfigMap/Secret payloads are dropped first (mirror leaves application data
-  # alone, so a registry-looking string there is not a leak).
-  leaked="$(jsonnet -J vendor -e "$K k.mirror('registry.test', k.list((import '${stage}')()))" \
-    | jq 'del(.. | objects | select(.kind == "ConfigMap" or .kind == "Secret") | .data)' \
+  # resource's own field. ConfigMap/Secret payloads are dropped first (mirror
+  # leaves application data alone, so a registry-looking string there is not a leak).
+  leaked="$(jq '.mirrored | del(.. | objects | select(.kind == "ConfigMap" or .kind == "Secret") | .data)' "$blob" \
     | grep -oE '(docker\.io|ghcr\.io|quay\.io|gcr\.io|registry\.k8s\.io|public\.ecr\.aws)/[^"]*' \
     | sort -u || true)"
   [ -z "$leaked" ] || { echo "::error::${stage}: kurly.mirror left these on a public registry: ${leaked}" >&2; return 1; }
 
   # Every workload that renders a PVC must let a consumer choose its storage class
-  # (classes differ per cluster). Render with the class overridden — through
-  # kurly.store where the mount path is known, or the workload's own param for a
-  # custom resource — and fail if the rendered PVC did not move.
+  # (classes differ per cluster). A kurly.store PVC is re-rendered with the class
+  # overridden in the batch (storeOverride); a custom resource that renders a PVC
+  # another way is re-rendered here through its own storageClass parameter.
   if [ "$(printf '%s' "$default" | jq '([.. | objects | select(.kind? == "PersistentVolumeClaim")] | length) + ([.. | objects | select(has("volumeClaimTemplates")) | .volumeClaimTemplates[]?] | length) + ([.. | objects | select(has("storage") and (.storage | type == "object") and (.storage | has("size")))] | length)')" != "0" ]; then
-    mount="$(printf '%s' "$default" | jq -r '[.. | objects | select(.name? == "store") | .mountPath?] | map(select(. != null)) | first // ""')"
-    if [ -n "$mount" ]; then
-      over="$(jsonnet -J vendor -e "$K k.list((import '${stage}')() + k.store('${mount}', '7Gi', storageClass='kurly-test-class'))")"
-    else
+    over="$(jq -c '.storeOverride' "$blob")"
+    if [ "$over" = "null" ]; then
       over="$(jsonnet -J vendor -e "$K k.list((import '${stage}')(storageClass='kurly-test-class'))" 2>/dev/null || true)"
       [ -n "$over" ] || { echo "::error::${stage}: renders a PVC but takes no storageClass parameter, and has no kurly.store to re-compose" >&2; return 1; }
     fi
@@ -102,16 +150,16 @@ check_stage() {
       || { echo "::error::${stage}: renders a PVC whose storage class cannot be set" >&2; return 1; }
   fi
 
-  # Classify by whether the workload ACCEPTS a composed pod feature, not by whether
-  # it renders a pod template. A workload that authors its manifests by hand — a
-  # custom resource whose pods belong to an operator, or node infrastructure like
-  # spegel that fills in its own DaemonSet — writes no config a base kind reads, so
-  # a composed feature would silently do nothing. It must REJECT composition (while
-  # the raw + escape hatch, which touches no config, keeps working). A workload that
-  # ACCEPTS a feature must make it land on every pod template it renders — so a
-  # hand-authored DaemonSet is held to the reject contract even though it has a
-  # template, and a base-kind workload is held to the landing contract below.
-  if ! jsonnet -J vendor -e "$K k.list((import '${stage}')() + k.podLabels({ 'kurly.test/label': 'set' }))" >/dev/null 2>&1; then
+  # A hand-authored workload (no hidden config) must REJECT a composed feature —
+  # otherwise the feature silently does nothing. Prove the rejection fires (a
+  # process-exit probe, since jsonnet has no try/catch) and that the raw + escape
+  # hatch, which touches no config, still works. Only the handful of such
+  # workloads reach these two renders.
+  if [ "$accepts" != "true" ]; then
+    if jsonnet -J vendor -e "$K k.list((import '${stage}')() + k.podLabels({ 'kurly.test/label': 'set' }))" >/dev/null 2>&1; then
+      echo "::error::${stage}: accepted kurly.podLabels() yet authors its own manifests — the feature silently does nothing here" >&2
+      return 1
+    fi
     jsonnet -J vendor -e "$K k.list((import '${stage}')() + { kurlyTestProbe:: true })" >/dev/null 2>&1 \
       || { echo "::error::${stage}: rejects the raw + escape hatch, which touches no config" >&2; return 1; }
     echo "ok ${stage} (hand-authored: features rejected, name/mirror/storage hold)"
@@ -128,17 +176,8 @@ check_stage() {
   # A pod workload: labels/annotations, IP families, supplemental groups + DNS,
   # and the composed uid must all reach EVERY pod template and container it
   # renders — a kind that drops any of them leaves the consumer's manifest saying
-  # one thing and the pod doing another (and a stray uid literal makes the whole
-  # workload unrunnable on OpenShift). Render once with all of them composed.
-  rendered="$(jsonnet -J vendor -e \
-    "$K k.list((import '${stage}')()
-       + k.podLabels({ 'kurly.test/label': 'set' })
-       + k.podAnnotations({ 'kurly.test/annotation': 'set' })
-       + k.supplementalGroups([4242])
-       + k.dns(config={ nameservers: ['10.0.0.10'] }, hostAliases=[{ ip: '10.0.0.5', hostnames: ['db.internal'] }])
-       + k.runAs(1000700000))")" \
-    || { echo "::error::${stage}: failed to render with the composed pod features" >&2; return 1; }
-
+  # one thing and the pod doing another. All read from the pre-rendered `composed`.
+  rendered="$(jq -c '.composed' "$blob")"
   metas="$(printf '%s' "$rendered" | jq "$pod_templates | map(.metadata)")"
   count="$(printf '%s' "$metas" | jq 'length')"
   missing="$(printf '%s' "$metas" | jq -r '[.[] | select((.labels["kurly.test/label"] != "set") or (.annotations["kurly.test/annotation"] != "set"))] | length')"
@@ -153,10 +192,9 @@ check_stage() {
 
   # Every Service must follow the composed IP families — a workload that writes a
   # Service by hand otherwise keeps the cluster default on it while the rest
-  # follow the consumer, and clients reach it over a family it does not speak.
+  # follow the consumer. Read from the pre-rendered `ipfam`.
   if [ "$(printf '%s' "$default" | jq '[.. | objects | select(.kind? == "Service")] | length')" != "0" ]; then
-    strays="$(jsonnet -J vendor -e "$K k.list((import '${stage}')() + k.ipFamilies(['IPv6'], 'SingleStack'))" \
-      | jq -r '[.. | objects | select(.kind? == "Service") | select(.spec.ipFamilies != ["IPv6"]) | .metadata.name] | join(" ")')"
+    strays="$(jq -r '[.ipfam | .. | objects | select(.kind? == "Service") | select(.spec.ipFamilies != ["IPv6"]) | .metadata.name] | join(" ")' "$blob")"
     [ -z "$strays" ] || { echo "::error::${stage}: Service(s) ignored the composed IP families: ${strays}" >&2; return 1; }
   fi
 
@@ -164,11 +202,11 @@ check_stage() {
 }
 export -f check_stage
 
-echo "== every workload's per-stage invariants (parallel) =="
+echo "== every workload's per-stage invariants (parallel over the batched render) =="
 # check_stage runs in each xargs child; $1 is the child's positional (the stage
 # path), expanded there, not here.
 # shellcheck disable=SC2016
-if ! printf '%s\n' workloads/*/*.libsonnet | xargs -P"$(nproc)" -I{} bash -c 'check_stage "$1"' _ {}; then
+if ! printf '%s\n' "${stages[@]}" | xargs -P"$(nproc)" -I{} bash -c 'check_stage "$1"' _ {}; then
   echo "::error::one or more workload invariant checks failed (see above)" >&2
   exit 1
 fi
