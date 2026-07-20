@@ -28,22 +28,43 @@ actual="$(jq length "$workdir/gen.json")"
 [ "$actual" = "$expected" ] || { echo "::error::coverage generated $actual compositions, expected $expected"; exit 1; }
 echo "generated $actual compositions from the catalog"
 
-# Render each composition and split its List into one file per manifest (the
-# shape kubeconform validates) under a dedicated dir, so the generator's own
-# gen.json array is not itself handed to kubeconform. A render failure trips
-# pipefail and fails the gate.
+# Render every composition in ONE jsonnet process: a single invocation imports
+# k8s-libsonnet once and shares it across all compositions, instead of paying the
+# parse per snippet. Each snippet is a self-contained expression (the shape the
+# per-case `-e` render used), keyed by name into one object.
 manifests="$workdir/manifests"
 mkdir -p "$manifests"
-jq -r '.[] | .name + "\t" + .snippet' "$workdir/gen.json" > "$workdir/cases.tsv"
+program="{"
 while IFS="$(printf '\t')" read -r name snippet; do
-  jsonnet -J vendor -e "$snippet" \
-    | jq -c '.items[]' \
-    | split --lines=1 --additional-suffix=.json - "$manifests/$name-"
-done < "$workdir/cases.tsv"
+  program+="\"${name}\": (${snippet}),"
+done < <(jq -r '.[] | .name + "\t" + .snippet' "$workdir/gen.json")
+program+="}"
+if ! jsonnet -J vendor -e "$program" > "$workdir/rendered.json" 2>"$workdir/err"; then
+  # A single bad composition fails the batch; jsonnet names it. Re-render per case
+  # to attribute it plainly.
+  cat "$workdir/err" >&2
+  while IFS="$(printf '\t')" read -r name snippet; do
+    jsonnet -J vendor -e "$snippet" >/dev/null 2>&1 || { echo "::error::composition $name failed to render"; exit 1; }
+  done < <(jq -r '.[] | .name + "\t" + .snippet' "$workdir/gen.json")
+  echo "::error::batched coverage render failed (see above)"; exit 1
+fi
+
+# Split every composition's List into one file per manifest — one jq pass, not one
+# per composition.
+jq -c '.[] | .items[]' "$workdir/rendered.json" \
+  | split --lines=1 --additional-suffix=.json - "$manifests/manifest-"
+
+# A persistent schema cache (shared with check-examples) and nproc-way parallelism
+# so validation does not re-download the remote CRD schemas or bottleneck on a
+# single core.
+cache="${KUBECONFORM_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/kubeconform}"
+mkdir -p "$cache"
 
 # Validate every manifest — core kinds against the upstream schemas, CRD kinds
 # (Gateway API) against the community catalog, exactly as check-examples does.
 kubeconform -strict -summary \
+  -cache "$cache" \
+  -n "$(nproc)" \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/CustomResourceDefinition/catalog/main/schema/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
   -ignore-missing-schemas \
