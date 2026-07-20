@@ -48,7 +48,7 @@ jobs:
       # across runs so validation does not re-fetch them every time. The rolling
       # run-id key with a shared restore prefix keeps it append-only: each run
       # restores the newest cache and saves a superset.
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ~/.cache/kubeconform
           key: kubeconform-schemas-${{ github.run_id }}
@@ -62,7 +62,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: ~/.cache/kubeconform
           key: kubeconform-schemas-${{ github.run_id }}
