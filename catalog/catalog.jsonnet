@@ -107,6 +107,7 @@ local stageImports = {
   'wikijs/server': import 'github.com/metio/kurly/workloads/wikijs/server.libsonnet',
   'matomo/server': import 'github.com/metio/kurly/workloads/matomo/server.libsonnet',
   'bookstack/server': import 'github.com/metio/kurly/workloads/bookstack/server.libsonnet',
+  'snipe-it/server': import 'github.com/metio/kurly/workloads/snipe-it/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
