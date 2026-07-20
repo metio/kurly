@@ -1500,6 +1500,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    mediawiki: {
+      summary: 'A MediaWiki server (the wiki engine behind Wikipedia) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploaded files on a PersistentVolume. Configured by a LocalSettings.php mounted from a Secret (it holds the DB password and secret key). The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The MediaWiki server. Uploaded files at /var/www/html/images on the volume. Mount a LocalSettings.php at /var/www/html/LocalSettings.php from a Secret (DB creds + secret key). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='mediawiki'),
+          d.arg('image', d.T.string, default='docker.io/library/mediawiki:1.45.4'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mediawiki/server.libsonnet' },
+      },
+    },
     roundcube: {
       summary: 'A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
