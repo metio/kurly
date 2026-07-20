@@ -14999,6 +14999,84 @@
          "summary": "OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source."
       },
       {
+         "id": "openhab",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "openhab",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/openhab/openhab:4.3.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "confSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "userdataSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "addonsSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The openHAB server. confSize/userdataSize/addonsSize size the three PVCs. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/openhab/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An openHAB server (a vendor-neutral, self-hosted home-automation platform integrating a huge range of devices behind one engine, UI and rule system) on the official image; its three persistent directories — config (/openhab/conf), runtime userdata (/openhab/userdata) and installed add-ons (/openhab/addons) — each get their own PersistentVolume (kurly.store composed three times). USB/serial radios are hardware and not modelled. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8080."
+      },
+      {
          "id": "openobserve",
          "stages": [
             {
