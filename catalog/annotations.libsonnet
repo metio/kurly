@@ -387,6 +387,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    listmonk: {
+      summary: 'A listmonk server (a self-hosted newsletter and mailing-list manager) on the official image, backed by an external PostgreSQL, with uploaded media on a PersistentVolume. Pairs with a cnpg-cluster named listmonk-db. kurly authors no Secret; the DB and admin passwords come from a provided Secret via envFrom. Run the one-time schema install before first use. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
+      stages: {
+        server: d.fn('The listmonk server. dbHost/dbName/dbUser default to a cnpg-cluster named listmonk-db; adminUser is the admin. secretName holds LISTMONK_db__password and LISTMONK_app__admin_password (envFrom). Uploads at /listmonk/uploads. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='listmonk'),
+          d.arg('image', d.T.string, default='docker.io/listmonk/listmonk:v6.2.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='listmonk-db-rw'),
+          d.arg('dbName', d.T.string, default='listmonk'),
+          d.arg('dbUser', d.T.string, default='listmonk'),
+          d.arg('adminUser', d.T.string, default='admin'),
+          d.arg('secretName', d.T.string, default='listmonk-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/listmonk/server.libsonnet' },
+      },
+    },
     umami: {
       summary: 'An Umami server (a simple, privacy-focused, self-hosted web-analytics alternative to Google Analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a cnpg-cluster named umami-db. Serves on :3000.',
       stages: {
