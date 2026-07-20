@@ -8,7 +8,7 @@
 # model the assembler reads can never silently disagree with the library.
 
 # The generator imports the library, which imports k8s-libsonnet; vendor it.
-jb install
+[ "${KURLY_VENDORED:-}" = "1" ] || jb install
 
 # The workloads section imports each stage by kurly's canonical path
 # (github.com/metio/kurly/...); resolve it locally by symlinking the repo into

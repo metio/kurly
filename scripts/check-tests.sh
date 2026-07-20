@@ -7,7 +7,7 @@
 
 # The k8s-libsonnet dependency floats at upstream HEAD (matching the JOI
 # images); vendor it fresh so the suites test what clusters actually run.
-jb install
+[ "${KURLY_VENDORED:-}" = "1" ] || jb install
 
 # The workload stages below import kurly by its canonical path — the one JaaS
 # resolves in a cluster — so resolve it locally through the vendor tree, as

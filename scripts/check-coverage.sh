@@ -9,7 +9,7 @@
 # authoring, and a generator gap is caught by the count assertion. check-catalog
 # keeps the catalog itself honest against the library.
 
-jb install
+[ "${KURLY_VENDORED:-}" = "1" ] || jb install
 
 # The compositions import kurly by its canonical path; resolve it via the vendor
 # symlink, exactly as check-examples does.

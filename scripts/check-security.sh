@@ -15,7 +15,7 @@
 # k8s-libsonnet floats at upstream HEAD; vendor it fresh so the gate checks what
 # clusters actually run, and symlink the repo into the vendor tree so workloads
 # resolve kurly's canonical import path the way JaaS does in-cluster.
-jb install
+[ "${KURLY_VENDORED:-}" = "1" ] || jb install
 mkdir -p vendor/github.com/metio
 ln -sfn ../../.. vendor/github.com/metio/kurly
 
