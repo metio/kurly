@@ -88,6 +88,7 @@ local stageImports = {
   'umami/server': import 'github.com/metio/kurly/workloads/umami/server.libsonnet',
   'listmonk/server': import 'github.com/metio/kurly/workloads/listmonk/server.libsonnet',
   'vikunja/server': import 'github.com/metio/kurly/workloads/vikunja/server.libsonnet',
+  'dex/server': import 'github.com/metio/kurly/workloads/dex/server.libsonnet',
   'status-responder/responder': import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet',
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
