@@ -9,7 +9,8 @@
 //   local server = import 'github.com/metio/kurly/workloads/authentik/server.libsonnet';
 //   kurly.list(server())
 //
-// Serves the web app and API on :9000 — compose an exposure onto it.
+// Serves the web app and API on :9000, with the HTTPS listener on :9443 published on the
+// Service beside it (the 'https' port) — compose an exposure onto the HTTP port.
 //
 // BACKENDS & SECRETS: authentik reads its PostgreSQL and Redis connection (AUTHENTIK_POSTGRESQL__*
 // and AUTHENTIK_REDIS__*) and AUTHENTIK_SECRET_KEY from the environment. kurly authors no Secret;
@@ -37,6 +38,7 @@ function(
   + kurly.command(['server'])
   + kurly.port(9000)
   + kurly.servicePort(9000)
+  + kurly.extraPort('https', 9443)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)

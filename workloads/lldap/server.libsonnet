@@ -12,8 +12,8 @@
 //
 // Serves the web UI and API on :17170 — compose an exposure onto it.
 //
-// LDAP: apps bind over LDAP on :3890, a separate port this HTTP workload does not expose.
-// Add a Service for it (a raw `+` patch) so clients can authenticate.
+// LDAP: apps bind over LDAP on :3890, published on the Service beside the web port (the
+// 'ldap' port); route it so clients can authenticate.
 //
 // SECRETS: LLDAP needs LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS (the admin password),
 // and typically LLDAP_LDAP_BASE_DN. kurly authors no Secret; provide one holding them,
@@ -48,6 +48,7 @@ function(
   + kurly.recreate()
   + kurly.port(17170)
   + kurly.servicePort(17170)
+  + kurly.extraPort('ldap', 3890)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
