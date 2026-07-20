@@ -39,8 +39,16 @@ echo "catalog is in sync with the library"
 # from the source. That is reliable precisely because check-fmt enforces the
 # layout: jsonnetfmt puts one parameter per line, indented two spaces.
 echo "== every workload parameter is annotated =="
+# Every workload's parameters by default; just the changed ones when
+# KURLY_WORKLOADS narrows an incremental run. The catalog reconcile above is
+# library-wide and always runs; only this per-workload parameter sweep narrows.
+if [ -n "${KURLY_WORKLOADS:-}" ]; then
+  mapfile -t param_stages <<<"$KURLY_WORKLOADS"
+else
+  param_stages=(workloads/*/*.libsonnet)
+fi
 fail=0
-for stage in workloads/*/*.libsonnet; do
+for stage in "${param_stages[@]}"; do
   workload="$(basename "$(dirname "$stage")")"
   id="$(basename "$stage" .libsonnet)"
 

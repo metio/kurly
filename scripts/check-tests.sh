@@ -214,7 +214,7 @@ echo "== every workload's per-stage invariants (parallel over the batched render
 # check_stage runs in each xargs child; $1 is the child's positional (the stage
 # path), expanded there, not here.
 # shellcheck disable=SC2016
-if ! printf '%s\n' "${stages[@]}" | xargs -P"$(nproc)" -I{} bash -c 'check_stage "$1"' _ {}; then
+if ! printf '%s\n' "${stages[@]}" | xargs -P"${KURLY_JOBS:-$(nproc)}" -I{} bash -c 'check_stage "$1"' _ {}; then
   echo "::error::one or more workload invariant checks failed (see above)" >&2
   exit 1
 fi

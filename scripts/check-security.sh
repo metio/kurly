@@ -192,7 +192,7 @@ if ! for fp in "${!rep_b64[@]}"; do
   key="${rep_b64["$fp"]%%$'\t'*}"
   mb64="${rep_b64["$fp"]#*$'\t'}"
   printf '%s\t%s\t%s\n' "$key" "$mb64" "${members["$fp"]}"
-done | xargs -P"$(nproc)" -d '\n' -I{} bash -c 'IFS=$(printf "\t") read -r k m n <<<"$1"; scan_one "$k" "$m" "$n"' _ {}; then
+done | xargs -P"${KURLY_JOBS:-$(nproc)}" -d '\n' -I{} bash -c 'IFS=$(printf "\t") read -r k m n <<<"$1"; scan_one "$k" "$m" "$n"' _ {}; then
   fail=1
 fi
 if [ "$fail" != "0" ]; then

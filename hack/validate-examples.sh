@@ -116,7 +116,7 @@ mkdir -p "$cache"
 # wrong schema.
 kubeconform -strict -summary \
   -cache "$cache" \
-  -n "$(nproc)" \
+  -n "${KURLY_JOBS:-$(nproc)}" \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/CustomResourceDefinition/catalog/main/schema/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
   -ignore-missing-schemas \

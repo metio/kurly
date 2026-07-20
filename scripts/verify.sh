@@ -15,6 +15,13 @@ mkdir -p vendor/github.com/metio
 ln -sfn ../../.. vendor/github.com/metio/kurly
 export KURLY_VENDORED=1
 
+# The gates run concurrently AND each fans out internally (xargs/kubeconform),
+# so cap each gate's internal workers to a share of the cores — otherwise the
+# heavy gates together spawn cores × gates workers and thrash. A quarter of the
+# cores per gate keeps the total near the core count.
+cores="$(nproc)"
+export KURLY_JOBS="${KURLY_JOBS:-$(( cores / 4 > 0 ? cores / 4 : 1 ))}"
+
 gates=(
   "check-fmt"
   "check-catalog"
