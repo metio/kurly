@@ -879,6 +879,37 @@ local podOf(app) = app.deployment.spec.template.spec;
     [a.service.spec.ports[0].port, a.service.spec.ports[0].targetPort, a.deployment.spec.template.spec.containers[0].ports[0].containerPort],
     [443, 'http', 8080]
   ),
+  // extraPort adds ports beside the primary http one: every declared port lands
+  // on the container; only the exposed ones reach the Service, each targeting its
+  // container port by name. servicePort defaults to the container port.
+  extra_ports_reach_container_and_service: std.assertEqual(
+    local a = kurly.http('mail', 'img:1')
+              + kurly.port(8025)
+              + kurly.extraPort('smtp', 1025)
+              + kurly.extraPort('metrics', 9090, expose=false);
+    [
+      a.deployment.spec.template.spec.containers[0].ports,
+      a.service.spec.ports,
+    ],
+    [
+      [{ containerPort: 8025, name: 'http' }, { containerPort: 1025, name: 'smtp' }, { containerPort: 9090, name: 'metrics' }],
+      [{ name: 'http', port: 80, targetPort: 'http' }, { name: 'smtp', port: 1025, targetPort: 'smtp' }],
+    ]
+  ),
+  // A UDP extra port carries its protocol on both the container and the Service,
+  // and a separate servicePort maps a client port to a different container port.
+  extra_port_protocol_and_service_port: std.assertEqual(
+    local a = kurly.http('dns', 'img:1')
+              + kurly.extraPort('dns-udp', 53, servicePort=5353, protocol='UDP');
+    [
+      a.deployment.spec.template.spec.containers[0].ports[1],
+      a.service.spec.ports[1],
+    ],
+    [
+      { containerPort: 53, name: 'dns-udp', protocol: 'UDP' },
+      { name: 'dns-udp', port: 5353, protocol: 'UDP', targetPort: 'dns-udp' },
+    ]
+  ),
   // Default unchanged: no type, no annotations, port 80.
   a_plain_service_is_unchanged: std.assertEqual(
     kurly.http('web', 'img:1').service.spec,

@@ -59,6 +59,14 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     port: d.fn('The container port the workload listens on (also the Service target).', [
       d.arg('port', d.T.int, required=true, example=8080),
     ]) + { kinds: ['http'], group: 'container' },
+    extraPort: d.fn('A port beside the primary http one, for a workload that listens on more than one (SMTP + web UI, TCP + UDP, a second admin port). Composable several times. name is the shared identity of the container port and its Service port; servicePort defaults to the container port; expose=false keeps the port on the pod but off the Service; protocol is TCP or UDP.', [
+      d.arg('name', d.T.string, required=true, example='smtp'),
+      d.arg('port', d.T.int, required=true, example=1025),
+      d.arg('servicePort', d.T.int, example=1025),
+      d.arg('protocol', d.T.string, default='TCP'),
+      d.arg('appProtocol', d.T.string),
+      d.arg('expose', d.T.bool, default=true),
+    ]) + { kinds: ['http'], group: 'container' },
     replicas: d.fn('The desired number of pod replicas.', [
       d.arg('replicas', d.T.int, required=true, example=3),
     ]) + { kinds: replicatedKinds, group: 'container' },

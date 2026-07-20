@@ -29,6 +29,25 @@ local resourcePresets = {
   // Container basics.
   image(image):: { config+:: { image: image } },
   port(port):: { config+:: { port: port } },
+  // A port beside the primary `http` one, for a workload that listens on more
+  // than one (a mail server's SMTP + web UI, a game server's TCP + UDP, a second
+  // admin port). Composable several times — each call appends. `name` is the
+  // shared identity of the container port and its Service port (≤15 chars,
+  // lowercase, per the Kubernetes port-name rules); servicePort defaults to the
+  // container port. expose=false keeps the port on the pod but off the Service
+  // (a metrics port scraped in-cluster). protocol is 'TCP' or 'UDP'.
+  extraPort(name, port, servicePort=null, protocol='TCP', appProtocol=null, expose=true):: {
+    config+:: {
+      extraPorts+: [{
+        name: name,
+        containerPort: port,
+        servicePort: if servicePort == null then port else servicePort,
+        protocol: protocol,
+        appProtocol: appProtocol,
+        expose: expose,
+      }],
+    },
+  },
   replicas(replicas):: { config+:: { replicas: replicas } },
   // args appends arguments to the image's own entrypoint (a subcommand
   // selecting the workload); command overrides the entrypoint itself.

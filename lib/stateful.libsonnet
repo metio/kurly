@@ -87,7 +87,7 @@ function(name, image)
       k.core.v1.service.new(
         headlessName(cfg.name),
         self.selectorLabels,
-        if cfg.port == null then [] else [k.core.v1.servicePort.newNamed('http', 80, 'http')],
+        (if cfg.port == null then [] else [k.core.v1.servicePort.newNamed('http', 80, 'http')]) + self.extraServicePorts,
       )
       + k.core.v1.service.metadata.withLabels(self.labels)
       + k.core.v1.service.spec.withClusterIP('None')

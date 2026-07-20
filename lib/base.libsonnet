@@ -227,6 +227,14 @@ local exclusionConflicts(exclusive) = [
       servicePort: 80,
       serviceType: null,
       serviceAnnotations: {},
+      // Ports beside the primary `http` one, for workloads that listen on more
+      // than one (a mail server's SMTP + web UI, a game server's TCP + UDP). Each
+      // entry is { name, containerPort, servicePort, protocol, appProtocol,
+      // expose }; the name is the shared identity of the container port and its
+      // Service port (targetPort references it by name). expose=false keeps a port
+      // on the pod but off the Service (a metrics port scraped via a PodMonitor).
+      // Empty by default, so a single-port workload renders exactly as before.
+      extraPorts: [],
       // Which IP families a Service asks for. A cluster is single-stack IPv4,
       // single-stack IPv6, or dual-stack, and a Service that pins the wrong one
       // is rejected — so kurly names none and lets the cluster's default stand
@@ -591,6 +599,17 @@ local exclusionConflicts(exclusive) = [
       ipFamilyPolicy: this.config.ipFamilyPolicy,
     }),
 
+    // The Service ports for the extra ports a workload declares, beside the
+    // primary `http` one. Each targets its container port by name, so the two
+    // stay in lockstep. A port marked expose=false stays off the Service.
+    extraServicePorts:: [
+      k.core.v1.servicePort.newNamed(p.name, p.servicePort, p.name)
+      + (if p.protocol == 'TCP' then {} else { protocol: p.protocol })
+      + (if p.appProtocol == null then {} else { appProtocol: p.appProtocol })
+      for p in this.config.extraPorts
+      if p.expose
+    ],
+
     // The container-level security posture, derived from config so that EVERY
     // container in the pod can carry it — not just the workload's own. A recipe
     // that writes these fields as literals into an initContainer or a sidecar
@@ -621,12 +640,15 @@ local exclusionConflicts(exclusive) = [
 
     container::
       local cfg = self.config;
+      local httpPort = if cfg.port == null then [] else [k.core.v1.containerPort.newNamed(cfg.port, 'http')];
+      local extraContainerPorts = [
+        k.core.v1.containerPort.newNamed(p.containerPort, p.name)
+        + (if p.protocol == 'TCP' then {} else k.core.v1.containerPort.withProtocol(p.protocol))
+        for p in cfg.extraPorts
+      ];
+      local containerPorts = httpPort + extraContainerPorts;
       k.core.v1.container.new(cfg.name, cfg.image)
-      + (
-        if cfg.port == null
-        then {}
-        else k.core.v1.container.withPorts([k.core.v1.containerPort.newNamed(cfg.port, 'http')])
-      )
+      + (if containerPorts == [] then {} else k.core.v1.container.withPorts(containerPorts))
       + (if cfg.command == [] then {} else k.core.v1.container.withCommand(cfg.command))
       + (if cfg.args == [] then {} else k.core.v1.container.withArgs(cfg.args))
       + k.core.v1.container.resources.withRequests(cfg.resources.requests)
@@ -699,7 +721,7 @@ local exclusionConflicts(exclusive) = [
     local this = self,
     service:
       local cfg = self.config;
-      k.core.v1.service.new(cfg.name, self.selectorLabels, [k.core.v1.servicePort.newNamed('http', cfg.servicePort, 'http')])
+      k.core.v1.service.new(cfg.name, self.selectorLabels, [k.core.v1.servicePort.newNamed('http', cfg.servicePort, 'http')] + this.extraServicePorts)
       + k.core.v1.service.metadata.withLabels(self.labels)
       + (if cfg.serviceAnnotations == {} then {} else { metadata+: { annotations: cfg.serviceAnnotations } })
       + (if cfg.serviceType == null then {} else { spec+: { type: cfg.serviceType } })

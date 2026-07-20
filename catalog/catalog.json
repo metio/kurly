@@ -637,6 +637,51 @@
       {
          "args": [
             {
+               "example": "smtp",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": 1025,
+               "name": "port",
+               "required": true,
+               "type": "int"
+            },
+            {
+               "example": 1025,
+               "name": "servicePort",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "default": "TCP",
+               "name": "protocol",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "appProtocol",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": true,
+               "name": "expose",
+               "required": false,
+               "type": "bool"
+            }
+         ],
+         "group": "container",
+         "help": "A port beside the primary http one, for a workload that listens on more than one (SMTP + web UI, TCP + UDP, a second admin port). Composable several times. name is the shared identity of the container port and its Service port; servicePort defaults to the container port; expose=false keeps the port on the pod but off the Service; protocol is TCP or UDP.",
+         "id": "extraPort",
+         "kinds": [
+            "http"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": 6379,
                "name": "port",
                "required": false,
