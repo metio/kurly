@@ -3611,6 +3611,22 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openhab/server.libsonnet' },
       },
     },
+    guacamole: {
+      summary: 'An Apache Guacamole server (a clientless remote-desktop gateway for RDP/VNC/SSH from a browser) on the official image, backed by an external PostgreSQL or MySQL. Guacamole is two processes — the web app and the guacd proxy daemon — so this runs guacd as a SIDECAR in the same pod (reached on localhost:4822). kurly authors no Secret; the database connection (POSTGRESQL_*/MYSQL_*) comes from a provided Secret via envFrom, and the schema must be initialised. Pairs with a cnpg-cluster named guacamole-db. Stateless: a plain rolling Deployment. Serves on :8080.',
+      stages: {
+        server: d.fn('The Guacamole server plus its guacd sidecar. guacdImage sets the sidecar image; secretName holds the database connection (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='guacamole'),
+          d.arg('image', d.T.string, default='docker.io/guacamole/guacamole:1.5.5'),
+          d.arg('guacdImage', d.T.string, default='docker.io/guacamole/guacd:1.5.5'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='guacamole-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/guacamole/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
