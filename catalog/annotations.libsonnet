@@ -1500,6 +1500,112 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    homarr: {
+      summary: 'A Homarr server (a sleek, self-hosted dashboard for your homelab) on the official image; its SQLite database and config live on a PersistentVolume, so it needs no external database. kurly authors no Secret; SECRET_ENCRYPTION_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7575.',
+      stages: {
+        server: d.fn('The Homarr server. secretName holds SECRET_ENCRYPTION_KEY (a 64-character hex string, envFrom). Data at /appdata. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='homarr'),
+          d.arg('image', d.T.string, default='ghcr.io/homarr-labs/homarr:v1.71.0'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='homarr-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/homarr/server.libsonnet' },
+      },
+    },
+    mattermost: {
+      summary: 'A Mattermost server (a self-hosted, open-source team messaging platform à la Slack) on the Team Edition image, backed by an external PostgreSQL, with file uploads on a PersistentVolume. Pairs with a cnpg-cluster named mattermost-db. kurly authors no Secret; MM_SQLSETTINGS_DATASOURCE comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated (point the file store at S3 to scale out). Serves on :8065.',
+      stages: {
+        server: d.fn('The Mattermost server. siteUrl is the public URL. secretName holds MM_SQLSETTINGS_DATASOURCE (envFrom). Uploads at /mattermost/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='mattermost'),
+          d.arg('image', d.T.string, default='docker.io/mattermost/mattermost-team-edition:11.8.4'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('siteUrl', d.T.string, example='https://chat.example.com'),
+          d.arg('secretName', d.T.string, default='mattermost-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mattermost/server.libsonnet' },
+      },
+    },
+    rocketchat: {
+      summary: 'A Rocket.Chat server (a self-hosted, open-source team chat platform) on the official image, backed by an external MongoDB replica set (Rocket.Chat requires the oplog). Pairs with a mongodb-cluster named rocketchat-db. kurly authors no Secret; MONGO_URL and MONGO_OPLOG_URL come from a provided Secret via envFrom. Stateless (uploads live in MongoDB GridFS): a plain rolling Deployment. Serves on :3000.',
+      stages: {
+        server: d.fn('The Rocket.Chat server. rootUrl is the public URL. secretName holds MONGO_URL and MONGO_OPLOG_URL (envFrom); MongoDB MUST be a replica set. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='rocketchat'),
+          d.arg('image', d.T.string, default='docker.io/rocketchat/rocket.chat:8.6.1'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('rootUrl', d.T.string, example='https://chat.example.com'),
+          d.arg('secretName', d.T.string, default='rocketchat-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rocketchat/server.libsonnet' },
+      },
+    },
+    wekan: {
+      summary: 'A Wekan server (a self-hosted, open-source kanban board à la Trello) on the official image, backed by an external MongoDB. Pairs with a mongodb-cluster named wekan-db. kurly authors no Secret; MONGO_URL comes from a provided Secret via envFrom. Stateless (attachments live in MongoDB GridFS): a plain rolling Deployment. Serves on :8080.',
+      stages: {
+        server: d.fn('The Wekan server. rootUrl is the public URL. secretName holds MONGO_URL (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='wekan'),
+          d.arg('image', d.T.string, default='docker.io/wekan/wekan:v10.03'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('rootUrl', d.T.string, example='https://boards.example.com'),
+          d.arg('secretName', d.T.string, default='wekan-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wekan/server.libsonnet' },
+      },
+    },
+    activepieces: {
+      summary: 'An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. kurly authors no Secret; AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET come from a provided Secret via envFrom. Stateless: a plain rolling Deployment. Serves on :80.',
+      stages: {
+        server: d.fn('The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). secretName holds AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='activepieces'),
+          d.arg('image', d.T.string, default='docker.io/activepieces/activepieces:0.86.3'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('frontendUrl', d.T.string, example='https://flows.example.com'),
+          d.arg('secretName', d.T.string, default='activepieces-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/activepieces/server.libsonnet' },
+      },
+    },
+    automatisch: {
+      summary: 'An Automatisch server (a self-hosted, open-source business-automation / workflow tool, an open alternative to Zapier) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web server (HTTP :3000) and a background worker that runs the flow executions the server enqueues onto Redis. Pairs with a cnpg-cluster named automatisch-db and a Redis. kurly authors no Secret; the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Stateless.',
+      stages: {
+        server: d.fn('The Automatisch web server. secretName holds the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='automatisch'),
+          d.arg('image', d.T.string, default='ghcr.io/automatisch/automatisch:0.15.0'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='automatisch-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/automatisch/server.libsonnet' },
+        worker: d.fn("The Automatisch background worker (runs the flow executions the server enqueues onto Redis). Shares the server's Secret via envFrom. No Service.", [
+          d.arg('name', d.T.string, default='automatisch-worker'),
+          d.arg('image', d.T.string, default='ghcr.io/automatisch/automatisch:0.15.0'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('secretName', d.T.string, default='automatisch-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/automatisch/worker.libsonnet' },
+      },
+    },
     spegel: {
       summary: "Spegel — a stateless, cluster-local OCI registry mirror (spegel.dev). A DaemonSet that serves image layers already present in each node's containerd content store to its peers over a peer-to-peer router, so a pull satisfied by any node never leaves the cluster; an init container writes containerd's registry-mirror config to pull through the local mirror first. Genuinely node-level infrastructure, so it authors its manifests directly (DaemonSet + init container + hostPath containerd socket/content, a NodePort the kubelet reaches the mirror on, and a headless Service peers bootstrap against via DNS) rather than composing a base kind. namespace is load-bearing: the bootstrap DNS name embeds it, so it must match where you deploy. Runs as root with hostPath mounts (the socket is root-owned); the posture is hardened as far as that allows. kurly features do not apply.",
       stages: {
