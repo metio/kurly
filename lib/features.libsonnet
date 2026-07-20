@@ -149,8 +149,16 @@ local resourcePresets = {
       },
     },
   },
-  config(files, mountPath='/etc/config'):: {
-    config+:: { configFiles: { mountPath: mountPath, files: files } },
+  // Renders a ConfigMap from a filename->content map and mounts it read-only. By
+  // default the whole ConfigMap mounts as a DIRECTORY at mountPath (replacing
+  // whatever is there). With subPath=true each file is instead mounted
+  // INDIVIDUALLY at mountPath/<filename> via a subPath mount, so a single config
+  // file drops into a directory the image already populates (e.g. an app's
+  // config.json beside its assets) without shadowing the rest — the standard
+  // Kubernetes single-file-mount pattern. (A subPath mount does not receive later
+  // ConfigMap updates, which is the accepted trade-off for config read at startup.)
+  config(files, mountPath='/etc/config', subPath=false):: {
+    config+:: { configFiles: { mountPath: mountPath, files: files, subPath: subPath } },
   },
   secretMount(secretName, mountPath, readOnly=true, optional=false, defaultMode=null):: {
     config+:: {

@@ -265,7 +265,7 @@ local exclusionConflicts(exclusive) = [
       // ConfigMap is `<name>-config`; in-pod volume names derive from the mount
       // path (secret volumes from the Secret name).
       store: null,  // { mountPath, size, accessModes, storageClass, selector, annotations }
-      configFiles: null,  // { mountPath, files }
+      configFiles: null,  // { mountPath, files, subPath }
       secretMounts: [],  // [{ secretName, mountPath, readOnly, optional, defaultMode }]
       scratch: [],  // [{ mountPath, sizeLimit }]
       // Deployment update strategy ('Recreate' for a single-writer workload on
@@ -364,7 +364,22 @@ local exclusionConflicts(exclusive) = [
       local cfg = this.config;
       dedupeLast(
         (if cfg.store == null then [] else [{ name: 'store', mountPath: cfg.store.mountPath }])
-        + (if cfg.configFiles == null then [] else [{ name: 'config', mountPath: cfg.configFiles.mountPath, readOnly: true }])
+        + (
+          if cfg.configFiles == null then []
+          // subPath: one mount per file at mountPath/<filename>, so the files land
+          // inside the target directory without shadowing what the image put there.
+          else if std.get(cfg.configFiles, 'subPath', false) then [
+            {
+              name: 'config',
+              mountPath: std.rstripChars(cfg.configFiles.mountPath, '/') + '/' + fname,
+              subPath: fname,
+              readOnly: true,
+            }
+            for fname in std.objectFields(cfg.configFiles.files)
+          ]
+          // default: mount the whole ConfigMap as a directory.
+          else [{ name: 'config', mountPath: cfg.configFiles.mountPath, readOnly: true }]
+        )
         + [{ name: m.secretName, mountPath: m.mountPath, readOnly: m.readOnly } for m in cfg.secretMounts]
         + [{ name: volumeName(s.mountPath), mountPath: s.mountPath } for s in cfg.scratch],
         function(m) m.mountPath
