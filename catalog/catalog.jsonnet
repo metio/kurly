@@ -77,6 +77,7 @@ local stageImports = {
   'grist/server': import 'github.com/metio/kurly/workloads/grist/server.libsonnet',
   'jenkins/server': import 'github.com/metio/kurly/workloads/jenkins/server.libsonnet',
   'kavita/server': import 'github.com/metio/kurly/workloads/kavita/server.libsonnet',
+  'portainer/server': import 'github.com/metio/kurly/workloads/portainer/server.libsonnet',
   'navidrome/server': import 'github.com/metio/kurly/workloads/navidrome/server.libsonnet',
   'audiobookshelf/server': import 'github.com/metio/kurly/workloads/audiobookshelf/server.libsonnet',
   'beszel/server': import 'github.com/metio/kurly/workloads/beszel/server.libsonnet',
