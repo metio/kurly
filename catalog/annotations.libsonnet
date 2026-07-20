@@ -2951,6 +2951,89 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/authelia/server.libsonnet' },
       },
     },
+    clickhouse: {
+      summary: 'A ClickHouse server (a fast, self-hosted column-oriented SQL database for real-time analytics) on the official single-node image; its data lives on a PersistentVolume. The native protocol (:9000) needs a separate Service. kurly authors no Secret; CLICKHOUSE_USER/PASSWORD/DB come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves HTTP on :8123.',
+      stages: {
+        server: d.fn('The ClickHouse server. secretName holds CLICKHOUSE_USER/PASSWORD/DB (envFrom). Data at /var/lib/clickhouse; native protocol (:9000) needs an extra Service. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='clickhouse'),
+          d.arg('image', d.T.string, default='docker.io/clickhouse/clickhouse-server:24.8'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='clickhouse-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/clickhouse/server.libsonnet' },
+      },
+    },
+    'matrix-conduit': {
+      summary: 'A Conduit server (a lightweight, self-hosted Matrix homeserver written in Rust that federates with the Matrix network) on the official image; its embedded database lives on a PersistentVolume. The serverName is baked into every user and room id at first start and cannot be changed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6167.',
+      stages: {
+        server: d.fn('The Conduit Matrix homeserver. serverName is permanent (baked into ids); allowRegistration toggles open sign-up. Data at /var/lib/matrix-conduit. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='matrix-conduit'),
+          d.arg('image', d.T.string, default='docker.io/matrixconduit/matrix-conduit:v0.9.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('serverName', d.T.string, example='matrix.example.com'),
+          d.arg('allowRegistration', d.T.bool, default=false),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/matrix-conduit/server.libsonnet' },
+      },
+    },
+    kutt: {
+      summary: 'A Kutt server (a free, self-hosted modern URL shortener with custom domains, link analytics and an API) on the official image, backed by an external PostgreSQL and Redis. kurly authors no Secret; the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN come from a provided Secret via envFrom. Pairs with a cnpg-cluster named kutt-db and a Redis. Stateless: a plain rolling Deployment. Serves on :3000.',
+      stages: {
+        server: d.fn('The Kutt server. secretName holds the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='kutt'),
+          d.arg('image', d.T.string, default='docker.io/kutt/kutt:v3.2.0'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='kutt-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kutt/server.libsonnet' },
+      },
+    },
+    emby: {
+      summary: 'An Emby server (a self-hosted media server for streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Mount your media libraries and add them in the UI. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096.',
+      stages: {
+        server: d.fn('The Emby server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='emby'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/emby:4.8.11'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/emby/server.libsonnet' },
+      },
+    },
+    webtrees: {
+      summary: 'A webtrees server (a self-hosted, collaborative online genealogy application) on the community image, backed by an external MySQL/MariaDB, with its data on a PersistentVolume. kurly authors no Secret; the DB_* credentials come from a provided Secret via envFrom. Pairs with a mysql-cluster named webtrees-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The webtrees server. baseUrl is the public URL; secretName holds the DB_* credentials (envFrom). Data at /var/www/webtrees/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='webtrees'),
+          d.arg('image', d.T.string, default='ghcr.io/nathanvaughn/webtrees:2.2.1'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('baseUrl', d.T.string, example='https://tree.example.com'),
+          d.arg('secretName', d.T.string, default='webtrees-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/webtrees/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
