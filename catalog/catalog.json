@@ -6918,6 +6918,79 @@
          "summary": "A Forgejo Git forge (a maintained Gitea fork): repository hosting, issues, pull requests, and a package registry. A plain composable http workload on the rootless image, with its data on a PersistentVolume and its database external — pairs with the cnpg-cluster workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI/git-over-HTTP on :3000 and git-over-SSH on :2222."
       },
       {
+         "id": "formbricks",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "formbricks",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/formbricks/formbricks:v2.6.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "https://surveys.example.com",
+                     "name": "webappUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "formbricks-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Formbricks server. webappUrl is the public URL; secretName holds DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/formbricks/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Formbricks server (a self-hosted, open-source experience-management and survey platform) on the official image, backed by an external PostgreSQL. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named formbricks-db. Stateless: a plain rolling Deployment. Serves on :3000."
+      },
+      {
          "id": "freshrss",
          "stages": [
             {
@@ -10921,6 +10994,78 @@
          "summary": "A Mailu mail server (SMTP, IMAP/POP3, webmail, antispam) as six coordinated http stages — front (the edge), admin (config + API + DB + DKIM), imap (Dovecot), smtp (Postfix), antispam (Rspamd), and webmail (Roundcube). Run all six pointed at the same namePrefix, secretName, and a shared ReadWriteMany storageClaim, plus a Redis (the valkey workload). Mailu images run as root with a writable root filesystem, so these relax kurly restricted defaults while keeping dropped capabilities and no privilege escalation. Each service is one replica, recreated; expose only front."
       },
       {
+         "id": "mariadb",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mariadb",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/mariadb:11.4.4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mariadb-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A MariaDB server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/mariadb/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306."
+      },
+      {
          "id": "matomo",
          "stages": [
             {
@@ -12049,6 +12194,150 @@
          "summary": "A Miniflux server (a minimalist, opinionated RSS/Atom feed reader) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and the admin password come from a provided Secret via envFrom. Pairs with a cnpg-cluster named miniflux-db. Serves on :8080."
       },
       {
+         "id": "minio",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "minio",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/minio/minio:RELEASE.2024-11-07T00-52-20Z",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "50Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "minio-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The MinIO server. secretName holds MINIO_ROOT_USER/PASSWORD (envFrom). Objects at /data; the console (:9001) needs an extra Service. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/minio/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A MinIO server (a high-performance, self-hosted, S3-compatible object storage server) on the official image; its objects live on a PersistentVolume. Single-node MinIO (a real object store runs distributed across nodes/disks). The web console (:9001) needs a separate Service. kurly authors no Secret; MINIO_ROOT_USER/PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the S3 API on :9000."
+      },
+      {
+         "id": "mongo",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mongo",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/mongo:8.0.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mongo-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A MongoDB server. secretName holds the credentials (envFrom). Data at /data/db. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/mongo/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A MongoDB server — a self-hosted, document-oriented NoSQL database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :27017; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :27017."
+      },
+      {
          "id": "mongo-express",
          "stages": [
             {
@@ -12508,6 +12797,78 @@
             }
          ],
          "summary": "A Mylar3 server — a self-hosted comic-book (CBR/CBZ) downloader and library manager. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090."
+      },
+      {
+         "id": "mysql",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mysql",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/mysql:8.4.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mysql-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A MySQL server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/mysql/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A MySQL server — the popular open-source relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306."
       },
       {
          "id": "mysql-cluster",
@@ -13169,6 +13530,72 @@
             }
          ],
          "summary": "A Nextcloud server (a self-hosted content-collaboration platform: file sync and share, calendars, contacts, office documents) on the official Apache image; with the default SQLite backend the whole installation lives on a PersistentVolume. kurly authors no Secret; NEXTCLOUD_ADMIN_* come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL and S3 primary storage to scale out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "nginx-proxy-manager",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "nginx-proxy-manager",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/jc21/nginx-proxy-manager:2.12.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Nginx Proxy Manager server. Data at /data; the proxy (:80/:443) needs an extra Service. Compose an exposure onto the admin HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/nginx-proxy-manager/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Nginx Proxy Manager server (a self-hosted reverse-proxy with a web UI, free Let's Encrypt certificates, access lists and custom nginx config) on the official image; its SQLite database and config live on a PersistentVolume. The reverse proxy listens on :80/:443, separate ports that need their own Service. It binds the privileged ports so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI serves on :81."
       },
       {
          "id": "nocodb",
@@ -15049,6 +15476,78 @@
          "summary": "A Piwigo server — a self-hosted photo gallery with albums, tagging and user management (backed by MySQL/MariaDB). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "postgres",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "postgres",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/postgres:17.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "postgres-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A PostgreSQL server. secretName holds the credentials (envFrom). Data at /var/lib/postgresql/data. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/postgres/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A PostgreSQL server — a powerful, open-source object-relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :5432; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :5432."
+      },
+      {
          "id": "privatebin",
          "stages": [
             {
@@ -15643,6 +16142,78 @@
          "summary": "A Qdrant server (a self-hosted vector database and similarity-search engine for embeddings, used for AI/semantic-search and RAG) on the official image; its collections live on a PersistentVolume. It also serves gRPC on :6334, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the REST API on :6333."
       },
       {
+         "id": "rabbitmq",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "rabbitmq",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/rabbitmq:4.0.4-management",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "rabbitmq-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The RabbitMQ server. secretName holds RABBITMQ_DEFAULT_USER/PASS (envFrom). Data at /var/lib/rabbitmq; the management UI (:15672) needs an extra Service. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/rabbitmq/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A RabbitMQ server (a widely-used, self-hosted message broker implementing AMQP) on the official management image; the broker speaks AMQP on :5672 with data on a PersistentVolume. Single node (not a cluster). The management UI (:15672) needs a separate Service. kurly authors no Secret; RABBITMQ_DEFAULT_USER/PASS come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves AMQP on :5672."
+      },
+      {
          "id": "radarr",
          "stages": [
             {
@@ -15930,6 +16501,78 @@
             }
          ],
          "summary": "A Readeck server (a self-hosted read-it-later and web-bookmarking tool that saves clean, readable copies of pages). A plain composable http workload that keeps its bookmarks and saved articles in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8000."
+      },
+      {
+         "id": "redis",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "redis",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/redis:7.4.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "redis-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A Redis server. secretName holds the credentials (envFrom). Data at /data. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/redis/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Redis server — an in-memory data store used as a cache, message broker and database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :6379; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :6379."
       },
       {
          "id": "redmine",

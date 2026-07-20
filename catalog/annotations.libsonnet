@@ -3034,6 +3034,149 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/webtrees/server.libsonnet' },
       },
     },
+    mariadb: {
+      summary: 'A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
+      stages: {
+        server: d.fn('The A MariaDB server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='mariadb'),
+          d.arg('image', d.T.string, default='docker.io/library/mariadb:11.4.4'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='mariadb-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mariadb/server.libsonnet' },
+      },
+    },
+    mysql: {
+      summary: 'A MySQL server — the popular open-source relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
+      stages: {
+        server: d.fn('The A MySQL server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='mysql'),
+          d.arg('image', d.T.string, default='docker.io/library/mysql:8.4.3'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='mysql-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mysql/server.libsonnet' },
+      },
+    },
+    postgres: {
+      summary: 'A PostgreSQL server — a powerful, open-source object-relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :5432; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :5432.',
+      stages: {
+        server: d.fn('The A PostgreSQL server. secretName holds the credentials (envFrom). Data at /var/lib/postgresql/data. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='postgres'),
+          d.arg('image', d.T.string, default='docker.io/library/postgres:17.2'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='postgres-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/postgres/server.libsonnet' },
+      },
+    },
+    redis: {
+      summary: 'A Redis server — an in-memory data store used as a cache, message broker and database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :6379; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :6379.',
+      stages: {
+        server: d.fn('The A Redis server. secretName holds the credentials (envFrom). Data at /data. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='redis'),
+          d.arg('image', d.T.string, default='docker.io/library/redis:7.4.1'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='redis-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/redis/server.libsonnet' },
+      },
+    },
+    mongo: {
+      summary: 'A MongoDB server — a self-hosted, document-oriented NoSQL database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :27017; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :27017.',
+      stages: {
+        server: d.fn('The A MongoDB server. secretName holds the credentials (envFrom). Data at /data/db. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='mongo'),
+          d.arg('image', d.T.string, default='docker.io/library/mongo:8.0.3'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='mongo-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mongo/server.libsonnet' },
+      },
+    },
+    'nginx-proxy-manager': {
+      summary: "An Nginx Proxy Manager server (a self-hosted reverse-proxy with a web UI, free Let's Encrypt certificates, access lists and custom nginx config) on the official image; its SQLite database and config live on a PersistentVolume. The reverse proxy listens on :80/:443, separate ports that need their own Service. It binds the privileged ports so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI serves on :81.",
+      stages: {
+        server: d.fn('The Nginx Proxy Manager server. Data at /data; the proxy (:80/:443) needs an extra Service. Compose an exposure onto the admin HTTP port.', [
+          d.arg('name', d.T.string, default='nginx-proxy-manager'),
+          d.arg('image', d.T.string, default='docker.io/jc21/nginx-proxy-manager:2.12.3'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nginx-proxy-manager/server.libsonnet' },
+      },
+    },
+    minio: {
+      summary: 'A MinIO server (a high-performance, self-hosted, S3-compatible object storage server) on the official image; its objects live on a PersistentVolume. Single-node MinIO (a real object store runs distributed across nodes/disks). The web console (:9001) needs a separate Service. kurly authors no Secret; MINIO_ROOT_USER/PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the S3 API on :9000.',
+      stages: {
+        server: d.fn('The MinIO server. secretName holds MINIO_ROOT_USER/PASSWORD (envFrom). Objects at /data; the console (:9001) needs an extra Service. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='minio'),
+          d.arg('image', d.T.string, default='docker.io/minio/minio:RELEASE.2024-11-07T00-52-20Z'),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='minio-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/minio/server.libsonnet' },
+      },
+    },
+    rabbitmq: {
+      summary: 'A RabbitMQ server (a widely-used, self-hosted message broker implementing AMQP) on the official management image; the broker speaks AMQP on :5672 with data on a PersistentVolume. Single node (not a cluster). The management UI (:15672) needs a separate Service. kurly authors no Secret; RABBITMQ_DEFAULT_USER/PASS come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves AMQP on :5672.',
+      stages: {
+        server: d.fn('The RabbitMQ server. secretName holds RABBITMQ_DEFAULT_USER/PASS (envFrom). Data at /var/lib/rabbitmq; the management UI (:15672) needs an extra Service. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='rabbitmq'),
+          d.arg('image', d.T.string, default='docker.io/library/rabbitmq:4.0.4-management'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='rabbitmq-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rabbitmq/server.libsonnet' },
+      },
+    },
+    formbricks: {
+      summary: 'A Formbricks server (a self-hosted, open-source experience-management and survey platform) on the official image, backed by an external PostgreSQL. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named formbricks-db. Stateless: a plain rolling Deployment. Serves on :3000.',
+      stages: {
+        server: d.fn('The Formbricks server. webappUrl is the public URL; secretName holds DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='formbricks'),
+          d.arg('image', d.T.string, default='ghcr.io/formbricks/formbricks:v2.6.0'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('webappUrl', d.T.string, example='https://surveys.example.com'),
+          d.arg('secretName', d.T.string, default='formbricks-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/formbricks/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
