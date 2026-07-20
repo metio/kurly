@@ -2637,6 +2637,159 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mumble/server.libsonnet' },
       },
     },
+    victoriametrics: {
+      summary: 'A VictoriaMetrics server (a fast, cost-effective, self-hosted time-series database and Prometheus-compatible monitoring backend) on the official single-node image; its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the HTTP API on :8428.',
+      stages: {
+        server: d.fn('The VictoriaMetrics server. retentionPeriod is in months. Data at /victoria-metrics-data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='victoriametrics'),
+          d.arg('image', d.T.string, default='docker.io/victoriametrics/victoria-metrics:v1.109.0'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('retentionPeriod', d.T.string, default='1'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/victoriametrics/server.libsonnet' },
+      },
+    },
+    openobserve: {
+      summary: 'An OpenObserve server (a self-hosted, high-performance observability platform for logs, metrics and traces) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5080.',
+      stages: {
+        server: d.fn('The OpenObserve server. secretName holds ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD (envFrom). Data at /data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='openobserve'),
+          d.arg('image', d.T.string, default='docker.io/openobserve/openobserve:v0.14.4'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='openobserve-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openobserve/server.libsonnet' },
+      },
+    },
+    meilisearch: {
+      summary: 'A Meilisearch server (a fast, typo-tolerant, self-hosted search engine with a simple REST API) on the official image; its indexes live on a PersistentVolume. The search companion several apps expect (e.g. karakeep). kurly authors no Secret; MEILI_MASTER_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7700.',
+      stages: {
+        server: d.fn('The Meilisearch server. secretName holds MEILI_MASTER_KEY (envFrom). Indexes at /meili_data. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='meilisearch'),
+          d.arg('image', d.T.string, default='docker.io/getmeili/meilisearch:v1.12.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='meilisearch-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/meilisearch/server.libsonnet' },
+      },
+    },
+    qdrant: {
+      summary: 'A Qdrant server (a self-hosted vector database and similarity-search engine for embeddings, used for AI/semantic-search and RAG) on the official image; its collections live on a PersistentVolume. It also serves gRPC on :6334, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the REST API on :6333.',
+      stages: {
+        server: d.fn('The Qdrant server. Collections at /qdrant/storage; gRPC (:6334) needs an extra Service. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='qdrant'),
+          d.arg('image', d.T.string, default='docker.io/qdrant/qdrant:v1.13.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/qdrant/server.libsonnet' },
+      },
+    },
+    typesense: {
+      summary: 'A Typesense server (a fast, typo-tolerant, self-hosted search engine with a clean API) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; TYPESENSE_API_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8108.',
+      stages: {
+        server: d.fn('The Typesense server. secretName holds TYPESENSE_API_KEY (envFrom). Data at /data. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='typesense'),
+          d.arg('image', d.T.string, default='docker.io/typesense/typesense:27.1'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='typesense-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/typesense/server.libsonnet' },
+      },
+    },
+    browserless: {
+      summary: 'A Browserless server (a headless-Chromium service exposing a REST/WebSocket API for rendering, screenshots, PDF generation and scraping) on the official image. Stateless: a plain rolling Deployment. The browser companion apps like changedetection and karakeep expect. kurly authors no Secret; TOKEN comes from a provided Secret via envFrom. Serves on :3000.',
+      stages: {
+        server: d.fn('The Browserless server. secretName holds TOKEN (envFrom). Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='browserless'),
+          d.arg('image', d.T.string, default='ghcr.io/browserless/chromium:v2.24.3'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='browserless-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/browserless/server.libsonnet' },
+      },
+    },
+    tika: {
+      summary: 'An Apache Tika server (a content-analysis toolkit that detects and extracts text and metadata from over a thousand file types) on the official image. Stateless: a plain rolling Deployment. The text-extraction companion apps like paperless-ngx expect. Serves on :9998.',
+      stages: {
+        server: d.fn('The Apache Tika server. Stateless; usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='tika'),
+          d.arg('image', d.T.string, default='docker.io/apache/tika:2.9.2.1'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tika/server.libsonnet' },
+      },
+    },
+    gotenberg: {
+      summary: 'A Gotenberg server (a stateless API for converting HTML, Markdown and Office documents to PDF, powered by Chromium and LibreOffice) on the official image. Stateless: a plain rolling Deployment. The PDF-conversion companion apps like paperless-ngx and DocuSeal expect. Serves on :3000.',
+      stages: {
+        server: d.fn('The Gotenberg server. Stateless; usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='gotenberg'),
+          d.arg('image', d.T.string, default='docker.io/gotenberg/gotenberg:8.15.3'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/gotenberg/server.libsonnet' },
+      },
+    },
+    'open-webui': {
+      summary: 'An Open WebUI server (a feature-rich, self-hosted web interface for chatting with local and remote LLMs — Ollama and any OpenAI-compatible API) on the official image; with the default SQLite backend its database and uploads live on a PersistentVolume. kurly authors no Secret; WEBUI_SECRET_KEY comes from a provided Secret via envFrom. Point it at an external PostgreSQL (DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
+      stages: {
+        server: d.fn('The Open WebUI server. ollamaBaseUrl points at an Ollama backend; secretName holds WEBUI_SECRET_KEY (envFrom). Data at /app/backend/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='open-webui'),
+          d.arg('image', d.T.string, default='ghcr.io/open-webui/open-webui:v0.6.5'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('ollamaBaseUrl', d.T.string, example='http://ollama:11434'),
+          d.arg('secretName', d.T.string, default='open-webui-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/open-webui/server.libsonnet' },
+      },
+    },
+    glance: {
+      summary: 'A Glance server (a self-hosted dashboard that puts feeds, RSS, weather, markets, monitoring and homelab widgets on one fast page) on the official image. Its layout is its glance.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state. Stateless: the default shows a minimal page. Serves on :8080.',
+      stages: {
+        server: d.fn("The Glance server. config is Glance's own glance.yml (pages/columns/widgets), rendered to the mounted glance.yml. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='glance'),
+          d.arg('image', d.T.string, default='docker.io/glanceapp/glance:v0.8.4'),
+          d.arg('config', d.T.object, default={}),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/glance/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

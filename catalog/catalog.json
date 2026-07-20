@@ -3477,6 +3477,73 @@
          "summary": "A BookStack server (a simple, self-hosted platform for organising and storing documentation) on the maintained LinuxServer image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and uploads on a PersistentVolume. The LinuxServer s6 image runs as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASS and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "browserless",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "browserless",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/browserless/chromium:v2.24.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "browserless-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Browserless server. secretName holds TOKEN (envFrom). Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/browserless/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Browserless server (a headless-Chromium service exposing a REST/WebSocket API for rendering, screenshots, PDF generation and scraping) on the official image. Stateless: a plain rolling Deployment. The browser companion apps like changedetection and karakeep expect. kurly authors no Secret; TOKEN comes from a provided Secret via envFrom. Serves on :3000."
+      },
+      {
          "id": "bugsink",
          "stages": [
             {
@@ -6725,6 +6792,66 @@
          "summary": "A Gitea server (a lightweight, self-hosted Git service with issues, pull requests, a package registry and CI via Actions) on the official image; with the default SQLite backend its repositories and data live on a PersistentVolume. Git-over-SSH uses :22, a separate port to add a Service for. Point it at an external PostgreSQL/MySQL (GITEA__database__*) to scale past the single SQLite writer. The official image uses s6-overlay, so it runs as root and drops to uid/gid. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "id": "glance",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "glance",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/glanceapp/glance:v0.8.4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "config",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Glance server. config is Glance's own glance.yml (pages/columns/widgets), rendered to the mounted glance.yml. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/glance/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Glance server (a self-hosted dashboard that puts feeds, RSS, weather, markets, monitoring and homelab widgets on one fast page) on the official image. Its layout is its glance.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state. Stateless: the default shows a minimal page. Serves on :8080."
+      },
+      {
          "id": "glitchtip",
          "stages": [
             {
@@ -6935,6 +7062,67 @@
             }
          ],
          "summary": "A Gogs server (a painless, self-hosted Git service: a lightweight, fast Git server with a clean web UI) on the official image; with the default SQLite backend its repositories and data live on a PersistentVolume. Git-over-SSH uses :22, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
+         "id": "gotenberg",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "gotenberg",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/gotenberg/gotenberg:8.15.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Gotenberg server. Stateless; usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/gotenberg/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Gotenberg server (a stateless API for converting HTML, Markdown and Office documents to PDF, powered by Chromium and LibreOffice) on the official image. Stateless: a plain rolling Deployment. The PDF-conversion companion apps like paperless-ngx and DocuSeal expect. Serves on :3000."
       },
       {
          "id": "gotify",
@@ -10583,6 +10771,78 @@
          "summary": "A MediaWiki server (the wiki engine behind Wikipedia) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploaded files on a PersistentVolume. Configured by a LocalSettings.php mounted from a Secret (it holds the DB password and secret key). The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "meilisearch",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "meilisearch",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/getmeili/meilisearch:v1.12.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "meilisearch-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Meilisearch server. secretName holds MEILI_MASTER_KEY (envFrom). Indexes at /meili_data. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/meilisearch/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Meilisearch server (a fast, typo-tolerant, self-hosted search engine with a simple REST API) on the official image; its indexes live on a PersistentVolume. The search companion several apps expect (e.g. karakeep). kurly authors no Secret; MEILI_MASTER_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7700."
+      },
+      {
          "id": "memcached",
          "stages": [
             {
@@ -12432,6 +12692,84 @@
          "summary": "An Ombi server — a request-management portal for Plex, Emby and Jellyfin. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3579."
       },
       {
+         "id": "open-webui",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "open-webui",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/open-webui/open-webui:v0.6.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "http://ollama:11434",
+                     "name": "ollamaBaseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "open-webui-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Open WebUI server. ollamaBaseUrl points at an Ollama backend; secretName holds WEBUI_SECRET_KEY (envFrom). Data at /app/backend/data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/open-webui/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Open WebUI server (a feature-rich, self-hosted web interface for chatting with local and remote LLMs — Ollama and any OpenAI-compatible API) on the official image; with the default SQLite backend its database and uploads live on a PersistentVolume. kurly authors no Secret; WEBUI_SECRET_KEY comes from a provided Secret via envFrom. Point it at an external PostgreSQL (DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
+      },
+      {
          "id": "opencost",
          "stages": [
             {
@@ -12503,6 +12841,78 @@
             }
          ],
          "summary": "OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source."
+      },
+      {
+         "id": "openobserve",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "openobserve",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/openobserve/openobserve:v0.14.4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "openobserve-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The OpenObserve server. secretName holds ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD (envFrom). Data at /data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/openobserve/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An OpenObserve server (a self-hosted, high-performance observability platform for logs, metrics and traces) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5080."
       },
       {
          "id": "opensearch-cluster",
@@ -14218,6 +14628,72 @@
             }
          ],
          "summary": "A qBittorrent server — a feature-rich, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
+      },
+      {
+         "id": "qdrant",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "qdrant",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/qdrant/qdrant:v1.13.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Qdrant server. Collections at /qdrant/storage; gRPC (:6334) needs an extra Service. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/qdrant/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Qdrant server (a self-hosted vector database and similarity-search engine for embeddings, used for AI/semantic-search and RAG) on the official image; its collections live on a PersistentVolume. It also serves gRPC on :6334, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the REST API on :6333."
       },
       {
          "id": "radarr",
@@ -17052,6 +17528,67 @@
          "summary": "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store."
       },
       {
+         "id": "tika",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "tika",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/apache/tika:2.9.2.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Apache Tika server. Stateless; usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/tika/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Apache Tika server (a content-analysis toolkit that detects and extracts text and metadata from over a thousand file types) on the official image. Stateless: a plain rolling Deployment. The text-extraction companion apps like paperless-ngx expect. Serves on :9998."
+      },
+      {
          "id": "traccar",
          "stages": [
             {
@@ -17424,6 +17961,78 @@
          "summary": "A Twenty server (a modern, open-source CRM) as two stages — server (the web/API front end) and worker (background BullMQ jobs) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named twenty-db and a valkey named twenty-cache. kurly authors no Secret; PG_DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. The server keeps local uploads on a ReadWriteOnce volume (one replica, recreated); move to S3 to scale out."
       },
       {
+         "id": "typesense",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "typesense",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/typesense/typesense:27.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "typesense-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Typesense server. secretName holds TYPESENSE_API_KEY (envFrom). Data at /data. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/typesense/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Typesense server (a fast, typo-tolerant, self-hosted search engine with a clean API) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; TYPESENSE_API_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8108."
+      },
+      {
          "id": "umami",
          "stages": [
             {
@@ -17708,6 +18317,78 @@
             }
          ],
          "summary": "A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080."
+      },
+      {
+         "id": "victoriametrics",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "victoriametrics",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/victoriametrics/victoria-metrics:v1.109.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1",
+                     "name": "retentionPeriod",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The VictoriaMetrics server. retentionPeriod is in months. Data at /victoria-metrics-data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/victoriametrics/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A VictoriaMetrics server (a fast, cost-effective, self-hosted time-series database and Prometheus-compatible monitoring backend) on the official single-node image; its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the HTTP API on :8428."
       },
       {
          "id": "vikunja",
