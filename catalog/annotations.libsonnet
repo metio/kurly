@@ -1500,6 +1500,24 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    wikijs: {
+      summary: 'A Wiki.js server (a modern, open-source wiki) on the official image, backed by an external PostgreSQL. Its content and configuration live in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named wikijs-db. kurly authors no Secret; DB_PASS comes from a provided Secret via envFrom. Serves on :3000.',
+      stages: {
+        server: d.fn('The Wiki.js server. dbHost/dbName/dbUser default to a cnpg-cluster named wikijs-db. secretName holds DB_PASS (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='wikijs'),
+          d.arg('image', d.T.string, default='ghcr.io/requarks/wiki:2.5.314'),
+          d.arg('dbHost', d.T.string, default='wikijs-db-rw'),
+          d.arg('dbName', d.T.string, default='wikijs'),
+          d.arg('dbUser', d.T.string, default='wikijs'),
+          d.arg('secretName', d.T.string, default='wikijs-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wikijs/server.libsonnet' },
+      },
+    },
     n8n: {
       summary: 'An n8n server (a fair-code workflow-automation tool with a visual editor) on the official image. A plain composable http workload that keeps its workflows, credentials, and encryption key in SQLite on a PersistentVolume by default — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the editor, API, and webhooks on :5678.',
       stages: {
