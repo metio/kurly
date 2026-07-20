@@ -1500,6 +1500,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'opensearch-cluster': {
+      summary: 'A highly-available OpenSearch cluster as an OpenSearch Operator OpenSearchCluster custom resource, with optional OpenSearch Dashboards. OpenSearch is the Apache-2.0 fork of Elasticsearch — no SSPL/Elastic-License restriction on offering it as a service, the right default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the OpenSearch Operator.',
+      stages: {
+        cluster: d.fn('The OpenSearchCluster CR. replicas is the default node pool size (each node is cluster_manager+data+ingest; split into dedicated pools via the raw + hatch for large clusters). dashboards runs OpenSearch Dashboards alongside. Render with kurly.list.', [
+          d.arg('name', d.T.string, default='opensearch'),
+          d.arg('replicas', d.T.int, default=3),
+          d.arg('opensearchVersion', d.T.string, default='2.19.1'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '4Gi' } }),
+          d.arg('dashboards', d.T.bool, default=true),
+          d.arg('dashboardsReplicas', d.T.int, default=1),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'opensearch',
+          importPath: 'github.com/metio/kurly/workloads/opensearch-cluster/cluster.libsonnet',
+        },
+      },
+    },
     'mysql-cluster': {
       summary: 'A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none).',
       stages: {

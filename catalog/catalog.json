@@ -6622,6 +6622,85 @@
          "summary": "OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source."
       },
       {
+         "id": "opensearch-cluster",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "opensearch",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 3,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "2.19.1",
+                     "name": "opensearchVersion",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "4Gi"
+                        },
+                        "requests": {
+                           "cpu": "500m",
+                           "memory": "2Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": true,
+                     "name": "dashboards",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "default": 1,
+                     "name": "dashboardsReplicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The OpenSearchCluster CR. replicas is the default node pool size (each node is cluster_manager+data+ingest; split into dedicated pools via the raw + hatch for large clusters). dashboards runs OpenSearch Dashboards alongside. Render with kurly.list.",
+               "id": "cluster",
+               "importPath": "github.com/metio/kurly/workloads/opensearch-cluster/cluster.libsonnet",
+               "kind": "opensearch"
+            }
+         ],
+         "summary": "A highly-available OpenSearch cluster as an OpenSearch Operator OpenSearchCluster custom resource, with optional OpenSearch Dashboards. OpenSearch is the Apache-2.0 fork of Elasticsearch — no SSPL/Elastic-License restriction on offering it as a service, the right default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the OpenSearch Operator."
+      },
+      {
          "id": "otel-collector",
          "stages": [
             {
