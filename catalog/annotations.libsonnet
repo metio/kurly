@@ -3423,6 +3423,39 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocobase/server.libsonnet' },
       },
     },
+    synapse: {
+      summary: 'A Synapse server (the reference Matrix homeserver from the Matrix.org Foundation) on the official image; its configuration, signing keys and (with the default SQLite backend) database live on a PersistentVolume, generated on first start from SYNAPSE_SERVER_NAME. The server name is baked into every id and cannot be changed. Beyond a small instance, edit the generated homeserver.yaml to point at an external PostgreSQL. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8008.',
+      stages: {
+        server: d.fn('The Synapse server. serverName is the permanent Matrix server name; reportStats toggles anonymous stats. Data at /data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='synapse'),
+          d.arg('image', d.T.string, default='docker.io/matrixdotorg/synapse:v1.119.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('serverName', d.T.string, example='matrix.example.com'),
+          d.arg('reportStats', d.T.string, default='no'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/synapse/server.libsonnet' },
+      },
+    },
+    onlyoffice: {
+      summary: 'An ONLYOFFICE Document Server (a self-hosted online office suite for collaborative editing, embedded by Nextcloud/Seafile and others) on the official image; its data lives on a PersistentVolume. The app that embeds it points its connector at this URL. kurly authors no Secret; JWT_SECRET comes from a provided Secret via envFrom. The image bundles its own PostgreSQL and RabbitMQ, so it runs as root. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The ONLYOFFICE Document Server. secretName holds JWT_SECRET (envFrom). Data at /var/www/onlyoffice/Data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='onlyoffice'),
+          d.arg('image', d.T.string, default='docker.io/onlyoffice/documentserver:8.2.1'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='onlyoffice-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/onlyoffice/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

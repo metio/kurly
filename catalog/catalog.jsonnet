@@ -262,6 +262,8 @@ local stageImports = {
   'drupal/server': import 'github.com/metio/kurly/workloads/drupal/server.libsonnet',
   'prestashop/server': import 'github.com/metio/kurly/workloads/prestashop/server.libsonnet',
   'nocobase/server': import 'github.com/metio/kurly/workloads/nocobase/server.libsonnet',
+  'synapse/server': import 'github.com/metio/kurly/workloads/synapse/server.libsonnet',
+  'onlyoffice/server': import 'github.com/metio/kurly/workloads/onlyoffice/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
