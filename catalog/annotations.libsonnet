@@ -1500,6 +1500,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'firefly-iii': {
+      summary: 'A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
+      stages: {
+        server: d.fn('The Firefly III server. dbHost/dbName/dbUser default to a cnpg-cluster named firefly-iii-db. appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (a 32-char key, envFrom). Uploads at /var/www/html/storage. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='firefly-iii'),
+          d.arg('image', d.T.string, default='docker.io/fireflyiii/core:version-6.6.6'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='firefly-iii-db-rw'),
+          d.arg('dbName', d.T.string, default='firefly'),
+          d.arg('dbUser', d.T.string, default='firefly'),
+          d.arg('appUrl', d.T.string, example='https://finance.example.com'),
+          d.arg('secretName', d.T.string, default='firefly-iii-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/firefly-iii/server.libsonnet' },
+      },
+    },
     mediawiki: {
       summary: 'A MediaWiki server (the wiki engine behind Wikipedia) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploaded files on a PersistentVolume. Configured by a LocalSettings.php mounted from a Secret (it holds the DB password and secret key). The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
