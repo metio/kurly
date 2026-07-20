@@ -8480,6 +8480,84 @@
          "summary": "A Readeck server (a self-hosted read-it-later and web-bookmarking tool that saves clean, readable copies of pages). A plain composable http workload that keeps its bookmarks and saved articles in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8000."
       },
       {
+         "id": "roundcube",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "roundcube",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/roundcube/roundcubemail:1.7.2-apache",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "ssl://mail.example.com:993",
+                     "name": "imapHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "tls://mail.example.com:587",
+                     "name": "smtpHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Roundcube server. imapHost/smtpHost point at the mail server (e.g. ssl://mail.example.com:993). Keeps contacts/preferences in SQLite at /var/roundcube/db. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/roundcube/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "seatsurfing",
          "stages": [
             {

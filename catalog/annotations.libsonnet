@@ -1500,6 +1500,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    roundcube: {
+      summary: 'A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Roundcube server. imapHost/smtpHost point at the mail server (e.g. ssl://mail.example.com:993). Keeps contacts/preferences in SQLite at /var/roundcube/db. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='roundcube'),
+          d.arg('image', d.T.string, default='docker.io/roundcube/roundcubemail:1.7.2-apache'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('imapHost', d.T.string, example='ssl://mail.example.com:993'),
+          d.arg('smtpHost', d.T.string, example='tls://mail.example.com:587'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/roundcube/server.libsonnet' },
+      },
+    },
     shlink: {
       summary: 'A Shlink server (a self-hosted URL shortener with a REST API and rich analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named shlink-db. kurly authors no Secret; DB_PASSWORD (and optionally the GeoLite key) come from a provided Secret via envFrom. Serves on :8080.',
       stages: {

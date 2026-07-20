@@ -112,6 +112,7 @@ local stageImports = {
   'baserow/server': import 'github.com/metio/kurly/workloads/baserow/server.libsonnet',
   'rallly/server': import 'github.com/metio/kurly/workloads/rallly/server.libsonnet',
   'shlink/server': import 'github.com/metio/kurly/workloads/shlink/server.libsonnet',
+  'roundcube/server': import 'github.com/metio/kurly/workloads/roundcube/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
