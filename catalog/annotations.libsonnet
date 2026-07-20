@@ -1500,6 +1500,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    shlink: {
+      summary: 'A Shlink server (a self-hosted URL shortener with a REST API and rich analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named shlink-db. kurly authors no Secret; DB_PASSWORD (and optionally the GeoLite key) come from a provided Secret via envFrom. Serves on :8080.',
+      stages: {
+        server: d.fn('The Shlink server. dbHost/dbName/dbUser default to a cnpg-cluster named shlink-db. defaultDomain is the short-URL domain. secretName holds DB_PASSWORD (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='shlink'),
+          d.arg('image', d.T.string, default='docker.io/shlinkio/shlink:5.1.5'),
+          d.arg('dbHost', d.T.string, default='shlink-db-rw'),
+          d.arg('dbName', d.T.string, default='shlink'),
+          d.arg('dbUser', d.T.string, default='shlink'),
+          d.arg('defaultDomain', d.T.string, example='s.example.com'),
+          d.arg('secretName', d.T.string, default='shlink-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/shlink/server.libsonnet' },
+      },
+    },
     rallly: {
       summary: 'A Rallly server (a self-hosted scheduling and group-poll tool for finding the best date to meet) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL, SECRET_PASSWORD, and SMTP creds come from a provided Secret via envFrom. Pairs with a cnpg-cluster named rallly-db. Serves on :3000.',
       stages: {

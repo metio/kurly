@@ -8779,6 +8779,97 @@
          "summary": "A Shiori server (a simple, self-hosted bookmarks manager with web-page archiving). A plain composable http workload that keeps its bookmarks and archived pages in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080."
       },
       {
+         "id": "shlink",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "shlink",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/shlinkio/shlink:5.1.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "shlink-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "shlink",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "shlink",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "s.example.com",
+                     "name": "defaultDomain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "shlink-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Shlink server. dbHost/dbName/dbUser default to a cnpg-cluster named shlink-db. defaultDomain is the short-URL domain. secretName holds DB_PASSWORD (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/shlink/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Shlink server (a self-hosted URL shortener with a REST API and rich analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named shlink-db. kurly authors no Secret; DB_PASSWORD (and optionally the GeoLite key) come from a provided Secret via envFrom. Serves on :8080."
+      },
+      {
          "id": "silverbullet",
          "stages": [
             {
