@@ -250,6 +250,8 @@ local stageImports = {
   'plex/server': import 'github.com/metio/kurly/workloads/plex/server.libsonnet',
   'ollama/server': import 'github.com/metio/kurly/workloads/ollama/server.libsonnet',
   'odoo/server': import 'github.com/metio/kurly/workloads/odoo/server.libsonnet',
+  'technitium/server': import 'github.com/metio/kurly/workloads/technitium/server.libsonnet',
+  'docker-registry-ui/server': import 'github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',

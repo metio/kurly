@@ -5225,6 +5225,79 @@
          "summary": "A Directus server (an open-source headless CMS and data platform over your SQL database) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named directus-db. kurly authors no Secret; DB_PASSWORD, KEY, SECRET, and the admin password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8055."
       },
       {
+         "id": "docker-registry-ui",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "docker-registry-ui",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/joxit/docker-registry-ui:2.5.7",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "https://registry.example.com",
+                     "name": "registryUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "Docker Registry",
+                     "name": "registryTitle",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Docker Registry UI server. registryUrl points at the registry (NGINX_PROXY_PASS_URL); registryTitle sets the page title. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Docker Registry UI server (a clean, self-hosted web interface for browsing a Docker/OCI registry: repositories, tags, inspect and delete images) on the official image. Stateless: a plain rolling Deployment that talks to the registry you point it at. Serves on :80."
+      },
+      {
          "id": "docmost",
          "stages": [
             {
@@ -18784,6 +18857,78 @@
             }
          ],
          "summary": "A Tautulli server — a monitoring and tracking tool for Plex Media Server: history, statistics and notifications. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8181."
+      },
+      {
+         "id": "technitium",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "technitium",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/technitium/dns-server:13.2.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "technitium-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Technitium DNS server. secretName holds DNS_SERVER_ADMIN_PASSWORD (envFrom). Config at /etc/dns; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/technitium/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Technitium DNS Server (a self-hosted, privacy-focused DNS server with ad-blocking, DNS-over-HTTPS/TLS and a full web console) on the official image; its configuration and zones live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; DNS_SERVER_ADMIN_PASSWORD comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The web console serves on :5380."
       },
       {
          "id": "tempo",

@@ -3226,6 +3226,38 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/odoo/server.libsonnet' },
       },
     },
+    technitium: {
+      summary: 'A Technitium DNS Server (a self-hosted, privacy-focused DNS server with ad-blocking, DNS-over-HTTPS/TLS and a full web console) on the official image; its configuration and zones live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; DNS_SERVER_ADMIN_PASSWORD comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The web console serves on :5380.',
+      stages: {
+        server: d.fn('The Technitium DNS server. secretName holds DNS_SERVER_ADMIN_PASSWORD (envFrom). Config at /etc/dns; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='technitium'),
+          d.arg('image', d.T.string, default='docker.io/technitium/dns-server:13.2.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='technitium-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/technitium/server.libsonnet' },
+      },
+    },
+    'docker-registry-ui': {
+      summary: 'A Docker Registry UI server (a clean, self-hosted web interface for browsing a Docker/OCI registry: repositories, tags, inspect and delete images) on the official image. Stateless: a plain rolling Deployment that talks to the registry you point it at. Serves on :80.',
+      stages: {
+        server: d.fn('The Docker Registry UI server. registryUrl points at the registry (NGINX_PROXY_PASS_URL); registryTitle sets the page title. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='docker-registry-ui'),
+          d.arg('image', d.T.string, default='docker.io/joxit/docker-registry-ui:2.5.7'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('registryUrl', d.T.string, example='https://registry.example.com'),
+          d.arg('registryTitle', d.T.string, default='Docker Registry'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
