@@ -2628,6 +2628,75 @@
          "summary": "An Apache Answer server (a self-hosted Q&A platform for a community knowledge base, à la Stack Overflow) on the official image. A plain composable http workload — with the SQLite backend its data and uploads live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80. Configure external PostgreSQL/MySQL via the installer to scale out."
       },
       {
+         "id": "apprise",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "apprise",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/caronc/apprise:latest@sha256:91321755496e8472bdb674e4b14eb64d1f3b15510ef94971309c9f76ef3171e7",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "APPRISE_STATEFUL_MODE": "simple"
+                     },
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Apprise server. Named configs at /config on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/apprise/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
+      },
+      {
          "id": "audiobookshelf",
          "stages": [
             {

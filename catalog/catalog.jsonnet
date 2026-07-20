@@ -76,6 +76,7 @@ local stageImports = {
   'komga/server': import 'github.com/metio/kurly/workloads/komga/server.libsonnet',
   'grist/server': import 'github.com/metio/kurly/workloads/grist/server.libsonnet',
   'jenkins/server': import 'github.com/metio/kurly/workloads/jenkins/server.libsonnet',
+  'apprise/server': import 'github.com/metio/kurly/workloads/apprise/server.libsonnet',
   'cal-com/server': import 'github.com/metio/kurly/workloads/cal-com/server.libsonnet',
   'documenso/server': import 'github.com/metio/kurly/workloads/documenso/server.libsonnet',
   'kavita/server': import 'github.com/metio/kurly/workloads/kavita/server.libsonnet',

@@ -745,6 +745,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/cal-com/server.libsonnet' },
       },
     },
+    apprise: {
+      summary: 'An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
+      stages: {
+        server: d.fn('The Apprise server. Named configs at /config on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='apprise'),
+          d.arg('image', d.T.string, default='docker.io/caronc/apprise:latest@sha256:91321755496e8472bdb674e4b14eb64d1f3b15510ef94971309c9f76ef3171e7'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={ APPRISE_STATEFUL_MODE: 'simple' }),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/apprise/server.libsonnet' },
+      },
+    },
     kavita: {
       summary: 'A Kavita server (a fast, cross-platform reading server for comics, manga, and ebooks) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /library on the same volume — no external database. The .NET app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.',
       stages: {
