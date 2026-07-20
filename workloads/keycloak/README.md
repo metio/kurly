@@ -71,54 +71,73 @@ keycloak(hostname='https://id.example.com', spec={ proxy: { headers: 'xforwarded
 Expose it from outside the cluster by composing an exposure onto the operator's
 Service, or let the operator manage an Ingress via `spec.ingress`.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-keycloak, namespace: identity }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/keycloak
-  ref: { tag: latest }
+metadata: { name: kurly, namespace: keycloak }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-keycloak, namespace: keycloak }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/keycloak, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-keycloak, namespace: identity }
+metadata: { name: kurly, namespace: keycloak }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-keycloak, namespace: keycloak }
 spec: { sourceRef: { kind: OCIRepository, name: kurly-keycloak } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: keycloak, namespace: identity }
+metadata: { name: keycloak, namespace: keycloak }
 spec:
   serviceAccountName: keycloak-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local keycloak = import 'github.com/metio/kurly/workloads/keycloak/server.libsonnet';
-      function(hostname='https://id.example.com')
-        kurly.list(keycloak(hostname=hostname, tlsSecret='keycloak-tls'))
+      local server = import 'github.com/metio/kurly/workloads/keycloak/server.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(server())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,          importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-keycloak, importPath: github.com/metio/kurly/workloads/keycloak }
-  tlas:
-    - name: hostname
-      value: https://id.example.com
----
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: keycloak, namespace: identity }
+metadata: { name: keycloak, namespace: keycloak }
 spec:
   serviceAccountName: keycloak-deployer
+  rollbackOnFailure: true
   stages:
-    - name: keycloak
+    - name: server
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
         name: keycloak
-      readyChecks:
-        checks:
-          - apiVersion: k8s.keycloak.org/v2beta1
-            kind: Keycloak
-            name: keycloak
 ```
+
+<!-- END generated: jaas-deploy -->

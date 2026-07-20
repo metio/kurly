@@ -162,6 +162,23 @@
             ++ securityTools;
             text = builtins.readFile ./scripts/check-security.sh;
           };
+          # Splices the maturity badge and JaaS/stageset deploy walkthrough into
+          # every workload README from the catalog.
+          gen-readme = pkgs.writeShellApplication {
+            name = "gen-readme";
+            runtimeInputs = with pkgs; [
+              go-jsonnet
+              python3
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-readme.sh;
+          };
+          # Fails if any committed README's generated section is stale.
+          check-readme = pkgs.writeShellApplication {
+            name = "check-readme";
+            runtimeInputs = [ gen-readme ];
+            text = builtins.readFile ./scripts/check-readme.sh;
+          };
           # Stages the generated data the docs site reads into docs/data/
           # (gitignored) — currently the assembler catalog. Run before `hugo`;
           # the docs workflow runs it too, so the published site is always built
@@ -183,6 +200,7 @@
             runtimeInputs = [
               check-fmt
               check-catalog
+              check-readme
               check-tests
               check-examples
               check-coverage
@@ -194,11 +212,13 @@
           commands = [
             check-fmt
             check-catalog
+            check-readme
             check-tests
             check-examples
             check-coverage
             check-security
             gen-maturity
+            gen-readme
             gen-docs-data
             verify
           ];
@@ -211,11 +231,13 @@
               echo "kurly commands (also: nix develop --command <name>):"
               echo "  check-fmt        jsonnetfmt --test across all sources"
               echo "  check-catalog    regenerate catalog/catalog.json, fail if stale"
+              echo "  check-readme     fail if a workload README's generated section is stale"
               echo "  check-tests      assertion suite + the requiresService negative check"
               echo "  check-examples   render examples + workloads, validate with kubeconform"
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
+              echo "  gen-readme       splice the deploy walkthrough into every workload README"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
               echo "  verify           run every gate locally (what CI runs)"
             '';

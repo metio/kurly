@@ -72,9 +72,21 @@ The container runs as the image's non-root `valkey` user (uid 999); the pod's
 fsGroup matches so it owns the volume, and the rest of kurly's restricted posture
 (read-only root filesystem, dropped capabilities, seccomp) applies unchanged.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stages with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata: { name: kurly, namespace: valkey }
@@ -97,24 +109,39 @@ spec: { sourceRef: { kind: OCIRepository, name: kurly-valkey } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: valkey, namespace: valkey }
+metadata: { name: valkey-cache, namespace: valkey }
 spec:
   serviceAccountName: valkey-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local valkey = import 'github.com/metio/kurly/workloads/valkey/instance.libsonnet';
-      function(storageSize='5Gi', maxMemory='512mb')
-        kurly.list(valkey(storageSize=storageSize, maxMemory=maxMemory))
+      local cache = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(cache())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,         importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-valkey,  importPath: github.com/metio/kurly/workloads/valkey }
-  tlas:
-    - name: storageSize
-      value: "5Gi"
-    - name: maxMemory
-      value: 512mb
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-valkey, importPath: github.com/metio/kurly/workloads/valkey }
 ---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: valkey-instance, namespace: valkey }
+spec:
+  serviceAccountName: valkey-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local instance = import 'github.com/metio/kurly/workloads/valkey/instance.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(instance())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-valkey, importPath: github.com/metio/kurly/workloads/valkey }
+```
+
+A `StageSet` deploys the stages in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
 metadata: { name: valkey, namespace: valkey }
@@ -122,14 +149,22 @@ spec:
   serviceAccountName: valkey-deployer
   rollbackOnFailure: true
   stages:
+    - name: cache
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: valkey-cache
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: valkey-cache }
     - name: instance
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: valkey
+        name: valkey-instance
       readyChecks:
         checks:
-          - apiVersion: apps/v1
-            kind: StatefulSet
-            name: valkey
+          - { apiVersion: apps/v1, kind: StatefulSet, name: valkey-instance }
 ```
+
+<!-- END generated: jaas-deploy -->

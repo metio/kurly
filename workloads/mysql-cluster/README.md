@@ -60,3 +60,74 @@ stringData:
 Apps reach the cluster through the `<name>` Service (MySQL Router). Point a
 MySQL-backed workload — [wordpress](../wordpress/), [invoiceninja](../invoiceninja/),
 [mautic](../mautic/), … — at `dbHost: <name>` with the root (or an app) credential.
+
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
+
+```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly, namespace: mysql-cluster }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-mysql-cluster, namespace: mysql-cluster }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/mysql-cluster, ref: { tag: latest } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly, namespace: mysql-cluster }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-mysql-cluster, namespace: mysql-cluster }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-mysql-cluster } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: mysql-cluster, namespace: mysql-cluster }
+spec:
+  serviceAccountName: mysql-cluster-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local cluster = import 'github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(cluster())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-mysql-cluster, importPath: github.com/metio/kurly/workloads/mysql-cluster }
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
+apiVersion: stages.metio.wtf/v1
+kind: StageSet
+metadata: { name: mysql-cluster, namespace: mysql-cluster }
+spec:
+  serviceAccountName: mysql-cluster-deployer
+  rollbackOnFailure: true
+  stages:
+    - name: cluster
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: mysql-cluster
+```
+
+<!-- END generated: jaas-deploy -->

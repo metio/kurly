@@ -117,3 +117,192 @@ front(domain='example.com', hostnames=['mail.example.com'])
 ClamAV (antivirus), Radicale (webdav), the `unbound` resolver, and fetchmail are
 Mailu options this recipe omits. Compose them as additional workloads and point
 `ANTIVIRUS_ADDRESS` / `WEBDAV_ADDRESS` / `resolverAddress` at them through `env`.
+
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stages with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
+
+```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly, namespace: mailu }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-mailu, namespace: mailu }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/mailu, ref: { tag: latest } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly, namespace: mailu }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-mailu, namespace: mailu }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-mailu } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: mailu-admin, namespace: mailu }
+spec:
+  serviceAccountName: mailu-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local admin = import 'github.com/metio/kurly/workloads/mailu/admin.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(admin())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-mailu, importPath: github.com/metio/kurly/workloads/mailu }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: mailu-antispam, namespace: mailu }
+spec:
+  serviceAccountName: mailu-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local antispam = import 'github.com/metio/kurly/workloads/mailu/antispam.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(antispam())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-mailu, importPath: github.com/metio/kurly/workloads/mailu }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: mailu-front, namespace: mailu }
+spec:
+  serviceAccountName: mailu-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local front = import 'github.com/metio/kurly/workloads/mailu/front.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(front())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-mailu, importPath: github.com/metio/kurly/workloads/mailu }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: mailu-imap, namespace: mailu }
+spec:
+  serviceAccountName: mailu-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local imap = import 'github.com/metio/kurly/workloads/mailu/imap.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(imap())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-mailu, importPath: github.com/metio/kurly/workloads/mailu }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: mailu-smtp, namespace: mailu }
+spec:
+  serviceAccountName: mailu-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local smtp = import 'github.com/metio/kurly/workloads/mailu/smtp.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(smtp())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-mailu, importPath: github.com/metio/kurly/workloads/mailu }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: mailu-webmail, namespace: mailu }
+spec:
+  serviceAccountName: mailu-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local webmail = import 'github.com/metio/kurly/workloads/mailu/webmail.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(webmail())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-mailu, importPath: github.com/metio/kurly/workloads/mailu }
+```
+
+A `StageSet` deploys the stages in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
+apiVersion: stages.metio.wtf/v1
+kind: StageSet
+metadata: { name: mailu, namespace: mailu }
+spec:
+  serviceAccountName: mailu-deployer
+  rollbackOnFailure: true
+  stages:
+    - name: admin
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: mailu-admin
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: mailu-admin }
+    - name: antispam
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: mailu-antispam
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: mailu-antispam }
+    - name: front
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: mailu-front
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: mailu-front }
+    - name: imap
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: mailu-imap
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: mailu-imap }
+    - name: smtp
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: mailu-smtp
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: mailu-smtp }
+    - name: webmail
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: mailu-webmail
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: mailu-webmail }
+```
+
+<!-- END generated: jaas-deploy -->

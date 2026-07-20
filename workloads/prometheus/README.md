@@ -79,54 +79,73 @@ reach the API and UI at:
 http://prometheus-operated.<namespace>.svc:9090
 ```
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-prometheus, namespace: monitoring }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/prometheus
-  ref: { tag: latest }
+metadata: { name: kurly, namespace: prometheus }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-prometheus, namespace: prometheus }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/prometheus, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-prometheus, namespace: monitoring }
+metadata: { name: kurly, namespace: prometheus }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-prometheus, namespace: prometheus }
 spec: { sourceRef: { kind: OCIRepository, name: kurly-prometheus } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: prometheus, namespace: monitoring }
+metadata: { name: prometheus, namespace: prometheus }
 spec:
   serviceAccountName: prometheus-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local prometheus = import 'github.com/metio/kurly/workloads/prometheus/server.libsonnet';
-      function(namespace='monitoring')
-        kurly.list(prometheus(namespace=namespace, retention='30d'))
+      local server = import 'github.com/metio/kurly/workloads/prometheus/server.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(server())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,            importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-prometheus, importPath: github.com/metio/kurly/workloads/prometheus }
-  tlas:
-    - name: namespace
-      value: monitoring
----
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: prometheus, namespace: monitoring }
+metadata: { name: prometheus, namespace: prometheus }
 spec:
   serviceAccountName: prometheus-deployer
+  rollbackOnFailure: true
   stages:
-    - name: prometheus
+    - name: server
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
         name: prometheus
-      readyChecks:
-        checks:
-          - apiVersion: monitoring.coreos.com/v1
-            kind: Prometheus
-            name: prometheus
 ```
+
+<!-- END generated: jaas-deploy -->

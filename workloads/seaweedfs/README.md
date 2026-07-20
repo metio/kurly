@@ -79,54 +79,145 @@ Capacity is the split's whole point: the all-in-one has a single data process, s
 scaling it means a bigger volume; the split scales the volume tier out by adding
 servers. That is why these are separate stages, not a replica count on `server`.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stages with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-seaweedfs, namespace: storage }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/seaweedfs
-  ref: { tag: latest }
+metadata: { name: kurly, namespace: seaweedfs }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-seaweedfs, namespace: seaweedfs }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/seaweedfs, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-seaweedfs, namespace: storage }
+metadata: { name: kurly, namespace: seaweedfs }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-seaweedfs, namespace: seaweedfs }
 spec: { sourceRef: { kind: OCIRepository, name: kurly-seaweedfs } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: seaweedfs, namespace: storage }
+metadata: { name: seaweedfs-filer, namespace: seaweedfs }
 spec:
   serviceAccountName: seaweedfs-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local seaweedfs = import 'github.com/metio/kurly/workloads/seaweedfs/server.libsonnet';
-      function(storageSize='50Gi')
-        kurly.list(seaweedfs(storageSize=storageSize))
+      local filer = import 'github.com/metio/kurly/workloads/seaweedfs/filer.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(filer())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,           importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-seaweedfs, importPath: github.com/metio/kurly/workloads/seaweedfs }
-  tlas:
-    - name: storageSize
-      value: "50Gi"
 ---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: seaweedfs-master, namespace: seaweedfs }
+spec:
+  serviceAccountName: seaweedfs-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local master = import 'github.com/metio/kurly/workloads/seaweedfs/master.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(master())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-seaweedfs, importPath: github.com/metio/kurly/workloads/seaweedfs }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: seaweedfs-server, namespace: seaweedfs }
+spec:
+  serviceAccountName: seaweedfs-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/seaweedfs/server.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(server())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-seaweedfs, importPath: github.com/metio/kurly/workloads/seaweedfs }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: seaweedfs-volume, namespace: seaweedfs }
+spec:
+  serviceAccountName: seaweedfs-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local volume = import 'github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(volume())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-seaweedfs, importPath: github.com/metio/kurly/workloads/seaweedfs }
+```
+
+A `StageSet` deploys the stages in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: seaweedfs, namespace: storage }
+metadata: { name: seaweedfs, namespace: seaweedfs }
 spec:
   serviceAccountName: seaweedfs-deployer
+  rollbackOnFailure: true
   stages:
-    - name: seaweedfs
+    - name: filer
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: seaweedfs
+        name: seaweedfs-filer
       readyChecks:
         checks:
-          - apiVersion: apps/v1
-            kind: StatefulSet
-            name: seaweedfs
+          - { apiVersion: apps/v1, kind: StatefulSet, name: seaweedfs-filer }
+    - name: master
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: seaweedfs-master
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: StatefulSet, name: seaweedfs-master }
+    - name: server
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: seaweedfs-server
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: StatefulSet, name: seaweedfs-server }
+    - name: volume
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: seaweedfs-volume
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: StatefulSet, name: seaweedfs-volume }
 ```
+
+<!-- END generated: jaas-deploy -->

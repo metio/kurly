@@ -80,54 +80,73 @@ env:
 workload whose images are mirrored at operator install rather than through
 `kurly.mirror`, because the images are the operator's to choose.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-loki, namespace: logging }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/loki
-  ref: { tag: latest }
+metadata: { name: kurly, namespace: loki }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-loki, namespace: loki }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/loki, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-loki, namespace: logging }
+metadata: { name: kurly, namespace: loki }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-loki, namespace: loki }
 spec: { sourceRef: { kind: OCIRepository, name: kurly-loki } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: loki, namespace: logging }
+metadata: { name: loki, namespace: loki }
 spec:
   serviceAccountName: loki-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local loki = import 'github.com/metio/kurly/workloads/loki/server.libsonnet';
-      function(size='1x.small')
-        kurly.list(loki(size=size, storageSecret='loki-s3'))
+      local server = import 'github.com/metio/kurly/workloads/loki/server.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(server())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,      importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-loki, importPath: github.com/metio/kurly/workloads/loki }
-  tlas:
-    - name: size
-      value: 1x.small
----
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: loki, namespace: logging }
+metadata: { name: loki, namespace: loki }
 spec:
   serviceAccountName: loki-deployer
+  rollbackOnFailure: true
   stages:
-    - name: loki
+    - name: server
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
         name: loki
-      readyChecks:
-        checks:
-          - apiVersion: loki.grafana.com/v1
-            kind: LokiStack
-            name: loki
 ```
+
+<!-- END generated: jaas-deploy -->

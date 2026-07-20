@@ -25,6 +25,7 @@ export KURLY_JOBS="${KURLY_JOBS:-$(( cores / 4 > 0 ? cores / 4 : 1 ))}"
 gates=(
   "check-fmt"
   "check-catalog"
+  "check-readme"
   "check-tests"
   "check-examples"
   "check-coverage"

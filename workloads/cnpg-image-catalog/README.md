@@ -75,106 +75,93 @@ on the workload version (`spec.version.fromObject`), a catalog-driven PostgreSQL
 upgrade will not cross any migration boundary — the label never moves. Gate on the
 cluster's own version if a migration must fire on a PostgreSQL bump.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
 
-The operator, the catalog, and the clusters form a ladder where each rung is a
-real dependency:
+## Maturity
 
-| Stage | Source | Why it must come first |
-|---|---|---|
-| `operator` | upstream's release manifest, via a Flux `GitRepository` | a catalog is a `postgresql.cnpg.io` CR, so the CRDs must be Established before it can apply |
-| `images` | this workload | a cluster cannot resolve an image for a major the catalog does not list |
-| `clusters` | [cnpg-cluster](../cnpg-cluster/) | — |
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
 
-The operator stage points at CloudNativePG's own published manifest rather than
-a kurly-authored copy: it is ~21k lines, nearly all of it the CRDs, and it is
-CNPG's release artifact rather than anyone's intent to model. Gate that stage on
-the CRDs, not only the Deployment — kstatus reports a CRD ready on its
-`Established` condition, which is what the stage behind it actually needs.
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stages with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: GitRepository
-metadata: { name: cnpg-operator, namespace: postgres }
-spec:
-  interval: 12h
-  url: https://github.com/cloudnative-pg/cloudnative-pg
-  ref: { tag: v1.30.0 }
-  ignore: |
-    /*
-    !/releases/cnpg-1.30.0.yaml
+kind: OCIRepository
+metadata: { name: kurly, namespace: cnpg-image-catalog }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-cnpg-image-catalog, namespace: postgres }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/cnpg-image-catalog
-  ref: { tag: latest }
+metadata: { name: kurly-cnpg-image-catalog, namespace: cnpg-image-catalog }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/cnpg-image-catalog, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-cnpg-image-catalog, namespace: postgres }
+metadata: { name: kurly, namespace: cnpg-image-catalog }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-cnpg-image-catalog, namespace: cnpg-image-catalog }
 spec: { sourceRef: { kind: OCIRepository, name: kurly-cnpg-image-catalog } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: postgres-images, namespace: postgres }
+metadata: { name: cnpg-image-catalog-cluster, namespace: cnpg-image-catalog }
 spec:
-  serviceAccountName: postgres-renderer
+  serviceAccountName: cnpg-image-catalog-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local catalog = import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet';
-      function(pg17='ghcr.io/cloudnative-pg/postgresql:17.2')
-        kurly.list(catalog(name='postgres', images={ '17': pg17 }))
+      local cluster = import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(cluster())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,                     importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-cnpg-image-catalog,  importPath: github.com/metio/kurly/workloads/cnpg-image-catalog }
-  tlas:
-    - name: pg17
-      value: ghcr.io/cloudnative-pg/postgresql:17.2
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-cnpg-image-catalog, importPath: github.com/metio/kurly/workloads/cnpg-image-catalog }
 ---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: cnpg-image-catalog-namespaced, namespace: cnpg-image-catalog }
+spec:
+  serviceAccountName: cnpg-image-catalog-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local namespaced = import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(namespaced())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-cnpg-image-catalog, importPath: github.com/metio/kurly/workloads/cnpg-image-catalog }
+```
+
+A `StageSet` deploys the stages in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: postgres, namespace: postgres }
+metadata: { name: cnpg-image-catalog, namespace: cnpg-image-catalog }
 spec:
-  serviceAccountName: postgres-deployer
+  serviceAccountName: cnpg-image-catalog-deployer
+  rollbackOnFailure: true
   stages:
-    - name: operator
-      sourceRef: { kind: GitRepository, name: cnpg-operator }
-      path: ./releases
-      readyChecks:
-        timeout: 5m
-        checks:
-          - apiVersion: apiextensions.k8s.io/v1
-            kind: CustomResourceDefinition
-            name: imagecatalogs.postgresql.cnpg.io
-          - apiVersion: apiextensions.k8s.io/v1
-            kind: CustomResourceDefinition
-            name: clusters.postgresql.cnpg.io
-          - apiVersion: apps/v1
-            kind: Deployment
-            name: cnpg-controller-manager
-            namespace: cnpg-system
-    - name: images
-      sourceRef:
-        apiVersion: jaas.metio.wtf/v1
-        kind: JsonnetSnippet
-        name: postgres-images
-      readyChecks:
-        checks:
-          - apiVersion: postgresql.cnpg.io/v1
-            kind: ImageCatalog
-            name: postgres
     - name: cluster
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: postgres
-      readyChecks:
-        checks:
-          - apiVersion: postgresql.cnpg.io/v1
-            kind: Cluster
-            name: orders-db
+        name: cnpg-image-catalog-cluster
+    - name: namespaced
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: cnpg-image-catalog-namespaced
 ```
+
+<!-- END generated: jaas-deploy -->

@@ -266,3 +266,189 @@ Each stage is its own JaaS `JsonnetSnippet` / stageset stage — see the
 [alertmanager](../alertmanager/) or [loki](../loki/) README for the full
 `OCIRepository` → `JsonnetLibrary` → `StageSet` wiring (substitute
 `workloads/thanos` and the stage import path).
+
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stages with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
+
+```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly, namespace: thanos }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-thanos, namespace: thanos }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/thanos, ref: { tag: latest } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly, namespace: thanos }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-thanos, namespace: thanos }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-thanos } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: thanos-compact, namespace: thanos }
+spec:
+  serviceAccountName: thanos-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local compact = import 'github.com/metio/kurly/workloads/thanos/compact.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(compact())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-thanos, importPath: github.com/metio/kurly/workloads/thanos }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: thanos-query, namespace: thanos }
+spec:
+  serviceAccountName: thanos-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local query = import 'github.com/metio/kurly/workloads/thanos/query.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(query())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-thanos, importPath: github.com/metio/kurly/workloads/thanos }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: thanos-query-frontend, namespace: thanos }
+spec:
+  serviceAccountName: thanos-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local query_frontend = import 'github.com/metio/kurly/workloads/thanos/query-frontend.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(query_frontend())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-thanos, importPath: github.com/metio/kurly/workloads/thanos }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: thanos-receive, namespace: thanos }
+spec:
+  serviceAccountName: thanos-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local receive = import 'github.com/metio/kurly/workloads/thanos/receive.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(receive())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-thanos, importPath: github.com/metio/kurly/workloads/thanos }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: thanos-ruler, namespace: thanos }
+spec:
+  serviceAccountName: thanos-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local ruler = import 'github.com/metio/kurly/workloads/thanos/ruler.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(ruler())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-thanos, importPath: github.com/metio/kurly/workloads/thanos }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: thanos-store, namespace: thanos }
+spec:
+  serviceAccountName: thanos-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local store = import 'github.com/metio/kurly/workloads/thanos/store.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(store())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-thanos, importPath: github.com/metio/kurly/workloads/thanos }
+```
+
+A `StageSet` deploys the stages in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
+apiVersion: stages.metio.wtf/v1
+kind: StageSet
+metadata: { name: thanos, namespace: thanos }
+spec:
+  serviceAccountName: thanos-deployer
+  rollbackOnFailure: true
+  stages:
+    - name: compact
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: thanos-compact
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: thanos-compact }
+    - name: query
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: thanos-query
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: thanos-query }
+    - name: query-frontend
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: thanos-query-frontend
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: thanos-query-frontend }
+    - name: receive
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: thanos-receive
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: StatefulSet, name: thanos-receive }
+    - name: ruler
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: thanos-ruler
+    - name: store
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: thanos-store
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: StatefulSet, name: thanos-store }
+```
+
+<!-- END generated: jaas-deploy -->

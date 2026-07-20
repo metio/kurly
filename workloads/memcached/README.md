@@ -72,47 +72,67 @@ comes from the same `memoryMB` that produces `-m` (plus 25% and 32Mi), so the tw
 cannot drift — the usual failure being an `-m` raised without the limit following
 it.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-memcached, namespace: cache }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/memcached
-  ref: { tag: latest }
+metadata: { name: kurly, namespace: memcached }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-memcached, namespace: memcached }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/memcached, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-memcached, namespace: cache }
+metadata: { name: kurly, namespace: memcached }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-memcached, namespace: memcached }
 spec: { sourceRef: { kind: OCIRepository, name: kurly-memcached } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: memcached, namespace: cache }
+metadata: { name: memcached, namespace: memcached }
 spec:
-  serviceAccountName: cache-renderer
+  serviceAccountName: memcached-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local memcached = import 'github.com/metio/kurly/workloads/memcached/cache.libsonnet';
-      function(replicas='3', memoryMB='256')
-        kurly.list(memcached(replicas=std.parseInt(replicas), memoryMB=std.parseInt(memoryMB)))
+      local cache = import 'github.com/metio/kurly/workloads/memcached/cache.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(cache())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,           importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-memcached, importPath: github.com/metio/kurly/workloads/memcached }
-  tlas:
-    - name: replicas
-      value: "3"
-    - name: memoryMB
-      value: "256"
----
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: memcached, namespace: cache }
+metadata: { name: memcached, namespace: memcached }
 spec:
-  serviceAccountName: cache-deployer
+  serviceAccountName: memcached-deployer
+  rollbackOnFailure: true
   stages:
     - name: cache
       sourceRef:
@@ -121,7 +141,7 @@ spec:
         name: memcached
       readyChecks:
         checks:
-          - apiVersion: apps/v1
-            kind: StatefulSet
-            name: memcached
+          - { apiVersion: apps/v1, kind: StatefulSet, name: memcached }
 ```
+
+<!-- END generated: jaas-deploy -->

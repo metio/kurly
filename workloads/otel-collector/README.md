@@ -84,51 +84,76 @@ node by resolving the node's IP through the downward API
 which requires the collector to listen on a `hostPort`. Add the hostPort to the
 container the same way as the log mount above, in the namespaces that allow it.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-otel, namespace: observability }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/otel-collector
-  ref: { tag: latest }
+metadata: { name: kurly, namespace: otel-collector }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-otel-collector, namespace: otel-collector }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/otel-collector, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-otel, namespace: observability }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-otel } }
+metadata: { name: kurly, namespace: otel-collector }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-otel-collector, namespace: otel-collector }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-otel-collector } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: agent, namespace: observability }
+metadata: { name: otel-collector, namespace: otel-collector }
 spec:
-  serviceAccountName: agent-renderer
+  serviceAccountName: otel-collector-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
       local agent = import 'github.com/metio/kurly/workloads/otel-collector/agent.libsonnet';
-      function()
-        kurly.list(agent())
+      // Compose your exposure and any + features here, then render.
+      kurly.list(agent())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,      importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-otel, importPath: github.com/metio/kurly/workloads/otel-collector }
----
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-otel-collector, importPath: github.com/metio/kurly/workloads/otel-collector }
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: agent, namespace: observability }
+metadata: { name: otel-collector, namespace: otel-collector }
 spec:
-  serviceAccountName: agent-deployer
+  serviceAccountName: otel-collector-deployer
+  rollbackOnFailure: true
   stages:
     - name: agent
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: agent
+        name: otel-collector
       readyChecks:
         checks:
-          - apiVersion: apps/v1
-            kind: DaemonSet
-            name: otel-collector
+          - { apiVersion: apps/v1, kind: DaemonSet, name: otel-collector }
 ```
+
+<!-- END generated: jaas-deploy -->

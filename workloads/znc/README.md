@@ -39,3 +39,77 @@ or mount it from a Secret (kurly mints none — it holds passwords).
 
 The configuration and buffers live on a ReadWriteOnce volume, so this is **one
 replica, recreated** (never rolled) to keep two pods off the files.
+
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
+
+```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly, namespace: znc }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-znc, namespace: znc }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/znc, ref: { tag: latest } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly, namespace: znc }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-znc, namespace: znc }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-znc } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: znc, namespace: znc }
+spec:
+  serviceAccountName: znc-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/znc/server.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(server())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-znc, importPath: github.com/metio/kurly/workloads/znc }
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
+apiVersion: stages.metio.wtf/v1
+kind: StageSet
+metadata: { name: znc, namespace: znc }
+spec:
+  serviceAccountName: znc-deployer
+  rollbackOnFailure: true
+  stages:
+    - name: server
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: znc
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: znc }
+```
+
+<!-- END generated: jaas-deploy -->

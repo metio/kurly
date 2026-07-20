@@ -84,55 +84,76 @@ responder(name='not-found', statusCode=404, message='not found')
 One `ReferenceGrant` lists every granted namespace; add a namespace to the list
 rather than deploying another responder.
 
-## Deploy through JaaS and stageset
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-status-responder, namespace: shared-http-services }
-spec:
-  interval: 12h
-  url: oci://ghcr.io/metio/kurly/workloads/status-responder
-  ref: { tag: latest }
+metadata: { name: kurly, namespace: status-responder }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-status-responder, namespace: status-responder }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/status-responder, ref: { tag: latest } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-status-responder, namespace: shared-http-services }
+metadata: { name: kurly, namespace: status-responder }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-status-responder, namespace: status-responder }
 spec: { sourceRef: { kind: OCIRepository, name: kurly-status-responder } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: not-found, namespace: shared-http-services }
+metadata: { name: status-responder, namespace: status-responder }
 spec:
-  serviceAccountName: responder-renderer
+  serviceAccountName: status-responder-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
       local responder = import 'github.com/metio/kurly/workloads/status-responder/responder.libsonnet';
-      function(tenants=[])
-        kurly.list(responder(name='not-found', statusCode=404, message='not found')
-                   + kurly.expose.referenceGrant(tenants))
+      // Compose your exposure and any + features here, then render.
+      kurly.list(responder())
   libraries:
-    - { kind: JsonnetLibrary, name: kurly,                   importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-status-responder,  importPath: github.com/metio/kurly/workloads/status-responder }
-  tlas:
-    - name: tenants
-      value: [team-a, team-b]
----
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-status-responder, importPath: github.com/metio/kurly/workloads/status-responder }
+```
+
+A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: not-found, namespace: shared-http-services }
+metadata: { name: status-responder, namespace: status-responder }
 spec:
-  serviceAccountName: responder-deployer
+  serviceAccountName: status-responder-deployer
+  rollbackOnFailure: true
   stages:
-    - name: not-found
+    - name: responder
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: not-found
+        name: status-responder
       readyChecks:
         checks:
-          - apiVersion: apps/v1
-            kind: Deployment
-            name: not-found
+          - { apiVersion: apps/v1, kind: Deployment, name: status-responder }
 ```
+
+<!-- END generated: jaas-deploy -->

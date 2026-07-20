@@ -65,3 +65,100 @@ With local file storage the server keeps uploads on a ReadWriteOnce volume, so i
 **one replica, recreated**. Move `STORAGE_TYPE` to S3 (the [seaweedfs](../seaweedfs/)
 workload) to scale the front end horizontally; the worker holds no state and scales
 with `replicas`.
+
+<!-- BEGIN generated: jaas-deploy -->
+
+## Maturity
+
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+
+## Deploy with JaaS
+
+Make the kurly library and this workload importable as `JsonnetLibrary`s, render
+each stages with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
+
+```yaml
+# The kurly library (recipes) and this workload (source), both single-layer
+# images from their release pipelines, pulled by plain OCIRepositories.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly, namespace: twenty }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: kurly-twenty, namespace: twenty }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/twenty, ref: { tag: latest } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly, namespace: twenty }
+spec: { sourceRef: { kind: OCIRepository, name: kurly } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: kurly-twenty, namespace: twenty }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-twenty } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: twenty-server, namespace: twenty }
+spec:
+  serviceAccountName: twenty-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/twenty/server.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(server())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-twenty, importPath: github.com/metio/kurly/workloads/twenty }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: twenty-worker, namespace: twenty }
+spec:
+  serviceAccountName: twenty-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local worker = import 'github.com/metio/kurly/workloads/twenty/worker.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(worker())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-twenty, importPath: github.com/metio/kurly/workloads/twenty }
+```
+
+A `StageSet` deploys the stages in order, pinning artifact revisions at the start of
+the run and gating each stage before the next.
+
+```yaml
+apiVersion: stages.metio.wtf/v1
+kind: StageSet
+metadata: { name: twenty, namespace: twenty }
+spec:
+  serviceAccountName: twenty-deployer
+  rollbackOnFailure: true
+  stages:
+    - name: server
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: twenty-server
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: twenty-server }
+    - name: worker
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: twenty-worker
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: twenty-worker }
+```
+
+<!-- END generated: jaas-deploy -->
