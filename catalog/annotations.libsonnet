@@ -387,6 +387,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    hedgedoc: {
+      summary: 'A HedgeDoc server (real-time, collaborative markdown notes) on the official image, backed by an external PostgreSQL, with uploaded files on a PersistentVolume. Pairs with a cnpg-cluster named hedgedoc-db. kurly authors no Secret; CMD_DB_URL and CMD_SESSION_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The HedgeDoc server. domain is the public domain. secretName holds CMD_DB_URL (with the DB password) and CMD_SESSION_SECRET (envFrom). Uploads at /hedgedoc/public/uploads. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='hedgedoc'),
+          d.arg('image', d.T.string, default='quay.io/hedgedoc/hedgedoc:1.11.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('domain', d.T.string, example='pad.example.com'),
+          d.arg('secretName', d.T.string, default='hedgedoc-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/hedgedoc/server.libsonnet' },
+      },
+    },
     dex: {
       summary: 'A Dex server (an OpenID Connect / OAuth 2.0 identity provider that federates to upstream connectors — LDAP, SAML, GitHub, Google, …) on the official image. A plain composable http workload; with the SQLite storage backend its state lives on a PersistentVolume, no external database. Driven entirely by a config.yaml (issuer, storage, connectors, staticClients) mounted from a Secret — kurly authors none. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves OIDC on :5556.',
       stages: {
