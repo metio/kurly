@@ -29,18 +29,8 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 
 // Forgejo serves the UI and git-over-HTTP on :3000; git-over-SSH runs on :2222
-// (an unprivileged port the rootless image can bind). kurly.http names the primary
-// container port 'http'; add the SSH port and publish both on the Service.
-local sshPort = {
-  deployment+: { spec+: { template+: { spec+: {
-    containers: [
-      container { ports+: [{ containerPort: 2222, name: 'ssh', protocol: 'TCP' }] }
-      for container in super.containers
-    ],
-  } } } },
-  service+: { spec+: { ports+: [{ name: 'ssh', port: 2222, targetPort: 'ssh', protocol: 'TCP' }] } },
-};
-
+// (an unprivileged port the rootless image can bind), published on the Service
+// beside the HTTP port via kurly.extraPort.
 function(
   name='forgejo',
   image='codeberg.org/forgejo/forgejo:16.0-rootless',
@@ -83,6 +73,7 @@ function(
   + kurly.recreate()
   + kurly.port(3000)
   + kurly.servicePort(3000)
+  + kurly.extraPort('ssh', 2222)
   + kurly.env(baseEnv + env)
   // The rootless image runs as uid 1000; pin it and its fsGroup so the data volume
   // is writable and the restricted posture admits the pod.
@@ -101,4 +92,3 @@ function(
   )
   + kurly.labels(labels)
   + kurly.annotations(annotations)
-  + sshPort

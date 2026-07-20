@@ -25,7 +25,8 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 
 // The public mail and web ports the edge terminates, beyond the primary :80 that
-// kurly.http names 'http'. Each rides onto both the container and the Service.
+// kurly.http names 'http'. Each rides onto both the container and the Service via
+// kurly.extraPort.
 local edgePorts = [
   { name: 'smtp', port: 25 },
   { name: 'smtps', port: 465 },
@@ -68,39 +69,39 @@ function(
     REDIS_ADDRESS: redisAddress,
   } + (if resolverAddress == '' then {} else { RESOLVER_ADDRESS: resolverAddress });
 
-  // The edge ports and the shared TLS-cert directory, patched onto the container
-  // and Service that kurly.http builds.
-  local edge = {
+  // The shared TLS-cert directory, mounted from the coordinated Mailu volume. The
+  // ports are composed as features below; this patch is only the /certs mount.
+  local certVolume = {
     deployment+: { spec+: { template+: { spec+: {
       volumes+: [{ name: 'storage', persistentVolumeClaim: { claimName: storageClaim } }],
       containers: [
-        container {
-          ports+: [{ containerPort: p.port, name: p.name, protocol: 'TCP' } for p in edgePorts],
-          volumeMounts+: [{ name: 'storage', mountPath: '/certs', subPath: 'certs' }],
-        }
+        container { volumeMounts+: [{ name: 'storage', mountPath: '/certs', subPath: 'certs' }] }
         for container in super.containers
       ],
     } } } },
-    service+: { spec+: { ports+: [{ name: p.name, port: p.port, targetPort: p.name, protocol: 'TCP' } for p in edgePorts] } },
   };
 
-  kurly.http(resolvedName, image)
-  + kurly.version(version)
-  + kurly.replicas(1)
-  + kurly.recreate()
-  + kurly.port(80)
-  + kurly.servicePort(80)
-  + kurly.envFromSecret(secretName)
-  + kurly.env(mailuEnv)
-  + kurly.rootUser()
-  + kurly.writableRootFilesystem()
-  + kurly.hostUsers()
-  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
-  + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
-  + kurly.resources(
-    requests=std.get(resources, 'requests', {}),
-    limits=std.get(resources, 'limits', {}),
+  std.foldl(
+    function(app, p) app + kurly.extraPort(p.name, p.port),
+    edgePorts,
+    kurly.http(resolvedName, image)
+    + kurly.version(version)
+    + kurly.replicas(1)
+    + kurly.recreate()
+    + kurly.port(80)
+    + kurly.servicePort(80)
+    + kurly.envFromSecret(secretName)
+    + kurly.env(mailuEnv)
+    + kurly.rootUser()
+    + kurly.writableRootFilesystem()
+    + kurly.hostUsers()
+    + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
+    + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
+    + kurly.resources(
+      requests=std.get(resources, 'requests', {}),
+      limits=std.get(resources, 'limits', {}),
+    )
+    + kurly.labels(labels)
+    + kurly.annotations(annotations)
+    + certVolume,
   )
-  + kurly.labels(labels)
-  + kurly.annotations(annotations)
-  + edge
