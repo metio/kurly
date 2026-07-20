@@ -1500,6 +1500,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    matomo: {
+      summary: 'A Matomo server (a privacy-focused, self-hosted web-analytics platform — the open-source Google Analytics alternative) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and plugins on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MATOMO_DATABASE_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Matomo server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). secretName holds MATOMO_DATABASE_PASSWORD (envFrom). Config/plugins at /var/www/html. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='matomo'),
+          d.arg('image', d.T.string, default='docker.io/library/matomo:5.12.0-apache'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='matomo-db'),
+          d.arg('dbName', d.T.string, default='matomo'),
+          d.arg('dbUser', d.T.string, default='matomo'),
+          d.arg('secretName', d.T.string, default='matomo-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/matomo/server.libsonnet' },
+      },
+    },
     wikijs: {
       summary: 'A Wiki.js server (a modern, open-source wiki) on the official image, backed by an external PostgreSQL. Its content and configuration live in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named wikijs-db. kurly authors no Secret; DB_PASS comes from a provided Secret via envFrom. Serves on :3000.',
       stages: {
