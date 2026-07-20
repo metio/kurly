@@ -1500,6 +1500,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    ferretdb: {
+      summary: 'A FerretDB server (an open-source, MongoDB-compatible database) — the Apache-2.0 alternative to MongoDB Community (SSPL) for a platform that monetizes hosting. A stateless proxy that speaks the MongoDB wire protocol and stores everything in a PostgreSQL backend (with the DocumentDB extension), so it needs no volume and can run several replicas. kurly authors no Secret; FERRETDB_POSTGRESQL_URL comes from a provided Secret via envFrom. Serves MongoDB wire on :27017.',
+      stages: {
+        server: d.fn('The FerretDB proxy. secretName holds FERRETDB_POSTGRESQL_URL (with the backend password, envFrom). The backend is a PostgreSQL with the DocumentDB extension — run one with cnpg-cluster pinned to imageName=ghcr.io/ferretdb/postgres-documentdb. Scales horizontally via replicas. Route :27017 as TCP for MongoDB clients.', [
+          d.arg('name', d.T.string, default='ferretdb'),
+          d.arg('image', d.T.string, default='ghcr.io/ferretdb/ferretdb:2.7.0'),
+          d.arg('secretName', d.T.string, default='ferretdb-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ferretdb/server.libsonnet' },
+      },
+    },
     neo4j: {
       summary: 'A Neo4j graph database on the official Community image. Unlike the other database workloads, Neo4j Community has no operator and does not cluster (clustering is Enterprise), so this is a plain composable http single-instance workload rather than a CR — its graph lives on a PersistentVolume. Community Edition is GPLv3 (fine to run). kurly authors no Secret; NEO4J_AUTH comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves HTTP on :7474 and Bolt on :7687.',
       stages: {
