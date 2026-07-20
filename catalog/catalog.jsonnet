@@ -288,6 +288,7 @@ local stageImports = {
   'mastodon/web': import 'github.com/metio/kurly/workloads/mastodon/web.libsonnet',
   'mastodon/streaming': import 'github.com/metio/kurly/workloads/mastodon/streaming.libsonnet',
   'mastodon/sidekiq': import 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet',
+  'oauth2-proxy/server': import 'github.com/metio/kurly/workloads/oauth2-proxy/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
