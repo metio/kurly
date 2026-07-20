@@ -3550,6 +3550,50 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tvheadend/server.libsonnet' },
       },
     },
+    organizr: {
+      summary: 'An Organizr server (a self-hosted HTPC/homelab services dashboard that ties your apps together behind one tabbed interface with authentication) on the official image (pinned by digest; Renovate maintains it); SQLite config on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Organizr server. Config at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='organizr'),
+          d.arg('image', d.T.string, default='docker.io/organizr/organizr:latest@sha256:1ce319d73cdfd2666ec7ef21e15907531fabc8a6f333c4ac61e2b2e9d2d162f5'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/organizr/server.libsonnet' },
+      },
+    },
+    filestash: {
+      summary: 'A Filestash server (a self-hosted web file manager with a modern UI in front of many storage backends: SFTP, FTP, S3, WebDAV, Git) on the official image (pinned by digest; Renovate maintains it); config on a PersistentVolume. Files live on the configured backends, not here. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8334.',
+      stages: {
+        server: d.fn('The Filestash server. Add storage backends in the admin console. Config at /app/data/state. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='filestash'),
+          d.arg('image', d.T.string, default='docker.io/machines/filestash:latest@sha256:1d621a2f96785c0ae711805593d1005fbf80068bd437a25a95b1462004ef57ca'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/filestash/server.libsonnet' },
+      },
+    },
+    mailhog: {
+      summary: 'A MailHog server (a self-hosted email-testing tool for developers that captures the mail your apps send and shows it in a web inbox instead of delivering it) on the official image (pinned by digest; Renovate maintains it). Keeps captured mail in memory: a plain stateless Deployment. Apps send to its SMTP listener on :1025 (needs an extra Service). Serves the web inbox on :8025.',
+      stages: {
+        server: d.fn('The MailHog server. SMTP on :1025 needs an extra Service. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='mailhog'),
+          d.arg('image', d.T.string, default='docker.io/mailhog/mailhog:latest@sha256:8d76a3d4ffa32a3661311944007a415332c4bb855657f4f6c57996405c009bea'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mailhog/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
