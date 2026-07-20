@@ -387,6 +387,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    umami: {
+      summary: 'An Umami server (a simple, privacy-focused, self-hosted web-analytics alternative to Google Analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a cnpg-cluster named umami-db. Serves on :3000.',
+      stages: {
+        server: d.fn('The Umami server. secretName holds DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='umami'),
+          d.arg('image', d.T.string, default='ghcr.io/umami-software/umami:postgresql-v2.15.1'),
+          d.arg('secretName', d.T.string, default='umami-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/umami/server.libsonnet' },
+      },
+    },
     linkwarden: {
       summary: 'A Linkwarden server (a self-hosted bookmark manager that archives a copy of every page) on the official image, backed by an external PostgreSQL, with archived pages on a PersistentVolume. Pairs with a cnpg-cluster named linkwarden-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

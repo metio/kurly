@@ -8281,6 +8281,73 @@
          "summary": "A Twenty server (a modern, open-source CRM) as two stages — server (the web/API front end) and worker (background BullMQ jobs) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named twenty-db and a valkey named twenty-cache. kurly authors no Secret; PG_DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. The server keeps local uploads on a ReadWriteOnce volume (one replica, recreated); move to S3 to scale out."
       },
       {
+         "id": "umami",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "umami",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/umami-software/umami:postgresql-v2.15.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "umami-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Umami server. secretName holds DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/umami/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Umami server (a simple, privacy-focused, self-hosted web-analytics alternative to Google Analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a cnpg-cluster named umami-db. Serves on :3000."
+      },
+      {
          "id": "uptime-kuma",
          "stages": [
             {
