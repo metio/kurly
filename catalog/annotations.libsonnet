@@ -1500,6 +1500,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    bookstack: {
+      summary: 'A BookStack server (a simple, self-hosted platform for organising and storing documentation) on the maintained LinuxServer image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and uploads on a PersistentVolume. The LinuxServer s6 image runs as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASS and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The BookStack server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASS and APP_KEY (envFrom). Config/uploads at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='bookstack'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/bookstack:26.05.2'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='bookstack-db'),
+          d.arg('dbName', d.T.string, default='bookstack'),
+          d.arg('dbUser', d.T.string, default='bookstack'),
+          d.arg('appUrl', d.T.string, example='https://docs.example.com'),
+          d.arg('secretName', d.T.string, default='bookstack-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bookstack/server.libsonnet' },
+      },
+    },
     matomo: {
       summary: 'A Matomo server (a privacy-focused, self-hosted web-analytics platform — the open-source Google Analytics alternative) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and plugins on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MATOMO_DATABASE_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
