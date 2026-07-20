@@ -4517,6 +4517,90 @@
          "summary": "A Dashy server (a highly customizable, self-hosted dashboard for your services) on the official image. A plain composable http workload — its configuration lives on a PersistentVolume, no external database. The image rebuilds assets on a config change and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "id": "davos",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "davos",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/davos:2.2.2-ls220",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A davos server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/davos/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A davos server — a self-hosted FTP automation tool that watches remote directories and downloads on a schedule. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
+      },
+      {
          "id": "deluge",
          "stages": [
             {
@@ -5099,6 +5183,90 @@
             }
          ],
          "summary": "A draw.io server — the self-hosted diagrams.net web editor for flowcharts, UML and network diagrams. On the official image; stateless (a plain rolling Deployment). Serves on :8080."
+      },
+      {
+         "id": "duplicati",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "duplicati",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/duplicati:v2.3.0.4_stable_2026-07-09-ls301",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A Duplicati server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/duplicati/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Duplicati server — a self-hosted, encrypted backup client for cloud and remote storage, managed from the browser. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8200."
       },
       {
          "id": "ejabberd",
@@ -6052,6 +6220,90 @@
             }
          ],
          "summary": "A Focalboard server — a self-hosted project-management and kanban tool, an open alternative to Trello/Notion/Asana. On the official image; with the default SQLite backend its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
+      },
+      {
+         "id": "foldingathome",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "foldingathome",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/foldingathome:8.5.6",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A Folding@home client. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/foldingathome/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Folding@home client — the distributed-computing client for disease research, with its web control panel. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7396."
       },
       {
          "id": "forgejo",
@@ -10805,6 +11057,73 @@
          "summary": "A Miniflux server (a minimalist, opinionated RSS/Atom feed reader) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and the admin password come from a provided Secret via envFrom. Pairs with a cnpg-cluster named miniflux-db. Serves on :8080."
       },
       {
+         "id": "mongo-express",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mongo-express",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/mongo-express:1.0.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "mongo-express-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The mongo-express server. secretName holds ME_CONFIG_MONGODB_URL and the basic-auth credentials (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/mongo-express/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A mongo-express server (a lightweight, web-based MongoDB admin UI) on the official image. Stateless: a plain rolling Deployment that connects to the MongoDB you point it at. kurly authors no Secret; ME_CONFIG_MONGODB_URL and the basic-auth credentials come from a provided Secret via envFrom. Pairs with a mongodb-cluster. Serves on :8081."
+      },
+      {
          "id": "mongodb-cluster",
          "stages": [
             {
@@ -10970,6 +11289,78 @@
             }
          ],
          "summary": "A Monica server (a self-hosted personal relationship manager) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "mumble",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mumble",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/mumblevoip/mumble-server:v1.5.735-0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mumble-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mumble/Murmur server on :64738 (TCP control + UDP voice). secretName holds MUMBLE_SUPERUSER_PASSWORD (envFrom). Data at /data. Expose to clients (often a LoadBalancer); add a second Service for UDP.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/mumble/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Mumble server (Murmur: a self-hosted, low-latency voice-chat server for gaming and communities). Modelled as an HTTP workload for its Deployment/Service plumbing, but Mumble speaks its own voice protocol on :64738 (TCP control, UDP voice), with its SQLite database on a PersistentVolume. The Service publishes the TCP port; UDP voice needs a second Service (usually a LoadBalancer). kurly authors no Secret; MUMBLE_SUPERUSER_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated."
       },
       {
          "id": "mylar3",
@@ -11871,6 +12262,90 @@
             }
          ],
          "summary": "An NZBGet server — an efficient, self-hosted Usenet downloader written in C++. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6789."
+      },
+      {
+         "id": "nzbhydra2",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "nzbhydra2",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/nzbhydra2:v8.9.0-ls97",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The An NZBHydra2 server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/nzbhydra2/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An NZBHydra2 server — a meta-search server that aggregates Usenet indexers behind one search API for the *arr apps. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5076."
       },
       {
          "id": "ombi",
@@ -13283,6 +13758,90 @@
          "summary": "A PrivateBin server (a minimalist, zero-knowledge pastebin: the server stores only encrypted blobs, encrypted and decrypted in the browser) on the official nginx+php-fpm image; with the default filesystem backend its encrypted pastes live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "id": "projectsend",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "projectsend",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/projectsend:2021.12.10",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A ProjectSend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/projectsend/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A ProjectSend server — a self-hosted, private file-sharing app that assigns uploads to specific clients (backed by MySQL/MariaDB). On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "prometheus",
          "stages": [
             {
@@ -14020,6 +14579,90 @@
             }
          ],
          "summary": "A Redmine server (a mature, self-hosted project-management web app: issue tracking, wikis, forums, Gantt charts and time tracking) on the official image, backed by an external MySQL/MariaDB or PostgreSQL, with uploaded files on a PersistentVolume. kurly authors no Secret; the database connection and REDMINE_SECRET_KEY_BASE come from a provided Secret via envFrom. Pairs with a mysql-cluster named redmine-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
+         "id": "resilio-sync",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "resilio-sync",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/resilio-sync:3.1.2.1076-1-ls251",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A Resilio Sync server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/resilio-sync/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Resilio Sync server — a fast, peer-to-peer file-synchronization tool with a web UI. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888."
       },
       {
          "id": "rocketchat",
@@ -16306,6 +16949,72 @@
          "summary": "The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed."
       },
       {
+         "id": "thelounge",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "thelounge",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/thelounge/thelounge:4.4.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The The Lounge server. Data at /var/opt/thelounge. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/thelounge/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A The Lounge server (a modern, self-hosted web IRC client: always-connected, multi-user, accessible from any browser) on the official image; its configuration and per-user data live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
+      },
+      {
          "id": "tik",
          "stages": [
             {
@@ -17414,6 +18123,67 @@
             }
          ],
          "summary": "A wger server (a self-hosted workout, nutrition, and body-weight manager) on the official all-in-one image, backed by an external PostgreSQL and Redis, with uploaded media on a PersistentVolume. Pairs with a cnpg-cluster named wger-db and a valkey named wger-cache. The image runs nginx + uWSGI + Celery and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DJANGO_DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "whoogle",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "whoogle",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/benbusby/whoogle-search:0.9.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Whoogle server. Stateless; configure via WHOOGLE_CONFIG_* env. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/whoogle/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Whoogle Search server (a self-hosted, privacy-respecting metasearch proxy for Google results: no ads, no tracking, no JavaScript required) on the official image. Stateless: a plain rolling Deployment. Configure through WHOOGLE_CONFIG_* env. Serves on :5000."
       },
       {
          "id": "wikijs",
