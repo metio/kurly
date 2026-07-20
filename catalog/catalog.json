@@ -5444,6 +5444,73 @@
          "summary": "A Dashy server (a highly customizable, self-hosted dashboard for your services) on the official image. A plain composable http workload — its configuration lives on a PersistentVolume, no external database. The image rebuilds assets on a config change and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "id": "davis",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "davis",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/tchapi/davis:latest@sha256:60195a4f241f75957cfb5a0d371cb5b2898102153b0447f5a9ec13860eb49320",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "davis-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Davis server. Provide the Secret. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/davis/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Davis server (a self-hosted CalDAV and CardDAV server with a simple admin UI, built on sabre/dav) on the official image, backed by an external database (MySQL/MariaDB, PostgreSQL, or SQLite). A plain composable http workload. kurly authors no Secret; DATABASE_URL, APP_SECRET and the admin login come from a provided Secret via envFrom. Pair it with a database you run separately. Stateless: calendars and contacts live in the database, so a plain rolling Deployment. Serves on :80."
+      },
+      {
          "id": "davos",
          "stages": [
             {

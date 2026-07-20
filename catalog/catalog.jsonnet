@@ -81,6 +81,7 @@ local stageImports = {
   'readarr/server': import 'github.com/metio/kurly/workloads/readarr/server.libsonnet',
   'apprise/server': import 'github.com/metio/kurly/workloads/apprise/server.libsonnet',
   'chatpad/server': import 'github.com/metio/kurly/workloads/chatpad/server.libsonnet',
+  'davis/server': import 'github.com/metio/kurly/workloads/davis/server.libsonnet',
   'draw-io/server': import 'github.com/metio/kurly/workloads/draw-io/server.libsonnet',
   'ghostfolio/server': import 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet',
   'anythingllm/server': import 'github.com/metio/kurly/workloads/anythingllm/server.libsonnet',

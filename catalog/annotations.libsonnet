@@ -916,6 +916,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/anythingllm/server.libsonnet' },
       },
     },
+    davis: {
+      summary: 'A Davis server (a self-hosted CalDAV and CardDAV server with a simple admin UI, built on sabre/dav) on the official image, backed by an external database (MySQL/MariaDB, PostgreSQL, or SQLite). A plain composable http workload. kurly authors no Secret; DATABASE_URL, APP_SECRET and the admin login come from a provided Secret via envFrom. Pair it with a database you run separately. Stateless: calendars and contacts live in the database, so a plain rolling Deployment. Serves on :80.',
+      stages: {
+        server: d.fn('The Davis server. Provide the Secret. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='davis'),
+          d.arg('image', d.T.string, default='ghcr.io/tchapi/davis:latest@sha256:60195a4f241f75957cfb5a0d371cb5b2898102153b0447f5a9ec13860eb49320'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='davis-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/davis/server.libsonnet' },
+      },
+    },
     chatpad: {
       summary: 'A Chatpad AI server (a self-hosted, clean web UI for OpenAI chat models) on the official image. A plain composable http workload. Conversations and the API key are stored client-side, so the server only serves static assets and holds no data — a plain, horizontally scalable Deployment. The browser talks to OpenAI directly with the user own key. Serves on :80.',
       stages: {
