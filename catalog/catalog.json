@@ -10351,6 +10351,165 @@
          "summary": "A SonarQube server (continuous code-quality and static-analysis inspection) on the official Community image, backed by an external PostgreSQL, with data/extensions/search-index on a PersistentVolume. Pairs with a cnpg-cluster named sonarqube-db. Its embedded Elasticsearch needs the node vm.max_map_count >= 262144 (set on the node; kurly injects no privileged initContainer). kurly authors no Secret; SONAR_JDBC_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
+         "id": "spegel",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "spegel",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "spegel",
+                     "name": "namespace",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/spegel-org/spegel:v0.7.4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "/run/containerd/containerd.sock",
+                     "name": "containerdSock",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "/var/lib/containerd/io.containerd.content.v1.content",
+                     "name": "containerdContentPath",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "/etc/containerd/certs.d",
+                     "name": "containerdRegistryConfigPath",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "k8s.io",
+                     "name": "containerdNamespace",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5000,
+                     "name": "registryPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 30020,
+                     "name": "registryNodePort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 5001,
+                     "name": "routerPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 9090,
+                     "name": "metricsPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "INFO",
+                     "name": "logLevel",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": true,
+                     "name": "resolveTags",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "default": 3,
+                     "name": "mirrorResolveRetries",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "20ms",
+                     "name": "mirrorResolveTimeout",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "cluster.local",
+                     "name": "clusterDomain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": [
+                        {
+                           "operator": "Exists"
+                        }
+                     ],
+                     "name": "tolerations",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "nodeSelector",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "affinity",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "priorityClassName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Spegel DaemonSet and its Services. namespace MUST match the deploy namespace (the peer-bootstrap DNS name embeds it). containerdSock/containerdContentPath/containerdRegistryConfigPath point at the node's containerd; registryNodePort is where the kubelet reaches the local mirror.",
+               "id": "mirror",
+               "importPath": "github.com/metio/kurly/workloads/spegel/mirror.libsonnet",
+               "kind": "daemon"
+            }
+         ],
+         "summary": "Spegel — a stateless, cluster-local OCI registry mirror (spegel.dev). A DaemonSet that serves image layers already present in each node's containerd content store to its peers over a peer-to-peer router, so a pull satisfied by any node never leaves the cluster; an init container writes containerd's registry-mirror config to pull through the local mirror first. Genuinely node-level infrastructure, so it authors its manifests directly (DaemonSet + init container + hostPath containerd socket/content, a NodePort the kubelet reaches the mirror on, and a headless Service peers bootstrap against via DNS) rather than composing a base kind. namespace is load-bearing: the bootstrap DNS name embeds it, so it must match where you deploy. Runs as root with hostPath mounts (the socket is root-owned); the posture is hardened as far as that allows. kurly features do not apply."
+      },
+      {
          "id": "status-responder",
          "stages": [
             {

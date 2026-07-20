@@ -129,6 +129,7 @@ local stageImports = {
   'docmost/server': import 'github.com/metio/kurly/workloads/docmost/server.libsonnet',
   'greenlight/server': import 'github.com/metio/kurly/workloads/greenlight/server.libsonnet',
   'pilos/server': import 'github.com/metio/kurly/workloads/pilos/server.libsonnet',
+  'spegel/mirror': import 'github.com/metio/kurly/workloads/spegel/mirror.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',

@@ -102,19 +102,27 @@ check_stage() {
       || { echo "::error::${stage}: renders a PVC whose storage class cannot be set" >&2; return 1; }
   fi
 
-  if [ "$templates" = "0" ]; then
-    # A custom-resource workload authors someone else's API; a kurly feature
-    # composed onto it writes a hidden config no base kind reads, so it must be
-    # REJECTED rather than silently doing nothing — while the raw + escape hatch
-    # (which touches no config) keeps working.
-    if jsonnet -J vendor -e "$K k.list((import '${stage}')() + k.podLabels({ 'kurly.test/label': 'set' }))" >/dev/null 2>&1; then
-      echo "::error::${stage}: renders no pod template, yet accepted kurly.podLabels() — the feature silently does nothing here" >&2
-      return 1
-    fi
+  # Classify by whether the workload ACCEPTS a composed pod feature, not by whether
+  # it renders a pod template. A workload that authors its manifests by hand — a
+  # custom resource whose pods belong to an operator, or node infrastructure like
+  # spegel that fills in its own DaemonSet — writes no config a base kind reads, so
+  # a composed feature would silently do nothing. It must REJECT composition (while
+  # the raw + escape hatch, which touches no config, keeps working). A workload that
+  # ACCEPTS a feature must make it land on every pod template it renders — so a
+  # hand-authored DaemonSet is held to the reject contract even though it has a
+  # template, and a base-kind workload is held to the landing contract below.
+  if ! jsonnet -J vendor -e "$K k.list((import '${stage}')() + k.podLabels({ 'kurly.test/label': 'set' }))" >/dev/null 2>&1; then
     jsonnet -J vendor -e "$K k.list((import '${stage}')() + { kurlyTestProbe:: true })" >/dev/null 2>&1 \
       || { echo "::error::${stage}: rejects the raw + escape hatch, which touches no config" >&2; return 1; }
-    echo "ok ${stage} (custom resource: features rejected, name/mirror/storage hold)"
+    echo "ok ${stage} (hand-authored: features rejected, name/mirror/storage hold)"
     return 0
+  fi
+
+  # It accepts a feature, so it must have a pod template for the feature to land on;
+  # accepting one with nowhere to put it is the silent no-op the reject contract guards.
+  if [ "$templates" = "0" ]; then
+    echo "::error::${stage}: accepted kurly.podLabels() yet renders no pod template — the feature silently does nothing here" >&2
+    return 1
   fi
 
   # A pod workload: labels/annotations, IP families, supplemental groups + DNS,

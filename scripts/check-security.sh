@@ -99,6 +99,11 @@ score_one() {
   local manifest="$1" score
   case "$manifest" in
     *examples-legacy-* | *examples-cron-*) return 0 ;; # escape-hatch demos
+    # spegel is node infrastructure: it serves the containerd content store to its
+    # peers, so it runs as root with hostPath mounts (the socket is root-owned). No
+    # score reaches the floor with hostPath present — the posture is hardened as far
+    # as the job allows, and it is deployed to a namespace labelled for it.
+    *workloads-spegel-*) return 0 ;;
   esac
   case "$(jq -r '.kind' "$manifest")" in
     Deployment | DaemonSet | CronJob | Pod) ;;
