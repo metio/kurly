@@ -2242,6 +2242,67 @@
          "summary": "An AdGuard Home server (a self-hosted, network-wide DNS ad- and tracker-blocker with a friendly web UI, an alternative to Pi-hole) on the official image; its configuration and runtime data live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. The config and work directory both live under /opt/adguardhome, so a single volume persists everything; it binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI (setup wizard) serves on :3000."
       },
       {
+         "id": "adminer",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "adminer",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/adminer:5.3.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Adminer server. Stateless; connects to whatever database you point it at. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/adminer/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Adminer server (a full-featured database management tool in a single PHP file: MySQL, PostgreSQL, SQLite and more) on the official image. Stateless: a plain rolling Deployment. Serves on :8080."
+      },
+      {
          "id": "airsonic-advanced",
          "stages": [
             {
@@ -4197,6 +4258,72 @@
          "summary": "A CommaFeed server (a self-hosted Google Reader-style RSS/Atom feed reader) on the official image. A plain composable http workload — the H2 variant keeps its feeds in an embedded database on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8082. Use the PostgreSQL image variant to scale past the embedded DB."
       },
       {
+         "id": "convertx",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "convertx",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/c4illin/convertx:v0.18.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The ConvertX server. Set JWT_SECRET via env/envFromSecret. Data at /app/data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/convertx/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A ConvertX server (a self-hosted online file converter supporting 1000+ formats) on the official image; its SQLite database and in-flight files live on a PersistentVolume. kurly authors no Secret; JWT_SECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
          "id": "cryptpad",
          "stages": [
             {
@@ -4261,6 +4388,67 @@
             }
          ],
          "summary": "A CryptPad server (end-to-end encrypted, collaborative documents and spreadsheets) on the official image. A plain composable http workload that keeps its encrypted blocks, blobs, and datastore on a PersistentVolume — no external database. The Node app writes under /cryptpad, so it relaxes read-only-rootfs while keeping non-root and dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000; needs a config.js with a main and a separate sandbox origin."
+      },
+      {
+         "id": "cyberchef",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "cyberchef",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/gchq/cyberchef:10.19.4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The CyberChef server. Stateless. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/cyberchef/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A CyberChef server (GCHQ's \"cyber Swiss-army knife\" for encoding, encryption, compression and data analysis, all in the browser) on the official image. Stateless: a plain rolling Deployment. Serves on :8000."
       },
       {
          "id": "dashy",
@@ -7932,6 +8120,79 @@
          "summary": "A Jellyseerr server — a request-management and media-discovery companion for Jellyfin, Emby and Plex. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055."
       },
       {
+         "id": "joplin",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "joplin",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/joplin/server:3.4.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "https://joplin.example.com",
+                     "name": "appBaseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "joplin-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Joplin Server. appBaseUrl is the public URL; secretName holds the POSTGRES_* connection (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/joplin/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Joplin Server (the self-hosted sync target for the Joplin note-taking apps) on the official image, backed by an external PostgreSQL. kurly authors no Secret; the POSTGRES_* connection comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named joplin-db. Stateless (notes live in PostgreSQL): a plain rolling Deployment. Serves on :22300."
+      },
+      {
          "id": "kanboard",
          "stages": [
             {
@@ -8234,6 +8495,73 @@
             }
          ],
          "summary": "A Keycloak identity server as an official keycloak-operator `Keycloak` custom resource. Authors the CR (like loki and tempo) for the operator to reconcile into a StatefulSet, Services, and the admin credentials Secret. Requires the keycloak-operator (whose recent releases let one operator manage instances across many namespaces) and a PostgreSQL database — pairs with the cnpg-cluster workload."
+      },
+      {
+         "id": "kimai",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "kimai",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/kimai/kimai2:apache-2.38.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "kimai-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Kimai server. secretName holds DATABASE_URL and APP_SECRET (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/kimai/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Kimai server (a self-hosted, professional time-tracking application for freelancers and teams) on the official Apache image, backed by an external MySQL/MariaDB. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a mysql-cluster named kimai-db. Stateless (timesheets live in MySQL): a plain rolling Deployment. Serves on :8001."
       },
       {
          "id": "komga",
@@ -12432,6 +12760,78 @@
          "summary": "A PeerTube server (a decentralized, federated video platform) on the official image, backed by an external PostgreSQL and Redis, with videos/uploads/config on a PersistentVolume. Pairs with a cnpg-cluster named peertube-db and a valkey named peertube-cache. kurly authors no Secret; PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, and the initial root password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
+         "id": "pgadmin",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "pgadmin",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/dpage/pgadmin4:9.8",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "pgadmin-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The pgAdmin server. secretName holds PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD (envFrom). Config at /var/lib/pgadmin. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/pgadmin/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A pgAdmin 4 server (the web UI for administering PostgreSQL) on the official image; its session and configuration store (SQLite) lives on a PersistentVolume. kurly authors no Secret; PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD come from a provided Secret via envFrom. The image runs as uid 5050. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "photoprism",
          "stages": [
             {
@@ -12514,6 +12914,151 @@
             }
          ],
          "summary": "A PhotoPrism server (an AI-powered, self-hosted photo-management app with face recognition and automatic tagging) on the official image. A plain composable http workload — with the SQLite backend its database, cache, and originals live on a PersistentVolume, no external database. The image runs TensorFlow indexing and writes the rootfs, relaxing read-only-rootfs while keeping non-root and dropped capabilities. kurly authors no Secret; PHOTOPRISM_ADMIN_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :2342."
+      },
+      {
+         "id": "phpmyadmin",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "phpmyadmin",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/phpmyadmin:5.2.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "mysql",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The phpMyAdmin server. dbHost sets PMA_HOST (the MySQL/MariaDB host). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/phpmyadmin/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A phpMyAdmin server (the classic web UI for administering MySQL and MariaDB) on the official image. Stateless: a plain rolling Deployment that connects to the MySQL host you point it at. Serves on :80."
+      },
+      {
+         "id": "pihole",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "pihole",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/pihole/pihole:2025.08.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "pihole-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Pi-hole server. timezone sets TZ; secretName holds FTLCONF_webserver_api_password (envFrom). Config at /etc/pihole; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/pihole/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80."
       },
       {
          "id": "pilos",
@@ -13403,6 +13948,78 @@
             }
          ],
          "summary": "A Readeck server (a self-hosted read-it-later and web-bookmarking tool that saves clean, readable copies of pages). A plain composable http workload that keeps its bookmarks and saved articles in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8000."
+      },
+      {
+         "id": "redmine",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "redmine",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/redmine:6.0.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "redmine-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Redmine server. secretName holds the database connection (REDMINE_DB_* / DATABASE_URL) and REDMINE_SECRET_KEY_BASE (envFrom). Files at /usr/src/redmine/files. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/redmine/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Redmine server (a mature, self-hosted project-management web app: issue tracking, wikis, forums, Gantt charts and time tracking) on the official image, backed by an external MySQL/MariaDB or PostgreSQL, with uploaded files on a PersistentVolume. kurly authors no Secret; the database connection and REDMINE_SECRET_KEY_BASE come from a provided Secret via envFrom. Pairs with a mysql-cluster named redmine-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
          "id": "rocketchat",
@@ -15008,6 +15625,72 @@
             }
          ],
          "summary": "A Syncthing server — a continuous, self-hosted file-synchronization tool that syncs folders between devices peer-to-peer (sync on :22000). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8384."
+      },
+      {
+         "id": "tachidesk",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "tachidesk",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/suwayomi/tachidesk:v2.1.1867",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Suwayomi/Tachidesk server. Library at /home/suwayomi/.local/share/Tachidesk. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/tachidesk/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Suwayomi-Server (formerly Tachidesk): a self-hosted manga reader and library server, on the official image; its library, downloads and settings live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4567."
       },
       {
          "id": "tautulli",

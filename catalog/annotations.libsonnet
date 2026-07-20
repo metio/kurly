@@ -2316,6 +2316,159 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/searxng/server.libsonnet' },
       },
     },
+    convertx: {
+      summary: 'A ConvertX server (a self-hosted online file converter supporting 1000+ formats) on the official image; its SQLite database and in-flight files live on a PersistentVolume. kurly authors no Secret; JWT_SECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The ConvertX server. Set JWT_SECRET via env/envFromSecret. Data at /app/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='convertx'),
+          d.arg('image', d.T.string, default='ghcr.io/c4illin/convertx:v0.18.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/convertx/server.libsonnet' },
+      },
+    },
+    cyberchef: {
+      summary: 'A CyberChef server (GCHQ\'s "cyber Swiss-army knife" for encoding, encryption, compression and data analysis, all in the browser) on the official image. Stateless: a plain rolling Deployment. Serves on :8000.',
+      stages: {
+        server: d.fn('The CyberChef server. Stateless. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='cyberchef'),
+          d.arg('image', d.T.string, default='ghcr.io/gchq/cyberchef:10.19.4'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/cyberchef/server.libsonnet' },
+      },
+    },
+    joplin: {
+      summary: 'A Joplin Server (the self-hosted sync target for the Joplin note-taking apps) on the official image, backed by an external PostgreSQL. kurly authors no Secret; the POSTGRES_* connection comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named joplin-db. Stateless (notes live in PostgreSQL): a plain rolling Deployment. Serves on :22300.',
+      stages: {
+        server: d.fn('The Joplin Server. appBaseUrl is the public URL; secretName holds the POSTGRES_* connection (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='joplin'),
+          d.arg('image', d.T.string, default='docker.io/joplin/server:3.4.2'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('appBaseUrl', d.T.string, example='https://joplin.example.com'),
+          d.arg('secretName', d.T.string, default='joplin-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/joplin/server.libsonnet' },
+      },
+    },
+    pgadmin: {
+      summary: 'A pgAdmin 4 server (the web UI for administering PostgreSQL) on the official image; its session and configuration store (SQLite) lives on a PersistentVolume. kurly authors no Secret; PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD come from a provided Secret via envFrom. The image runs as uid 5050. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The pgAdmin server. secretName holds PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD (envFrom). Config at /var/lib/pgadmin. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='pgadmin'),
+          d.arg('image', d.T.string, default='docker.io/dpage/pgadmin4:9.8'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='pgadmin-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pgadmin/server.libsonnet' },
+      },
+    },
+    tachidesk: {
+      summary: 'A Suwayomi-Server (formerly Tachidesk): a self-hosted manga reader and library server, on the official image; its library, downloads and settings live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4567.',
+      stages: {
+        server: d.fn('The Suwayomi/Tachidesk server. Library at /home/suwayomi/.local/share/Tachidesk. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='tachidesk'),
+          d.arg('image', d.T.string, default='ghcr.io/suwayomi/tachidesk:v2.1.1867'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tachidesk/server.libsonnet' },
+      },
+    },
+    pihole: {
+      summary: 'A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80.',
+      stages: {
+        server: d.fn('The Pi-hole server. timezone sets TZ; secretName holds FTLCONF_webserver_api_password (envFrom). Config at /etc/pihole; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='pihole'),
+          d.arg('image', d.T.string, default='docker.io/pihole/pihole:2025.08.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('secretName', d.T.string, default='pihole-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pihole/server.libsonnet' },
+      },
+    },
+    kimai: {
+      summary: 'A Kimai server (a self-hosted, professional time-tracking application for freelancers and teams) on the official Apache image, backed by an external MySQL/MariaDB. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a mysql-cluster named kimai-db. Stateless (timesheets live in MySQL): a plain rolling Deployment. Serves on :8001.',
+      stages: {
+        server: d.fn('The Kimai server. secretName holds DATABASE_URL and APP_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='kimai'),
+          d.arg('image', d.T.string, default='docker.io/kimai/kimai2:apache-2.38.0'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='kimai-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kimai/server.libsonnet' },
+      },
+    },
+    adminer: {
+      summary: 'An Adminer server (a full-featured database management tool in a single PHP file: MySQL, PostgreSQL, SQLite and more) on the official image. Stateless: a plain rolling Deployment. Serves on :8080.',
+      stages: {
+        server: d.fn('The Adminer server. Stateless; connects to whatever database you point it at. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='adminer'),
+          d.arg('image', d.T.string, default='docker.io/library/adminer:5.3.0'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/adminer/server.libsonnet' },
+      },
+    },
+    phpmyadmin: {
+      summary: 'A phpMyAdmin server (the classic web UI for administering MySQL and MariaDB) on the official image. Stateless: a plain rolling Deployment that connects to the MySQL host you point it at. Serves on :80.',
+      stages: {
+        server: d.fn('The phpMyAdmin server. dbHost sets PMA_HOST (the MySQL/MariaDB host). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='phpmyadmin'),
+          d.arg('image', d.T.string, default='docker.io/library/phpmyadmin:5.2.2'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('dbHost', d.T.string, example='mysql'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/phpmyadmin/server.libsonnet' },
+      },
+    },
+    redmine: {
+      summary: 'A Redmine server (a mature, self-hosted project-management web app: issue tracking, wikis, forums, Gantt charts and time tracking) on the official image, backed by an external MySQL/MariaDB or PostgreSQL, with uploaded files on a PersistentVolume. kurly authors no Secret; the database connection and REDMINE_SECRET_KEY_BASE come from a provided Secret via envFrom. Pairs with a mysql-cluster named redmine-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Redmine server. secretName holds the database connection (REDMINE_DB_* / DATABASE_URL) and REDMINE_SECRET_KEY_BASE (envFrom). Files at /usr/src/redmine/files. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='redmine'),
+          d.arg('image', d.T.string, default='docker.io/library/redmine:6.0.5'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='redmine-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/redmine/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
