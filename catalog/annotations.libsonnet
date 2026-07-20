@@ -1500,6 +1500,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    baserow: {
+      summary: 'A Baserow server (an open-source, no-code database and Airtable alternative) on the official all-in-one image, which bundles the backend, frontend, Celery workers, and (by default) an embedded PostgreSQL and Redis — everything in /baserow/data, so a single instance needs nothing external. The image supervises multiple processes and writes the rootfs, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the signing keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Baserow all-in-one server. Everything (embedded DB, Redis, uploads) at /baserow/data on the volume. publicUrl is the public URL. secretName holds BASEROW_SECRET_KEY and BASEROW_JWT_SIGNING_KEY (envFrom). Point DATABASE_*/REDIS_* at external services via env to scale out. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='baserow'),
+          d.arg('image', d.T.string, default='docker.io/baserow/baserow:2.3.2'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('publicUrl', d.T.string, example='https://baserow.example.com'),
+          d.arg('secretName', d.T.string, default='baserow-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/baserow/server.libsonnet' },
+      },
+    },
     nocodb: {
       summary: 'A NocoDB server (an open-source Airtable alternative that turns any SQL database into a smart spreadsheet) on the official image, backed by an external PostgreSQL for its metadata, with attachments on a PersistentVolume. kurly authors no Secret; NC_DB and NC_AUTH_JWT_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       stages: {
