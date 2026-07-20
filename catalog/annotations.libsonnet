@@ -1500,6 +1500,24 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    photoprism: {
+      summary: 'A PhotoPrism server (an AI-powered, self-hosted photo-management app with face recognition and automatic tagging) on the official image. A plain composable http workload — with the SQLite backend its database, cache, and originals live on a PersistentVolume, no external database. The image runs TensorFlow indexing and writes the rootfs, relaxing read-only-rootfs while keeping non-root and dropped capabilities. kurly authors no Secret; PHOTOPRISM_ADMIN_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :2342.',
+      stages: {
+        server: d.fn('The PhotoPrism server. Storage at /photoprism/storage, originals at /photoprism/originals, both on the volume. siteUrl is the public URL (keep the trailing /). secretName holds PHOTOPRISM_ADMIN_PASSWORD (envFrom). Point PHOTOPRISM_DATABASE_DRIVER at external MariaDB (mysql-cluster) to scale out. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='photoprism'),
+          d.arg('image', d.T.string, default='docker.io/photoprism/photoprism:260601'),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('siteUrl', d.T.string, example='https://photos.example.com/'),
+          d.arg('adminUser', d.T.string, default='admin'),
+          d.arg('secretName', d.T.string, default='photoprism-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '3Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/photoprism/server.libsonnet' },
+      },
+    },
     lychee: {
       summary: 'A Lychee server (a self-hosted photo-management and gallery system) on the official image. A plain composable http workload — with the SQLite backend its config, database, and photos live on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; APP_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {

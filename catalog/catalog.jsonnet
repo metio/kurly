@@ -122,6 +122,7 @@ local stageImports = {
   'glitchtip/worker': import 'github.com/metio/kurly/workloads/glitchtip/worker.libsonnet',
   'commafeed/server': import 'github.com/metio/kurly/workloads/commafeed/server.libsonnet',
   'lychee/server': import 'github.com/metio/kurly/workloads/lychee/server.libsonnet',
+  'photoprism/server': import 'github.com/metio/kurly/workloads/photoprism/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
