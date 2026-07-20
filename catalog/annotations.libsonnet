@@ -873,6 +873,49 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet' },
       },
     },
+    'lobe-chat': {
+      summary: 'A LobeChat server (a self-hosted, open-source AI chat UI supporting many LLM providers, plugins and multimodal input) on the official image. A plain composable http workload. In its default mode conversations are stored client-side, so the server holds no data — a plain, horizontally scalable Deployment. Point it at your LLM providers with the documented environment variables; kurly authors no Secret. Serves on :3210.',
+      stages: {
+        server: d.fn('The LobeChat server. Stateless; compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='lobe-chat'),
+          d.arg('image', d.T.string, default='docker.io/lobehub/lobe-chat:latest@sha256:b2d2454525523d9f0a19c79661f83ec45f13363dbadd5c1180887e77af35d872'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lobe-chat/server.libsonnet' },
+      },
+    },
+    hollama: {
+      summary: 'A Hollama server (a minimal, self-hosted web UI for Ollama and OpenAI-compatible LLMs) on the official image. A plain composable http workload. Sessions and settings are stored client-side, so the server holds no data — a plain, horizontally scalable Deployment. The browser talks to your Ollama / OpenAI endpoint directly. Serves on :4173.',
+      stages: {
+        server: d.fn('The Hollama server. Stateless; compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='hollama'),
+          d.arg('image', d.T.string, default='ghcr.io/fmaclen/hollama:latest@sha256:74999be7ac1cb23e72c81b9e21055aec20576f9ef67b394fe0eeb2e36c3a8b93'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/hollama/server.libsonnet' },
+      },
+    },
+    anythingllm: {
+      summary: 'An AnythingLLM server (a self-hosted, all-in-one AI application: chat with your documents through RAG, agents and many LLM/embedding providers) on the official image. A plain composable http workload that keeps its storage (embedded vector database, uploaded documents, settings) on a PersistentVolume under /app/server/storage. Point it at your LLM and embedding providers with the documented environment variables; kurly authors no Secret. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3001.',
+      stages: {
+        server: d.fn('The AnythingLLM server. Storage at /app/server/storage on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='anythingllm'),
+          d.arg('image', d.T.string, default='docker.io/mintplexlabs/anythingllm:latest@sha256:9a87bca983e688db2a11a0ed3290daa16c4b67556617ae77325c9d12c6a37c25'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={ STORAGE_DIR: '/app/server/storage' }),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/anythingllm/server.libsonnet' },
+      },
+    },
     maloja: {
       summary: 'A Maloja server (a self-hosted music scrobble database and listening-statistics server, an alternative to Last.fm) on the official image. A plain composable http workload that keeps its database (SQLite) and configuration on a PersistentVolume under /mljdata. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :42010.',
       stages: {

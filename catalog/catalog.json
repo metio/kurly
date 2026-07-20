@@ -2694,6 +2694,75 @@
          "summary": "An Apache Answer server (a self-hosted Q&A platform for a community knowledge base, à la Stack Overflow) on the official image. A plain composable http workload — with the SQLite backend its data and uploads live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80. Configure external PostgreSQL/MySQL via the installer to scale out."
       },
       {
+         "id": "anythingllm",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "anythingllm",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/mintplexlabs/anythingllm:latest@sha256:9a87bca983e688db2a11a0ed3290daa16c4b67556617ae77325c9d12c6a37c25",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "STORAGE_DIR": "/app/server/storage"
+                     },
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "1Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The AnythingLLM server. Storage at /app/server/storage on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/anythingllm/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An AnythingLLM server (a self-hosted, all-in-one AI application: chat with your documents through RAG, agents and many LLM/embedding providers) on the official image. A plain composable http workload that keeps its storage (embedded vector database, uploaded documents, settings) on a PersistentVolume under /app/server/storage. Point it at your LLM and embedding providers with the documented environment variables; kurly authors no Secret. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3001."
+      },
+      {
          "id": "apprise",
          "stages": [
             {
@@ -9480,6 +9549,67 @@
          "summary": "A Heimdall server — an elegant dashboard and application launcher for your self-hosted services. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "hollama",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "hollama",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/fmaclen/hollama:latest@sha256:74999be7ac1cb23e72c81b9e21055aec20576f9ef67b394fe0eeb2e36c3a8b93",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Hollama server. Stateless; compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/hollama/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Hollama server (a minimal, self-hosted web UI for Ollama and OpenAI-compatible LLMs) on the official image. A plain composable http workload. Sessions and settings are stored client-side, so the server holds no data — a plain, horizontally scalable Deployment. The browser talks to your Ollama / OpenAI endpoint directly. Serves on :4173."
+      },
+      {
          "id": "homarr",
          "stages": [
             {
@@ -11816,6 +11946,67 @@
             }
          ],
          "summary": "An LLDAP server (a light LDAP implementation for authentication: a simple user/group directory with a friendly web UI, a lightweight stand-in for OpenLDAP) on the official image; with the default SQLite backend its directory lives on a PersistentVolume. Apps bind over LDAP on :3890, a separate port to add a Service for. kurly authors no Secret; LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL (LLDAP_DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :17170."
+      },
+      {
+         "id": "lobe-chat",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "lobe-chat",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/lobehub/lobe-chat:latest@sha256:b2d2454525523d9f0a19c79661f83ec45f13363dbadd5c1180887e77af35d872",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The LobeChat server. Stateless; compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/lobe-chat/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A LobeChat server (a self-hosted, open-source AI chat UI supporting many LLM providers, plugins and multimodal input) on the official image. A plain composable http workload. In its default mode conversations are stored client-side, so the server holds no data — a plain, horizontally scalable Deployment. Point it at your LLM providers with the documented environment variables; kurly authors no Secret. Serves on :3210."
       },
       {
          "id": "loki",
