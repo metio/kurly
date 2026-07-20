@@ -6148,6 +6148,72 @@
          "summary": "An Emby server (a self-hosted media server for streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Mount your media libraries and add them in the UI. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096."
       },
       {
+         "id": "emqx",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "emqx",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/emqx/emqx:5.8.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The EMQX broker on :1883. Data at /opt/emqx/data; the dashboard (:18083) needs an extra Service. Expose to devices (often a LoadBalancer).",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/emqx/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883."
+      },
+      {
          "id": "endurain",
          "stages": [
             {
@@ -14193,6 +14259,72 @@
             }
          ],
          "summary": "An n8n server (a fair-code workflow-automation tool with a visual editor) on the official image. A plain composable http workload that keeps its workflows, credentials, and encryption key in SQLite on a PersistentVolume by default — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the editor, API, and webhooks on :5678."
+      },
+      {
+         "id": "nats",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "nats",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/nats:2.10-alpine",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The NATS server on :4222 (JetStream enabled). Store at /data; monitoring (:8222) needs an extra Service. Usually reached in-cluster.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/nats/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222."
       },
       {
          "id": "navidrome",

@@ -3810,6 +3810,36 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/oauth2-proxy/server.libsonnet' },
       },
     },
+    emqx: {
+      summary: 'An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.',
+      stages: {
+        server: d.fn('The EMQX broker on :1883. Data at /opt/emqx/data; the dashboard (:18083) needs an extra Service. Expose to devices (often a LoadBalancer).', [
+          d.arg('name', d.T.string, default='emqx'),
+          d.arg('image', d.T.string, default='docker.io/emqx/emqx:5.8.0'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/emqx/server.libsonnet' },
+      },
+    },
+    nats: {
+      summary: 'A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222.',
+      stages: {
+        server: d.fn('The NATS server on :4222 (JetStream enabled). Store at /data; monitoring (:8222) needs an extra Service. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='nats'),
+          d.arg('image', d.T.string, default='docker.io/library/nats:2.10-alpine'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nats/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
