@@ -74,6 +74,8 @@ local stageImports = {
   'stirling-pdf/server': import 'github.com/metio/kurly/workloads/stirling-pdf/server.libsonnet',
   'microbin/server': import 'github.com/metio/kurly/workloads/microbin/server.libsonnet',
   'komga/server': import 'github.com/metio/kurly/workloads/komga/server.libsonnet',
+  'grist/server': import 'github.com/metio/kurly/workloads/grist/server.libsonnet',
+  'jenkins/server': import 'github.com/metio/kurly/workloads/jenkins/server.libsonnet',
   'kavita/server': import 'github.com/metio/kurly/workloads/kavita/server.libsonnet',
   'navidrome/server': import 'github.com/metio/kurly/workloads/navidrome/server.libsonnet',
   'audiobookshelf/server': import 'github.com/metio/kurly/workloads/audiobookshelf/server.libsonnet',

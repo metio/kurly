@@ -8514,6 +8514,72 @@
          "summary": "A Greenlight 3 server (the official BigBlueButton front-end: a Rails app for scheduling and joining BBB rooms and meetings) on the official image, backed by an external PostgreSQL and Redis. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named greenlight-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_* endpoint/secret come from a provided Secret via envFrom. Stateless (recordings live on the BBB server): a plain rolling Deployment. Serves on :3000."
       },
       {
+         "id": "grist",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "grist",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/gristlabs/grist:1.2.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Grist server. Documents at /persist on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/grist/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Grist server (a self-hosted, open-source relational spreadsheet: the flexibility of a spreadsheet with the structure of a database, plus Python formulas and access rules) on the official image. A plain composable http workload that keeps its documents (SQLite) on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8484."
+      },
+      {
          "id": "grocy",
          "stages": [
             {
@@ -9786,6 +9852,72 @@
             }
          ],
          "summary": "A Jellyseerr server — a request-management and media-discovery companion for Jellyfin, Emby and Plex. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055."
+      },
+      {
+         "id": "jenkins",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "jenkins",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/jenkins/jenkins:2.479.2-lts",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "500m",
+                           "memory": "1Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Jenkins controller. JENKINS_HOME at /var/jenkins_home on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/jenkins/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Jenkins controller (the self-hosted automation server for building, testing and deploying software) on the official LTS image. A plain composable http workload that keeps JENKINS_HOME (jobs, plugins, config, build history) on a PersistentVolume. Single controller over a ReadWriteOnce volume: one replica, recreated. Inbound agents connect over the same HTTP port (websocket). Serves on :8080."
       },
       {
          "id": "joomla",

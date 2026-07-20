@@ -667,6 +667,36 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/navidrome/server.libsonnet' },
       },
     },
+    grist: {
+      summary: 'A Grist server (a self-hosted, open-source relational spreadsheet: the flexibility of a spreadsheet with the structure of a database, plus Python formulas and access rules) on the official image. A plain composable http workload that keeps its documents (SQLite) on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8484.',
+      stages: {
+        server: d.fn('The Grist server. Documents at /persist on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='grist'),
+          d.arg('image', d.T.string, default='docker.io/gristlabs/grist:1.2.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/grist/server.libsonnet' },
+      },
+    },
+    jenkins: {
+      summary: 'A Jenkins controller (the self-hosted automation server for building, testing and deploying software) on the official LTS image. A plain composable http workload that keeps JENKINS_HOME (jobs, plugins, config, build history) on a PersistentVolume. Single controller over a ReadWriteOnce volume: one replica, recreated. Inbound agents connect over the same HTTP port (websocket). Serves on :8080.',
+      stages: {
+        server: d.fn('The Jenkins controller. JENKINS_HOME at /var/jenkins_home on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='jenkins'),
+          d.arg('image', d.T.string, default='docker.io/jenkins/jenkins:2.479.2-lts'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/jenkins/server.libsonnet' },
+      },
+    },
     kavita: {
       summary: 'A Kavita server (a fast, cross-platform reading server for comics, manga, and ebooks) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /library on the same volume — no external database. The .NET app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.',
       stages: {
