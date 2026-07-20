@@ -1735,6 +1735,55 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/siyuan/server.libsonnet' },
       },
     },
+    gitea: {
+      summary: 'A Gitea server (a lightweight, self-hosted Git service with issues, pull requests, a package registry and CI via Actions) on the official image; with the default SQLite backend its repositories and data live on a PersistentVolume. Git-over-SSH uses :22, a separate port to add a Service for. Point it at an external PostgreSQL/MySQL (GITEA__database__*) to scale past the single SQLite writer. The official image uses s6-overlay, so it runs as root and drops to uid/gid. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Gitea server. rootUrl is the public URL; uid/gid own the mounted files. Data at /data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='gitea'),
+          d.arg('image', d.T.string, default='docker.io/gitea/gitea:1.27.0'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('uid', d.T.int, default=1000),
+          d.arg('gid', d.T.int, default=1000),
+          d.arg('rootUrl', d.T.string, example='https://git.example.com'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/gitea/server.libsonnet' },
+      },
+    },
+    gogs: {
+      summary: 'A Gogs server (a painless, self-hosted Git service: a lightweight, fast Git server with a clean web UI) on the official image; with the default SQLite backend its repositories and data live on a PersistentVolume. Git-over-SSH uses :22, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Gogs server. Data at /data. Git-over-SSH (:22) needs an extra Service. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='gogs'),
+          d.arg('image', d.T.string, default='docker.io/gogs/gogs:0.14.3'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/gogs/server.libsonnet' },
+      },
+    },
+    mealie: {
+      summary: 'A Mealie server (a self-hosted recipe manager and meal planner with a recipe scraper, shopping lists and a REST API) on the official image; with the default SQLite backend its database and uploaded assets live on a PersistentVolume. Point it at an external PostgreSQL (DB_ENGINE=postgres + POSTGRES_*) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
+      stages: {
+        server: d.fn('The Mealie server. baseUrl is the public URL. Data at /app/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='mealie'),
+          d.arg('image', d.T.string, default='ghcr.io/mealie-recipes/mealie:v3.20.1'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('baseUrl', d.T.string, example='https://recipes.example.com'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mealie/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
