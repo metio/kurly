@@ -842,6 +842,37 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/calibre-web-automated/server.libsonnet' },
       },
     },
+    tandoor: {
+      summary: 'A Tandoor Recipes server (a self-hosted recipe manager and meal planner with a smart shopping list) on the official image, backed by an external PostgreSQL; uploaded media on a PersistentVolume under /opt/recipes/mediafiles. A plain composable http workload. kurly authors no Secret; SECRET_KEY and the PostgreSQL settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named tandoor-db. Single writer over a ReadWriteOnce media volume: one replica, recreated. Serves on :8080.',
+      stages: {
+        server: d.fn('The Tandoor server. Media at /opt/recipes/mediafiles on the volume; provide the Secret. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='tandoor'),
+          d.arg('image', d.T.string, default='ghcr.io/tandoorrecipes/recipes:latest@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='tandoor-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tandoor/server.libsonnet' },
+      },
+    },
+    ghostfolio: {
+      summary: 'A Ghostfolio server (a self-hosted, open-source wealth-management and portfolio tracker for stocks, ETFs, crypto and more) on the official image, backed by an external PostgreSQL and Redis. A plain composable http workload. kurly authors no Secret; DATABASE_URL, the Redis settings, ACCESS_TOKEN_SALT and JWT_SECRET_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named ghostfolio-db and a Redis. Stateless: a plain rolling Deployment. Serves on :3333.',
+      stages: {
+        server: d.fn('The Ghostfolio server. Provide the Secret. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='ghostfolio'),
+          d.arg('image', d.T.string, default='docker.io/ghostfolio/ghostfolio:latest@sha256:969327948d76b31251237e04842939d01956e278be273a1851f626ade5f10601'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='ghostfolio-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet' },
+      },
+    },
     apprise: {
       summary: 'An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
       stages: {
