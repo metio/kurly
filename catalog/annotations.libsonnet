@@ -1500,6 +1500,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'cassandra-cluster': {
+      summary: 'A highly-available Apache Cassandra cluster as a cass-operator CassandraDatacenter custom resource. Cassandra is Apache-2.0 — a clean default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires cass-operator; the operator mints the superuser Secret.',
+      stages: {
+        cluster: d.fn('The CassandraDatacenter CR. name is the datacenter name; clusterName defaults to it. size is the node count. config is extra cassandra.yaml/JVM tuning (cass-operator schema, verbatim). Render with kurly.list.', [
+          d.arg('name', d.T.string, default='cassandra'),
+          d.arg('clusterName', d.T.string),
+          d.arg('size', d.T.int, default=3),
+          d.arg('serverVersion', d.T.string, default='4.1.7'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '1', memory: '2Gi' }, limits: { memory: '4Gi' } }),
+          d.arg('config', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'cassandra',
+          importPath: 'github.com/metio/kurly/workloads/cassandra-cluster/cluster.libsonnet',
+        },
+      },
+    },
     'mongodb-cluster': {
       summary: 'A highly-available MongoDB replica set as a MongoDB Community Operator MongoDBCommunity custom resource. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the MongoDB Community Operator and a consumer-provided admin-password Secret. WARNING: MongoDB Community Edition is SSPL-licensed (restricts offering it as a service) — the operator is Apache-2.0 but the server is not; prefer FerretDB (Apache-2.0) if SSPL is a problem for a monetized hosting platform.',
       stages: {

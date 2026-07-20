@@ -1,0 +1,41 @@
+<!--
+SPDX-FileCopyrightText: The kurly Authors
+SPDX-License-Identifier: 0BSD
+-->
+
+# cassandra-cluster
+
+A highly-available **Apache Cassandra** cluster as a
+[cass-operator](https://github.com/k8ssandra/cass-operator) `CassandraDatacenter`
+custom resource. Cassandra is **Apache-2.0** (no SSPL/Elastic restriction), a clean
+default for a platform that monetizes hosting. This is the wide-column-store
+counterpart to [cnpg-cluster](../cnpg-cluster/).
+
+## Compose
+
+```jsonnet
+local kurly = import 'github.com/metio/kurly/main.libsonnet';
+local cassandra = import 'github.com/metio/kurly/workloads/cassandra-cluster/cluster.libsonnet';
+
+kurly.list(cassandra(name='events', size=3, storageSize='100Gi'))
+```
+
+| Parameter | Default | Notes |
+|---|---|---|
+| `name` | `cassandra` | the datacenter name |
+| `clusterName` | = `name` | the Cassandra cluster name |
+| `size` | `3` | nodes in this datacenter |
+| `serverVersion` | `4.1.7` | the Cassandra version |
+| `storageSize` / `storageClass` | `10Gi` / cluster default | per-node data volume |
+| `resources` | 1 CPU / 2–4Gi | per-node resources |
+| `config` | `{}` | extra `cassandra.yaml` / JVM tuning (cass-operator schema, verbatim) |
+| `labels` / `annotations` | | |
+
+Like `cnpg-cluster`, this authors a custom resource, so it is composed **by
+parameter, not by `+` feature**.
+
+## Prerequisite
+
+Install **cass-operator** (the DataStax Kubernetes Operator for Apache Cassandra,
+Apache-2.0). The operator mints the superuser credentials as a Secret; point apps at
+the `<clusterName>-<name>-service` Service.

@@ -2663,6 +2663,83 @@
          "summary": "The Prometheus blackbox_exporter: it probes endpoints from the outside (HTTP, TCP, DNS, ICMP) and turns each probe into metrics. A plain composable http workload, deployed once as the prober kurly.expose.probe points a workload Probe at. Serves /probe on :9115."
       },
       {
+         "id": "cassandra-cluster",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "cassandra",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "clusterName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 3,
+                     "name": "size",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "4.1.7",
+                     "name": "serverVersion",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "4Gi"
+                        },
+                        "requests": {
+                           "cpu": "1",
+                           "memory": "2Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "config",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The CassandraDatacenter CR. name is the datacenter name; clusterName defaults to it. size is the node count. config is extra cassandra.yaml/JVM tuning (cass-operator schema, verbatim). Render with kurly.list.",
+               "id": "cluster",
+               "importPath": "github.com/metio/kurly/workloads/cassandra-cluster/cluster.libsonnet",
+               "kind": "cassandra"
+            }
+         ],
+         "summary": "A highly-available Apache Cassandra cluster as a cass-operator CassandraDatacenter custom resource. Cassandra is Apache-2.0 — a clean default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires cass-operator; the operator mints the superuser Secret."
+      },
+      {
          "id": "cnpg-cluster",
          "stages": [
             {
