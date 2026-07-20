@@ -178,9 +178,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('selector', d.T.object),
       d.arg('annotations', d.T.object),
     ]) + { kinds: allKinds, group: 'storage' },
-    config: d.fn('Renders a ConfigMap from a filename→content map and mounts it read-only.', [
+    config: d.fn('Renders a ConfigMap from a filename→content map and mounts it read-only. By default the whole ConfigMap mounts as a directory at mountPath; with subPath=true each file is mounted individually at mountPath/<filename> (a subPath mount), so a single config file drops into a directory the image already populates without shadowing the rest.', [
       d.arg('files', d.T.object, required=true, example={ 'app.conf': 'key = value' }),
       d.arg('mountPath', d.T.path, default='/etc/config'),
+      d.arg('subPath', d.T.bool, default=false),
     ]) + { kinds: allKinds, group: 'storage' },
     secretMount: d.fn('Mounts an EXISTING Secret (kurly never mints key material).', [
       d.arg('secretName', d.T.string, required=true, example='tik-tls'),
@@ -3256,6 +3257,40 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet' },
+      },
+    },
+    'element-web': {
+      summary: 'An Element Web server (the popular self-hosted web client for the Matrix network) on the official image. It serves a static app configured by a single config.json, mounted into the web root via a subPath ConfigMap mount beside the app assets, so it is stateless. Element is a client only; point it at a Matrix homeserver (e.g. matrix-conduit). Serves on :80.',
+      stages: {
+        server: d.fn("The Element Web server. homeserverUrl/serverName populate config.json default_server_config; brand sets the title; config overrides/extends Element's config.json verbatim. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='element-web'),
+          d.arg('image', d.T.string, default='ghcr.io/element-hq/element-web:v1.11.100'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('homeserverUrl', d.T.string, example='https://matrix.example.com'),
+          d.arg('serverName', d.T.string, example='example.com'),
+          d.arg('brand', d.T.string, default='Element'),
+          d.arg('config', d.T.object, default={}),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/element-web/server.libsonnet' },
+      },
+    },
+    planka: {
+      summary: 'A Planka server (a self-hosted, real-time kanban board for teams, an open alternative to Trello) on the official image, backed by an external PostgreSQL, with uploads in S3-compatible object storage so it stays stateless (pair with the seaweedfs workload or any S3 bucket). kurly authors no Secret; DATABASE_URL, SECRET_KEY, the S3_* settings and the admin credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named planka-db. For local-disk uploads instead, compose ReadWriteMany volumes onto the three upload paths and drop the S3 settings. Serves on :1337.',
+      stages: {
+        server: d.fn('The Planka server. baseUrl is the public URL; secretName holds DATABASE_URL, SECRET_KEY, the S3_* settings and admin credentials (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='planka'),
+          d.arg('image', d.T.string, default='ghcr.io/plankanban/planka:2.1.1'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('baseUrl', d.T.string, example='https://boards.example.com'),
+          d.arg('secretName', d.T.string, default='planka-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/planka/server.libsonnet' },
       },
     },
     homepage: {

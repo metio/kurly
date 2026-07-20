@@ -492,10 +492,16 @@
                "name": "mountPath",
                "required": false,
                "type": "path"
+            },
+            {
+               "default": false,
+               "name": "subPath",
+               "required": false,
+               "type": "bool"
             }
          ],
          "group": "storage",
-         "help": "Renders a ConfigMap from a filename→content map and mounts it read-only.",
+         "help": "Renders a ConfigMap from a filename→content map and mounts it read-only. By default the whole ConfigMap mounts as a directory at mountPath; with subPath=true each file is mounted individually at mountPath/<filename> (a subPath mount), so a single config file drops into a directory the image already populates without shadowing the rest.",
          "id": "config",
          "kinds": [
             "http",
@@ -5772,6 +5778,90 @@
             }
          ],
          "summary": "An ejabberd server (a robust, scalable XMPP/messaging server) on the official community image. A plain composable http workload that keeps its Mnesia database and uploads on a PersistentVolume — no external database by default. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves XMPP client :5222, s2s :5269, and admin/HTTP :5280; mount ejabberd.yml at /home/ejabberd/conf."
+      },
+      {
+         "id": "element-web",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "element-web",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/element-hq/element-web:v1.11.100",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "https://matrix.example.com",
+                     "name": "homeserverUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "example.com",
+                     "name": "serverName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "Element",
+                     "name": "brand",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "config",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Element Web server. homeserverUrl/serverName populate config.json default_server_config; brand sets the title; config overrides/extends Element's config.json verbatim. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/element-web/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Element Web server (the popular self-hosted web client for the Matrix network) on the official image. It serves a static app configured by a single config.json, mounted into the web root via a subPath ConfigMap mount beside the app assets, so it is stateless. Element is a client only; point it at a Matrix homeserver (e.g. matrix-conduit). Serves on :80."
       },
       {
          "id": "emby",
@@ -15685,6 +15775,79 @@
             }
          ],
          "summary": "A Piwigo server — a self-hosted photo gallery with albums, tagging and user management (backed by MySQL/MariaDB). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "planka",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "planka",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/plankanban/planka:2.1.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "https://boards.example.com",
+                     "name": "baseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "planka-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Planka server. baseUrl is the public URL; secretName holds DATABASE_URL, SECRET_KEY, the S3_* settings and admin credentials (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/planka/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Planka server (a self-hosted, real-time kanban board for teams, an open alternative to Trello) on the official image, backed by an external PostgreSQL, with uploads in S3-compatible object storage so it stays stateless (pair with the seaweedfs workload or any S3 bucket). kurly authors no Secret; DATABASE_URL, SECRET_KEY, the S3_* settings and the admin credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named planka-db. For local-disk uploads instead, compose ReadWriteMany volumes onto the three upload paths and drop the S3 settings. Serves on :1337."
       },
       {
          "id": "plex",
