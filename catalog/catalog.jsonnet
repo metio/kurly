@@ -125,6 +125,7 @@ local stageImports = {
   'photoprism/server': import 'github.com/metio/kurly/workloads/photoprism/server.libsonnet',
   'answer/server': import 'github.com/metio/kurly/workloads/answer/server.libsonnet',
   'blinko/server': import 'github.com/metio/kurly/workloads/blinko/server.libsonnet',
+  'docmost/server': import 'github.com/metio/kurly/workloads/docmost/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',

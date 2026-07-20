@@ -1500,6 +1500,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    docmost: {
+      summary: 'A Docmost server (a self-hosted, open-source collaborative wiki and documentation platform) on the official image, backed by an external PostgreSQL and Redis, with attachments on a PersistentVolume. Pairs with a cnpg-cluster named docmost-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL and APP_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Docmost server. appUrl is the public URL. secretName holds DATABASE_URL, REDIS_URL and APP_SECRET (envFrom). Attachments at /app/data/storage; point STORAGE_DRIVER at S3 to scale past the single writer. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='docmost'),
+          d.arg('image', d.T.string, default='docker.io/docmost/docmost:0.95.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('appUrl', d.T.string, example='https://wiki.example.com'),
+          d.arg('secretName', d.T.string, default='docmost-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/docmost/server.libsonnet' },
+      },
+    },
     blinko: {
       summary: 'A Blinko server (a self-hosted, AI-powered note-taking app for quickly capturing ideas) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named blinko-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1111.',
       stages: {
