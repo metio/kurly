@@ -11967,6 +11967,201 @@
          "summary": "A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306."
       },
       {
+         "id": "mastodon",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mastodon-sidekiq",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mastodon/mastodon:v4.3.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "mastodon-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1536Mi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "768Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mastodon sidekiq background worker (federation, media, scheduled jobs). Shares the web stage's Secret via envFrom. No Service.",
+               "id": "sidekiq",
+               "importPath": "github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet",
+               "kind": "worker"
+            },
+            {
+               "args": [
+                  {
+                     "default": "mastodon-streaming",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mastodon/mastodon-streaming:v4.3.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "mastodon-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mastodon streaming server (real-time timelines over WebSockets) on :4000. Shares the web stage's Secret via envFrom; route /api/v1/streaming to it.",
+               "id": "streaming",
+               "importPath": "github.com/metio/kurly/workloads/mastodon/streaming.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "mastodon",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/mastodon/mastodon:v4.3.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "social.example.com",
+                     "name": "localDomain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mastodon-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1536Mi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "768Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mastodon web/API server on :3000. localDomain is the permanent instance domain (@handle); secretName holds the shared connection and secrets (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "web",
+               "importPath": "github.com/metio/kurly/workloads/mastodon/web.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "Mastodon (the leading self-hosted ActivityPub/Fediverse microblogging platform) as three workloads backed by an external PostgreSQL and Redis, with media in S3-compatible object storage: a web/API server (:3000), a streaming server for real-time timelines (:4000), and a sidekiq background worker. LOCAL_DOMAIN is baked into every @handle and cannot be changed. kurly authors no Secret; the PostgreSQL/Redis connection, SECRET_KEY_BASE, OTP_SECRET, the VAPID keys and the S3 settings come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named mastodon-db, a Redis and an S3 bucket (e.g. seaweedfs)."
+      },
+      {
          "id": "matomo",
          "stages": [
             {

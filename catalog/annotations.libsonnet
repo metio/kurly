@@ -3759,6 +3759,42 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lemmy/pictrs.libsonnet' },
       },
     },
+    mastodon: {
+      summary: 'Mastodon (the leading self-hosted ActivityPub/Fediverse microblogging platform) as three workloads backed by an external PostgreSQL and Redis, with media in S3-compatible object storage: a web/API server (:3000), a streaming server for real-time timelines (:4000), and a sidekiq background worker. LOCAL_DOMAIN is baked into every @handle and cannot be changed. kurly authors no Secret; the PostgreSQL/Redis connection, SECRET_KEY_BASE, OTP_SECRET, the VAPID keys and the S3 settings come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named mastodon-db, a Redis and an S3 bucket (e.g. seaweedfs).',
+      stages: {
+        web: d.fn('The Mastodon web/API server on :3000. localDomain is the permanent instance domain (@handle); secretName holds the shared connection and secrets (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='mastodon'),
+          d.arg('image', d.T.string, default='ghcr.io/mastodon/mastodon:v4.3.1'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('localDomain', d.T.string, example='social.example.com'),
+          d.arg('secretName', d.T.string, default='mastodon-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/web.libsonnet' },
+        streaming: d.fn("The Mastodon streaming server (real-time timelines over WebSockets) on :4000. Shares the web stage's Secret via envFrom; route /api/v1/streaming to it.", [
+          d.arg('name', d.T.string, default='mastodon-streaming'),
+          d.arg('image', d.T.string, default='ghcr.io/mastodon/mastodon-streaming:v4.3.1'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='mastodon-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/streaming.libsonnet' },
+        sidekiq: d.fn("The Mastodon sidekiq background worker (federation, media, scheduled jobs). Shares the web stage's Secret via envFrom. No Service.", [
+          d.arg('name', d.T.string, default='mastodon-sidekiq'),
+          d.arg('image', d.T.string, default='ghcr.io/mastodon/mastodon:v4.3.1'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('secretName', d.T.string, default='mastodon-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
