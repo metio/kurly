@@ -8341,6 +8341,79 @@
          "summary": "A Radicale server (a lightweight CalDAV and CardDAV server for calendars and contacts) on the tomsquest image. A plain composable http workload that keeps its collections on a PersistentVolume — no external database. The image runs as its designated uid 2999 with a writable root filesystem (s6 init). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5232; mount a config + htpasswd for real authentication."
       },
       {
+         "id": "rallly",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "rallly",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/lukevella/rallly:4.11.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://rallly.example.com",
+                     "name": "baseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "rallly-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Rallly server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), SECRET_PASSWORD, and SMTP_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/rallly/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Rallly server (a self-hosted scheduling and group-poll tool for finding the best date to meet) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL, SECRET_PASSWORD, and SMTP creds come from a provided Secret via envFrom. Pairs with a cnpg-cluster named rallly-db. Serves on :3000."
+      },
+      {
          "id": "readeck",
          "stages": [
             {

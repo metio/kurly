@@ -1500,6 +1500,22 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    rallly: {
+      summary: 'A Rallly server (a self-hosted scheduling and group-poll tool for finding the best date to meet) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL, SECRET_PASSWORD, and SMTP creds come from a provided Secret via envFrom. Pairs with a cnpg-cluster named rallly-db. Serves on :3000.',
+      stages: {
+        server: d.fn('The Rallly server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), SECRET_PASSWORD, and SMTP_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='rallly'),
+          d.arg('image', d.T.string, default='ghcr.io/lukevella/rallly:4.11.1'),
+          d.arg('baseUrl', d.T.string, example='https://rallly.example.com'),
+          d.arg('secretName', d.T.string, default='rallly-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rallly/server.libsonnet' },
+      },
+    },
     baserow: {
       summary: 'A Baserow server (an open-source, no-code database and Airtable alternative) on the official all-in-one image, which bundles the backend, frontend, Celery workers, and (by default) an embedded PostgreSQL and Redis — everything in /baserow/data, so a single instance needs nothing external. The image supervises multiple processes and writes the rootfs, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the signing keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
