@@ -805,6 +805,43 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/teable/server.libsonnet' },
       },
     },
+    readarr: {
+      summary: 'A Readarr server (an ebook and audiobook collection manager for Usenet and BitTorrent users) on the LinuxServer.io image. A plain composable http workload that keeps its application config (SQLite) on a PersistentVolume under /config. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8787.',
+      stages: {
+        server: d.fn('The Readarr server. Config at /config on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='readarr'),
+          d.arg('image', d.T.string, default='ghcr.io/linuxserver/readarr:develop@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/readarr/server.libsonnet' },
+      },
+    },
+    'calibre-web-automated': {
+      summary: 'A Calibre-Web Automated server (a self-hosted web reader and library manager for a Calibre ebook library, adding automatic ingest and format conversion on top of Calibre-Web) on the LinuxServer.io-based image. A plain composable http workload that keeps its application config on one PersistentVolume under /config and the Calibre library on another under /calibre-library. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8083.',
+      stages: {
+        server: d.fn('The Calibre-Web Automated server. Config at /config, library at /calibre-library. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='calibre-web-automated'),
+          d.arg('image', d.T.string, default='ghcr.io/crocodilestick/calibre-web-automated:latest@sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d'),
+          d.arg('configSize', d.T.quantity, default='1Gi'),
+          d.arg('librarySize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/calibre-web-automated/server.libsonnet' },
+      },
+    },
     apprise: {
       summary: 'An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
       stages: {

@@ -4287,6 +4287,96 @@
          "summary": "A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083."
       },
       {
+         "id": "calibre-web-automated",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "calibre-web-automated",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/crocodilestick/calibre-web-automated:latest@sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "configSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "librarySize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Calibre-Web Automated server. Config at /config, library at /calibre-library. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/calibre-web-automated/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Calibre-Web Automated server (a self-hosted web reader and library manager for a Calibre ebook library, adding automatic ingest and format conversion on top of Calibre-Web) on the LinuxServer.io-based image. A plain composable http workload that keeps its application config on one PersistentVolume under /config and the Calibre library on another under /calibre-library. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8083."
+      },
+      {
          "id": "cassandra-cluster",
          "stages": [
             {
@@ -19573,6 +19663,90 @@
             }
          ],
          "summary": "A Rallly server (a self-hosted scheduling and group-poll tool for finding the best date to meet) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL, SECRET_PASSWORD, and SMTP creds come from a provided Secret via envFrom. Pairs with a cnpg-cluster named rallly-db. Serves on :3000."
+      },
+      {
+         "id": "readarr",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "readarr",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/linuxserver/readarr:develop@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Readarr server. Config at /config on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/readarr/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Readarr server (an ebook and audiobook collection manager for Usenet and BitTorrent users) on the LinuxServer.io image. A plain composable http workload that keeps its application config (SQLite) on a PersistentVolume under /config. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8787."
       },
       {
          "id": "readeck",

@@ -77,6 +77,8 @@ local stageImports = {
   'grist/server': import 'github.com/metio/kurly/workloads/grist/server.libsonnet',
   'jenkins/server': import 'github.com/metio/kurly/workloads/jenkins/server.libsonnet',
   'alist/server': import 'github.com/metio/kurly/workloads/alist/server.libsonnet',
+  'calibre-web-automated/server': import 'github.com/metio/kurly/workloads/calibre-web-automated/server.libsonnet',
+  'readarr/server': import 'github.com/metio/kurly/workloads/readarr/server.libsonnet',
   'apprise/server': import 'github.com/metio/kurly/workloads/apprise/server.libsonnet',
   'draw-io/server': import 'github.com/metio/kurly/workloads/draw-io/server.libsonnet',
   'pocketbase/server': import 'github.com/metio/kurly/workloads/pocketbase/server.libsonnet',
