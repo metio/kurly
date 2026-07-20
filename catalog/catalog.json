@@ -10338,6 +10338,72 @@
          "summary": "A linkding server (a minimal, self-hosted bookmark manager). A plain composable http workload that keeps its bookmarks in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :9090."
       },
       {
+         "id": "linkstack",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "linkstack",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/linkstackorg/linkstack:latest@sha256:6e7e8f44099f7c4f1340bb9ffda5411f97da766a06fd63cf1ff90c57ce22dd61",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The LinkStack server. Data at /htdocs. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/linkstack/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A LinkStack server (a self-hosted, customizable \"link in bio\" page, a private alternative to Linktree) on the official image (pinned by digest; Renovate maintains it); with the default SQLite backend its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "linkwarden",
          "stages": [
             {
@@ -17621,6 +17687,73 @@
          "summary": "A Redis server — an in-memory data store used as a cache, message broker and database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :6379; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :6379."
       },
       {
+         "id": "redis-commander",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "redis-commander",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/joeferner/redis-commander:latest@sha256:1ad484c1fc0a3b4072dfa2bb10d44f0eba8ecb342c8c0f9e17cb21a6557e4b7e",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "local:redis:6379",
+                     "name": "redisHosts",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Redis Commander server. redisHosts sets REDIS_HOSTS (e.g. local:redis:6379). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/redis-commander/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Redis Commander server (a self-hosted web UI for managing Redis) on the official image (pinned by digest; Renovate maintains it). Stateless: a plain rolling Deployment that connects to the Redis you point it at. Serves on :8081."
+      },
+      {
          "id": "redmine",
          "stages": [
             {
@@ -18881,6 +19014,72 @@
             }
          ],
          "summary": "A SiYuan server (a privacy-first, self-hosted personal knowledge-management and note-taking app with block-level editing and a local-first workspace) on the official image; its workspace (notes, assets and the database) lives on a PersistentVolume. Web access is gated by an access-auth code set via SIYUAN_ACCESS_AUTH_CODE (kurly authors no Secret). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6806."
+      },
+      {
+         "id": "snappymail",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "snappymail",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/the-djmaze/snappymail:latest@sha256:5e3d990438809a8a49f8ac5758db03e858e6e9fc0e369e1f9e474f7664079905",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The SnappyMail server. Configure IMAP/SMTP in the admin panel. Data at /var/lib/snappymail. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/snappymail/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A SnappyMail server (a fast, modern, self-hosted webmail client that connects to your existing IMAP/SMTP servers) on the official image (pinned by digest; Renovate maintains it); config and per-account data on a PersistentVolume. SnappyMail is a client and does not run a mail server itself. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888."
       },
       {
          "id": "snipe-it",
@@ -20738,6 +20937,90 @@
             }
          ],
          "summary": "A TriliumNext Notes server (a hierarchical note-taking application for building personal knowledge bases) on the official image. A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :8080."
+      },
+      {
+         "id": "tvheadend",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "tvheadend",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/tvheadend:latest@sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Tvheadend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/tvheadend/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Tvheadend server (a self-hosted TV streaming server and DVR: DVB, IPTV, SAT>IP, with a web UI) on the LinuxServer.io image (pinned by digest; Renovate maintains it); config on a PersistentVolume. HTSP streaming (:9982) needs its own Service; tuners are hardware and not modelled. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :9981."
       },
       {
          "id": "twenty",

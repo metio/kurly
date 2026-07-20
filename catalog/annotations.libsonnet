@@ -3487,6 +3487,69 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/xwiki/server.libsonnet' },
       },
     },
+    'redis-commander': {
+      summary: 'A Redis Commander server (a self-hosted web UI for managing Redis) on the official image (pinned by digest; Renovate maintains it). Stateless: a plain rolling Deployment that connects to the Redis you point it at. Serves on :8081.',
+      stages: {
+        server: d.fn('The Redis Commander server. redisHosts sets REDIS_HOSTS (e.g. local:redis:6379). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='redis-commander'),
+          d.arg('image', d.T.string, default='ghcr.io/joeferner/redis-commander:latest@sha256:1ad484c1fc0a3b4072dfa2bb10d44f0eba8ecb342c8c0f9e17cb21a6557e4b7e'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('redisHosts', d.T.string, example='local:redis:6379'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/redis-commander/server.libsonnet' },
+      },
+    },
+    linkstack: {
+      summary: 'A LinkStack server (a self-hosted, customizable "link in bio" page, a private alternative to Linktree) on the official image (pinned by digest; Renovate maintains it); with the default SQLite backend its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The LinkStack server. Data at /htdocs. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='linkstack'),
+          d.arg('image', d.T.string, default='ghcr.io/linkstackorg/linkstack:latest@sha256:6e7e8f44099f7c4f1340bb9ffda5411f97da766a06fd63cf1ff90c57ce22dd61'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/linkstack/server.libsonnet' },
+      },
+    },
+    snappymail: {
+      summary: 'A SnappyMail server (a fast, modern, self-hosted webmail client that connects to your existing IMAP/SMTP servers) on the official image (pinned by digest; Renovate maintains it); config and per-account data on a PersistentVolume. SnappyMail is a client and does not run a mail server itself. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888.',
+      stages: {
+        server: d.fn('The SnappyMail server. Configure IMAP/SMTP in the admin panel. Data at /var/lib/snappymail. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='snappymail'),
+          d.arg('image', d.T.string, default='ghcr.io/the-djmaze/snappymail:latest@sha256:5e3d990438809a8a49f8ac5758db03e858e6e9fc0e369e1f9e474f7664079905'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/snappymail/server.libsonnet' },
+      },
+    },
+    tvheadend: {
+      summary: 'A Tvheadend server (a self-hosted TV streaming server and DVR: DVB, IPTV, SAT>IP, with a web UI) on the LinuxServer.io image (pinned by digest; Renovate maintains it); config on a PersistentVolume. HTSP streaming (:9982) needs its own Service; tuners are hardware and not modelled. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :9981.',
+      stages: {
+        server: d.fn('The Tvheadend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='tvheadend'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/tvheadend:latest@sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tvheadend/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
