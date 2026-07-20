@@ -3456,6 +3456,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/onlyoffice/server.libsonnet' },
       },
     },
+    registry: {
+      summary: 'A Docker Registry server (the reference OCI registry: a self-hosted store and distribution point for container images) on the official image; its stored images live on a PersistentVolume. Usually reached in-cluster; the docker-registry-ui workload gives it a web interface. The bare registry is unauthenticated and plaintext — front it with TLS and auth or keep it in-cluster. Single writer over a ReadWriteOnce volume: one replica, recreated (back it with S3 for a scaled registry). Serves on :5000.',
+      stages: {
+        server: d.fn('The Docker Registry server. Images at /var/lib/registry. Usually reached in-cluster. Compose an exposure onto the HTTP port only if reached from outside (with TLS/auth in front).', [
+          d.arg('name', d.T.string, default='registry'),
+          d.arg('image', d.T.string, default='docker.io/library/registry:2.8.3'),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/registry/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
