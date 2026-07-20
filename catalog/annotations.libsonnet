@@ -1500,6 +1500,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    directus: {
+      summary: 'A Directus server (an open-source headless CMS and data platform over your SQL database) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named directus-db. kurly authors no Secret; DB_PASSWORD, KEY, SECRET, and the admin password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8055.',
+      stages: {
+        server: d.fn('The Directus server. dbHost/dbName/dbUser default to a cnpg-cluster named directus-db. publicUrl is the public URL; adminEmail the first-run admin. secretName holds DB_PASSWORD, KEY, SECRET, ADMIN_PASSWORD (envFrom). Uploads at /directus/uploads. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='directus'),
+          d.arg('image', d.T.string, default='docker.io/directus/directus:12.1.1'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='directus-db-rw'),
+          d.arg('dbName', d.T.string, default='directus'),
+          d.arg('dbUser', d.T.string, default='directus'),
+          d.arg('publicUrl', d.T.string, example='https://cms.example.com'),
+          d.arg('adminEmail', d.T.string, default='admin@example.com'),
+          d.arg('secretName', d.T.string, default='directus-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/directus/server.libsonnet' },
+      },
+    },
     ferretdb: {
       summary: 'A FerretDB server (an open-source, MongoDB-compatible database) — the Apache-2.0 alternative to MongoDB Community (SSPL) for a platform that monetizes hosting. A stateless proxy that speaks the MongoDB wire protocol and stores everything in a PostgreSQL backend (with the DocumentDB extension), so it needs no volume and can run several replicas. kurly authors no Secret; FERRETDB_POSTGRESQL_URL comes from a provided Secret via envFrom. Serves MongoDB wire on :27017.',
       stages: {
