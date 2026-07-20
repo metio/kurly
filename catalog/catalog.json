@@ -2807,6 +2807,84 @@
          "summary": "The Prometheus blackbox_exporter: it probes endpoints from the outside (HTTP, TCP, DNS, ICMP) and turns each probe into metrics. A plain composable http workload, deployed once as the prober kurly.expose.probe points a workload Probe at. Serves /probe on :9115."
       },
       {
+         "id": "blinko",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "blinko",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/blinkospace/blinko:1.8.8",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://notes.example.com",
+                     "name": "nextauthUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "blinko-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Blinko server. nextauthUrl is the public URL. secretName holds DATABASE_URL (with the DB password) and NEXTAUTH_SECRET (envFrom). Uploads at /app/.blinko. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/blinko/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Blinko server (a self-hosted, AI-powered note-taking app for quickly capturing ideas) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named blinko-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1111."
+      },
+      {
          "id": "bookstack",
          "stages": [
             {

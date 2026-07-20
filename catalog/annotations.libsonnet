@@ -1500,6 +1500,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    blinko: {
+      summary: 'A Blinko server (a self-hosted, AI-powered note-taking app for quickly capturing ideas) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named blinko-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1111.',
+      stages: {
+        server: d.fn('The Blinko server. nextauthUrl is the public URL. secretName holds DATABASE_URL (with the DB password) and NEXTAUTH_SECRET (envFrom). Uploads at /app/.blinko. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='blinko'),
+          d.arg('image', d.T.string, default='docker.io/blinkospace/blinko:1.8.8'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('nextauthUrl', d.T.string, example='https://notes.example.com'),
+          d.arg('secretName', d.T.string, default='blinko-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/blinko/server.libsonnet' },
+      },
+    },
     answer: {
       summary: 'An Apache Answer server (a self-hosted Q&A platform for a community knowledge base, à la Stack Overflow) on the official image. A plain composable http workload — with the SQLite backend its data and uploads live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80. Configure external PostgreSQL/MySQL via the installer to scale out.',
       stages: {
