@@ -6122,6 +6122,77 @@
          "summary": "A Miniflux server (a minimalist, opinionated RSS/Atom feed reader) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and the admin password come from a provided Secret via envFrom. Pairs with a cnpg-cluster named miniflux-db. Serves on :8080."
       },
       {
+         "id": "mongodb-cluster",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mongodb",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 3,
+                     "name": "members",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "8.0.4",
+                     "name": "mongodbVersion",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "logsSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "admin",
+                     "name": "adminUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mongodb-admin",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The MongoDBCommunity CR (a SCRAM-authenticated ReplicaSet). members are replica-set members (odd count for quorum). secretName is a Secret you provide with the admin password (key `password`); adminUser is created on bootstrap. Storage is set via the operator StatefulSet override. Render with kurly.list.",
+               "id": "cluster",
+               "importPath": "github.com/metio/kurly/workloads/mongodb-cluster/cluster.libsonnet",
+               "kind": "mongodb"
+            }
+         ],
+         "summary": "A highly-available MongoDB replica set as a MongoDB Community Operator MongoDBCommunity custom resource. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the MongoDB Community Operator and a consumer-provided admin-password Secret. WARNING: MongoDB Community Edition is SSPL-licensed (restricts offering it as a service) — the operator is Apache-2.0 but the server is not; prefer FerretDB (Apache-2.0) if SSPL is a problem for a monetized hosting platform."
+      },
+      {
          "id": "mysql-cluster",
          "stages": [
             {

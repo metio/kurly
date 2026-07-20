@@ -1500,6 +1500,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'mongodb-cluster': {
+      summary: 'A highly-available MongoDB replica set as a MongoDB Community Operator MongoDBCommunity custom resource. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the MongoDB Community Operator and a consumer-provided admin-password Secret. WARNING: MongoDB Community Edition is SSPL-licensed (restricts offering it as a service) — the operator is Apache-2.0 but the server is not; prefer FerretDB (Apache-2.0) if SSPL is a problem for a monetized hosting platform.',
+      stages: {
+        cluster: d.fn('The MongoDBCommunity CR (a SCRAM-authenticated ReplicaSet). members are replica-set members (odd count for quorum). secretName is a Secret you provide with the admin password (key `password`); adminUser is created on bootstrap. Storage is set via the operator StatefulSet override. Render with kurly.list.', [
+          d.arg('name', d.T.string, default='mongodb'),
+          d.arg('members', d.T.int, default=3),
+          d.arg('mongodbVersion', d.T.string, default='8.0.4'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('logsSize', d.T.quantity, default='2Gi'),
+          d.arg('adminUser', d.T.string, default='admin'),
+          d.arg('secretName', d.T.string, default='mongodb-admin'),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'mongodb',
+          importPath: 'github.com/metio/kurly/workloads/mongodb-cluster/cluster.libsonnet',
+        },
+      },
+    },
     'opensearch-cluster': {
       summary: 'A highly-available OpenSearch cluster as an OpenSearch Operator OpenSearchCluster custom resource, with optional OpenSearch Dashboards. OpenSearch is the Apache-2.0 fork of Elasticsearch — no SSPL/Elastic-License restriction on offering it as a service, the right default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the OpenSearch Operator.',
       stages: {
