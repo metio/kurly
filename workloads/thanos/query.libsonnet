@@ -17,8 +17,8 @@
 //
 // Reach the Prometheus-compatible API at the Service on :10902 — point a Grafana
 // datasource, or the thanos query-frontend, at it. The pod also serves the
-// StoreAPI over gRPC on :10901 for a higher-level Querier to federate; expose
-// that with the raw `+` escape if you nest queriers.
+// StoreAPI over gRPC on :10901 (the 'grpc' port on the Service) for a higher-level
+// Querier to federate.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 // The workload version, stamped as app.kubernetes.io/version; the release
@@ -59,6 +59,7 @@ function(
   + kurly.replicas(replicas)
   + kurly.port(10902)
   + kurly.servicePort(10902)
+  + kurly.extraPort('grpc', 10901)
   + kurly.args(args)
   // The thanos image ships no non-root user, and the restricted default demands
   // one; the querier is stateless, so the read-only root filesystem stands.
