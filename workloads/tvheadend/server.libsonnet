@@ -9,8 +9,9 @@
 //   local tvheadend = import 'github.com/metio/kurly/workloads/tvheadend/server.libsonnet';
 //   kurly.list(tvheadend())
 //
-// Serves the web UI on :9981 — compose an exposure onto it. (The HTSP streaming protocol on
-// :9982 needs its own Service; tuners are hardware and are not modelled here.)
+// Serves the web UI on :9981 — compose an exposure onto it. The HTSP streaming protocol on
+// :9982 is published on the Service beside it (the 'htsp' port); tuners are hardware and are
+// not modelled here.
 //
 // The image publishes only a rolling tag, so it is pinned by digest here; Renovate resolves and
 // updates the digest. The s6-overlay init runs as root and drops to the PUID/PGID user.
@@ -37,6 +38,7 @@ function(
   + kurly.recreate()
   + kurly.port(9981)
   + kurly.servicePort(9981)
+  + kurly.extraPort('htsp', 9982)
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()

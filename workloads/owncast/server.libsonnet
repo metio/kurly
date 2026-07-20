@@ -12,9 +12,9 @@
 //
 // Serves the web player and API on :8080 — compose an exposure onto it.
 //
-// RTMP INGEST: streaming INTO Owncast uses RTMP on :1935, a separate port this HTTP
-// workload does not expose. Add a Service for it (a raw `+` patch, or a dedicated
-// LoadBalancer) so your broadcaster can reach it; the web player works without it.
+// RTMP INGEST: streaming INTO Owncast uses RTMP on :1935, published on the Service beside the
+// web port (the 'rtmp' port); route it (a NodePort or dedicated LoadBalancer) so your
+// broadcaster can reach it. The web player works without it.
 //
 // Single writer: the data lives on a ReadWriteOnce volume, so one replica, recreated
 // (never rolled) to keep two pods off the SQLite database and segments.
@@ -38,6 +38,7 @@ function(
   + kurly.recreate()
   + kurly.port(8080)
   + kurly.servicePort(8080)
+  + kurly.extraPort('rtmp', 1935)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()

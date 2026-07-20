@@ -12,8 +12,8 @@
 // Serves the REST API on :6333 — usually reached in-cluster (http://qdrant:6333), so it
 // often needs no exposure.
 //
-// GRPC: Qdrant also serves gRPC on :6334, a separate port this HTTP workload does not
-// expose. Add a Service for it (a raw `+` patch) if your clients use gRPC.
+// GRPC: Qdrant also serves gRPC on :6334, published on the Service beside the REST port (the
+// 'grpc' port) for clients that use gRPC.
 //
 // Single writer: the collections live on a ReadWriteOnce volume, so one replica, recreated
 // (never rolled) to keep two pods off the storage.
@@ -35,6 +35,7 @@ function(
   + kurly.recreate()
   + kurly.port(6333)
   + kurly.servicePort(6333)
+  + kurly.extraPort('grpc', 6334)
   + kurly.env({ QDRANT__STORAGE__STORAGE_PATH: '/qdrant/storage' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/qdrant/storage', storageSize, storageClass=storageClass)

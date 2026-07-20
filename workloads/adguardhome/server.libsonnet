@@ -11,9 +11,9 @@
 //
 // Serves the admin UI on :3000 (the first-run setup wizard) — compose an exposure onto it.
 //
-// DNS: AdGuard Home answers DNS on :53 (TCP and UDP), separate ports this HTTP workload
-// does not expose. Add a Service for :53 (usually a LoadBalancer so clients can point their
-// resolver at it) — a raw `+` patch; the admin UI works without it.
+// DNS: AdGuard Home answers DNS on :53 (TCP and UDP), published on the Service beside the web
+// port (the 'dns-tcp' and 'dns-udp' ports); route it (usually a LoadBalancer) so clients can
+// point their resolver at it. The admin UI works without it.
 //
 // The AdGuardHome.yaml config and the work directory both live under /opt/adguardhome, so a
 // single volume mounted there persists everything. The process binds the privileged DNS
@@ -41,6 +41,8 @@ function(
   + kurly.recreate()
   + kurly.port(3000)
   + kurly.servicePort(3000)
+  + kurly.extraPort('dns-tcp', 53)
+  + kurly.extraPort('dns-udp', 53, protocol='UDP')
   + kurly.env(env)
   // AdGuard Home binds the privileged DNS port, so it needs root and a writable root
   // filesystem alongside its data volume.

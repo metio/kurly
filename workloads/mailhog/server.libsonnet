@@ -10,7 +10,7 @@
 //   kurly.list(mailhog())
 //
 // Serves the web inbox on :8025 — compose an exposure onto it. Apps send mail to its SMTP
-// listener on :1025 (mailhog:1025), a separate port that needs its own Service.
+// listener on :1025, published on the Service beside the web port (the 'smtp' port).
 //
 // The image publishes only a rolling tag, so it is pinned by digest here; Renovate resolves and
 // updates the digest.
@@ -30,6 +30,7 @@ function(
   + kurly.replicas(replicas)
   + kurly.port(8025)
   + kurly.servicePort(8025)
+  + kurly.extraPort('smtp', 1025)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

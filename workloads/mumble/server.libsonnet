@@ -39,6 +39,7 @@ function(
   + kurly.recreate()
   + kurly.port(64738)
   + kurly.servicePort(64738)
+  + kurly.extraPort('voice-udp', 64738, protocol='UDP')
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)

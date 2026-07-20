@@ -12,9 +12,9 @@
 //
 // Serves the admin UI on :81 — compose an exposure onto it.
 //
-// PROXY PORTS: the actual reverse proxy listens on :80 and :443, separate ports this HTTP
-// workload does not expose. Add a Service (usually a LoadBalancer) for them so it can serve
-// your proxied hosts; the admin UI works without it.
+// PROXY PORTS: the actual reverse proxy listens on :80 and :443, published on the Service
+// beside the admin port (the 'proxy-http' and 'proxy-https' ports); route them (usually a
+// LoadBalancer) so it can serve your proxied hosts. The admin UI works without them.
 //
 // It binds the privileged proxy ports, so it runs as root with a writable root filesystem.
 //
@@ -38,6 +38,8 @@ function(
   + kurly.recreate()
   + kurly.port(81)
   + kurly.servicePort(81)
+  + kurly.extraPort('proxy-http', 80)
+  + kurly.extraPort('proxy-https', 443)
   + kurly.env(env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()

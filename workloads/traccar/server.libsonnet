@@ -13,8 +13,9 @@
 // Serves the web app and API on :8082 — compose an exposure onto it.
 //
 // DEVICE PORTS: Traccar listens for device protocols on a wide range of extra TCP/UDP
-// ports (5000-5150). Add Services for the protocols your devices use (a raw `+` patch);
-// the web app works without them.
+// ports (5000-5150) — too many to publish by default. Compose kurly.extraPort for each
+// protocol your devices use, e.g. + kurly.extraPort('gps103', 5001); the web app works
+// without them.
 //
 // CONFIG: `configXml` is Traccar's traccar.xml, mounted verbatim. The default points the
 // embedded H2 database at the data volume. Point it at an external PostgreSQL/MySQL (the

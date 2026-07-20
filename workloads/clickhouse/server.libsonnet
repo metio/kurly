@@ -10,7 +10,7 @@
 //   kurly.list(clickhouse())
 //
 // Serves the HTTP API on :8123 — usually reached in-cluster (http://clickhouse:8123). The
-// native protocol on :9000 needs a separate Service (a raw `+` patch).
+// native protocol on :9000 is published on the Service beside it (the 'native' port).
 //
 // SECRET: ClickHouse reads CLICKHOUSE_USER, CLICKHOUSE_PASSWORD and CLICKHOUSE_DB from the
 // environment on first start. kurly authors no Secret; provide one holding them, via envFrom.
@@ -35,6 +35,7 @@ function(
   + kurly.recreate()
   + kurly.port(8123)
   + kurly.servicePort(8123)
+  + kurly.extraPort('native', 9000)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
   + kurly.runAs(101, gid=101, fsGroup=101)

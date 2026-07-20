@@ -12,9 +12,9 @@
 //
 // Serves the admin dashboard on :80 — compose an exposure onto it.
 //
-// DNS: Pi-hole answers DNS on :53 (TCP and UDP), separate ports this HTTP workload does not
-// expose. Add a Service for :53 (usually a LoadBalancer so clients can point their resolver
-// at it) — a raw `+` patch; the admin dashboard works without it.
+// DNS: Pi-hole answers DNS on :53 (TCP and UDP), published on the Service beside the web port
+// (the 'dns-tcp' and 'dns-udp' ports); route it (usually a LoadBalancer) so clients can point
+// their resolver at it. The admin dashboard works without it.
 //
 // SECRET: set the admin password through FTLCONF_webserver_api_password from a Secret via
 // kurly.envFromSecret; kurly authors no Secret. Pi-hole binds the privileged DNS port, so it
@@ -42,6 +42,8 @@ function(
   + kurly.recreate()
   + kurly.port(80)
   + kurly.servicePort(80)
+  + kurly.extraPort('dns-tcp', 53)
+  + kurly.extraPort('dns-udp', 53, protocol='UDP')
   + kurly.envFromSecret(secretName)
   + kurly.env({ TZ: timezone } + env)
   + kurly.rootUser()

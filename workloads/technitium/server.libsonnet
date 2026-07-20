@@ -11,9 +11,9 @@
 //
 // Serves the web console on :5380 — compose an exposure onto it.
 //
-// DNS: Technitium answers DNS on :53 (TCP and UDP), separate ports this HTTP workload does not
-// expose. Add a Service for :53 (usually a LoadBalancer so clients can point their resolver at
-// it) — a raw `+` patch; the console works without it.
+// DNS: Technitium answers DNS on :53 (TCP and UDP), published on the Service beside the web
+// port (the 'dns-tcp' and 'dns-udp' ports); route it (usually a LoadBalancer) so clients can
+// point their resolver at it. The console works without it.
 //
 // SECRET: set the admin password through DNS_SERVER_ADMIN_PASSWORD from a Secret via
 // kurly.envFromSecret; kurly authors no Secret. It binds the privileged DNS port, so it runs
@@ -40,6 +40,8 @@ function(
   + kurly.recreate()
   + kurly.port(5380)
   + kurly.servicePort(5380)
+  + kurly.extraPort('dns-tcp', 53)
+  + kurly.extraPort('dns-udp', 53, protocol='UDP')
   + kurly.envFromSecret(secretName)
   + kurly.env({ DNS_SERVER_WEB_SERVICE_HTTP_PORT: '5380' } + env)
   + kurly.rootUser()
