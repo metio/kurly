@@ -14590,6 +14590,84 @@
          "summary": "An OpenObserve server (a self-hosted, high-performance observability platform for logs, metrics and traces) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5080."
       },
       {
+         "id": "openproject",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "openproject",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/openproject/openproject:15",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "projects.example.com",
+                     "name": "hostName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "openproject-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "4Gi"
+                        },
+                        "requests": {
+                           "cpu": "500m",
+                           "memory": "1Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The OpenProject server. hostName sets OPENPROJECT_HOST__NAME; secretName holds DATABASE_URL and SECRET_KEY_BASE (envFrom). Assets at /var/openproject/assets. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/openproject/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An OpenProject server (a self-hosted, open-source project-management and collaboration suite: work packages, Gantt charts, agile boards, wikis, time tracking) on the official image, backed by an external PostgreSQL, with uploaded assets on a PersistentVolume. kurly authors no Secret; DATABASE_URL, SECRET_KEY_BASE and host settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named openproject-db (a production deployment also wants memcached). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "opensearch-cluster",
          "stages": [
             {
@@ -16010,6 +16088,78 @@
             }
          ],
          "summary": "A Plex Media Server (a self-hosted media server for organising and streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Set PLEX_CLAIM on first run and mount your media libraries. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :32400."
+      },
+      {
+         "id": "pocket-id",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "pocket-id",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/pocket-id/pocket-id:v1.0.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://id.example.com",
+                     "name": "appUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Pocket ID server. appUrl is the public HTTPS URL (issuer/callback origin). Data at /app/data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/pocket-id/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Pocket ID server (a simple, self-hosted OIDC provider for passkey logins, no passwords) on the official image; with the default SQLite backend its database and keys live on a PersistentVolume. appUrl is the public HTTPS URL passkeys bind to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1411."
       },
       {
          "id": "postgres",
@@ -21394,6 +21544,79 @@
             }
          ],
          "summary": "A WordPress server (the popular CMS and blogging platform) on the official image, backed by an external MySQL/MariaDB, with content (themes, plugins, uploads) on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; WORDPRESS_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "yourls",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "yourls",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/library/yourls:1.10.1",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "example": "https://s.example.com",
+                     "name": "site",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "yourls-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The YOURLS server. site sets YOURLS_SITE (the public URL); secretName holds YOURLS_DB_* and the admin credentials (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/yourls/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A YOURLS server (Your Own URL Shortener: a small, self-hosted PHP app for short links with stats and plugins) on the official image, backed by an external MySQL/MariaDB. kurly authors no Secret; the YOURLS_DB_* and admin YOURLS_USER/YOURLS_PASS come from a provided Secret via envFrom. Pairs with a mysql-cluster named yourls-db. Stateless (links live in MySQL): a plain rolling Deployment. Serves on :80."
       },
       {
          "id": "znc",

@@ -3310,6 +3310,55 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/photoview/server.libsonnet' },
       },
     },
+    yourls: {
+      summary: 'A YOURLS server (Your Own URL Shortener: a small, self-hosted PHP app for short links with stats and plugins) on the official image, backed by an external MySQL/MariaDB. kurly authors no Secret; the YOURLS_DB_* and admin YOURLS_USER/YOURLS_PASS come from a provided Secret via envFrom. Pairs with a mysql-cluster named yourls-db. Stateless (links live in MySQL): a plain rolling Deployment. Serves on :80.',
+      stages: {
+        server: d.fn('The YOURLS server. site sets YOURLS_SITE (the public URL); secretName holds YOURLS_DB_* and the admin credentials (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='yourls'),
+          d.arg('image', d.T.string, default='docker.io/library/yourls:1.10.1'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('site', d.T.string, example='https://s.example.com'),
+          d.arg('secretName', d.T.string, default='yourls-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/yourls/server.libsonnet' },
+      },
+    },
+    'pocket-id': {
+      summary: 'A Pocket ID server (a simple, self-hosted OIDC provider for passkey logins, no passwords) on the official image; with the default SQLite backend its database and keys live on a PersistentVolume. appUrl is the public HTTPS URL passkeys bind to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1411.',
+      stages: {
+        server: d.fn('The Pocket ID server. appUrl is the public HTTPS URL (issuer/callback origin). Data at /app/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='pocket-id'),
+          d.arg('image', d.T.string, default='ghcr.io/pocket-id/pocket-id:v1.0.0'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('appUrl', d.T.string, example='https://id.example.com'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pocket-id/server.libsonnet' },
+      },
+    },
+    openproject: {
+      summary: 'An OpenProject server (a self-hosted, open-source project-management and collaboration suite: work packages, Gantt charts, agile boards, wikis, time tracking) on the official image, backed by an external PostgreSQL, with uploaded assets on a PersistentVolume. kurly authors no Secret; DATABASE_URL, SECRET_KEY_BASE and host settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named openproject-db (a production deployment also wants memcached). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The OpenProject server. hostName sets OPENPROJECT_HOST__NAME; secretName holds DATABASE_URL and SECRET_KEY_BASE (envFrom). Assets at /var/openproject/assets. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='openproject'),
+          d.arg('image', d.T.string, default='docker.io/openproject/openproject:15'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('hostName', d.T.string, example='projects.example.com'),
+          d.arg('secretName', d.T.string, default='openproject-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '4Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openproject/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
