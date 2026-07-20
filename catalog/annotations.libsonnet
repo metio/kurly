@@ -931,6 +931,51 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/davis/server.libsonnet' },
       },
     },
+    'pingvin-share': {
+      summary: 'A Pingvin Share server (a self-hosted, open-source file-sharing platform, an alternative to WeTransfer) on the official all-in-one image (frontend + backend behind its own reverse proxy); its SQLite database and uploaded shares on a PersistentVolume under /opt/app/backend/data. A plain composable http workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Pingvin Share server. Data at /opt/app/backend/data on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='pingvin-share'),
+          d.arg('image', d.T.string, default='ghcr.io/stonith404/pingvin-share:latest@sha256:6bf2bcd3043ee68cb61264f0857511ccf7f212fdb984382b7f2d491635184ad6'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pingvin-share/server.libsonnet' },
+      },
+    },
+    gokapi: {
+      summary: 'A Gokapi server (a self-hosted, lightweight file-sharing server with expiring links and a download limit, similar to the discontinued Firefox Send) on the official image; its database, configuration and (by default) stored files on a PersistentVolume under /app/data. A plain composable http workload. Uploaded files can instead go to S3 when the AWS_* settings are provided. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :53842.',
+      stages: {
+        server: d.fn('The Gokapi server. Data at /app/data on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='gokapi'),
+          d.arg('image', d.T.string, default='docker.io/f0rc3/gokapi:latest@sha256:7303dc0e658b8442f00d8363937ac0ffca3b4690930801b47aac6c0631d0cbcf'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/gokapi/server.libsonnet' },
+      },
+    },
+    cobalt: {
+      summary: 'A cobalt API server (a self-hosted media-downloader backend: give it a link and it returns a clean download for supported sites) on the official image. A plain composable http workload. The API is stateless — it streams and re-muxes on demand and keeps nothing — so a plain, horizontally scalable Deployment. This is the API only; run a cobalt web frontend separately for the UI. Serves on :9000.',
+      stages: {
+        server: d.fn('The cobalt API server. Set apiUrl to its public URL. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='cobalt'),
+          d.arg('image', d.T.string, default='ghcr.io/imputnet/cobalt:10@sha256:e5d3fff05a0a5a24ef31b034736fa5075ba45bdb051da1910b84be1c7798f5b4'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('apiUrl', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/cobalt/server.libsonnet' },
+      },
+    },
     chatpad: {
       summary: 'A Chatpad AI server (a self-hosted, clean web UI for OpenAI chat models) on the official image. A plain composable http workload. Conversations and the API key are stored client-side, so the server only serves static assets and holds no data — a plain, horizontally scalable Deployment. The browser talks to OpenAI directly with the user own key. Serves on :80.',
       stages: {

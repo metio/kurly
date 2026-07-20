@@ -4975,6 +4975,72 @@
          "summary": "The PostgreSQL images a fleet of CloudNativePG clusters may run, as an ImageCatalog or ClusterImageCatalog custom resource — one image per major, so a patch bump is one line and rolls every cluster on that major. Requires the CloudNativePG operator."
       },
       {
+         "id": "cobalt",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "cobalt",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/imputnet/cobalt:10@sha256:e5d3fff05a0a5a24ef31b034736fa5075ba45bdb051da1910b84be1c7798f5b4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "apiUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The cobalt API server. Set apiUrl to its public URL. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/cobalt/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A cobalt API server (a self-hosted media-downloader backend: give it a link and it returns a clean download for supported sites) on the official image. A plain composable http workload. The API is stateless — it streams and re-muxes on demand and keeps nothing — so a plain, horizontally scalable Deployment. This is the API only; run a cobalt web frontend separately for the UI. Serves on :9000."
+      },
+      {
          "id": "code-server",
          "stages": [
             {
@@ -8773,6 +8839,72 @@
             }
          ],
          "summary": "A Gogs server (a painless, self-hosted Git service: a lightweight, fast Git server with a clean web UI) on the official image; with the default SQLite backend its repositories and data live on a PersistentVolume. Git-over-SSH uses :22, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
+         "id": "gokapi",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "gokapi",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/f0rc3/gokapi:latest@sha256:7303dc0e658b8442f00d8363937ac0ffca3b4690930801b47aac6c0631d0cbcf",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Gokapi server. Data at /app/data on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/gokapi/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Gokapi server (a self-hosted, lightweight file-sharing server with expiring links and a download limit, similar to the discontinued Firefox Send) on the official image; its database, configuration and (by default) stored files on a PersistentVolume under /app/data. A plain composable http workload. Uploaded files can instead go to S3 when the AWS_* settings are provided. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :53842."
       },
       {
          "id": "gotenberg",
@@ -18895,6 +19027,72 @@
             }
          ],
          "summary": "A PILOS server (an open-source, Laravel-based front-end for BigBlueButton from TH Mittelhessen: room and meeting management with LDAP/OIDC support) on the official all-in-one image (nginx + php-fpm), backed by an external PostgreSQL and Redis, with uploaded assets on a PersistentVolume. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named pilos-db and a Redis. kurly authors no Secret; the database/Redis/APP_KEY/BBB settings come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated; the bundled nginx master needs root and a writable rootfs. Serves on :80."
+      },
+      {
+         "id": "pingvin-share",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "pingvin-share",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/stonith404/pingvin-share:latest@sha256:6bf2bcd3043ee68cb61264f0857511ccf7f212fdb984382b7f2d491635184ad6",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Pingvin Share server. Data at /opt/app/backend/data on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/pingvin-share/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Pingvin Share server (a self-hosted, open-source file-sharing platform, an alternative to WeTransfer) on the official all-in-one image (frontend + backend behind its own reverse proxy); its SQLite database and uploaded shares on a PersistentVolume under /opt/app/backend/data. A plain composable http workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
          "id": "piwigo",
