@@ -1500,6 +1500,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    commafeed: {
+      summary: 'A CommaFeed server (a self-hosted Google Reader-style RSS/Atom feed reader) on the official image. A plain composable http workload — the H2 variant keeps its feeds in an embedded database on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8082. Use the PostgreSQL image variant to scale past the embedded DB.',
+      stages: {
+        server: d.fn('The CommaFeed server (H2 variant). Keeps its embedded database at /commafeed/data on the volume. Switch to the -postgresql image and point CF_APP_DATABASE at a cnpg-cluster to scale out. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='commafeed'),
+          d.arg('image', d.T.string, default='docker.io/athou/commafeed:7.2.0-h2'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/commafeed/server.libsonnet' },
+      },
+    },
     glitchtip: {
       summary: 'A GlitchTip deployment (an open-source, Sentry-compatible error-tracking and performance-monitoring platform) as two stages — server (the web/ingest API) and worker (the Celery worker with beat) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named glitchtip-db and a valkey named glitchtip-cache. kurly authors no Secret; DATABASE_URL and SECRET_KEY come from a provided Secret via envFrom. The server is stateless and scales via replicas.',
       stages: {
