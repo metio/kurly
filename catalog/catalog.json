@@ -10792,6 +10792,102 @@
          "summary": "A Vikunja server (a self-hosted to-do and project-management app) on the official all-in-one image. A plain composable http workload that keeps its data in SQLite and file attachments on a PersistentVolume by default — no external database. kurly authors no Secret; VIKUNJA_SERVICE_JWTSECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3456."
       },
       {
+         "id": "wallabag",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "wallabag",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/wallabag/wallabag:2.6.14",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "wallabag-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "wallabag",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "wallabag",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://read.example.com",
+                     "name": "domain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "wallabag-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The wallabag server. dbHost/dbName/dbUser default to a cnpg-cluster named wallabag-db (SYMFONY__ENV__ prefix). domain is the public URL. secretName holds SYMFONY__ENV__DATABASE_PASSWORD and SYMFONY__ENV__SECRET (envFrom). Saved images on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/wallabag/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A wallabag server (a self-hosted read-it-later app that saves clean, readable copies of web pages) on the official image, backed by an external PostgreSQL, with saved images on a PersistentVolume. Pairs with a cnpg-cluster named wallabag-db. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the DB password and app secret come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "wger",
          "stages": [
             {

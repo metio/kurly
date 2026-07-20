@@ -1500,6 +1500,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    wallabag: {
+      summary: 'A wallabag server (a self-hosted read-it-later app that saves clean, readable copies of web pages) on the official image, backed by an external PostgreSQL, with saved images on a PersistentVolume. Pairs with a cnpg-cluster named wallabag-db. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the DB password and app secret come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The wallabag server. dbHost/dbName/dbUser default to a cnpg-cluster named wallabag-db (SYMFONY__ENV__ prefix). domain is the public URL. secretName holds SYMFONY__ENV__DATABASE_PASSWORD and SYMFONY__ENV__SECRET (envFrom). Saved images on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='wallabag'),
+          d.arg('image', d.T.string, default='docker.io/wallabag/wallabag:2.6.14'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='wallabag-db-rw'),
+          d.arg('dbName', d.T.string, default='wallabag'),
+          d.arg('dbUser', d.T.string, default='wallabag'),
+          d.arg('domain', d.T.string, example='https://read.example.com'),
+          d.arg('secretName', d.T.string, default='wallabag-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wallabag/server.libsonnet' },
+      },
+    },
     monica: {
       summary: 'A Monica server (a self-hosted personal relationship manager) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       stages: {
