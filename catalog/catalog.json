@@ -18405,6 +18405,72 @@
          "summary": "A Pocket ID server (a simple, self-hosted OIDC provider for passkey logins, no passwords) on the official image; with the default SQLite backend its database and keys live on a PersistentVolume. appUrl is the public HTTPS URL passkeys bind to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1411."
       },
       {
+         "id": "pocketbase",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "pocketbase",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/muchobien/pocketbase:latest@sha256:cd66d436afed100204a62b03810eb75c5b70edbaf377b68230f1f799bafc4952",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The PocketBase server. Data at /pb_data on the volume. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/pocketbase/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A PocketBase server (a self-hosted, open-source backend in one file: an embedded SQLite database, auth, file storage and a REST/realtime API, with an admin dashboard) on the official image. A plain composable http workload that keeps its database, uploads and migrations on a PersistentVolume under /pb_data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and admin UI on :8080."
+      },
+      {
          "id": "portainer",
          "stages": [
             {
@@ -21911,6 +21977,78 @@
             }
          ],
          "summary": "A Tautulli server — a monitoring and tracking tool for Plex Media Server: history, statistics and notifications. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8181."
+      },
+      {
+         "id": "teable",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "teable",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/teableio/teable:latest@sha256:3d76dae237327e0d54dcc1aa073209088deb6d9bc4b6215a09462b3d133d4e19",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "publicOrigin",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "teable-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Teable server. Point publicOrigin at its public URL and provide the Secret. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/teable/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Teable server (a self-hosted, no-code database built on PostgreSQL that presents as a spreadsheet, an Airtable alternative) on the official image, backed by an external PostgreSQL (and Redis for realtime/caching). A plain composable http workload. kurly authors no Secret; PRISMA_DATABASE_URL, BACKEND_CACHE_REDIS_URI, SECRET_KEY and the mail/storage settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named teable-db and a Redis; attachments go to S3 when configured. Stateless: a plain rolling Deployment. Serves on :3000."
       },
       {
          "id": "technitium",

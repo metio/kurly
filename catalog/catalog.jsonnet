@@ -79,6 +79,8 @@ local stageImports = {
   'alist/server': import 'github.com/metio/kurly/workloads/alist/server.libsonnet',
   'apprise/server': import 'github.com/metio/kurly/workloads/apprise/server.libsonnet',
   'draw-io/server': import 'github.com/metio/kurly/workloads/draw-io/server.libsonnet',
+  'pocketbase/server': import 'github.com/metio/kurly/workloads/pocketbase/server.libsonnet',
+  'teable/server': import 'github.com/metio/kurly/workloads/teable/server.libsonnet',
   'cal-com/server': import 'github.com/metio/kurly/workloads/cal-com/server.libsonnet',
   'documenso/server': import 'github.com/metio/kurly/workloads/documenso/server.libsonnet',
   'kavita/server': import 'github.com/metio/kurly/workloads/kavita/server.libsonnet',

@@ -774,6 +774,37 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/draw-io/server.libsonnet' },
       },
     },
+    pocketbase: {
+      summary: 'A PocketBase server (a self-hosted, open-source backend in one file: an embedded SQLite database, auth, file storage and a REST/realtime API, with an admin dashboard) on the official image. A plain composable http workload that keeps its database, uploads and migrations on a PersistentVolume under /pb_data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and admin UI on :8080.',
+      stages: {
+        server: d.fn('The PocketBase server. Data at /pb_data on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='pocketbase'),
+          d.arg('image', d.T.string, default='ghcr.io/muchobien/pocketbase:latest@sha256:cd66d436afed100204a62b03810eb75c5b70edbaf377b68230f1f799bafc4952'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pocketbase/server.libsonnet' },
+      },
+    },
+    teable: {
+      summary: 'A Teable server (a self-hosted, no-code database built on PostgreSQL that presents as a spreadsheet, an Airtable alternative) on the official image, backed by an external PostgreSQL (and Redis for realtime/caching). A plain composable http workload. kurly authors no Secret; PRISMA_DATABASE_URL, BACKEND_CACHE_REDIS_URI, SECRET_KEY and the mail/storage settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named teable-db and a Redis; attachments go to S3 when configured. Stateless: a plain rolling Deployment. Serves on :3000.',
+      stages: {
+        server: d.fn('The Teable server. Point publicOrigin at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='teable'),
+          d.arg('image', d.T.string, default='ghcr.io/teableio/teable:latest@sha256:3d76dae237327e0d54dcc1aa073209088deb6d9bc4b6215a09462b3d133d4e19'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('publicOrigin', d.T.string),
+          d.arg('secretName', d.T.string, default='teable-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/teable/server.libsonnet' },
+      },
+    },
     apprise: {
       summary: 'An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
       stages: {
