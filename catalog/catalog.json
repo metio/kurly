@@ -4107,6 +4107,79 @@
          "summary": "A FerretDB server (an open-source, MongoDB-compatible database) — the Apache-2.0 alternative to MongoDB Community (SSPL) for a platform that monetizes hosting. A stateless proxy that speaks the MongoDB wire protocol and stores everything in a PostgreSQL backend (with the DocumentDB extension), so it needs no volume and can run several replicas. kurly authors no Secret; FERRETDB_POSTGRESQL_URL comes from a provided Secret via envFrom. Serves MongoDB wire on :27017."
       },
       {
+         "id": "fider",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "fider",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/getfider/fider:v0.36.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://feedback.example.com",
+                     "name": "baseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "fider-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Fider server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), JWT_SECRET, and EMAIL_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/fider/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Fider server (an open-source platform to collect and prioritize customer feedback) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named fider-db. kurly authors no Secret; DATABASE_URL, JWT_SECRET, and SMTP creds come from a provided Secret via envFrom. Serves on :3000."
+      },
+      {
          "id": "firefly-iii",
          "stages": [
             {

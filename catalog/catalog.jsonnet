@@ -115,6 +115,7 @@ local stageImports = {
   'roundcube/server': import 'github.com/metio/kurly/workloads/roundcube/server.libsonnet',
   'mediawiki/server': import 'github.com/metio/kurly/workloads/mediawiki/server.libsonnet',
   'firefly-iii/server': import 'github.com/metio/kurly/workloads/firefly-iii/server.libsonnet',
+  'fider/server': import 'github.com/metio/kurly/workloads/fider/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',

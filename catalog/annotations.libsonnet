@@ -1500,6 +1500,22 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    fider: {
+      summary: 'A Fider server (an open-source platform to collect and prioritize customer feedback) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named fider-db. kurly authors no Secret; DATABASE_URL, JWT_SECRET, and SMTP creds come from a provided Secret via envFrom. Serves on :3000.',
+      stages: {
+        server: d.fn('The Fider server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), JWT_SECRET, and EMAIL_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='fider'),
+          d.arg('image', d.T.string, default='docker.io/getfider/fider:v0.36.0'),
+          d.arg('baseUrl', d.T.string, example='https://feedback.example.com'),
+          d.arg('secretName', d.T.string, default='fider-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/fider/server.libsonnet' },
+      },
+    },
     'firefly-iii': {
       summary: 'A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       stages: {
