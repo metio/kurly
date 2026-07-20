@@ -1500,6 +1500,24 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    metabase: {
+      summary: 'A Metabase server (an open-source business-intelligence and analytics tool) on the official image, backed by an external PostgreSQL for its application database. Its state lives in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named metabase-db. kurly authors no Secret; MB_DB_PASS comes from a provided Secret via envFrom. Serves on :3000.',
+      stages: {
+        server: d.fn('The Metabase server. dbHost/dbName/dbUser default to a cnpg-cluster named metabase-db (its application database). secretName holds MB_DB_PASS (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='metabase'),
+          d.arg('image', d.T.string, default='docker.io/metabase/metabase:v0.62.5'),
+          d.arg('dbHost', d.T.string, default='metabase-db-rw'),
+          d.arg('dbName', d.T.string, default='metabase'),
+          d.arg('dbUser', d.T.string, default='metabase'),
+          d.arg('secretName', d.T.string, default='metabase-secrets'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '300m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/metabase/server.libsonnet' },
+      },
+    },
     directus: {
       summary: 'A Directus server (an open-source headless CMS and data platform over your SQL database) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named directus-db. kurly authors no Secret; DB_PASSWORD, KEY, SECRET, and the admin password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8055.',
       stages: {
