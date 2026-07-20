@@ -1500,6 +1500,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    greenlight: {
+      summary: 'A Greenlight 3 server (the official BigBlueButton front-end: a Rails app for scheduling and joining BBB rooms and meetings) on the official image, backed by an external PostgreSQL and Redis. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named greenlight-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_* endpoint/secret come from a provided Secret via envFrom. Stateless (recordings live on the BBB server): a plain rolling Deployment. Serves on :3000.',
+      stages: {
+        server: d.fn('The Greenlight server. secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_ENDPOINT/BIGBLUEBUTTON_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='greenlight'),
+          d.arg('image', d.T.string, default='docker.io/bigbluebutton/greenlight:v3.8.2.3'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='greenlight-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/greenlight/server.libsonnet' },
+      },
+    },
     docmost: {
       summary: 'A Docmost server (a self-hosted, open-source collaborative wiki and documentation platform) on the official image, backed by an external PostgreSQL and Redis, with attachments on a PersistentVolume. Pairs with a cnpg-cluster named docmost-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL and APP_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

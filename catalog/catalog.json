@@ -5195,6 +5195,73 @@
          "summary": "A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed."
       },
       {
+         "id": "greenlight",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "greenlight",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/bigbluebutton/greenlight:v3.8.2.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "greenlight-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Greenlight server. secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_ENDPOINT/BIGBLUEBUTTON_SECRET (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/greenlight/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Greenlight 3 server (the official BigBlueButton front-end: a Rails app for scheduling and joining BBB rooms and meetings) on the official image, backed by an external PostgreSQL and Redis. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named greenlight-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_* endpoint/secret come from a provided Secret via envFrom. Stateless (recordings live on the BBB server): a plain rolling Deployment. Serves on :3000."
+      },
+      {
          "id": "hedgedoc",
          "stages": [
             {
