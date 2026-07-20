@@ -16,6 +16,7 @@ local migrations = import '../lib/migrations.libsonnet';
 local security = import '../lib/security.libsonnet';
 local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
+local maturity = import './maturity.libsonnet';
 
 // Each workload stage, imported by the canonical path a consumer's snippet uses
 // (resolved via the vendor/github.com/metio/kurly symlink check-catalog creates).
@@ -385,6 +386,7 @@ local workloadEntries =
     {
       id: workload,
       summary: ann.workloads[workload].summary,
+      maturity: maturity.of(workload),
       stages: [
         { id: stage } + ann.workloads[workload].stages[stage]
         for stage in std.objectFields(ann.workloads[workload].stages)
@@ -407,6 +409,10 @@ local workloadEntries =
   // Helpers are top-level fields of main alongside the kinds; assert the
   // annotated set is exactly the rendering terminals main exposes.
   assert reconcile('helpers', std.objectFields(ann.helpers), ['certificate', 'externalSecret', 'join', 'list', 'listOf', 'mirror']),
+  // Every operator-attested production workload must be a real, annotated one —
+  // a dangling claim (a typo or a renamed workload) fails here.
+  assert std.all([std.objectHas(ann.workloads, name) for name in maturity.productionNames]) :
+         'maturity: production.libsonnet names a workload that does not exist',
   assert std.all([std.objectHasAll(main, helper) for helper in std.objectFields(ann.helpers)]) :
          'helpers: main.libsonnet must expose every annotated helper',
 

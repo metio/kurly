@@ -2089,6 +2089,9 @@
    "workloads": [
       {
          "id": "2fauth",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2167,6 +2170,9 @@
       },
       {
          "id": "activepieces",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2240,6 +2246,9 @@
       },
       {
          "id": "actualbudget",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2306,6 +2315,9 @@
       },
       {
          "id": "adguardhome",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2372,6 +2384,9 @@
       },
       {
          "id": "adminer",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2433,6 +2448,9 @@
       },
       {
          "id": "airsonic-advanced",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2517,6 +2535,9 @@
       },
       {
          "id": "alertmanager",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -2608,6 +2629,9 @@
       },
       {
          "id": "alist",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2674,6 +2698,9 @@
       },
       {
          "id": "answer",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2740,6 +2767,9 @@
       },
       {
          "id": "anythingllm",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2809,6 +2839,9 @@
       },
       {
          "id": "apprise",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2878,6 +2911,9 @@
       },
       {
          "id": "audiobookshelf",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -2944,6 +2980,9 @@
       },
       {
          "id": "authelia",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3021,6 +3060,9 @@
       },
       {
          "id": "authentik",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3149,6 +3191,9 @@
       },
       {
          "id": "automatisch",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3277,6 +3322,9 @@
       },
       {
          "id": "baikal",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3343,6 +3391,9 @@
       },
       {
          "id": "baserow",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3421,6 +3472,9 @@
       },
       {
          "id": "bazarr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3505,6 +3559,9 @@
       },
       {
          "id": "beszel",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3571,6 +3628,9 @@
       },
       {
          "id": "bigcapital",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3781,6 +3841,9 @@
       },
       {
          "id": "blackbox-exporter",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3842,6 +3905,9 @@
       },
       {
          "id": "blinko",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -3920,6 +3986,9 @@
       },
       {
          "id": "bookstack",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4016,6 +4085,9 @@
       },
       {
          "id": "browserless",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4083,6 +4155,9 @@
       },
       {
          "id": "bugsink",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4162,6 +4237,9 @@
       },
       {
          "id": "cal-com",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4234,6 +4312,9 @@
       },
       {
          "id": "calibre",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4318,6 +4399,9 @@
       },
       {
          "id": "calibre-web",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4402,6 +4486,9 @@
       },
       {
          "id": "calibre-web-automated",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4492,6 +4579,9 @@
       },
       {
          "id": "cassandra-cluster",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4569,6 +4659,9 @@
       },
       {
          "id": "changedetection",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4641,6 +4734,9 @@
       },
       {
          "id": "chatpad",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4702,6 +4798,9 @@
       },
       {
          "id": "clickhouse",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -4774,6 +4873,9 @@
       },
       {
          "id": "cnpg-cluster",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -4941,6 +5043,9 @@
       },
       {
          "id": "cnpg-image-catalog",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -5021,6 +5126,9 @@
       },
       {
          "id": "cobalt",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5087,6 +5195,9 @@
       },
       {
          "id": "code-server",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5159,6 +5270,9 @@
       },
       {
          "id": "commafeed",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5225,6 +5339,9 @@
       },
       {
          "id": "convertx",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5291,6 +5408,9 @@
       },
       {
          "id": "couchdb",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5363,6 +5483,9 @@
       },
       {
          "id": "cryptpad",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5429,6 +5552,9 @@
       },
       {
          "id": "cyberchef",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5490,6 +5616,9 @@
       },
       {
          "id": "dashy",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5556,6 +5685,9 @@
       },
       {
          "id": "davis",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5623,6 +5755,9 @@
       },
       {
          "id": "davos",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5707,6 +5842,9 @@
       },
       {
          "id": "deluge",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5791,6 +5929,9 @@
       },
       {
          "id": "dex",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5863,6 +6004,9 @@
       },
       {
          "id": "directus",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -5965,6 +6109,9 @@
       },
       {
          "id": "docker-registry-ui",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6038,6 +6185,9 @@
       },
       {
          "id": "docmost",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6116,6 +6266,9 @@
       },
       {
          "id": "documenso",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6188,6 +6341,9 @@
       },
       {
          "id": "docuseal",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6254,6 +6410,9 @@
       },
       {
          "id": "dokuwiki",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6320,6 +6479,9 @@
       },
       {
          "id": "dragonfly",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -6375,6 +6537,9 @@
       },
       {
          "id": "draw-io",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6436,6 +6601,9 @@
       },
       {
          "id": "drawio",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6497,6 +6665,9 @@
       },
       {
          "id": "drupal",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6569,6 +6740,9 @@
       },
       {
          "id": "duplicati",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6653,6 +6827,9 @@
       },
       {
          "id": "ejabberd",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6719,6 +6896,9 @@
       },
       {
          "id": "element-web",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6803,6 +6983,9 @@
       },
       {
          "id": "emby",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6887,6 +7070,9 @@
       },
       {
          "id": "emqx",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -6953,6 +7139,9 @@
       },
       {
          "id": "endurain",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7055,6 +7244,9 @@
       },
       {
          "id": "esphome",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7121,6 +7313,9 @@
       },
       {
          "id": "etherpad",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7206,6 +7401,9 @@
       },
       {
          "id": "excalidraw",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7267,6 +7465,9 @@
       },
       {
          "id": "expenseowl",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7333,6 +7534,9 @@
       },
       {
          "id": "ferretdb",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7400,6 +7604,9 @@
       },
       {
          "id": "fider",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7473,6 +7680,9 @@
       },
       {
          "id": "filebrowser",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7539,6 +7749,9 @@
       },
       {
          "id": "filestash",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7605,6 +7818,9 @@
       },
       {
          "id": "firefly-iii",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7701,6 +7917,9 @@
       },
       {
          "id": "flame",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7767,6 +7986,9 @@
       },
       {
          "id": "flaresolverr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7834,6 +8056,9 @@
       },
       {
          "id": "flatnotes",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7906,6 +8131,9 @@
       },
       {
          "id": "focalboard",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -7972,6 +8200,9 @@
       },
       {
          "id": "foldingathome",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8056,6 +8287,9 @@
       },
       {
          "id": "forgejo",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8152,6 +8386,9 @@
       },
       {
          "id": "formbricks",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8225,6 +8462,9 @@
       },
       {
          "id": "freshrss",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8297,6 +8537,9 @@
       },
       {
          "id": "gatus",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8368,6 +8611,9 @@
       },
       {
          "id": "ghost",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8464,6 +8710,9 @@
       },
       {
          "id": "ghostfolio",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8531,6 +8780,9 @@
       },
       {
          "id": "gitea",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8615,6 +8867,9 @@
       },
       {
          "id": "glance",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8675,6 +8930,9 @@
       },
       {
          "id": "glitchtip",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8821,6 +9079,9 @@
       },
       {
          "id": "gogs",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8887,6 +9148,9 @@
       },
       {
          "id": "gokapi",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -8953,6 +9217,9 @@
       },
       {
          "id": "gotenberg",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9014,6 +9281,9 @@
       },
       {
          "id": "gotify",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9080,6 +9350,9 @@
       },
       {
          "id": "gotosocial",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9152,6 +9425,9 @@
       },
       {
          "id": "grafana",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -9235,6 +9511,9 @@
       },
       {
          "id": "grav",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9319,6 +9598,9 @@
       },
       {
          "id": "greenlight",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9386,6 +9668,9 @@
       },
       {
          "id": "grist",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9452,6 +9737,9 @@
       },
       {
          "id": "grocy",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9536,6 +9824,9 @@
       },
       {
          "id": "guacamole",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9609,6 +9900,9 @@
       },
       {
          "id": "healthchecks",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9693,6 +9987,9 @@
       },
       {
          "id": "hedgedoc",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9771,6 +10068,9 @@
       },
       {
          "id": "heimdall",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9855,6 +10155,9 @@
       },
       {
          "id": "hollama",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9916,6 +10219,9 @@
       },
       {
          "id": "homarr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -9988,6 +10294,9 @@
       },
       {
          "id": "home-assistant",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10054,6 +10363,9 @@
       },
       {
          "id": "homebox",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10120,6 +10432,9 @@
       },
       {
          "id": "homepage",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10192,6 +10507,9 @@
       },
       {
          "id": "homer",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10258,6 +10576,9 @@
       },
       {
          "id": "influxdb",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10330,6 +10651,9 @@
       },
       {
          "id": "inspircd",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10396,6 +10720,9 @@
       },
       {
          "id": "invoiceninja",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10492,6 +10819,9 @@
       },
       {
          "id": "it-tools",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10553,6 +10883,9 @@
       },
       {
          "id": "jackett",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10637,6 +10970,9 @@
       },
       {
          "id": "jellyfin",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10721,6 +11057,9 @@
       },
       {
          "id": "jellyseerr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10787,6 +11126,9 @@
       },
       {
          "id": "jenkins",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10853,6 +11195,9 @@
       },
       {
          "id": "joomla",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10925,6 +11270,9 @@
       },
       {
          "id": "joplin",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -10998,6 +11346,9 @@
       },
       {
          "id": "kanboard",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11064,6 +11415,9 @@
       },
       {
          "id": "karakeep",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11154,6 +11508,9 @@
       },
       {
          "id": "kavita",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11220,6 +11577,9 @@
       },
       {
          "id": "keycloak",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11302,6 +11662,9 @@
       },
       {
          "id": "kimai",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11369,6 +11732,9 @@
       },
       {
          "id": "komga",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11435,6 +11801,9 @@
       },
       {
          "id": "kutt",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11502,6 +11871,9 @@
       },
       {
          "id": "leantime",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11574,6 +11946,9 @@
       },
       {
          "id": "lemmy",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11774,6 +12149,9 @@
       },
       {
          "id": "librespeed",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11858,6 +12236,9 @@
       },
       {
          "id": "lidarr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -11942,6 +12323,9 @@
       },
       {
          "id": "linkding",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12008,6 +12392,9 @@
       },
       {
          "id": "linkstack",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12074,6 +12461,9 @@
       },
       {
          "id": "linkwarden",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12152,6 +12542,9 @@
       },
       {
          "id": "listmonk",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12248,6 +12641,9 @@
       },
       {
          "id": "lldap",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12326,6 +12722,9 @@
       },
       {
          "id": "lobe-chat",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12387,6 +12786,9 @@
       },
       {
          "id": "loki",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -12456,6 +12858,9 @@
       },
       {
          "id": "lychee",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12534,6 +12939,9 @@
       },
       {
          "id": "mailhog",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12595,6 +13003,9 @@
       },
       {
          "id": "mailpit",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -12664,6 +13075,9 @@
       },
       {
          "id": "mailu",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13228,6 +13642,9 @@
       },
       {
          "id": "maloja",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13294,6 +13711,9 @@
       },
       {
          "id": "mariadb",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13366,6 +13786,9 @@
       },
       {
          "id": "mastodon",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13561,6 +13984,9 @@
       },
       {
          "id": "matomo",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13651,6 +14077,9 @@
       },
       {
          "id": "matrix-conduit",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13729,6 +14158,9 @@
       },
       {
          "id": "mattermost",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13807,6 +14239,9 @@
       },
       {
          "id": "mautic",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -13909,6 +14344,9 @@
       },
       {
          "id": "maybe",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14005,6 +14443,9 @@
       },
       {
          "id": "mazanoke",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14066,6 +14507,9 @@
       },
       {
          "id": "mealie",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14138,6 +14582,9 @@
       },
       {
          "id": "mediawiki",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14204,6 +14651,9 @@
       },
       {
          "id": "meilisearch",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14276,6 +14726,9 @@
       },
       {
          "id": "memcached",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -14320,6 +14773,9 @@
       },
       {
          "id": "memos",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14386,6 +14842,9 @@
       },
       {
          "id": "mermaid-live-editor",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14447,6 +14906,9 @@
       },
       {
          "id": "metabase",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14532,6 +14994,9 @@
       },
       {
          "id": "metrics-server",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14606,6 +15071,9 @@
       },
       {
          "id": "metube",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14672,6 +15140,9 @@
       },
       {
          "id": "microbin",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14738,6 +15209,9 @@
       },
       {
          "id": "miniflux",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14811,6 +15285,9 @@
       },
       {
          "id": "minio",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14883,6 +15360,9 @@
       },
       {
          "id": "misskey",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -14955,6 +15435,9 @@
       },
       {
          "id": "mongo",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15027,6 +15510,9 @@
       },
       {
          "id": "mongo-express",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15094,6 +15580,9 @@
       },
       {
          "id": "mongodb-cluster",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15165,6 +15654,9 @@
       },
       {
          "id": "monica",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15261,6 +15753,9 @@
       },
       {
          "id": "mosquitto",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15332,6 +15827,9 @@
       },
       {
          "id": "mumble",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15404,6 +15902,9 @@
       },
       {
          "id": "mylar3",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15488,6 +15989,9 @@
       },
       {
          "id": "mysql",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15560,6 +16064,9 @@
       },
       {
          "id": "mysql-cluster",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15644,6 +16151,9 @@
       },
       {
          "id": "n8n",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15716,6 +16226,9 @@
       },
       {
          "id": "nats",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15782,6 +16295,9 @@
       },
       {
          "id": "navidrome",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15848,6 +16364,9 @@
       },
       {
          "id": "neo4j",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -15920,6 +16439,9 @@
       },
       {
          "id": "netbootxyz",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16004,6 +16526,9 @@
       },
       {
          "id": "netbox",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16209,6 +16734,9 @@
       },
       {
          "id": "nextcloud",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16287,6 +16815,9 @@
       },
       {
          "id": "nginx-proxy-manager",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16353,6 +16884,9 @@
       },
       {
          "id": "nocobase",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16425,6 +16959,9 @@
       },
       {
          "id": "nocodb",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16503,6 +17040,9 @@
       },
       {
          "id": "node-red",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16569,6 +17109,9 @@
       },
       {
          "id": "ntfy",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16641,6 +17184,9 @@
       },
       {
          "id": "nzbget",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16725,6 +17271,9 @@
       },
       {
          "id": "nzbhydra2",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16809,6 +17358,9 @@
       },
       {
          "id": "oauth2-proxy",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16876,6 +17428,9 @@
       },
       {
          "id": "odoo",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -16948,6 +17503,9 @@
       },
       {
          "id": "ollama",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17014,6 +17572,9 @@
       },
       {
          "id": "ombi",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17098,6 +17659,9 @@
       },
       {
          "id": "onlyoffice",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17170,6 +17734,9 @@
       },
       {
          "id": "open-webui",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17248,6 +17815,9 @@
       },
       {
          "id": "opencost",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17321,6 +17891,9 @@
       },
       {
          "id": "openhab",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17399,6 +17972,9 @@
       },
       {
          "id": "openobserve",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17471,6 +18047,9 @@
       },
       {
          "id": "openproject",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17549,6 +18128,9 @@
       },
       {
          "id": "opensearch-cluster",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17628,6 +18210,9 @@
       },
       {
          "id": "organizr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17694,6 +18279,9 @@
       },
       {
          "id": "otel-collector",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -17725,6 +18313,9 @@
       },
       {
          "id": "outline",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17798,6 +18389,9 @@
       },
       {
          "id": "overleaf",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17888,6 +18482,9 @@
       },
       {
          "id": "overseerr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -17954,6 +18551,9 @@
       },
       {
          "id": "owncast",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18020,6 +18620,9 @@
       },
       {
          "id": "owntracks-recorder",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18089,6 +18692,9 @@
       },
       {
          "id": "pairdrop",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18144,6 +18750,9 @@
       },
       {
          "id": "paisa",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18210,6 +18819,9 @@
       },
       {
          "id": "paperless-ngx",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18318,6 +18930,9 @@
       },
       {
          "id": "passwordpusher",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18385,6 +19000,9 @@
       },
       {
          "id": "peertube",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18487,6 +19105,9 @@
       },
       {
          "id": "penpot",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18693,6 +19314,9 @@
       },
       {
          "id": "pgadmin",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18765,6 +19389,9 @@
       },
       {
          "id": "photoprism",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18849,6 +19476,9 @@
       },
       {
          "id": "photoview",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18927,6 +19557,9 @@
       },
       {
          "id": "phpmyadmin",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -18994,6 +19627,9 @@
       },
       {
          "id": "pihole",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19072,6 +19708,9 @@
       },
       {
          "id": "pilos",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19144,6 +19783,9 @@
       },
       {
          "id": "pingvin-share",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19210,6 +19852,9 @@
       },
       {
          "id": "piwigo",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19294,6 +19939,9 @@
       },
       {
          "id": "planka",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19367,6 +20015,9 @@
       },
       {
          "id": "plex",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19451,6 +20102,9 @@
       },
       {
          "id": "pocket-id",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19523,6 +20177,9 @@
       },
       {
          "id": "pocketbase",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19589,6 +20246,9 @@
       },
       {
          "id": "portainer",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19660,6 +20320,9 @@
       },
       {
          "id": "postgres",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19732,6 +20395,9 @@
       },
       {
          "id": "prestashop",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19804,6 +20470,9 @@
       },
       {
          "id": "privatebin",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19870,6 +20539,9 @@
       },
       {
          "id": "projectsend",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -19954,6 +20626,9 @@
       },
       {
          "id": "prometheus",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -20080,6 +20755,9 @@
       },
       {
          "id": "prowlarr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20164,6 +20842,9 @@
       },
       {
          "id": "pyload-ng",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20248,6 +20929,9 @@
       },
       {
          "id": "qbittorrent",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20332,6 +21016,9 @@
       },
       {
          "id": "qdrant",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20398,6 +21085,9 @@
       },
       {
          "id": "rabbitmq",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20470,6 +21160,9 @@
       },
       {
          "id": "radarr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20554,6 +21247,9 @@
       },
       {
          "id": "radicale",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20620,6 +21316,9 @@
       },
       {
          "id": "rallly",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20693,6 +21392,9 @@
       },
       {
          "id": "readarr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20777,6 +21479,9 @@
       },
       {
          "id": "readeck",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20843,6 +21548,9 @@
       },
       {
          "id": "redis",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20915,6 +21623,9 @@
       },
       {
          "id": "redis-commander",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -20982,6 +21693,9 @@
       },
       {
          "id": "redmine",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21054,6 +21768,9 @@
       },
       {
          "id": "registry",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21120,6 +21837,9 @@
       },
       {
          "id": "resilio-sync",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21204,6 +21924,9 @@
       },
       {
          "id": "rocketchat",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21277,6 +22000,9 @@
       },
       {
          "id": "roundcube",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21355,6 +22081,9 @@
       },
       {
          "id": "rss-bridge",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21416,6 +22145,9 @@
       },
       {
          "id": "rundeck",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21494,6 +22226,9 @@
       },
       {
          "id": "sabnzbd",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21578,6 +22313,9 @@
       },
       {
          "id": "searxng",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21650,6 +22388,9 @@
       },
       {
          "id": "seatsurfing",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21717,6 +22458,9 @@
       },
       {
          "id": "seaweedfs",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -21883,6 +22627,9 @@
       },
       {
          "id": "shaarli",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -21949,6 +22696,9 @@
       },
       {
          "id": "shiori",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22015,6 +22765,9 @@
       },
       {
          "id": "shlink",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22106,6 +22859,9 @@
       },
       {
          "id": "silverbullet",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22178,6 +22934,9 @@
       },
       {
          "id": "siyuan",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22244,6 +23003,9 @@
       },
       {
          "id": "smtp4dev",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22313,6 +23075,9 @@
       },
       {
          "id": "snappymail",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22379,6 +23144,9 @@
       },
       {
          "id": "snipe-it",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22475,6 +23243,9 @@
       },
       {
          "id": "sonarqube",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22565,6 +23336,9 @@
       },
       {
          "id": "sonarr",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22649,6 +23423,9 @@
       },
       {
          "id": "spegel",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22830,6 +23607,9 @@
       },
       {
          "id": "status-responder",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -22872,6 +23652,9 @@
       },
       {
          "id": "stirling-pdf",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -22938,6 +23721,9 @@
       },
       {
          "id": "synapse",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23016,6 +23802,9 @@
       },
       {
          "id": "syncthing",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23100,6 +23889,9 @@
       },
       {
          "id": "tachidesk",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23166,6 +23958,9 @@
       },
       {
          "id": "tandoor",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23238,6 +24033,9 @@
       },
       {
          "id": "tautulli",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23322,6 +24120,9 @@
       },
       {
          "id": "teable",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23394,6 +24195,9 @@
       },
       {
          "id": "technitium",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23466,6 +24270,9 @@
       },
       {
          "id": "tempo",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23521,6 +24328,9 @@
       },
       {
          "id": "thanos",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -23995,6 +24805,9 @@
       },
       {
          "id": "thelounge",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24061,6 +24874,9 @@
       },
       {
          "id": "tik",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -24098,6 +24914,9 @@
       },
       {
          "id": "tika",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24159,6 +24978,9 @@
       },
       {
          "id": "traccar",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24230,6 +25052,9 @@
       },
       {
          "id": "transmission",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24314,6 +25139,9 @@
       },
       {
          "id": "trilium",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24380,6 +25208,9 @@
       },
       {
          "id": "tvheadend",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24464,6 +25295,9 @@
       },
       {
          "id": "twenty",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24615,6 +25449,9 @@
       },
       {
          "id": "typesense",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24687,6 +25524,9 @@
       },
       {
          "id": "umami",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24754,6 +25594,9 @@
       },
       {
          "id": "uptime-kuma",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24820,6 +25663,9 @@
       },
       {
          "id": "valkey",
+         "maturity": {
+            "tier": "e2e"
+         },
          "stages": [
             {
                "args": [
@@ -24895,6 +25741,9 @@
       },
       {
          "id": "vaultwarden",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -24973,6 +25822,9 @@
       },
       {
          "id": "victoriametrics",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25045,6 +25897,9 @@
       },
       {
          "id": "vikunja",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25123,6 +25978,9 @@
       },
       {
          "id": "wallabag",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25219,6 +26077,9 @@
       },
       {
          "id": "wallos",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25285,6 +26146,9 @@
       },
       {
          "id": "webtrees",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25363,6 +26227,9 @@
       },
       {
          "id": "wekan",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25436,6 +26303,9 @@
       },
       {
          "id": "wger",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25538,6 +26408,9 @@
       },
       {
          "id": "whoogle",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25599,6 +26472,9 @@
       },
       {
          "id": "wikijs",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25684,6 +26560,9 @@
       },
       {
          "id": "wordpress",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25774,6 +26653,9 @@
       },
       {
          "id": "xwiki",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25846,6 +26728,9 @@
       },
       {
          "id": "yourls",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [
@@ -25919,6 +26804,9 @@
       },
       {
          "id": "znc",
+         "maturity": {
+            "tier": "rendered"
+         },
          "stages": [
             {
                "args": [

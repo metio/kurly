@@ -7,6 +7,20 @@
 # annotation with no matching export, fails here) — so the machine-readable API
 # model the assembler reads can never silently disagree with the library.
 
+# The derived maturity tiers (catalog/maturity.gen.libsonnet) must match what the
+# repository actually proves. Regenerate from the live signals and fail if the
+# committed file is stale — the same discipline the catalog itself follows, so a
+# workload can never claim a tier the smoke scenarios and tests do not back.
+gen-maturity >/dev/null
+if ! git diff --quiet -- catalog/maturity.gen.libsonnet 2>/dev/null; then
+  echo "catalog/maturity.gen.libsonnet is stale — regenerate it:" >&2
+  echo "  gen-maturity" >&2
+  echo >&2
+  git --no-pager diff -- catalog/maturity.gen.libsonnet >&2 || true
+  exit 1
+fi
+echo "maturity tiers match the smoke scenarios and tests"
+
 # The generator imports the library, which imports k8s-libsonnet; vendor it.
 [ "${KURLY_VENDORED:-}" = "1" ] || jb install
 

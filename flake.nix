@@ -101,6 +101,19 @@
             ];
             text = builtins.readFile ./scripts/check-tests.sh;
           };
+          # Derives each workload's maturity tier from the repository's own
+          # signals (smoke scenarios, test assertions) into
+          # catalog/maturity.gen.libsonnet, which catalog.jsonnet imports.
+          gen-maturity = pkgs.writeShellApplication {
+            name = "gen-maturity";
+            runtimeInputs = with pkgs; [
+              findutils
+              gnugrep
+              gnused
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-maturity.sh;
+          };
           check-catalog = pkgs.writeShellApplication {
             name = "check-catalog";
             runtimeInputs = with pkgs; [
@@ -108,6 +121,8 @@
               jsonnet-bundler
               diffutils
               coreutils
+              git
+              gen-maturity
             ];
             text = builtins.readFile ./scripts/check-catalog.sh;
           };
@@ -183,6 +198,7 @@
             check-examples
             check-coverage
             check-security
+            gen-maturity
             gen-docs-data
             verify
           ];
@@ -199,6 +215,7 @@
               echo "  check-examples   render examples + workloads, validate with kubeconform"
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
+              echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
               echo "  verify           run every gate locally (what CI runs)"
             '';
