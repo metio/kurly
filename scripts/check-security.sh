@@ -24,24 +24,37 @@ trap 'rm -rf "$workdir"' EXIT
 mandir="$workdir/manifests"
 mkdir -p "$mandir"
 
-# Examples render to a List directly; a workload stage is a composable app
-# (function), rendered with defaults and wrapped in kurly.list like a consumer's
-# JsonnetSnippet does. Each source is independent, so the whole set renders in
-# parallel across cores — one more workload is one more parallel unit.
-export MANDIR="$mandir"
-render_one() {
-  local src="$1" name
-  name="$(printf '%s' "${src%.*}" | tr '/' '-')"
-  case "$src" in
-    workloads/*/*.libsonnet)
-      jsonnet -J vendor -e "(import 'github.com/metio/kurly/main.libsonnet').list((import '$src')())" ;;
-    *)
-      jsonnet -J vendor "$src" ;;
-  esac | jq -c '.items[]' | split --lines=1 --additional-suffix=.json - "$MANDIR/$name-"
+# Render every example and workload in ONE jsonnet process: a single invocation
+# imports k8s-libsonnet once and shares it across every render, instead of paying
+# the parse per source — the render cost stops scaling with the workload count.
+# An example is a `kind: List`; a workload stage is a composable app rendered with
+# defaults and wrapped in kurly.list like a consumer's JsonnetSnippet does.
+exprof() {
+  case "$1" in
+    workloads/*/*.libsonnet) printf "(import 'github.com/metio/kurly/main.libsonnet').list((import '%s')())" "$1" ;;
+    *) printf "(import '%s')" "$1" ;;
+  esac
 }
-export -f render_one
-# shellcheck disable=SC2016
-printf '%s\n' examples/*.jsonnet workloads/*/*.libsonnet | xargs -P"$(nproc)" -I{} bash -c 'render_one "$1"' _ {}
+sources=(examples/*.jsonnet workloads/*/*.libsonnet)
+program="{"
+for src in "${sources[@]}"; do
+  key="${src//\//-}"; key="${key%.*}"
+  program+=$(printf '"%s": %s,' "$key" "$(exprof "$src")")
+done
+program+="}"
+all="$workdir/all.json"
+if ! jsonnet -J vendor -e "$program" >"$all" 2>"$workdir/err"; then
+  cat "$workdir/err" >&2
+  for src in "${sources[@]}"; do
+    jsonnet -J vendor -e "$(exprof "$src")" >/dev/null 2>&1 || { echo "::error::$src failed to render"; exit 1; }
+  done
+  echo "::error::batched render failed (see above)"; exit 1
+fi
+
+# Split every manifest into its own file for conftest and pluto — one jq+split
+# pass over the whole blob, not one jq per source.
+jq -c '.[] | .items[]' "$all" \
+  | split --lines=1 --additional-suffix=.json - "$mandir/manifest-"
 echo "rendered $(find "$mandir" -name '*.json' | wc -l) manifests"
 
 echo "== conftest (kurly Rego invariants) =="
@@ -89,36 +102,93 @@ echo "the guard fires on a rendered Secret"
 echo "== pluto (removed / deprecated APIs) =="
 pluto detect-files --directory "$mandir" --target-versions k8s=v1.31.0
 
-echo "== kubesec (security score of the hardened controllers) =="
-# The hardened examples score 7-11; a drop below this floor is a security
+# kubesec scores the hardened controllers; a drop below the floor is a security
 # regression (a missing readOnlyRootFilesystem / dropped-capabilities / seccomp).
-# kubesec scans one manifest at a time and is the slowest step, so the scans run
-# in parallel across cores — one more workload is one more parallel scan.
+# kubesec has no batch mode and a single scan costs ~0.4s, so scanning every
+# controller is the gate's tallest pole AND the one part that grows with the
+# workload count.
+#
+# But a kubesec score depends ONLY on the security posture — the pod- and
+# container-level securityContext, resources, hostPath/host-namespace use, and the
+# ServiceAccount-token settings — never on the image, name, ports or env. So many
+# controllers share a byte-identical posture and therefore an identical score.
+# Fingerprint each controller by exactly those fields, and scan ONE representative
+# per DISTINCT posture: the floor is still proven for every posture the library
+# emits, but the scan count is bounded by the (small, finite) number of security
+# relaxations rather than by the number of workloads. The full per-controller scan
+# stays available via KUBESEC_ALL=1 for a belt-and-suspenders sweep.
+echo "== kubesec (security score, one scan per distinct posture) =="
 export THRESHOLD=6
-score_one() {
-  local manifest="$1" score
-  case "$manifest" in
-    *examples-legacy-* | *examples-cron-*) return 0 ;; # escape-hatch demos
-    # spegel is node infrastructure: it serves the containerd content store to its
-    # peers, so it runs as root with hostPath mounts (the socket is root-owned). No
-    # score reaches the floor with hostPath present — the posture is hardened as far
-    # as the job allows, and it is deployed to a namespace labelled for it.
-    *workloads-spegel-*) return 0 ;;
+
+# The kubesec-relevant fields of a controller, as a canonical fingerprint. A pod
+# lives directly under .spec; a CronJob nests it under jobTemplate; the rest under
+# .spec.template.
+fingerprint='
+  def podspec:
+    if .kind == "CronJob" then .spec.jobTemplate.spec.template.spec
+    elif .kind == "Pod" then .spec
+    else .spec.template.spec end;
+  podspec | {
+    psc: .securityContext,
+    hostNetwork: .hostNetwork, hostPID: .hostPID, hostIPC: .hostIPC, hostUsers: .hostUsers,
+    sa: (.serviceAccountName != null), automount: .automountServiceAccountToken,
+    hostpath: ([.volumes[]? | select(has("hostPath"))] | length),
+    containers: [.containers[] | { sc: .securityContext, res: .resources }],
+    init: [.initContainers[]? | { sc: .securityContext, res: .resources }]
+  }'
+
+# Emit one line per scannable controller: <source-key> <TAB> <fingerprint b64> <TAB>
+# <manifest b64>. base64 keeps the JSON safe across the line delimiter. The source
+# key drives the escape-hatch exemptions below.
+jq -rc "
+  to_entries[] | .key as \$k
+  | (.value.items[]? | select(.kind == \"Deployment\" or .kind == \"DaemonSet\" or .kind == \"CronJob\" or .kind == \"Pod\"))
+  | [\$k, (($fingerprint) | @base64), (@base64)] | @tsv
+" "$all" > "$workdir/controllers.tsv"
+
+# Group by posture, honouring the exemptions (the escape-hatch demos and spegel,
+# which is node infrastructure that cannot reach the floor with hostPath present).
+# For each distinct posture keep one representative manifest and count its members.
+declare -A rep_b64 members
+while IFS="$(printf '\t')" read -r key fp mb64; do
+  case "$key" in
+    examples-legacy | examples-cron) continue ;;
+    workloads-spegel-*) continue ;;
   esac
-  case "$(jq -r '.kind' "$manifest")" in
-    Deployment | DaemonSet | CronJob | Pod) ;;
-    *) return 0 ;;
-  esac
-  score="$(kubesec scan "$manifest" | jq -r '.[0].score')"
+  if [ "${KUBESEC_ALL:-}" = "1" ]; then fp="$key-$fp"; fi  # full sweep: never merge
+  members["$fp"]="${members["$fp"]:-0}"
+  members["$fp"]=$(( members["$fp"] + 1 ))
+  if [ -z "${rep_b64["$fp"]:-}" ]; then rep_b64["$fp"]="$key"$'\t'"$mb64"; fi
+done < "$workdir/controllers.tsv"
+
+echo "scanning $(printf '%s\n' "${!rep_b64[@]}" | wc -l) distinct posture(s) across $(wc -l < "$workdir/controllers.tsv") controller(s)"
+
+scan_one() { # <key> <manifest-b64> <member-count>
+  local key="$1" mb64="$2" n="$3" f score
+  f="$(mktemp)"; printf '%s' "$mb64" | base64 -d > "$f"
+  score="$(kubesec scan "$f" | jq -r '.[0].score')"
+  rm -f "$f"
   if [ "$score" -lt "$THRESHOLD" ]; then
-    echo "  FAIL $(basename "$manifest") scored $score (< $THRESHOLD)" >&2
+    echo "  FAIL ${key} scored ${score} (< ${THRESHOLD}) — posture shared by ${n} controller(s)" >&2
     return 1
   fi
-  echo "  ok   $(basename "$manifest") scored $score"
+  echo "  ok   ${key} scored ${score} (posture shared by ${n} controller(s))"
 }
-export -f score_one
+export -f scan_one
+export THRESHOLD
+
+# Scan the representatives in parallel across cores. Each line is
+# <key><TAB><manifest-b64><TAB><count>; the child splits it and scans.
+fail=0
 # shellcheck disable=SC2016
-if ! printf '%s\n' "$mandir"/*.json | xargs -P"$(nproc)" -I{} bash -c 'score_one "$1"' _ {}; then
+if ! for fp in "${!rep_b64[@]}"; do
+  key="${rep_b64["$fp"]%%$'\t'*}"
+  mb64="${rep_b64["$fp"]#*$'\t'}"
+  printf '%s\t%s\t%s\n' "$key" "$mb64" "${members["$fp"]}"
+done | xargs -P"$(nproc)" -d '\n' -I{} bash -c 'IFS=$(printf "\t") read -r k m n <<<"$1"; scan_one "$k" "$m" "$n"' _ {}; then
+  fail=1
+fi
+if [ "$fail" != "0" ]; then
   echo "kubesec: a hardened controller scored below $THRESHOLD" >&2
   exit 1
 fi
