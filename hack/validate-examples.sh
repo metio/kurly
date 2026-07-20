@@ -67,8 +67,16 @@ done
 # catalog. -ignore-missing-schemas covers kinds the catalog has not picked up
 # yet; the summary line reports how many manifests were skipped, so a silent
 # gap stays visible.
+#
+# -skip lists kinds whose catalogued schema is DEFECTIVE (not merely missing).
+# InnoDBCluster (mysql.oracle.com) models metadata as a closed object without the
+# standard labels/annotations, so it rejects the kurly ownership labels every other
+# manifest carries — a schema bug, not a manifest one (CNPG's Cluster schema has no
+# such flaw). Skipping validates nothing for that kind rather than failing on a
+# wrong schema.
 kubeconform -strict -summary \
   -schema-location default \
   -schema-location 'https://raw.githubusercontent.com/CustomResourceDefinition/catalog/main/schema/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
   -ignore-missing-schemas \
+  -skip InnoDBCluster \
   "$workdir"/*.json

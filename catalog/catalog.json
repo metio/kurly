@@ -6122,6 +6122,90 @@
          "summary": "A Miniflux server (a minimalist, opinionated RSS/Atom feed reader) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and the admin password come from a provided Secret via envFrom. Pairs with a cnpg-cluster named miniflux-db. Serves on :8080."
       },
       {
+         "id": "mysql-cluster",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mysql",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 3,
+                     "name": "instances",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 2,
+                     "name": "routerInstances",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "8.4.4",
+                     "name": "serverVersion",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mysql-root",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": true,
+                     "name": "tlsUseSelfSigned",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "imagePullSecrets",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "example": {
+                        "team": "payments"
+                     },
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The MySQL InnoDBCluster CR. Adapt with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource). secretName is a Secret you provide with rootUser/rootHost/rootPassword. instances are Group Replication members (odd count for quorum); routerInstances the routing tier.",
+               "id": "cluster",
+               "importPath": "github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet",
+               "kind": "mysql"
+            }
+         ],
+         "summary": "A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none)."
+      },
+      {
          "id": "navidrome",
          "stages": [
             {

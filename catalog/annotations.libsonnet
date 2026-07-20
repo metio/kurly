@@ -1500,6 +1500,28 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'mysql-cluster': {
+      summary: 'A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none).',
+      stages: {
+        cluster: d.fn('The MySQL InnoDBCluster CR. Adapt with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource). secretName is a Secret you provide with rootUser/rootHost/rootPassword. instances are Group Replication members (odd count for quorum); routerInstances the routing tier.', [
+          d.arg('name', d.T.string, default='mysql'),
+          d.arg('instances', d.T.int, default=3),
+          d.arg('routerInstances', d.T.int, default=2),
+          d.arg('serverVersion', d.T.string, default='8.4.4'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='mysql-root'),
+          d.arg('resources', d.T.object),
+          d.arg('tlsUseSelfSigned', d.T.bool, default=true),
+          d.arg('imagePullSecrets', d.T.array, default=[]),
+          d.arg('labels', d.T.object, default={}, example={ team: 'payments' }),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'mysql',
+          importPath: 'github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet',
+        },
+      },
+    },
     'cnpg-cluster': {
       summary: 'A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator.',
       stages: {
