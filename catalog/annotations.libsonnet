@@ -387,6 +387,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    vikunja: {
+      summary: 'A Vikunja server (a self-hosted to-do and project-management app) on the official all-in-one image. A plain composable http workload that keeps its data in SQLite and file attachments on a PersistentVolume by default — no external database. kurly authors no Secret; VIKUNJA_SERVICE_JWTSECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3456.',
+      stages: {
+        server: d.fn('The Vikunja server. Database at /db, attachments at /files, both on the volume. publicUrl is the public URL; secretName holds VIKUNJA_SERVICE_JWTSECRET (envFrom, keep it stable). Point VIKUNJA_DATABASE_TYPE at external Postgres/MySQL via env to scale past SQLite. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='vikunja'),
+          d.arg('image', d.T.string, default='docker.io/vikunja/vikunja:v2.4.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('publicUrl', d.T.string, example='https://tasks.example.com'),
+          d.arg('secretName', d.T.string, default='vikunja-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/vikunja/server.libsonnet' },
+      },
+    },
     listmonk: {
       summary: 'A listmonk server (a self-hosted newsletter and mailing-list manager) on the official image, backed by an external PostgreSQL, with uploaded media on a PersistentVolume. Pairs with a cnpg-cluster named listmonk-db. kurly authors no Secret; the DB and admin passwords come from a provided Secret via envFrom. Run the one-time schema install before first use. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
       stages: {
