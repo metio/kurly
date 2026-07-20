@@ -3471,6 +3471,22 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/registry/server.libsonnet' },
       },
     },
+    xwiki: {
+      summary: 'An XWiki server (a powerful, self-hosted enterprise wiki and application-development platform: structured pages, macros, apps, fine-grained rights) on the official PostgreSQL/Tomcat image, backed by an external PostgreSQL, with its permanent directory on a PersistentVolume. kurly authors no Secret; the DB_* connection comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named xwiki-db. The bundled Tomcat runs as root. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
+      stages: {
+        server: d.fn('The XWiki server. secretName holds the DB_* connection (envFrom). Data at /usr/local/xwiki. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='xwiki'),
+          d.arg('image', d.T.string, default='docker.io/xwiki:16-postgres-tomcat'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='xwiki-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/xwiki/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
