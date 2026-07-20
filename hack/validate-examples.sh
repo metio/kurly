@@ -30,7 +30,14 @@ cd "$(dirname "$0")/.."
 workdir="$(mktemp -d)"
 trap 'rm -rf "$workdir"' EXIT
 
-sources=(examples/*.jsonnet workloads/*/*.libsonnet workloads/*/migrations.jsonnet)
+# Every example and workload by default; just the changed workloads (plus the
+# examples) when KURLY_WORKLOADS narrows an incremental run.
+if [ -n "${KURLY_WORKLOADS:-}" ]; then
+  mapfile -t changed <<<"$KURLY_WORKLOADS"
+  sources=(examples/*.jsonnet "${changed[@]}")
+else
+  sources=(examples/*.jsonnet workloads/*/*.libsonnet workloads/*/migrations.jsonnet)
+fi
 
 # A filesystem-safe key for a source: its path with slashes turned to dashes and
 # the extension dropped (workloads/tik/backend.libsonnet -> workloads-tik-backend).

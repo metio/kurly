@@ -35,7 +35,14 @@ exprof() {
     *) printf "(import '%s')" "$1" ;;
   esac
 }
-sources=(examples/*.jsonnet workloads/*/*.libsonnet)
+# Every example and workload by default; just the changed workloads (plus the
+# examples) when KURLY_WORKLOADS narrows an incremental run.
+if [ -n "${KURLY_WORKLOADS:-}" ]; then
+  mapfile -t changed <<<"$KURLY_WORKLOADS"
+  sources=(examples/*.jsonnet "${changed[@]}")
+else
+  sources=(examples/*.jsonnet workloads/*/*.libsonnet)
+fi
 program="{"
 for src in "${sources[@]}"; do
   key="${src//\//-}"; key="${key%.*}"

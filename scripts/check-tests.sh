@@ -55,7 +55,15 @@ echo "exposure exclusion assert fired as expected"
 # base kinds do; a hand-authored custom resource or node agent like spegel does
 # not, and composing a feature onto it fires its own assert). That is the same
 # distinction the per-stage podLabels probe drew, read structurally instead.
-stages=(workloads/*/*.libsonnet)
+# The stages to check: every workload by default, or just the ones named in
+# KURLY_WORKLOADS (a newline-separated list) when verify runs incrementally
+# against a changed set. The library-wide assertion suites and negative checks
+# above always run — only this per-workload sweep narrows.
+if [ -n "${KURLY_WORKLOADS:-}" ]; then
+  mapfile -t stages <<<"$KURLY_WORKLOADS"
+else
+  stages=(workloads/*/*.libsonnet)
+fi
 # Each stage is a top-level field holding its variants object, so `jsonnet -m`
 # writes one small JSON file PER STAGE in a single process — rather than one giant
 # blob every check_stage would have to re-parse to reach its own slice. The file
