@@ -924,6 +924,36 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/anythingllm/server.libsonnet' },
       },
     },
+    mailpit: {
+      summary: 'A Mailpit server (a self-hosted email- and SMTP-testing tool: it catches every message your apps send and shows them in a web UI, with a real SMTP sink and an API) on the official image. A plain composable http workload listening on TWO ports — the web UI/API on :8025 and the SMTP sink on :1025 (via kurly.extraPort). Its message store (SQLite) lives on a PersistentVolume under /data. Single writer over a ReadWriteOnce volume: one replica, recreated. Point your apps at the Service on port 1025 for SMTP.',
+      stages: {
+        server: d.fn('The Mailpit server. Store at /data on the volume; SMTP on port 1025, web on 8025. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='mailpit'),
+          d.arg('image', d.T.string, default='docker.io/axllent/mailpit:latest@sha256:b868afa176bfd6cce2323ea316cd99ccad77915e51e595748f6d786700ecf109'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={ MP_DATABASE: '/data/mailpit.db' }),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mailpit/server.libsonnet' },
+      },
+    },
+    smtp4dev: {
+      summary: 'An smtp4dev server (a self-hosted fake SMTP server for development: it receives the mail your apps send and shows it in a web UI, without delivering anything onward) on the official image. A plain composable http workload listening on TWO ports — the web UI on :80 and the SMTP sink on :25 (via kurly.extraPort). Its message database lives on a PersistentVolume under /smtp4dev. Single writer over a ReadWriteOnce volume: one replica, recreated. Point your apps at the Service on port 25 for SMTP.',
+      stages: {
+        server: d.fn('The smtp4dev server. Database at /smtp4dev on the volume; SMTP on port 25, web on 80. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='smtp4dev'),
+          d.arg('image', d.T.string, default='docker.io/rnwood/smtp4dev:latest@sha256:25c434c1900a9c5b61e17ead0a774d9e81b80554d05cf64719d69e5ea8c66537'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={ ServerOptions__Database: '/smtp4dev/database.db' }),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/smtp4dev/server.libsonnet' },
+      },
+    },
     davis: {
       summary: 'A Davis server (a self-hosted CalDAV and CardDAV server with a simple admin UI, built on sabre/dav) on the official image, backed by an external database (MySQL/MariaDB, PostgreSQL, or SQLite). A plain composable http workload. kurly authors no Secret; DATABASE_URL, APP_SECRET and the admin login come from a provided Secret via envFrom. Pair it with a database you run separately. Stateless: calendars and contacts live in the database, so a plain rolling Deployment. Serves on :80.',
       stages: {

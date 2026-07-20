@@ -12594,6 +12594,75 @@
          "summary": "A MailHog server (a self-hosted email-testing tool for developers that captures the mail your apps send and shows it in a web inbox instead of delivering it) on the official image (pinned by digest; Renovate maintains it). Keeps captured mail in memory: a plain stateless Deployment. Apps send to its SMTP listener on :1025 (needs an extra Service). Serves the web inbox on :8025."
       },
       {
+         "id": "mailpit",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "mailpit",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/axllent/mailpit:latest@sha256:b868afa176bfd6cce2323ea316cd99ccad77915e51e595748f6d786700ecf109",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "MP_DATABASE": "/data/mailpit.db"
+                     },
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "64Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Mailpit server. Store at /data on the volume; SMTP on port 1025, web on 8025. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/mailpit/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Mailpit server (a self-hosted email- and SMTP-testing tool: it catches every message your apps send and shows them in a web UI, with a real SMTP sink and an API) on the official image. A plain composable http workload listening on TWO ports — the web UI/API on :8025 and the SMTP sink on :1025 (via kurly.extraPort). Its message store (SQLite) lives on a PersistentVolume under /data. Single writer over a ReadWriteOnce volume: one replica, recreated. Point your apps at the Service on port 1025 for SMTP."
+      },
+      {
          "id": "mailu",
          "stages": [
             {
@@ -22172,6 +22241,75 @@
             }
          ],
          "summary": "A SiYuan server (a privacy-first, self-hosted personal knowledge-management and note-taking app with block-level editing and a local-first workspace) on the official image; its workspace (notes, assets and the database) lives on a PersistentVolume. Web access is gated by an access-auth code set via SIYUAN_ACCESS_AUTH_CODE (kurly authors no Secret). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6806."
+      },
+      {
+         "id": "smtp4dev",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "smtp4dev",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/rnwood/smtp4dev:latest@sha256:25c434c1900a9c5b61e17ead0a774d9e81b80554d05cf64719d69e5ea8c66537",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "ServerOptions__Database": "/smtp4dev/database.db"
+                     },
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The smtp4dev server. Database at /smtp4dev on the volume; SMTP on port 25, web on 80. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/smtp4dev/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An smtp4dev server (a self-hosted fake SMTP server for development: it receives the mail your apps send and shows it in a web UI, without delivering anything onward) on the official image. A plain composable http workload listening on TWO ports — the web UI on :80 and the SMTP sink on :25 (via kurly.extraPort). Its message database lives on a PersistentVolume under /smtp4dev. Single writer over a ReadWriteOnce volume: one replica, recreated. Point your apps at the Service on port 25 for SMTP."
       },
       {
          "id": "snappymail",
