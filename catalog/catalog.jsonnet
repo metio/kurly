@@ -275,6 +275,8 @@ local stageImports = {
   'mailhog/server': import 'github.com/metio/kurly/workloads/mailhog/server.libsonnet',
   'openhab/server': import 'github.com/metio/kurly/workloads/openhab/server.libsonnet',
   'guacamole/server': import 'github.com/metio/kurly/workloads/guacamole/server.libsonnet',
+  'authentik/server': import 'github.com/metio/kurly/workloads/authentik/server.libsonnet',
+  'authentik/worker': import 'github.com/metio/kurly/workloads/authentik/worker.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',

@@ -3627,6 +3627,31 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/guacamole/server.libsonnet' },
       },
     },
+    authentik: {
+      summary: 'An authentik server (a self-hosted identity provider and SSO: OAuth2, SAML, LDAP, forward-auth) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web/API server (HTTP :9000) and a background worker (migrations, scheduled tasks, outposts). kurly authors no Secret; the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Pairs with a cnpg-cluster named authentik-db and a Redis. Stateless.',
+      stages: {
+        server: d.fn('The authentik web/API server. secretName holds the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='authentik'),
+          d.arg('image', d.T.string, default='ghcr.io/goauthentik/server:2024.10.5'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('secretName', d.T.string, default='authentik-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/authentik/server.libsonnet' },
+        worker: d.fn("The authentik background worker (migrations, scheduled tasks, outposts). Shares the server's Secret via envFrom. No Service.", [
+          d.arg('name', d.T.string, default='authentik-worker'),
+          d.arg('image', d.T.string, default='ghcr.io/goauthentik/server:2024.10.5'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('secretName', d.T.string, default='authentik-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/authentik/worker.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

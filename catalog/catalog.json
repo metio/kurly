@@ -2771,6 +2771,134 @@
          "summary": "An Authelia server (a self-hosted authentication and authorization gateway adding SSO and 2FA in front of your apps via a reverse proxy forward-auth) on the official image. Its behaviour is its configuration.yml, mounted as a ConfigMap and passed verbatim; with the default SQLite storage its database lives on a PersistentVolume. The default config is a minimal skeleton that MUST be completed. kurly authors no Secret; the session/storage/JWT secrets come from a provided Secret via envFrom (as AUTHELIA_* env). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091."
       },
       {
+         "id": "authentik",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "authentik",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/goauthentik/server:2024.10.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "authentik-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "200m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The authentik web/API server. secretName holds the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/authentik/server.libsonnet",
+               "kind": "http"
+            },
+            {
+               "args": [
+                  {
+                     "default": "authentik-worker",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/goauthentik/server:2024.10.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "authentik-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "200m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The authentik background worker (migrations, scheduled tasks, outposts). Shares the server's Secret via envFrom. No Service.",
+               "id": "worker",
+               "importPath": "github.com/metio/kurly/workloads/authentik/worker.libsonnet",
+               "kind": "worker"
+            }
+         ],
+         "summary": "An authentik server (a self-hosted identity provider and SSO: OAuth2, SAML, LDAP, forward-auth) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web/API server (HTTP :9000) and a background worker (migrations, scheduled tasks, outposts). kurly authors no Secret; the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Pairs with a cnpg-cluster named authentik-db and a Redis. Stateless."
+      },
+      {
          "id": "automatisch",
          "stages": [
             {
