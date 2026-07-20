@@ -10,7 +10,9 @@
 //   kurly.list(emqx())
 //
 // Serves MQTT on :1883 — reached in-cluster (emqx:1883) or exposed to devices (often a
-// LoadBalancer). The web dashboard on :18083 needs its own Service.
+// LoadBalancer). The other default listeners ride onto the Service beside it: MQTT-over-WebSocket
+// on :8083 ('ws'), its TLS forms on :8084 ('wss') and :8883 ('mqtts'), and the web dashboard on
+// :18083 ('dashboard').
 //
 // Single node: this is a single-instance EMQX, not a cluster (EMQX clusters via a StatefulSet
 // and peer discovery). Single writer on a ReadWriteOnce volume: one replica, recreated.
@@ -32,6 +34,10 @@ function(
   + kurly.recreate()
   + kurly.port(1883)
   + kurly.servicePort(1883)
+  + kurly.extraPort('dashboard', 18083)
+  + kurly.extraPort('ws', 8083)
+  + kurly.extraPort('wss', 8084)
+  + kurly.extraPort('mqtts', 8883)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/opt/emqx/data', storageSize, storageClass=storageClass)

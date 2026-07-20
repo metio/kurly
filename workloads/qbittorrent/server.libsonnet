@@ -10,6 +10,10 @@
 //
 // Serves the web app on :8080 — compose an exposure onto it.
 //
+// PEER: the BitTorrent peer port :6881 (TCP and UDP) rides onto the Service beside the web port
+// (the 'peer-tcp' and 'peer-udp' ports); route it (NodePort/LoadBalancer) and forward it for
+// incoming connections.
+//
 // DOWNLOADS & MEDIA: mount your downloads (and media/watch) directories and point the app
 // at them in its settings; compose the extra volumes on. The config volume holds only the
 // app's own state.
@@ -43,6 +47,8 @@ function(
   + kurly.recreate()
   + kurly.port(8080)
   + kurly.servicePort(8080)
+  + kurly.extraPort('peer-tcp', 6881)
+  + kurly.extraPort('peer-udp', 6881, protocol='UDP')
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()

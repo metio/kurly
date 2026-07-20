@@ -12,9 +12,9 @@
 //
 // Serves the web app and API on :3000 — compose an exposure onto it.
 //
-// SSH: Git-over-SSH uses :22, a separate port this HTTP workload does not expose. Add a
-// Service for it (a raw `+` patch or a dedicated LoadBalancer); HTTP(S) Git works
-// without it.
+// SSH: Git-over-SSH runs on container :22, published on the Service beside the HTTP port
+// (the 'ssh' port). Route it through a LoadBalancer or NodePort to clone over SSH; HTTP(S)
+// Git works without it.
 //
 // DATABASE: point Gitea at an external PostgreSQL/MySQL through GITEA__database__* env to
 // scale past the single SQLite writer. The official image uses s6-overlay, so it runs as
@@ -50,6 +50,7 @@ function(
   + kurly.recreate()
   + kurly.port(3000)
   + kurly.servicePort(3000)
+  + kurly.extraPort('ssh', 22)
   + kurly.env(baseEnv + env)
   // The s6-overlay init needs root and a writable root filesystem; it drops to USER_UID.
   + kurly.rootUser()

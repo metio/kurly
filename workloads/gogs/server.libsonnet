@@ -12,8 +12,9 @@
 //
 // Serves the web app on :3000 — compose an exposure onto it.
 //
-// SSH: Git-over-SSH uses :22, a separate port this HTTP workload does not expose. Add a
-// Service for it; HTTP(S) Git works without it.
+// SSH: Git-over-SSH runs on container :22, published on the Service beside the HTTP port
+// (the 'ssh' port). Route it through a LoadBalancer or NodePort to clone over SSH; HTTP(S)
+// Git works without it.
 //
 // Single writer: repositories and the SQLite database live on a ReadWriteOnce volume, so
 // one replica, recreated (never rolled) to keep two pods off the files.
@@ -37,6 +38,7 @@ function(
   + kurly.recreate()
   + kurly.port(3000)
   + kurly.servicePort(3000)
+  + kurly.extraPort('ssh', 22)
   + kurly.env(env)
   // The image runs its init as root and serves as the git user; the root filesystem
   // stays writable for its runtime state.

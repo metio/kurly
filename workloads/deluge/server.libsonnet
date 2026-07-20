@@ -10,6 +10,9 @@
 //
 // Serves the web app on :8112 — compose an exposure onto it.
 //
+// PORTS: the daemon RPC on :58846 (for thin clients like deluge-console) and the BitTorrent peer
+// port :6881 ride onto the Service beside the web port (the 'daemon' and 'peer' ports).
+//
 // DOWNLOADS & MEDIA: mount your downloads (and media/watch) directories and point the app
 // at them in its settings; compose the extra volumes on. The config volume holds only the
 // app's own state.
@@ -43,6 +46,8 @@ function(
   + kurly.recreate()
   + kurly.port(8112)
   + kurly.servicePort(8112)
+  + kurly.extraPort('daemon', 58846)
+  + kurly.extraPort('peer', 6881)
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()

@@ -10,9 +10,9 @@
 //
 // Serves the web app on :8384 — compose an exposure onto it.
 //
-// SYNC: the sync protocol uses :22000 (TCP/UDP) and discovery :21027, separate ports this
-// HTTP workload does not expose — add Services for them so peers can connect. Mount the
-// folders you sync as extra volumes.
+// SYNC: the sync protocol on :22000 (TCP and UDP/QUIC) and local discovery on :21027 (UDP)
+// ride onto the Service beside the web port (the 'sync-tcp', 'sync-udp' and 'discovery' ports);
+// route them so peers can connect. Mount the folders you sync as extra volumes.
 //
 // LINUXSERVER IMAGE: the s6-overlay init runs as root and drops to the PUID/PGID user,
 // so this runs as root with a writable root filesystem — kurly keeps the rest of the
@@ -43,6 +43,9 @@ function(
   + kurly.recreate()
   + kurly.port(8384)
   + kurly.servicePort(8384)
+  + kurly.extraPort('sync-tcp', 22000)
+  + kurly.extraPort('sync-udp', 22000, protocol='UDP')
+  + kurly.extraPort('discovery', 21027, protocol='UDP')
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()

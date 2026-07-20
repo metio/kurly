@@ -11,7 +11,7 @@
 //   kurly.list(nats())
 //
 // Serves clients on :4222 — reached in-cluster (nats:4222). The monitoring endpoint on :8222
-// needs its own Service.
+// is published on the Service beside the client port (the 'monitoring' port).
 //
 // JetStream is enabled with its store on the volume. This is a single-server NATS (a real
 // deployment runs a NATS cluster via a StatefulSet); one writer on a ReadWriteOnce volume, so one
@@ -34,6 +34,7 @@ function(
   + kurly.recreate()
   + kurly.port(4222)
   + kurly.servicePort(4222)
+  + kurly.extraPort('monitoring', 8222)
   + kurly.args(['--jetstream', '--store_dir=/data', '--http_port=8222'])
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)

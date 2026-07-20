@@ -9,8 +9,9 @@
 //   local rabbitmq = import 'github.com/metio/kurly/workloads/rabbitmq/server.libsonnet';
 //   kurly.list(rabbitmq())
 //
-// Serves AMQP on :5672 — reached in-cluster (rabbitmq:5672). The management UI runs on :15672,
-// a separate port that needs its own Service.
+// Serves AMQP on :5672 — reached in-cluster (rabbitmq:5672). The management UI on :15672 and the
+// Prometheus metrics on :15692 are published on the Service beside the AMQP port (the 'management'
+// and 'metrics' ports).
 //
 // SECRET: RabbitMQ reads RABBITMQ_DEFAULT_USER and RABBITMQ_DEFAULT_PASS from the environment.
 // kurly authors no Secret; provide one holding them, via envFrom.
@@ -36,6 +37,8 @@ function(
   + kurly.recreate()
   + kurly.port(5672)
   + kurly.servicePort(5672)
+  + kurly.extraPort('management', 15672)
+  + kurly.extraPort('metrics', 15692)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
   + kurly.runAs(999, gid=999, fsGroup=999)

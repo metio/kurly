@@ -9,7 +9,7 @@
 //   kurly.list(minio())
 //
 // Serves the S3 API on :9000 — usually reached in-cluster (http://minio:9000). The web console
-// runs on :9001, a separate port that needs its own Service.
+// runs on :9001, published on the Service beside the S3 port (the 'console' port).
 //
 // SECRET: MinIO reads MINIO_ROOT_USER and MINIO_ROOT_PASSWORD from the environment. kurly
 // authors no Secret; provide one holding them, via envFrom.
@@ -35,6 +35,7 @@ function(
   + kurly.recreate()
   + kurly.port(9000)
   + kurly.servicePort(9000)
+  + kurly.extraPort('console', 9001)
   + kurly.args(['server', '/data', '--console-address', ':9001'])
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
