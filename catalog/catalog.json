@@ -6052,6 +6052,96 @@
          "summary": "A Kanboard server (a minimalist kanban project-management board) on the official image. A plain composable http workload that keeps board data in SQLite and uploads on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, so it relaxes non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "id": "karakeep",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "karakeep",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/karakeep-app/karakeep:v0.32.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://bookmarks.example.com",
+                     "name": "nextauthUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "http://meilisearch:7700",
+                     "name": "meiliAddr",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "http://chrome:9222",
+                     "name": "browserWebUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "karakeep-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Karakeep server. nextauthUrl is the public URL. meiliAddr/browserWebUrl point at the Meilisearch and headless-Chrome companions. secretName holds NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys (envFrom). Database and assets at /data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/karakeep/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Karakeep server (a self-hosted \"bookmark everything\" app, formerly Hoarder: save links, notes and images and search them with AI tagging) on the official image; its SQLite database and stored assets live on a PersistentVolume. Expects two companion side services it does not bundle: a Meilisearch instance (MEILI_ADDR + MEILI_MASTER_KEY) and a headless Chrome (BROWSER_WEB_URL). kurly authors no Secret; NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
          "id": "kavita",
          "stages": [
             {

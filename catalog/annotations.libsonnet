@@ -1500,6 +1500,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    karakeep: {
+      summary: 'A Karakeep server (a self-hosted "bookmark everything" app, formerly Hoarder: save links, notes and images and search them with AI tagging) on the official image; its SQLite database and stored assets live on a PersistentVolume. Expects two companion side services it does not bundle: a Meilisearch instance (MEILI_ADDR + MEILI_MASTER_KEY) and a headless Chrome (BROWSER_WEB_URL). kurly authors no Secret; NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The Karakeep server. nextauthUrl is the public URL. meiliAddr/browserWebUrl point at the Meilisearch and headless-Chrome companions. secretName holds NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys (envFrom). Database and assets at /data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='karakeep'),
+          d.arg('image', d.T.string, default='ghcr.io/karakeep-app/karakeep:v0.32.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('nextauthUrl', d.T.string, example='https://bookmarks.example.com'),
+          d.arg('meiliAddr', d.T.string, default='http://meilisearch:7700'),
+          d.arg('browserWebUrl', d.T.string, default='http://chrome:9222'),
+          d.arg('secretName', d.T.string, default='karakeep-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/karakeep/server.libsonnet' },
+      },
+    },
     homarr: {
       summary: 'A Homarr server (a sleek, self-hosted dashboard for your homelab) on the official image; its SQLite database and config live on a PersistentVolume, so it needs no external database. kurly authors no Secret; SECRET_ENCRYPTION_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7575.',
       stages: {

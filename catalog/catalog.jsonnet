@@ -137,6 +137,7 @@ local stageImports = {
   'activepieces/server': import 'github.com/metio/kurly/workloads/activepieces/server.libsonnet',
   'automatisch/server': import 'github.com/metio/kurly/workloads/automatisch/server.libsonnet',
   'automatisch/worker': import 'github.com/metio/kurly/workloads/automatisch/worker.libsonnet',
+  'karakeep/server': import 'github.com/metio/kurly/workloads/karakeep/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
