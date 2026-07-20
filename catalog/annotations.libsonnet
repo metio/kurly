@@ -745,6 +745,35 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/cal-com/server.libsonnet' },
       },
     },
+    alist: {
+      summary: 'An AList server (a self-hosted file list / WebDAV program fronting many storage backends — local disk, S3, WebDAV, cloud drives — behind one web UI) on the official image. A plain composable http workload that keeps its SQLite database and configuration on a PersistentVolume under /opt/alist/data. Single writer over a ReadWriteOnce volume: one replica, recreated. On first start it logs a randomly generated admin password. Serves the UI and WebDAV on :5244.',
+      stages: {
+        server: d.fn('The AList server. Database and config at /opt/alist/data on the volume. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='alist'),
+          d.arg('image', d.T.string, default='ghcr.io/alistgo/alist:latest@sha256:ee46012c344c0f40387b1c1aeddee4c114887764d3aebdd1d7bba83920423c5e'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/alist/server.libsonnet' },
+      },
+    },
+    'draw-io': {
+      summary: 'A draw.io / diagrams.net server (a self-hosted, client-side diagram editor) on the official image. A plain composable http workload. The editor runs entirely in the browser; the server only serves static assets and a stateless export/proxy endpoint, so it holds no data — a plain, horizontally scalable Deployment. Serves on :8080.',
+      stages: {
+        server: d.fn('The draw.io server. Stateless; compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='draw-io'),
+          d.arg('image', d.T.string, default='docker.io/jgraph/drawio:latest@sha256:51adba39a4a13cd0cb2979916ea9ee6e4438564e76acd51f92e79fc65e728b73'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/draw-io/server.libsonnet' },
+      },
+    },
     apprise: {
       summary: 'An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
       stages: {
