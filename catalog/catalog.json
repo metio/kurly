@@ -4347,6 +4347,72 @@
          "summary": "A Docmost server (a self-hosted, open-source collaborative wiki and documentation platform) on the official image, backed by an external PostgreSQL and Redis, with attachments on a PersistentVolume. Pairs with a cnpg-cluster named docmost-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL and APP_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "id": "docuseal",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "docuseal",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/docuseal/docuseal:3.1.5",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The DocuSeal server. Data at /data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/docuseal/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A DocuSeal server (a self-hosted document-signing platform: build fillable PDF forms and collect legally-binding e-signatures, an open alternative to DocuSign) on the official image; with the default SQLite backend its database and uploaded documents live on a PersistentVolume. Point it at an external PostgreSQL (DATABASE_URL) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
          "id": "dokuwiki",
          "stages": [
             {
@@ -7039,6 +7105,72 @@
          "summary": "A Jackett server — a proxy server that exposes many tracker indexers through one API. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9117."
       },
       {
+         "id": "jellyseerr",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "jellyseerr",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/fallenbagel/jellyseerr:2.7.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A Jellyseerr server. Config at /app/config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/jellyseerr/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Jellyseerr server — a request-management and media-discovery companion for Jellyfin, Emby and Plex. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055."
+      },
+      {
          "id": "kanboard",
          "stages": [
             {
@@ -9301,6 +9433,72 @@
          "summary": "The Kubernetes Metrics Server: it scrapes CPU/memory usage from every node's kubelet and serves it through the aggregated metrics.k8s.io API — what kubectl top and Horizontal Pod Autoscalers read. A plain composable http workload that registers an APIService and carries the aggregation RBAC (ServiceAccount, ClusterRoles/Bindings, the kube-system auth-reader RoleBinding)."
       },
       {
+         "id": "metube",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "metube",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/alexta69/metube:2026.07.18",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "50Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The MeTube server. Downloads at /downloads. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/metube/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A MeTube server (a web UI for yt-dlp: paste a video or playlist URL and it downloads it to a directory) on the official image; downloaded files live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8081."
+      },
+      {
          "id": "microbin",
          "stages": [
             {
@@ -10256,6 +10454,90 @@
          "summary": "An ntfy server (send push notifications to your phone or desktop over simple HTTP). A plain composable http workload that keeps its message cache and user database in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and pub/sub API on :80."
       },
       {
+         "id": "ombi",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "ombi",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/ombi:4.53.10",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The An Ombi server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/ombi/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Ombi server — a request-management portal for Plex, Emby and Jellyfin. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3579."
+      },
+      {
          "id": "opencost",
          "stages": [
             {
@@ -10527,6 +10809,72 @@
             }
          ],
          "summary": "An Overleaf server (the Community Edition of the collaborative LaTeX editor) on the official monolith image, backed by an external MongoDB (a replica set — it uses transactions) and Redis, with projects and compiles on a PersistentVolume. kurly ships no MongoDB recipe; bring your own (Redis can be the valkey workload). The image spawns TeX compiles and writes across the root filesystem, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; OVERLEAF_MONGO_URL comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "overseerr",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "overseerr",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/sctx/overseerr:1.35.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The An Overseerr server. Config at /app/config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/overseerr/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Overseerr server — a request-management and media-discovery companion for Plex, integrating with Sonarr and Radarr. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055."
       },
       {
          "id": "owncast",
@@ -12038,6 +12386,72 @@
          "summary": "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups."
       },
       {
+         "id": "shaarli",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "shaarli",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/shaarli/shaarli:v0.16.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Shaarli server. Data at /var/www/shaarli/data. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/shaarli/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Shaarli server (a self-hosted, database-free bookmarking and link-sharing app) on the official image; because Shaarli is flat-file, its data lives on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
          "id": "shiori",
          "stages": [
             {
@@ -12890,6 +13304,90 @@
             }
          ],
          "summary": "A Stirling-PDF server (a locally-hosted web toolkit for splitting, merging, converting, and editing PDFs) on the official image. A plain composable http workload — it processes files in memory and keeps configuration on a PersistentVolume, no external database. The image runs LibreOffice and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
+      },
+      {
+         "id": "tautulli",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "tautulli",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/tautulli:2.17.2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The A Tautulli server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/tautulli/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Tautulli server — a monitoring and tracking tool for Plex Media Server: history, statistics and notifications. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8181."
       },
       {
          "id": "tempo",

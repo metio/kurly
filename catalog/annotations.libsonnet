@@ -1784,6 +1784,117 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mealie/server.libsonnet' },
       },
     },
+    tautulli: {
+      summary: 'A Tautulli server — a monitoring and tracking tool for Plex Media Server: history, statistics and notifications. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8181.',
+      stages: {
+        server: d.fn('The A Tautulli server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='tautulli'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/tautulli:2.17.2'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tautulli/server.libsonnet' },
+      },
+    },
+    ombi: {
+      summary: 'An Ombi server — a request-management portal for Plex, Emby and Jellyfin. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3579.',
+      stages: {
+        server: d.fn('The An Ombi server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='ombi'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/ombi:4.53.10'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ombi/server.libsonnet' },
+      },
+    },
+    overseerr: {
+      summary: 'An Overseerr server — a request-management and media-discovery companion for Plex, integrating with Sonarr and Radarr. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055.',
+      stages: {
+        server: d.fn('The An Overseerr server. Config at /app/config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='overseerr'),
+          d.arg('image', d.T.string, default='docker.io/sctx/overseerr:1.35.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/overseerr/server.libsonnet' },
+      },
+    },
+    jellyseerr: {
+      summary: 'A Jellyseerr server — a request-management and media-discovery companion for Jellyfin, Emby and Plex. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055.',
+      stages: {
+        server: d.fn('The A Jellyseerr server. Config at /app/config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='jellyseerr'),
+          d.arg('image', d.T.string, default='docker.io/fallenbagel/jellyseerr:2.7.0'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/jellyseerr/server.libsonnet' },
+      },
+    },
+    metube: {
+      summary: 'A MeTube server (a web UI for yt-dlp: paste a video or playlist URL and it downloads it to a directory) on the official image; downloaded files live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8081.',
+      stages: {
+        server: d.fn('The MeTube server. Downloads at /downloads. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='metube'),
+          d.arg('image', d.T.string, default='ghcr.io/alexta69/metube:2026.07.18'),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/metube/server.libsonnet' },
+      },
+    },
+    docuseal: {
+      summary: 'A DocuSeal server (a self-hosted document-signing platform: build fillable PDF forms and collect legally-binding e-signatures, an open alternative to DocuSign) on the official image; with the default SQLite backend its database and uploaded documents live on a PersistentVolume. Point it at an external PostgreSQL (DATABASE_URL) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
+      stages: {
+        server: d.fn('The DocuSeal server. Data at /data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='docuseal'),
+          d.arg('image', d.T.string, default='docker.io/docuseal/docuseal:3.1.5'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/docuseal/server.libsonnet' },
+      },
+    },
+    shaarli: {
+      summary: 'A Shaarli server (a self-hosted, database-free bookmarking and link-sharing app) on the official image; because Shaarli is flat-file, its data lives on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Shaarli server. Data at /var/www/shaarli/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='shaarli'),
+          d.arg('image', d.T.string, default='docker.io/shaarli/shaarli:v0.16.3'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/shaarli/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
