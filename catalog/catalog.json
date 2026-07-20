@@ -13982,6 +13982,144 @@
          "summary": "An NZBHydra2 server — a meta-search server that aggregates Usenet indexers behind one search API for the *arr apps. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5076."
       },
       {
+         "id": "odoo",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "odoo",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/odoo:18.0",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "odoo-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Odoo server. secretName holds the PostgreSQL connection (HOST/USER/PASSWORD, envFrom). Filestore at /var/lib/odoo. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/odoo/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Odoo server (a self-hosted, all-in-one business/ERP suite: CRM, sales, inventory, accounting, website and more) on the official image, backed by an external PostgreSQL, with its filestore on a PersistentVolume. kurly authors no Secret; the PostgreSQL connection (HOST/USER/PASSWORD) comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named odoo-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8069."
+      },
+      {
+         "id": "ollama",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "ollama",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/ollama/ollama:0.5.4",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "50Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "8Gi"
+                        },
+                        "requests": {
+                           "cpu": "500m",
+                           "memory": "2Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Ollama server. Models at /models. Usually reached in-cluster (e.g. from open-webui). Compose an exposure onto the HTTP port only if reached from outside.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/ollama/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "An Ollama server (a self-hosted runtime for running large language models locally, with a simple REST API) on the official image; its downloaded models live on a PersistentVolume. Runs on CPU by default; for GPU acceleration schedule it on a GPU node and request the device resource. The backend open-webui and many AI apps talk to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :11434."
+      },
+      {
          "id": "ombi",
          "stages": [
             {
@@ -15474,6 +15612,90 @@
             }
          ],
          "summary": "A Piwigo server — a self-hosted photo gallery with albums, tagging and user management (backed by MySQL/MariaDB). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
+      },
+      {
+         "id": "plex",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "plex",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "lscr.io/linuxserver/plex:1.41.3",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "UTC",
+                     "name": "timezone",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Plex server. puid/pgid own the mounted files; timezone sets TZ; set PLEX_CLAIM via env to bind to your account. Config at /config. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/plex/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Plex Media Server (a self-hosted media server for organising and streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Set PLEX_CLAIM on first run and mount your media libraries. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :32400."
       },
       {
          "id": "postgres",

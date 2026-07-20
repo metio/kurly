@@ -3177,6 +3177,55 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/formbricks/server.libsonnet' },
       },
     },
+    plex: {
+      summary: 'A Plex Media Server (a self-hosted media server for organising and streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Set PLEX_CLAIM on first run and mount your media libraries. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :32400.',
+      stages: {
+        server: d.fn('The Plex server. puid/pgid own the mounted files; timezone sets TZ; set PLEX_CLAIM via env to bind to your account. Config at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='plex'),
+          d.arg('image', d.T.string, default='lscr.io/linuxserver/plex:1.41.3'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/plex/server.libsonnet' },
+      },
+    },
+    ollama: {
+      summary: 'An Ollama server (a self-hosted runtime for running large language models locally, with a simple REST API) on the official image; its downloaded models live on a PersistentVolume. Runs on CPU by default; for GPU acceleration schedule it on a GPU node and request the device resource. The backend open-webui and many AI apps talk to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :11434.',
+      stages: {
+        server: d.fn('The Ollama server. Models at /models. Usually reached in-cluster (e.g. from open-webui). Compose an exposure onto the HTTP port only if reached from outside.', [
+          d.arg('name', d.T.string, default='ollama'),
+          d.arg('image', d.T.string, default='docker.io/ollama/ollama:0.5.4'),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '8Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ollama/server.libsonnet' },
+      },
+    },
+    odoo: {
+      summary: 'An Odoo server (a self-hosted, all-in-one business/ERP suite: CRM, sales, inventory, accounting, website and more) on the official image, backed by an external PostgreSQL, with its filestore on a PersistentVolume. kurly authors no Secret; the PostgreSQL connection (HOST/USER/PASSWORD) comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named odoo-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8069.',
+      stages: {
+        server: d.fn('The Odoo server. secretName holds the PostgreSQL connection (HOST/USER/PASSWORD, envFrom). Filestore at /var/lib/odoo. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='odoo'),
+          d.arg('image', d.T.string, default='docker.io/odoo:18.0'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='odoo-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/odoo/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
