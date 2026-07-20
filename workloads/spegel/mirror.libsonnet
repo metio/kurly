@@ -11,9 +11,9 @@
 // This is genuinely node-level infrastructure, so — like the database clusters — it
 // authors its manifests directly rather than composing a kurly base kind: it needs an
 // init container, hostPath access to the containerd socket and content store, a
-// NodePort the kubelet reaches the mirror on, and a headless Service the peers bootstrap
-// against. None of that fits the http/worker/daemon composable shape. Import it, adapt
-// with the parameters below, and render with kurly.list:
+// host port the kubelet reaches the mirror on, and a headless Service the peers
+// bootstrap against. None of that fits the http/worker/daemon composable shape. Import
+// it, adapt with the parameters below, and render with kurly.list:
 //
 //   local spegel = import 'github.com/metio/kurly/workloads/spegel/mirror.libsonnet';
 //   kurly.list(spegel(namespace='spegel'))
@@ -22,12 +22,20 @@
 // whose FQDN embeds the namespace — so `namespace` MUST match where you deploy, and
 // every object is stamped with it.
 //
-// SECURITY: the mirror runs as root with hostPath mounts (the containerd socket is
-// root-owned) — the restricted Pod Security Standard cannot admit it. The posture is
-// hardened as far as the job allows (read-only root filesystem, no privilege
-// escalation, all capabilities dropped, RuntimeDefault seccomp), but this is
-// privileged node infrastructure and should be deployed to a namespace labelled for
-// it. The socket is mounted read-only; the content store is mounted read-only.
+// LOCAL ROUTING: the kubelet reaches its own node's mirror two ways, both written into
+// containerd's mirror config, so a node always finds its local Spegel even when
+// kube-proxy topology routing is not in play: a hostPort straight to the local pod
+// (registryHostPort) and a NodePort through kube-proxy (registryNodePort). Drop the
+// hostPort (registryHostPort=null) where host ports are forbidden and the NodePort
+// carries it alone.
+//
+// SECURITY: the mirror serves the node's containerd content store, so it runs as root
+// with hostPath mounts (the socket is root-owned) — the restricted Pod Security
+// Standard cannot admit it. The posture is hardened as far as the job allows
+// (read-only root filesystem, no privilege escalation, all capabilities dropped,
+// RuntimeDefault seccomp), and the socket and content store are mounted read-only, but
+// this is privileged node infrastructure: deploy it to a namespace labelled for it,
+// and consider priorityClassName='system-node-critical' so it is not evicted.
 local version = std.rstripChars(importstr './version.txt', '\n');
 
 // The kurly label convention, applied to every object so the same ownership marker and
@@ -51,24 +59,32 @@ function(
   containerdContentPath='/var/lib/containerd/io.containerd.content.v1.content',
   containerdRegistryConfigPath='/etc/containerd/certs.d',
   containerdNamespace='k8s.io',
-  // The kubelet reaches the local mirror at http://<node-ip>:registryNodePort, which
-  // the init container writes into containerd's mirror config; the NodePort Service
-  // routes it to the registry port. Keep the two in step with the cluster's NodePort
-  // range.
   registryPort=5000,
-  registryNodePort=30020,
+  // The kubelet reaches the local mirror at http://<node-ip>:<port>, which the init
+  // container writes into containerd's mirror config. Both a hostPort straight to the
+  // local pod and a NodePort through kube-proxy are configured, so a node always finds
+  // its own mirror; keep them in the cluster's NodePort range. Set registryHostPort to
+  // null where host ports are forbidden.
+  registryHostPort=30020,
+  registryNodePort=30021,
   routerPort=5001,
   metricsPort=9090,
+  // A hostPath directory Spegel persists its routing state to, so a restarted node
+  // rejoins the mesh fast. Set to null to run without it.
+  dataDir='/var/lib/spegel',
   logLevel='INFO',
   resolveTags=true,
   mirrorResolveRetries=3,
   mirrorResolveTimeout='20ms',
+  // Serve Spegel's debug web UI on the registry port.
+  debugWeb=false,
   clusterDomain='cluster.local',
-  resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '128Mi' } },
+  resources={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '128Mi' } },
   // DaemonSets usually run everywhere, control-plane nodes included, so a mirror is
   // present wherever an image is pulled. Override to confine it.
   tolerations=[{ operator: 'Exists' }],
-  nodeSelector={},
+  // The containerd paths are Linux-only, so keep the mirror off non-Linux nodes.
+  nodeSelector={ 'kubernetes.io/os': 'linux' },
   affinity=null,
   priorityClassName=null,
   labels={},
@@ -96,8 +112,14 @@ function(
 
   local bootstrapDomain = name + '-bootstrap.' + namespace + '.svc.' + clusterDomain;
 
+  // Both the hostPort and the NodePort are written as mirror targets, so the kubelet
+  // reaches its local mirror whichever path is live.
+  local mirrorTargets =
+    (if registryHostPort == null then [] else ['http://$(NODE_IP):' + registryHostPort])
+    + ['http://$(NODE_IP):' + registryNodePort];
+
   // Writes containerd's registry-mirror hosts.toml so the kubelet pulls through the
-  // local Spegel (http://<node-ip>:registryNodePort) before the upstream registry.
+  // local Spegel before the upstream registry.
   local configurationContainer = {
     name: 'configuration',
     image: image,
@@ -107,7 +129,7 @@ function(
       '--log-level=' + logLevel,
       '--containerd-registry-config-path=' + containerdRegistryConfigPath,
       '--mirror-targets',
-      'http://$(NODE_IP):' + registryNodePort,
+    ] + mirrorTargets + [
       '--resolve-tags=' + resolveTags,
       '--prepend-existing=false',
     ],
@@ -132,7 +154,8 @@ function(
       '--containerd-content-path=' + containerdContentPath,
       '--bootstrap-kind=dns',
       '--dns-bootstrap-domain=' + bootstrapDomain,
-    ],
+      '--debug-web-enabled=' + debugWeb,
+    ] + (if dataDir == null then [] else ['--data-dir=' + dataDir]),
     env: [
       // Ties the Go heap ceiling to the container's memory limit so a spike sheds
       // rather than getting OOMKilled.
@@ -140,7 +163,7 @@ function(
       nodeIp,
     ],
     ports: [
-      { name: 'registry', containerPort: registryPort, protocol: 'TCP' },
+      std.prune({ name: 'registry', containerPort: registryPort, hostPort: registryHostPort, protocol: 'TCP' }),
       { name: 'router-tcp', containerPort: routerPort, protocol: 'TCP' },
       { name: 'router-quic', containerPort: routerPort, protocol: 'UDP' },
       { name: 'metrics', containerPort: metricsPort, protocol: 'TCP' },
@@ -150,11 +173,21 @@ function(
     readinessProbe: { httpGet: { path: '/readyz', port: 'registry' } },
     livenessProbe: { httpGet: { path: '/livez', port: 'registry' } },
     resources: resources,
-    volumeMounts: [
-      { name: 'containerd-sock', mountPath: containerdSock, readOnly: true },
-      { name: 'containerd-content', mountPath: containerdContentPath, readOnly: true },
-    ],
+    volumeMounts:
+      (if dataDir == null then [] else [{ name: 'spegel-data', mountPath: dataDir }])
+      + [
+        { name: 'containerd-sock', mountPath: containerdSock, readOnly: true },
+        { name: 'containerd-content', mountPath: containerdContentPath, readOnly: true },
+      ],
   };
+
+  local volumes =
+    (if dataDir == null then [] else [{ name: 'spegel-data', hostPath: { path: dataDir, type: 'DirectoryOrCreate' } }])
+    + [
+      { name: 'containerd-sock', hostPath: { path: containerdSock, type: 'Socket' } },
+      { name: 'containerd-content', hostPath: { path: containerdContentPath, type: 'Directory' } },
+      { name: 'containerd-config', hostPath: { path: containerdRegistryConfigPath, type: 'DirectoryOrCreate' } },
+    ];
 
   {
     // A kurly feature composed onto this workload writes a hidden `config` that no
@@ -185,6 +218,9 @@ function(
         annotations: (if annotations == {} then null else annotations),
       }),
       spec: {
+        // A DaemonSet keeps no rollout history worth ten revisions; one is plenty and
+        // keeps a frequently-updated mirror from piling up ControllerRevisions.
+        revisionHistoryLimit: 1,
         selector: { matchLabels: selectorLabels },
         template: {
           metadata: std.prune({
@@ -200,19 +236,15 @@ function(
             affinity: affinity,
             initContainers: [configurationContainer],
             containers: [registryContainer],
-            volumes: [
-              { name: 'containerd-sock', hostPath: { path: containerdSock, type: 'Socket' } },
-              { name: 'containerd-content', hostPath: { path: containerdContentPath, type: 'Directory' } },
-              { name: 'containerd-config', hostPath: { path: containerdRegistryConfigPath, type: 'DirectoryOrCreate' } },
-            ],
+            volumes: volumes,
           }),
         },
       },
     },
 
     // The kubelet reaches the local mirror here: NodePort registryNodePort routes to
-    // the registry port on the node's own Spegel (the init container points containerd
-    // at http://<node-ip>:registryNodePort).
+    // the registry port (the init container also points containerd at the hostPort
+    // straight to the local pod).
     registryService: {
       apiVersion: 'v1',
       kind: 'Service',

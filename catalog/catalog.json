@@ -10405,6 +10405,12 @@
                   },
                   {
                      "default": 30020,
+                     "name": "registryHostPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 30021,
                      "name": "registryNodePort",
                      "required": false,
                      "type": "int"
@@ -10420,6 +10426,12 @@
                      "name": "metricsPort",
                      "required": false,
                      "type": "int"
+                  },
+                  {
+                     "default": "/var/lib/spegel",
+                     "name": "dataDir",
+                     "required": false,
+                     "type": "string"
                   },
                   {
                      "default": "INFO",
@@ -10446,6 +10458,12 @@
                      "type": "string"
                   },
                   {
+                     "default": false,
+                     "name": "debugWeb",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
                      "default": "cluster.local",
                      "name": "clusterDomain",
                      "required": false,
@@ -10457,7 +10475,7 @@
                            "memory": "128Mi"
                         },
                         "requests": {
-                           "cpu": "50m",
+                           "cpu": "100m",
                            "memory": "128Mi"
                         }
                      },
@@ -10476,6 +10494,9 @@
                      "type": "array"
                   },
                   {
+                     "default": {
+                        "kubernetes.io/os": "linux"
+                     },
                      "name": "nodeSelector",
                      "required": false,
                      "type": "object"
@@ -10486,6 +10507,7 @@
                      "type": "object"
                   },
                   {
+                     "example": "system-node-critical",
                      "name": "priorityClassName",
                      "required": false,
                      "type": "string"
@@ -10501,7 +10523,7 @@
                      "type": "object"
                   }
                ],
-               "help": "The Spegel DaemonSet and its Services. namespace MUST match the deploy namespace (the peer-bootstrap DNS name embeds it). containerdSock/containerdContentPath/containerdRegistryConfigPath point at the node's containerd; registryNodePort is where the kubelet reaches the local mirror.",
+               "help": "The Spegel DaemonSet and its Services. namespace MUST match the deploy namespace (the peer-bootstrap DNS name embeds it). containerdSock/containerdContentPath/containerdRegistryConfigPath point at the node's containerd; the kubelet reaches the local mirror at both registryHostPort (straight to the local pod) and registryNodePort (through kube-proxy), so set registryHostPort=null where host ports are forbidden. dataDir persists routing state (null to disable).",
                "id": "mirror",
                "importPath": "github.com/metio/kurly/workloads/spegel/mirror.libsonnet",
                "kind": "daemon"

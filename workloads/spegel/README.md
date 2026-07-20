@@ -33,11 +33,14 @@ kurly.list(spegel(namespace='spegel'))
 | `containerdContentPath` | `/var/lib/containerd/io.containerd.content.v1.content` | content store (mounted read-only) |
 | `containerdRegistryConfigPath` | `/etc/containerd/certs.d` | where the mirror config is written |
 | `containerdNamespace` | `k8s.io` | |
-| `registryPort` / `registryNodePort` | `5000` / `30020` | the kubelet reaches the local mirror at `http://<node-ip>:30020` |
+| `registryPort` | `5000` | the mirror's container port |
+| `registryHostPort` / `registryNodePort` | `30020` / `30021` | the kubelet reaches the local mirror at both — the hostPort straight to the local pod, the NodePort through kube-proxy; set `registryHostPort=null` where host ports are forbidden |
 | `routerPort` / `metricsPort` | `5001` / `9090` | P2P router / metrics |
+| `dataDir` | `/var/lib/spegel` | hostPath for persisted routing state (`null` to disable) |
 | `resolveTags` / `mirrorResolveRetries` / `mirrorResolveTimeout` | `true` / `3` / `20ms` | mirror resolution tuning |
+| `debugWeb` | `false` | serve Spegel's debug web UI on the registry port |
 | `clusterDomain` | `cluster.local` | |
-| `resources` / `tolerations` / `nodeSelector` / `affinity` / `priorityClassName` | | `tolerations` defaults to run everywhere |
+| `resources` / `tolerations` / `nodeSelector` / `affinity` / `priorityClassName` | | `nodeSelector` keeps it on Linux nodes; consider `priorityClassName='system-node-critical'` |
 | `labels` / `annotations` | | |
 
 ## Why the namespace matters
@@ -45,6 +48,14 @@ kurly.list(spegel(namespace='spegel'))
 Peers bootstrap the P2P router against the DNS name of the headless
 `<name>-bootstrap` Service, whose FQDN embeds the namespace. Deploy Spegel to the
 namespace you pass as `namespace`, or the nodes never find each other.
+
+## Local routing
+
+The kubelet must reach its own node's mirror at `http://<node-ip>:<port>`. Both a
+**hostPort** (straight to the local pod) and a **NodePort** (through kube-proxy) are
+written into containerd's mirror config, so a node always finds its local Spegel even
+when kube-proxy topology-aware routing is not in play. Where host ports are forbidden,
+set `registryHostPort=null` and the NodePort carries it alone.
 
 ## Node access and security
 
