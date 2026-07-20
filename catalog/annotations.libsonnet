@@ -1500,6 +1500,23 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    lychee: {
+      summary: 'A Lychee server (a self-hosted photo-management and gallery system) on the official image. A plain composable http workload — with the SQLite backend its config, database, and photos live on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; APP_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Lychee server. Photos at /uploads, config at /conf, symlinks at /sym, all on the volume. appUrl is the public URL. secretName holds APP_KEY (envFrom). Point DB_CONNECTION at external MySQL/PostgreSQL to scale past SQLite. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='lychee'),
+          d.arg('image', d.T.string, default='docker.io/lycheeorg/lychee:v7.7.1'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('appUrl', d.T.string, example='https://photos.example.com'),
+          d.arg('secretName', d.T.string, default='lychee-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lychee/server.libsonnet' },
+      },
+    },
     commafeed: {
       summary: 'A CommaFeed server (a self-hosted Google Reader-style RSS/Atom feed reader) on the official image. A plain composable http workload — the H2 variant keeps its feeds in an embedded database on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8082. Use the PostgreSQL image variant to scale past the embedded DB.',
       stages: {
