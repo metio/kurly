@@ -3359,6 +3359,70 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openproject/server.libsonnet' },
       },
     },
+    joomla: {
+      summary: 'A Joomla server — a popular self-hosted CMS for building websites and online applications (backed by MySQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The A Joomla server. secretName holds the DB credentials (envFrom). Data at /var/www/html. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='joomla'),
+          d.arg('image', d.T.string, default='docker.io/library/joomla:5.2'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='joomla-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/joomla/server.libsonnet' },
+      },
+    },
+    drupal: {
+      summary: 'A Drupal server — a powerful, self-hosted open-source CMS and content framework (backed by MySQL/PostgreSQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The A Drupal server. secretName holds the DB credentials (envFrom). Data at /var/www/html/sites. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='drupal'),
+          d.arg('image', d.T.string, default='docker.io/library/drupal:11.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='drupal-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/drupal/server.libsonnet' },
+      },
+    },
+    prestashop: {
+      summary: 'A PrestaShop server — a self-hosted, open-source e-commerce platform for building online stores (backed by MySQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The A PrestaShop server. secretName holds the DB credentials (envFrom). Data at /var/www/html. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='prestashop'),
+          d.arg('image', d.T.string, default='docker.io/prestashop/prestashop:8.1'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='prestashop-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/prestashop/server.libsonnet' },
+      },
+    },
+    nocobase: {
+      summary: 'A NocoBase server (a self-hosted, open-source no-code/low-code platform for building internal tools, databases and workflows) on the official image, backed by an external PostgreSQL, with its storage on a PersistentVolume. kurly authors no Secret; the DB_* connection and APP_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named nocobase-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The NocoBase server. secretName holds the DB_* connection and APP_KEY (envFrom). Storage at /app/nocobase/storage. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='nocobase'),
+          d.arg('image', d.T.string, default='docker.io/nocobase/nocobase:1.4.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='nocobase-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocobase/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {
