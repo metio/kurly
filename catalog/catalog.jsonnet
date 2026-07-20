@@ -254,6 +254,7 @@ local stageImports = {
   'docker-registry-ui/server': import 'github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet',
   'element-web/server': import 'github.com/metio/kurly/workloads/element-web/server.libsonnet',
   'planka/server': import 'github.com/metio/kurly/workloads/planka/server.libsonnet',
+  'photoview/server': import 'github.com/metio/kurly/workloads/photoview/server.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
   'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
