@@ -11,6 +11,7 @@ extend-exclude = ["LICENSES/", "vendor/", "docs/themes/", "docs/static/js/alpine
 # `edn` (Clojure's Extensible Data Notation) is the tik workload's config
 # format, not a typo of `end`.
 [default.extend-words]
+mosquitto = "mosquitto"
 pyload = "pyload"
 edn = "edn"
 EDN = "EDN"

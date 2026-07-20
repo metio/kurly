@@ -2790,6 +2790,167 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/glance/server.libsonnet' },
       },
     },
+    'node-red': {
+      summary: 'A Node-RED server — a flow-based, low-code programming tool for wiring together APIs, devices and online services; flows and settings on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1880.',
+      stages: {
+        server: d.fn('The A Node-RED server. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='node-red'),
+          d.arg('image', d.T.string, default='docker.io/nodered/node-red:4.0.9'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/node-red/server.libsonnet' },
+      },
+    },
+    esphome: {
+      summary: 'An ESPHome dashboard server — the web dashboard and compiler for ESP8266/ESP32 smart-home firmware; runs as root, configs on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6052.',
+      stages: {
+        server: d.fn('The An ESPHome dashboard server. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='esphome'),
+          d.arg('image', d.T.string, default='ghcr.io/esphome/esphome:2025.7.3'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/esphome/server.libsonnet' },
+      },
+    },
+    '2fauth': {
+      summary: 'A 2FAuth server (a self-hosted web app to manage TOTP/HOTP two-factor accounts and generate one-time codes) on the official image; with the default SQLite backend its database lives on a PersistentVolume. kurly authors no Secret; APP_KEY (encrypts stored 2FA secrets) comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
+      stages: {
+        server: d.fn('The 2FAuth server. appUrl is the public URL; secretName holds APP_KEY (envFrom). Data at /2fauth. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='2fauth'),
+          d.arg('image', d.T.string, default='docker.io/2fauth/2fauth:5.6.0'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('appUrl', d.T.string, example='https://2fa.example.com'),
+          d.arg('secretName', d.T.string, default='2fauth-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/2fauth/server.libsonnet' },
+      },
+    },
+    influxdb: {
+      summary: 'An InfluxDB 2 server (a self-hosted time-series database for metrics, events and IoT data with a built-in UI) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; the DOCKER_INFLUXDB_INIT_* setup values come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8086.',
+      stages: {
+        server: d.fn('The InfluxDB server. secretName holds the DOCKER_INFLUXDB_INIT_* setup values (envFrom). Data at /var/lib/influxdb2. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='influxdb'),
+          d.arg('image', d.T.string, default='docker.io/library/influxdb:2.7.11'),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='influxdb-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/influxdb/server.libsonnet' },
+      },
+    },
+    couchdb: {
+      summary: 'An Apache CouchDB server (a self-hosted, document-oriented NoSQL database that speaks HTTP/JSON and syncs with offline-first apps) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; COUCHDB_USER and COUCHDB_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5984.',
+      stages: {
+        server: d.fn('The CouchDB server. secretName holds COUCHDB_USER and COUCHDB_PASSWORD (envFrom). Data at /opt/couchdb/data. Usually reached in-cluster.', [
+          d.arg('name', d.T.string, default='couchdb'),
+          d.arg('image', d.T.string, default='docker.io/library/couchdb:3.4.2'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='couchdb-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/couchdb/server.libsonnet' },
+      },
+    },
+    'home-assistant': {
+      summary: 'A Home Assistant server (Home Assistant Core: the leading self-hosted home-automation platform) on the official image; its configuration and state database live on a PersistentVolume. It runs as root with a writable root filesystem. Local-network discovery (mDNS/SSDP) does not work through a ClusterIP; devices reachable by IP/MQTT/cloud work, and USB radios need a network coordinator. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8123.',
+      stages: {
+        server: d.fn('The Home Assistant server. Config at /config. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='home-assistant'),
+          d.arg('image', d.T.string, default='ghcr.io/home-assistant/home-assistant:2025.7'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/home-assistant/server.libsonnet' },
+      },
+    },
+    nextcloud: {
+      summary: 'A Nextcloud server (a self-hosted content-collaboration platform: file sync and share, calendars, contacts, office documents) on the official Apache image; with the default SQLite backend the whole installation lives on a PersistentVolume. kurly authors no Secret; NEXTCLOUD_ADMIN_* come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL and S3 primary storage to scale out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      stages: {
+        server: d.fn('The Nextcloud server. trustedDomains sets NEXTCLOUD_TRUSTED_DOMAINS; secretName holds NEXTCLOUD_ADMIN_* (envFrom). Installation at /var/www/html. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='nextcloud'),
+          d.arg('image', d.T.string, default='docker.io/library/nextcloud:31.0.4'),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('trustedDomains', d.T.string, example='cloud.example.com'),
+          d.arg('secretName', d.T.string, default='nextcloud-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nextcloud/server.libsonnet' },
+      },
+    },
+    rundeck: {
+      summary: 'A Rundeck server (a self-hosted runbook-automation and operations platform: jobs, workflows, access control and scheduling) on the official image; with the default embedded storage its data lives on a PersistentVolume. kurly authors no Secret; the admin credentials come from a provided Secret via envFrom. Point it at an external MySQL/PostgreSQL to scale past the embedded database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4440.',
+      stages: {
+        server: d.fn('The Rundeck server. grailsUrl is the public URL (RUNDECK_GRAILS_URL); secretName holds the admin credentials (envFrom). Data at /home/rundeck/server/data. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='rundeck'),
+          d.arg('image', d.T.string, default='docker.io/rundeck/rundeck:5.9.0'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('grailsUrl', d.T.string, example='https://rundeck.example.com'),
+          d.arg('secretName', d.T.string, default='rundeck-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rundeck/server.libsonnet' },
+      },
+    },
+    mosquitto: {
+      summary: 'An Eclipse Mosquitto server (a lightweight, self-hosted MQTT message broker for IoT and home automation). Mosquitto speaks MQTT, not HTTP: it listens on :1883, its mosquitto.conf is mounted as a ConfigMap and passed verbatim, and its persistence database lives on a PersistentVolume. The default allows anonymous clients; a real broker sets up authentication. WebSockets (:9001) need a listener in the config and a second Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.',
+      stages: {
+        server: d.fn('The Mosquitto broker on :1883. config is mosquitto.conf, mounted verbatim. Data at /mosquitto/data. Expose to devices (often a LoadBalancer), not an HTTP ingress.', [
+          d.arg('name', d.T.string, default='mosquitto'),
+          d.arg('image', d.T.string, default='docker.io/eclipse-mosquitto:2.0.20'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('config', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mosquitto/server.libsonnet' },
+      },
+    },
+    authelia: {
+      summary: 'An Authelia server (a self-hosted authentication and authorization gateway adding SSO and 2FA in front of your apps via a reverse proxy forward-auth) on the official image. Its behaviour is its configuration.yml, mounted as a ConfigMap and passed verbatim; with the default SQLite storage its database lives on a PersistentVolume. The default config is a minimal skeleton that MUST be completed. kurly authors no Secret; the session/storage/JWT secrets come from a provided Secret via envFrom (as AUTHELIA_* env). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091.',
+      stages: {
+        server: d.fn("The Authelia server. config is Authelia's own configuration.yml (complete the skeleton); secretName holds the AUTHELIA_* secrets (envFrom). Data at /config. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='authelia'),
+          d.arg('image', d.T.string, default='ghcr.io/authelia/authelia:4.39.5'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('config', d.T.object, default={}),
+          d.arg('secretName', d.T.string, default='authelia-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/authelia/server.libsonnet' },
+      },
+    },
     homepage: {
       summary: 'A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       stages: {

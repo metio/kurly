@@ -36,7 +36,7 @@ local defaultConfig = {
   authentication_backend: { file: { path: '/config/users_database.yml' } },
   access_control: { default_policy: 'one_factor' },
   session: { cookies: [{ domain: 'example.com', authelia_url: 'https://auth.example.com' }] },
-  storage: { local: { path: '/config/db.sqlite3' } },
+  storage: { 'local': { path: '/config/db.sqlite3' } },
   notifier: { filesystem: { filename: '/config/notification.txt' } },
 };
 
