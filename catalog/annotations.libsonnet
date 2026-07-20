@@ -713,6 +713,38 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/portainer/server.libsonnet' },
       },
     },
+    documenso: {
+      summary: 'A Documenso server (a self-hosted, open-source alternative to DocuSign for signing documents) on the official image, backed by an external PostgreSQL. A plain composable http workload. kurly authors no Secret; NEXTAUTH_SECRET, NEXT_PRIVATE_ENCRYPTION_KEY, NEXT_PRIVATE_DATABASE_URL and the SMTP settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named documenso-db. Stateless: a plain rolling Deployment. Serves on :3000.',
+      stages: {
+        server: d.fn('The Documenso server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='documenso'),
+          d.arg('image', d.T.string, default='docker.io/documenso/documenso:latest@sha256:cd38a43c050fd14435653c0f66faf8dad538de8ebb7a072c72fb0ab6371d770f'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('webappUrl', d.T.string),
+          d.arg('secretName', d.T.string, default='documenso-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/documenso/server.libsonnet' },
+      },
+    },
+    'cal-com': {
+      summary: 'A Cal.com server (a self-hosted, open-source scheduling platform, an alternative to Calendly) on the official image, backed by an external PostgreSQL. A plain composable http workload. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET, CALENDSO_ENCRYPTION_KEY and the integration credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named cal-com-db. Stateless: a plain rolling Deployment. Serves on :3000.',
+      stages: {
+        server: d.fn('The Cal.com server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='cal-com'),
+          d.arg('image', d.T.string, default='docker.io/calcom/cal.com:latest@sha256:ace3bb1219fb7306585ab9f4d94d41af7ee064c343db0498173436bbe857bd49'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('webappUrl', d.T.string),
+          d.arg('secretName', d.T.string, default='cal-com-secrets'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/cal-com/server.libsonnet' },
+      },
+    },
     kavita: {
       summary: 'A Kavita server (a fast, cross-platform reading server for comics, manga, and ebooks) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /library on the same volume — no external database. The .NET app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.',
       stages: {

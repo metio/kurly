@@ -3912,6 +3912,78 @@
          "summary": "A Bugsink server (a self-hosted, Sentry-compatible error tracker: it ingests the same events your existing Sentry SDKs emit) on the official image, backed by an external PostgreSQL or MySQL. Pairs with a cnpg-cluster named bugsink-db. kurly authors no Secret; DATABASE_URL and SECRET_KEY come from a provided Secret via envFrom. Stateless (events live in the DB): a plain rolling Deployment. Serves on :8000."
       },
       {
+         "id": "cal-com",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "cal-com",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/calcom/cal.com:latest@sha256:ace3bb1219fb7306585ab9f4d94d41af7ee064c343db0498173436bbe857bd49",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "webappUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "cal-com-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Cal.com server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/cal-com/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Cal.com server (a self-hosted, open-source scheduling platform, an alternative to Calendly) on the official image, backed by an external PostgreSQL. A plain composable http workload. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET, CALENDSO_ENCRYPTION_KEY and the integration credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named cal-com-db. Stateless: a plain rolling Deployment. Serves on :3000."
+      },
+      {
          "id": "calibre",
          "stages": [
             {
@@ -5508,6 +5580,78 @@
             }
          ],
          "summary": "A Docmost server (a self-hosted, open-source collaborative wiki and documentation platform) on the official image, backed by an external PostgreSQL and Redis, with attachments on a PersistentVolume. Pairs with a cnpg-cluster named docmost-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL and APP_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
+      },
+      {
+         "id": "documenso",
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "documenso",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "docker.io/documenso/documenso:latest@sha256:cd38a43c050fd14435653c0f66faf8dad538de8ebb7a072c72fb0ab6371d770f",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 2,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "webappUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "documenso-secrets",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Documenso server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/documenso/server.libsonnet",
+               "kind": "http"
+            }
+         ],
+         "summary": "A Documenso server (a self-hosted, open-source alternative to DocuSign for signing documents) on the official image, backed by an external PostgreSQL. A plain composable http workload. kurly authors no Secret; NEXTAUTH_SECRET, NEXT_PRIVATE_ENCRYPTION_KEY, NEXT_PRIVATE_DATABASE_URL and the SMTP settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named documenso-db. Stateless: a plain rolling Deployment. Serves on :3000."
       },
       {
          "id": "docuseal",
