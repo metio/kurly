@@ -8,6 +8,7 @@
 // late-bind regardless of compose order. The visible fields of the result ARE
 // the manifests.
 local k = import './k.libsonnet';
+local networkPolicy = import './networkpolicy.libsonnet';
 
 // A volume name derived from a mount path: '/var/lib/tik' -> 'var-lib-tik'.
 // Keeps generated volume names DNS-1123 and unique per distinct mount path.
@@ -70,18 +71,6 @@ local hpaManifest(name, spec, labels) = {
       + (if spec.targetMemory == null then [] else [utilization('memory', spec.targetMemory)]),
   },
 };
-
-local networkPolicyManifest(name, spec, selectorLabels, labels) = std.prune({
-  apiVersion: 'networking.k8s.io/v1',
-  kind: 'NetworkPolicy',
-  metadata: { name: name, labels: labels },
-  spec: {
-    podSelector: { matchLabels: selectorLabels },
-    policyTypes: spec.policyTypes,
-    ingress: spec.ingress,
-    egress: spec.egress,
-  },
-});
 
 // A headless Service (clusterIP: None) selecting the workload's pods, for
 // peer discovery by DNS. publishNotReadyAddresses lists pods before they are
@@ -316,7 +305,7 @@ local exclusionConflicts(exclusive) = [
       // creates (podServiceAccount below).
       pdb: null,  // { minAvailable, maxUnavailable }
       hpa: null,  // { minReplicas, maxReplicas, targetCPU, targetMemory }
-      networkPolicy: null,  // { ingress, egress, policyTypes }
+      networkPolicy: null,  // { variant, allowFrom, allowTo, ingress, egress, policyTypes, extraSpec } — see kurly.network
       serviceMonitor: null,  // { port, path, interval }
       rbac: null,  // { rules }
       // Cross-cutting requirements a capability declares so the manifest that
@@ -440,18 +429,13 @@ local exclusionConflicts(exclusive) = [
       if this.config.pdb == null then null else pdbManifest(this.config.name, this.config.pdb, this.selectorLabels, this.labels),
     hpa::
       if this.config.hpa == null then null else hpaManifest(this.config.name, this.config.hpa, this.labels),
-    // The NetworkPolicy always allows the requiredEgress a sidecar declared (e.g.
-    // apiserver access), unioned into the consumer's egress; when that adds egress
-    // to an otherwise ingress-only policy, Egress joins policyTypes so the rules
-    // take effect (a null policyTypes lets Kubernetes infer it from the fields).
+    // The workload's firewall, rendered by the composed kurly.network variant
+    // (Kubernetes/Calico/Cilium) from its neutral allow-list. The variant builder
+    // always unions in the requiredEgress a sidecar declared (e.g. apiserver
+    // access), so a consumer's own allow-list cannot cut off a capability.
     networkPolicy::
-      if this.config.networkPolicy == null then null else
-        local np = this.config.networkPolicy;
-        local egress = np.egress + this.config.requiredEgress;
-        local policyTypes =
-          if np.policyTypes != null && this.config.requiredEgress != [] && !std.member(np.policyTypes, 'Egress')
-          then np.policyTypes + ['Egress'] else np.policyTypes;
-        networkPolicyManifest(this.config.name, np { egress: egress, policyTypes: policyTypes }, this.selectorLabels, this.labels),
+      if this.config.networkPolicy == null then null
+      else networkPolicy.render(this.config.name, this.config.networkPolicy, this.selectorLabels, this.labels, this.config.requiredEgress),
     serviceMonitor::
       if this.config.serviceMonitor == null then null else serviceMonitorManifest(this.config.name, this.config.serviceMonitor, this.selectorLabels, this.labels),
     headlessService::

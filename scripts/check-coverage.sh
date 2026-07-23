@@ -22,7 +22,7 @@ trap 'rm -rf "$workdir"' EXIT
 # The expected composition count derives straight from the catalog (one per
 # feature×kind, plus one per exposure recipe, security profile, and kind), so a
 # generator that silently skips an entry fails here.
-expected="$(jq '([.features[].kinds | length] | add) + (.expose | length) + (.security | length) + (.kinds | length)' catalog/catalog.json)"
+expected="$(jq '([.features[].kinds | length] | add) + (.expose | length) + (.security | length) + (.kinds | length) + ([.network[] | select(.standalone != true)] | length)' catalog/catalog.json)"
 jsonnet -J vendor tests/coverage_gen.jsonnet > "$workdir/gen.json"
 actual="$(jq length "$workdir/gen.json")"
 [ "$actual" = "$expected" ] || { echo "::error::coverage generated $actual compositions, expected $expected"; exit 1; }

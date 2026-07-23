@@ -248,11 +248,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('targetCPU', d.T.int, example=80),
       d.arg('targetMemory', d.T.int),
     ]) + { kinds: deploymentKinds, group: 'reliability' },
-    networkPolicy: d.fn('A NetworkPolicy firewalling the pods (ingress/egress rules and policyTypes passed through verbatim).', [
+    networkPolicy: d.fn('The low-level Kubernetes variant of the kurly.network axis: a networking.k8s.io/v1 NetworkPolicy firewalling the pods, with ingress/egress rules and policyTypes passed through verbatim. For an allow-list in the neutral vocabulary (and the Calico/Cilium variants) reach for kurly.network.*; both feed the same slot and join the networkPolicy exclusion group.', [
       d.arg('ingress', d.T.array, default=[]),
       d.arg('egress', d.T.array, default=[]),
       d.arg('policyTypes', d.T.array),
-    ]) + { kinds: allKinds, group: 'networking' },
+    ]) + { kinds: allKinds, exclusiveGroup: 'networkPolicy', group: 'networking' },
     headlessService: d.fn('A headless Service (clusterIP: None) selecting the pods, for DNS peer discovery — the discovery a replication hand-off needs.', [
       d.arg('port', d.T.int, example=6379),
       d.arg('publishNotReady', d.T.bool, default=false),
@@ -337,6 +337,45 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     restricted: d.fn('The default posture, written out. Compose after another profile to re-tighten.', []),
     baseline: d.fn('Relaxes what only restricted requires (root allowed, default capabilities kept, privilege escalation and unpinned seccomp permitted); keeps the read-only root filesystem and user namespaces.', []),
     privileged: d.fn('Emits no security fields at all — the manifest constrains nothing.', []),
+  },
+
+  // Network policy — a separate axis, one recipe per CNI. All three variants
+  // emit ONE policy named after the workload, selecting its own pods, and join
+  // the `networkPolicy` exclusion group (a workload firewalls one way). Rules are
+  // written once in the neutral vocabulary (allowFrom/allowTo entries of
+  // { pods, namespaces | namespace, cidr, ports }); each variant translates it
+  // into its native kind, and its escape hatch passes CNI-specific bits verbatim.
+  // denyAll holds the standalone default-DENY generators, not composed onto a
+  // workload but placed into a manifest set with kurly.listOf.
+  network: {
+    kubernetes: d.fn('An allow-list networking.k8s.io/v1 NetworkPolicy named after the workload, selecting its own pods — deny-by-default for that pod, opening only the listed peers. allowFrom/allowTo take neutral peers; ingress/egress take verbatim native rules for what the vocabulary does not cover; policyTypes forces the denied directions (null lets Kubernetes infer).', [
+      d.arg('allowFrom', d.T.array, default=[], example=[{ pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress', ports: [8080] }]),
+      d.arg('allowTo', d.T.array, default=[], example=[{ cidr: '10.0.0.0/8' }]),
+      d.arg('ingress', d.T.array, default=[]),
+      d.arg('egress', d.T.array, default=[]),
+      d.arg('policyTypes', d.T.array),
+    ]) + { kinds: allKinds, exclusiveGroup: 'networkPolicy', group: 'networking' },
+    // The example is intentionally port-less: the community CRD-catalog schema
+    // for projectcalico.org/v3 NetworkPolicy models Calico's intOrString protocol
+    // and ports as `type: object`, so kubeconform rejects the correct scalar
+    // forms the coverage battery would render. The ports translation is proven by
+    // the network_calico_v3_shape assertion instead, which schema validation does
+    // not gate.
+    calico: d.fn('An allow-list projectcalico.org/v3 NetworkPolicy named after the workload (the aggregated API, never the v1 storage CRD). allowFrom/allowTo take neutral peers, translated into Calico rules; extraSpec passes Calico-only spec fields (order, serviceAccountSelector, …) through verbatim.', [
+      d.arg('allowFrom', d.T.array, default=[], example=[{ pods: { role: 'web' } }]),
+      d.arg('allowTo', d.T.array, default=[]),
+      d.arg('extraSpec', d.T.object, default={}, example={ order: 100 }),
+    ]) + { kinds: allKinds, exclusiveGroup: 'networkPolicy', group: 'networking' },
+    cilium: d.fn('An allow-list cilium.io/v2 CiliumNetworkPolicy named after the workload. allowFrom/allowTo take neutral peers, translated into Cilium rules; extraSpec passes Cilium-only spec fields (an L7 rules block, toFQDNs, …) through verbatim.', [
+      d.arg('allowFrom', d.T.array, default=[], example=[{ pods: { role: 'web' }, ports: [8080] }]),
+      d.arg('allowTo', d.T.array, default=[]),
+      d.arg('extraSpec', d.T.object, default={}),
+    ]) + { kinds: allKinds, exclusiveGroup: 'networkPolicy', group: 'networking' },
+    denyAll: d.fn('The standalone default-DENY baseline an allow-list assumes — one per CNI (denyAll.kubernetes / denyAll.calico / denyAll.cilium), each selecting every pod and naming no allows. Not composed onto a workload: place it into a manifest set with kurly.listOf. global=true (Calico/Cilium) emits the cluster-wide kind; extraSpec passes exceptions (an allow for kube-dns) verbatim.', [
+      d.arg('name', d.T.string, default='default-deny'),
+      d.arg('global', d.T.bool, default=false),
+      d.arg('extraSpec', d.T.object, default={}),
+    ]) + { group: 'networking', standalone: true },
   },
 
   // Deployable workloads — the starting point the assembler composes onto. Each

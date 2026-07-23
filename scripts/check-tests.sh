@@ -40,6 +40,14 @@ if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 
 fi
 echo "exposure exclusion assert fired as expected"
 
+# The same exclusion assert must fire for two network policy variants on one
+# workload — a workload firewalls one way, not two.
+if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 'img:1') + kurly.network.kubernetes() + kurly.network.calico()" >/dev/null 2>&1; then
+  echo "composing two network policy variants rendered instead of failing" >&2
+  exit 1
+fi
+echo "network policy exclusion assert fired as expected"
+
 # Every glob-driven per-workload invariant, checked over a SINGLE batched render.
 # Each invariant needs the same workload composed a few different ways (default,
 # named, mirrored, and — for a feature-accepting workload — with pod features and

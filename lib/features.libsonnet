@@ -237,8 +237,24 @@ local resourcePresets = {
   hpa(minReplicas, maxReplicas, targetCPU=null, targetMemory=null):: {
     config+:: { hpa: { minReplicas: minReplicas, maxReplicas: maxReplicas, targetCPU: targetCPU, targetMemory: targetMemory } },
   },
+  // networkPolicy is the low-level Kubernetes variant of the kurly.network axis:
+  // it takes verbatim networking.k8s.io/v1 ingress/egress rules. For an
+  // allow-list written in the neutral vocabulary (and the Calico/Cilium
+  // variants), reach for kurly.network.* instead; both feed the same slot and
+  // share the `networkPolicy` exclusion group, so a workload firewalls one way.
   networkPolicy(ingress=[], egress=[], policyTypes=null):: {
-    config+:: { networkPolicy: { ingress: ingress, egress: egress, policyTypes: policyTypes } },
+    config+:: {
+      networkPolicy: {
+        variant: 'kubernetes',
+        allowFrom: [],
+        allowTo: [],
+        ingress: ingress,
+        egress: egress,
+        policyTypes: policyTypes,
+        extraSpec: {},
+      },
+      exclusive+: { networkPolicy+: ['kubernetes'] },
+    },
   },
   serviceMonitor(port='http', path='/metrics', interval=null):: {
     config+:: { serviceMonitor: { port: port, path: path, interval: interval } },

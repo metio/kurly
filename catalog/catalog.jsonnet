@@ -13,6 +13,7 @@
 local expose = import '../lib/expose.libsonnet';
 local features = import '../lib/features.libsonnet';
 local migrations = import '../lib/migrations.libsonnet';
+local network = import '../lib/network.libsonnet';
 local security = import '../lib/security.libsonnet';
 local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
@@ -399,6 +400,7 @@ local workloadEntries =
   // Drift gates — object-level asserts fire when this object is manifested.
   assert reconcile('features', std.objectFields(ann.features), std.objectFieldsAll(features)),
   assert reconcile('expose', std.objectFields(ann.expose), std.objectFieldsAll(expose)),
+  assert reconcile('network', std.objectFields(ann.network), std.objectFieldsAll(network)),
   assert reconcile('security', std.objectFields(ann.security), std.objectFieldsAll(security)),
   assert reconcile('migrations', std.objectFields(ann.migrations), std.objectFieldsAll(migrations)),
   // Kinds live in separate files; assert the annotated set is exactly the four
@@ -421,6 +423,7 @@ local workloadEntries =
   kinds: entries(ann.kinds),
   features: entries(ann.features),
   expose: entries(ann.expose),
+  network: entries(ann.network),
   security: entries(ann.security),
   helpers: entries(ann.helpers),
   migrations: entries(ann.migrations),

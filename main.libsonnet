@@ -38,6 +38,7 @@ local join(parts) =
   // Composable axes.
   expose: import './lib/expose.libsonnet',
   security: import './lib/security.libsonnet',
+  network: import './lib/network.libsonnet',
   migrations: import './lib/migrations.libsonnet',
 
   // list renders every manifest of an app as a single `kind: List`, ready for

@@ -18,7 +18,7 @@ containers(obj) := obj.spec.template.spec.containers if obj.kind in {"Deployment
 containers(obj) := obj.spec.jobTemplate.spec.template.spec.containers if obj.kind == "CronJob"
 
 # The kinds kurly stamps with its managed-by label.
-managed := {"Deployment", "Service", "CronJob", "DaemonSet", "Ingress", "PersistentVolumeClaim", "ConfigMap", "HTTPRoute", "Gateway", "ListenerSet"}
+managed := {"Deployment", "Service", "CronJob", "DaemonSet", "Ingress", "PersistentVolumeClaim", "ConfigMap", "HTTPRoute", "Gateway", "ListenerSet", "NetworkPolicy", "GlobalNetworkPolicy", "CiliumNetworkPolicy", "CiliumClusterwideNetworkPolicy"}
 
 # Every kurly-owned object carries the managed-by label, so an operator can tell
 # what kurly produced from what they hand-wrote.

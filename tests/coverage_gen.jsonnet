@@ -71,5 +71,12 @@ local securityCases = [
   { name: 'security-' + s.id, snippet: snippetFor('http', ' + kurly.security.' + s.id) }
   for s in catalog.security
 ];
+// Each composable network variant on http. denyAll is a standalone generator
+// (not a mixin), so it is skipped here and documented rather than composed.
+local networkCases = [
+  { name: 'network-' + n.id, snippet: snippetFor('http', ' + ' + call('kurly.network.' + n.id, n)) }
+  for n in catalog.network
+  if !(std.objectHas(n, 'standalone') && n.standalone)
+];
 
-kindCases + featureCases + exposeCases + securityCases
+kindCases + featureCases + exposeCases + securityCases + networkCases

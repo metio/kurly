@@ -955,8 +955,9 @@
                "type": "array"
             }
          ],
+         "exclusiveGroup": "networkPolicy",
          "group": "networking",
-         "help": "A NetworkPolicy firewalling the pods (ingress/egress rules and policyTypes passed through verbatim).",
+         "help": "The low-level Kubernetes variant of the kurly.network axis: a networking.k8s.io/v1 NetworkPolicy firewalling the pods, with ingress/egress rules and policyTypes passed through verbatim. For an allow-list in the neutral vocabulary (and the Calico/Cilium variants) reach for kurly.network.*; both feed the same slot and join the networkPolicy exclusion group.",
          "id": "networkPolicy",
          "kinds": [
             "http",
@@ -2066,6 +2067,172 @@
          ],
          "help": "Builds one entry of a stageset-controller migration ladder (a plain array of these). Actions are passed through verbatim.",
          "id": "migration"
+      }
+   ],
+   "network": [
+      {
+         "args": [
+            {
+               "example": [
+                  {
+                     "pods": {
+                        "role": "web"
+                     }
+                  }
+               ],
+               "name": "allowFrom",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "allowTo",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "example": {
+                  "order": 100
+               },
+               "name": "extraSpec",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "exclusiveGroup": "networkPolicy",
+         "group": "networking",
+         "help": "An allow-list projectcalico.org/v3 NetworkPolicy named after the workload (the aggregated API, never the v1 storage CRD). allowFrom/allowTo take neutral peers, translated into Calico rules; extraSpec passes Calico-only spec fields (order, serviceAccountSelector, …) through verbatim.",
+         "id": "calico",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  {
+                     "pods": {
+                        "role": "web"
+                     },
+                     "ports": [
+                        8080
+                     ]
+                  }
+               ],
+               "name": "allowFrom",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "allowTo",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "extraSpec",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "exclusiveGroup": "networkPolicy",
+         "group": "networking",
+         "help": "An allow-list cilium.io/v2 CiliumNetworkPolicy named after the workload. allowFrom/allowTo take neutral peers, translated into Cilium rules; extraSpec passes Cilium-only spec fields (an L7 rules block, toFQDNs, …) through verbatim.",
+         "id": "cilium",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "default": "default-deny",
+               "name": "name",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": false,
+               "name": "global",
+               "required": false,
+               "type": "bool"
+            },
+            {
+               "name": "extraSpec",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "group": "networking",
+         "help": "The standalone default-DENY baseline an allow-list assumes — one per CNI (denyAll.kubernetes / denyAll.calico / denyAll.cilium), each selecting every pod and naming no allows. Not composed onto a workload: place it into a manifest set with kurly.listOf. global=true (Calico/Cilium) emits the cluster-wide kind; extraSpec passes exceptions (an allow for kube-dns) verbatim.",
+         "id": "denyAll",
+         "standalone": true
+      },
+      {
+         "args": [
+            {
+               "example": [
+                  {
+                     "namespace": "ingress",
+                     "pods": {
+                        "app.kubernetes.io/name": "gateway"
+                     },
+                     "ports": [
+                        8080
+                     ]
+                  }
+               ],
+               "name": "allowFrom",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "example": [
+                  {
+                     "cidr": "10.0.0.0/8"
+                  }
+               ],
+               "name": "allowTo",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "ingress",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "egress",
+               "required": false,
+               "type": "array"
+            },
+            {
+               "name": "policyTypes",
+               "required": false,
+               "type": "array"
+            }
+         ],
+         "exclusiveGroup": "networkPolicy",
+         "group": "networking",
+         "help": "An allow-list networking.k8s.io/v1 NetworkPolicy named after the workload, selecting its own pods — deny-by-default for that pod, opening only the listed peers. allowFrom/allowTo take neutral peers; ingress/egress take verbatim native rules for what the vocabulary does not cover; policyTypes forces the denied directions (null lets Kubernetes infer).",
+         "id": "kubernetes",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
       }
    ],
    "schemaVersion": 1,

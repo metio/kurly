@@ -402,6 +402,99 @@ local podOf(app) = app.deployment.spec.template.spec;
     0
   ),
 
+  // --- kurly.network allow-list axis ------------------------------------------
+  // The Kubernetes variant translates the neutral vocabulary into a
+  // networking.k8s.io/v1 NetworkPolicy named after the workload, selecting its
+  // own pods. A peer's pods+ports become one from-rule; a peer's cidr its own
+  // ipBlock rule.
+  network_kubernetes_translates_vocab: std.assertEqual(
+    local a = shop + kurly.network.kubernetes(
+      allowFrom=[{ pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress', ports: [8080] }],
+      allowTo=[{ cidr: '10.0.0.0/8' }],
+    );
+    local np = [m for m in kurly.list(a).items if m.kind == 'NetworkPolicy'][0];
+    [np.apiVersion, np.metadata.name, np.spec.podSelector, np.spec.ingress, np.spec.egress],
+    [
+      'networking.k8s.io/v1',
+      'shop',
+      { matchLabels: { 'app.kubernetes.io/name': 'shop' } },
+      [{
+        from: [{
+          podSelector: { matchLabels: { 'app.kubernetes.io/name': 'gateway' } },
+          namespaceSelector: { matchLabels: { 'kubernetes.io/metadata.name': 'ingress' } },
+        }],
+        ports: [{ protocol: 'TCP', port: 8080 }],
+      }],
+      [{ to: [{ ipBlock: { cidr: '10.0.0.0/8' } }] }],
+    ]
+  ),
+
+  // The Calico variant emits a projectcalico.org/v3 NetworkPolicy (never the v1
+  // storage CRD), selecting with a label expression, ports on the destination,
+  // and passing extraSpec (order) through verbatim.
+  network_calico_v3_shape: std.assertEqual(
+    local a = shop + kurly.network.calico(
+      allowFrom=[{ pods: { role: 'web' }, ports: [{ port: 443, protocol: 'TCP' }] }],
+      extraSpec={ order: 100 },
+    );
+    local np = [m for m in kurly.list(a).items if m.kind == 'NetworkPolicy'][0];
+    [np.apiVersion, np.spec.selector, np.spec.types, np.spec.ingress, np.spec.order],
+    [
+      'projectcalico.org/v3',
+      "app.kubernetes.io/name == 'shop'",
+      ['Ingress'],
+      [{ action: 'Allow', protocol: 'TCP', source: { selector: "role == 'web'" }, destination: { ports: [443] } }],
+      100,
+    ]
+  ),
+
+  // The Cilium variant emits a cilium.io/v2 CiliumNetworkPolicy with matchLabels
+  // selectors and string ports on toPorts.
+  network_cilium_v2_shape: std.assertEqual(
+    local a = shop + kurly.network.cilium(
+      allowFrom=[{ pods: { role: 'web' }, ports: [8080] }],
+    );
+    local np = [m for m in kurly.list(a).items if m.kind == 'CiliumNetworkPolicy'][0];
+    [np.apiVersion, np.spec.endpointSelector, np.spec.ingress],
+    [
+      'cilium.io/v2',
+      { matchLabels: { 'app.kubernetes.io/name': 'shop' } },
+      [{
+        fromEndpoints: [{ matchLabels: { role: 'web' } }],
+        toPorts: [{ ports: [{ port: '8080', protocol: 'TCP' }] }],
+      }],
+    ]
+  ),
+
+  // A sidecar's requiredEgress is unioned into whichever variant the workload
+  // composes — here translated into a Calico Allow to any destination.
+  network_calico_unions_required_egress: std.assertEqual(
+    local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.apiServerClient([{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }])
+              + kurly.network.calico(allowFrom=[{ pods: { role: 'peer' } }]);
+    local np = [m for m in kurly.list(a).items if m.kind == 'NetworkPolicy'][0].spec;
+    [np.types, np.egress],
+    [
+      ['Ingress', 'Egress'],
+      [{ action: 'Allow', protocol: 'TCP', destination: { ports: [443, 6443] } }],
+    ]
+  ),
+
+  // denyAll generators are standalone manifests (not composed onto a workload),
+  // each selecting everything and naming no allows. global=true is cluster-wide.
+  network_deny_all_baselines: std.assertEqual(
+    [
+      kurly.network.denyAll.kubernetes().spec,
+      kurly.network.denyAll.calico(global=true).kind,
+      kurly.network.denyAll.cilium().spec.enableDefaultDeny,
+    ],
+    [
+      { podSelector: {}, policyTypes: ['Ingress', 'Egress'] },
+      'GlobalNetworkPolicy',
+      { ingress: true, egress: true },
+    ]
+  ),
+
   // --- stateful & job kinds ---------------------------------------------------
   // stateful emits a StatefulSet + a headless Service naming it; the store
   // becomes a per-pod volumeClaimTemplate, not a shared owned PVC.
