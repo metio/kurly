@@ -161,7 +161,7 @@ spec:
         // cluster does not install.
         enablePodMonitor=false,
       );
-      local rendered = kurly.listOf([
+      local rendered = kurly.list([
         one('${CLUSTERS[0]}').cluster,
         one('${CLUSTERS[1]}').cluster,
       ]);

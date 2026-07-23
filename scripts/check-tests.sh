@@ -24,6 +24,29 @@ for suite in tests/*_test.jsonnet; do
   echo "assertions passed: $suite"
 done
 
+# Every `kurly.<name>` referenced ANYWHERE in the repo must be a real top-level
+# export of main.libsonnet. The Jsonnet embedded in hack/smoke/*.sh (and in
+# prose that no renderer reaches) is not evaluated by any other gate, so a helper
+# that is renamed or removed would otherwise surface only in an e2e run against a
+# live cluster — long after the change looked green.
+#
+# The ignored tokens are not API references: a docs URL
+# (kurly.projects.metio.wtf), the policy file (policy/kurly.rego), and the
+# kurly.test/* and kurly.dev/* label keys the gates and workloads use.
+# Only TRACKED files are scanned, so the vendored library and generated build
+# output (docs/public, both gitignored) cannot fabricate a reference.
+exports="$(jsonnet -J vendor -e "std.objectFieldsAll(import 'main.libsonnet')" | jq -r '.[]' | sort -u)"
+# -d skip steps over the theme submodule, which git ls-files reports as a path.
+referenced="$(git ls-files -z | xargs -0 grep -IhoE -d skip 'kurly\.[a-zA-Z_][a-zA-Z0-9_]*' \
+  | sed 's/^kurly\.//' | sort -u | grep -vxE 'projects|rego|test|dev' || true)"
+unknown="$(comm -23 <(printf '%s\n' "$referenced") <(printf '%s\n' "$exports"))"
+if [ -n "$unknown" ]; then
+  echo "::error::these kurly.<name> references are not exported by main.libsonnet:" >&2
+  echo "$unknown" >&2
+  exit 1
+fi
+echo "every kurly.<name> reference resolves to a main.libsonnet export"
+
 # The requiresService assert must fire when an exposure is composed onto a
 # workload with no Service.
 if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.worker('w', 'img:1') + kurly.expose.ingress('h.example.com')" >/dev/null 2>&1; then

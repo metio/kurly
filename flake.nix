@@ -98,6 +98,10 @@
               go-jsonnet
               jsonnet-bundler
               jq
+              gnugrep
+              git
+              gnused
+              coreutils
             ];
             text = builtins.readFile ./scripts/check-tests.sh;
           };
@@ -109,6 +113,7 @@
             runtimeInputs = with pkgs; [
               findutils
               gnugrep
+              git
               gnused
               coreutils
             ];
