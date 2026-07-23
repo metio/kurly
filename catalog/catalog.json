@@ -22471,7 +22471,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/chrislusf/seaweedfs:4.39",
+                     "default": "docker.io/chrislusf/seaweedfs:4.40",
                      "name": "image",
                      "required": false,
                      "type": "string"
@@ -22514,7 +22514,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/chrislusf/seaweedfs:4.39",
+                     "default": "docker.io/chrislusf/seaweedfs:4.40",
                      "name": "image",
                      "required": false,
                      "type": "string"
@@ -22551,7 +22551,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/chrislusf/seaweedfs:4.39",
+                     "default": "docker.io/chrislusf/seaweedfs:4.40",
                      "name": "image",
                      "required": false,
                      "type": "string"
@@ -22582,7 +22582,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/chrislusf/seaweedfs:4.39",
+                     "default": "docker.io/chrislusf/seaweedfs:4.40",
                      "name": "image",
                      "required": false,
                      "type": "string"

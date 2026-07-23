@@ -28,7 +28,7 @@ local advertisePodIP = {
 
 function(
   name='seaweedfs-filer',
-  image='docker.io/chrislusf/seaweedfs:4.39',
+  image='docker.io/chrislusf/seaweedfs:4.40',
   storageSize='1Gi',
   storageClass=null,
   masterEndpoint='seaweedfs-master-0.seaweedfs-master-headless:9333',

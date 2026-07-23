@@ -24,7 +24,7 @@ kurly.list(seaweedfs(storageSize='50Gi', storageClass='fast'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `seaweedfs` | also names the headless Service |
-| `image` | `docker.io/chrislusf/seaweedfs:4.39` | |
+| `image` | `docker.io/chrislusf/seaweedfs:4.40` | |
 | `storageSize` | `10Gi` | the data volume, mounted at `/data` |
 | `storageClass` | cluster default | |
 
