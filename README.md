@@ -185,6 +185,45 @@ Together with [Secrets](#secrets), [TLS certificates](#tls-certificates), and
 workload composes alongside its exposure — the Secret it reads, the certificate
 that fills it, the DNS record that points at it, and the probe that watches it.
 
+## Network policies
+
+`kurly.network` firewalls a workload with an allow-list, on its own axis and with
+one recipe per CNI. The rules are written once in a small neutral vocabulary —
+`allowFrom`/`allowTo` entries of `{ pods, namespaces | namespace, cidr, ports }` —
+and the variant you pick renders them as the matching kind:
+
+```jsonnet
+kurly.http('users', image)
++ kurly.network.calico(               // or .kubernetes / .cilium
+  allowFrom=[{ pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress', ports: [3000] }],
+  allowTo=[{ pods: { 'app.kubernetes.io/name': 'postgres' }, namespace: 'databases', ports: [5432] }],
+)
+```
+
+- `kubernetes` → a `networking.k8s.io/v1` NetworkPolicy
+- `calico` → a `projectcalico.org/v3` NetworkPolicy (the aggregated API)
+- `cilium` → a `cilium.io/v2` CiliumNetworkPolicy
+
+Each emits one policy named after the workload and selecting its own pods, so the
+allow-list is deny-by-default for that pod without a separate rule. All three
+share the `networkPolicy` exclusion group — a workload firewalls one way, and
+composing two variants fails the render. Anything the neutral vocabulary does not
+cover (a Calico `order` or `serviceAccountSelector`, a Cilium L7 block or
+`toFQDNs`) passes through verbatim via each variant's `ingress`/`egress`/`extraSpec`
+escape hatch, so kurly stays out of modelling the full CNI schemas.
+
+The cluster-wide or per-namespace **default-deny** baseline is a separate choice,
+so it is a standalone generator rather than something baked into every workload —
+apply it once for the whole cluster, or once per namespace:
+
+```jsonnet
+kurly.listOf([ kurly.network.denyAll.calico(global=true) ])   // cluster-wide
+kurly.listOf([ kurly.network.denyAll.kubernetes() ])          // this namespace
+```
+
+`global=true` (Calico/Cilium) emits the cluster-wide kind; `extraSpec` passes
+through the exceptions a real baseline keeps, such as an allow for kube-dns.
+
 ## Documentation
 
 The full documentation lives at **<https://kurly.projects.metio.wtf/>**:
@@ -192,7 +231,8 @@ The full documentation lives at **<https://kurly.projects.metio.wtf/>**:
 - **[Assembler](https://kurly.projects.metio.wtf/assembler/)** — build a workload
   visually and copy out the Jsonnet snippet and JaaS manifests.
 - **[Reference](https://kurly.projects.metio.wtf/reference/)** — every kind,
-  feature, exposure recipe, and security profile with its parameters.
+  feature, exposure recipe, network policy variant, and security profile with its
+  parameters.
 - Workload kinds, features, exposure, security profiles, and how to consume the
   library locally or on Kubernetes with [jaas](https://github.com/metio/jaas).
 
