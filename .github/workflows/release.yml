@@ -129,7 +129,7 @@ jobs:
       - id: version
         name: Compute the shared version for this run
         if: steps.changed.outputs.any == 'true'
-        uses: metio/ci/calver@90f338e9eaaaaf67a8964a596260eaf27ea53812 # 2026.7.20205609
+        uses: metio/ci/calver@af736d94d3689a0b49c521fb9d096445cb9f1b84 # 2026.7.23184830
   validate:
     name: Test the library and workloads
     needs: discover
@@ -189,7 +189,7 @@ jobs:
           [ "$kind" = '"Deployment"' ] || { echo "::error::library image did not render kurly.http (got: $kind) — the layer is missing lib/"; exit 1; }
           echo "library image renders kurly.http from its own tree"
       - name: Build, push and sign the image
-        uses: metio/ci/container-release@90f338e9eaaaaf67a8964a596260eaf27ea53812 # 2026.7.20205609
+        uses: metio/ci/container-release@af736d94d3689a0b49c521fb9d096445cb9f1b84 # 2026.7.23184830
         with:
           image: ghcr.io/metio/kurly
           version: ${{ needs.discover.outputs.version }}
@@ -199,7 +199,7 @@ jobs:
         run: echo "prev=$(git tag --list 'library-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@90f338e9eaaaaf67a8964a596260eaf27ea53812 # 2026.7.20205609
+        uses: metio/ci/release-notes@af736d94d3689a0b49c521fb9d096445cb9f1b84 # 2026.7.23184830
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: library
@@ -284,7 +284,7 @@ jobs:
           [ "$stamped" = "$VERSION" ] || { echo "::error::workload image version.txt is '$stamped', expected '$VERSION'"; exit 1; }
       - id: build
         name: Build, push and sign the image
-        uses: metio/ci/container-release@90f338e9eaaaaf67a8964a596260eaf27ea53812 # 2026.7.20205609
+        uses: metio/ci/container-release@af736d94d3689a0b49c521fb9d096445cb9f1b84 # 2026.7.23184830
         with:
           image: ghcr.io/metio/kurly/workloads/${{ matrix.workload }}
           version: ${{ needs.discover.outputs.version }}
@@ -295,7 +295,7 @@ jobs:
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@90f338e9eaaaaf67a8964a596260eaf27ea53812 # 2026.7.20205609
+        uses: metio/ci/release-notes@af736d94d3689a0b49c521fb9d096445cb9f1b84 # 2026.7.23184830
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: ${{ matrix.workload }}
