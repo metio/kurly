@@ -410,7 +410,7 @@ local workloadEntries =
          'kinds: main.libsonnet must expose every annotated kind',
   // Helpers are top-level fields of main alongside the kinds; assert the
   // annotated set is exactly the rendering terminals main exposes.
-  assert reconcile('helpers', std.objectFields(ann.helpers), ['certificate', 'externalSecret', 'join', 'list', 'listOf', 'mirror']),
+  assert reconcile('helpers', std.objectFields(ann.helpers), ['certificate', 'externalSecret', 'join', 'list', 'mirror']),
   // Every operator-attested production workload must be a real, annotated one —
   // a dangling claim (a typo or a renamed workload) fails here.
   assert std.all([std.objectHas(ann.workloads, name) for name in maturity.productionNames]) :

@@ -26,6 +26,23 @@ local join(parts) =
     if std.isArray(part) then acc + part else acc + [part];
   std.foldl(flatten, std.filter(function(part) part != null, parts), []);
 
+// The manifests a value contributes to a `kind: List`, resolved by what the
+// value IS: an array is flattened element-by-element; a null drops out; a bare
+// manifest (a top-level `kind`) is taken as-is, and a nested `kind: List` is
+// unwrapped to its items; any other object is a manifest BAG — a composed app,
+// or a hand-authored workload's set — whose visible fields are its manifests
+// (plus, for a composed app, its hidden owned ones). This is what lets `list`
+// take a single app or a mixed set of apps, manifests, and sublists uniformly:
+// a manifest carries a `kind`, a bag does not, so the two are told apart without
+// a wrapper.
+local itemsOf(value) =
+  if value == null then []
+  else if std.isArray(value) then std.flattenArrays([itemsOf(e) for e in value])
+  else if std.objectHas(value, 'kind') then
+    (if value.kind == 'List' then value.items else [value])
+  else std.objectValues(value)
+       + (if std.objectHasAll(value, 'ownedManifests') then value.ownedManifests else []);
+
 {
   // Base kinds — each a `function(name, image)` (cron also takes a schedule).
   http: import './lib/http.libsonnet',
@@ -41,19 +58,31 @@ local join(parts) =
   network: import './lib/network.libsonnet',
   migrations: import './lib/migrations.libsonnet',
 
-  // list renders every manifest of an app as a single `kind: List`, ready for
-  // `kubectl apply --filename -` or as a JsonnetSnippet's published output.
-  // The app's owned manifests (its store PVC, its config ConfigMap) ride along
-  // — they are hidden fields, so std.objectValues skips them.
-  list(app):: {
+  // list renders manifests as a single `kind: List`, ready for
+  // `kubectl apply --filename -` or as a JsonnetSnippet's published output. It
+  // takes either ONE composed app, or an array assembling several — apps,
+  // standalone manifests (a Certificate, an ExternalSecret, a denyAll policy),
+  // sublists, and `if cond then …` entries that drop out when false:
+  //
+  //   kurly.list(server())                          // one app
+  //   kurly.list([                                  // several, one List
+  //     cnpg(name='app-db', database='app'),        // apps expand to their manifests
+  //     server() + kurly.expose.gateway(host, 'shared'),
+  //     kurly.certificate('app-tls', [host], 'letsencrypt-prod'),  // a bare manifest
+  //     if withCache then valkey(name='app-cache'), // dropped when false
+  //   ])
+  //
+  // An app's owned manifests (its store PVC, its config ConfigMap) ride along —
+  // they are hidden fields, so std.objectValues skips them, and itemsOf appends
+  // them.
+  list(parts):: {
     apiVersion: 'v1',
     kind: 'List',
-    items: std.objectValues(app)
-           + (if std.objectHasAll(app, 'ownedManifests') then app.ownedManifests else []),
+    items: itemsOf(parts),
   },
 
   // join builds one flat array from parts that may be null or nested arrays —
-  // assemble the parts of a value (a list of manifests, a set of args) with
+  // assemble the parts of a value (a set of args, a list of manifests) with
   // conditionals and optional groups:
   //
   //   kurly.join([
@@ -62,16 +91,6 @@ local join(parts) =
   //     [aGroupOfThings],               // flattened in
   //   ])
   join(parts):: join(parts),
-
-  // listOf renders an explicit set of manifests as a `kind: List`. It joins the
-  // parts first, so entries can be null (dropped — e.g. an absent owned
-  // manifest) or nested arrays (flattened), letting a consumer build the set
-  // with the same conditionals and optional groups as join.
-  listOf(parts):: {
-    apiVersion: 'v1',
-    kind: 'List',
-    items: std.filter(function(manifest) manifest != null, join(parts)),
-  },
 
   // mirror points every image in already-rendered manifests at another
   // registry, for a cluster that pulls from a private one:

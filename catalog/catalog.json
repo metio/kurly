@@ -1875,24 +1875,13 @@
       {
          "args": [
             {
-               "name": "app",
-               "required": true,
-               "type": "object"
-            }
-         ],
-         "help": "Renders one composed app as a kind: List, including its hidden owned manifests (the store PVC, the config ConfigMap).",
-         "id": "list"
-      },
-      {
-         "args": [
-            {
                "name": "parts",
                "required": true,
-               "type": "array"
+               "type": "any"
             }
          ],
-         "help": "Renders an explicit set of parts as a kind: List. Joins the parts first, so entries can be null (dropped) or nested arrays (flattened) — build the set with conditionals and optional groups.",
-         "id": "listOf"
+         "help": "Renders manifests as a kind: List. Takes one composed app (its hidden owned manifests — the store PVC, the config ConfigMap — ride along), or an array assembling several: apps expand to their manifests, bare manifests (a Certificate, an ExternalSecret) pass through, sublists flatten, and null entries (an if with no else) drop out.",
+         "id": "list"
       },
       {
          "args": [
@@ -2173,7 +2162,7 @@
             }
          ],
          "group": "networking",
-         "help": "The standalone default-DENY baseline an allow-list assumes — one per CNI (denyAll.kubernetes / denyAll.calico / denyAll.cilium), each selecting every pod and naming no allows. Not composed onto a workload: place it into a manifest set with kurly.listOf. global=true (Calico/Cilium) emits the cluster-wide kind; extraSpec passes exceptions (an allow for kube-dns) verbatim.",
+         "help": "The standalone default-DENY baseline an allow-list assumes — one per CNI (denyAll.kubernetes / denyAll.calico / denyAll.cilium), each selecting every pod and naming no allows. Not composed onto a workload: place it into a manifest set with kurly.list. global=true (Calico/Cilium) emits the cluster-wide kind; extraSpec passes exceptions (an allow for kube-dns) verbatim.",
          "id": "denyAll",
          "standalone": true
       },

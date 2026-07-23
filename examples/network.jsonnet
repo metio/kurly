@@ -10,20 +10,18 @@
 // API without any extra rule.
 local kurly = import '../main.libsonnet';
 
-kurly.listOf([
-  kurly.list(
-    kurly.http('users', 'ghcr.io/example/users-api:2.4.1')
-    + kurly.port(3000)
-    + kurly.network.kubernetes(
-      allowFrom=[
-        { pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress', ports: [3000] },
-      ],
-      allowTo=[
-        { pods: { 'app.kubernetes.io/name': 'postgres' }, namespace: 'databases', ports: [5432] },
-        // DNS to the cluster resolver, so name resolution survives the deny-all.
-        { namespace: 'kube-system', ports: [{ port: 53, protocol: 'UDP' }] },
-      ],
-    )
+kurly.list([
+  kurly.http('users', 'ghcr.io/example/users-api:2.4.1')
+  + kurly.port(3000)
+  + kurly.network.kubernetes(
+    allowFrom=[
+      { pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress', ports: [3000] },
+    ],
+    allowTo=[
+      { pods: { 'app.kubernetes.io/name': 'postgres' }, namespace: 'databases', ports: [5432] },
+      // DNS to the cluster resolver, so name resolution survives the deny-all.
+      { namespace: 'kube-system', ports: [{ port: 53, protocol: 'UDP' }] },
+    ],
   ),
   // The namespace-wide baseline the allow-list assumes: everything not opened by
   // a workload's own policy is denied. An operator relying on a cluster-wide

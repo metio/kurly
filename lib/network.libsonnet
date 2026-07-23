@@ -75,10 +75,10 @@ local policy(name) = {
 
   // Standalone default-DENY policies — the baseline an allow-list workload
   // policy assumes but does not carry. Not composed onto a workload; place one
-  // into a stage's manifest set with kurly.listOf so the cluster (or a
+  // into a stage's manifest set with kurly.list so the cluster (or a
   // namespace) denies every peer no allow-list opens:
   //
-  //   kurly.listOf([ kurly.network.denyAll.calico(global=true) ])
+  //   kurly.list([ kurly.network.denyAll.calico(global=true) ])
   //
   // Each selects EVERY pod (or every pod cluster-wide with global=true) and
   // names no allows. `extraSpec` passes through the exceptions a real baseline

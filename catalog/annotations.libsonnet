@@ -346,7 +346,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   // { pods, namespaces | namespace, cidr, ports }); each variant translates it
   // into its native kind, and its escape hatch passes CNI-specific bits verbatim.
   // denyAll holds the standalone default-DENY generators, not composed onto a
-  // workload but placed into a manifest set with kurly.listOf.
+  // workload but placed into a manifest set with kurly.list.
   network: {
     kubernetes: d.fn('An allow-list networking.k8s.io/v1 NetworkPolicy named after the workload, selecting its own pods — deny-by-default for that pod, opening only the listed peers. allowFrom/allowTo take neutral peers; ingress/egress take verbatim native rules for what the vocabulary does not cover; policyTypes forces the denied directions (null lets Kubernetes infer).', [
       d.arg('allowFrom', d.T.array, default=[], example=[{ pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress', ports: [8080] }]),
@@ -371,7 +371,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('allowTo', d.T.array, default=[]),
       d.arg('extraSpec', d.T.object, default={}),
     ]) + { kinds: allKinds, exclusiveGroup: 'networkPolicy', group: 'networking' },
-    denyAll: d.fn('The standalone default-DENY baseline an allow-list assumes — one per CNI (denyAll.kubernetes / denyAll.calico / denyAll.cilium), each selecting every pod and naming no allows. Not composed onto a workload: place it into a manifest set with kurly.listOf. global=true (Calico/Cilium) emits the cluster-wide kind; extraSpec passes exceptions (an allow for kube-dns) verbatim.', [
+    denyAll: d.fn('The standalone default-DENY baseline an allow-list assumes — one per CNI (denyAll.kubernetes / denyAll.calico / denyAll.cilium), each selecting every pod and naming no allows. Not composed onto a workload: place it into a manifest set with kurly.list. global=true (Calico/Cilium) emits the cluster-wide kind; extraSpec passes exceptions (an allow for kube-dns) verbatim.', [
       d.arg('name', d.T.string, default='default-deny'),
       d.arg('global', d.T.bool, default=false),
       d.arg('extraSpec', d.T.object, default={}),
@@ -5677,11 +5677,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('registry', d.T.string, required=true, example='harbor.internal/dockerhub'),
       d.arg('manifests', d.T.object, required=true),
     ]),
-    list: d.fn('Renders one composed app as a kind: List, including its hidden owned manifests (the store PVC, the config ConfigMap).', [
-      d.arg('app', d.T.object, required=true),
-    ]),
-    listOf: d.fn('Renders an explicit set of parts as a kind: List. Joins the parts first, so entries can be null (dropped) or nested arrays (flattened) — build the set with conditionals and optional groups.', [
-      d.arg('parts', d.T.array, required=true),
+    list: d.fn('Renders manifests as a kind: List. Takes one composed app (its hidden owned manifests — the store PVC, the config ConfigMap — ride along), or an array assembling several: apps expand to their manifests, bare manifests (a Certificate, an ExternalSecret) pass through, sublists flatten, and null entries (an if with no else) drop out.', [
+      d.arg('parts', d.T.any, required=true),
     ]),
     join: d.fn('Builds one flat array from parts that may be null (dropped) or nested arrays (flattened one level), for assembling any value with conditionals and optional groups. A Jsonnet `if` with no else is null when false, so an unmet condition drops out.', [
       d.arg('parts', d.T.array, required=true),

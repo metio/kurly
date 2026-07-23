@@ -550,16 +550,35 @@ local podOf(app) = app.deployment.spec.template.spec;
   list_kind: std.assertEqual(kurly.list(ingressed).kind, 'List'),
   list_renders_all_manifests: std.assertEqual(std.length(kurly.list(ingressed).items), 4),
   list_worker_has_only_deployment: std.assertEqual(std.length(kurly.list(worker).items), 1),
-  // listOf renders explicit items and drops nulls (an absent owned manifest).
-  list_of_drops_nulls: std.assertEqual(std.length(kurly.listOf([shop.deployment, shop.storeClaim, shop.service]).items), 2),
+  // list also takes an explicit array of manifests, dropping nulls (an absent
+  // owned manifest) — the same rendering terminal as a single app.
+  list_of_drops_nulls: std.assertEqual(std.length(kurly.list([shop.deployment, shop.storeClaim, shop.service]).items), 2),
   // join drops nulls and flattens nested arrays one level.
   join_flattens_and_drops: std.assertEqual(kurly.join([1, null, [2, 3], 4]), [1, 2, 3, 4]),
   // An `if` with no else is null when false, so an unmet condition drops out.
   join_conditionals: std.assertEqual(kurly.join([1, if false then 2, if true then 3]), [1, 3]),
-  // listOf accepts the same shape: conditionals and nested arrays of manifests.
+  // An array of manifests: conditionals drop and nested arrays flatten.
   list_of_flattens_conditionals: std.assertEqual(
-    std.length(kurly.listOf([shop.deployment, if false then shop.service, [shop.service, shop.storeClaim]]).items),
+    std.length(kurly.list([shop.deployment, if false then shop.service, [shop.service, shop.storeClaim]]).items),
     2
+  ),
+  // An array of APPS expands each to its manifests (including hidden owned ones),
+  // so several workloads render into one List with no per-app .items plumbing.
+  list_expands_multiple_apps: std.assertEqual(
+    local sidecarDb = kurly.worker('db', 'ghcr.io/example/db:16') + kurly.store('/var/lib/db', '5Gi');
+    std.set([m.kind for m in kurly.list([shop, sidecarDb]).items]),
+    ['Deployment', 'PersistentVolumeClaim', 'Service', 'ServiceAccount']
+  ),
+  // A bare manifest and a nested List sit alongside apps; the List unwraps to its
+  // items rather than nesting, and a null entry drops.
+  list_mixes_apps_manifests_and_lists: std.assertEqual(
+    std.set([m.kind for m in kurly.list([
+      shop,
+      kurly.certificate('shop-tls', ['shop.example.com'], 'letsencrypt-prod'),
+      kurly.list(worker),
+      if false then shop.service,
+    ]).items]),
+    ['Certificate', 'Deployment', 'Service', 'ServiceAccount']
   ),
 
   // --- Pod Security Standards (restricted) ------------------------------------
