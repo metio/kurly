@@ -51,10 +51,11 @@ machine-readable index at `/llms.txt` and the whole site at `/llms-full.txt`.
 For an exact feature, parameter, type, or default, prefer these over memory:
 
 - **[Reference](https://kurly.projects.metio.wtf/reference/)** — every kind,
-  feature, exposure recipe, and security profile with its parameters.
+  feature, exposure recipe, network policy variant, and security profile with its
+  parameters.
 - **[`/catalog.json`](https://kurly.projects.metio.wtf/catalog.json)** — the same
-  data, machine-readable (schemaVersion, kinds, features, expose, security,
-  workloads). Fetch and parse this when you need the precise API.
+  data, machine-readable (schemaVersion, kinds, features, expose, network,
+  security, workloads). Fetch and parse this when you need the precise API.
 - **[Assembler](https://kurly.projects.metio.wtf/assembler/)** — compose a
   workload in the browser and copy out the snippet + JaaS manifests.
 
@@ -76,6 +77,14 @@ For an exact feature, parameter, type, or default, prefer these over memory:
   `exposure` exclusion group; composing two fails the render. Exposure also
   requires a Service, so it only composes onto `kurly.http` — composing onto a
   worker/cron/daemon fails with a `requiresService` assert.
+- **One network policy variant per workload.** `kurly.network.kubernetes` /
+  `.calico` / `.cilium` firewall a workload with an allow-list written in the
+  neutral `allowFrom`/`allowTo` vocabulary (`{ pods, namespaces | namespace, cidr,
+  ports }`), each rendering its CNI's kind and named after the workload. All join
+  the `networkPolicy` exclusion group, so composing two fails the render. The
+  cluster/namespace default-deny baseline is separate — the standalone
+  `kurly.network.denyAll.{kubernetes,calico,cilium}(global=…)` generators, placed
+  into a list with `kurly.listOf`, not composed onto a workload.
 - **Security profiles set every knob, last one wins.** `kurly.security.restricted`
   (the default, written out), `.baseline`, and `.privileged` each set all
   security knobs, so compose a profile *before* the single-knob hatches
