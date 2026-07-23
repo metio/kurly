@@ -28,6 +28,7 @@ gates=(
   "check-readme"
   "check-tests"
   "check-examples"
+  "check-readme-examples"
   "check-coverage"
   "check-security"
   "reuse lint"

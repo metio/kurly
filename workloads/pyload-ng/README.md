@@ -10,8 +10,8 @@ config (SQLite) lives on a PersistentVolume.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local pyload-ng = import 'github.com/metio/kurly/workloads/pyload-ng/server.libsonnet';
-kurly.list(pyload-ng())
+local pyloadNg = import 'github.com/metio/kurly/workloads/pyload-ng/server.libsonnet';
+kurly.list(pyloadNg())
 ```
 
 The LinuxServer.io s6-overlay init runs as root and drops to `puid`/`pgid`, so this runs

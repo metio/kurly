@@ -10,8 +10,8 @@ config lives on a PersistentVolume.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local airsonic-advanced = import 'github.com/metio/kurly/workloads/airsonic-advanced/server.libsonnet';
-kurly.list(airsonic-advanced())
+local airsonicAdvanced = import 'github.com/metio/kurly/workloads/airsonic-advanced/server.libsonnet';
+kurly.list(airsonicAdvanced())
 ```
 
 The LinuxServer.io s6-overlay init runs as root and drops to `puid`/`pgid`, so this runs

@@ -9,8 +9,8 @@ a Resilio Sync server — a fast, peer-to-peer file-synchronization tool (BitTor
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local resilio-sync = import 'github.com/metio/kurly/workloads/resilio-sync/server.libsonnet';
-kurly.list(resilio-sync())
+local resilioSync = import 'github.com/metio/kurly/workloads/resilio-sync/server.libsonnet';
+kurly.list(resilioSync())
 ```
 
 Runs as root (s6-overlay), dropping to `puid`/`pgid`. Config at `/config` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:8888`.

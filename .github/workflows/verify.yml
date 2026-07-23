@@ -54,6 +54,20 @@ jobs:
           key: kubeconform-schemas-${{ github.run_id }}
           restore-keys: kubeconform-schemas-
       - run: nix develop --command check-examples
+  readme-examples:
+    # Renders the deploy examples embedded in workload READMEs and validates
+    # their manifests with kubeconform, so a stale README example fails here.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        with:
+          path: ~/.cache/kubeconform
+          key: kubeconform-schemas-${{ github.run_id }}
+          restore-keys: kubeconform-schemas-
+      - run: nix develop --command check-readme-examples
   coverage:
     # The catalog-driven battery: renders every feature/recipe/profile/kind
     # composition generated from the catalog and validates each with kubeconform.
@@ -139,7 +153,7 @@ jobs:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.
     name: Verify
-    needs: [fmt, catalog, test, examples, coverage, security, reuse, yaml, github-actions, markdown, typos, policy, dco]
+    needs: [fmt, catalog, test, examples, readme-examples, coverage, security, reuse, yaml, github-actions, markdown, typos, policy, dco]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 15

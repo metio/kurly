@@ -151,6 +151,22 @@
             ];
             text = builtins.readFile ./scripts/check-coverage.sh;
           };
+          # Renders the deploy examples embedded in workload READMEs and
+          # validates every manifest with kubeconform, so a stale or malformed
+          # README example fails the gate rather than shipping as broken copy.
+          check-readme-examples = pkgs.writeShellApplication {
+            name = "check-readme-examples";
+            runtimeInputs = with pkgs; [
+              go-jsonnet
+              jsonnet-bundler
+              jq
+              kubeconform
+              coreutils
+              gnused
+              python3
+            ];
+            text = builtins.readFile ./scripts/check-readme-examples.sh;
+          };
           check-security = pkgs.writeShellApplication {
             name = "check-security";
             runtimeInputs = with pkgs; [
@@ -203,6 +219,7 @@
               check-readme
               check-tests
               check-examples
+              check-readme-examples
               check-coverage
               check-security
             ]
@@ -215,6 +232,7 @@
             check-readme
             check-tests
             check-examples
+            check-readme-examples
             check-coverage
             check-security
             gen-maturity
@@ -234,6 +252,7 @@
               echo "  check-readme     fail if a workload README's generated section is stale"
               echo "  check-tests      assertion suite + the requiresService negative check"
               echo "  check-examples   render examples + workloads, validate with kubeconform"
+              echo "  check-readme-examples  render workload README examples, validate with kubeconform"
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
