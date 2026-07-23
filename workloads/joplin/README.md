@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local joplin = import 'github.com/metio/kurly/workloads/joplin/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='joplin-db', database='joplin')).items,
-  kurly.list(joplin(appBaseUrl='https://joplin.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='joplin-db', database='joplin'),
+  joplin(appBaseUrl='https://joplin.example.com'),
+])
 ```
 
 The `POSTGRES_*` connection comes from a Secret via `envFrom` — kurly authors **no Secret**. Stateless (notes live in PostgreSQL). Serves on `:22300`.

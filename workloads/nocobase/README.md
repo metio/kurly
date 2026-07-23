@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local nocobase = import 'github.com/metio/kurly/workloads/nocobase/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='nocobase-db', database='nocobase')).items,
-  kurly.list(nocobase()).items,
-]))
+kurly.list([
+  cnpg(name='nocobase-db', database='nocobase'),
+  nocobase(),
+])
 ```
 
 The `DB_*` connection and `APP_KEY` come from a Secret via `envFrom` — kurly authors **no Secret**. Storage at `/app/nocobase/storage` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:80`.

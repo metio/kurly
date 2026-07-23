@@ -34,7 +34,7 @@ Serves the web UI and git-over-HTTP on `:3000` and git-over-SSH on `:2222`. Expo
 the HTTP port, and route TCP `:2222` for SSH clones:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   forgejo(rootUrl='https://git.example.com/')
   + kurly.expose.ownGateway('git.example.com', 'istio', tls='forgejo-tls'),
   kurly.certificate('forgejo-tls', ['git.example.com'], 'letsencrypt-prod'),
@@ -52,7 +52,7 @@ Service and reads the password from the `-app` Secret CNPG generates (via
 ```jsonnet
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf([
+kurly.list([
   cnpg(name='forgejo-db', database='forgejo'),
   forgejo(rootUrl='https://git.example.com/'),
 ])

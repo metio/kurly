@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local webtrees = import 'github.com/metio/kurly/workloads/webtrees/server.libsonnet';
 local mysql = import 'github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(mysql(name='webtrees-db')).items,
-  kurly.list(webtrees(baseUrl='https://tree.example.com')).items,
-]))
+kurly.list([
+  mysql(name='webtrees-db'),
+  webtrees(baseUrl='https://tree.example.com'),
+])
 ```
 
 The `DB_*` credentials come from a Secret via `envFrom` — kurly authors **no Secret**. Data at `/var/www/webtrees/data` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:80`.

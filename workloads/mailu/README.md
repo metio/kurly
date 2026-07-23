@@ -68,15 +68,15 @@ local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 local d = 'example.com';
 local h = ['mail.example.com'];
 
-kurly.listOf(kurly.join([
-  kurly.list(valkey(name='mailu-cache')).items,
-  kurly.list(front(domain=d, hostnames=h)).items,
-  kurly.list(admin(domain=d, hostnames=h)).items,
-  kurly.list(imap(domain=d, hostnames=h)).items,
-  kurly.list(smtp(domain=d, hostnames=h)).items,
-  kurly.list(antispam(domain=d, hostnames=h)).items,
-  kurly.list(webmail(domain=d, hostnames=h)).items,
-]))
+kurly.list([
+  valkey(name='mailu-cache'),
+  front(domain=d, hostnames=h),
+  admin(domain=d, hostnames=h),
+  imap(domain=d, hostnames=h),
+  smtp(domain=d, hostnames=h),
+  antispam(domain=d, hostnames=h),
+  webmail(domain=d, hostnames=h),
+])
 ```
 
 Each stage renders to its own `kind: List`, so in practice a consumer deploys each

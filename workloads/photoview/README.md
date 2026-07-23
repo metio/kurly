@@ -15,10 +15,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local photoview = import 'github.com/metio/kurly/workloads/photoview/server.libsonnet';
 local mysql = import 'github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(mysql(name='photoview-db')).items,
-  kurly.list(photoview()).items,
-]))
+kurly.list([
+  mysql(name='photoview-db'),
+  photoview(),
+])
 ```
 
 Photoview keeps two directories on disk — the media library at `/photos` (add photos there to

@@ -18,11 +18,11 @@ local peertube = import 'github.com/metio/kurly/workloads/peertube/server.libson
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='peertube-db', database='peertube')).items,
-  kurly.list(valkey(name='peertube-cache')).items,
-  kurly.list(peertube(webserverHost='videos.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='peertube-db', database='peertube'),
+  valkey(name='peertube-cache'),
+  peertube(webserverHost='videos.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

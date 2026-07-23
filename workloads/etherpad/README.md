@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local etherpad = import 'github.com/metio/kurly/workloads/etherpad/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='etherpad-db', database='etherpad')).items,
-  kurly.list(etherpad()).items,
-]))
+kurly.list([
+  cnpg(name='etherpad-db', database='etherpad'),
+  etherpad(),
+])
 ```
 
 | Parameter | Default | Notes |

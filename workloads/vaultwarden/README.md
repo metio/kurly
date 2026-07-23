@@ -33,7 +33,7 @@ Serves the web vault and API on `:8080` (moved off the image's default `:80` so 
 non-root pod can bind it). Compose an exposure and a certificate onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   vaultwarden(domain='https://vault.example.com')
   + kurly.expose.ownGateway('vault.example.com', 'istio', tls='vault-tls'),
   kurly.certificate('vault-tls', ['vault.example.com'], 'letsencrypt-prod'),

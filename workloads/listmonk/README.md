@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local listmonk = import 'github.com/metio/kurly/workloads/listmonk/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='listmonk-db', database='listmonk')).items,
-  kurly.list(listmonk()).items,
-]))
+kurly.list([
+  cnpg(name='listmonk-db', database='listmonk'),
+  listmonk(),
+])
 ```
 
 | Parameter | Default | Notes |

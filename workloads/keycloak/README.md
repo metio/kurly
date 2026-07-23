@@ -46,7 +46,7 @@ read-write Service (`keycloak-db-rw`) and reads the username/password from the
 ```jsonnet
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf([
+kurly.list([
   cnpg(name='keycloak-db', database='keycloak'),
   keycloak(hostname='https://id.example.com', tlsSecret='keycloak-tls'),
 ])

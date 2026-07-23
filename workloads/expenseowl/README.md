@@ -29,7 +29,7 @@ kurly.list(expenseowl())
 Serves the web UI and API on `:8080` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   expenseowl()
   + kurly.expose.ownGateway('expenses.example.com', 'istio', tls='expenseowl-tls'),
   kurly.certificate('expenseowl-tls', ['expenses.example.com'], 'letsencrypt-prod'),

@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local fider = import 'github.com/metio/kurly/workloads/fider/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='fider-db', database='fider')).items,
-  kurly.list(fider(baseUrl='https://feedback.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='fider-db', database='fider'),
+  fider(baseUrl='https://feedback.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

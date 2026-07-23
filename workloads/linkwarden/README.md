@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local linkwarden = import 'github.com/metio/kurly/workloads/linkwarden/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='linkwarden-db', database='linkwarden')).items,
-  kurly.list(linkwarden(nextauthUrl='https://links.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='linkwarden-db', database='linkwarden'),
+  linkwarden(nextauthUrl='https://links.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

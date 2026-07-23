@@ -164,16 +164,16 @@ The full deploy — import → `JsonnetSnippet` → `StageSet` — is in each wo
 
 ## Assembling with conditionals
 
-`kurly.list(app)` renders one composed app. To build a set from several parts —
-some optional, some themselves lists — use `kurly.listOf`, which drops `null`
-entries and flattens nested arrays. A Jsonnet `if` with no `else` is `null` when
-false, so an unmet condition simply drops out:
+`kurly.list` renders one composed app, or a set assembled from several parts —
+apps, standalone manifests, sublists, and optional entries. Apps expand to their
+manifests (owned ones included), sublists flatten, and a Jsonnet `if` with no
+`else` is `null` when false, so an unmet condition simply drops out:
 
 ```jsonnet
-kurly.listOf([
-  kurly.list(app).items,                  // a group, flattened in
+kurly.list([
+  app,                                    // an app, expanded to its manifests
   if enableBackup then backupCronJob,     // dropped when the flag is false
-  sharedConfigMap,
+  sharedConfigMap,                        // a standalone manifest, passed through
 ])
 ```
 

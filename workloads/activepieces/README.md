@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local activepieces = import 'github.com/metio/kurly/workloads/activepieces/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='activepieces-db', database='activepieces')).items,
-  kurly.list(activepieces(frontendUrl='https://flows.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='activepieces-db', database='activepieces'),
+  activepieces(frontendUrl='https://flows.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

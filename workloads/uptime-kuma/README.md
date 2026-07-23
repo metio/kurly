@@ -30,7 +30,7 @@ kurly.list(uptimeKuma())
 Serves the dashboard and status pages on `:3001` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   uptimeKuma()
   + kurly.expose.ownGateway('status.example.com', 'istio', tls='uptime-kuma-tls'),
   kurly.certificate('uptime-kuma-tls', ['status.example.com'], 'letsencrypt-prod'),

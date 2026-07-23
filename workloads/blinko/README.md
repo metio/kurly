@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local blinko = import 'github.com/metio/kurly/workloads/blinko/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='blinko-db', database='blinko')).items,
-  kurly.list(blinko(nextauthUrl='https://notes.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='blinko-db', database='blinko'),
+  blinko(nextauthUrl='https://notes.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

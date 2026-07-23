@@ -19,12 +19,12 @@ local worker = import 'github.com/metio/kurly/workloads/glitchtip/worker.libsonn
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='glitchtip-db', database='glitchtip')).items,
-  kurly.list(valkey(name='glitchtip-cache')).items,
-  kurly.list(glitchtip(domain='https://errors.example.com')).items,
-  kurly.list(worker()).items,
-]))
+kurly.list([
+  cnpg(name='glitchtip-db', database='glitchtip'),
+  valkey(name='glitchtip-cache'),
+  glitchtip(domain='https://errors.example.com'),
+  worker(),
+])
 ```
 
 ### `server`

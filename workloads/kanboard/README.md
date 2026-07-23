@@ -30,7 +30,7 @@ kurly.list(kanboard())
 Serves the web UI on `:80` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   kanboard()
   + kurly.expose.ownGateway('board.example.com', 'istio', tls='kanboard-tls'),
   kurly.certificate('kanboard-tls', ['board.example.com'], 'letsencrypt-prod'),

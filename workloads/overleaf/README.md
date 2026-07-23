@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local overleaf = import 'github.com/metio/kurly/workloads/overleaf/server.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(valkey(name='overleaf-cache')).items,
-  kurly.list(overleaf(siteUrl='https://latex.example.com')).items,
-]))
+kurly.list([
+  valkey(name='overleaf-cache'),
+  overleaf(siteUrl='https://latex.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

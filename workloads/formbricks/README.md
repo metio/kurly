@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local formbricks = import 'github.com/metio/kurly/workloads/formbricks/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='formbricks-db', database='formbricks')).items,
-  kurly.list(formbricks(webappUrl='https://surveys.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='formbricks-db', database='formbricks'),
+  formbricks(webappUrl='https://surveys.example.com'),
+])
 ```
 
 `DATABASE_URL`, `NEXTAUTH_SECRET` and `ENCRYPTION_KEY` come from a Secret via `envFrom` — kurly authors **no Secret**. Stateless. Serves on `:3000`.

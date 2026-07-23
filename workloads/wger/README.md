@@ -18,11 +18,11 @@ local wger = import 'github.com/metio/kurly/workloads/wger/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='wger-db', database='wger')).items,
-  kurly.list(valkey(name='wger-cache')).items,
-  kurly.list(wger(siteUrl='https://wger.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='wger-db', database='wger'),
+  valkey(name='wger-cache'),
+  wger(siteUrl='https://wger.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local kutt = import 'github.com/metio/kurly/workloads/kutt/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='kutt-db', database='kutt')).items,
-  kurly.list(kutt()).items,
-]))
+kurly.list([
+  cnpg(name='kutt-db', database='kutt'),
+  kutt(),
+])
 ```
 
 The PostgreSQL/Redis connection, `JWT_SECRET` and `DEFAULT_DOMAIN` come from a Secret via `envFrom` — kurly authors **no Secret**. Stateless (links live in PostgreSQL). Serves on `:3000`.

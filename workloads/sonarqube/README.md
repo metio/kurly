@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local sonarqube = import 'github.com/metio/kurly/workloads/sonarqube/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='sonarqube-db', database='sonarqube')).items,
-  kurly.list(sonarqube()).items,
-]))
+kurly.list([
+  cnpg(name='sonarqube-db', database='sonarqube'),
+  sonarqube(),
+])
 ```
 
 | Parameter | Default | Notes |

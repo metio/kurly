@@ -31,7 +31,7 @@ kurly.list(baikal())
 Serves the admin UI and CalDAV/CardDAV on `:80` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   baikal()
   + kurly.expose.ownGateway('dav.example.com', 'istio', tls='baikal-tls'),
   kurly.certificate('baikal-tls', ['dav.example.com'], 'letsencrypt-prod'),

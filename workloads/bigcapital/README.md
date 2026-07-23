@@ -22,11 +22,11 @@ local server = import 'github.com/metio/kurly/workloads/bigcapital/server.libson
 local webapp = import 'github.com/metio/kurly/workloads/bigcapital/webapp.libsonnet';
 local gateway = import 'github.com/metio/kurly/workloads/bigcapital/gateway.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(server(baseUrl='https://accounting.example.com')).items,
-  kurly.list(webapp()).items,
-  kurly.list(gateway()).items,
-]))
+kurly.list([
+  server(baseUrl='https://accounting.example.com'),
+  webapp(),
+  gateway(),
+])
 ```
 
 | Stage | Port | Role |

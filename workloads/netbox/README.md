@@ -18,7 +18,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local netbox = import 'github.com/metio/kurly/workloads/netbox/server.libsonnet';
 local worker = import 'github.com/metio/kurly/workloads/netbox/worker.libsonnet';
 
-kurly.listOf([
+kurly.list([
   netbox(allowedHosts='netbox.example.com'),
   worker(),
 ])
@@ -52,7 +52,7 @@ kurly.listOf([
 The server serves the UI and API on `:8080` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   netbox(allowedHosts='netbox.example.com')
   + kurly.expose.ownGateway('netbox.example.com', 'istio', tls='netbox-tls'),
   kurly.certificate('netbox-tls', ['netbox.example.com'], 'letsencrypt-prod'),
@@ -71,7 +71,7 @@ databases on that one instance — `0` for the task queue, `1` for the cache.
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/instance.libsonnet';
 
-kurly.listOf([
+kurly.list([
   cnpg(name='netbox-db', database='netbox'),
   valkey(name='netbox-cache'),
   netbox(allowedHosts='netbox.example.com'),

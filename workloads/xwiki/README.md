@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local xwiki = import 'github.com/metio/kurly/workloads/xwiki/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='xwiki-db', database='xwiki')).items,
-  kurly.list(xwiki()).items,
-]))
+kurly.list([
+  cnpg(name='xwiki-db', database='xwiki'),
+  xwiki(),
+])
 ```
 
 The `DB_*` connection comes from a Secret via `envFrom` — kurly authors **no Secret**. Data at `/usr/local/xwiki` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:8080`.

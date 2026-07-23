@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local mattermost = import 'github.com/metio/kurly/workloads/mattermost/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='mattermost-db', database='mattermost')).items,
-  kurly.list(mattermost(siteUrl='https://chat.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='mattermost-db', database='mattermost'),
+  mattermost(siteUrl='https://chat.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

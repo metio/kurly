@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local outline = import 'github.com/metio/kurly/workloads/outline/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='outline-db', database='outline')).items,
-  kurly.list(outline(url='https://wiki.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='outline-db', database='outline'),
+  outline(url='https://wiki.example.com'),
+])
 ```
 
 `DATABASE_URL`, `REDIS_URL`, `SECRET_KEY`, `UTILS_SECRET`, the S3 settings and an auth provider come from a Secret via `envFrom` — kurly authors **no Secret**. Uploads go to S3 (pair with [seaweedfs](../seaweedfs/)). Stateless. Serves on `:3000`.

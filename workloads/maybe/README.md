@@ -18,11 +18,11 @@ local maybe = import 'github.com/metio/kurly/workloads/maybe/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='maybe-db', database='maybe')).items,
-  kurly.list(valkey(name='maybe-cache')).items,
-  kurly.list(maybe()).items,
-]))
+kurly.list([
+  cnpg(name='maybe-db', database='maybe'),
+  valkey(name='maybe-cache'),
+  maybe(),
+])
 ```
 
 | Parameter | Default | Notes |

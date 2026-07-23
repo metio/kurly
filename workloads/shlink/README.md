@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local shlink = import 'github.com/metio/kurly/workloads/shlink/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='shlink-db', database='shlink')).items,
-  kurly.list(shlink(defaultDomain='s.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='shlink-db', database='shlink'),
+  shlink(defaultDomain='s.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

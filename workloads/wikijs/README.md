@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local wikijs = import 'github.com/metio/kurly/workloads/wikijs/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='wikijs-db', database='wikijs')).items,
-  kurly.list(wikijs()).items,
-]))
+kurly.list([
+  cnpg(name='wikijs-db', database='wikijs'),
+  wikijs(),
+])
 ```
 
 | Parameter | Default | Notes |

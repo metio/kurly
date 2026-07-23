@@ -19,11 +19,11 @@ local paperless = import 'github.com/metio/kurly/workloads/paperless-ngx/server.
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='paperless-db', database='paperless')).items,
-  kurly.list(valkey(name='paperless-cache')).items,
-  kurly.list(paperless(url='https://paperless.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='paperless-db', database='paperless'),
+  valkey(name='paperless-cache'),
+  paperless(url='https://paperless.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

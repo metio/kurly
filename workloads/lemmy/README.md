@@ -16,12 +16,12 @@ local ui = import 'github.com/metio/kurly/workloads/lemmy/ui.libsonnet';
 local pictrs = import 'github.com/metio/kurly/workloads/lemmy/pictrs.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='lemmy-db', database='lemmy')).items,
-  kurly.list(backend()).items,
-  kurly.list(ui(externalHost='lemmy.example.com')).items,
-  kurly.list(pictrs()).items,
-]))
+kurly.list([
+  cnpg(name='lemmy-db', database='lemmy'),
+  backend(),
+  ui(externalHost='lemmy.example.com'),
+  pictrs(),
+])
 ```
 
 The **backend** reads its config (with the PostgreSQL connection and the pict-rs API key) from

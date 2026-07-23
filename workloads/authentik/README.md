@@ -15,11 +15,11 @@ local server = import 'github.com/metio/kurly/workloads/authentik/server.libsonn
 local worker = import 'github.com/metio/kurly/workloads/authentik/worker.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='authentik-db', database='authentik')).items,
-  kurly.list(server()).items,
-  kurly.list(worker()).items,
-]))
+kurly.list([
+  cnpg(name='authentik-db', database='authentik'),
+  server(),
+  worker(),
+])
 ```
 
 Both stages read the PostgreSQL/Redis connection (`AUTHENTIK_POSTGRESQL__*`,

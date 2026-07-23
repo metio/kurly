@@ -76,7 +76,7 @@ references, and ESO reconciles the values in from your store (Vault, AWS/GCP
 Secrets Manager, …):
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   loki(storageSecret='loki-storage'),
   kurly.externalSecret('loki-storage', { name: 'vault', kind: 'ClusterSecretStore' }, [
     { secretKey: 'access_key_id',     remoteRef: { key: 'loki/s3', property: 'access_key_id' } },
@@ -101,7 +101,7 @@ cert-manager `Certificate` — point the workload's `tls` parameter at the same
 name:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   kurly.http('storefront', image)
   + kurly.expose.ownGateway('storefront.example.com', 'istio', tls='storefront-tls'),
   kurly.certificate('storefront-tls', ['storefront.example.com'], 'letsencrypt-prod'),
@@ -217,8 +217,8 @@ so it is a standalone generator rather than something baked into every workload 
 apply it once for the whole cluster, or once per namespace:
 
 ```jsonnet
-kurly.listOf([ kurly.network.denyAll.calico(global=true) ])   // cluster-wide
-kurly.listOf([ kurly.network.denyAll.kubernetes() ])          // this namespace
+kurly.list([ kurly.network.denyAll.calico(global=true) ])   // cluster-wide
+kurly.list([ kurly.network.denyAll.kubernetes() ])          // this namespace
 ```
 
 `global=true` (Calico/Cilium) emits the cluster-wide kind; `extraSpec` passes

@@ -17,12 +17,12 @@ local frontend = import 'github.com/metio/kurly/workloads/penpot/frontend.libson
 local exporter = import 'github.com/metio/kurly/workloads/penpot/exporter.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='penpot-db', database='penpot')).items,
-  kurly.list(backend()).items,
-  kurly.list(frontend()).items,
-  kurly.list(exporter()).items,
-]))
+kurly.list([
+  cnpg(name='penpot-db', database='penpot'),
+  backend(),
+  frontend(),
+  exporter(),
+])
 ```
 
 All three stages share a Secret (`penpot-secrets`) via `envFrom` holding the PostgreSQL/Redis

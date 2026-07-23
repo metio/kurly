@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local projectsend = import 'github.com/metio/kurly/workloads/projectsend/server.libsonnet';
 local mysql = import 'github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(mysql(name='projectsend-db')).items,
-  kurly.list(projectsend()).items,
-]))
+kurly.list([
+  mysql(name='projectsend-db'),
+  projectsend(),
+])
 ```
 
 Runs as root (s6-overlay), dropping to `puid`/`pgid`. Config and uploads at `/config` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:80`.

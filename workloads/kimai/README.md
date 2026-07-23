@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local kimai = import 'github.com/metio/kurly/workloads/kimai/server.libsonnet';
 local mysql = import 'github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(mysql(name='kimai-db')).items,
-  kurly.list(kimai()).items,
-]))
+kurly.list([
+  mysql(name='kimai-db'),
+  kimai(),
+])
 ```
 
 `DATABASE_URL` and `APP_SECRET` come from a Secret via `envFrom` — kurly authors **no Secret**. Stateless (timesheets live in MySQL). Serves on `:8001`.

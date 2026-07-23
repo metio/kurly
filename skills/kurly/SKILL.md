@@ -38,11 +38,11 @@ visible fields are the manifests, computed from that config. A feature is a
 `{ config+:: … }` mixin — it only ever writes `config`, never a manifest — so the
 manifests **late-bind against the merged config regardless of compose order**.
 `kurly.list(app)` wraps every manifest (including hidden owned ones like the
-store PVC and config ConfigMap) in a `kind: List`. To assemble several parts
-into one list, use `kurly.listOf([...])`, which drops `null` entries and
-flattens nested arrays — so `if cond then manifest` (null when false) and nested
-groups compose cleanly. `kurly.join` is the same drop-and-flatten over a plain
-array.
+store PVC and config ConfigMap) in a `kind: List`. It also takes an array to
+assemble several parts into one list — `kurly.list([cnpg(...), server(), cert])`
+— where apps expand to their manifests, bare manifests pass through, sublists
+flatten, and `if cond then …` (null when false) drops out. `kurly.join` is the
+same drop-and-flatten over a plain array.
 
 ## The docs are the source of truth
 
@@ -84,7 +84,7 @@ For an exact feature, parameter, type, or default, prefer these over memory:
   the `networkPolicy` exclusion group, so composing two fails the render. The
   cluster/namespace default-deny baseline is separate — the standalone
   `kurly.network.denyAll.{kubernetes,calico,cilium}(global=…)` generators, placed
-  into a list with `kurly.listOf`, not composed onto a workload.
+  into a list with `kurly.list`, not composed onto a workload.
 - **Security profiles set every knob, last one wins.** `kurly.security.restricted`
   (the default, written out), `.baseline`, and `.privileged` each set all
   security knobs, so compose a profile *before* the single-knob hatches

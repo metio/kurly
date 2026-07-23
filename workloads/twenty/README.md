@@ -19,12 +19,12 @@ local worker = import 'github.com/metio/kurly/workloads/twenty/worker.libsonnet'
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='twenty-db', database='twenty')).items,
-  kurly.list(valkey(name='twenty-cache')).items,
-  kurly.list(twenty(serverUrl='https://crm.example.com')).items,
-  kurly.list(worker()).items,
-]))
+kurly.list([
+  cnpg(name='twenty-db', database='twenty'),
+  valkey(name='twenty-cache'),
+  twenty(serverUrl='https://crm.example.com'),
+  worker(),
+])
 ```
 
 ### `server`

@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local docmost = import 'github.com/metio/kurly/workloads/docmost/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='docmost-db', database='docmost')).items,
-  kurly.list(docmost(appUrl='https://wiki.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='docmost-db', database='docmost'),
+  docmost(appUrl='https://wiki.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

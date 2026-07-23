@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local hedgedoc = import 'github.com/metio/kurly/workloads/hedgedoc/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='hedgedoc-db', database='hedgedoc')).items,
-  kurly.list(hedgedoc(domain='pad.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='hedgedoc-db', database='hedgedoc'),
+  hedgedoc(domain='pad.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

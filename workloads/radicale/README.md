@@ -30,7 +30,7 @@ kurly.list(radicale())
 Serves CalDAV/CardDAV on `:5232` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   radicale()
   + kurly.expose.ownGateway('dav.example.com', 'istio', tls='radicale-tls'),
   kurly.certificate('radicale-tls', ['dav.example.com'], 'letsencrypt-prod'),

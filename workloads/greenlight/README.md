@@ -18,10 +18,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local greenlight = import 'github.com/metio/kurly/workloads/greenlight/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='greenlight-db', database='greenlight')).items,
-  kurly.list(greenlight()).items,
-]))
+kurly.list([
+  cnpg(name='greenlight-db', database='greenlight'),
+  greenlight(),
+])
 ```
 
 | Parameter | Default | Notes |

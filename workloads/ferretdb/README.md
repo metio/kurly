@@ -25,10 +25,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local ferretdb = import 'github.com/metio/kurly/workloads/ferretdb/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='ferretdb-db', imageName='ghcr.io/ferretdb/postgres-documentdb:17')).items,
-  kurly.list(ferretdb()).items,
-]))
+kurly.list([
+  cnpg(name='ferretdb-db', imageName='ghcr.io/ferretdb/postgres-documentdb:17'),
+  ferretdb(),
+])
 ```
 
 | Parameter | Default | Notes |

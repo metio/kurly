@@ -17,12 +17,12 @@ local streaming = import 'github.com/metio/kurly/workloads/mastodon/streaming.li
 local sidekiq = import 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='mastodon-db', database='mastodon')).items,
-  kurly.list(web(localDomain='social.example.com')).items,
-  kurly.list(streaming()).items,
-  kurly.list(sidekiq()).items,
-]))
+kurly.list([
+  cnpg(name='mastodon-db', database='mastodon'),
+  web(localDomain='social.example.com'),
+  streaming(),
+  sidekiq(),
+])
 ```
 
 `LOCAL_DOMAIN` is **baked into every `@handle` and cannot be changed** — set it deliberately. All

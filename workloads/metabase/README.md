@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local metabase = import 'github.com/metio/kurly/workloads/metabase/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='metabase-db', database='metabase')).items,
-  kurly.list(metabase()).items,
-]))
+kurly.list([
+  cnpg(name='metabase-db', database='metabase'),
+  metabase(),
+])
 ```
 
 | Parameter | Default | Notes |

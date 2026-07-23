@@ -30,7 +30,7 @@ kurly.list(paisa())
 Serves the web UI on `:7500` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   paisa()
   + kurly.expose.ownGateway('finance.example.com', 'istio', tls='paisa-tls'),
   kurly.certificate('paisa-tls', ['finance.example.com'], 'letsencrypt-prod'),

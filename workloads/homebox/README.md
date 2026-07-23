@@ -30,7 +30,7 @@ kurly.list(homebox())
 Serves the web UI and API on `:7745` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   homebox()
   + kurly.expose.ownGateway('inventory.example.com', 'istio', tls='homebox-tls'),
   kurly.certificate('homebox-tls', ['inventory.example.com'], 'letsencrypt-prod'),

@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local miniflux = import 'github.com/metio/kurly/workloads/miniflux/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='miniflux-db', database='miniflux')).items,
-  kurly.list(miniflux()).items,
-]))
+kurly.list([
+  cnpg(name='miniflux-db', database='miniflux'),
+  miniflux(),
+])
 ```
 
 | Parameter | Default | Notes |

@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local umami = import 'github.com/metio/kurly/workloads/umami/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='umami-db', database='umami')).items,
-  kurly.list(umami()).items,
-]))
+kurly.list([
+  cnpg(name='umami-db', database='umami'),
+  umami(),
+])
 ```
 
 | Parameter | Default | Notes |

@@ -29,7 +29,7 @@ kurly.list(pwpush())
 Serves the web UI and API on `:5100` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   pwpush()
   + kurly.expose.ownGateway('pw.example.com', 'istio', tls='pwpush-tls'),
   kurly.certificate('pwpush-tls', ['pw.example.com'], 'letsencrypt-prod'),

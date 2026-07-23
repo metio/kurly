@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local directus = import 'github.com/metio/kurly/workloads/directus/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='directus-db', database='directus')).items,
-  kurly.list(directus(publicUrl='https://cms.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='directus-db', database='directus'),
+  directus(publicUrl='https://cms.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

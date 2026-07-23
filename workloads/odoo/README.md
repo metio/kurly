@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local odoo = import 'github.com/metio/kurly/workloads/odoo/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='odoo-db', database='odoo')).items,
-  kurly.list(odoo()).items,
-]))
+kurly.list([
+  cnpg(name='odoo-db', database='odoo'),
+  odoo(),
+])
 ```
 
 The PostgreSQL connection (`HOST`/`USER`/`PASSWORD`) comes from a Secret via `envFrom` — kurly authors **no Secret**. Filestore at `/var/lib/odoo` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:8069`.

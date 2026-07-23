@@ -15,10 +15,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local guacamole = import 'github.com/metio/kurly/workloads/guacamole/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='guacamole-db', database='guacamole')).items,
-  kurly.list(guacamole()).items,
-]))
+kurly.list([
+  cnpg(name='guacamole-db', database='guacamole'),
+  guacamole(),
+])
 ```
 
 The web app's database connection (`POSTGRESQL_*` / `MYSQL_*`) comes from a Secret via `envFrom`

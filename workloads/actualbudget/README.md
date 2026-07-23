@@ -30,7 +30,7 @@ kurly.list(actual())
 Serves the web app and sync API on `:5006` — compose an exposure onto it:
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   actual()
   + kurly.expose.ownGateway('budget.example.com', 'istio', tls='actual-tls'),
   kurly.certificate('actual-tls', ['budget.example.com'], 'letsencrypt-prod'),

@@ -19,10 +19,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local pilos = import 'github.com/metio/kurly/workloads/pilos/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='pilos-db', database='pilos')).items,
-  kurly.list(pilos()).items,
-]))
+kurly.list([
+  cnpg(name='pilos-db', database='pilos'),
+  pilos(),
+])
 ```
 
 | Parameter | Default | Notes |

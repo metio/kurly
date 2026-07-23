@@ -18,11 +18,11 @@ local endurain = import 'github.com/metio/kurly/workloads/endurain/server.libson
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local valkey = import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='endurain-db', database='endurain')).items,
-  kurly.list(valkey(name='endurain-cache')).items,
-  kurly.list(endurain(endurainHost='https://fitness.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='endurain-db', database='endurain'),
+  valkey(name='endurain-cache'),
+  endurain(endurainHost='https://fitness.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

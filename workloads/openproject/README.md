@@ -11,10 +11,10 @@ SPDX-License-Identifier: 0BSD
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local openproject = import 'github.com/metio/kurly/workloads/openproject/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='openproject-db', database='openproject')).items,
-  kurly.list(openproject(hostName='projects.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='openproject-db', database='openproject'),
+  openproject(hostName='projects.example.com'),
+])
 ```
 
 `DATABASE_URL`, `SECRET_KEY_BASE` and host settings come from a Secret via `envFrom` — kurly authors **no Secret**. A production deployment also wants a memcached. Assets at `/var/openproject/assets` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:80`.

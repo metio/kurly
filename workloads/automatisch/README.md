@@ -18,11 +18,11 @@ local server = import 'github.com/metio/kurly/workloads/automatisch/server.libso
 local worker = import 'github.com/metio/kurly/workloads/automatisch/worker.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='automatisch-db', database='automatisch')).items,
-  kurly.list(server()).items,
-  kurly.list(worker()).items,
-]))
+kurly.list([
+  cnpg(name='automatisch-db', database='automatisch'),
+  server(),
+  worker(),
+])
 ```
 
 Both stages read the PostgreSQL/Redis connection and the `ENCRYPTION_KEY` /

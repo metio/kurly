@@ -250,7 +250,7 @@ gateways, put `query-frontend` in front of it, and evaluate `ruler` against the
 frontend (or the Querier directly).
 
 ```jsonnet
-kurly.listOf([
+kurly.list([
   store(objstoreSecret='thanos-objstore'),
   compact(objstoreSecret='thanos-objstore'),
   query(endpoints=[

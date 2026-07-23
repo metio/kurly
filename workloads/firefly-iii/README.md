@@ -16,10 +16,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local firefly = import 'github.com/metio/kurly/workloads/firefly-iii/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='firefly-iii-db', database='firefly')).items,
-  kurly.list(firefly(appUrl='https://finance.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='firefly-iii-db', database='firefly'),
+  firefly(appUrl='https://finance.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |

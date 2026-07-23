@@ -17,10 +17,10 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local wallabag = import 'github.com/metio/kurly/workloads/wallabag/server.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 
-kurly.listOf(kurly.join([
-  kurly.list(cnpg(name='wallabag-db', database='wallabag')).items,
-  kurly.list(wallabag(domain='https://read.example.com')).items,
-]))
+kurly.list([
+  cnpg(name='wallabag-db', database='wallabag'),
+  wallabag(domain='https://read.example.com'),
+])
 ```
 
 | Parameter | Default | Notes |
