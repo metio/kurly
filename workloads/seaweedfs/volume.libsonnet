@@ -29,7 +29,7 @@ local advertisePodIP = {
 
 function(
   name='seaweedfs-volume',
-  image='docker.io/chrislusf/seaweedfs:4.39',
+  image='docker.io/chrislusf/seaweedfs:4.40',
   replicas=2,
   storageSize='10Gi',
   storageClass=null,

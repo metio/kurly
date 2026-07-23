@@ -36,7 +36,7 @@ local advertisePodIP = {
 
 function(
   name='seaweedfs-master',
-  image='docker.io/chrislusf/seaweedfs:4.39',
+  image='docker.io/chrislusf/seaweedfs:4.40',
   storageSize='1Gi',
   storageClass=null,
   defaultReplication='000',

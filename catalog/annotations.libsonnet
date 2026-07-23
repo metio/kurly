@@ -5537,7 +5537,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The all-in-one server. Serves S3 on 8333 over the data volume at /data; the master/volume/filer ports serve the cluster itself. The default allows anonymous access, fine inside a trusted namespace. Splitting the roles into dedicated tiers is a different topology, not more replicas, so it would be its own stage.', [
           d.arg('name', d.T.string, default='seaweedfs'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.39'),
+          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
         ]) + {
@@ -5546,7 +5546,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         master: d.fn("The coordinator of a SPLIT SeaweedFS: `weed master` holds the topology, assigns file IDs, and directs clients to volume servers. defaultReplication is the cluster-wide policy it owns ('000' keeps one copy). Deploy it, then point the volume and filer stages at it.", [
           d.arg('name', d.T.string, default='seaweedfs-master'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.39'),
+          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('defaultReplication', d.T.string, default='000'),
@@ -5556,7 +5556,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         volume: d.fn('The data tier of a SPLIT SeaweedFS: `weed volume` stores file content and registers with the master, advertising its pod IP so reads reach it. Scale by replicas for capacity, each a pod with its own PVC. Point it at the master with masterEndpoint.', [
           d.arg('name', d.T.string, default='seaweedfs-volume'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.39'),
+          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
@@ -5568,7 +5568,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         filer: d.fn('The access tier of a SPLIT SeaweedFS: `weed filer` puts a filesystem and (s3=true) an S3 gateway on 8333 over the volume servers, keeping its own metadata. Point it at the master with masterEndpoint.', [
           d.arg('name', d.T.string, default='seaweedfs-filer'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.39'),
+          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('masterEndpoint', d.T.string, default='seaweedfs-master-0.seaweedfs-master-headless:9333'),

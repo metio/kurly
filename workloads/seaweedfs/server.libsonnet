@@ -23,7 +23,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='seaweedfs',
-  image='docker.io/chrislusf/seaweedfs:4.39',
+  image='docker.io/chrislusf/seaweedfs:4.40',
   storageSize='10Gi',
   storageClass=null,
 )
