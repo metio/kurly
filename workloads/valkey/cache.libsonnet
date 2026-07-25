@@ -28,7 +28,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='valkey',
-  image='docker.io/valkey/valkey:9.1.0',
+  image='docker.io/valkey/valkey:9.1.1',
   maxMemory='256mb',
   // The sidecar that labels the primary pod — a maintained Alpine image carrying
   // kubectl plus busybox `nc` and `sh` (the role probe needs neither bash nor a
