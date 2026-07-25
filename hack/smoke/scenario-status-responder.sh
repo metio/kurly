@@ -34,7 +34,7 @@ GATEWAY_API_VERSION="v1.6.1"
 # 1.5. It supplies only its own CRDs here — the Gateway API CRDs come from the
 # release above, not from EG's bundle.
 # renovate: datasource=docker depName=docker.io/envoyproxy/gateway-helm
-ENVOY_GATEWAY_VERSION="v1.8.2"
+ENVOY_GATEWAY_VERSION="1.8.3"
 
 gw_ns=gateway-infra
 shared_ns=shared-http-services
