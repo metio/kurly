@@ -852,7 +852,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     teable: {
       summary: 'A Teable server (a self-hosted, no-code database built on PostgreSQL that presents as a spreadsheet, an Airtable alternative) on the official image, backed by an external PostgreSQL (and Redis for realtime/caching). A plain composable http workload. kurly authors no Secret; PRISMA_DATABASE_URL, BACKEND_CACHE_REDIS_URI, SECRET_KEY and the mail/storage settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named teable-db and a Redis; attachments go to S3 when configured. Stateless: a plain rolling Deployment. Serves on :3000.',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         server: d.fn('The Teable server. Point publicOrigin at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='teable'),
@@ -923,7 +923,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     ghostfolio: {
       summary: 'A Ghostfolio server (a self-hosted, open-source wealth-management and portfolio tracker for stocks, ETFs, crypto and more) on the official image, backed by an external PostgreSQL and Redis. A plain composable http workload. kurly authors no Secret; DATABASE_URL, the Redis settings, ACCESS_TOKEN_SALT and JWT_SECRET_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named ghostfolio-db and a Redis. Stateless: a plain rolling Deployment. Serves on :3333.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Ghostfolio server. Provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='ghostfolio'),
@@ -1391,7 +1391,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     overleaf: {
       summary: 'An Overleaf server (the Community Edition of the collaborative LaTeX editor) on the official monolith image, backed by an external MongoDB (a replica set — it uses transactions) and Redis, with projects and compiles on a PersistentVolume. kurly ships no MongoDB recipe; bring your own (Redis can be the valkey workload). The image spawns TeX compiles and writes across the root filesystem, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; OVERLEAF_MONGO_URL comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Overleaf server. redisHost defaults to a valkey named overleaf-cache; siteUrl is the public URL; appName the instance name. secretName holds OVERLEAF_MONGO_URL, pointing at a MongoDB replica set you provide (envFrom). Projects and compiles at /var/lib/overleaf. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='overleaf'),
@@ -1411,7 +1411,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     bigcapital: {
       summary: 'A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),
@@ -1451,7 +1451,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     twenty: {
       summary: 'A Twenty server (a modern, open-source CRM) as two stages — server (the web/API front end) and worker (background BullMQ jobs) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named twenty-db and a valkey named twenty-cache. kurly authors no Secret; PG_DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. The server keeps local uploads on a ReadWriteOnce volume (one replica, recreated); move to S3 to scale out.',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         server: d.fn('The Twenty web/API front end on :3000. redisHost defaults to a valkey named twenty-cache; serverUrl is the public URL. secretName holds PG_DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Local uploads at /app/packages/twenty-server/.local-storage. Run a worker alongside. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='twenty'),
@@ -1501,7 +1501,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     peertube: {
       summary: 'A PeerTube server (a decentralized, federated video platform) on the official image, backed by an external PostgreSQL and Redis, with videos/uploads/config on a PersistentVolume. Pairs with a cnpg-cluster named peertube-db and a valkey named peertube-cache. kurly authors no Secret; PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, and the initial root password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         server: d.fn('The PeerTube server. dbHost/dbName/dbUser default to a cnpg-cluster named peertube-db; redisHost to a valkey named peertube-cache. webserverHost is the public hostname (required for federation). secretName holds PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, PT_INITIAL_ROOT_PASSWORD (envFrom). Videos/uploads at /data, config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='peertube'),
@@ -1523,7 +1523,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     maybe: {
       summary: 'A Maybe server (a self-hosted personal finance and net-worth manager) backed by an external PostgreSQL and Redis, with Active Storage uploads on a PersistentVolume. Pairs with a cnpg-cluster named maybe-db and a valkey named maybe-cache. The Rails app writes under /rails, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; POSTGRES_PASSWORD and SECRET_KEY_BASE come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Maybe server. dbHost/dbName/dbUser default to a cnpg-cluster named maybe-db; redisHost to a valkey named maybe-cache. secretName holds POSTGRES_PASSWORD and SECRET_KEY_BASE (envFrom). Uploads at /rails/storage. A separate Sidekiq worker can be added. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='maybe'),
@@ -1587,7 +1587,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'paperless-ngx': {
       summary: 'A Paperless-ngx server (scan, index, and archive documents with OCR and full-text search) backed by an external PostgreSQL and Redis, with its data/media/consume/export trees on a PersistentVolume. The image runs the web server and Celery workers together. Pairs with a cnpg-cluster named paperless-db and a valkey named paperless-cache. The entrypoint writes to the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; secrets come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Paperless-ngx server. dbHost/dbName/dbUser default to a cnpg-cluster named paperless-db; redisHost to a valkey named paperless-cache. url is the public URL; adminUser the first-run admin. secretName holds PAPERLESS_DBPASS, PAPERLESS_SECRET_KEY, and PAPERLESS_ADMIN_PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='paperless-ngx'),
@@ -1610,7 +1610,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     wger: {
       summary: 'A wger server (a self-hosted workout, nutrition, and body-weight manager) on the official all-in-one image, backed by an external PostgreSQL and Redis, with uploaded media on a PersistentVolume. Pairs with a cnpg-cluster named wger-db and a valkey named wger-cache. The image runs nginx + uWSGI + Celery and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DJANGO_DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The wger server. dbHost/dbName/dbUser default to a cnpg-cluster named wger-db; redisHost to a valkey named wger-cache. siteUrl is the public URL. secretName holds DJANGO_DB_PASSWORD and SECRET_KEY (envFrom). Media at /home/wger/media on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='wger'),
@@ -1632,7 +1632,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     endurain: {
       summary: 'An Endurain server (a self-hosted fitness and training-activity tracker) backed by an external PostgreSQL and Redis, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named endurain-db and a valkey named endurain-cache. kurly authors no Secret; DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Endurain server. dbHost/dbName/dbUser default to a cnpg-cluster named endurain-db; redisHost to a valkey named endurain-cache. endurainHost is the public URL. secretName holds DB_PASSWORD and SECRET_KEY (envFrom). Uploads at /app/backend/app on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='endurain'),
@@ -1868,7 +1868,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     netbox: {
       summary: 'A NetBox server (the IPAM/DCIM source of truth: IP address management, data-center infrastructure modelling, and a full REST/GraphQL API). Two composable stages on the community image — server (the web front end) and worker (the RQ background task worker) — with PostgreSQL and Redis external. Pairs with the cnpg-cluster and valkey workloads. Single writer over a ReadWriteOnce media volume: the server is one replica, recreated; the worker scales horizontally.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The NetBox web front end, serving the UI and API on :8080. dbHost/dbName/dbUser default to a cnpg-cluster named netbox-db; redisHost to a valkey named netbox-cache (queue on Redis DB 0, cache on DB 1). secretName is the Secret the image reads at /run/secrets — secret_key (Django SECRET_KEY, keep it stable), db_password, and superuser_password on first boot. allowedHosts is Django ALLOWED_HOSTS. kurly authors no Secret. Compose an exposure onto the HTTP port; run a worker alongside.', [
           d.arg('name', d.T.string, default='netbox'),
@@ -1913,7 +1913,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     mailu: {
       summary: 'A Mailu mail server (SMTP, IMAP/POP3, webmail, antispam) as six coordinated http stages — front (the edge), admin (config + API + DB + DKIM), imap (Dovecot), smtp (Postfix), antispam (Rspamd), and webmail (Roundcube). Run all six pointed at the same namePrefix, secretName, and a shared ReadWriteMany storageClaim, plus a Redis (the valkey workload). Mailu images run as root with a writable root filesystem, so these relax kurly restricted defaults while keeping dropped capabilities and no privilege escalation. Each service is one replica, recreated; expose only front.',
-      requires: { cache: true },
+      requires: { cache: 'required' },
       stages: {
         front: d.fn('The Mailu edge (nginx): terminates SMTP/IMAP/POP3/ManageSieve and the web UI and proxies to the other services. The one stage you expose. domain/hostnames identify the mail server; secretName carries SECRET_KEY (envFrom, kurly mints none); storageClaim is the shared RWM volume; redisAddress points at a valkey. Publishes 25/465/587/110/995/143/993/4190/80/443.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
@@ -2009,7 +2009,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     forgejo: {
       summary: 'A Forgejo Git forge (a maintained Gitea fork): repository hosting, issues, pull requests, and a package registry. A plain composable http workload on the rootless image, with its data on a PersistentVolume and its database external — pairs with the cnpg-cluster workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI/git-over-HTTP on :3000 and git-over-SSH on :2222.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'optional' },
       stages: {
         server: d.fn('The Forgejo server. dbHost/dbName/dbUser/dbSecret default to a cnpg-cluster named forgejo-db (its -rw Service and the -app Secret CNPG mints, key password read via a file). rootUrl is the public base URL for links/clone URLs. env carries extra FORGEJO__section__KEY settings — provide SECRET_KEY/JWT_SECRET there (from a Secret) so sessions survive restarts. kurly authors no Secret. Compose an exposure onto the HTTP port; route TCP :2222 for SSH.', [
           d.arg('name', d.T.string, default='forgejo'),
@@ -2841,7 +2841,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     searxng: {
       summary: 'A SearXNG server (a privacy-respecting, self-hosted metasearch engine that aggregates results from many search services without tracking you) on the official image. Its behaviour is its settings.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state of its own. kurly authors no Secret; SEARXNG_SECRET (overriding server.secret_key) comes from a provided Secret via envFrom. A busy instance also wants a Valkey/Redis for the limiter. Stateless: scale freely. Serves on :8080.',
-      requires: { cache: true },
+      requires: { cache: 'optional' },
       stages: {
         server: d.fn("The SearXNG server. baseUrl is the public URL; settings is SearXNG's own settings.yml, mounted verbatim; secretName holds SEARXNG_SECRET (envFrom). Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='searxng'),
@@ -3539,7 +3539,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     kutt: {
       summary: 'A Kutt server (a free, self-hosted modern URL shortener with custom domains, link analytics and an API) on the official image, backed by an external PostgreSQL and Redis. kurly authors no Secret; the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN come from a provided Secret via envFrom. Pairs with a cnpg-cluster named kutt-db and a Redis. Stateless: a plain rolling Deployment. Serves on :3000.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Kutt server. secretName holds the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='kutt'),
@@ -3903,7 +3903,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     openproject: {
       summary: 'An OpenProject server (a self-hosted, open-source project-management and collaboration suite: work packages, Gantt charts, agile boards, wikis, time tracking) on the official image, backed by an external PostgreSQL, with uploaded assets on a PersistentVolume. kurly authors no Secret; DATABASE_URL, SECRET_KEY_BASE and host settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named openproject-db (a production deployment also wants memcached). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'optional' },
       stages: {
         server: d.fn('The OpenProject server. hostName sets OPENPROJECT_HOST__NAME; secretName holds DATABASE_URL and SECRET_KEY_BASE (envFrom). Assets at /var/openproject/assets. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='openproject'),
@@ -4057,7 +4057,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'redis-commander': {
       summary: 'A Redis Commander server (a self-hosted web UI for managing Redis) on the official image (pinned by digest; Renovate maintains it). Stateless: a plain rolling Deployment that connects to the Redis you point it at. Serves on :8081.',
-      requires: { cache: true },
+      requires: { cache: 'required' },
       stages: {
         server: d.fn('The Redis Commander server. redisHosts sets REDIS_HOSTS (e.g. local:redis:6379). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='redis-commander'),
@@ -4200,7 +4200,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     authentik: {
       summary: 'An authentik server (a self-hosted identity provider and SSO: OAuth2, SAML, LDAP, forward-auth) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web/API server (HTTP :9000) and a background worker (migrations, scheduled tasks, outposts). kurly authors no Secret; the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Pairs with a cnpg-cluster named authentik-db and a Redis. Stateless.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The authentik web/API server. secretName holds the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='authentik'),
@@ -4226,7 +4226,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     outline: {
       summary: 'An Outline server (a fast, collaborative, self-hosted team knowledge base and wiki with real-time editing) on the official image, backed by an external PostgreSQL, Redis and S3-compatible object storage. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider come from a provided Secret via envFrom. Pairs with a cnpg-cluster named outline-db, a Redis and an S3 bucket (e.g. seaweedfs). Stateless. Serves on :3000.',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         server: d.fn('The Outline server. url is the public URL; secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='outline'),
@@ -4243,7 +4243,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     penpot: {
       summary: 'Penpot (a self-hosted, open-source design and prototyping platform, an alternative to Figma) as three workloads on the official images, backed by an external PostgreSQL and Redis: a backend (API + data, assets on a PersistentVolume), a frontend (the nginx-served web app on :80 that proxies to the others), and an exporter (headless-browser rendering, :6061). kurly authors no Secret; the PostgreSQL/Redis connection and PENPOT_SECRET_KEY come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named penpot-db and a Redis.',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         backend: d.fn('The Penpot backend (API + data) on :6060. publicUri sets PENPOT_PUBLIC_URI; secretName holds the PostgreSQL/Redis connection and PENPOT_SECRET_KEY (envFrom). Assets at /opt/data (put on S3 to scale out).', [
           d.arg('name', d.T.string, default='penpot-backend'),
@@ -4282,7 +4282,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     misskey: {
       summary: 'A Misskey server (a self-hosted, feature-rich ActivityPub/Fediverse social platform) on the official image, backed by an external PostgreSQL and Redis, with uploaded files on a PersistentVolume. Misskey reads its whole config (including DB/Redis credentials) from /misskey/.config/default.yml; because that holds secrets, kurly mounts it from an existing Secret you provide (kurly never mints key material). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         server: d.fn('The Misskey server. configSecret is an existing Secret holding default.yml (the config, with DB/Redis creds), mounted at /misskey/.config. Files at /misskey/files. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='misskey'),
@@ -4337,7 +4337,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     mastodon: {
       summary: 'Mastodon (the leading self-hosted ActivityPub/Fediverse microblogging platform) as three workloads backed by an external PostgreSQL and Redis, with media in S3-compatible object storage: a web/API server (:3000), a streaming server for real-time timelines (:4000), and a sidekiq background worker. LOCAL_DOMAIN is baked into every @handle and cannot be changed. kurly authors no Secret; the PostgreSQL/Redis connection, SECRET_KEY_BASE, OTP_SECRET, the VAPID keys and the S3 settings come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named mastodon-db, a Redis and an S3 bucket (e.g. seaweedfs).',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         web: d.fn('The Mastodon web/API server on :3000. localDomain is the permanent instance domain (@handle); secretName holds the shared connection and secrets (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mastodon'),
@@ -4374,7 +4374,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'oauth2-proxy': {
       summary: 'An OAuth2 Proxy server (a reverse proxy and forward-auth service that puts an OAuth2/OIDC login in front of your apps, delegating to Keycloak, authentik, Pocket ID, Google, GitHub) on the official image. Stateless (sessions in a signed cookie or shared Redis): a plain rolling Deployment. kurly authors no Secret; the provider settings, client id/secret and cookie secret come from a provided Secret via envFrom (OAUTH2_PROXY_*). Serves on :4180 — front an app or wire as a reverse proxy forward-auth.',
-      requires: { cache: true },
+      requires: { cache: 'optional' },
       stages: {
         server: d.fn('The OAuth2 Proxy server. secretName holds the OAUTH2_PROXY_* provider settings and secrets (envFrom). Front an app (OAUTH2_PROXY_UPSTREAMS) or use as forward-auth at /oauth2/auth.', [
           d.arg('name', d.T.string, default='oauth2-proxy'),
@@ -4604,7 +4604,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     activepieces: {
       summary: 'An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. kurly authors no Secret; AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET come from a provided Secret via envFrom. Stateless: a plain rolling Deployment. Serves on :80.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). secretName holds AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='activepieces'),
@@ -4621,7 +4621,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     automatisch: {
       summary: 'An Automatisch server (a self-hosted, open-source business-automation / workflow tool, an open alternative to Zapier) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web server (HTTP :3000) and a background worker that runs the flow executions the server enqueues onto Redis. Pairs with a cnpg-cluster named automatisch-db and a Redis. kurly authors no Secret; the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Stateless.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Automatisch web server. secretName holds the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='automatisch'),
@@ -4680,7 +4680,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     pilos: {
       summary: 'A PILOS server (an open-source, Laravel-based front-end for BigBlueButton from TH Mittelhessen: room and meeting management with LDAP/OIDC support) on the official all-in-one image (nginx + php-fpm), backed by an external PostgreSQL and Redis, with uploaded assets on a PersistentVolume. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named pilos-db and a Redis. kurly authors no Secret; the database/Redis/APP_KEY/BBB settings come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated; the bundled nginx master needs root and a writable rootfs. Serves on :80.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The PILOS server. secretName holds the database/Redis/APP_KEY/BBB settings (envFrom). Uploaded assets at /var/www/html/storage/app. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pilos'),
@@ -4697,7 +4697,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     greenlight: {
       summary: 'A Greenlight 3 server (the official BigBlueButton front-end: a Rails app for scheduling and joining BBB rooms and meetings) on the official image, backed by an external PostgreSQL and Redis. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named greenlight-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_* endpoint/secret come from a provided Secret via envFrom. Stateless (recordings live on the BBB server): a plain rolling Deployment. Serves on :3000.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Greenlight server. secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_ENDPOINT/BIGBLUEBUTTON_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='greenlight'),
@@ -4713,7 +4713,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     docmost: {
       summary: 'A Docmost server (a self-hosted, open-source collaborative wiki and documentation platform) on the official image, backed by an external PostgreSQL and Redis, with attachments on a PersistentVolume. Pairs with a cnpg-cluster named docmost-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL and APP_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
-      requires: { database: true, cache: true, objectStorage: 'optional' },
+      requires: { database: true, cache: 'required', objectStorage: 'optional' },
       stages: {
         server: d.fn('The Docmost server. appUrl is the public URL. secretName holds DATABASE_URL, REDIS_URL and APP_SECRET (envFrom). Attachments at /app/data/storage; point STORAGE_DRIVER at S3 to scale past the single writer. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='docmost'),
@@ -4836,7 +4836,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     glitchtip: {
       summary: 'A GlitchTip deployment (an open-source, Sentry-compatible error-tracking and performance-monitoring platform) as two stages — server (the web/ingest API) and worker (the Celery worker with beat) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named glitchtip-db and a valkey named glitchtip-cache. kurly authors no Secret; DATABASE_URL and SECRET_KEY come from a provided Secret via envFrom. The server is stateless and scales via replicas.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The GlitchTip web/ingest API on :8080. redisHost defaults to a valkey named glitchtip-cache; domain is the public URL. secretName holds DATABASE_URL (with the DB password) and SECRET_KEY (envFrom). Run a worker alongside. Scales via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='glitchtip'),
@@ -5015,7 +5015,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     baserow: {
       summary: 'A Baserow server (an open-source, no-code database and Airtable alternative) on the official all-in-one image, which bundles the backend, frontend, Celery workers, and (by default) an embedded PostgreSQL and Redis — everything in /baserow/data, so a single instance needs nothing external. The image supervises multiple processes and writes the rootfs, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the signing keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
-      requires: { database: true, cache: true },
+      requires: { database: true, cache: 'required' },
       stages: {
         server: d.fn('The Baserow all-in-one server. Everything (embedded DB, Redis, uploads) at /baserow/data on the volume. publicUrl is the public URL. secretName holds BASEROW_SECRET_KEY and BASEROW_JWT_SIGNING_KEY (envFrom). Point DATABASE_*/REDIS_* at external services via env to scale out. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='baserow'),
@@ -5475,7 +5475,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     thanos: {
       summary: 'The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed.',
-      requires: { cache: true, objectStorage: 'required' },
+      requires: { cache: 'optional', objectStorage: 'required' },
       stages: {
         query: d.fn('The Thanos Querier (a plain `thanos query` Deployment + Service). endpoints are the StoreAPI targets it fans out to over gRPC (dnssrv+ resolves every replica); queryReplicaLabels deduplicate HA replicas. Serves the Prometheus API on :10902 (gRPC StoreAPI on :10901 for federation). Point a Grafana datasource or the query-frontend at it.', [
           d.arg('name', d.T.string, default='thanos-query'),
@@ -5800,7 +5800,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     immich: {
       summary: 'Immich — a self-hosted photo and video backup. The server keeps the media library on a PersistentVolume and reaches a PostgreSQL with the VectorChord extension plus a Redis; the machine-learning stage serves inference (smart search, faces) from a model cache. Compose both with a cnpg-cluster on a VectorChord image and a valkey.',
-      requires: { database: { extensions: ['vchord'] }, cache: true },
+      requires: { database: { extensions: ['vchord'] }, cache: 'required' },
       stages: {
         server: d.fn('The Immich API and web app on :2283, media library on a ReadWriteOnce volume at /data (one replica, recreated). Reaches PostgreSQL/VectorChord and Redis by the given hosts; the password comes from `secretName` as DB_PASSWORD (an Immich-shaped Secret the operator supplies, e.g. via kurly.externalSecret from the CNPG cluster Secret).', [
           d.arg('name', d.T.string, default='immich'),
