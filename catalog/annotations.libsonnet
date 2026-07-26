@@ -2894,7 +2894,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Joplin Server. appBaseUrl is the public URL; secretName holds the POSTGRES_* connection (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='joplin'),
-          d.arg('image', d.T.string, default='docker.io/joplin/server:3.4.2'),
+          d.arg('image', d.T.string, default='docker.io/joplin/server:3.7.1'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('appBaseUrl', d.T.string, example='https://joplin.example.com'),
           d.arg('secretName', d.T.string, default='joplin-secrets'),

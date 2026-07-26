@@ -12509,7 +12509,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/joplin/server:3.4.2",
+                     "default": "docker.io/joplin/server:3.7.1",
                      "name": "image",
                      "required": false,
                      "type": "string"

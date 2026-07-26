@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='joplin',
-  image='docker.io/joplin/server:3.4.2',
+  image='docker.io/joplin/server:3.7.1',
   replicas=2,
   appBaseUrl=null,
   secretName='joplin-secrets',
