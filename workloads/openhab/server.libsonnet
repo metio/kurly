@@ -22,7 +22,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='openhab',
-  image='docker.io/openhab/openhab:4.3.0',
+  image='docker.io/openhab/openhab:4.3.11',
   confSize='2Gi',
   userdataSize='5Gi',
   addonsSize='2Gi',
