@@ -28,7 +28,7 @@ Clients reach it at `<pod>.valkey-headless.<namespace>.svc` on port `6379`.
   apply`, a Helm upgrade, or a stageset roll all trigger it identically.
 
   Clients connect to the **`valkey`** Service, which follows the current primary:
-  a sidecar labels its own pod `kurly.dev/valkey-role=primary` while it is the
+  a sidecar labels its own pod `kurly.metio.wtf/valkey-role=primary` while it is the
   master (removing the label on a replica), and the Service selects that label —
   so the Service is **never routed to a replica**. When the master role migrates
   during a hand-off, the label follows the promoted pod within about a second; the

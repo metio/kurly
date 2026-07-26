@@ -38,7 +38,7 @@ function(
   kubectlImage='docker.io/alpine/k8s:1.36.2',
 )
   local headless = name + '-headless';
-  local roleLabel = 'kurly.dev/valkey-role';
+  local roleLabel = 'kurly.metio.wtf/valkey-role';
 
   // Discover the peer that is actually the primary and write a config that
   // replicates it. The whole server config is generated here so the stock image
