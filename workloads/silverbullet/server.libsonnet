@@ -27,7 +27,7 @@ function(
   storageSize='2Gi',
   storageClass=null,
   // The Secret holding SB_USER (kurly mints none), via envFrom.
-  secretName='silverbullet-secrets',
+  secretName='silverbullet',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

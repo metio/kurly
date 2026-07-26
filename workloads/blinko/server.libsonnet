@@ -32,7 +32,7 @@ function(
   nextauthUrl=null,
   // The Secret holding DATABASE_URL and NEXTAUTH_SECRET (kurly mints none), via
   // envFrom.
-  secretName='blinko-secrets',
+  secretName='blinko',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

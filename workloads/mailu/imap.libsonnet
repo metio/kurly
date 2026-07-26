@@ -32,7 +32,7 @@ function(
   image=defaultImage,
   domain='example.com',
   hostnames=['mail.example.com'],
-  secretName='mailu-secrets',
+  secretName='mailu',
   storageClaim='mailu-storage',
   subnet='10.0.0.0/8',
   redisAddress='mailu-cache',

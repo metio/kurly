@@ -28,7 +28,7 @@ function(
   baseUrl=null,
   // The Secret holding DATABASE_URL, SECRET_PASSWORD, and SMTP_* (kurly mints none),
   // via envFrom.
-  secretName='rallly-secrets',
+  secretName='rallly',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

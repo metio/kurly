@@ -27,7 +27,7 @@ function(
   storageSize='10Gi',
   storageClass=null,
   ollamaBaseUrl=null,
-  secretName='open-webui-secrets',
+  secretName='open-webui',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

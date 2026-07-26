@@ -24,7 +24,7 @@ function(
   image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
-  secretName='nocobase-secrets',
+  secretName='nocobase',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

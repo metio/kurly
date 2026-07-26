@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   replicas=2,
   publicOrigin=null,
-  secretName='teable-secrets',
+  secretName='teable',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

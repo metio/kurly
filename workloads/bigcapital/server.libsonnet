@@ -35,7 +35,7 @@ function(
   baseUrl=null,
   // The Secret holding SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET
   // (kurly mints none), via envFrom.
-  secretName='bigcapital-secrets',
+  secretName='bigcapital',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

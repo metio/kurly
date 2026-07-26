@@ -25,7 +25,7 @@ function(
   name='lemmy',
   image=defaultImage,
   replicas=1,
-  configSecret='lemmy-config',
+  configSecret='lemmy',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

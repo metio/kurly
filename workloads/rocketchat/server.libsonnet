@@ -30,7 +30,7 @@ function(
   // The public URL (Rocket.Chat builds absolute links and validates it).
   rootUrl=null,
   // The Secret holding MONGO_URL and MONGO_OPLOG_URL (kurly mints none), via envFrom.
-  secretName='rocketchat-secrets',
+  secretName='rocketchat',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

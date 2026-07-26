@@ -28,7 +28,7 @@ function(
   dbName='wikijs',
   dbUser='wikijs',
   // The Secret holding DB_PASS (kurly mints none), via envFrom.
-  secretName='wikijs-secrets',
+  secretName='wikijs',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

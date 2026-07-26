@@ -37,7 +37,7 @@ function(
   siteUrl=null,
   adminUser='admin',
   // The Secret holding PHOTOPRISM_ADMIN_PASSWORD (kurly mints none), via envFrom.
-  secretName='photoprism-secrets',
+  secretName='photoprism',
   env={},
   resources={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '3Gi' } },
   labels={},

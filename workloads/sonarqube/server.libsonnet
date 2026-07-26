@@ -38,7 +38,7 @@ function(
   dbName='sonarqube',
   dbUser='sonarqube',
   // The Secret holding SONAR_JDBC_PASSWORD (kurly mints none), via envFrom.
-  secretName='sonarqube-secrets',
+  secretName='sonarqube',
   env={},
   resources={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '4Gi' } },
   labels={},

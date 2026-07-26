@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   // The Secret holding POSTGRES_URL and JWT_SIGNING_KEY (kurly mints none),
   // pulled into the environment via envFrom.
-  secretName='seatsurfing-secrets',
+  secretName='seatsurfing',
   replicas=1,
   // Non-sensitive settings (PUBLIC_URL, FRONTEND_URL, …).
   env={},

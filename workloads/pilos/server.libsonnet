@@ -34,7 +34,7 @@ function(
   storageClass=null,
   // The Secret holding the database/Redis/APP_KEY/BBB settings (kurly mints none),
   // via envFrom.
-  secretName='pilos-secrets',
+  secretName='pilos',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

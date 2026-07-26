@@ -24,7 +24,7 @@ function(
   name='kimai',
   image=defaultImage,
   replicas=2,
-  secretName='kimai-secrets',
+  secretName='kimai',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

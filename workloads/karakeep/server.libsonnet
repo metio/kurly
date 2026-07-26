@@ -41,7 +41,7 @@ function(
   browserWebUrl='http://chrome:9222',
   // The Secret holding NEXTAUTH_SECRET, MEILI_MASTER_KEY and any AI provider key
   // (kurly mints none), via envFrom.
-  secretName='karakeep-secrets',
+  secretName='karakeep',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

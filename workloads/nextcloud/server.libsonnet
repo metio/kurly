@@ -29,7 +29,7 @@ function(
   storageSize='50Gi',
   storageClass=null,
   trustedDomains=null,
-  secretName='nextcloud-secrets',
+  secretName='nextcloud',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

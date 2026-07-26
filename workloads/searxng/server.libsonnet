@@ -42,7 +42,7 @@ function(
   baseUrl=null,
   settings=defaultSettings,
   // The Secret holding SEARXNG_SECRET (kurly mints none), via envFrom.
-  secretName='searxng-secrets',
+  secretName='searxng',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

@@ -20,7 +20,7 @@ function(
   name='penpot-exporter',
   image=defaultImage,
   replicas=1,
-  secretName='penpot-secrets',
+  secretName='penpot',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

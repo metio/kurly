@@ -31,7 +31,7 @@ function(
   storageSize='1Gi',
   storageClass=null,
   // The Secret holding config.yaml (kurly mints none), mounted at /etc/dex.
-  configSecret='dex-config',
+  configSecret='dex',
   env={},
   resources={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } },
   labels={},

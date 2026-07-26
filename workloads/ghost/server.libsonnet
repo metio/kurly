@@ -34,7 +34,7 @@ function(
   url=null,
   // The Secret holding database__connection__password (kurly mints none), via
   // envFrom.
-  secretName='ghost-secrets',
+  secretName='ghost',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

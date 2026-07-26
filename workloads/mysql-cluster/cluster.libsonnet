@@ -44,7 +44,7 @@ function(
   storageClass=null,
   // The consumer-provided Secret holding rootUser / rootHost / rootPassword. The
   // operator requires it; kurly mints none.
-  secretName='mysql-root',
+  secretName='mysql-cluster',
   resources=null,
   // Emit a self-signed CA/certs for in-cluster TLS. Turn off to supply your own
   // via the CR's tlsSecretName/tlsCASecretName through the raw + escape hatch.

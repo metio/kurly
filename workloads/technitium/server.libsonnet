@@ -29,7 +29,7 @@ function(
   image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
-  secretName='technitium-secrets',
+  secretName='technitium',
   env={},
   resources={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

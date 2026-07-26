@@ -24,7 +24,7 @@ function(
   image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
-  secretName='clickhouse-secrets',
+  secretName='clickhouse',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } },
   labels={},

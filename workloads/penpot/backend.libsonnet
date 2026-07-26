@@ -28,7 +28,7 @@ function(
   storageSize='20Gi',
   storageClass=null,
   publicUri=null,
-  secretName='penpot-secrets',
+  secretName='penpot',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

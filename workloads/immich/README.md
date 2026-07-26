@@ -30,7 +30,7 @@ kurly.list([
   ml(),
   // The Immich-shaped Secret the server reads (DB_PASSWORD); fill it from the
   // CNPG cluster's own immich-db-app Secret, or from your secret store.
-  kurly.externalSecret('immich-secrets', { name: 'vault', kind: 'ClusterSecretStore' }, [
+  kurly.externalSecret('immich', { name: 'vault', kind: 'ClusterSecretStore' }, [
     { secretKey: 'DB_PASSWORD', remoteRef: { key: 'immich/db', property: 'password' } },
   ]),
 ])

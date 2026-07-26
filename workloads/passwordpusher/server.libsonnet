@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   // The Secret holding DATABASE_URL and SECRET_KEY_BASE (kurly mints none),
   // pulled into the environment via envFrom.
-  secretName='passwordpusher-secrets',
+  secretName='passwordpusher',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

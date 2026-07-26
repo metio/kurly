@@ -37,7 +37,7 @@ function(
   dbName='matomo',
   dbUser='matomo',
   // The Secret holding MATOMO_DATABASE_PASSWORD (kurly mints none), via envFrom.
-  secretName='matomo-secrets',
+  secretName='matomo',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

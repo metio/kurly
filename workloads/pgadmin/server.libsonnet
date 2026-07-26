@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
-  secretName='pgadmin-secrets',
+  secretName='pgadmin',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

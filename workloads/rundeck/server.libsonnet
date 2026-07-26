@@ -28,7 +28,7 @@ function(
   storageSize='10Gi',
   storageClass=null,
   grailsUrl=null,
-  secretName='rundeck-secrets',
+  secretName='rundeck',
   env={},
   resources={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},

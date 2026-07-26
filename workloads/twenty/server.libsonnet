@@ -34,7 +34,7 @@ function(
   serverUrl=null,
   // The Secret holding PG_DATABASE_URL and APP_SECRET (kurly mints none), via
   // envFrom.
-  secretName='twenty-secrets',
+  secretName='twenty',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

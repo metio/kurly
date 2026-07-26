@@ -31,7 +31,7 @@ function(
   // The public URL Lychee builds links against (required).
   appUrl=null,
   // The Secret holding APP_KEY (kurly mints none), via envFrom.
-  secretName='lychee-secrets',
+  secretName='lychee',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

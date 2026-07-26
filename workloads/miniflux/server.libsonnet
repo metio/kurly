@@ -25,7 +25,7 @@ function(
   image=defaultImage,
   // The Secret holding DATABASE_URL and ADMIN_PASSWORD (kurly mints none), via
   // envFrom.
-  secretName='miniflux-secrets',
+  secretName='miniflux',
   // Create the admin account on first start (its password comes from the Secret).
   adminUser='admin',
   replicas=1,

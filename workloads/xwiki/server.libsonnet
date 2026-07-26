@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
-  secretName='xwiki-secrets',
+  secretName='xwiki',
   env={},
   resources={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},

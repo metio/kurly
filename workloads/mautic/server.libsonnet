@@ -38,7 +38,7 @@ function(
   // The public URL Mautic builds links against.
   siteUrl=null,
   // The Secret holding MAUTIC_DB_PASSWORD (kurly mints none), via envFrom.
-  secretName='mautic-secrets',
+  secretName='mautic',
   // Run Mautic's background cron jobs (segments, campaigns, emails) in-container.
   runCronJobs=true,
   env={},

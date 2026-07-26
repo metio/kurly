@@ -29,7 +29,7 @@ function(
   dbName='metabase',
   dbUser='metabase',
   // The Secret holding MB_DB_PASS (kurly mints none), via envFrom.
-  secretName='metabase-secrets',
+  secretName='metabase',
   replicas=1,
   env={},
   resources={ requests: { cpu: '300m', memory: '1Gi' }, limits: { memory: '2Gi' } },

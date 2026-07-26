@@ -32,7 +32,7 @@ function(
   domain=null,
   // The Secret holding CMD_DB_URL and CMD_SESSION_SECRET (kurly mints none), via
   // envFrom.
-  secretName='hedgedoc-secrets',
+  secretName='hedgedoc',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

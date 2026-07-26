@@ -33,7 +33,7 @@ function(
   storageSize='10Gi',
   storageClass=null,
   // The Secret holding NEO4J_AUTH (kurly mints none), via envFrom.
-  secretName='neo4j-secrets',
+  secretName='neo4j',
   env={},
   resources={ requests: { cpu: '200m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},

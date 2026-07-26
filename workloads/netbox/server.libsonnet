@@ -47,7 +47,7 @@ function(
   redisHost='netbox-cache',
   // The Secret the image reads secret_key / db_password / superuser_password from,
   // mounted at /run/secrets. The consumer provides it; kurly mints none.
-  secretName='netbox-secrets',
+  secretName='netbox',
   // Space-separated hostnames NetBox will answer for (Django ALLOWED_HOSTS). '*'
   // accepts any Host header — fine behind a trusted ingress, tighten in the open.
   allowedHosts='*',

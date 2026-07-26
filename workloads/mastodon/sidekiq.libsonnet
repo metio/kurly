@@ -19,7 +19,7 @@ function(
   name='mastodon-sidekiq',
   image=defaultImage,
   replicas=1,
-  secretName='mastodon-secrets',
+  secretName='mastodon',
   env={},
   resources={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } },
   labels={},

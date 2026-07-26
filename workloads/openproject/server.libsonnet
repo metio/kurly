@@ -27,7 +27,7 @@ function(
   storageSize='20Gi',
   storageClass=null,
   hostName=null,
-  secretName='openproject-secrets',
+  secretName='openproject',
   env={},
   resources={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '4Gi' } },
   labels={},

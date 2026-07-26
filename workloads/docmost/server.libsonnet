@@ -32,7 +32,7 @@ function(
   appUrl=null,
   // The Secret holding DATABASE_URL, REDIS_URL and APP_SECRET (kurly mints none),
   // via envFrom.
-  secretName='docmost-secrets',
+  secretName='docmost',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

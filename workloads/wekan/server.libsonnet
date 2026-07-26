@@ -28,7 +28,7 @@ function(
   // The public URL (Wekan builds absolute links and validates it).
   rootUrl=null,
   // The Secret holding MONGO_URL (kurly mints none), via envFrom.
-  secretName='wekan-secrets',
+  secretName='wekan',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

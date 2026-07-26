@@ -30,7 +30,7 @@ function(
   // The default domain short URLs are generated under (required).
   defaultDomain=null,
   // The Secret holding DB_PASSWORD (and optionally GEOLITE_LICENSE_KEY), via envFrom.
-  secretName='shlink-secrets',
+  secretName='shlink',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

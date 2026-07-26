@@ -30,7 +30,7 @@ function(
   baseUrl=null,
   behindHttps=true,
   // The Secret holding DATABASE_URL and SECRET_KEY (kurly mints none), via envFrom.
-  secretName='bugsink-secrets',
+  secretName='bugsink',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

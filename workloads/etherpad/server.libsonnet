@@ -30,7 +30,7 @@ function(
   dbUser='etherpad',
   // The Secret holding DB_PASS, ADMIN_PASSWORD, and APIKEY (kurly mints none), via
   // envFrom.
-  secretName='etherpad-secrets',
+  secretName='etherpad',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

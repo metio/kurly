@@ -38,7 +38,7 @@ function(
   // The public URL Invoice Ninja builds links against.
   appUrl=null,
   // The Secret holding DB_PASSWORD and APP_KEY (kurly mints none), via envFrom.
-  secretName='invoiceninja-secrets',
+  secretName='invoiceninja',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

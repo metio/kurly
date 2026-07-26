@@ -35,7 +35,7 @@ function(
   adminUser='admin',
   // The Secret holding LISTMONK_db__password and LISTMONK_app__admin_password
   // (kurly mints none), via envFrom.
-  secretName='listmonk-secrets',
+  secretName='listmonk',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

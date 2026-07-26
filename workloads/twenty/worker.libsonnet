@@ -21,7 +21,7 @@ function(
   image=defaultImage,
   redisHost='twenty-cache',
   // The same Secret the server uses (PG_DATABASE_URL and APP_SECRET).
-  secretName='twenty-secrets',
+  secretName='twenty',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },

@@ -39,7 +39,7 @@ function(
   logsSize='2Gi',
   // The admin user created on bootstrap and the Secret its password is read from.
   adminUser='admin',
-  secretName='mongodb-admin',
+  secretName='mongodb-cluster',
   labels={},
   annotations={},
 )

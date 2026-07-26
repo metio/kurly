@@ -28,7 +28,7 @@ function(
   baseUrl=null,
   // The Secret holding DATABASE_URL, JWT_SECRET, and EMAIL_* (kurly mints none), via
   // envFrom.
-  secretName='fider-secrets',
+  secretName='fider',
   replicas=1,
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },

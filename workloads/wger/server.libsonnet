@@ -42,7 +42,7 @@ function(
   siteUrl=null,
   // The Secret holding DJANGO_DB_PASSWORD and SECRET_KEY (kurly mints none),
   // via envFrom.
-  secretName='wger-secrets',
+  secretName='wger',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

@@ -31,7 +31,7 @@ function(
   replicas=2,
   // The Secret holding the PostgreSQL/Redis connection and the ENCRYPTION_KEY /
   // WEBHOOK_SECRET_KEY / APP_SECRET_KEY (kurly mints none), via envFrom.
-  secretName='automatisch-secrets',
+  secretName='automatisch',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

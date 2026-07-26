@@ -23,7 +23,7 @@ function(
   name='davis',
   image=defaultImage,
   replicas=2,
-  secretName='davis-secrets',
+  secretName='davis',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

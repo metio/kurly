@@ -32,7 +32,7 @@ function(
   mediaSize='100Gi',
   cacheSize='20Gi',
   storageClass=null,
-  secretName='photoview-secrets',
+  secretName='photoview',
   env={},
   resources={ requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

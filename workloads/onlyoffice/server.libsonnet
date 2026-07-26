@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
-  secretName='onlyoffice-secrets',
+  secretName='onlyoffice',
   env={},
   resources={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},

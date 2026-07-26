@@ -46,7 +46,7 @@ function(
   adminUser='admin',
   // The Secret holding PAPERLESS_DBPASS, PAPERLESS_SECRET_KEY, and
   // PAPERLESS_ADMIN_PASSWORD (kurly mints none), via envFrom.
-  secretName='paperless-ngx-secrets',
+  secretName='paperless-ngx',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

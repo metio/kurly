@@ -31,7 +31,7 @@ function(
   storageSize='2Gi',
   storageClass=null,
   timezone='UTC',
-  secretName='pihole-secrets',
+  secretName='pihole',
   env={},
   resources={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

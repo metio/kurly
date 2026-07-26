@@ -48,7 +48,7 @@ function(
   storageClass=null,
   shmSize='256Mi',
   cacheSize='1Gi',
-  secretName='frigate-secrets',
+  secretName='frigate',
   env={},
   resources={ requests: { cpu: '500m', memory: '512Mi' }, limits: { memory: '2Gi' } },
   labels={},

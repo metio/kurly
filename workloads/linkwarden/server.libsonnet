@@ -32,7 +32,7 @@ function(
   nextauthUrl=null,
   // The Secret holding DATABASE_URL and NEXTAUTH_SECRET (kurly mints none), via
   // envFrom.
-  secretName='linkwarden-secrets',
+  secretName='linkwarden',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

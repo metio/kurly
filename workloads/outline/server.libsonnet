@@ -28,7 +28,7 @@ function(
   image=defaultImage,
   replicas=2,
   url=null,
-  secretName='outline-secrets',
+  secretName='outline',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

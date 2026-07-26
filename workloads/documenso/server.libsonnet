@@ -25,7 +25,7 @@ function(
   image=defaultImage,
   replicas=2,
   webappUrl=null,
-  secretName='documenso-secrets',
+  secretName='documenso',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

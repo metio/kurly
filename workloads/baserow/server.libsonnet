@@ -36,7 +36,7 @@ function(
   publicUrl=null,
   // The Secret holding BASEROW_SECRET_KEY and BASEROW_JWT_SIGNING_KEY (kurly mints
   // none), via envFrom.
-  secretName='baserow-secrets',
+  secretName='baserow',
   env={},
   resources={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},

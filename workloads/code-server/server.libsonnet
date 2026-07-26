@@ -27,7 +27,7 @@ function(
   storageSize='10Gi',
   storageClass=null,
   // The Secret holding PASSWORD (kurly mints none), via envFrom.
-  secretName='code-server-secrets',
+  secretName='code-server',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '2Gi' } },
   labels={},

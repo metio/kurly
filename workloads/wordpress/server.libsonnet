@@ -36,7 +36,7 @@ function(
   dbName='wordpress',
   dbUser='wordpress',
   // The Secret holding WORDPRESS_DB_PASSWORD (kurly mints none), via envFrom.
-  secretName='wordpress-secrets',
+  secretName='wordpress',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

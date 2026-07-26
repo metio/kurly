@@ -26,7 +26,7 @@ function(
   storageSize='1Gi',
   storageClass=null,
   appUrl=null,
-  secretName='2fauth-secrets',
+  secretName='2fauth',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

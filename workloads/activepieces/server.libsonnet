@@ -32,7 +32,7 @@ function(
   frontendUrl=null,
   // The Secret holding AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET
   // (kurly mints none), via envFrom.
-  secretName='activepieces-secrets',
+  secretName='activepieces',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

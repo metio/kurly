@@ -22,7 +22,7 @@ function(
   image=defaultImage,
   redisHost='glitchtip-cache',
   // The same Secret the server uses (DATABASE_URL and SECRET_KEY).
-  secretName='glitchtip-secrets',
+  secretName='glitchtip',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },

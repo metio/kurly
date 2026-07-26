@@ -40,7 +40,7 @@ function(
   redisHost='maybe-cache',
   // The Secret holding POSTGRES_PASSWORD and SECRET_KEY_BASE (kurly mints none),
   // via envFrom.
-  secretName='maybe-secrets',
+  secretName='maybe',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

@@ -24,7 +24,7 @@ function(
   image=defaultImage,
   replicas=2,
   webappUrl=null,
-  secretName='formbricks-secrets',
+  secretName='formbricks',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

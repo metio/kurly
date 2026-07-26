@@ -37,7 +37,7 @@ function(
   // The public URL the app builds links against.
   endurainHost=null,
   // The Secret holding DB_PASSWORD and SECRET_KEY (kurly mints none), via envFrom.
-  secretName='endurain-secrets',
+  secretName='endurain',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

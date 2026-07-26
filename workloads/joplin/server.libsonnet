@@ -24,7 +24,7 @@ function(
   image=defaultImage,
   replicas=2,
   appBaseUrl=null,
-  secretName='joplin-secrets',
+  secretName='joplin',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

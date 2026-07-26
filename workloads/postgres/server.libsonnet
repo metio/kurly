@@ -25,7 +25,7 @@ function(
   image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
-  secretName='postgres-secrets',
+  secretName='postgres',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

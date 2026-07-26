@@ -22,7 +22,7 @@ function(
   name='mongo-express',
   image=defaultImage,
   replicas=2,
-  secretName='mongo-express-secrets',
+  secretName='mongo-express',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

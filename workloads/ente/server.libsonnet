@@ -28,7 +28,7 @@ function(
   // Museum publishes only commit-tagged and moving tags, so it is pinned as
   // latest@digest — a known artifact that Renovate refreshes.
   image=defaultImage,
-  credentialsSecret='ente-credentials',
+  credentialsSecret='ente',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

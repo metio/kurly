@@ -27,7 +27,7 @@ function(
   image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
-  configSecret='misskey-config',
+  configSecret='misskey',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

@@ -29,7 +29,7 @@ kurly.list([
   // The credentials file museum reads (DB DSN + S3 endpoint/bucket/keys + app
   // secrets), assembled by the operator from the database and object-store
   // above — kurly authors no Secret. Fill it from your secret store:
-  kurly.externalSecret('ente-credentials', { name: 'vault', kind: 'ClusterSecretStore' }, [
+  kurly.externalSecret('ente', { name: 'vault', kind: 'ClusterSecretStore' }, [
     { secretKey: 'credentials.yaml', remoteRef: { key: 'ente/credentials' } },
   ]),
 ])

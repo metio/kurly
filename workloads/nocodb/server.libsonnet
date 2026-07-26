@@ -32,7 +32,7 @@ function(
   // The public URL NocoDB builds links against.
   publicUrl=null,
   // The Secret holding NC_DB and NC_AUTH_JWT_SECRET (kurly mints none), via envFrom.
-  secretName='nocodb-secrets',
+  secretName='nocodb',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

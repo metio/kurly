@@ -30,7 +30,7 @@ function(
   replicas=2,
   // The Secret holding DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the
   // BIGBLUEBUTTON_* endpoint/secret (kurly mints none), via envFrom.
-  secretName='greenlight-secrets',
+  secretName='greenlight',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

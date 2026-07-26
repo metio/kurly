@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
-  secretName='meilisearch-secrets',
+  secretName='meilisearch',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

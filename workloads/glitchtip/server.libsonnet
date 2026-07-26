@@ -30,7 +30,7 @@ function(
   // The public URL GlitchTip serves at.
   domain=null,
   // The Secret holding DATABASE_URL and SECRET_KEY (kurly mints none), via envFrom.
-  secretName='glitchtip-secrets',
+  secretName='glitchtip',
   replicas=1,
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },

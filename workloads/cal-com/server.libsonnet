@@ -24,7 +24,7 @@ function(
   image=defaultImage,
   replicas=2,
   webappUrl=null,
-  secretName='cal-com-secrets',
+  secretName='cal-com',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

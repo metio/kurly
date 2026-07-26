@@ -37,7 +37,7 @@ function(
   // The public URL Snipe-IT builds links against (required).
   appUrl=null,
   // The Secret holding DB_PASSWORD and APP_KEY (kurly mints none), via envFrom.
-  secretName='snipe-it-secrets',
+  secretName='snipe-it',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

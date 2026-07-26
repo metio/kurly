@@ -26,7 +26,7 @@ function(
   image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
-  secretName='leantime-secrets',
+  secretName='leantime',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

@@ -40,7 +40,7 @@ function(
   domain=null,
   // The Secret holding SYMFONY__ENV__DATABASE_PASSWORD and SYMFONY__ENV__SECRET
   // (kurly mints none), via envFrom.
-  secretName='wallabag-secrets',
+  secretName='wallabag',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

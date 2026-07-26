@@ -29,7 +29,7 @@ function(
   image=defaultImage,
   replicas=2,
   localDomain=null,
-  secretName='mastodon-secrets',
+  secretName='mastodon',
   env={},
   resources={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } },
   labels={},

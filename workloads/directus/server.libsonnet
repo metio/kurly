@@ -35,7 +35,7 @@ function(
   adminEmail='admin@example.com',
   // The Secret holding DB_PASSWORD, KEY, SECRET, and ADMIN_PASSWORD (kurly mints
   // none), via envFrom.
-  secretName='directus-secrets',
+  secretName='directus',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

@@ -27,7 +27,7 @@ function(
   storageSize='10Gi',
   storageClass=null,
   baseUrl=null,
-  secretName='webtrees-secrets',
+  secretName='webtrees',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

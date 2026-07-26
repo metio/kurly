@@ -25,7 +25,7 @@ function(
   image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
-  secretName='influxdb-secrets',
+  secretName='influxdb',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

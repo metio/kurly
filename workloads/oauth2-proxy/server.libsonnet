@@ -23,7 +23,7 @@ function(
   name='oauth2-proxy',
   image=defaultImage,
   replicas=2,
-  secretName='oauth2-proxy-secrets',
+  secretName='oauth2-proxy',
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
   labels={},

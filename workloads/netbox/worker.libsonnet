@@ -30,7 +30,7 @@ function(
   dbUser='netbox',
   redisHost='netbox-cache',
   // The same Secret the server mounts, holding secret_key and db_password.
-  secretName='netbox-secrets',
+  secretName='netbox',
   replicas=1,
   // Extra environment, merged over the below.
   env={},

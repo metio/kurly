@@ -22,7 +22,7 @@ function(
   image=defaultImage,
   replicas=1,
   // The same Secret the server uses (PostgreSQL/Redis connection and the keys).
-  secretName='automatisch-secrets',
+  secretName='automatisch',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

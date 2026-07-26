@@ -31,7 +31,7 @@ function(
   image=defaultImage,
   // The Secret holding FERRETDB_POSTGRESQL_URL (with the backend password), via
   // envFrom. kurly mints none.
-  secretName='ferretdb-secrets',
+  secretName='ferretdb',
   replicas=1,
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },

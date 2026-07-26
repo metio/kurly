@@ -25,7 +25,7 @@ function(
   image=defaultImage,
   replicas=2,
   site=null,
-  secretName='yourls-secrets',
+  secretName='yourls',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

@@ -47,7 +47,7 @@ function(
   storageSize='1Gi',
   storageClass=null,
   config=defaultConfig,
-  secretName='authelia-secrets',
+  secretName='authelia',
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
   labels={},

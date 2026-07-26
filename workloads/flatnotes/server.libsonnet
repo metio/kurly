@@ -29,7 +29,7 @@ function(
   storageClass=null,
   // The Secret holding FLATNOTES_USERNAME, FLATNOTES_PASSWORD, and
   // FLATNOTES_SECRET_KEY (kurly mints none), via envFrom.
-  secretName='flatnotes-secrets',
+  secretName='flatnotes',
   env={},
   resources={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } },
   labels={},

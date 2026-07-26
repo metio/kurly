@@ -40,7 +40,7 @@ function(
   webserverHost=null,
   // The Secret holding PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, and
   // PT_INITIAL_ROOT_PASSWORD (kurly mints none), via envFrom.
-  secretName='peertube-secrets',
+  secretName='peertube',
   env={},
   resources={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},

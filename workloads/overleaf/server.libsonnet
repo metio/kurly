@@ -39,7 +39,7 @@ function(
   siteUrl=null,
   appName='Overleaf',
   // The Secret holding OVERLEAF_MONGO_URL (kurly mints none), via envFrom.
-  secretName='overleaf-secrets',
+  secretName='overleaf',
   env={},
   resources={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},

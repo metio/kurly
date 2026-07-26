@@ -28,7 +28,7 @@ function(
   image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
-  secretName='mumble-secrets',
+  secretName='mumble',
   env={},
   resources={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

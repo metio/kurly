@@ -31,7 +31,7 @@ function(
   dbHost='immich-db-rw',
   redisHost='immich-cache-headless',
   machineLearningUrl='http://immich-machine-learning:3003',
-  secretName='immich-secrets',
+  secretName='immich',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } },
   labels={},

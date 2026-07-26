@@ -32,7 +32,7 @@ function(
   // The public URL the frontend and API are reached at.
   publicUrl=null,
   // The Secret holding VIKUNJA_SERVICE_JWTSECRET (kurly mints none), via envFrom.
-  secretName='vikunja-secrets',
+  secretName='vikunja',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

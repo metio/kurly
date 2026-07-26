@@ -24,7 +24,7 @@ function(
   image=defaultImage,
   storageSize='50Gi',
   storageClass=null,
-  secretName='minio-secrets',
+  secretName='minio',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

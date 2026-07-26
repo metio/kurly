@@ -29,7 +29,7 @@ function(
   storageSize='1Gi',
   storageClass=null,
   // The Secret holding SECRET_ENCRYPTION_KEY (kurly mints none), via envFrom.
-  secretName='homarr-secrets',
+  secretName='homarr',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

@@ -28,7 +28,7 @@ function(
   image=defaultImage,
   replicas=2,
   baseUrl=null,
-  secretName='planka-secrets',
+  secretName='planka',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

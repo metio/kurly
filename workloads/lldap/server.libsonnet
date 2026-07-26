@@ -35,7 +35,7 @@ function(
   baseDn=null,
   // The Secret holding LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS (kurly mints none), via
   // envFrom.
-  secretName='lldap-secrets',
+  secretName='lldap',
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
   labels={},

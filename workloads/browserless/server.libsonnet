@@ -22,7 +22,7 @@ function(
   name='browserless',
   image=defaultImage,
   replicas=2,
-  secretName='browserless-secrets',
+  secretName='browserless',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } },
   labels={},

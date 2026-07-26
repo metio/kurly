@@ -24,7 +24,7 @@ function(
   image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
-  secretName='pictrs-secrets',
+  secretName='lemmy-pictrs',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

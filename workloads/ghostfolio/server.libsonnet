@@ -23,7 +23,7 @@ function(
   name='ghostfolio',
   image=defaultImage,
   replicas=2,
-  secretName='ghostfolio-secrets',
+  secretName='ghostfolio',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

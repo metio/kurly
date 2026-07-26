@@ -32,7 +32,7 @@ function(
   // The public URL (Mattermost builds absolute links and validates it).
   siteUrl=null,
   // The Secret holding MM_SQLSETTINGS_DATASOURCE (kurly mints none), via envFrom.
-  secretName='mattermost-secrets',
+  secretName='mattermost',
   env={},
   resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

@@ -32,7 +32,7 @@ function(
   siteRoot=null,
   allowedHosts=null,
   // The Secret holding SECRET_KEY (kurly mints none), via envFrom.
-  secretName='healthchecks-secrets',
+  secretName='healthchecks',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

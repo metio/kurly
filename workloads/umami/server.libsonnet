@@ -24,7 +24,7 @@ function(
   name='umami',
   image=defaultImage,
   // The Secret holding DATABASE_URL and APP_SECRET (kurly mints none), via envFrom.
-  secretName='umami-secrets',
+  secretName='umami',
   replicas=1,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

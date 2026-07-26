@@ -37,7 +37,7 @@ function(
   // The public URL BookStack builds links against (required).
   appUrl=null,
   // The Secret holding DB_PASS and APP_KEY (kurly mints none), via envFrom.
-  secretName='bookstack-secrets',
+  secretName='bookstack',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

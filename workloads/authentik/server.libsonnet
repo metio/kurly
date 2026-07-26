@@ -27,7 +27,7 @@ function(
   name='authentik',
   image=defaultImage,
   replicas=2,
-  secretName='authentik-secrets',
+  secretName='authentik',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},

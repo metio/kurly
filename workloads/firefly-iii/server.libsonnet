@@ -38,7 +38,7 @@ function(
   // The public URL Firefly III builds links against (required; also TRUSTED_PROXIES).
   appUrl=null,
   // The Secret holding DB_PASSWORD and APP_KEY (kurly mints none), via envFrom.
-  secretName='firefly-iii-secrets',
+  secretName='firefly-iii',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},

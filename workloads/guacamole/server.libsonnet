@@ -28,7 +28,7 @@ function(
   image=defaultImage,
   guacdImage='docker.io/guacamole/guacd:1.6.0',
   replicas=2,
-  secretName='guacamole-secrets',
+  secretName='guacamole',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},
