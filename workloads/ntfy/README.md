@@ -21,7 +21,7 @@ kurly.list(ntfy(baseUrl='https://ntfy.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `ntfy` | |
-| `image` | `docker.io/binwiederhier/ntfy:v2.26.0` | |
+| `image` | `docker.io/binwiederhier/ntfy:v2.26.3` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | cache, auth db, attachments (`/var/lib/ntfy`) |
 | `baseUrl` | inferred | the public URL (needed for the web app, attachments, iOS) |
 | `env` / `resources` / `labels` / `annotations` | | |
