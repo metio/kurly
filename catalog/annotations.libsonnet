@@ -3629,7 +3629,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A PostgreSQL server. secretName holds the credentials (envFrom). Data at /var/lib/postgresql/data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='postgres'),
-          d.arg('image', d.T.string, default='docker.io/library/postgres:17.2'),
+          d.arg('image', d.T.string, default='docker.io/library/postgres:18.4'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='postgres-secrets'),

@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='postgres',
-  image='docker.io/library/postgres:17.2',
+  image='docker.io/library/postgres:18.4',
   storageSize='10Gi',
   storageClass=null,
   secretName='postgres-secrets',

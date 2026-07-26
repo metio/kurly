@@ -22136,7 +22136,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/postgres:17.2",
+                     "default": "docker.io/library/postgres:18.4",
                      "name": "image",
                      "required": false,
                      "type": "string"
