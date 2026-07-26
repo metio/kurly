@@ -19627,7 +19627,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/openobserve/openobserve:v0.14.4",
+                     "default": "docker.io/openobserve/openobserve:v0.91.3",
                      "name": "image",
                      "required": false,
                      "type": "string"

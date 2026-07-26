@@ -3210,7 +3210,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The OpenObserve server. secretName holds ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD (envFrom). Data at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='openobserve'),
-          d.arg('image', d.T.string, default='docker.io/openobserve/openobserve:v0.14.4'),
+          d.arg('image', d.T.string, default='docker.io/openobserve/openobserve:v0.91.3'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='openobserve-secrets'),

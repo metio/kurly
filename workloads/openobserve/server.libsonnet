@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='openobserve',
-  image='docker.io/openobserve/openobserve:v0.14.4',
+  image='docker.io/openobserve/openobserve:v0.91.3',
   storageSize='20Gi',
   storageClass=null,
   secretName='openobserve-secrets',
