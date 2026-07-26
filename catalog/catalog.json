@@ -7191,7 +7191,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/jgraph/drawio:v30.3.14",
+                     "default": "docker.io/jgraph/drawio:30.4.3",
                      "name": "image",
                      "required": false,
                      "type": "string"

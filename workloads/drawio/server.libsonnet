@@ -17,7 +17,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='drawio',
-  image='docker.io/jgraph/drawio:v30.3.14',
+  image='docker.io/jgraph/drawio:30.4.3',
   replicas=2,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
