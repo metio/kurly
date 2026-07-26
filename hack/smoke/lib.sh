@@ -228,6 +228,28 @@ kurly::validate_cr() {
   echo "ok: ${stage} validates against the operator schema on a live cluster"
 }
 
+# Frees everything a workload's fast + deep checks created, so the shared single
+# cluster does not accumulate pods across the walk. Deletes the workload's
+# namespaces (kurly-<id>, kurly-<id>-<stage>, kurly-deep-<id>) and the deep
+# check's cluster-scoped RoleBinding, then waits briefly for termination so the
+# next workload starts on a drained cluster. Best-effort — a slow finalizer never
+# fails the run. Installed operators/CRDs are left in place (harmless, and
+# re-running their install is idempotent).
+kurly::cleanup_workload() {
+  local id="$1" nss
+  mapfile -t nss < <(kubectl get namespace --output=name 2>/dev/null \
+    | sed 's#namespace/##' | grep -E "^kurly-(deep-)?${id}(-|\$)" || true)
+  # --interactive=false: kubectl prompts for delete confirmation and reads EOF as
+  # "no" in a non-interactive shell, silently cancelling the delete otherwise.
+  kubectl delete clusterrolebinding "stageset-deployer-kurly-deep-${id}" --interactive=false --ignore-not-found >/dev/null 2>&1 || true
+  [ "${#nss[@]}" -gt 0 ] || return 0
+  echo "== cleanup ${id}: deleting namespaces ${nss[*]} =="
+  # A blocking delete (kubectl's default --wait) returns only once the namespaces
+  # and everything in them are gone, so the next workload starts on a drained
+  # cluster; the timeout caps a stuck finalizer rather than hanging the walk.
+  kubectl delete namespace "${nss[@]}" --interactive=false --timeout=180s >/dev/null 2>&1 || true
+}
+
 # Extracts a stage parameter's simple quoted default (dbHost='x' -> x); empty when
 # the default is a computed expression rather than a literal.
 kurly::_param() { grep -oE "^[[:space:]]*$2='[^']*'" "$1" 2>/dev/null | head -1 | sed -E "s/.*='([^']*)'.*/\1/" || true; }
