@@ -33,7 +33,7 @@ function(
   // keeps a quorum.
   members=3,
   // renovate: datasource=docker depName=docker.io/library/mongo versioning=docker
-  mongodbVersion='8.0.4',
+  mongodbVersion='8.3.7',
   storageSize='10Gi',
   storageClass=null,
   logsSize='2Gi',

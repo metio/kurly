@@ -29,7 +29,7 @@ function(
   replicas=3,
   // The OpenSearch version the operator pins (server and Dashboards image tag).
   // renovate: datasource=docker depName=docker.io/opensearchproject/opensearch versioning=docker
-  opensearchVersion='2.19.1',
+  opensearchVersion='3.7.0',
   storageSize='10Gi',
   storageClass=null,
   resources={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '4Gi' } },
