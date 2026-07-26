@@ -24916,7 +24916,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/b3log/siyuan:v3.7.2",
+                     "default": "docker.io/b3log/siyuan:v3.7.3",
                      "name": "image",
                      "required": false,
                      "type": "string"

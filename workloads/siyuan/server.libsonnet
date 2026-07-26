@@ -24,7 +24,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='siyuan',
-  image='docker.io/b3log/siyuan:v3.7.2',
+  image='docker.io/b3log/siyuan:v3.7.3',
   storageSize='10Gi',
   storageClass=null,
   env={},

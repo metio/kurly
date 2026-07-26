@@ -2259,7 +2259,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The SiYuan server. Set SIYUAN_ACCESS_AUTH_CODE via env/envFromSecret to gate web access. Workspace at /siyuan/workspace. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='siyuan'),
-          d.arg('image', d.T.string, default='docker.io/b3log/siyuan:v3.7.2'),
+          d.arg('image', d.T.string, default='docker.io/b3log/siyuan:v3.7.3'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
