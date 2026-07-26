@@ -18472,7 +18472,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/nocobase/nocobase:1.4.0",
+                     "default": "docker.io/nocobase/nocobase:1.9.68",
                      "name": "image",
                      "required": false,
                      "type": "string"

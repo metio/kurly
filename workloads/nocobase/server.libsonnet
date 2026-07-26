@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='nocobase',
-  image='docker.io/nocobase/nocobase:1.4.0',
+  image='docker.io/nocobase/nocobase:1.9.68',
   storageSize='10Gi',
   storageClass=null,
   secretName='nocobase-secrets',
