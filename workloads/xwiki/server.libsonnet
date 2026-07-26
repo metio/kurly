@@ -20,9 +20,10 @@
 // recreated. The bundled Tomcat runs as root.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='xwiki',
-  image='docker.io/xwiki:16-postgres-tomcat',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   secretName='xwiki-secrets',

@@ -27,6 +27,7 @@ function(
   clusterName=null,
   // Nodes in this datacenter.
   size=3,
+  // renovate: datasource=docker depName=docker.io/library/cassandra versioning=docker
   serverVersion='4.1.7',
   storageSize='10Gi',
   storageClass=null,

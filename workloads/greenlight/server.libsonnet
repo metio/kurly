@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='greenlight',
-  image='docker.io/bigbluebutton/greenlight:v3.8.2.3',
+  image=defaultImage,
   replicas=2,
   // The Secret holding DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the
   // BIGBLUEBUTTON_* endpoint/secret (kurly mints none), via envFrom.

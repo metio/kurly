@@ -25,10 +25,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline rewrites 'dev' to the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './cache.image', '\n');
 
 function(
   name='valkey',
-  image='docker.io/valkey/valkey:9.1.1',
+  image=defaultImage,
   maxMemory='256mb',
   // The sidecar that labels the primary pod — a maintained Alpine image carrying
   // kubectl plus busybox `nc` and `sh` (the role probe needs neither bash nor a

@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='blinko',
-  image='docker.io/blinkospace/blinko:1.8.8',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   // The public URL (NextAuth needs it).

@@ -21,6 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 local labelsFor(name) = {
   'app.kubernetes.io/name': name,
@@ -47,7 +48,7 @@ function(
   // RoleBinding — which a cluster-scoped object cannot inherit later — so it MUST
   // match the namespace you deploy to.
   namespace='opencost',
-  image='ghcr.io/opencost/opencost:1.119.2',
+  image=defaultImage,
   // The Prometheus (or Thanos Query) OpenCost reads usage from. Defaults to the
   // prometheus workload's Service.
   prometheusEndpoint='http://prometheus-operated.monitoring.svc:9090',

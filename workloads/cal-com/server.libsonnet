@@ -18,9 +18,10 @@
 // Stateless: a plain rolling Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='cal-com',
-  image='docker.io/calcom/cal.com:latest@sha256:ace3bb1219fb7306585ab9f4d94d41af7ee064c343db0498173436bbe857bd49',
+  image=defaultImage,
   replicas=2,
   webappUrl=null,
   secretName='cal-com-secrets',

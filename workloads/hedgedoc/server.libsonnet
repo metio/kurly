@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='hedgedoc',
-  image='quay.io/hedgedoc/hedgedoc:1.11.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   // The public domain HedgeDoc serves at.

@@ -13,9 +13,10 @@
 // WHOOGLE_CONFIG_* environment variables (see the project docs).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='whoogle',
-  image='ghcr.io/benbusby/whoogle-search:0.9.0',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },

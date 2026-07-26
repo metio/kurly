@@ -16,10 +16,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='homebox',
-  image='ghcr.io/sysadminsmedia/homebox:0.26.2-rootless',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

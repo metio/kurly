@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='fider',
-  image='docker.io/getfider/fider:v0.36.0',
+  image=defaultImage,
   // The public URL Fider builds links against (required).
   baseUrl=null,
   // The Secret holding DATABASE_URL, JWT_SECRET, and EMAIL_* (kurly mints none), via

@@ -27,6 +27,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './ruler.image', '\n');
 
 local labelsFor(name) = {
   'app.kubernetes.io/name': name,
@@ -36,7 +37,7 @@ local labelsFor(name) = {
 
 function(
   name='thanos-ruler',
-  image='quay.io/thanos/thanos:v0.42.2',
+  image=defaultImage,
   replicas=1,
   // The Thanos Query endpoints the ruler evaluates rules against — the whole
   // point of a Thanos Ruler over a plain Prometheus rule evaluator. Passed

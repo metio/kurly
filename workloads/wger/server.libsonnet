@@ -27,10 +27,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='wger',
-  image='docker.io/wger/server:2.6.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   dbHost='wger-db-rw',

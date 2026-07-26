@@ -13,9 +13,10 @@
 // chooses (browser, their own Google Drive/OneDrive/GitHub); the server keeps nothing.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='draw-io',
-  image='docker.io/jgraph/drawio:latest@sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '50m', memory: '256Mi' }, limits: { memory: '512Mi' } },

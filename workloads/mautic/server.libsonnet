@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='mautic',
-  image='docker.io/mautic/mautic:5.2.11-apache',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   dbHost='mautic-db',

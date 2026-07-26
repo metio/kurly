@@ -18,9 +18,10 @@
 // Single writer: the data lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='snappymail',
-  image='ghcr.io/the-djmaze/snappymail:latest@sha256:5e3d990438809a8a49f8ac5758db03e858e6e9fc0e369e1f9e474f7664079905',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

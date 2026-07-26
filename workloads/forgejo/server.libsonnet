@@ -27,13 +27,14 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 // Forgejo serves the UI and git-over-HTTP on :3000; git-over-SSH runs on :2222
 // (an unprivileged port the rootless image can bind), published on the Service
 // beside the HTTP port via kurly.extraPort.
 function(
   name='forgejo',
-  image='codeberg.org/forgejo/forgejo:16.0-rootless',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   dbHost='forgejo-db-rw',

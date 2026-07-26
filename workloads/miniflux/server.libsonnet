@@ -18,10 +18,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='miniflux',
-  image='docker.io/miniflux/miniflux:2.3.2',
+  image=defaultImage,
   // The Secret holding DATABASE_URL and ADMIN_PASSWORD (kurly mints none), via
   // envFrom.
   secretName='miniflux-secrets',

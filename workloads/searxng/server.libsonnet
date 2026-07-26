@@ -22,6 +22,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 local defaultSettings = {
   use_default_settings: true,
@@ -36,7 +37,7 @@ local defaultSettings = {
 
 function(
   name='searxng',
-  image='docker.io/searxng/searxng:2026.7.9-b512eaa27',
+  image=defaultImage,
   // The public URL (SearXNG builds absolute links from it).
   baseUrl=null,
   settings=defaultSettings,

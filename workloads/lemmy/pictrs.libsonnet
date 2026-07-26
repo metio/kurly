@@ -18,9 +18,10 @@
 // object storage at S3 to scale out).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './pictrs.image', '\n');
 function(
   name='pictrs',
-  image='docker.io/asonix/pictrs:0.5.16',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   secretName='pictrs-secrets',

@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='calibre-web',
-  image='lscr.io/linuxserver/calibre-web:0.6.26',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

@@ -28,17 +28,26 @@
   ],
   "customManagers": [
     {
-      "description": "Every workload's default image, pinned in its stage, its catalog annotation, and the generated catalog.json (and any README that names it) — matched together so the three stay in lockstep and the check-catalog gate stays green on the bump PR. A single generic manager covers every fully-qualified image rather than one manager per image; the placeholder registries are disabled in packageRules above.",
+      "description": "Every workload's default image. The PRIMARY image of each stage lives in its own dedicated file (workloads/<name>/<stage>.image), and any secondary image (a sidecar's, a README deploy example's) in that workload's own .libsonnet or README — so a Renovate bump touches ONE workload's file and never a shared one, and hundreds of parallel update branches never collide. The catalog no longer embeds image versions, so annotations.libsonnet and catalog.json are deliberately NOT matched. The placeholder registries are disabled in packageRules above.",
       "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [
+        "/^workloads/.+\\.image$/",
         "/^workloads/.+\\.libsonnet$/",
-        "/^workloads/.+\\.md$/",
-        "/^catalog/annotations\\.libsonnet$/",
-        "/^catalog/catalog\\.json$/"
+        "/^workloads/.+\\.md$/"
       ],
       "matchStrings": [
-        "(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9._-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
+        "(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9._-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
+      ]
+    },
+    {
+      "description": "Operator-backed workloads (mysql/mongodb/opensearch/cassandra clusters) pin a VERSION the operator maps to a container image, not a full image ref. Track each through a `// renovate: datasource=... depName=... versioning=...` hint above its `<name>Version='X'` line in the workload's own .libsonnet — a per-workload file, so these bumps never collide either.",
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^workloads/.+\\.libsonnet$/"
+      ],
+      "matchStrings": [
+        "// renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\s+[a-zA-Z]+[Vv]ersion='(?<currentValue>[^']+)'"
       ]
     },
     {

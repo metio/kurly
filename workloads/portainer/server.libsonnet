@@ -23,9 +23,10 @@
 // (never rolled) to keep two instances off the same database.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='portainer',
-  image='docker.io/portainer/portainer-ce:2.21.4',
+  image=defaultImage,
   serviceAccountName=null,
   storageSize='1Gi',
   storageClass=null,

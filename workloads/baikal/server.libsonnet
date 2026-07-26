@@ -23,10 +23,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='baikal',
-  image='docker.io/ckulka/baikal:0.10.1-nginx',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

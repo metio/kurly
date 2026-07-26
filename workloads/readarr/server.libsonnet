@@ -23,9 +23,10 @@
 // Single writer: the config lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='readarr',
-  image='ghcr.io/linuxserver/readarr:develop@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

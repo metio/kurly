@@ -18,10 +18,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='umami',
-  image='ghcr.io/umami-software/umami:postgresql-v2.15.1',
+  image=defaultImage,
   // The Secret holding DATABASE_URL and APP_SECRET (kurly mints none), via envFrom.
   secretName='umami-secrets',
   replicas=1,

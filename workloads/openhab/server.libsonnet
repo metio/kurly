@@ -20,9 +20,10 @@
 // Single writer: the data lives on ReadWriteOnce volumes, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='openhab',
-  image='docker.io/openhab/openhab:4.3.0',
+  image=defaultImage,
   confSize='2Gi',
   userdataSize='5Gi',
   addonsSize='2Gi',

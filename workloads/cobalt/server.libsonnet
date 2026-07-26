@@ -17,9 +17,10 @@
 // your own envFrom (compose kurly.envFromSecret on).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='cobalt',
-  image='ghcr.io/imputnet/cobalt:10@sha256:e5d3fff05a0a5a24ef31b034736fa5075ba45bdb051da1910b84be1c7798f5b4',
+  image=defaultImage,
   replicas=2,
   apiUrl=null,
   env={},

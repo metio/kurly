@@ -18,9 +18,10 @@
 // envFrom.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='oauth2-proxy',
-  image='quay.io/oauth2-proxy/oauth2-proxy:v7.7.1',
+  image=defaultImage,
   replicas=2,
   secretName='oauth2-proxy-secrets',
   env={},

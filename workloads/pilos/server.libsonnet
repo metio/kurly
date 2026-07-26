@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='pilos',
-  image='docker.io/pilos/pilos:4.17.0',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   // The Secret holding the database/Redis/APP_KEY/BBB settings (kurly mints none),

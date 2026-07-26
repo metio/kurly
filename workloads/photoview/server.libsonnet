@@ -24,10 +24,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='photoview',
-  image='docker.io/viktorstrate/photoview:2.4.0',
+  image=defaultImage,
   mediaSize='100Gi',
   cacheSize='20Gi',
   storageClass=null,

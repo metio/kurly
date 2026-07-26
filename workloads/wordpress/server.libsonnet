@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='wordpress',
-  image='docker.io/library/wordpress:6.9.4-php8.3-apache',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   dbHost='wordpress-db',

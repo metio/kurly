@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='nocodb',
-  image='docker.io/nocodb/nocodb:2026.07.0',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   // The public URL NocoDB builds links against.

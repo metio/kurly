@@ -16,9 +16,10 @@
 // rolled) to keep two pods off the same config directory.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='apprise',
-  image='docker.io/caronc/apprise:latest@sha256:91321755496e8472bdb674e4b14eb64d1f3b15510ef94971309c9f76ef3171e7',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   env={ APPRISE_STATEFUL_MODE: 'simple' },

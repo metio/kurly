@@ -20,9 +20,10 @@
 // Stateless with S3 storage: a plain rolling Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='teable',
-  image='ghcr.io/teableio/teable:latest@sha256:3d76dae237327e0d54dcc1aa073209088deb6d9bc4b6215a09462b3d133d4e19',
+  image=defaultImage,
   replicas=2,
   publicOrigin=null,
   secretName='teable-secrets',

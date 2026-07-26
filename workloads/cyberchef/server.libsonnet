@@ -12,9 +12,10 @@
 // Serves the app on :8000 — compose an exposure onto it.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='cyberchef',
-  image='ghcr.io/gchq/cyberchef:10.19.4',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },

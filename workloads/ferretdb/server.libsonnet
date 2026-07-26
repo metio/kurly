@@ -24,10 +24,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='ferretdb',
-  image='ghcr.io/ferretdb/ferretdb:2.7.0',
+  image=defaultImage,
   // The Secret holding FERRETDB_POSTGRESQL_URL (with the backend password), via
   // envFrom. kurly mints none.
   secretName='ferretdb-secrets',

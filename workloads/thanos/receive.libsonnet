@@ -28,10 +28,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './receive.image', '\n');
 
 function(
   name='thanos-receive',
-  image='quay.io/thanos/thanos:v0.42.2',
+  image=defaultImage,
   replicas=1,
   // How many receivers each series is written to. Must be <= replicas and is
   // usually odd (the receiver quorum-writes). 1 disables replication.

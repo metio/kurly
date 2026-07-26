@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='outline',
-  image='docker.io/outlinewiki/outline:0.81.1',
+  image=defaultImage,
   replicas=2,
   url=null,
   secretName='outline-secrets',

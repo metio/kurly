@@ -18,6 +18,7 @@
 // replace it with your own.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 local defaultConfig = {
   pages: [
@@ -32,7 +33,7 @@ local defaultConfig = {
 
 function(
   name='glance',
-  image='docker.io/glanceapp/glance:v0.8.4',
+  image=defaultImage,
   config=defaultConfig,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },

@@ -23,10 +23,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='automatisch',
-  image='ghcr.io/automatisch/automatisch:0.15.0',
+  image=defaultImage,
   replicas=2,
   // The Secret holding the PostgreSQL/Redis connection and the ENCRYPTION_KEY /
   // WEBHOOK_SECRET_KEY / APP_SECRET_KEY (kurly mints none), via envFrom.

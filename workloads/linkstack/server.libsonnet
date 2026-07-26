@@ -17,9 +17,10 @@
 // Single writer: the data lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='linkstack',
-  image='ghcr.io/linkstackorg/linkstack:latest@sha256:6e7e8f44099f7c4f1340bb9ffda5411f97da766a06fd63cf1ff90c57ce22dd61',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

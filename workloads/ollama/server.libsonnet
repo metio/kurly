@@ -19,9 +19,10 @@
 // rolled) to keep two pods off the store.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='ollama',
-  image='docker.io/ollama/ollama:0.5.4',
+  image=defaultImage,
   storageSize='50Gi',
   storageClass=null,
   env={},

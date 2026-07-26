@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='monica',
-  image='docker.io/library/monica:4.1.2-apache',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   dbHost='monica-db',

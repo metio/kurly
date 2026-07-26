@@ -15,9 +15,10 @@
 // Secret via envFrom. Stateless — scale freely.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './streaming.image', '\n');
 function(
   name='mastodon-streaming',
-  image='ghcr.io/mastodon/mastodon-streaming:v4.3.1',
+  image=defaultImage,
   replicas=2,
   secretName='mastodon-secrets',
   env={},

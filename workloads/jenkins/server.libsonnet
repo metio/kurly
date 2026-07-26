@@ -16,9 +16,10 @@
 // (never rolled) to keep two controllers off the same home directory.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='jenkins',
-  image='docker.io/jenkins/jenkins:2.479.2-lts',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   env={},

@@ -409,7 +409,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         backend: d.fn('The tik backend supervisor: a single-writer http app over a ReadWriteOnce store (one replica, recreated to avoid deadlocking on the volume). Compose an exposure recipe to serve the board.', [
           d.arg('name', d.T.string, default='tik'),
-          d.arg('image', d.T.string, default='ghcr.io/metio/tik:2026.7.18213457'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
         ]) + {
@@ -424,7 +424,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Vaultwarden server. domain is the public URL — WebAuthn/passkeys, attachment links, and email all need it. signupsAllowed is off by default (turn on to bootstrap, then off). env carries extra settings (ADMIN_TOKEN, SMTP_*, or DATABASE_URL to move to external Postgres) — the admin token and any DB password should come from a Secret, kurly mints none. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='vaultwarden'),
-          d.arg('image', d.T.string, default='docker.io/vaultwarden/server:1.36.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('domain', d.T.string, example='https://vault.example.com'),
@@ -445,7 +445,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The WordPress server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide. secretName holds WORDPRESS_DB_PASSWORD (envFrom). Content at /var/www/html. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='wordpress'),
-          d.arg('image', d.T.string, default='docker.io/library/wordpress:6.9.4-php8.3-apache'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='wordpress-db'),
@@ -465,7 +465,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Etherpad server. dbHost/dbName/dbUser default to a cnpg-cluster named etherpad-db. secretName holds DB_PASS, ADMIN_PASSWORD, and APIKEY (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='etherpad'),
-          d.arg('image', d.T.string, default='docker.io/etherpad/etherpad:3.3.2'),
+          d.arg('image', d.T.string),
           d.arg('dbHost', d.T.string, default='etherpad-db-rw'),
           d.arg('dbName', d.T.string, default='etherpad'),
           d.arg('dbUser', d.T.string, default='etherpad'),
@@ -484,7 +484,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The HedgeDoc server. domain is the public domain. secretName holds CMD_DB_URL (with the DB password) and CMD_SESSION_SECRET (envFrom). Uploads at /hedgedoc/public/uploads. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='hedgedoc'),
-          d.arg('image', d.T.string, default='quay.io/hedgedoc/hedgedoc:1.11.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('domain', d.T.string, example='pad.example.com'),
@@ -502,7 +502,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Dex server (runs `dex serve /etc/dex/config.yaml`). SQLite state at /var/dex on the volume. configSecret is the Secret holding config.yaml (mounted at /etc/dex; it carries client and connector secrets). Point storage at PostgreSQL in the config, or the kubernetes backend with kurly.rbac, to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='dex'),
-          d.arg('image', d.T.string, default='ghcr.io/dexidp/dex:v2.45.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('configSecret', d.T.string, default='dex-config'),
@@ -519,7 +519,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Vikunja server. Database at /db, attachments at /files, both on the volume. publicUrl is the public URL; secretName holds VIKUNJA_SERVICE_JWTSECRET (envFrom, keep it stable). Point VIKUNJA_DATABASE_TYPE at external Postgres/MySQL via env to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='vikunja'),
-          d.arg('image', d.T.string, default='docker.io/vikunja/vikunja:v2.4.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('publicUrl', d.T.string, example='https://tasks.example.com'),
@@ -537,7 +537,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The listmonk server. dbHost/dbName/dbUser default to a cnpg-cluster named listmonk-db; adminUser is the admin. secretName holds LISTMONK_db__password and LISTMONK_app__admin_password (envFrom). Uploads at /listmonk/uploads. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='listmonk'),
-          d.arg('image', d.T.string, default='docker.io/listmonk/listmonk:v6.2.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='listmonk-db-rw'),
@@ -558,7 +558,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Umami server. secretName holds DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='umami'),
-          d.arg('image', d.T.string, default='ghcr.io/umami-software/umami:postgresql-v2.15.1'),
+          d.arg('image', d.T.string),
           d.arg('secretName', d.T.string, default='umami-secrets'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
@@ -574,7 +574,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Linkwarden server. nextauthUrl is the public URL. secretName holds DATABASE_URL (with the DB password) and NEXTAUTH_SECRET (envFrom). Archived pages at /data/data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='linkwarden'),
-          d.arg('image', d.T.string, default='ghcr.io/linkwarden/linkwarden:v2.15.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('nextauthUrl', d.T.string, example='https://links.example.com'),
@@ -592,7 +592,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Miniflux server. secretName holds DATABASE_URL (with the DB password) and ADMIN_PASSWORD (envFrom); adminUser is the first-run admin. Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='miniflux'),
-          d.arg('image', d.T.string, default='docker.io/miniflux/miniflux:2.3.2'),
+          d.arg('image', d.T.string),
           d.arg('secretName', d.T.string, default='miniflux-secrets'),
           d.arg('adminUser', d.T.string, default='admin'),
           d.arg('replicas', d.T.int, default=1),
@@ -609,7 +609,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The FreshRSS server. Keeps its SQLite database at /var/www/FreshRSS/data on the volume; baseUrl is the public URL. Point it at external PostgreSQL/MySQL via the setup wizard to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='freshrss'),
-          d.arg('image', d.T.string, default='docker.io/freshrss/freshrss:1.29.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://rss.example.com'),
@@ -625,7 +625,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The flatnotes server. Notes live at /data on the volume. secretName holds FLATNOTES_USERNAME, FLATNOTES_PASSWORD, and FLATNOTES_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='flatnotes'),
-          d.arg('image', d.T.string, default='docker.io/dullage/flatnotes:v5.5.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='flatnotes-secrets'),
@@ -641,7 +641,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The TriliumNext server. Keeps notes in SQLite at /home/node/trilium-data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='trilium'),
-          d.arg('image', d.T.string, default='ghcr.io/triliumnext/trilium:v0.104.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -656,7 +656,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The SilverBullet server. Your markdown space lives at /space on the volume. secretName holds SB_USER (user:password, envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='silverbullet'),
-          d.arg('image', d.T.string, default='ghcr.io/silverbulletmd/silverbullet:2.9.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='silverbullet-secrets'),
@@ -672,7 +672,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The code-server editor. Workspace, extensions, and settings at /home/coder on the volume. secretName holds PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='code-server'),
-          d.arg('image', d.T.string, default='docker.io/codercom/code-server:4.129.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='code-server-secrets'),
@@ -688,7 +688,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Beszel hub. Keeps its SQLite data at /beszel_data on the volume. Compose an exposure onto the HTTP port; agents on monitored hosts report to it.', [
           d.arg('name', d.T.string, default='beszel'),
-          d.arg('image', d.T.string, default='ghcr.io/henrygd/beszel/beszel:0.18.7'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -703,7 +703,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Audiobookshelf server. Config at /config, metadata at /metadata, library at /audiobooks, all on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='audiobookshelf'),
-          d.arg('image', d.T.string, default='ghcr.io/advplyr/audiobookshelf:2.35.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -718,7 +718,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Navidrome server. Database at /data, music library at /music (read-only), both on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='navidrome'),
-          d.arg('image', d.T.string, default='docker.io/deluan/navidrome:0.63.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -733,7 +733,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Grist server. Documents at /persist on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='grist'),
-          d.arg('image', d.T.string, default='docker.io/gristlabs/grist:1.2.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -748,7 +748,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Jenkins controller. JENKINS_HOME at /var/jenkins_home on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='jenkins'),
-          d.arg('image', d.T.string, default='docker.io/jenkins/jenkins:2.479.2-lts'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -763,7 +763,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Portainer server. Database at /data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='portainer'),
-          d.arg('image', d.T.string, default='docker.io/portainer/portainer-ce:2.21.4'),
+          d.arg('image', d.T.string),
           d.arg('serviceAccountName', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
@@ -780,7 +780,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Documenso server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='documenso'),
-          d.arg('image', d.T.string, default='docker.io/documenso/documenso:latest@sha256:945bd2c04306bd5d78def0c4ceafdffb6b0a106cd6a2543db5acda9a6424b2d9'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('webappUrl', d.T.string),
           d.arg('secretName', d.T.string, default='documenso-secrets'),
@@ -797,7 +797,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Cal.com server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='cal-com'),
-          d.arg('image', d.T.string, default='docker.io/calcom/cal.com:latest@sha256:ace3bb1219fb7306585ab9f4d94d41af7ee064c343db0498173436bbe857bd49'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('webappUrl', d.T.string),
           d.arg('secretName', d.T.string, default='cal-com-secrets'),
@@ -814,7 +814,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The AList server. Database and config at /opt/alist/data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='alist'),
-          d.arg('image', d.T.string, default='ghcr.io/alistgo/alist:latest@sha256:ee46012c344c0f40387b1c1aeddee4c114887764d3aebdd1d7bba83920423c5e'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -829,7 +829,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The draw.io server. Stateless; compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='draw-io'),
-          d.arg('image', d.T.string, default='docker.io/jgraph/drawio:latest@sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
@@ -843,7 +843,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The PocketBase server. Data at /pb_data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pocketbase'),
-          d.arg('image', d.T.string, default='ghcr.io/muchobien/pocketbase:latest@sha256:c0667fe6c5197ff226ff642120ab1ad870c3f2f27300940a61e5a7fa082b6816'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -859,7 +859,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Teable server. Point publicOrigin at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='teable'),
-          d.arg('image', d.T.string, default='ghcr.io/teableio/teable:latest@sha256:3d76dae237327e0d54dcc1aa073209088deb6d9bc4b6215a09462b3d133d4e19'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('publicOrigin', d.T.string),
           d.arg('secretName', d.T.string, default='teable-secrets'),
@@ -875,7 +875,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Readarr server. Config at /config on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='readarr'),
-          d.arg('image', d.T.string, default='ghcr.io/linuxserver/readarr:develop@sha256:eb37f58646a901dc7727cf448cae36daaefaba79de33b5058dab79aa4c04aefb'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -893,7 +893,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Calibre-Web Automated server. Config at /config, library at /calibre-library. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='calibre-web-automated'),
-          d.arg('image', d.T.string, default='ghcr.io/crocodilestick/calibre-web-automated:latest@sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d'),
+          d.arg('image', d.T.string),
           d.arg('configSize', d.T.quantity, default='1Gi'),
           d.arg('librarySize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
@@ -913,7 +913,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Tandoor server. Media at /opt/recipes/mediafiles on the volume; provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='tandoor'),
-          d.arg('image', d.T.string, default='ghcr.io/tandoorrecipes/recipes:latest@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='tandoor-secrets'),
@@ -930,7 +930,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Ghostfolio server. Provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='ghostfolio'),
-          d.arg('image', d.T.string, default='docker.io/ghostfolio/ghostfolio:latest@sha256:6e99d235d99dc01a205ad3cda46ab8b08fea6b732015b8c8906d5300017efa18'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='ghostfolio-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -945,7 +945,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The LobeChat server. Stateless; compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='lobe-chat'),
-          d.arg('image', d.T.string, default='docker.io/lobehub/lobe-chat:latest@sha256:b2d2454525523d9f0a19c79661f83ec45f13363dbadd5c1180887e77af35d872'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
@@ -959,7 +959,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Hollama server. Stateless; compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='hollama'),
-          d.arg('image', d.T.string, default='ghcr.io/fmaclen/hollama:latest@sha256:74999be7ac1cb23e72c81b9e21055aec20576f9ef67b394fe0eeb2e36c3a8b93'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
@@ -973,7 +973,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The AnythingLLM server. Storage at /app/server/storage on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='anythingllm'),
-          d.arg('image', d.T.string, default='docker.io/mintplexlabs/anythingllm:latest@sha256:9a87bca983e688db2a11a0ed3290daa16c4b67556617ae77325c9d12c6a37c25'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={ STORAGE_DIR: '/app/server/storage' }),
@@ -988,7 +988,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mailpit server. Store at /data on the volume; SMTP on port 1025, web on 8025. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mailpit'),
-          d.arg('image', d.T.string, default='docker.io/axllent/mailpit:latest@sha256:b868afa176bfd6cce2323ea316cd99ccad77915e51e595748f6d786700ecf109'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={ MP_DATABASE: '/data/mailpit.db' }),
@@ -1003,7 +1003,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The smtp4dev server. Database at /smtp4dev on the volume; SMTP on port 25, web on 80. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='smtp4dev'),
-          d.arg('image', d.T.string, default='docker.io/rnwood/smtp4dev:latest@sha256:25c434c1900a9c5b61e17ead0a774d9e81b80554d05cf64719d69e5ea8c66537'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={ ServerOptions__Database: '/smtp4dev/database.db' }),
@@ -1019,7 +1019,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Davis server. Provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='davis'),
-          d.arg('image', d.T.string, default='ghcr.io/tchapi/davis:latest@sha256:60195a4f241f75957cfb5a0d371cb5b2898102153b0447f5a9ec13860eb49320'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='davis-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -1034,7 +1034,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Pingvin Share server. Data at /opt/app/backend/data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pingvin-share'),
-          d.arg('image', d.T.string, default='ghcr.io/stonith404/pingvin-share:latest@sha256:6bf2bcd3043ee68cb61264f0857511ccf7f212fdb984382b7f2d491635184ad6'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1050,7 +1050,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Gokapi server. Data at /app/data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='gokapi'),
-          d.arg('image', d.T.string, default='docker.io/f0rc3/gokapi:latest@sha256:7303dc0e658b8442f00d8363937ac0ffca3b4690930801b47aac6c0631d0cbcf'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1065,7 +1065,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The cobalt API server. Set apiUrl to its public URL. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='cobalt'),
-          d.arg('image', d.T.string, default='ghcr.io/imputnet/cobalt:10@sha256:e5d3fff05a0a5a24ef31b034736fa5075ba45bdb051da1910b84be1c7798f5b4'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('apiUrl', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1080,7 +1080,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Chatpad server. Stateless; compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='chatpad'),
-          d.arg('image', d.T.string, default='ghcr.io/deiucanta/chatpad:latest@sha256:15155e3a09fd677d578583f6bd3848c991cf768997400e37bc4c27e62a918a7e'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } }),
@@ -1094,7 +1094,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mermaid Live Editor server. Stateless; compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mermaid-live-editor'),
-          d.arg('image', d.T.string, default='ghcr.io/mermaid-js/mermaid-live-editor:latest@sha256:836616adc144fdc0f711a8fb149cc572eed63fe4de347c2ab6448831c8992c28'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } }),
@@ -1109,7 +1109,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Leantime server. Uploads at /var/www/html/userfiles; provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='leantime'),
-          d.arg('image', d.T.string, default='docker.io/leantime/leantime:latest@sha256:6150dd3e8a1e17f1ead8d462d31e26177fe906ce3602dbbbf6af5417ef809de3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='leantime-secrets'),
@@ -1125,7 +1125,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Maloja server. Data at /mljdata on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='maloja'),
-          d.arg('image', d.T.string, default='docker.io/krateng/maloja:latest@sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1140,7 +1140,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The MAZANOKE server. Stateless; compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mazanoke'),
-          d.arg('image', d.T.string, default='ghcr.io/civilblur/mazanoke:latest@sha256:92cc7474deb789af6549318563b7a9ee750131f9f7b297cc9c87ab67e656c22c'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } }),
@@ -1154,7 +1154,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The OwnTracks Recorder server. Store at /store on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='owntracks-recorder'),
-          d.arg('image', d.T.string, default='docker.io/owntracks/recorder:latest@sha256:050c3ac9ed798d4110f12e53851e94f9fa0fcecb16cf4d7457967eac2e498da7'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={ OTR_STORAGEDIR: '/store' }),
@@ -1169,7 +1169,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Apprise server. Named configs at /config on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='apprise'),
-          d.arg('image', d.T.string, default='docker.io/caronc/apprise:latest@sha256:91321755496e8472bdb674e4b14eb64d1f3b15510ef94971309c9f76ef3171e7'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={ APPRISE_STATEFUL_MODE: 'simple' }),
@@ -1184,7 +1184,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Kavita server. Database and settings at /kavita/config, library at /library, both on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='kavita'),
-          d.arg('image', d.T.string, default='docker.io/jvmilazz0/kavita:0.9.0.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1199,7 +1199,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Komga server. Database at /config, library at /books, both on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='komga'),
-          d.arg('image', d.T.string, default='docker.io/gotson/komga:1.25.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1214,7 +1214,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The MicroBin server. Keeps pastes and files at /app/microbin_data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='microbin'),
-          d.arg('image', d.T.string, default='docker.io/danielszabo99/microbin:v2.1.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1229,7 +1229,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Stirling-PDF server. Keeps configuration and custom files at /configs on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='stirling-pdf'),
-          d.arg('image', d.T.string, default='docker.io/stirlingtools/stirling-pdf:2.14.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1244,7 +1244,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Dashy server. Configuration lives at /app/user-data/conf.yml on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='dashy'),
-          d.arg('image', d.T.string, default='docker.io/lissy93/dashy:4.4.7'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1259,7 +1259,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Homer server. Configuration and custom assets live at /www/assets on the volume (edit config.yml there; the image seeds defaults via INIT_ASSETS). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='homer'),
-          d.arg('image', d.T.string, default='docker.io/b4bz/homer:v26.4.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1274,7 +1274,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Excalidraw static server on :80 (stateless — scale via replicas). The image tag is an immutable sha (Excalidraw ships no semver tags). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='excalidraw'),
-          d.arg('image', d.T.string, default='docker.io/excalidraw/excalidraw:sha-4bfc5bb'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } }),
@@ -1288,7 +1288,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The DokuWiki server. All content lives at /storage on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='dokuwiki'),
-          d.arg('image', d.T.string, default='docker.io/dokuwiki/dokuwiki:2025-05-14b'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1303,7 +1303,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Readeck server. Keeps its SQLite database and saved pages at /readeck on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='readeck'),
-          d.arg('image', d.T.string, default='codeberg.org/readeck/readeck:0.22.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1319,7 +1319,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Shiori server (runs `shiori serve`). Keeps its SQLite database and archives at /shiori on the volume. Point SHIORI_DATABASE_URL at external PostgreSQL/MySQL through env to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='shiori'),
-          d.arg('image', d.T.string, default='ghcr.io/go-shiori/shiori:v1.8.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1335,7 +1335,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The linkding server. Keeps bookmarks in SQLite at /etc/linkding/data on the volume. Point LD_DB_ENGINE at external PostgreSQL through env to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='linkding'),
-          d.arg('image', d.T.string, default='docker.io/sissbruecker/linkding:1.45.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1350,7 +1350,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Gotify server. Keeps everything in SQLite at /app/data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='gotify'),
-          d.arg('image', d.T.string, default='docker.io/gotify/server:3.0.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1365,7 +1365,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ntfy server (runs `serve`). Keeps its cache, auth db, and attachments at /var/lib/ntfy on the volume. baseUrl is the public URL (needed for the web app, attachments, iOS). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='ntfy'),
-          d.arg('image', d.T.string, default='docker.io/binwiederhier/ntfy:v2.26.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://ntfy.example.com'),
@@ -1382,7 +1382,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Memos server. Keeps notes in SQLite at /var/opt/memos on the volume. Point MEMOS_DRIVER at external PostgreSQL through env to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='memos'),
-          d.arg('image', d.T.string, default='docker.io/neosmemo/memos:0.29.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1398,7 +1398,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Overleaf server. redisHost defaults to a valkey named overleaf-cache; siteUrl is the public URL; appName the instance name. secretName holds OVERLEAF_MONGO_URL, pointing at a MongoDB replica set you provide (envFrom). Projects and compiles at /var/lib/overleaf. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='overleaf'),
-          d.arg('image', d.T.string, default='docker.io/sharelatex/sharelatex:6.2.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('redisHost', d.T.string, default='overleaf-cache'),
@@ -1419,7 +1419,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         server: d.fn('The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='docker.io/bigcapitalhq/server:v0.25.23'),
+          d.arg('image', d.T.string),
           d.arg('dbHost', d.T.string, default='bigcapital-mariadb'),
           d.arg('dbUser', d.T.string, default='bigcapital'),
           d.arg('mongoHost', d.T.string, default='bigcapital-mongo'),
@@ -1434,7 +1434,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         webapp: d.fn('The Bigcapital front end (single-page web app) on :80. Stateless — scales via replicas. The gateway proxies to it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='docker.io/bigcapitalhq/webapp:v0.25.23'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
@@ -1444,7 +1444,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         gateway: d.fn('The Bigcapital nginx entry on :80 — the stage you expose. Routes the browser to the webapp and /api to the server, which it reaches by Service names derived from namePrefix. Compose an exposure onto it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='docker.io/bigcapitalhq/gateway:v0.25.23'),
+          d.arg('image', d.T.string),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
@@ -1458,7 +1458,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Twenty web/API front end on :3000. redisHost defaults to a valkey named twenty-cache; serverUrl is the public URL. secretName holds PG_DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Local uploads at /app/packages/twenty-server/.local-storage. Run a worker alongside. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='twenty'),
-          d.arg('image', d.T.string, default='docker.io/twentycrm/twenty:v2.22.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('redisHost', d.T.string, default='twenty-cache'),
@@ -1471,7 +1471,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/twenty/server.libsonnet' },
         worker: d.fn('The Twenty background worker (BullMQ jobs), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs `yarn worker:prod`. Scales horizontally via replicas. A Twenty deployment needs at least one.', [
           d.arg('name', d.T.string, default='twenty-worker'),
-          d.arg('image', d.T.string, default='docker.io/twentycrm/twenty:v2.22.0'),
+          d.arg('image', d.T.string),
           d.arg('redisHost', d.T.string, default='twenty-cache'),
           d.arg('secretName', d.T.string, default='twenty-secrets'),
           d.arg('replicas', d.T.int, default=1),
@@ -1488,7 +1488,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The SonarQube server. dbHost/dbName/dbUser default to a cnpg-cluster named sonarqube-db (SONAR_JDBC_URL is built from them). secretName holds SONAR_JDBC_PASSWORD (envFrom). Data at /opt/sonarqube/data, extensions and logs on the volume. Requires node vm.max_map_count >= 262144. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='sonarqube'),
-          d.arg('image', d.T.string, default='docker.io/library/sonarqube:26.7.0.124771-community'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='sonarqube-db-rw'),
@@ -1508,7 +1508,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The PeerTube server. dbHost/dbName/dbUser default to a cnpg-cluster named peertube-db; redisHost to a valkey named peertube-cache. webserverHost is the public hostname (required for federation). secretName holds PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, PT_INITIAL_ROOT_PASSWORD (envFrom). Videos/uploads at /data, config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='peertube'),
-          d.arg('image', d.T.string, default='docker.io/chocobozzz/peertube:v8.2.2-trixie'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='peertube-db-rw'),
@@ -1530,7 +1530,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Maybe server. dbHost/dbName/dbUser default to a cnpg-cluster named maybe-db; redisHost to a valkey named maybe-cache. secretName holds POSTGRES_PASSWORD and SECRET_KEY_BASE (envFrom). Uploads at /rails/storage. A separate Sidekiq worker can be added. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='maybe'),
-          d.arg('image', d.T.string, default='ghcr.io/maybe-finance/maybe:0.1.0-alpha.6'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='maybe-db-rw'),
@@ -1551,7 +1551,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mautic server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide. siteUrl is the public URL; runCronJobs runs Mautic background jobs in-container. secretName holds MAUTIC_DB_PASSWORD (envFrom). Config at /var/www/html/config, media on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mautic'),
-          d.arg('image', d.T.string, default='docker.io/mautic/mautic:5.2.11-apache'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='mautic-db'),
@@ -1573,7 +1573,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Invoice Ninja server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide (DB_CONNECTION=mysql). appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (envFrom). Uploads/PDFs at /var/www/html/storage. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='invoiceninja'),
-          d.arg('image', d.T.string, default='docker.io/invoiceninja/invoiceninja:5.13.26'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='invoiceninja-db'),
@@ -1594,7 +1594,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Paperless-ngx server. dbHost/dbName/dbUser default to a cnpg-cluster named paperless-db; redisHost to a valkey named paperless-cache. url is the public URL; adminUser the first-run admin. secretName holds PAPERLESS_DBPASS, PAPERLESS_SECRET_KEY, and PAPERLESS_ADMIN_PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='paperless-ngx'),
-          d.arg('image', d.T.string, default='ghcr.io/paperless-ngx/paperless-ngx:2.20.15'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='paperless-db-rw'),
@@ -1617,7 +1617,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The wger server. dbHost/dbName/dbUser default to a cnpg-cluster named wger-db; redisHost to a valkey named wger-cache. siteUrl is the public URL. secretName holds DJANGO_DB_PASSWORD and SECRET_KEY (envFrom). Media at /home/wger/media on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='wger'),
-          d.arg('image', d.T.string, default='docker.io/wger/server:2.6.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='wger-db-rw'),
@@ -1639,7 +1639,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Endurain server. dbHost/dbName/dbUser default to a cnpg-cluster named endurain-db; redisHost to a valkey named endurain-cache. endurainHost is the public URL. secretName holds DB_PASSWORD and SECRET_KEY (envFrom). Uploads at /app/backend/app on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='endurain'),
-          d.arg('image', d.T.string, default='ghcr.io/joaovitoriasilva/endurain:0.17.7'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='endurain-db-rw'),
@@ -1661,7 +1661,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Seatsurfing server. secretName is the Secret holding POSTGRES_URL (with the embedded DB password) and JWT_SIGNING_KEY, pulled in via envFrom. env carries non-sensitive settings (PUBLIC_URL, FRONTEND_URL). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='seatsurfing'),
-          d.arg('image', d.T.string, default='ghcr.io/seatsurfing/seatsurfing:1.116.0'),
+          d.arg('image', d.T.string),
           d.arg('secretName', d.T.string, default='seatsurfing-secrets'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
@@ -1676,7 +1676,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ejabberd server. Keeps its Mnesia database at /home/ejabberd/database on the volume; mount ejabberd.yml at /home/ejabberd/conf (kurly.config; credentials from a Secret). Route the XMPP ports as TCP and expose :5280 for admin.', [
           d.arg('name', d.T.string, default='ejabberd'),
-          d.arg('image', d.T.string, default='docker.io/ejabberd/ecs:26.04'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1691,7 +1691,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The InspIRCd server. Keeps runtime data at /inspircd/data on the volume; mount its configuration at /inspircd/conf (kurly.config, or a Secret for oper/link credentials). Route the port as TCP.', [
           d.arg('name', d.T.string, default='inspircd'),
-          d.arg('image', d.T.string, default='docker.io/inspircd/inspircd-docker:4.11.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1707,7 +1707,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Password Pusher server. secretName is the Secret holding DATABASE_URL (with the embedded DB password) and SECRET_KEY_BASE, pulled in via envFrom; kurly mints none. Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='passwordpusher'),
-          d.arg('image', d.T.string, default='docker.io/pglombardo/pwpush:v2.9.3'),
+          d.arg('image', d.T.string),
           d.arg('secretName', d.T.string, default='passwordpusher-secrets'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
@@ -1723,7 +1723,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Baikal server. Keeps its SQLite database at /var/www/baikal/Specific and its generated config at /var/www/baikal/config (both on the volume). Point it at external MySQL/PostgreSQL through the setup wizard to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='baikal'),
-          d.arg('image', d.T.string, default='docker.io/ckulka/baikal:0.10.1-nginx'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1738,7 +1738,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The CryptPad server. Keeps the encrypted datastore at /cryptpad/data on the volume. Mount a config.js (kurly.config) setting httpUnsafeOrigin (main URL) and httpSafeOrigin (a SEPARATE sandbox domain, required for security). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='cryptpad'),
-          d.arg('image', d.T.string, default='docker.io/cryptpad/cryptpad:2026.5.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1753,7 +1753,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Paisa server, run from /data on the volume where it finds paisa.yaml and the referenced journal (provide them before first use). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='paisa'),
-          d.arg('image', d.T.string, default='ghcr.io/ananthakumaran/paisa:0.7.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1769,7 +1769,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Kanboard server. Keeps board data and uploads at /var/www/app/data on the volume. Point DATABASE_URL (env) at external PostgreSQL to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='kanboard'),
-          d.arg('image', d.T.string, default='docker.io/kanboard/kanboard:v1.2.52'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1784,7 +1784,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ZNC server. Keeps everything at /znc-data on the volume. Provide a znc.conf at /znc-data/configs/znc.conf (generate with `znc --makeconf` or mount from a Secret — it holds passwords). Route the port as TCP.', [
           d.arg('name', d.T.string, default='znc'),
-          d.arg('image', d.T.string, default='docker.io/library/znc:1.10.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1799,7 +1799,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Radicale server. Keeps collections at /data on the volume. Default config allows anonymous access — mount a Radicale config and htpasswd (kurly.config / kurly.secretMount) for htpasswd auth. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='radicale'),
-          d.arg('image', d.T.string, default='docker.io/tomsquest/docker-radicale:3.7.6.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1814,7 +1814,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ExpenseOwl server. Keeps its expenses at /app/data on the volume, so it needs nothing external. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='expenseowl'),
-          d.arg('image', d.T.string, default='ghcr.io/tanq16/expenseowl:v4.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1829,7 +1829,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Homebox server. Keeps inventory and attachments at /data on the volume (HBOX_STORAGE_*), so it needs nothing external. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='homebox'),
-          d.arg('image', d.T.string, default='ghcr.io/sysadminsmedia/homebox:0.26.2-rootless'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1844,7 +1844,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Actual Budget server. Keeps everything in SQLite at /data on the volume (ACTUAL_DATA_DIR), so it needs nothing external. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='actualbudget'),
-          d.arg('image', d.T.string, default='docker.io/actualbudget/actual-server:26.7.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1859,7 +1859,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Uptime Kuma server. Keeps everything in SQLite at /app/data on the volume, so it needs nothing external. env carries extra settings (UPTIME_KUMA_* overrides). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='uptime-kuma'),
-          d.arg('image', d.T.string, default='docker.io/louislam/uptime-kuma:1.23.16'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -1875,7 +1875,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The NetBox web front end, serving the UI and API on :8080. dbHost/dbName/dbUser default to a cnpg-cluster named netbox-db; redisHost to a valkey named netbox-cache (queue on Redis DB 0, cache on DB 1). secretName is the Secret the image reads at /run/secrets — secret_key (Django SECRET_KEY, keep it stable), db_password, and superuser_password on first boot. allowedHosts is Django ALLOWED_HOSTS. kurly authors no Secret. Compose an exposure onto the HTTP port; run a worker alongside.', [
           d.arg('name', d.T.string, default='netbox'),
-          d.arg('image', d.T.string, default='docker.io/netboxcommunity/netbox:v4.6.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='netbox-db-rw'),
@@ -1897,7 +1897,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         worker: d.fn('The NetBox RQ background worker, draining the high/default/low queues (webhooks, report/script runs, housekeeping). Same image and Secret as the server, no Service. dbHost/dbName/dbUser/redisHost/secretName match the server. Scales horizontally via replicas — workers coordinate through the shared Redis queue. A NetBox deployment needs at least one.', [
           d.arg('name', d.T.string, default='netbox-worker'),
-          d.arg('image', d.T.string, default='docker.io/netboxcommunity/netbox:v4.6.5'),
+          d.arg('image', d.T.string),
           d.arg('dbHost', d.T.string, default='netbox-db-rw'),
           d.arg('dbName', d.T.string, default='netbox'),
           d.arg('dbUser', d.T.string, default='netbox'),
@@ -1921,7 +1921,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         front: d.fn('The Mailu edge (nginx): terminates SMTP/IMAP/POP3/ManageSieve and the web UI and proxies to the other services. The one stage you expose. domain/hostnames identify the mail server; secretName carries SECRET_KEY (envFrom, kurly mints none); storageClaim is the shared RWM volume; redisAddress points at a valkey. Publishes 25/465/587/110/995/143/993/4190/80/443.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='ghcr.io/mailu/nginx:2024.06'),
+          d.arg('image', d.T.string),
           d.arg('domain', d.T.string, default='example.com'),
           d.arg('hostnames', d.T.array, default=['mail.example.com']),
           d.arg('secretName', d.T.string, default='mailu-secrets'),
@@ -1937,7 +1937,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         admin: d.fn('The Mailu administration service: web admin UI, the internal API the other services query, and the SQLite database and DKIM keys behind them (on the shared volume at /data and /dkim). front proxies /admin to it.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='ghcr.io/mailu/admin:2024.06'),
+          d.arg('image', d.T.string),
           d.arg('domain', d.T.string, default='example.com'),
           d.arg('hostnames', d.T.array, default=['mail.example.com']),
           d.arg('secretName', d.T.string, default='mailu-secrets'),
@@ -1952,7 +1952,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         imap: d.fn('The Mailu mail store (Dovecot): holds the maildirs at /mail on the shared volume and serves IMAP/POP3 to front and LMTP delivery to postfix.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='ghcr.io/mailu/dovecot:2024.06'),
+          d.arg('image', d.T.string),
           d.arg('domain', d.T.string, default='example.com'),
           d.arg('hostnames', d.T.array, default=['mail.example.com']),
           d.arg('secretName', d.T.string, default='mailu-secrets'),
@@ -1967,7 +1967,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         smtp: d.fn('The Mailu MTA (Postfix): relays mail between the edge, the filter, and the store. The queue is transient; only user overrides live on the shared volume.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='ghcr.io/mailu/postfix:2024.06'),
+          d.arg('image', d.T.string),
           d.arg('domain', d.T.string, default='example.com'),
           d.arg('hostnames', d.T.array, default=['mail.example.com']),
           d.arg('secretName', d.T.string, default='mailu-secrets'),
@@ -1982,7 +1982,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         antispam: d.fn('The Mailu filter (Rspamd): screens mail on :11332, serves its web UI on :11334, and signs outbound mail with the DKIM keys admin generates. Learned state lives at /var/lib/rspamd on the shared volume.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='ghcr.io/mailu/rspamd:2024.06'),
+          d.arg('image', d.T.string),
           d.arg('domain', d.T.string, default='example.com'),
           d.arg('hostnames', d.T.array, default=['mail.example.com']),
           d.arg('secretName', d.T.string, default='mailu-secrets'),
@@ -1997,7 +1997,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         webmail: d.fn('The Mailu webmail client (Roundcube): front proxies /webmail to it. Optional — drop it if you only want IMAP/SMTP clients. Keeps its settings at /data on the shared volume.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
-          d.arg('image', d.T.string, default='ghcr.io/mailu/webmail:2024.06'),
+          d.arg('image', d.T.string),
           d.arg('domain', d.T.string, default='example.com'),
           d.arg('hostnames', d.T.array, default=['mail.example.com']),
           d.arg('secretName', d.T.string, default='mailu-secrets'),
@@ -2016,7 +2016,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Forgejo server. dbHost/dbName/dbUser/dbSecret default to a cnpg-cluster named forgejo-db (its -rw Service and the -app Secret CNPG mints, key password read via a file). rootUrl is the public base URL for links/clone URLs. env carries extra FORGEJO__section__KEY settings — provide SECRET_KEY/JWT_SECRET there (from a Secret) so sessions survive restarts. kurly authors no Secret. Compose an exposure onto the HTTP port; route TCP :2222 for SSH.', [
           d.arg('name', d.T.string, default='forgejo'),
-          d.arg('image', d.T.string, default='codeberg.org/forgejo/forgejo:16.0-rootless'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='forgejo-db-rw'),
@@ -2039,7 +2039,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Sonarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='sonarr'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/sonarr:4.0.19'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2057,7 +2057,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Radarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='radarr'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/radarr:6.3.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2075,7 +2075,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Lidarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='lidarr'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/lidarr:3.1.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2093,7 +2093,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Prowlarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='prowlarr'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/prowlarr:2.4.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2111,7 +2111,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Bazarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='bazarr'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/bazarr:1.6.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2129,7 +2129,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Jackett server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='jackett'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/jackett:0.24.2246'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2147,7 +2147,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The FlareSolverr server. logLevel sets LOG_LEVEL. Stateless; usually needs no exposure. Compose an exposure onto the HTTP port only if reached from outside the cluster.', [
           d.arg('name', d.T.string, default='flaresolverr'),
-          d.arg('image', d.T.string, default='ghcr.io/flaresolverr/flaresolverr:v3.5.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('logLevel', d.T.string, default='info'),
           d.arg('env', d.T.object, default={}),
@@ -2162,7 +2162,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Heimdall server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='heimdall'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/heimdall:2.8.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2180,7 +2180,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Grocy server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='grocy'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/grocy:4.6.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2198,7 +2198,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A LibreSpeed server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='librespeed'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/librespeed:6.1.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2216,7 +2216,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The An IT-Tools server. Stateless. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='it-tools'),
-          d.arg('image', d.T.string, default='ghcr.io/corentinth/it-tools:2024.10.22-7ca5933'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
@@ -2230,7 +2230,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A draw.io server. Stateless. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='drawio'),
-          d.arg('image', d.T.string, default='docker.io/jgraph/drawio:v30.3.14'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
@@ -2244,7 +2244,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The File Browser server. Database at /database; compose the volume to serve onto /srv. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='filebrowser'),
-          d.arg('image', d.T.string, default='docker.io/filebrowser/filebrowser:v2.63.18'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2259,7 +2259,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The SiYuan server. Set SIYUAN_ACCESS_AUTH_CODE via env/envFromSecret to gate web access. Workspace at /siyuan/workspace. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='siyuan'),
-          d.arg('image', d.T.string, default='docker.io/b3log/siyuan:v3.7.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2275,7 +2275,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Gitea server. rootUrl is the public URL; uid/gid own the mounted files. Data at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='gitea'),
-          d.arg('image', d.T.string, default='docker.io/gitea/gitea:1.27.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('uid', d.T.int, default=1000),
@@ -2293,7 +2293,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Gogs server. Data at /data. Git-over-SSH (:22) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='gogs'),
-          d.arg('image', d.T.string, default='docker.io/gogs/gogs:0.14.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2309,7 +2309,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mealie server. baseUrl is the public URL. Data at /app/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mealie'),
-          d.arg('image', d.T.string, default='ghcr.io/mealie-recipes/mealie:v3.20.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://recipes.example.com'),
@@ -2325,7 +2325,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Tautulli server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='tautulli'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/tautulli:2.17.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2343,7 +2343,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The An Ombi server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='ombi'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/ombi:4.53.10'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2361,7 +2361,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The An Overseerr server. Config at /app/config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='overseerr'),
-          d.arg('image', d.T.string, default='docker.io/sctx/overseerr:1.35.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2376,7 +2376,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Jellyseerr server. Config at /app/config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='jellyseerr'),
-          d.arg('image', d.T.string, default='docker.io/fallenbagel/jellyseerr:2.7.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2391,7 +2391,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The MeTube server. Downloads at /downloads. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='metube'),
-          d.arg('image', d.T.string, default='ghcr.io/alexta69/metube:2026.07.18'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2407,7 +2407,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The DocuSeal server. Data at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='docuseal'),
-          d.arg('image', d.T.string, default='docker.io/docuseal/docuseal:3.1.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2422,7 +2422,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Shaarli server. Data at /var/www/shaarli/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='shaarli'),
-          d.arg('image', d.T.string, default='docker.io/shaarli/shaarli:v0.16.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2438,7 +2438,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Piwigo server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='piwigo'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/piwigo:15.5.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2456,7 +2456,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A pyLoad server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pyload-ng'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/pyload-ng:0.5.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2474,7 +2474,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The PairDrop server. Stateless signaling; runs as one replica. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pairdrop'),
-          d.arg('image', d.T.string, default='ghcr.io/schlagmichdoch/pairdrop:v1.11.2'),
+          d.arg('image', d.T.string),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
@@ -2487,7 +2487,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The PrivateBin server. Pastes at /srv/data. Point at an external database (conf.php) to scale out. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='privatebin'),
-          d.arg('image', d.T.string, default='docker.io/privatebin/nginx-fpm-alpine:2.0.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2503,7 +2503,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The LLDAP server. baseDn sets LLDAP_LDAP_BASE_DN; secretName holds LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS (envFrom). Directory at /data; LDAP (:3890) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='lldap'),
-          d.arg('image', d.T.string, default='docker.io/lldap/lldap:v0.6.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('baseDn', d.T.string, example='dc=example,dc=com'),
@@ -2520,7 +2520,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A qBittorrent server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='qbittorrent'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/qbittorrent:5.2.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2538,7 +2538,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Transmission server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='transmission'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/transmission:4.1.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2556,7 +2556,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A SABnzbd server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='sabnzbd'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/sabnzbd:5.0.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2574,7 +2574,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The An NZBGet server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='nzbget'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/nzbget:26.2.20260717'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2592,7 +2592,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Deluge server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='deluge'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/deluge:2.2.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2610,7 +2610,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Syncthing server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='syncthing'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/syncthing:2.1.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2628,7 +2628,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Jellyfin server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='jellyfin'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/jellyfin:10.11.11'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2646,7 +2646,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Calibre server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='calibre'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/calibre:8.14.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2665,7 +2665,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The GoToSocial server. host is the permanent instance domain. Data at /gotosocial/storage. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='gotosocial'),
-          d.arg('image', d.T.string, default='docker.io/superseriousbusiness/gotosocial:0.20.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('host', d.T.string, example='social.example.com'),
@@ -2681,7 +2681,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Flame server. Set PASSWORD via env/envFromSecret. Data at /app/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='flame'),
-          d.arg('image', d.T.string, default='docker.io/pawelmalak/flame:2.3.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2696,7 +2696,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The An Airsonic-Advanced server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='airsonic-advanced'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/airsonic-advanced:11.0.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2714,7 +2714,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Mylar3 server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mylar3'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/mylar3:0.8.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2732,7 +2732,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A netboot.xyz server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='netbootxyz'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/netbootxyz:0.7.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -2750,7 +2750,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Focalboard server. Data on the config volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='focalboard'),
-          d.arg('image', d.T.string, default='docker.io/mattermost/focalboard:7.11.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2765,7 +2765,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Wallos server. Data on the config volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='wallos'),
-          d.arg('image', d.T.string, default='ghcr.io/ellite/wallos:4.4.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2780,7 +2780,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The AdGuard Home server. Config and data under /opt/adguardhome; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='adguardhome'),
-          d.arg('image', d.T.string, default='docker.io/adguard/adguardhome:v0.107.65'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2795,7 +2795,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Gatus server. config is Gatus's own settings (endpoints/conditions/alerting/storage), rendered to the mounted config.yaml. History at /data. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='gatus'),
-          d.arg('image', d.T.string, default='docker.io/twinproduction/gatus:v5.36.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('config', d.T.object, default={}),
@@ -2812,7 +2812,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Traccar server. configXml is traccar.xml, mounted verbatim; the default uses embedded H2 on the data volume. Device protocol ports (5000-5150) need extra Services. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='traccar'),
-          d.arg('image', d.T.string, default='docker.io/traccar/traccar:6.14.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('configXml', d.T.string),
@@ -2829,7 +2829,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Healthchecks server. siteRoot is the public URL; allowedHosts sets ALLOWED_HOSTS; secretName holds SECRET_KEY (envFrom). Data at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='healthchecks'),
-          d.arg('image', d.T.string, default='docker.io/healthchecks/healthchecks:v4.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('siteRoot', d.T.string, example='https://checks.example.com'),
@@ -2848,7 +2848,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The SearXNG server. baseUrl is the public URL; settings is SearXNG's own settings.yml, mounted verbatim; secretName holds SEARXNG_SECRET (envFrom). Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='searxng'),
-          d.arg('image', d.T.string, default='docker.io/searxng/searxng:2026.7.9-b512eaa27'),
+          d.arg('image', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://search.example.com'),
           d.arg('settings', d.T.object, default={}),
           d.arg('secretName', d.T.string, default='searxng-secrets'),
@@ -2864,7 +2864,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ConvertX server. Set JWT_SECRET via env/envFromSecret. Data at /app/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='convertx'),
-          d.arg('image', d.T.string, default='ghcr.io/c4illin/convertx:v0.18.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2879,7 +2879,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The CyberChef server. Stateless. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='cyberchef'),
-          d.arg('image', d.T.string, default='ghcr.io/gchq/cyberchef:10.19.4'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
@@ -2894,7 +2894,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Joplin Server. appBaseUrl is the public URL; secretName holds the POSTGRES_* connection (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='joplin'),
-          d.arg('image', d.T.string, default='docker.io/joplin/server:3.4.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('appBaseUrl', d.T.string, example='https://joplin.example.com'),
           d.arg('secretName', d.T.string, default='joplin-secrets'),
@@ -2911,7 +2911,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The pgAdmin server. secretName holds PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD (envFrom). Config at /var/lib/pgadmin. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pgadmin'),
-          d.arg('image', d.T.string, default='docker.io/dpage/pgadmin4:9.8'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='pgadmin-secrets'),
@@ -2927,7 +2927,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Suwayomi/Tachidesk server. Library at /home/suwayomi/.local/share/Tachidesk. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='tachidesk'),
-          d.arg('image', d.T.string, default='ghcr.io/suwayomi/tachidesk:v2.1.1867'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -2942,7 +2942,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Pi-hole server. timezone sets TZ; secretName holds FTLCONF_webserver_api_password (envFrom). Config at /etc/pihole; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pihole'),
-          d.arg('image', d.T.string, default='docker.io/pihole/pihole:2025.08.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('timezone', d.T.string, default='UTC'),
@@ -2960,7 +2960,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Kimai server. secretName holds DATABASE_URL and APP_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='kimai'),
-          d.arg('image', d.T.string, default='docker.io/kimai/kimai2:apache-2.38.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='kimai-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -2976,7 +2976,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Adminer server. Stateless; connects to whatever database you point it at. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='adminer'),
-          d.arg('image', d.T.string, default='docker.io/library/adminer:5.3.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
@@ -2991,7 +2991,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The phpMyAdmin server. dbHost sets PMA_HOST (the MySQL/MariaDB host). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='phpmyadmin'),
-          d.arg('image', d.T.string, default='docker.io/library/phpmyadmin:5.2.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('dbHost', d.T.string, example='mysql'),
           d.arg('env', d.T.object, default={}),
@@ -3007,7 +3007,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Redmine server. secretName holds the database connection (REDMINE_DB_* / DATABASE_URL) and REDMINE_SECRET_KEY_BASE (envFrom). Files at /usr/src/redmine/files. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='redmine'),
-          d.arg('image', d.T.string, default='docker.io/library/redmine:6.0.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='redmine-secrets'),
@@ -3023,7 +3023,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The An NZBHydra2 server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='nzbhydra2'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/nzbhydra2:v8.9.0-ls97'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3042,7 +3042,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Duplicati server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='duplicati'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/duplicati:v2.3.0.4_stable_2026-07-09-ls301'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3060,7 +3060,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Resilio Sync server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='resilio-sync'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/resilio-sync:3.1.2.1076-1-ls251'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3078,7 +3078,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A davos server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='davos'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/davos:2.2.2-ls220'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3096,7 +3096,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Folding@home client. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='foldingathome'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/foldingathome:8.5.6'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3115,7 +3115,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A ProjectSend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='projectsend'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/projectsend:2021.12.10'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3133,7 +3133,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Whoogle server. Stateless; configure via WHOOGLE_CONFIG_* env. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='whoogle'),
-          d.arg('image', d.T.string, default='ghcr.io/benbusby/whoogle-search:0.9.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
@@ -3148,7 +3148,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The mongo-express server. secretName holds ME_CONFIG_MONGODB_URL and the basic-auth credentials (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mongo-express'),
-          d.arg('image', d.T.string, default='docker.io/library/mongo-express:1.0.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='mongo-express-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -3163,7 +3163,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The The Lounge server. Data at /var/opt/thelounge. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='thelounge'),
-          d.arg('image', d.T.string, default='ghcr.io/thelounge/thelounge:4.4.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -3178,7 +3178,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mumble/Murmur server on :64738 (TCP control + UDP voice). secretName holds MUMBLE_SUPERUSER_PASSWORD (envFrom). Data at /data. Expose to clients (often a LoadBalancer); add a second Service for UDP.', [
           d.arg('name', d.T.string, default='mumble'),
-          d.arg('image', d.T.string, default='docker.io/mumblevoip/mumble-server:v1.5.735-0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='mumble-secrets'),
@@ -3194,7 +3194,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The VictoriaMetrics server. retentionPeriod is in months. Data at /victoria-metrics-data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='victoriametrics'),
-          d.arg('image', d.T.string, default='docker.io/victoriametrics/victoria-metrics:v1.109.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('retentionPeriod', d.T.string, default='1'),
@@ -3210,7 +3210,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The OpenObserve server. secretName holds ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD (envFrom). Data at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='openobserve'),
-          d.arg('image', d.T.string, default='docker.io/openobserve/openobserve:v0.14.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='openobserve-secrets'),
@@ -3226,7 +3226,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Meilisearch server. secretName holds MEILI_MASTER_KEY (envFrom). Indexes at /meili_data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='meilisearch'),
-          d.arg('image', d.T.string, default='docker.io/getmeili/meilisearch:v1.12.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='meilisearch-secrets'),
@@ -3242,7 +3242,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Qdrant server. Collections at /qdrant/storage; gRPC (:6334) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='qdrant'),
-          d.arg('image', d.T.string, default='docker.io/qdrant/qdrant:v1.13.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -3257,7 +3257,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Typesense server. secretName holds TYPESENSE_API_KEY (envFrom). Data at /data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='typesense'),
-          d.arg('image', d.T.string, default='docker.io/typesense/typesense:27.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='typesense-secrets'),
@@ -3273,7 +3273,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Browserless server. secretName holds TOKEN (envFrom). Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='browserless'),
-          d.arg('image', d.T.string, default='ghcr.io/browserless/chromium:v2.24.3'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='browserless-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -3288,7 +3288,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Apache Tika server. Stateless; usually reached in-cluster.', [
           d.arg('name', d.T.string, default='tika'),
-          d.arg('image', d.T.string, default='docker.io/apache/tika:2.9.2.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
@@ -3302,7 +3302,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Gotenberg server. Stateless; usually reached in-cluster.', [
           d.arg('name', d.T.string, default='gotenberg'),
-          d.arg('image', d.T.string, default='docker.io/gotenberg/gotenberg:8.15.3'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
@@ -3317,7 +3317,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Open WebUI server. ollamaBaseUrl points at an Ollama backend; secretName holds WEBUI_SECRET_KEY (envFrom). Data at /app/backend/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='open-webui'),
-          d.arg('image', d.T.string, default='ghcr.io/open-webui/open-webui:v0.6.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('ollamaBaseUrl', d.T.string, example='http://ollama:11434'),
@@ -3334,7 +3334,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Glance server. config is Glance's own glance.yml (pages/columns/widgets), rendered to the mounted glance.yml. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='glance'),
-          d.arg('image', d.T.string, default='docker.io/glanceapp/glance:v0.8.4'),
+          d.arg('image', d.T.string),
           d.arg('config', d.T.object, default={}),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
@@ -3348,7 +3348,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Node-RED server. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='node-red'),
-          d.arg('image', d.T.string, default='docker.io/nodered/node-red:4.0.9'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -3363,7 +3363,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The An ESPHome dashboard server. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='esphome'),
-          d.arg('image', d.T.string, default='ghcr.io/esphome/esphome:2025.7.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -3378,7 +3378,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The 2FAuth server. appUrl is the public URL; secretName holds APP_KEY (envFrom). Data at /2fauth. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='2fauth'),
-          d.arg('image', d.T.string, default='docker.io/2fauth/2fauth:5.6.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('appUrl', d.T.string, example='https://2fa.example.com'),
@@ -3396,7 +3396,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The InfluxDB server. secretName holds the DOCKER_INFLUXDB_INIT_* setup values (envFrom). Data at /var/lib/influxdb2. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='influxdb'),
-          d.arg('image', d.T.string, default='docker.io/library/influxdb:2.7.11'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='influxdb-secrets'),
@@ -3412,7 +3412,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The CouchDB server. secretName holds COUCHDB_USER and COUCHDB_PASSWORD (envFrom). Data at /opt/couchdb/data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='couchdb'),
-          d.arg('image', d.T.string, default='docker.io/library/couchdb:3.4.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='couchdb-secrets'),
@@ -3428,7 +3428,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Home Assistant server. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='home-assistant'),
-          d.arg('image', d.T.string, default='ghcr.io/home-assistant/home-assistant:2025.7'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -3444,7 +3444,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Nextcloud server. trustedDomains sets NEXTCLOUD_TRUSTED_DOMAINS; secretName holds NEXTCLOUD_ADMIN_* (envFrom). Installation at /var/www/html. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='nextcloud'),
-          d.arg('image', d.T.string, default='docker.io/library/nextcloud:31.0.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('trustedDomains', d.T.string, example='cloud.example.com'),
@@ -3462,7 +3462,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Rundeck server. grailsUrl is the public URL (RUNDECK_GRAILS_URL); secretName holds the admin credentials (envFrom). Data at /home/rundeck/server/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='rundeck'),
-          d.arg('image', d.T.string, default='docker.io/rundeck/rundeck:5.9.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('grailsUrl', d.T.string, example='https://rundeck.example.com'),
@@ -3479,7 +3479,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mosquitto broker on :1883. config is mosquitto.conf, mounted verbatim. Data at /mosquitto/data. Expose to devices (often a LoadBalancer), not an HTTP ingress.', [
           d.arg('name', d.T.string, default='mosquitto'),
-          d.arg('image', d.T.string, default='docker.io/eclipse-mosquitto:2.0.20'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('config', d.T.string),
@@ -3495,7 +3495,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Authelia server. config is Authelia's own configuration.yml (complete the skeleton); secretName holds the AUTHELIA_* secrets (envFrom). Data at /config. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='authelia'),
-          d.arg('image', d.T.string, default='ghcr.io/authelia/authelia:4.39.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('config', d.T.object, default={}),
@@ -3512,7 +3512,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ClickHouse server. secretName holds CLICKHOUSE_USER/PASSWORD/DB (envFrom). Data at /var/lib/clickhouse; native protocol (:9000) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='clickhouse'),
-          d.arg('image', d.T.string, default='docker.io/clickhouse/clickhouse-server:24.8'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='clickhouse-secrets'),
@@ -3528,7 +3528,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Conduit Matrix homeserver. serverName is permanent (baked into ids); allowRegistration toggles open sign-up. Data at /var/lib/matrix-conduit. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='matrix-conduit'),
-          d.arg('image', d.T.string, default='docker.io/matrixconduit/matrix-conduit:v0.9.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('serverName', d.T.string, example='matrix.example.com'),
@@ -3546,7 +3546,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Kutt server. secretName holds the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='kutt'),
-          d.arg('image', d.T.string, default='docker.io/kutt/kutt:v3.2.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='kutt-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -3561,7 +3561,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Emby server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='emby'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/emby:4.8.11'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3580,7 +3580,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The webtrees server. baseUrl is the public URL; secretName holds the DB_* credentials (envFrom). Data at /var/www/webtrees/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='webtrees'),
-          d.arg('image', d.T.string, default='ghcr.io/nathanvaughn/webtrees:2.2.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://tree.example.com'),
@@ -3597,7 +3597,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A MariaDB server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='mariadb'),
-          d.arg('image', d.T.string, default='docker.io/library/mariadb:11.4.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='mariadb-secrets'),
@@ -3613,7 +3613,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A MySQL server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='mysql'),
-          d.arg('image', d.T.string, default='docker.io/library/mysql:8.4.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='mysql-secrets'),
@@ -3629,7 +3629,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A PostgreSQL server. secretName holds the credentials (envFrom). Data at /var/lib/postgresql/data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='postgres'),
-          d.arg('image', d.T.string, default='docker.io/library/postgres:17.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='postgres-secrets'),
@@ -3645,7 +3645,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Redis server. secretName holds the credentials (envFrom). Data at /data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='redis'),
-          d.arg('image', d.T.string, default='docker.io/library/redis:7.4.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='redis-secrets'),
@@ -3661,7 +3661,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A MongoDB server. secretName holds the credentials (envFrom). Data at /data/db. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='mongo'),
-          d.arg('image', d.T.string, default='docker.io/library/mongo:8.0.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='mongo-secrets'),
@@ -3677,7 +3677,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Nginx Proxy Manager server. Data at /data; the proxy (:80/:443) needs an extra Service. Compose an exposure onto the admin HTTP port.', [
           d.arg('name', d.T.string, default='nginx-proxy-manager'),
-          d.arg('image', d.T.string, default='docker.io/jc21/nginx-proxy-manager:2.12.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -3692,7 +3692,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The MinIO server. secretName holds MINIO_ROOT_USER/PASSWORD (envFrom). Objects at /data; the console (:9001) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='minio'),
-          d.arg('image', d.T.string, default='docker.io/minio/minio:RELEASE.2024-11-07T00-52-20Z'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='minio-secrets'),
@@ -3708,7 +3708,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The RabbitMQ server. secretName holds RABBITMQ_DEFAULT_USER/PASS (envFrom). Data at /var/lib/rabbitmq; the management UI (:15672) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='rabbitmq'),
-          d.arg('image', d.T.string, default='docker.io/library/rabbitmq:4.0.4-management'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='rabbitmq-secrets'),
@@ -3725,7 +3725,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Formbricks server. webappUrl is the public URL; secretName holds DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='formbricks'),
-          d.arg('image', d.T.string, default='ghcr.io/formbricks/formbricks:v2.6.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('webappUrl', d.T.string, example='https://surveys.example.com'),
           d.arg('secretName', d.T.string, default='formbricks-secrets'),
@@ -3741,7 +3741,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Plex server. puid/pgid own the mounted files; timezone sets TZ; set PLEX_CLAIM via env to bind to your account. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='plex'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/plex:1.41.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -3759,7 +3759,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Ollama server. Models at /models. Usually reached in-cluster (e.g. from open-webui). Compose an exposure onto the HTTP port only if reached from outside.', [
           d.arg('name', d.T.string, default='ollama'),
-          d.arg('image', d.T.string, default='docker.io/ollama/ollama:0.5.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -3775,7 +3775,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Odoo server. secretName holds the PostgreSQL connection (HOST/USER/PASSWORD, envFrom). Filestore at /var/lib/odoo. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='odoo'),
-          d.arg('image', d.T.string, default='docker.io/odoo:18.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='odoo-secrets'),
@@ -3791,7 +3791,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Technitium DNS server. secretName holds DNS_SERVER_ADMIN_PASSWORD (envFrom). Config at /etc/dns; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='technitium'),
-          d.arg('image', d.T.string, default='docker.io/technitium/dns-server:13.2.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='technitium-secrets'),
@@ -3807,7 +3807,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Docker Registry UI server. registryUrl points at the registry (NGINX_PROXY_PASS_URL); registryTitle sets the page title. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='docker-registry-ui'),
-          d.arg('image', d.T.string, default='docker.io/joxit/docker-registry-ui:2.5.7'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('registryUrl', d.T.string, example='https://registry.example.com'),
           d.arg('registryTitle', d.T.string, default='Docker Registry'),
@@ -3823,7 +3823,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Element Web server. homeserverUrl/serverName populate config.json default_server_config; brand sets the title; config overrides/extends Element's config.json verbatim. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='element-web'),
-          d.arg('image', d.T.string, default='ghcr.io/element-hq/element-web:v1.11.100'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('homeserverUrl', d.T.string, example='https://matrix.example.com'),
           d.arg('serverName', d.T.string, example='example.com'),
@@ -3842,7 +3842,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Planka server. baseUrl is the public URL; secretName holds DATABASE_URL, SECRET_KEY, the S3_* settings and admin credentials (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='planka'),
-          d.arg('image', d.T.string, default='ghcr.io/plankanban/planka:2.1.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('baseUrl', d.T.string, example='https://boards.example.com'),
           d.arg('secretName', d.T.string, default='planka-secrets'),
@@ -3859,7 +3859,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Photoview server. mediaSize/cacheSize size the two PVCs (/photos and /app/cache); secretName holds PHOTOVIEW_DATABASE_DRIVER and the connection URL (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='photoview'),
-          d.arg('image', d.T.string, default='docker.io/viktorstrate/photoview:2.4.0'),
+          d.arg('image', d.T.string),
           d.arg('mediaSize', d.T.quantity, default='100Gi'),
           d.arg('cacheSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
@@ -3877,7 +3877,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The YOURLS server. site sets YOURLS_SITE (the public URL); secretName holds YOURLS_DB_* and the admin credentials (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='yourls'),
-          d.arg('image', d.T.string, default='docker.io/library/yourls:1.10.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('site', d.T.string, example='https://s.example.com'),
           d.arg('secretName', d.T.string, default='yourls-secrets'),
@@ -3893,7 +3893,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Pocket ID server. appUrl is the public HTTPS URL (issuer/callback origin). Data at /app/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pocket-id'),
-          d.arg('image', d.T.string, default='ghcr.io/pocket-id/pocket-id:v1.0.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('appUrl', d.T.string, example='https://id.example.com'),
@@ -3910,7 +3910,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The OpenProject server. hostName sets OPENPROJECT_HOST__NAME; secretName holds DATABASE_URL and SECRET_KEY_BASE (envFrom). Assets at /var/openproject/assets. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='openproject'),
-          d.arg('image', d.T.string, default='docker.io/openproject/openproject:15'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('hostName', d.T.string, example='projects.example.com'),
@@ -3928,7 +3928,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Joomla server. secretName holds the DB credentials (envFrom). Data at /var/www/html. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='joomla'),
-          d.arg('image', d.T.string, default='docker.io/library/joomla:5.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='joomla-secrets'),
@@ -3945,7 +3945,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Drupal server. secretName holds the DB credentials (envFrom). Data at /var/www/html/sites. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='drupal'),
-          d.arg('image', d.T.string, default='docker.io/library/drupal:11.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='drupal-secrets'),
@@ -3962,7 +3962,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A PrestaShop server. secretName holds the DB credentials (envFrom). Data at /var/www/html. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='prestashop'),
-          d.arg('image', d.T.string, default='docker.io/prestashop/prestashop:8.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='prestashop-secrets'),
@@ -3979,7 +3979,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The NocoBase server. secretName holds the DB_* connection and APP_KEY (envFrom). Storage at /app/nocobase/storage. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='nocobase'),
-          d.arg('image', d.T.string, default='docker.io/nocobase/nocobase:1.4.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='nocobase-secrets'),
@@ -3996,7 +3996,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Synapse server. serverName is the permanent Matrix server name; reportStats toggles anonymous stats. Data at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='synapse'),
-          d.arg('image', d.T.string, default='docker.io/matrixdotorg/synapse:v1.119.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('serverName', d.T.string, example='matrix.example.com'),
@@ -4014,7 +4014,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ONLYOFFICE Document Server. secretName holds JWT_SECRET (envFrom). Data at /var/www/onlyoffice/Data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='onlyoffice'),
-          d.arg('image', d.T.string, default='docker.io/onlyoffice/documentserver:8.2.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='onlyoffice-secrets'),
@@ -4031,7 +4031,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Docker Registry server. Images at /var/lib/registry. Usually reached in-cluster. Compose an exposure onto the HTTP port only if reached from outside (with TLS/auth in front).', [
           d.arg('name', d.T.string, default='registry'),
-          d.arg('image', d.T.string, default='docker.io/library/registry:2.8.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4047,7 +4047,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The XWiki server. secretName holds the DB_* connection (envFrom). Data at /usr/local/xwiki. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='xwiki'),
-          d.arg('image', d.T.string, default='docker.io/xwiki:16-postgres-tomcat'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='xwiki-secrets'),
@@ -4064,7 +4064,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Redis Commander server. redisHosts sets REDIS_HOSTS (e.g. local:redis:6379). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='redis-commander'),
-          d.arg('image', d.T.string, default='ghcr.io/joeferner/redis-commander:latest@sha256:1ad484c1fc0a3b4072dfa2bb10d44f0eba8ecb342c8c0f9e17cb21a6557e4b7e'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('redisHosts', d.T.string, example='local:redis:6379'),
           d.arg('env', d.T.object, default={}),
@@ -4079,7 +4079,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The LinkStack server. Data at /htdocs. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='linkstack'),
-          d.arg('image', d.T.string, default='ghcr.io/linkstackorg/linkstack:latest@sha256:6e7e8f44099f7c4f1340bb9ffda5411f97da766a06fd63cf1ff90c57ce22dd61'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4094,7 +4094,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The SnappyMail server. Configure IMAP/SMTP in the admin panel. Data at /var/lib/snappymail. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='snappymail'),
-          d.arg('image', d.T.string, default='ghcr.io/the-djmaze/snappymail:latest@sha256:5e3d990438809a8a49f8ac5758db03e858e6e9fc0e369e1f9e474f7664079905'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4109,7 +4109,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Tvheadend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='tvheadend'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/tvheadend:latest@sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -4127,7 +4127,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Organizr server. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='organizr'),
-          d.arg('image', d.T.string, default='docker.io/organizr/organizr:latest@sha256:1ce319d73cdfd2666ec7ef21e15907531fabc8a6f333c4ac61e2b2e9d2d162f5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4143,7 +4143,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Filestash server. Add storage backends in the admin console. Config at /app/data/state. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='filestash'),
-          d.arg('image', d.T.string, default='docker.io/machines/filestash:latest@sha256:1d621a2f96785c0ae711805593d1005fbf80068bd437a25a95b1462004ef57ca'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4158,7 +4158,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The MailHog server. SMTP on :1025 needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mailhog'),
-          d.arg('image', d.T.string, default='docker.io/mailhog/mailhog:latest@sha256:8d76a3d4ffa32a3661311944007a415332c4bb855657f4f6c57996405c009bea'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
@@ -4172,7 +4172,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The openHAB server. confSize/userdataSize/addonsSize size the three PVCs. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='openhab'),
-          d.arg('image', d.T.string, default='docker.io/openhab/openhab:4.3.0'),
+          d.arg('image', d.T.string),
           d.arg('confSize', d.T.quantity, default='2Gi'),
           d.arg('userdataSize', d.T.quantity, default='5Gi'),
           d.arg('addonsSize', d.T.quantity, default='2Gi'),
@@ -4190,8 +4190,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Guacamole server plus its guacd sidecar. guacdImage sets the sidecar image; secretName holds the database connection (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='guacamole'),
-          d.arg('image', d.T.string, default='docker.io/guacamole/guacamole:1.5.5'),
-          d.arg('guacdImage', d.T.string, default='docker.io/guacamole/guacd:1.5.5'),
+          d.arg('image', d.T.string),
+          d.arg('guacdImage', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='guacamole-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4207,7 +4207,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The authentik web/API server. secretName holds the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='authentik'),
-          d.arg('image', d.T.string, default='ghcr.io/goauthentik/server:2024.10.5'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='authentik-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4217,7 +4217,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/authentik/server.libsonnet' },
         worker: d.fn("The authentik background worker (migrations, scheduled tasks, outposts). Shares the server's Secret via envFrom. No Service.", [
           d.arg('name', d.T.string, default='authentik-worker'),
-          d.arg('image', d.T.string, default='ghcr.io/goauthentik/server:2024.10.5'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('secretName', d.T.string, default='authentik-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4233,7 +4233,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Outline server. url is the public URL; secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='outline'),
-          d.arg('image', d.T.string, default='docker.io/outlinewiki/outline:0.81.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('url', d.T.string, example='https://wiki.example.com'),
           d.arg('secretName', d.T.string, default='outline-secrets'),
@@ -4250,7 +4250,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         backend: d.fn('The Penpot backend (API + data) on :6060. publicUri sets PENPOT_PUBLIC_URI; secretName holds the PostgreSQL/Redis connection and PENPOT_SECRET_KEY (envFrom). Assets at /opt/data (put on S3 to scale out).', [
           d.arg('name', d.T.string, default='penpot-backend'),
-          d.arg('image', d.T.string, default='docker.io/penpotapp/backend:2.3.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('publicUri', d.T.string, example='https://design.example.com'),
@@ -4262,7 +4262,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/backend.libsonnet' },
         frontend: d.fn('The Penpot frontend (the user-facing nginx web app) on :80. backendUri/exporterUri point at the other stages by Service name. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='penpot-frontend'),
-          d.arg('image', d.T.string, default='docker.io/penpotapp/frontend:2.3.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('backendUri', d.T.string, default='http://penpot-backend:6060'),
           d.arg('exporterUri', d.T.string, default='http://penpot-exporter:6061'),
@@ -4273,7 +4273,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/frontend.libsonnet' },
         exporter: d.fn('The Penpot exporter (headless-browser rendering) on :6061. secretName holds PENPOT_PUBLIC_URI and PENPOT_REDIS_URI (envFrom).', [
           d.arg('name', d.T.string, default='penpot-exporter'),
-          d.arg('image', d.T.string, default='docker.io/penpotapp/exporter:2.3.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('secretName', d.T.string, default='penpot-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4289,7 +4289,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Misskey server. configSecret is an existing Secret holding default.yml (the config, with DB/Redis creds), mounted at /misskey/.config. Files at /misskey/files. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='misskey'),
-          d.arg('image', d.T.string, default='docker.io/misskey/misskey:2024.11.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('configSecret', d.T.string, default='misskey-config'),
@@ -4306,7 +4306,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         backend: d.fn('The Lemmy backend (API + federation) on :8536. configSecret is an existing Secret holding config.hjson, mounted at /config. Reached in-cluster by the ui.', [
           d.arg('name', d.T.string, default='lemmy'),
-          d.arg('image', d.T.string, default='docker.io/dessalines/lemmy:0.19.7'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('configSecret', d.T.string, default='lemmy-config'),
           d.arg('env', d.T.object, default={}),
@@ -4316,7 +4316,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lemmy/backend.libsonnet' },
         ui: d.fn('The Lemmy web frontend (user-facing) on :1234. internalHost reaches the backend by Service name; externalHost is the public domain. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='lemmy-ui'),
-          d.arg('image', d.T.string, default='docker.io/dessalines/lemmy-ui:0.19.7'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('internalHost', d.T.string, default='lemmy:8536'),
           d.arg('externalHost', d.T.string, example='lemmy.example.com'),
@@ -4327,7 +4327,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lemmy/ui.libsonnet' },
         pictrs: d.fn('The pict-rs image server on :8080. secretName holds PICTRS__SERVER__API_KEY (envFrom). Images at /mnt. Reached in-cluster by the backend.', [
           d.arg('name', d.T.string, default='pictrs'),
-          d.arg('image', d.T.string, default='docker.io/asonix/pictrs:0.5.16'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='pictrs-secrets'),
@@ -4344,7 +4344,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         web: d.fn('The Mastodon web/API server on :3000. localDomain is the permanent instance domain (@handle); secretName holds the shared connection and secrets (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mastodon'),
-          d.arg('image', d.T.string, default='ghcr.io/mastodon/mastodon:v4.3.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('localDomain', d.T.string, example='social.example.com'),
           d.arg('secretName', d.T.string, default='mastodon-secrets'),
@@ -4355,7 +4355,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/web.libsonnet' },
         streaming: d.fn("The Mastodon streaming server (real-time timelines over WebSockets) on :4000. Shares the web stage's Secret via envFrom; route /api/v1/streaming to it.", [
           d.arg('name', d.T.string, default='mastodon-streaming'),
-          d.arg('image', d.T.string, default='ghcr.io/mastodon/mastodon-streaming:v4.3.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='mastodon-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4365,7 +4365,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/streaming.libsonnet' },
         sidekiq: d.fn("The Mastodon sidekiq background worker (federation, media, scheduled jobs). Shares the web stage's Secret via envFrom. No Service.", [
           d.arg('name', d.T.string, default='mastodon-sidekiq'),
-          d.arg('image', d.T.string, default='ghcr.io/mastodon/mastodon:v4.3.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('secretName', d.T.string, default='mastodon-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4381,7 +4381,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The OAuth2 Proxy server. secretName holds the OAUTH2_PROXY_* provider settings and secrets (envFrom). Front an app (OAUTH2_PROXY_UPSTREAMS) or use as forward-auth at /oauth2/auth.', [
           d.arg('name', d.T.string, default='oauth2-proxy'),
-          d.arg('image', d.T.string, default='quay.io/oauth2-proxy/oauth2-proxy:v7.7.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='oauth2-proxy-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4396,7 +4396,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The EMQX broker on :1883. Data at /opt/emqx/data; the dashboard (:18083) needs an extra Service. Expose to devices (often a LoadBalancer).', [
           d.arg('name', d.T.string, default='emqx'),
-          d.arg('image', d.T.string, default='docker.io/emqx/emqx:5.8.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4411,7 +4411,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The NATS server on :4222 (JetStream enabled). Store at /data; monitoring (:8222) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='nats'),
-          d.arg('image', d.T.string, default='docker.io/library/nats:2.10-alpine'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4426,7 +4426,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Homepage server. allowedHosts sets HOMEPAGE_ALLOWED_HOSTS (comma-separated) — required by recent releases. Config at /app/config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='homepage'),
-          d.arg('image', d.T.string, default='ghcr.io/gethomepage/homepage:v1.13.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('allowedHosts', d.T.string, example='home.example.com'),
@@ -4442,7 +4442,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The changedetection.io server. baseUrl is the public URL (notification links derive from it). Datastore at /datastore. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='changedetection'),
-          d.arg('image', d.T.string, default='ghcr.io/dgtlmoon/changedetection.io:0.55.8'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://watch.example.com'),
@@ -4458,7 +4458,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Calibre-Web server. puid/pgid own the mounted files; timezone sets TZ. Config at /config; point it at an existing Calibre library on first run. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='calibre-web'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/calibre-web:0.6.26'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -4476,7 +4476,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Owncast server. Data at /app/data. RTMP ingest (:1935) needs an extra Service composed on. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='owncast'),
-          d.arg('image', d.T.string, default='docker.io/owncast/owncast:0.2.5'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4491,7 +4491,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Grav server. puid/pgid own the mounted files; timezone sets TZ. Site at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='grav'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/grav:2.0.9'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
@@ -4509,7 +4509,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The RSS-Bridge server. Stateless; mount a whitelist.txt over /app/whitelist.txt to restrict enabled bridges. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='rss-bridge'),
-          d.arg('image', d.T.string, default='docker.io/rssbridge/rss-bridge:2025-08-05'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
@@ -4523,7 +4523,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Karakeep server. nextauthUrl is the public URL. meiliAddr/browserWebUrl point at the Meilisearch and headless-Chrome companions. secretName holds NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys (envFrom). Database and assets at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='karakeep'),
-          d.arg('image', d.T.string, default='ghcr.io/karakeep-app/karakeep:v0.32.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('nextauthUrl', d.T.string, example='https://bookmarks.example.com'),
@@ -4542,7 +4542,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Homarr server. secretName holds SECRET_ENCRYPTION_KEY (a 64-character hex string, envFrom). Data at /appdata. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='homarr'),
-          d.arg('image', d.T.string, default='ghcr.io/homarr-labs/homarr:v1.71.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='homarr-secrets'),
@@ -4559,7 +4559,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mattermost server. siteUrl is the public URL. secretName holds MM_SQLSETTINGS_DATASOURCE (envFrom). Uploads at /mattermost/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mattermost'),
-          d.arg('image', d.T.string, default='docker.io/mattermost/mattermost-team-edition:11.8.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('siteUrl', d.T.string, example='https://chat.example.com'),
@@ -4577,7 +4577,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Rocket.Chat server. rootUrl is the public URL. secretName holds MONGO_URL and MONGO_OPLOG_URL (envFrom); MongoDB MUST be a replica set. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='rocketchat'),
-          d.arg('image', d.T.string, default='docker.io/rocketchat/rocket.chat:8.6.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('rootUrl', d.T.string, example='https://chat.example.com'),
           d.arg('secretName', d.T.string, default='rocketchat-secrets'),
@@ -4594,7 +4594,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Wekan server. rootUrl is the public URL. secretName holds MONGO_URL (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='wekan'),
-          d.arg('image', d.T.string, default='docker.io/wekan/wekan:v10.03'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('rootUrl', d.T.string, example='https://boards.example.com'),
           d.arg('secretName', d.T.string, default='wekan-secrets'),
@@ -4611,7 +4611,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). secretName holds AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='activepieces'),
-          d.arg('image', d.T.string, default='docker.io/activepieces/activepieces:0.86.3'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('frontendUrl', d.T.string, example='https://flows.example.com'),
           d.arg('secretName', d.T.string, default='activepieces-secrets'),
@@ -4628,7 +4628,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Automatisch web server. secretName holds the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='automatisch'),
-          d.arg('image', d.T.string, default='ghcr.io/automatisch/automatisch:0.15.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='automatisch-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4638,7 +4638,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/automatisch/server.libsonnet' },
         worker: d.fn("The Automatisch background worker (runs the flow executions the server enqueues onto Redis). Shares the server's Secret via envFrom. No Service.", [
           d.arg('name', d.T.string, default='automatisch-worker'),
-          d.arg('image', d.T.string, default='ghcr.io/automatisch/automatisch:0.15.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('secretName', d.T.string, default='automatisch-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4654,7 +4654,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         mirror: d.fn("The Spegel DaemonSet and its Services. namespace MUST match the deploy namespace (the peer-bootstrap DNS name embeds it). containerdSock/containerdContentPath/containerdRegistryConfigPath point at the node's containerd; the kubelet reaches the local mirror at both registryHostPort (straight to the local pod) and registryNodePort (through kube-proxy), so set registryHostPort=null where host ports are forbidden. dataDir persists routing state (null to disable).", [
           d.arg('name', d.T.string, default='spegel'),
           d.arg('namespace', d.T.string, default='spegel'),
-          d.arg('image', d.T.string, default='ghcr.io/spegel-org/spegel:v0.7.4'),
+          d.arg('image', d.T.string),
           d.arg('containerdSock', d.T.string, default='/run/containerd/containerd.sock'),
           d.arg('containerdContentPath', d.T.string, default='/var/lib/containerd/io.containerd.content.v1.content'),
           d.arg('containerdRegistryConfigPath', d.T.string, default='/etc/containerd/certs.d'),
@@ -4687,7 +4687,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The PILOS server. secretName holds the database/Redis/APP_KEY/BBB settings (envFrom). Uploaded assets at /var/www/html/storage/app. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pilos'),
-          d.arg('image', d.T.string, default='docker.io/pilos/pilos:4.17.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='pilos-secrets'),
@@ -4704,7 +4704,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Greenlight server. secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_ENDPOINT/BIGBLUEBUTTON_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='greenlight'),
-          d.arg('image', d.T.string, default='docker.io/bigbluebutton/greenlight:v3.8.2.3'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='greenlight-secrets'),
           d.arg('env', d.T.object, default={}),
@@ -4720,7 +4720,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Docmost server. appUrl is the public URL. secretName holds DATABASE_URL, REDIS_URL and APP_SECRET (envFrom). Attachments at /app/data/storage; point STORAGE_DRIVER at S3 to scale past the single writer. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='docmost'),
-          d.arg('image', d.T.string, default='docker.io/docmost/docmost:0.95.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('appUrl', d.T.string, example='https://wiki.example.com'),
@@ -4738,7 +4738,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Bugsink server. baseUrl is the public URL (validated Host header); behindHttps toggles secure-cookie/HTTPS handling. secretName holds DATABASE_URL and SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='bugsink'),
-          d.arg('image', d.T.string, default='docker.io/bugsink/bugsink:2.4.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('baseUrl', d.T.string, example='https://errors.example.com'),
           d.arg('behindHttps', d.T.bool, default=true),
@@ -4756,7 +4756,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Blinko server. nextauthUrl is the public URL. secretName holds DATABASE_URL (with the DB password) and NEXTAUTH_SECRET (envFrom). Uploads at /app/.blinko. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='blinko'),
-          d.arg('image', d.T.string, default='docker.io/blinkospace/blinko:1.8.8'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('nextauthUrl', d.T.string, example='https://notes.example.com'),
@@ -4774,7 +4774,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Apache Answer server. Data and uploads at /data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='answer'),
-          d.arg('image', d.T.string, default='docker.io/apache/answer:v2.0.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4790,7 +4790,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The PhotoPrism server. Storage at /photoprism/storage, originals at /photoprism/originals, both on the volume. siteUrl is the public URL (keep the trailing /). secretName holds PHOTOPRISM_ADMIN_PASSWORD (envFrom). Point PHOTOPRISM_DATABASE_DRIVER at external MariaDB (mysql-cluster) to scale out. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='photoprism'),
-          d.arg('image', d.T.string, default='docker.io/photoprism/photoprism:260601'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('siteUrl', d.T.string, example='https://photos.example.com/'),
@@ -4809,7 +4809,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Lychee server. Photos at /uploads, config at /conf, symlinks at /sym, all on the volume. appUrl is the public URL. secretName holds APP_KEY (envFrom). Point DB_CONNECTION at external MySQL/PostgreSQL to scale past SQLite. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='lychee'),
-          d.arg('image', d.T.string, default='docker.io/lycheeorg/lychee:v7.7.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('appUrl', d.T.string, example='https://photos.example.com'),
@@ -4827,7 +4827,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The CommaFeed server (H2 variant). Keeps its embedded database at /commafeed/data on the volume. Switch to the -postgresql image and point CF_APP_DATABASE at a cnpg-cluster to scale out. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='commafeed'),
-          d.arg('image', d.T.string, default='docker.io/athou/commafeed:7.2.0-h2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4843,7 +4843,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The GlitchTip web/ingest API on :8080. redisHost defaults to a valkey named glitchtip-cache; domain is the public URL. secretName holds DATABASE_URL (with the DB password) and SECRET_KEY (envFrom). Run a worker alongside. Scales via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='glitchtip'),
-          d.arg('image', d.T.string, default='docker.io/glitchtip/glitchtip:v6.2.2'),
+          d.arg('image', d.T.string),
           d.arg('redisHost', d.T.string, default='glitchtip-cache'),
           d.arg('domain', d.T.string, example='https://errors.example.com'),
           d.arg('secretName', d.T.string, default='glitchtip-secrets'),
@@ -4855,7 +4855,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/glitchtip/server.libsonnet' },
         worker: d.fn('The GlitchTip Celery worker (with beat scheduler), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs ./bin/run-celery-with-beat.sh. Scales horizontally via replicas. A GlitchTip deployment needs at least one.', [
           d.arg('name', d.T.string, default='glitchtip-worker'),
-          d.arg('image', d.T.string, default='docker.io/glitchtip/glitchtip:v6.2.2'),
+          d.arg('image', d.T.string),
           d.arg('redisHost', d.T.string, default='glitchtip-cache'),
           d.arg('secretName', d.T.string, default='glitchtip-secrets'),
           d.arg('replicas', d.T.int, default=1),
@@ -4872,7 +4872,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The wallabag server. dbHost/dbName/dbUser default to a cnpg-cluster named wallabag-db (SYMFONY__ENV__ prefix). domain is the public URL. secretName holds SYMFONY__ENV__DATABASE_PASSWORD and SYMFONY__ENV__SECRET (envFrom). Saved images on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='wallabag'),
-          d.arg('image', d.T.string, default='docker.io/wallabag/wallabag:2.6.14'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='wallabag-db-rw'),
@@ -4893,7 +4893,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Monica server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (envFrom). Uploads at /var/www/html/storage. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='monica'),
-          d.arg('image', d.T.string, default='docker.io/library/monica:4.1.2-apache'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='monica-db'),
@@ -4914,7 +4914,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Fider server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), JWT_SECRET, and EMAIL_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='fider'),
-          d.arg('image', d.T.string, default='docker.io/getfider/fider:v0.36.0'),
+          d.arg('image', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://feedback.example.com'),
           d.arg('secretName', d.T.string, default='fider-secrets'),
           d.arg('replicas', d.T.int, default=1),
@@ -4931,7 +4931,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Firefly III server. dbHost/dbName/dbUser default to a cnpg-cluster named firefly-iii-db. appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (a 32-char key, envFrom). Uploads at /var/www/html/storage. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='firefly-iii'),
-          d.arg('image', d.T.string, default='docker.io/fireflyiii/core:version-6.6.6'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='firefly-iii-db-rw'),
@@ -4952,7 +4952,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The MediaWiki server. Uploaded files at /var/www/html/images on the volume. Mount a LocalSettings.php at /var/www/html/LocalSettings.php from a Secret (DB creds + secret key). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mediawiki'),
-          d.arg('image', d.T.string, default='docker.io/library/mediawiki:1.45.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -4967,7 +4967,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Roundcube server. imapHost/smtpHost point at the mail server (e.g. ssl://mail.example.com:993). Keeps contacts/preferences in SQLite at /var/roundcube/db. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='roundcube'),
-          d.arg('image', d.T.string, default='docker.io/roundcube/roundcubemail:1.7.2-apache'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('imapHost', d.T.string, example='ssl://mail.example.com:993'),
@@ -4985,7 +4985,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Shlink server. dbHost/dbName/dbUser default to a cnpg-cluster named shlink-db. defaultDomain is the short-URL domain. secretName holds DB_PASSWORD (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='shlink'),
-          d.arg('image', d.T.string, default='docker.io/shlinkio/shlink:5.1.5'),
+          d.arg('image', d.T.string),
           d.arg('dbHost', d.T.string, default='shlink-db-rw'),
           d.arg('dbName', d.T.string, default='shlink'),
           d.arg('dbUser', d.T.string, default='shlink'),
@@ -5005,7 +5005,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Rallly server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), SECRET_PASSWORD, and SMTP_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='rallly'),
-          d.arg('image', d.T.string, default='ghcr.io/lukevella/rallly:4.11.1'),
+          d.arg('image', d.T.string),
           d.arg('baseUrl', d.T.string, example='https://rallly.example.com'),
           d.arg('secretName', d.T.string, default='rallly-secrets'),
           d.arg('replicas', d.T.int, default=1),
@@ -5022,7 +5022,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Baserow all-in-one server. Everything (embedded DB, Redis, uploads) at /baserow/data on the volume. publicUrl is the public URL. secretName holds BASEROW_SECRET_KEY and BASEROW_JWT_SIGNING_KEY (envFrom). Point DATABASE_*/REDIS_* at external services via env to scale out. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='baserow'),
-          d.arg('image', d.T.string, default='docker.io/baserow/baserow:2.3.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('publicUrl', d.T.string, example='https://baserow.example.com'),
@@ -5040,7 +5040,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The NocoDB server. secretName holds NC_DB (a connection string with the DB password, point it at a cnpg-cluster) and NC_AUTH_JWT_SECRET (envFrom). publicUrl is the public URL. Attachments at /usr/app/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='nocodb'),
-          d.arg('image', d.T.string, default='docker.io/nocodb/nocodb:2026.07.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('publicUrl', d.T.string, example='https://nocodb.example.com'),
@@ -5058,7 +5058,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Snipe-IT server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (envFrom). Uploads at /var/lib/snipeit. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='snipe-it'),
-          d.arg('image', d.T.string, default='docker.io/snipe/snipe-it:v8.6.3'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='snipe-it-db'),
@@ -5079,7 +5079,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The BookStack server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASS and APP_KEY (envFrom). Config/uploads at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='bookstack'),
-          d.arg('image', d.T.string, default='lscr.io/linuxserver/bookstack:26.05.2'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='bookstack-db'),
@@ -5100,7 +5100,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Matomo server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). secretName holds MATOMO_DATABASE_PASSWORD (envFrom). Config/plugins at /var/www/html. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='matomo'),
-          d.arg('image', d.T.string, default='docker.io/library/matomo:5.12.0-apache'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='matomo-db'),
@@ -5120,7 +5120,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Wiki.js server. dbHost/dbName/dbUser default to a cnpg-cluster named wikijs-db. secretName holds DB_PASS (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='wikijs'),
-          d.arg('image', d.T.string, default='ghcr.io/requarks/wiki:2.5.314'),
+          d.arg('image', d.T.string),
           d.arg('dbHost', d.T.string, default='wikijs-db-rw'),
           d.arg('dbName', d.T.string, default='wikijs'),
           d.arg('dbUser', d.T.string, default='wikijs'),
@@ -5139,7 +5139,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The n8n server. Keeps everything (SQLite + auto-generated encryption key) at /home/node/.n8n on the volume. host is the public hostname (webhooks need it). Point DB_TYPE at external PostgreSQL and set N8N_ENCRYPTION_KEY via env to scale out. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='n8n'),
-          d.arg('image', d.T.string, default='docker.io/n8nio/n8n:2.31.4'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('host', d.T.string, example='n8n.example.com'),
@@ -5156,7 +5156,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Ghost server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). url is the public URL. secretName holds the DB password (envFrom). Content at /var/lib/ghost/content. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='ghost'),
-          d.arg('image', d.T.string, default='docker.io/library/ghost:5.130.6-alpine'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='ghost-db'),
@@ -5177,7 +5177,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Metabase server. dbHost/dbName/dbUser default to a cnpg-cluster named metabase-db (its application database). secretName holds MB_DB_PASS (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='metabase'),
-          d.arg('image', d.T.string, default='docker.io/metabase/metabase:v0.62.5'),
+          d.arg('image', d.T.string),
           d.arg('dbHost', d.T.string, default='metabase-db-rw'),
           d.arg('dbName', d.T.string, default='metabase'),
           d.arg('dbUser', d.T.string, default='metabase'),
@@ -5196,7 +5196,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Directus server. dbHost/dbName/dbUser default to a cnpg-cluster named directus-db. publicUrl is the public URL; adminEmail the first-run admin. secretName holds DB_PASSWORD, KEY, SECRET, ADMIN_PASSWORD (envFrom). Uploads at /directus/uploads. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='directus'),
-          d.arg('image', d.T.string, default='docker.io/directus/directus:12.1.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('dbHost', d.T.string, default='directus-db-rw'),
@@ -5218,7 +5218,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The FerretDB proxy. secretName holds FERRETDB_POSTGRESQL_URL (with the backend password, envFrom). The backend is a PostgreSQL with the DocumentDB extension — run one with cnpg-cluster pinned to imageName=ghcr.io/ferretdb/postgres-documentdb. Scales horizontally via replicas. Route :27017 as TCP for MongoDB clients.', [
           d.arg('name', d.T.string, default='ferretdb'),
-          d.arg('image', d.T.string, default='ghcr.io/ferretdb/ferretdb:2.7.0'),
+          d.arg('image', d.T.string),
           d.arg('secretName', d.T.string, default='ferretdb-secrets'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
@@ -5233,7 +5233,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Neo4j server. Graph at /data on the volume. secretName holds NEO4J_AUTH (neo4j/<password>, envFrom). Compose an exposure onto the HTTP port; route Bolt (:7687) as TCP. Clustering/HA needs Neo4j Enterprise, beyond this recipe.', [
           d.arg('name', d.T.string, default='neo4j'),
-          d.arg('image', d.T.string, default='docker.io/library/neo4j:5.26.28-community'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='neo4j-secrets'),
@@ -5390,7 +5390,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         instance: d.fn('The Dragonfly server. threads pins --proactor_threads and sizes the CPU (Dragonfly runs a thread per core); maxMemoryMB must be at least 256 per thread or Dragonfly exits at startup, so the render fails first. Name it for its role and a consumer never learns which RESP store it got.', [
           d.arg('name', d.T.string, default='dragonfly'),
-          d.arg('image', d.T.string, default='ghcr.io/dragonflydb/dragonfly:v1.39.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('maxMemoryMB', d.T.int, default=512),
@@ -5407,7 +5407,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         agent: d.fn("The per-node collector. config is the collector's own document, rendered straight into the mounted config file; the default receives OTLP on 4317/4318, guards memory, batches, and exports to the debug logger, with a health_check extension on 13133 backing the probes. Replace config for real pipelines, and move the probes if it drops health_check.", [
           d.arg('name', d.T.string, default='otel-collector'),
-          d.arg('image', d.T.string, default='docker.io/otel/opentelemetry-collector-contrib:0.157.0'),
+          d.arg('image', d.T.string),
           d.arg('config', d.T.object, example={ receivers: {}, exporters: {}, service: { pipelines: {} } }),
         ]) + {
           kind: 'daemon',
@@ -5420,7 +5420,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The exporter. modules is rendered as its config.yml; the default covers http_2xx (dual-stack) plus IPv4/IPv6-pinned variants and tcp_connect. Reach it at blackbox-exporter:9115 (the kurly.expose.probe default prober). An ICMP module needs CAP_NET_RAW, so relax the dropped capabilities for it.', [
           d.arg('name', d.T.string, default='blackbox-exporter'),
-          d.arg('image', d.T.string, default='quay.io/prometheus/blackbox-exporter:v0.28.0'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('modules', d.T.object),
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '64Mi' } }),
@@ -5437,7 +5437,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Alertmanager. alertmanagerConfigSelector (verbatim operator schema) decides which AlertmanagerConfig objects supply routing/receivers; {} selects everything, none runs the operator default. Wire a Prometheus to it through that workload's spec escape (alerting.alertmanagers -> alertmanager-operated:web). Reach it at alertmanager-operated.<namespace>.svc:9093.", [
           d.arg('name', d.T.string, default='alertmanager'),
-          d.arg('image', d.T.string, default='docker.io/prom/alertmanager:v0.33.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('retention', d.T.string, default='120h'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
@@ -5482,7 +5482,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         query: d.fn('The Thanos Querier (a plain `thanos query` Deployment + Service). endpoints are the StoreAPI targets it fans out to over gRPC (dnssrv+ resolves every replica); queryReplicaLabels deduplicate HA replicas. Serves the Prometheus API on :10902 (gRPC StoreAPI on :10901 for federation). Point a Grafana datasource or the query-frontend at it.', [
           d.arg('name', d.T.string, default='thanos-query'),
-          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('endpoints', d.T.array, default=[], example=['dnssrv+_grpc._tcp.prometheus-operated.monitoring.svc.cluster.local']),
           d.arg('queryReplicaLabels', d.T.array, default=['prometheus_replica', 'replica']),
@@ -5496,7 +5496,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         'query-frontend': d.fn('The Thanos Query Frontend (a plain `thanos query-frontend` Deployment + Service): an optional layer that splits long-range queries, caches results (in-memory by default), and forwards to a downstream Querier. downstreamUrl defaults to a thanos-query Service on :10902 in the same namespace. For a shared cache, pass --query-range.response-cache-config-file via extraArgs and back it with the memcached or valkey workload.', [
           d.arg('name', d.T.string, default='thanos-query-frontend'),
-          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('downstreamUrl', d.T.string, default='http://thanos-query:10902'),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
@@ -5509,7 +5509,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         store: d.fn('The Thanos Store Gateway (a `thanos store` StatefulSet + headless Service): it serves historical blocks from object storage over the StoreAPI so the Querier reaches data older than the sidecars hold. Stateful — a per-pod PVC caches block index headers. objstoreSecret names a Secret you provide (key objstore.yaml, fillable with kurly.externalSecret) pointing at the bucket; it pairs with the seaweedfs S3 workload. Add it to the Querier with dnssrv+_grpc._tcp.<name>-headless…', [
           d.arg('name', d.T.string, default='thanos-store'),
-          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('objstoreSecret', d.T.string, default='thanos-objstore'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
@@ -5524,7 +5524,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         compact: d.fn('The Thanos Compactor (a `thanos compact --wait` Deployment): it compacts raw blocks in object storage, builds the 5m/1h downsampled resolutions, and applies retention. A SINGLETON — a second compactor over the same bucket corrupts the data, so replicas is pinned to 1 (asserted) and it rolls with Recreate; shard a large bucket with --selector.relabel-config across separate compactors. Reads the same objstoreSecret as store. retentionRaw/5m/1h bound each resolution (0d = keep forever).', [
           d.arg('name', d.T.string, default='thanos-compact'),
-          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('image', d.T.string),
           d.arg('objstoreSecret', d.T.string, default='thanos-objstore'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
@@ -5541,7 +5541,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         receive: d.fn('The Thanos Receiver (a `thanos receive` StatefulSet + headless Service): the push-based ingestion path — Prometheus remote-writes to it (:19291) instead of running a sidecar. It holds recent data in a local TSDB, serves it to the Querier over the StoreAPI (:10901), and uploads blocks to object storage. Receivers form a hashring generated from the replica count; replicationFactor copies each series across pods, each tagged with a receive_replica label the Querier deduplicates. Reads the same objstoreSecret as store.', [
           d.arg('name', d.T.string, default='thanos-receive'),
-          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('replicationFactor', d.T.int, default=1),
           d.arg('objstoreSecret', d.T.string, default='thanos-objstore'),
@@ -5558,7 +5558,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         ruler: d.fn('The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.', [
           d.arg('name', d.T.string, default='thanos-ruler'),
-          d.arg('image', d.T.string, default='quay.io/thanos/thanos:v0.42.2'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('queryEndpoints', d.T.array, default=[], example=['dnssrv+_http._tcp.thanos-query.monitoring.svc.cluster.local']),
           d.arg('alertmanagersUrl', d.T.array, default=[], example=['http://alertmanager-operated.monitoring.svc:9093']),
@@ -5581,7 +5581,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Grafana instance. config is grafana.ini (operator sections of string values), merged over defaults that silence phone-home traffic. prometheusUrl points the default datasource at the prometheus workload's prometheus-operated Service; prometheusDatasource=false authors none. The operator mints a random admin password into <name>-admin-credentials.", [
           d.arg('name', d.T.string, default='grafana'),
-          d.arg('image', d.T.string, default='docker.io/grafana/grafana:13.1.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('config', d.T.object, default={}, example={ server: { root_url: 'https://grafana.example.com' } }),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
@@ -5640,7 +5640,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         server: d.fn('The Prometheus server. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. The selectors (verbatim operator schema) default to selecting everything; scope them to narrow what it scrapes. Query it at prometheus-operated.<namespace>.svc:9090.', [
           d.arg('name', d.T.string, default='prometheus'),
           d.arg('namespace', d.T.string, default='monitoring'),
-          d.arg('image', d.T.string, default='docker.io/prom/prometheus:v3.13.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('retention', d.T.string, default='15d'),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
@@ -5668,7 +5668,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         server: d.fn('The metrics server. namespace MUST match where you deploy — the APIService and cluster RBAC name the ServiceAccount by namespace, which cluster-scoped objects cannot inherit later; kube-system is conventional. kubeletInsecureTLS=true skips verifying the kubelet serving cert (needed on kind and many on-prem clusters, or every scrape fails the TLS handshake).', [
           d.arg('name', d.T.string, default='metrics-server'),
           d.arg('namespace', d.T.string, default='kube-system'),
-          d.arg('image', d.T.string, default='registry.k8s.io/metrics-server/metrics-server:v0.8.1'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
           d.arg('kubeletInsecureTLS', d.T.bool, default=false),
           d.arg('metricResolution', d.T.string, default='15s'),
@@ -5687,7 +5687,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         server: d.fn('The OpenCost cost model. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. prometheusEndpoint points at the prometheus workload (or a Thanos Query); env carries extra pricing/cloud settings. The web UI is a separate image (opencost-ui); this is the model, scraped at :9003.', [
           d.arg('name', d.T.string, default='opencost'),
           d.arg('namespace', d.T.string, default='opencost'),
-          d.arg('image', d.T.string, default='ghcr.io/opencost/opencost:1.119.2'),
+          d.arg('image', d.T.string),
           d.arg('prometheusEndpoint', d.T.string, default='http://prometheus-operated.monitoring.svc:9090'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('env', d.T.object, default={}),
@@ -5705,7 +5705,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The all-in-one server. Serves S3 on 8333 over the data volume at /data; the master/volume/filer ports serve the cluster itself. The default allows anonymous access, fine inside a trusted namespace. Splitting the roles into dedicated tiers is a different topology, not more replicas, so it would be its own stage.', [
           d.arg('name', d.T.string, default='seaweedfs'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
         ]) + {
@@ -5717,7 +5717,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         master: d.fn("The coordinator of a SPLIT SeaweedFS: `weed master` holds the topology, assigns file IDs, and directs clients to volume servers. defaultReplication is the cluster-wide policy it owns ('000' keeps one copy). Deploy it, then point the volume and filer stages at it.", [
           d.arg('name', d.T.string, default='seaweedfs-master'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('defaultReplication', d.T.string, default='000'),
@@ -5727,7 +5727,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         volume: d.fn('The data tier of a SPLIT SeaweedFS: `weed volume` stores file content and registers with the master, advertising its pod IP so reads reach it. Scale by replicas for capacity, each a pod with its own PVC. Point it at the master with masterEndpoint.', [
           d.arg('name', d.T.string, default='seaweedfs-volume'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
@@ -5739,7 +5739,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         filer: d.fn('The access tier of a SPLIT SeaweedFS: `weed filer` puts a filesystem and (s3=true) an S3 gateway on 8333 over the volume servers, keeping its own metadata. Point it at the master with masterEndpoint.', [
           d.arg('name', d.T.string, default='seaweedfs-filer'),
-          d.arg('image', d.T.string, default='docker.io/chrislusf/seaweedfs:4.40'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('masterEndpoint', d.T.string, default='seaweedfs-master-0.seaweedfs-master-headless:9333'),
@@ -5755,7 +5755,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         cache: d.fn('The memcached shards: a StatefulSet (for stable DNS names, not storage) and the headless Service that names them. Clients consistent-hash keys over memcached-0..N-1; scaling reshuffles that ring, so treat replicas as part of the client configuration. The container memory limit is derived from memoryMB, since -m caps only the item cache.', [
           d.arg('name', d.T.string, default='memcached'),
-          d.arg('image', d.T.string, default='docker.io/library/memcached:1.6.45'),
+          d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=3),
           d.arg('memoryMB', d.T.int, default=64),
           d.arg('maxConnections', d.T.int, default=1024),
@@ -5770,7 +5770,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         instance: d.fn('The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app). `image` also accepts a Redis build — Valkey is its BSD fork and takes the same configuration — so name the workload for its role rather than its engine, and a consumer holding an endpoint never learns which it got.', [
           d.arg('name', d.T.string, default='valkey'),
-          d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.1.1'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('maxMemory', d.T.string, example='512mb'),
@@ -5780,9 +5780,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
         cache: d.fn('An in-memory Valkey cache that upgrades its version with zero downtime and no data loss, on the stock image and no orchestrator — the replication hand-off lives entirely in the pod manifests (headless Service, maxSurge, an initContainer that replicates the running peer, and a preStop failover).', [
           d.arg('name', d.T.string, default='valkey'),
-          d.arg('image', d.T.string, default='docker.io/valkey/valkey:9.1.1'),
+          d.arg('image', d.T.string),
           d.arg('maxMemory', d.T.string, default='256mb'),
-          d.arg('kubectlImage', d.T.string, default='docker.io/alpine/k8s:1.36.2'),
+          d.arg('kubectlImage', d.T.string),
         ]) + {
           kind: 'worker',
           importPath: 'github.com/metio/kurly/workloads/valkey/cache.libsonnet',
@@ -5795,7 +5795,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Ente museum API on :8080, stateless (metadata in PostgreSQL, blobs in S3). Reads its base config from the image and merges the operator-supplied credentials file (`credentialsSecret`, a Secret with a credentials.yaml key carrying the DB DSN, the S3 endpoint/bucket/keys, and the app secrets); ENTE_CREDENTIALS_FILE points at it. Any value is also overridable by an ENTE_-prefixed env var.', [
           d.arg('name', d.T.string, default='ente-server'),
-          d.arg('image', d.T.string, default='ghcr.io/ente/server:latest@sha256:e9e06eb01834c38f41a3a09f9a64885b631346ce0005ccff2153faea403bd6e2'),
+          d.arg('image', d.T.string),
           d.arg('credentialsSecret', d.T.string, default='ente-credentials'),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
@@ -5804,7 +5804,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ente/server.libsonnet' },
         web: d.fn('The Ente web front end — one image bundling every web app (Photos on :3000, Albums :3002, Cast :3004, Share :3005, Embed :3006). Stateless; it talks to the museum from the browser, so apiOrigin/albumsOrigin are the PUBLIC URLs the browser reaches, not in-cluster Services. Expose :3000 for the main UI; route the extra ports for the public-album/cast/share apps.', [
           d.arg('name', d.T.string, default='ente-web'),
-          d.arg('image', d.T.string, default='ghcr.io/ente/web:latest@sha256:d9fe114825b27bd51be61a091e61b0e64117edb5bfd8cfb419ea404d4170e614'),
+          d.arg('image', d.T.string),
           d.arg('apiOrigin', d.T.string, default='https://ente-api.example.com'),
           d.arg('albumsOrigin', d.T.string, default='https://albums.example.com'),
           d.arg('env', d.T.object, default={}),
@@ -5820,7 +5820,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Immich API and web app on :2283, media library on a ReadWriteOnce volume at /data (one replica, recreated). Reaches PostgreSQL/VectorChord and Redis by the given hosts; the password comes from `secretName` as DB_PASSWORD (an Immich-shaped Secret the operator supplies, e.g. via kurly.externalSecret from the CNPG cluster Secret).', [
           d.arg('name', d.T.string, default='immich'),
-          d.arg('image', d.T.string, default='ghcr.io/immich-app/immich-server:v1.140.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='100Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('database', d.T.string, default='immich'),
@@ -5836,7 +5836,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/immich/server.libsonnet' },
         'machine-learning': d.fn("Immich's inference service on :3003, model cache on a ReadWriteOnce volume at /cache (one replica, recreated). The server reaches it through its Service at http://<name>:3003.", [
           d.arg('name', d.T.string, default='immich-machine-learning'),
-          d.arg('image', d.T.string, default='ghcr.io/immich-app/immich-machine-learning:v1.140.0'),
+          d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
@@ -5851,7 +5851,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Frigate NVR: authenticated UI/API on :8971 (plain UI on 5000, RTSP restream on 8554, WebRTC on 8555 TCP/UDP), config + database on /config and recordings on /media (two ReadWriteOnce volumes, one replica, recreated). config.yml mounts read-only over /config; FRIGATE_RTSP_PASSWORD comes from `secretName`.', [
           d.arg('name', d.T.string, default='frigate'),
-          d.arg('image', d.T.string, default='ghcr.io/blakeblackshear/frigate:0.15.0'),
+          d.arg('image', d.T.string),
           d.arg('config', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('mediaSize', d.T.quantity, default='100Gi'),

@@ -23,10 +23,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='nzbget',
-  image='lscr.io/linuxserver/nzbget:26.2.20260717',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

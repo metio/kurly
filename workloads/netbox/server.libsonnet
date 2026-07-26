@@ -34,10 +34,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='netbox',
-  image='docker.io/netboxcommunity/netbox:v4.6.5',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   dbHost='netbox-db-rw',

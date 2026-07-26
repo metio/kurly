@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='wekan',
-  image='docker.io/wekan/wekan:v10.03',
+  image=defaultImage,
   replicas=2,
   // The public URL (Wekan builds absolute links and validates it).
   rootUrl=null,

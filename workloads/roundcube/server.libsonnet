@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='roundcube',
-  image='docker.io/roundcube/roundcubemail:1.7.2-apache',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   // The IMAP and SMTP servers Roundcube connects users to (required).

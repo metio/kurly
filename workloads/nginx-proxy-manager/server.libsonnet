@@ -22,9 +22,10 @@
 // replica, recreated (never rolled) to keep two pods off the files.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='nginx-proxy-manager',
-  image='docker.io/jc21/nginx-proxy-manager:2.12.3',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   env={},

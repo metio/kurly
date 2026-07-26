@@ -21,6 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './agent.image', '\n');
 
 // A self-contained agent: accept OTLP over gRPC and HTTP, guard memory, batch,
 // and export to the debug logger. It runs and is healthy out of the box, which
@@ -56,7 +57,7 @@ local defaultConfig = {
 
 function(
   name='otel-collector',
-  image='docker.io/otel/opentelemetry-collector-contrib:0.157.0',
+  image=defaultImage,
   config=defaultConfig,
 )
   kurly.daemon(name, image)

@@ -28,6 +28,7 @@ function(
   // dedicated pools through the raw + escape hatch for large clusters.
   replicas=3,
   // The OpenSearch version the operator pins (server and Dashboards image tag).
+  // renovate: datasource=docker depName=docker.io/opensearchproject/opensearch versioning=docker
   opensearchVersion='2.19.1',
   storageSize='10Gi',
   storageClass=null,

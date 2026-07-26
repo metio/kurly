@@ -18,9 +18,10 @@
 // Stateless: links live in PostgreSQL, so this is a plain rolling Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='kutt',
-  image='docker.io/kutt/kutt:v3.2.0',
+  image=defaultImage,
   replicas=2,
   secretName='kutt-secrets',
   env={},

@@ -18,9 +18,10 @@
 // Single writer: the config lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='foldingathome',
-  image='lscr.io/linuxserver/foldingathome:8.5.6',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   puid=1000,

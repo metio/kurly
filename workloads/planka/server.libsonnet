@@ -22,9 +22,10 @@
 // compose ReadWriteMany volumes onto the three upload paths and drop the S3 settings.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='planka',
-  image='ghcr.io/plankanban/planka:2.1.1',
+  image=defaultImage,
   replicas=2,
   baseUrl=null,
   secretName='planka-secrets',

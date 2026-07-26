@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='baserow',
-  image='docker.io/baserow/baserow:2.3.2',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   // The public URL Baserow builds links against (required).

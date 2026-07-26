@@ -20,9 +20,10 @@
 // Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './backend.image', '\n');
 function(
   name='lemmy',
-  image='docker.io/dessalines/lemmy:0.19.7',
+  image=defaultImage,
   replicas=1,
   configSecret='lemmy-config',
   env={},

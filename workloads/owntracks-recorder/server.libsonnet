@@ -17,9 +17,10 @@
 // keep two pods off the same store directory.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='owntracks-recorder',
-  image='docker.io/owntracks/recorder:latest@sha256:050c3ac9ed798d4110f12e53851e94f9fa0fcecb16cf4d7457967eac2e498da7',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   env={ OTR_STORAGEDIR: '/store' },

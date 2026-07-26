@@ -27,6 +27,7 @@
 // recreated (never rolled) to keep two pods off the file.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 // A minimal skeleton — complete it for your domain, identity backend and access rules.
 local defaultConfig = {
@@ -42,7 +43,7 @@ local defaultConfig = {
 
 function(
   name='authelia',
-  image='ghcr.io/authelia/authelia:4.39.5',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   config=defaultConfig,

@@ -22,10 +22,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='blackbox-exporter',
-  image='quay.io/prometheus/blackbox-exporter:v0.28.0',
+  image=defaultImage,
   replicas=1,
   // The prober modules, rendered as the exporter's config.yml. The default set is
   // enough for kurly.expose.probe's http_2xx and for IP-family-specific checks;

@@ -23,10 +23,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='endurain',
-  image='ghcr.io/joaovitoriasilva/endurain:0.17.7',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   dbHost='endurain-db-rw',

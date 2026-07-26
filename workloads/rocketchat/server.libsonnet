@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='rocketchat',
-  image='docker.io/rocketchat/rocket.chat:8.6.1',
+  image=defaultImage,
   replicas=2,
   // The public URL (Rocket.Chat builds absolute links and validates it).
   rootUrl=null,

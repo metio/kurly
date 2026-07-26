@@ -23,10 +23,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='bazarr',
-  image='lscr.io/linuxserver/bazarr:1.6.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

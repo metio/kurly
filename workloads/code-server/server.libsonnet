@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='code-server',
-  image='docker.io/codercom/code-server:4.129.0',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   // The Secret holding PASSWORD (kurly mints none), via envFrom.

@@ -35,12 +35,13 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline rewrites 'dev' to the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './cache.image', '\n');
 
 local port = 11211;
 
 function(
   name='memcached',
-  image='docker.io/library/memcached:1.6.45',
+  image=defaultImage,
   replicas=3,
   memoryMB=64,
   maxConnections=1024,

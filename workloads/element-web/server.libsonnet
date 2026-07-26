@@ -19,9 +19,10 @@
 // verbatim (kurly does not model its schema).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='element-web',
-  image='ghcr.io/element-hq/element-web:v1.11.100',
+  image=defaultImage,
   replicas=2,
   homeserverUrl=null,
   serverName=null,

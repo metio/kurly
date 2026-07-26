@@ -18,9 +18,10 @@
 // Stateless: surveys and responses live in PostgreSQL, so this is a plain rolling Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='formbricks',
-  image='ghcr.io/formbricks/formbricks:v2.6.0',
+  image=defaultImage,
   replicas=2,
   webappUrl=null,
   secretName='formbricks-secrets',

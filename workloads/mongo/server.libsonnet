@@ -19,9 +19,10 @@
 // (never rolled) to keep two pods off the store.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='mongo',
-  image='docker.io/library/mongo:8.0.3',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   secretName='mongo-secrets',

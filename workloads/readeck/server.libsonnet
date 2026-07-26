@@ -17,10 +17,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='readeck',
-  image='codeberg.org/readeck/readeck:0.22.3',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

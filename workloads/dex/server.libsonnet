@@ -23,10 +23,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='dex',
-  image='ghcr.io/dexidp/dex:v2.45.1',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   // The Secret holding config.yaml (kurly mints none), mounted at /etc/dex.

@@ -15,10 +15,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './worker.image', '\n');
 
 function(
   name='automatisch-worker',
-  image='ghcr.io/automatisch/automatisch:0.15.0',
+  image=defaultImage,
   replicas=1,
   // The same Secret the server uses (PostgreSQL/Redis connection and the keys).
   secretName='automatisch-secrets',

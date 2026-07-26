@@ -14,9 +14,10 @@
 // Serves its conversion API on :3000 — usually reached in-cluster (http://gotenberg:3000).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='gotenberg',
-  image='docker.io/gotenberg/gotenberg:8.15.3',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },

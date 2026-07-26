@@ -23,6 +23,7 @@
 // recreated (never rolled) to keep two pods off the file.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 local defaultConfig = |||
   listener 1883
@@ -33,7 +34,7 @@ local defaultConfig = |||
 
 function(
   name='mosquitto',
-  image='docker.io/eclipse-mosquitto:2.0.20',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   config=defaultConfig,

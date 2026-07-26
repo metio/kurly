@@ -14,11 +14,12 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './gateway.image', '\n');
 
 function(
   namePrefix='bigcapital',
   name=null,
-  image='docker.io/bigcapitalhq/gateway:v0.25.23',
+  image=defaultImage,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
   labels={},

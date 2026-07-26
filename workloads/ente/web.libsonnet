@@ -17,12 +17,13 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './web.image', '\n');
 
 function(
   name='ente-web',
   // The web bundle publishes only commit-tagged and moving tags, so it is pinned
   // as latest@digest — a known artifact that Renovate refreshes.
-  image='ghcr.io/ente/web:latest@sha256:d9fe114825b27bd51be61a091e61b0e64117edb5bfd8cfb419ea404d4170e614',
+  image=defaultImage,
   // The museum API and the albums app, as the BROWSER reaches them (public URLs).
   apiOrigin='https://ente-api.example.com',
   albumsOrigin='https://albums.example.com',

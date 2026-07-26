@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='mylar3',
-  image='lscr.io/linuxserver/mylar3:0.8.3',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

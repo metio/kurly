@@ -19,9 +19,10 @@
 // as root then serves as www-data.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='yourls',
-  image='docker.io/library/yourls:1.10.1',
+  image=defaultImage,
   replicas=2,
   site=null,
   secretName='yourls-secrets',

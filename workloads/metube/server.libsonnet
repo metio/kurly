@@ -15,10 +15,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='metube',
-  image='ghcr.io/alexta69/metube:2026.07.18',
+  image=defaultImage,
   storageSize='50Gi',
   storageClass=null,
   env={},

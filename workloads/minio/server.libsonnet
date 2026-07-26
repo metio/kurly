@@ -18,9 +18,10 @@
 // is a single-node MinIO; a real object store runs distributed MinIO across nodes/disks.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='minio',
-  image='docker.io/minio/minio:RELEASE.2024-11-07T00-52-20Z',
+  image=defaultImage,
   storageSize='50Gi',
   storageClass=null,
   secretName='minio-secrets',

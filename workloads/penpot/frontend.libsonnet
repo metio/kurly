@@ -16,9 +16,10 @@
 // state, so it scales freely.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './frontend.image', '\n');
 function(
   name='penpot-frontend',
-  image='docker.io/penpotapp/frontend:2.3.2',
+  image=defaultImage,
   replicas=2,
   backendUri='http://penpot-backend:6060',
   exporterUri='http://penpot-exporter:6061',

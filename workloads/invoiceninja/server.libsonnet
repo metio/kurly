@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='invoiceninja',
-  image='docker.io/invoiceninja/invoiceninja:5.13.26',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   dbHost='invoiceninja-db',

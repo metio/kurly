@@ -55,6 +55,16 @@ precedence = "override"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
 
+# Each stage's default container image lives in its own <stage>.image file (read
+# with importstr), so a Renovate bump touches one workload's file and never a
+# shared one. Plain text, so no inline header — a comment would end up inside the
+# image reference.
+[[annotations]]
+path = "workloads/*/*.image"
+precedence = "override"
+SPDX-FileCopyrightText = "The kurly Authors"
+SPDX-License-Identifier = "0BSD"
+
 # .gitmodules registers the docs theme git submodule; it has no comment syntax.
 [[annotations]]
 path = ".gitmodules"

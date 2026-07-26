@@ -32,6 +32,7 @@ function(
   // Replica-set members. Three gives one primary and two secondaries; an odd count
   // keeps a quorum.
   members=3,
+  // renovate: datasource=docker depName=docker.io/library/mongo versioning=docker
   mongodbVersion='8.0.4',
   storageSize='10Gi',
   storageClass=null,

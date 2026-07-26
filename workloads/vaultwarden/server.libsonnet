@@ -23,10 +23,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='vaultwarden',
-  image='docker.io/vaultwarden/server:1.36.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   // The public URL clients reach Vaultwarden at. Required for WebAuthn/passkeys,

@@ -13,9 +13,10 @@
 // with the user's own key.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='chatpad',
-  image='ghcr.io/deiucanta/chatpad:latest@sha256:15155e3a09fd677d578583f6bd3848c991cf768997400e37bc4c27e62a918a7e',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } },

@@ -15,6 +15,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './antispam.image', '\n');
 
 // The proxy port (:11332) is primary and named 'http' by kurly.http; the web/
 // controller port (:11334) rides alongside.
@@ -23,7 +24,7 @@ local controllerPort = { name: 'controller', port: 11334 };
 function(
   namePrefix='mailu',
   name=null,
-  image='ghcr.io/mailu/rspamd:2024.06',
+  image=defaultImage,
   domain='example.com',
   hostnames=['mail.example.com'],
   secretName='mailu-secrets',

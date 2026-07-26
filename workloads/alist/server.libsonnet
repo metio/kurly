@@ -16,9 +16,10 @@
 // (never rolled) to keep two pods off the same database.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='alist',
-  image='ghcr.io/alistgo/alist:latest@sha256:ee46012c344c0f40387b1c1aeddee4c114887764d3aebdd1d7bba83920423c5e',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   env={},

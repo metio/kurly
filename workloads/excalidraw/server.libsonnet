@@ -18,12 +18,13 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='excalidraw',
   // Excalidraw publishes no semver tags; this is the immutable sha tag (pinned,
   // reproducible), which Renovate tracks.
-  image='docker.io/excalidraw/excalidraw:sha-4bfc5bb',
+  image=defaultImage,
   replicas=1,
   env={},
   resources={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } },

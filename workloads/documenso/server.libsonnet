@@ -19,9 +19,10 @@
 // when NEXT_PRIVATE_UPLOAD_TRANSPORT=s3 is set in the Secret).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='documenso',
-  image='docker.io/documenso/documenso:latest@sha256:945bd2c04306bd5d78def0c4ceafdffb6b0a106cd6a2543db5acda9a6424b2d9',
+  image=defaultImage,
   replicas=2,
   webappUrl=null,
   secretName='documenso-secrets',

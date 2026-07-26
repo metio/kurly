@@ -17,9 +17,10 @@
 // envFrom (compose kurly.envFromSecret on).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='lobe-chat',
-  image='docker.io/lobehub/lobe-chat:latest@sha256:b2d2454525523d9f0a19c79661f83ec45f13363dbadd5c1180887e77af35d872',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

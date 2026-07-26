@@ -17,10 +17,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='shiori',
-  image='ghcr.io/go-shiori/shiori:v1.8.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

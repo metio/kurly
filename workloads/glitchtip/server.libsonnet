@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='glitchtip',
-  image='docker.io/glitchtip/glitchtip:v6.2.2',
+  image=defaultImage,
   redisHost='glitchtip-cache',
   // The public URL GlitchTip serves at.
   domain=null,

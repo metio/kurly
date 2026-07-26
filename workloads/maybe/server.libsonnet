@@ -27,10 +27,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='maybe',
-  image='ghcr.io/maybe-finance/maybe:0.1.0-alpha.6',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   dbHost='maybe-db-rw',

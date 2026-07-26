@@ -18,9 +18,10 @@
 // Stateless: calendars and contacts live in the database, so a plain rolling Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='davis',
-  image='ghcr.io/tchapi/davis:latest@sha256:60195a4f241f75957cfb5a0d371cb5b2898102153b0447f5a9ec13860eb49320',
+  image=defaultImage,
   replicas=2,
   secretName='davis-secrets',
   env={},

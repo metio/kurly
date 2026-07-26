@@ -14,10 +14,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='it-tools',
-  image='ghcr.io/corentinth/it-tools:2024.10.22-7ca5933',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },

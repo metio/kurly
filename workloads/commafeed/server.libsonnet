@@ -18,10 +18,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='commafeed',
-  image='docker.io/athou/commafeed:7.2.0-h2',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

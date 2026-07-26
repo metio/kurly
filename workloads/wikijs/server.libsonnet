@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='wikijs',
-  image='ghcr.io/requarks/wiki:2.5.314',
+  image=defaultImage,
   dbHost='wikijs-db-rw',
   dbName='wikijs',
   dbUser='wikijs',

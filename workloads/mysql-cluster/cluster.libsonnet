@@ -38,6 +38,7 @@ function(
   // MySQL Router instances — the routing tier apps connect through. Two for HA.
   routerInstances=2,
   // The MySQL server version the operator pins (its container image tag).
+  // renovate: datasource=docker depName=docker.io/library/mysql versioning=docker
   serverVersion='8.4.4',
   storageSize='10Gi',
   storageClass=null,

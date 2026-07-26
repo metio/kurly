@@ -12,9 +12,10 @@
 // Serves the web app on :80 — compose an exposure onto it. Images never leave the browser.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='mazanoke',
-  image='ghcr.io/civilblur/mazanoke:latest@sha256:92cc7474deb789af6549318563b7a9ee750131f9f7b297cc9c87ab67e656c22c',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } },

@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='airsonic-advanced',
-  image='lscr.io/linuxserver/airsonic-advanced:11.0.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

@@ -13,9 +13,10 @@
 // OpenAI endpoint directly; configure it in the UI.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='hollama',
-  image='ghcr.io/fmaclen/hollama:latest@sha256:74999be7ac1cb23e72c81b9e21055aec20576f9ef67b394fe0eeb2e36c3a8b93',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } },

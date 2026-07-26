@@ -22,9 +22,10 @@
 // an external database to scale out.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='nextcloud',
-  image='docker.io/library/nextcloud:31.0.4',
+  image=defaultImage,
   storageSize='50Gi',
   storageClass=null,
   trustedDomains=null,

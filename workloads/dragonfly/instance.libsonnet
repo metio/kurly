@@ -35,13 +35,14 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline rewrites 'dev' to the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './instance.image', '\n');
 
 // Dragonfly's own floor: it exits at startup rather than run under-provisioned.
 local mibPerThread = 256;
 
 function(
   name='dragonfly',
-  image='ghcr.io/dragonflydb/dragonfly:v1.39.0',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   maxMemoryMB=512,

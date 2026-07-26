@@ -26,10 +26,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='matomo',
-  image='docker.io/library/matomo:5.12.0-apache',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   dbHost='matomo-db',

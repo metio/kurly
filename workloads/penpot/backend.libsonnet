@@ -21,9 +21,10 @@
 // PENPOT_ASSETS_STORAGE_BACKEND on S3 to scale out).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './backend.image', '\n');
 function(
   name='penpot-backend',
-  image='docker.io/penpotapp/backend:2.3.2',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   publicUri=null,

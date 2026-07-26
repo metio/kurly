@@ -18,9 +18,10 @@
 // Single writer: the config lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='duplicati',
-  image='lscr.io/linuxserver/duplicati:v2.3.0.4_stable_2026-07-09-ls301',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

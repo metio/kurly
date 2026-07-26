@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='inspircd',
-  image='docker.io/inspircd/inspircd-docker:4.11.0',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   env={},

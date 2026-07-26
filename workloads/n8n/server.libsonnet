@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='n8n',
-  image='docker.io/n8nio/n8n:2.31.4',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   // The public hostname n8n serves at (webhook URLs need it).

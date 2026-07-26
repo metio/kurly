@@ -13,9 +13,10 @@
 // Serves the web app on :8080 — compose an exposure onto it.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='mermaid-live-editor',
-  image='ghcr.io/mermaid-js/mermaid-live-editor:latest@sha256:836616adc144fdc0f711a8fb149cc572eed63fe4de347c2ab6448831c8992c28',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } },

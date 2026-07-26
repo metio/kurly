@@ -18,9 +18,10 @@
 // Stateless: notes live in PostgreSQL, so this is a plain rolling Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='joplin',
-  image='docker.io/joplin/server:3.4.2',
+  image=defaultImage,
   replicas=2,
   appBaseUrl=null,
   secretName='joplin-secrets',

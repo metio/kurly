@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='seatsurfing',
-  image='ghcr.io/seatsurfing/seatsurfing:1.116.0',
+  image=defaultImage,
   // The Secret holding POSTGRES_URL and JWT_SIGNING_KEY (kurly mints none),
   // pulled into the environment via envFrom.
   secretName='seatsurfing-secrets',

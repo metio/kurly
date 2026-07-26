@@ -26,10 +26,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='wallabag',
-  image='docker.io/wallabag/wallabag:2.6.14',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   dbHost='wallabag-db-rw',

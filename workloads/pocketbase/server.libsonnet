@@ -16,9 +16,10 @@
 // (never rolled) to keep two pods off the same database.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='pocketbase',
-  image='ghcr.io/muchobien/pocketbase:latest@sha256:c0667fe6c5197ff226ff642120ab1ad870c3f2f27300940a61e5a7fa082b6816',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   env={},

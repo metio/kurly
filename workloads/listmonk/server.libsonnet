@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='listmonk',
-  image='docker.io/listmonk/listmonk:v6.2.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   dbHost='listmonk-db-rw',

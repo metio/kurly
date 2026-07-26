@@ -21,12 +21,13 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='ente-server',
   // Museum publishes only commit-tagged and moving tags, so it is pinned as
   // latest@digest — a known artifact that Renovate refreshes.
-  image='ghcr.io/ente/server:latest@sha256:e9e06eb01834c38f41a3a09f9a64885b631346ce0005ccff2153faea403bd6e2',
+  image=defaultImage,
   credentialsSecret='ente-credentials',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },

@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='librespeed',
-  image='lscr.io/linuxserver/librespeed:6.1.0',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   puid=1000,

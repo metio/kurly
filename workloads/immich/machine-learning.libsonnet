@@ -15,10 +15,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './machine-learning.image', '\n');
 
 function(
   name='immich-machine-learning',
-  image='ghcr.io/immich-app/immich-machine-learning:v1.140.0',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   env={},

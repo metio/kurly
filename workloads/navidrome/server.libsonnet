@@ -18,10 +18,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='navidrome',
-  image='docker.io/deluan/navidrome:0.63.2',
+  image=defaultImage,
   storageSize='50Gi',
   storageClass=null,
   env={},

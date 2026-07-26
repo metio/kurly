@@ -17,9 +17,10 @@
 // rolled) to keep two pods off the same database.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='mailpit',
-  image='docker.io/axllent/mailpit:latest@sha256:b868afa176bfd6cce2323ea316cd99ccad77915e51e595748f6d786700ecf109',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={ MP_DATABASE: '/data/mailpit.db' },

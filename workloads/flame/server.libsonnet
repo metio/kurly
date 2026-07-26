@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='flame',
-  image='docker.io/pawelmalak/flame:2.3.1',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   env={},

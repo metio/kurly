@@ -21,9 +21,10 @@
 // object storage at S3 in default.yml to scale out).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='misskey',
-  image='docker.io/misskey/misskey:2024.11.0',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   configSecret='misskey-config',

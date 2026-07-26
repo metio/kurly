@@ -12,6 +12,7 @@
 //
 // Clients reach it at <pod>.<name>-headless.<namespace>.svc on port 6379.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
+local defaultImage = std.rstripChars(importstr './instance.image', '\n');
 
 // Valkey is the BSD-licensed fork of Redis and takes the same configuration, so
 // `image` also accepts a Redis build (they share the uid, the flags and /data).
@@ -28,7 +29,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // swaps between engines by editing one manifest.
 function(
   name='valkey',
-  image='docker.io/valkey/valkey:9.1.1',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   maxMemory=null,

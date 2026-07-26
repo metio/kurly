@@ -18,9 +18,10 @@
 // Single writer: the config lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='filestash',
-  image='docker.io/machines/filestash:latest@sha256:1d621a2f96785c0ae711805593d1005fbf80068bd437a25a95b1462004ef57ca',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   env={},

@@ -23,10 +23,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='gotosocial',
-  image='docker.io/superseriousbusiness/gotosocial:0.20.1',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   // The instance domain — permanent, part of every @handle.

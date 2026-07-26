@@ -27,10 +27,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='transmission',
-  image='lscr.io/linuxserver/transmission:4.1.3',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   puid=1000,

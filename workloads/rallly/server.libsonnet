@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='rallly',
-  image='ghcr.io/lukevella/rallly:4.11.1',
+  image=defaultImage,
   // The public URL Rallly builds links against (required).
   baseUrl=null,
   // The Secret holding DATABASE_URL, SECRET_PASSWORD, and SMTP_* (kurly mints none),

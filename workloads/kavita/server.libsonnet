@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='kavita',
-  image='docker.io/jvmilazz0/kavita:0.9.0.2',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   env={},

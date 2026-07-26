@@ -14,10 +14,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './worker.image', '\n');
 
 function(
   name='twenty-worker',
-  image='docker.io/twentycrm/twenty:v2.22.0',
+  image=defaultImage,
   redisHost='twenty-cache',
   // The same Secret the server uses (PG_DATABASE_URL and APP_SECRET).
   secretName='twenty-secrets',

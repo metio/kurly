@@ -14,6 +14,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './volume.image', '\n');
 
 // A volume server MUST advertise a routable address, or the master hands clients
 // an unreachable one and every read fails — its short hostname does not resolve
@@ -29,7 +30,7 @@ local advertisePodIP = {
 
 function(
   name='seaweedfs-volume',
-  image='docker.io/chrislusf/seaweedfs:4.40',
+  image=defaultImage,
   replicas=2,
   storageSize='10Gi',
   storageClass=null,

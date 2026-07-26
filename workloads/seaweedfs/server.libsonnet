@@ -20,10 +20,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='seaweedfs',
-  image='docker.io/chrislusf/seaweedfs:4.40',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
 )

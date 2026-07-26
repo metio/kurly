@@ -24,6 +24,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 // The XMPP and admin ports beyond the primary client port :5222 that kurly.http
 // names 'http'.
@@ -34,7 +35,7 @@ local xmppPorts = [
 
 function(
   name='ejabberd',
-  image='docker.io/ejabberd/ecs:26.04',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

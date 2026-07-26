@@ -26,10 +26,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './compact.image', '\n');
 
 function(
   name='thanos-compact',
-  image='quay.io/thanos/thanos:v0.42.2',
+  image=defaultImage,
   // The Secret naming the Thanos objstore config (key `objstore.yaml`), mounted
   // read-only; --objstore.config-file points at it.
   objstoreSecret='thanos-objstore',

@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='jellyfin',
-  image='lscr.io/linuxserver/jellyfin:10.11.11',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   puid=1000,

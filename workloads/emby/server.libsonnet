@@ -20,9 +20,10 @@
 // Single writer: the config lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='emby',
-  image='lscr.io/linuxserver/emby:4.8.11',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   puid=1000,

@@ -21,6 +21,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 // A working default: persist to SQLite on the data volume and watch one endpoint. A real
 // deployment replaces `endpoints` (and usually adds `alerting`).
@@ -39,7 +40,7 @@ local defaultConfig = {
 
 function(
   name='gatus',
-  image='docker.io/twinproduction/gatus:v5.36.0',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   config=defaultConfig,

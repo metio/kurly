@@ -17,10 +17,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='memos',
-  image='docker.io/neosmemo/memos:0.29.1',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   env={},

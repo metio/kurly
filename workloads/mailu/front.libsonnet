@@ -23,6 +23,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './front.image', '\n');
 
 // The public mail and web ports the edge terminates, beyond the primary :80 that
 // kurly.http names 'http'. Each rides onto both the container and the Service via
@@ -42,7 +43,7 @@ local edgePorts = [
 function(
   namePrefix='mailu',
   name=null,
-  image='ghcr.io/mailu/nginx:2024.06',
+  image=defaultImage,
   domain='example.com',
   hostnames=['mail.example.com'],
   secretName='mailu-secrets',

@@ -20,9 +20,10 @@
 // to keep two pods off the same storage directory.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='anythingllm',
-  image='docker.io/mintplexlabs/anythingllm:latest@sha256:9a87bca983e688db2a11a0ed3290daa16c4b67556617ae77325c9d12c6a37c25',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   env={ STORAGE_DIR: '/app/server/storage' },

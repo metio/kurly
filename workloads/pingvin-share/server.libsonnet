@@ -15,9 +15,10 @@
 // replica, recreated (never rolled) to keep two pods off the same data directory.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='pingvin-share',
-  image='ghcr.io/stonith404/pingvin-share:latest@sha256:6bf2bcd3043ee68cb61264f0857511ccf7f212fdb984382b7f2d491635184ad6',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   env={},

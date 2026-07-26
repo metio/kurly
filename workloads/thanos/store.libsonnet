@@ -26,6 +26,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './store.image', '\n');
 
 // The store serves the StoreAPI on gRPC :10901 (what the Querier connects to) and
 // metrics/health on HTTP :10902. kurly.port names the primary container port
@@ -46,7 +47,7 @@ local dualPorts = {
 
 function(
   name='thanos-store',
-  image='quay.io/thanos/thanos:v0.42.2',
+  image=defaultImage,
   replicas=1,
   // The Secret naming the Thanos objstore config (key `objstore.yaml`), which you
   // create — kurly never mints it. Mounted read-only; --objstore.config-file

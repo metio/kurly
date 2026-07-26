@@ -20,9 +20,10 @@
 // Single writer: uploaded assets live on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='openproject',
-  image='docker.io/openproject/openproject:15',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   hostName=null,

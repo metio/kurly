@@ -20,10 +20,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='flatnotes',
-  image='docker.io/dullage/flatnotes:v5.5.4',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   // The Secret holding FLATNOTES_USERNAME, FLATNOTES_PASSWORD, and

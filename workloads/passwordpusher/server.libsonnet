@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='passwordpusher',
-  image='docker.io/pglombardo/pwpush:v2.9.3',
+  image=defaultImage,
   // The Secret holding DATABASE_URL and SECRET_KEY_BASE (kurly mints none),
   // pulled into the environment via envFrom.
   secretName='passwordpusher-secrets',

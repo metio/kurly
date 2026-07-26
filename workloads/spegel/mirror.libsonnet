@@ -37,6 +37,7 @@
 // this is privileged node infrastructure: deploy it to a namespace labelled for it,
 // and consider priorityClassName='system-node-critical' so it is not evicted.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './mirror.image', '\n');
 
 // The kurly label convention, applied to every object so the same ownership marker and
 // version stamp ride on the mirror as on every other kurly manifest.
@@ -51,7 +52,7 @@ function(
   // Where Spegel runs. The peer-bootstrap DNS name embeds this namespace, so it MUST
   // match the namespace you deploy to; every object below is stamped with it.
   namespace='spegel',
-  image='ghcr.io/spegel-org/spegel:v0.7.4',
+  image=defaultImage,
   // The node's containerd socket and stores. Defaults match a stock containerd; a
   // cluster with a relocated socket or content path (k3s, some managed distros) must
   // point these at the real locations or the mirror serves nothing.

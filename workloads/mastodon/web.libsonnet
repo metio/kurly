@@ -23,9 +23,10 @@
 // Stateless (with S3 media): a plain rolling Deployment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './web.image', '\n');
 function(
   name='mastodon',
-  image='ghcr.io/mastodon/mastodon:v4.3.1',
+  image=defaultImage,
   replicas=2,
   localDomain=null,
   secretName='mastodon-secrets',

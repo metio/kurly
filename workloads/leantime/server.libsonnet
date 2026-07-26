@@ -20,9 +20,10 @@
 // (never rolled) to keep two pods off the same directory.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='leantime',
-  image='docker.io/leantime/leantime:latest@sha256:6150dd3e8a1e17f1ead8d462d31e26177fe906ce3602dbbbf6af5417ef809de3',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   secretName='leantime-secrets',

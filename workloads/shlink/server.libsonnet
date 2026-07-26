@@ -19,10 +19,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='shlink',
-  image='docker.io/shlinkio/shlink:5.1.5',
+  image=defaultImage,
   dbHost='shlink-db-rw',
   dbName='shlink',
   dbUser='shlink',

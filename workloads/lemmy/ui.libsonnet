@@ -14,9 +14,10 @@
 // your public domain. It is stateless, so it scales freely.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './ui.image', '\n');
 function(
   name='lemmy-ui',
-  image='docker.io/dessalines/lemmy-ui:0.19.7',
+  image=defaultImage,
   replicas=2,
   internalHost='lemmy:8536',
   externalHost=null,

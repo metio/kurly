@@ -24,10 +24,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='adguardhome',
-  image='docker.io/adguard/adguardhome:v0.107.65',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

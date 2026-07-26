@@ -14,9 +14,10 @@
 // Serves its extraction API on :9998 — usually reached in-cluster (http://tika:9998).
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='tika',
-  image='docker.io/apache/tika:2.9.2.1',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },

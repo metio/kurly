@@ -17,10 +17,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='rss-bridge',
-  image='docker.io/rssbridge/rss-bridge:2025-08-05',
+  image=defaultImage,
   replicas=2,
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },

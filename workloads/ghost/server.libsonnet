@@ -20,10 +20,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='ghost',
-  image='docker.io/library/ghost:5.130.6-alpine',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   dbHost='ghost-db',

@@ -19,9 +19,10 @@
 // master runs as root then serves as www-data.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='kimai',
-  image='docker.io/kimai/kimai2:apache-2.38.0',
+  image=defaultImage,
   replicas=2,
   secretName='kimai-secrets',
   env={},

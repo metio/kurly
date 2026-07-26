@@ -21,6 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 local labelsFor(name) = {
   'app.kubernetes.io/name': name,
@@ -35,7 +36,7 @@ function(
   // later — so it MUST match the namespace you deploy to. kube-system is the
   // conventional home.
   namespace='kube-system',
-  image='registry.k8s.io/metrics-server/metrics-server:v0.8.1',
+  image=defaultImage,
   replicas=1,
   // Skip verifying the kubelet's serving certificate. The default trusts the
   // cluster CA; turn this on where the kubelets present a self-signed cert (kind,

@@ -18,9 +18,10 @@
 // Single writer: the data lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='clickhouse',
-  image='docker.io/clickhouse/clickhouse-server:24.8',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   secretName='clickhouse-secrets',

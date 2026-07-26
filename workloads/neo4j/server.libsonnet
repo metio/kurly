@@ -25,10 +25,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='neo4j',
-  image='docker.io/library/neo4j:5.26.28-community',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   // The Secret holding NEO4J_AUTH (kurly mints none), via envFrom.

@@ -16,11 +16,12 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './admin.image', '\n');
 
 function(
   namePrefix='mailu',
   name=null,
-  image='ghcr.io/mailu/admin:2024.06',
+  image=defaultImage,
   domain='example.com',
   hostnames=['mail.example.com'],
   secretName='mailu-secrets',

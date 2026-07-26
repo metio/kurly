@@ -21,11 +21,12 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='guacamole',
-  image='docker.io/guacamole/guacamole:1.5.5',
-  guacdImage='docker.io/guacamole/guacd:1.5.5',
+  image=defaultImage,
+  guacdImage='docker.io/guacamole/guacd:1.6.0',
   replicas=2,
   secretName='guacamole-secrets',
   env={},

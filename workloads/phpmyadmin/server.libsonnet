@@ -16,9 +16,10 @@
 // are entered at the login screen, or set through the image's PMA_* environment.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='phpmyadmin',
-  image='docker.io/library/phpmyadmin:5.2.2',
+  image=defaultImage,
   replicas=2,
   dbHost=null,
   env={},

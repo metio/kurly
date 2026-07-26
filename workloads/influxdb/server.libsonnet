@@ -19,9 +19,10 @@
 // rolled) to keep two pods off the storage.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='influxdb',
-  image='docker.io/library/influxdb:2.7.11',
+  image=defaultImage,
   storageSize='20Gi',
   storageClass=null,
   secretName='influxdb-secrets',

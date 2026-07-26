@@ -20,10 +20,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='bugsink',
-  image='docker.io/bugsink/bugsink:2.4.0',
+  image=defaultImage,
   replicas=2,
   // The public URL (Bugsink builds absolute links and validates the Host header).
   baseUrl=null,

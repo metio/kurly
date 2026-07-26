@@ -22,10 +22,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './query-frontend.image', '\n');
 
 function(
   name='thanos-query-frontend',
-  image='quay.io/thanos/thanos:v0.42.2',
+  image=defaultImage,
   replicas=2,
   // The Querier this frontend forwards to. Defaults to a `thanos-query` Service on
   // :10902 in the same namespace — the query workload's own default name.

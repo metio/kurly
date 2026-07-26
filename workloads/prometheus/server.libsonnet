@@ -21,6 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 local labelsFor(name) = {
   'app.kubernetes.io/name': name,
@@ -46,7 +47,7 @@ function(
   // cluster-scoped object cannot inherit later — so it MUST match the namespace
   // you deploy to. Defaults to the conventional 'monitoring'.
   namespace='monitoring',
-  image='docker.io/prom/prometheus:v3.13.1',
+  image=defaultImage,
   replicas=1,
   retention='15d',
   storageSize='50Gi',

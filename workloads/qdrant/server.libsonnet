@@ -19,9 +19,10 @@
 // (never rolled) to keep two pods off the storage.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='qdrant',
-  image='docker.io/qdrant/qdrant:v1.13.0',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   env={},

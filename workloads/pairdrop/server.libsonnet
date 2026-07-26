@@ -17,10 +17,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='pairdrop',
-  image='ghcr.io/schlagmichdoch/pairdrop:v1.11.2',
+  image=defaultImage,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
   labels={},

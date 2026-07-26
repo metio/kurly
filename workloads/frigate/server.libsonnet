@@ -26,6 +26,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 // A minimal, valid Frigate config: no broker, a CPU detector, no cameras yet.
 local defaultConfig = |||
@@ -40,7 +41,7 @@ local defaultConfig = |||
 
 function(
   name='frigate',
-  image='ghcr.io/blakeblackshear/frigate:0.15.0',
+  image=defaultImage,
   config=defaultConfig,
   storageSize='1Gi',
   mediaSize='100Gi',

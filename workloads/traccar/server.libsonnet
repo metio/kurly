@@ -26,6 +26,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 // Traccar's traccar.xml, pointing the embedded H2 database at the data volume. Replace the
 // database.* entries to use an external PostgreSQL/MySQL.
@@ -43,7 +44,7 @@ local defaultConfigXml = |||
 
 function(
   name='traccar',
-  image='docker.io/traccar/traccar:6.14.5',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   configXml=defaultConfigXml,

@@ -17,10 +17,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='ntfy',
-  image='docker.io/binwiederhier/ntfy:v2.26.0',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   // The public base URL — needed for the web app, attachments, and iOS.

@@ -17,9 +17,10 @@
 // Apache master runs as root then serves as www-data.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='prestashop',
-  image='docker.io/prestashop/prestashop:8.1',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   secretName='prestashop-secrets',

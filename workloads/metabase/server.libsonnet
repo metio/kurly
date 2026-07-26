@@ -20,10 +20,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='metabase',
-  image='docker.io/metabase/metabase:v0.62.5',
+  image=defaultImage,
   dbHost='metabase-db-rw',
   dbName='metabase',
   dbUser='metabase',

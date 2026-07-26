@@ -17,9 +17,10 @@
 // recreated (never rolled) to keep two pods off the same data directory.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='gokapi',
-  image='docker.io/f0rc3/gokapi:latest@sha256:7303dc0e658b8442f00d8363937ac0ffca3b4690930801b47aac6c0631d0cbcf',
+  image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
   env={},

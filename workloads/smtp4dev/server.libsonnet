@@ -17,9 +17,10 @@
 // rolled) to keep two pods off the same database.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='smtp4dev',
-  image='docker.io/rnwood/smtp4dev:latest@sha256:25c434c1900a9c5b61e17ead0a774d9e81b80554d05cf64719d69e5ea8c66537',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={ ServerOptions__Database: '/smtp4dev/database.db' },

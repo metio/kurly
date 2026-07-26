@@ -17,9 +17,10 @@
 // holding it, pulled in via envFrom.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='browserless',
-  image='ghcr.io/browserless/chromium:v2.24.3',
+  image=defaultImage,
   replicas=2,
   secretName='browserless-secrets',
   env={},

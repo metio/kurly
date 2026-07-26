@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='activepieces',
-  image='docker.io/activepieces/activepieces:0.86.3',
+  image=defaultImage,
   replicas=2,
   // The public URL (Activepieces builds absolute links and webhook URLs from it).
   frontendUrl=null,

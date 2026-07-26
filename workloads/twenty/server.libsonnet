@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='twenty',
-  image='docker.io/twentycrm/twenty:v2.22.0',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   redisHost='twenty-cache',

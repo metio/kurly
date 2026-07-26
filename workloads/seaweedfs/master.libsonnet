@@ -19,6 +19,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './master.image', '\n');
 
 // SeaweedFS peers reach one another by address, and a pod's short hostname is not
 // resolvable cluster-wide — so advertise the pod's own routable IP, injected
@@ -36,7 +37,7 @@ local advertisePodIP = {
 
 function(
   name='seaweedfs-master',
-  image='docker.io/chrislusf/seaweedfs:4.40',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   defaultReplication='000',

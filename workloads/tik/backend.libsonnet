@@ -19,6 +19,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version. 'dev' locally; the
 // release pipeline rewrites it to the calver before packing the source.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './backend.image', '\n');
 
 // The pipelines the supervisor runs, passed via --config as an EDN document in
 // the mounted ConfigMap. The board serves continuously; the recur and probe
@@ -32,7 +33,7 @@ local pipelines = |||
 
 function(
   name='tik',
-  image='ghcr.io/metio/tik:2026.7.18213457',
+  image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
 )

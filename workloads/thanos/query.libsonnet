@@ -24,10 +24,11 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version; the release
 // pipeline overwrites version.txt with the calver.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './query.image', '\n');
 
 function(
   name='thanos-query',
-  image='quay.io/thanos/thanos:v0.42.2',
+  image=defaultImage,
   replicas=2,
   // The StoreAPI endpoints to fan out to (gRPC). Each becomes a --endpoint flag;
   // the `dnssrv+` prefix resolves an SRV record so every backing replica is used.

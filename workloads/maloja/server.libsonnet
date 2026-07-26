@@ -15,9 +15,10 @@
 // (never rolled) to keep two pods off the same database.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='maloja',
-  image='docker.io/krateng/maloja:latest@sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   env={},

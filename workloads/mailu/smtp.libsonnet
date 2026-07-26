@@ -15,6 +15,7 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './smtp.image', '\n');
 
 // The submission ports front relays to Postfix on, beyond the primary :25 that
 // kurly.http names 'http'.
@@ -26,7 +27,7 @@ local postfixPorts = [
 function(
   namePrefix='mailu',
   name=null,
-  image='ghcr.io/mailu/postfix:2024.06',
+  image=defaultImage,
   domain='example.com',
   hostnames=['mail.example.com'],
   secretName='mailu-secrets',

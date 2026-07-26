@@ -16,9 +16,10 @@
 // needs the registry to allow it and REGISTRY_ALLOW_DELETE=true.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='docker-registry-ui',
-  image='docker.io/joxit/docker-registry-ui:2.5.7',
+  image=defaultImage,
   replicas=2,
   registryUrl=null,
   registryTitle='Docker Registry',

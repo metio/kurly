@@ -27,6 +27,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 // The workload version, stamped as app.kubernetes.io/version. 'dev' locally; the
 // release pipeline rewrites it to the calver before packing the source.
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './responder.image', '\n');
 
 function(
   name='forbidden',
@@ -35,7 +36,7 @@ function(
   labels={},
   annotations={},
 )
-  kurly.http(name, 'docker.io/hashicorp/http-echo:1.0')
+  kurly.http(name, defaultImage)
   + kurly.version(version)
   // http-echo listens on :5678 by default; match the Service to it so a route's
   // backendRef port is 5678.

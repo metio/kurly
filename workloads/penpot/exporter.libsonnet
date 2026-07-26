@@ -15,9 +15,10 @@
 // envFrom. Stateless; it runs a headless browser, so it wants a little scratch space.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './exporter.image', '\n');
 function(
   name='penpot-exporter',
-  image='docker.io/penpotapp/exporter:2.3.2',
+  image=defaultImage,
   replicas=1,
   secretName='penpot-secrets',
   env={},

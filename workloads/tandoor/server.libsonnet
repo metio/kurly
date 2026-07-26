@@ -20,9 +20,10 @@
 // exposure or a sidecar if you scale the app out with a shared (ReadWriteMany) volume instead.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='tandoor',
-  image='ghcr.io/tandoorrecipes/recipes:latest@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   secretName='tandoor-secrets',

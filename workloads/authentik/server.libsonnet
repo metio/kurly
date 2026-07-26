@@ -21,10 +21,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='authentik',
-  image='ghcr.io/goauthentik/server:2024.10.5',
+  image=defaultImage,
   replicas=2,
   secretName='authentik-secrets',
   env={},

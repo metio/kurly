@@ -20,9 +20,10 @@
 // Single writer: config and library live on ReadWriteOnce volumes, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='calibre-web-automated',
-  image='ghcr.io/crocodilestick/calibre-web-automated:latest@sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d',
+  image=defaultImage,
   configSize='1Gi',
   librarySize='20Gi',
   storageClass=null,

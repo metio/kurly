@@ -22,10 +22,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='vikunja',
-  image='docker.io/vikunja/vikunja:v2.4.0',
+  image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
   // The public URL the frontend and API are reached at.

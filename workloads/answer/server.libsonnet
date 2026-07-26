@@ -18,10 +18,11 @@
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
+local defaultImage = std.rstripChars(importstr './server.image', '\n');
 
 function(
   name='answer',
-  image='docker.io/apache/answer:v2.0.1',
+  image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
   env={},
