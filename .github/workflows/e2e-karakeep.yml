@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/karakeep/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-karakeep)\.sh|\.github/workflows/e2e(-karakeep)?\.yml)'
       scenario: hack/smoke/scenario-karakeep.sh
+      max_versions: '1'

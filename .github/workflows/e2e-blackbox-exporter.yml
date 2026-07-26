@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/blackbox-exporter/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-blackbox-exporter)\.sh|\.github/workflows/e2e(-blackbox-exporter)?\.yml)'
       scenario: hack/smoke/scenario-blackbox-exporter.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/neo4j/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-neo4j)\.sh|\.github/workflows/e2e(-neo4j)?\.yml)'
       scenario: hack/smoke/scenario-neo4j.sh
+      max_versions: '1'

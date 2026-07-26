@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/siyuan/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-siyuan)\.sh|\.github/workflows/e2e(-siyuan)?\.yml)'
       scenario: hack/smoke/scenario-siyuan.sh
+      max_versions: '1'

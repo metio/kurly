@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/postgres/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-postgres)\.sh|\.github/workflows/e2e(-postgres)?\.yml)'
       scenario: hack/smoke/scenario-postgres.sh
+      max_versions: '1'

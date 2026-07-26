@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/couchdb/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-couchdb)\.sh|\.github/workflows/e2e(-couchdb)?\.yml)'
       scenario: hack/smoke/scenario-couchdb.sh
+      max_versions: '1'

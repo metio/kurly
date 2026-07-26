@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/owntracks-recorder/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-owntracks-recorder)\.sh|\.github/workflows/e2e(-owntracks-recorder)?\.yml)'
       scenario: hack/smoke/scenario-owntracks-recorder.sh
+      max_versions: '1'

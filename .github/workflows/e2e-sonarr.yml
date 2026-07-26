@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/sonarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-sonarr)\.sh|\.github/workflows/e2e(-sonarr)?\.yml)'
       scenario: hack/smoke/scenario-sonarr.sh
+      max_versions: '1'

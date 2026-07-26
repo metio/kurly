@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/readarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-readarr)\.sh|\.github/workflows/e2e(-readarr)?\.yml)'
       scenario: hack/smoke/scenario-readarr.sh
+      max_versions: '1'

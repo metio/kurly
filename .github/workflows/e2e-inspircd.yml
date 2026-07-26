@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/inspircd/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-inspircd)\.sh|\.github/workflows/e2e(-inspircd)?\.yml)'
       scenario: hack/smoke/scenario-inspircd.sh
+      max_versions: '1'

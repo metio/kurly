@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/gotify/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-gotify)\.sh|\.github/workflows/e2e(-gotify)?\.yml)'
       scenario: hack/smoke/scenario-gotify.sh
+      max_versions: '1'

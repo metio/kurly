@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/pihole/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-pihole)\.sh|\.github/workflows/e2e(-pihole)?\.yml)'
       scenario: hack/smoke/scenario-pihole.sh
+      max_versions: '1'

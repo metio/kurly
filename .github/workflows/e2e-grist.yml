@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/grist/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-grist)\.sh|\.github/workflows/e2e(-grist)?\.yml)'
       scenario: hack/smoke/scenario-grist.sh
+      max_versions: '1'

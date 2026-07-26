@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/nzbhydra2/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nzbhydra2)\.sh|\.github/workflows/e2e(-nzbhydra2)?\.yml)'
       scenario: hack/smoke/scenario-nzbhydra2.sh
+      max_versions: '1'

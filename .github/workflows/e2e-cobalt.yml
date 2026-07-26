@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/cobalt/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cobalt)\.sh|\.github/workflows/e2e(-cobalt)?\.yml)'
       scenario: hack/smoke/scenario-cobalt.sh
+      max_versions: '1'

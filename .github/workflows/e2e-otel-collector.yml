@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/otel-collector/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-otel-collector)\.sh|\.github/workflows/e2e(-otel-collector)?\.yml)'
       scenario: hack/smoke/scenario-otel-collector.sh
+      max_versions: '1'

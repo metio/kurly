@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/metrics-server/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-metrics-server)\.sh|\.github/workflows/e2e(-metrics-server)?\.yml)'
       scenario: hack/smoke/scenario-metrics-server.sh
+      max_versions: '1'

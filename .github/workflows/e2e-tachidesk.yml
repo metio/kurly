@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/tachidesk/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tachidesk)\.sh|\.github/workflows/e2e(-tachidesk)?\.yml)'
       scenario: hack/smoke/scenario-tachidesk.sh
+      max_versions: '1'

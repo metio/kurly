@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/mumble/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mumble)\.sh|\.github/workflows/e2e(-mumble)?\.yml)'
       scenario: hack/smoke/scenario-mumble.sh
+      max_versions: '1'

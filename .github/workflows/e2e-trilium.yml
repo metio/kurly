@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/trilium/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-trilium)\.sh|\.github/workflows/e2e(-trilium)?\.yml)'
       scenario: hack/smoke/scenario-trilium.sh
+      max_versions: '1'

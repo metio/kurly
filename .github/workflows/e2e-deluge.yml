@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/deluge/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-deluge)\.sh|\.github/workflows/e2e(-deluge)?\.yml)'
       scenario: hack/smoke/scenario-deluge.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/roundcube/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-roundcube)\.sh|\.github/workflows/e2e(-roundcube)?\.yml)'
       scenario: hack/smoke/scenario-roundcube.sh
+      max_versions: '1'

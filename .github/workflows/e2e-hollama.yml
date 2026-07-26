@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/hollama/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-hollama)\.sh|\.github/workflows/e2e(-hollama)?\.yml)'
       scenario: hack/smoke/scenario-hollama.sh
+      max_versions: '1'

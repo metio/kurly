@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/mysql/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mysql)\.sh|\.github/workflows/e2e(-mysql)?\.yml)'
       scenario: hack/smoke/scenario-mysql.sh
+      max_versions: '1'

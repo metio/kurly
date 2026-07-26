@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/victoriametrics/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-victoriametrics)\.sh|\.github/workflows/e2e(-victoriametrics)?\.yml)'
       scenario: hack/smoke/scenario-victoriametrics.sh
+      max_versions: '1'

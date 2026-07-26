@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/silverbullet/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-silverbullet)\.sh|\.github/workflows/e2e(-silverbullet)?\.yml)'
       scenario: hack/smoke/scenario-silverbullet.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/opencost/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-opencost)\.sh|\.github/workflows/e2e(-opencost)?\.yml)'
       scenario: hack/smoke/scenario-opencost.sh
+      max_versions: '1'

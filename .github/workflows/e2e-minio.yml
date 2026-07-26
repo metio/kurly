@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/minio/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-minio)\.sh|\.github/workflows/e2e(-minio)?\.yml)'
       scenario: hack/smoke/scenario-minio.sh
+      max_versions: '1'

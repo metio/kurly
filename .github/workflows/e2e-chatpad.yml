@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/chatpad/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-chatpad)\.sh|\.github/workflows/e2e(-chatpad)?\.yml)'
       scenario: hack/smoke/scenario-chatpad.sh
+      max_versions: '1'

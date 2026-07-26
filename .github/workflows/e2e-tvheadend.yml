@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/tvheadend/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tvheadend)\.sh|\.github/workflows/e2e(-tvheadend)?\.yml)'
       scenario: hack/smoke/scenario-tvheadend.sh
+      max_versions: '1'

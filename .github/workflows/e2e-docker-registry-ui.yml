@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/docker-registry-ui/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-docker-registry-ui)\.sh|\.github/workflows/e2e(-docker-registry-ui)?\.yml)'
       scenario: hack/smoke/scenario-docker-registry-ui.sh
+      max_versions: '1'

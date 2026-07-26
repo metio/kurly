@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/audiobookshelf/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-audiobookshelf)\.sh|\.github/workflows/e2e(-audiobookshelf)?\.yml)'
       scenario: hack/smoke/scenario-audiobookshelf.sh
+      max_versions: '1'

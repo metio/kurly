@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/calibre-web-automated/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-calibre-web-automated)\.sh|\.github/workflows/e2e(-calibre-web-automated)?\.yml)'
       scenario: hack/smoke/scenario-calibre-web-automated.sh
+      max_versions: '1'

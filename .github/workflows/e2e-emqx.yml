@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/emqx/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-emqx)\.sh|\.github/workflows/e2e(-emqx)?\.yml)'
       scenario: hack/smoke/scenario-emqx.sh
+      max_versions: '1'

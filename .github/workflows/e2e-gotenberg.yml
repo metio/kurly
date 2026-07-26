@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/gotenberg/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-gotenberg)\.sh|\.github/workflows/e2e(-gotenberg)?\.yml)'
       scenario: hack/smoke/scenario-gotenberg.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/microbin/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-microbin)\.sh|\.github/workflows/e2e(-microbin)?\.yml)'
       scenario: hack/smoke/scenario-microbin.sh
+      max_versions: '1'

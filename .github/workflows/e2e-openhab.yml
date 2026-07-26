@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/openhab/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-openhab)\.sh|\.github/workflows/e2e(-openhab)?\.yml)'
       scenario: hack/smoke/scenario-openhab.sh
+      max_versions: '1'

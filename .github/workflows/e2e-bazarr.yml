@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/bazarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-bazarr)\.sh|\.github/workflows/e2e(-bazarr)?\.yml)'
       scenario: hack/smoke/scenario-bazarr.sh
+      max_versions: '1'

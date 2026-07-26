@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/nats/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nats)\.sh|\.github/workflows/e2e(-nats)?\.yml)'
       scenario: hack/smoke/scenario-nats.sh
+      max_versions: '1'

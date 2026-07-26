@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/cryptpad/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cryptpad)\.sh|\.github/workflows/e2e(-cryptpad)?\.yml)'
       scenario: hack/smoke/scenario-cryptpad.sh
+      max_versions: '1'

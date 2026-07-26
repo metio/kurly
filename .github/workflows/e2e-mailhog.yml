@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/mailhog/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mailhog)\.sh|\.github/workflows/e2e(-mailhog)?\.yml)'
       scenario: hack/smoke/scenario-mailhog.sh
+      max_versions: '1'

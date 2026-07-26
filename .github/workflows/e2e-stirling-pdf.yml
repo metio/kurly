@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/stirling-pdf/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-stirling-pdf)\.sh|\.github/workflows/e2e(-stirling-pdf)?\.yml)'
       scenario: hack/smoke/scenario-stirling-pdf.sh
+      max_versions: '1'

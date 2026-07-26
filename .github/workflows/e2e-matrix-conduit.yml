@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/matrix-conduit/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-matrix-conduit)\.sh|\.github/workflows/e2e(-matrix-conduit)?\.yml)'
       scenario: hack/smoke/scenario-matrix-conduit.sh
+      max_versions: '1'

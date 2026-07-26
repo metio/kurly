@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/lobe-chat/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-lobe-chat)\.sh|\.github/workflows/e2e(-lobe-chat)?\.yml)'
       scenario: hack/smoke/scenario-lobe-chat.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/qbittorrent/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-qbittorrent)\.sh|\.github/workflows/e2e(-qbittorrent)?\.yml)'
       scenario: hack/smoke/scenario-qbittorrent.sh
+      max_versions: '1'

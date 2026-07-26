@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/netbootxyz/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-netbootxyz)\.sh|\.github/workflows/e2e(-netbootxyz)?\.yml)'
       scenario: hack/smoke/scenario-netbootxyz.sh
+      max_versions: '1'

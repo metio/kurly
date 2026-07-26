@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/pyload-ng/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-pyload-ng)\.sh|\.github/workflows/e2e(-pyload-ng)?\.yml)'
       scenario: hack/smoke/scenario-pyload-ng.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/jackett/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-jackett)\.sh|\.github/workflows/e2e(-jackett)?\.yml)'
       scenario: hack/smoke/scenario-jackett.sh
+      max_versions: '1'

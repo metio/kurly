@@ -2582,7 +2582,7 @@
       {
          "id": "activepieces",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -2854,7 +2854,7 @@
       {
          "id": "adminer",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -3143,7 +3143,7 @@
       {
          "id": "alist",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "objectStorage": "optional"
@@ -3226,7 +3226,7 @@
       {
          "id": "answer",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -3654,7 +3654,7 @@
       {
          "id": "authentik",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -3820,7 +3820,7 @@
       {
          "id": "automatisch",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -3998,7 +3998,7 @@
       {
          "id": "baikal",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -4084,7 +4084,7 @@
       {
          "id": "baserow",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -4376,7 +4376,7 @@
       {
          "id": "bigcapital",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -4724,7 +4724,7 @@
       {
          "id": "blinko",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -4827,7 +4827,7 @@
       {
          "id": "bookstack",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -5031,7 +5031,7 @@
       {
          "id": "bugsink",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -5135,7 +5135,7 @@
       {
          "id": "cal-com",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -6333,7 +6333,7 @@
       {
          "id": "commafeed",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -6834,7 +6834,7 @@
       {
          "id": "davis",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -7125,7 +7125,7 @@
       {
          "id": "dex",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -7218,7 +7218,7 @@
       {
          "id": "directus",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -7443,7 +7443,7 @@
       {
          "id": "docmost",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -7548,7 +7548,7 @@
       {
          "id": "documenso",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required",
@@ -7655,7 +7655,7 @@
       {
          "id": "docuseal",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -8045,7 +8045,7 @@
       {
          "id": "drupal",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -8140,7 +8140,7 @@
       {
          "id": "duplicati",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "objectStorage": "optional"
@@ -8605,7 +8605,7 @@
       {
          "id": "endurain",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -8737,7 +8737,7 @@
       {
          "id": "ente",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required",
@@ -8970,7 +8970,7 @@
       {
          "id": "etherpad",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -9237,7 +9237,7 @@
       {
          "id": "ferretdb",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -9322,7 +9322,7 @@
       {
          "id": "fider",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -9503,7 +9503,7 @@
       {
          "id": "filestash",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "objectStorage": "optional"
@@ -9586,7 +9586,7 @@
       {
          "id": "firefly-iii",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -10159,7 +10159,7 @@
       {
          "id": "forgejo",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "optional",
@@ -10275,7 +10275,7 @@
       {
          "id": "formbricks",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -10378,7 +10378,7 @@
       {
          "id": "freshrss",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -10675,7 +10675,7 @@
       {
          "id": "ghost",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -10789,7 +10789,7 @@
       {
          "id": "ghostfolio",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -10891,7 +10891,7 @@
       {
          "id": "gitea",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -11071,7 +11071,7 @@
       {
          "id": "glitchtip",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -11336,7 +11336,7 @@
       {
          "id": "gokapi",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "objectStorage": "optional"
@@ -11584,7 +11584,7 @@
       {
          "id": "gotosocial",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -11869,7 +11869,7 @@
       {
          "id": "greenlight",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -12143,7 +12143,7 @@
       {
          "id": "guacamole",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -12233,7 +12233,7 @@
       {
          "id": "healthchecks",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -12343,7 +12343,7 @@
       {
          "id": "hedgedoc",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -13054,7 +13054,7 @@
       {
          "id": "immich",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -13257,7 +13257,7 @@
       {
          "id": "influxdb",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "objectStorage": "optional"
@@ -13436,7 +13436,7 @@
       {
          "id": "invoiceninja",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -14006,7 +14006,7 @@
       {
          "id": "joomla",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -14101,7 +14101,7 @@
       {
          "id": "joplin",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -14192,7 +14192,7 @@
       {
          "id": "kanboard",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -14574,7 +14574,7 @@
       {
          "id": "kimai",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -14749,7 +14749,7 @@
       {
          "id": "kutt",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -14842,7 +14842,7 @@
       {
          "id": "leantime",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -14943,7 +14943,7 @@
       {
          "id": "lemmy",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required",
@@ -15387,7 +15387,7 @@
       {
          "id": "linkding",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -15553,7 +15553,7 @@
       {
          "id": "linkwarden",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required",
@@ -15657,7 +15657,7 @@
       {
          "id": "listmonk",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -15772,7 +15772,7 @@
       {
          "id": "lldap",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -16032,7 +16032,7 @@
       {
          "id": "lychee",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -16295,7 +16295,7 @@
       {
          "id": "mailu",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required"
@@ -17121,7 +17121,7 @@
       {
          "id": "mastodon",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -17367,7 +17367,7 @@
       {
          "id": "matomo",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -17581,7 +17581,7 @@
       {
          "id": "mattermost",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required",
@@ -17677,7 +17677,7 @@
       {
          "id": "mautic",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -17804,7 +17804,7 @@
       {
          "id": "maybe",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -18003,7 +18003,7 @@
       {
          "id": "mealie",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -18093,7 +18093,7 @@
       {
          "id": "mediawiki",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -18340,7 +18340,7 @@
       {
          "id": "memos",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -18501,7 +18501,7 @@
       {
          "id": "metabase",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -18860,7 +18860,7 @@
       {
          "id": "miniflux",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -19056,7 +19056,7 @@
       {
          "id": "misskey",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -19236,7 +19236,7 @@
       {
          "id": "mongo-express",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -19401,7 +19401,7 @@
       {
          "id": "monica",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -20000,7 +20000,7 @@
       {
          "id": "n8n",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -20448,7 +20448,7 @@
       {
          "id": "netbox",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -20684,7 +20684,7 @@
       {
          "id": "nextcloud",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional",
@@ -20880,7 +20880,7 @@
       {
          "id": "nocobase",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -20977,7 +20977,7 @@
       {
          "id": "nocodb",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required",
@@ -21453,7 +21453,7 @@
       {
          "id": "oauth2-proxy",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "optional"
@@ -21541,7 +21541,7 @@
       {
          "id": "odoo",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -21814,7 +21814,7 @@
       {
          "id": "onlyoffice",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -21911,7 +21911,7 @@
       {
          "id": "open-webui",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -22292,7 +22292,7 @@
       {
          "id": "openproject",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "optional",
@@ -22610,7 +22610,7 @@
       {
          "id": "outline",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -22715,7 +22715,7 @@
       {
          "id": "overleaf",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -23226,7 +23226,7 @@
       {
          "id": "paperless-ngx",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -23365,7 +23365,7 @@
       {
          "id": "passwordpusher",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -23449,7 +23449,7 @@
       {
          "id": "peertube",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -23588,7 +23588,7 @@
       {
          "id": "penpot",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -23845,7 +23845,7 @@
       {
          "id": "pgadmin",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -23942,7 +23942,7 @@
       {
          "id": "photoprism",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -24051,7 +24051,7 @@
       {
          "id": "photoview",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -24148,7 +24148,7 @@
       {
          "id": "phpmyadmin",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -24335,7 +24335,7 @@
       {
          "id": "pilos",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -24513,7 +24513,7 @@
       {
          "id": "piwigo",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -24615,7 +24615,7 @@
       {
          "id": "planka",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required",
@@ -25171,7 +25171,7 @@
       {
          "id": "prestashop",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -25348,7 +25348,7 @@
       {
          "id": "projectsend",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -26248,7 +26248,7 @@
       {
          "id": "rallly",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -26619,7 +26619,7 @@
       {
          "id": "redis-commander",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required"
@@ -26703,7 +26703,7 @@
       {
          "id": "redmine",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -26798,7 +26798,7 @@
       {
          "id": "registry",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "objectStorage": "optional"
@@ -26986,7 +26986,7 @@
       {
          "id": "rocketchat",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -27251,7 +27251,7 @@
       {
          "id": "rundeck",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -27446,7 +27446,7 @@
       {
          "id": "searxng",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "optional"
@@ -27544,7 +27544,7 @@
       {
          "id": "seatsurfing",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -27948,7 +27948,7 @@
       {
          "id": "shiori",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -28033,7 +28033,7 @@
       {
          "id": "shlink",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -28490,7 +28490,7 @@
       {
          "id": "snipe-it",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -28616,7 +28616,7 @@
       {
          "id": "sonarqube",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -29175,7 +29175,7 @@
       {
          "id": "synapse",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -29456,7 +29456,7 @@
       {
          "id": "tandoor",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -29657,7 +29657,7 @@
       {
          "id": "teable",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -29917,7 +29917,7 @@
       {
          "id": "thanos",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "optional",
@@ -30684,7 +30684,7 @@
       {
          "id": "traccar",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -31055,7 +31055,7 @@
       {
          "id": "twenty",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -31340,7 +31340,7 @@
       {
          "id": "umami",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -31621,7 +31621,7 @@
       {
          "id": "vaultwarden",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -31809,7 +31809,7 @@
       {
          "id": "vikunja",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "optional"
@@ -31904,7 +31904,7 @@
       {
          "id": "wallabag",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -32102,7 +32102,7 @@
       {
          "id": "webtrees",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -32199,7 +32199,7 @@
       {
          "id": "wekan",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -32289,7 +32289,7 @@
       {
          "id": "wger",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "cache": "required",
@@ -32500,7 +32500,7 @@
       {
          "id": "wikijs",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -32603,7 +32603,7 @@
       {
          "id": "wordpress",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -32723,7 +32723,7 @@
       {
          "id": "xwiki",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -32820,7 +32820,7 @@
       {
          "id": "yourls",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"

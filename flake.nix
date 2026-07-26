@@ -148,7 +148,7 @@
             # The emitted scenarios and embedded jq programs carry literal
             # `$(...)` and jq `$vars` in single quotes on purpose — generated text
             # and jq syntax, not shell expansions.
-            excludeShellChecks = [ "SC2016" ];
+            excludeShellChecks = [ "SC2016" "SC2318" ];
             text = builtins.readFile ./scripts/gen-smoke.sh;
           };
           check-catalog = pkgs.writeShellApplication {

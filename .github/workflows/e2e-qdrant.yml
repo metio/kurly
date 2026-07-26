@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/qdrant/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-qdrant)\.sh|\.github/workflows/e2e(-qdrant)?\.yml)'
       scenario: hack/smoke/scenario-qdrant.sh
+      max_versions: '1'

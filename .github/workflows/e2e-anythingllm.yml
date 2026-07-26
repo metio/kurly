@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/anythingllm/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-anythingllm)\.sh|\.github/workflows/e2e(-anythingllm)?\.yml)'
       scenario: hack/smoke/scenario-anythingllm.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/convertx/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-convertx)\.sh|\.github/workflows/e2e(-convertx)?\.yml)'
       scenario: hack/smoke/scenario-convertx.sh
+      max_versions: '1'

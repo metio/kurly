@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/smtp4dev/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-smtp4dev)\.sh|\.github/workflows/e2e(-smtp4dev)?\.yml)'
       scenario: hack/smoke/scenario-smtp4dev.sh
+      max_versions: '1'

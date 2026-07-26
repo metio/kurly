@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/browserless/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-browserless)\.sh|\.github/workflows/e2e(-browserless)?\.yml)'
       scenario: hack/smoke/scenario-browserless.sh
+      max_versions: '1'

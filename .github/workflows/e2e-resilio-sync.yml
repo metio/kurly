@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/resilio-sync/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-resilio-sync)\.sh|\.github/workflows/e2e(-resilio-sync)?\.yml)'
       scenario: hack/smoke/scenario-resilio-sync.sh
+      max_versions: '1'

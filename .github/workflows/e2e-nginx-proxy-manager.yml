@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/nginx-proxy-manager/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nginx-proxy-manager)\.sh|\.github/workflows/e2e(-nginx-proxy-manager)?\.yml)'
       scenario: hack/smoke/scenario-nginx-proxy-manager.sh
+      max_versions: '1'

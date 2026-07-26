@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/davos/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-davos)\.sh|\.github/workflows/e2e(-davos)?\.yml)'
       scenario: hack/smoke/scenario-davos.sh
+      max_versions: '1'

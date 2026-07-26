@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/transmission/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-transmission)\.sh|\.github/workflows/e2e(-transmission)?\.yml)'
       scenario: hack/smoke/scenario-transmission.sh
+      max_versions: '1'

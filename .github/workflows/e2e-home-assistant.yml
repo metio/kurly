@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/home-assistant/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-home-assistant)\.sh|\.github/workflows/e2e(-home-assistant)?\.yml)'
       scenario: hack/smoke/scenario-home-assistant.sh
+      max_versions: '1'
