@@ -26,7 +26,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='pihole',
-  image='docker.io/pihole/pihole:2025.08.0',
+  image='docker.io/pihole/pihole:2025.11.1',
   storageSize='2Gi',
   storageClass=null,
   timezone='UTC',
