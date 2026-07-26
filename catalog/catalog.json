@@ -19995,7 +19995,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/outlinewiki/outline:0.81.1",
+                     "default": "docker.io/outlinewiki/outline:1.9.2",
                      "name": "image",
                      "required": false,
                      "type": "string"

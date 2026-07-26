@@ -24,7 +24,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='outline',
-  image='docker.io/outlinewiki/outline:0.81.1',
+  image='docker.io/outlinewiki/outline:1.9.2',
   replicas=2,
   url=null,
   secretName='outline-secrets',
