@@ -16,7 +16,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='lemmy-ui',
-  image='docker.io/dessalines/lemmy-ui:0.19.7',
+  image='docker.io/dessalines/lemmy-ui:0.19.20',
   replicas=2,
   internalHost='lemmy:8536',
   externalHost=null,

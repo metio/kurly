@@ -13368,7 +13368,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/dessalines/lemmy-ui:0.19.7",
+                     "default": "docker.io/dessalines/lemmy-ui:0.19.20",
                      "name": "image",
                      "required": false,
                      "type": "string"

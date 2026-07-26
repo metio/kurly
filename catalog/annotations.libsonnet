@@ -4316,7 +4316,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lemmy/backend.libsonnet' },
         ui: d.fn('The Lemmy web frontend (user-facing) on :1234. internalHost reaches the backend by Service name; externalHost is the public domain. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='lemmy-ui'),
-          d.arg('image', d.T.string, default='docker.io/dessalines/lemmy-ui:0.19.7'),
+          d.arg('image', d.T.string, default='docker.io/dessalines/lemmy-ui:0.19.20'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('internalHost', d.T.string, default='lemmy:8536'),
           d.arg('externalHost', d.T.string, example='lemmy.example.com'),
