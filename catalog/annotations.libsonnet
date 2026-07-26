@@ -4396,7 +4396,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The EMQX broker on :1883. Data at /opt/emqx/data; the dashboard (:18083) needs an extra Service. Expose to devices (often a LoadBalancer).', [
           d.arg('name', d.T.string, default='emqx'),
-          d.arg('image', d.T.string, default='docker.io/emqx/emqx:5.8.0'),
+          d.arg('image', d.T.string, default='docker.io/emqx/emqx:5.10.4'),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),

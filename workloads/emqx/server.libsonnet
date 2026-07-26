@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='emqx',
-  image='docker.io/emqx/emqx:5.8.0',
+  image='docker.io/emqx/emqx:5.10.4',
   storageSize='5Gi',
   storageClass=null,
   env={},
