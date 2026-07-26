@@ -5541,7 +5541,7 @@
       {
          "id": "cassandra-cluster",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": { },
          "stages": [
@@ -14481,7 +14481,7 @@
       {
          "id": "keycloak",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "database": "required"
@@ -19321,7 +19321,7 @@
       {
          "id": "mongodb-cluster",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": { },
          "stages": [
@@ -19907,7 +19907,7 @@
       {
          "id": "mysql-cluster",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": { },
          "stages": [
@@ -22389,7 +22389,7 @@
       {
          "id": "opensearch-cluster",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": { },
          "stages": [
@@ -29851,7 +29851,7 @@
       {
          "id": "tempo",
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "requires": {
             "objectStorage": "required"

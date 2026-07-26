@@ -205,6 +205,29 @@ EOF
   kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
 }
 
+# Fast check for an operator/custom-resource workload (no image of its own): it
+# installs the operator's CRDs and validates the rendered custom resource against
+# the real schema with a server-side dry-run — catching a version or field the
+# operator would reject, in seconds, without waiting for a full cluster to
+# reconcile. Standing up the real database/search/identity cluster is the deeper
+# tier that comes later; this is the fast "is this version's manifest broken"
+# signal the auto-merge net needs.
+#   kurly::validate_cr <ns> <stage-file> <crd-url>...
+kurly::validate_cr() {
+  local ns="$1" stage="$2"; shift 2
+  local url
+  for url in "$@"; do
+    echo "== install CRD ${url##*/} =="
+    kubectl apply --server-side --force-conflicts --filename="$url"
+  done
+  kurly::namespace "$ns" >/dev/null
+  echo "== validate the rendered custom resource against the operator schema =="
+  kurly::render "$stage" \
+    | kubectl apply --namespace="$ns" --server-side --dry-run=server --filename=- \
+    || { echo "::error::${stage}: the custom resource was rejected by the operator schema"; return 1; }
+  echo "ok: ${stage} validates against the operator schema on a live cluster"
+}
+
 # Dumps everything useful about a namespace on failure, grouped in the log.
 kurly::diagnose() {
   local ns="$1"

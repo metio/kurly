@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for tempo (operator schema check). Self-gated on this
+# workload plus the shared library and e2e machinery.
+name: E2E tempo
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  e2e:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: tempo
+      # yamllint disable-line rule:line-length
+      paths: '^(workloads/tempo/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tempo)\.sh|\.github/workflows/e2e(-tempo)?\.yml)'
+      scenario: hack/smoke/scenario-tempo.sh
+      max_versions: '1'
