@@ -3677,7 +3677,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Nginx Proxy Manager server. Data at /data; the proxy (:80/:443) needs an extra Service. Compose an exposure onto the admin HTTP port.', [
           d.arg('name', d.T.string, default='nginx-proxy-manager'),
-          d.arg('image', d.T.string, default='docker.io/jc21/nginx-proxy-manager:2.12.3'),
+          d.arg('image', d.T.string, default='docker.io/jc21/nginx-proxy-manager:2.15.1'),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),

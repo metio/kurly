@@ -24,7 +24,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='nginx-proxy-manager',
-  image='docker.io/jc21/nginx-proxy-manager:2.12.3',
+  image='docker.io/jc21/nginx-proxy-manager:2.15.1',
   storageSize='5Gi',
   storageClass=null,
   env={},
