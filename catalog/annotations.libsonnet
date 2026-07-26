@@ -3444,7 +3444,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Nextcloud server. trustedDomains sets NEXTCLOUD_TRUSTED_DOMAINS; secretName holds NEXTCLOUD_ADMIN_* (envFrom). Installation at /var/www/html. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='nextcloud'),
-          d.arg('image', d.T.string, default='docker.io/library/nextcloud:31.0.4'),
+          d.arg('image', d.T.string, default='docker.io/library/nextcloud:34.0.1'),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('trustedDomains', d.T.string, example='cloud.example.com'),

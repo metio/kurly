@@ -24,7 +24,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='nextcloud',
-  image='docker.io/library/nextcloud:31.0.4',
+  image='docker.io/library/nextcloud:34.0.1',
   storageSize='50Gi',
   storageClass=null,
   trustedDomains=null,

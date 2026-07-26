@@ -18312,7 +18312,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/nextcloud:31.0.4",
+                     "default": "docker.io/library/nextcloud:34.0.1",
                      "name": "image",
                      "required": false,
                      "type": "string"
