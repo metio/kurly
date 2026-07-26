@@ -67,6 +67,39 @@ kurly::verify_min_resources() {
   echo "ok: ${stage} starts at its declared minimum resources"
 }
 
+# Boots one workload stage on the live cluster the way a consumer would: render
+# its defaults, apply, and wait for every controller it creates to become healthy
+# — proving the stage RUNS, not merely that it schema-validates. hostUsers is
+# relaxed because kind-in-CI cannot nest user namespaces; every other hardening
+# knob the stage ships (read-only rootfs, dropped caps, seccomp, pinned uid) is
+# still exercised. A CronJob stage carries no long-running controller, so it is
+# triggered once as a Job and awaited. Extra Jsonnet composed onto the app is
+# passed as $3 (e.g. a Secret-backed env the app needs to boot).
+#
+#   kurly::boot workloads/adguardhome/server.libsonnet kurly-adguardhome
+kurly::boot() {
+  local stage="$1" ns="$2" extra="${3:-}"
+  kurly::namespace "$ns" >/dev/null
+  echo "== boot ${stage} in ${ns} =="
+  kurly::render "$stage" "+ k.hostUsers() ${extra}" | kubectl apply --namespace="$ns" --filename=-
+  local ctrl found=0
+  for ctrl in $(kubectl --namespace="$ns" get deployment,statefulset,daemonset --output=name 2>/dev/null); do
+    found=1
+    kubectl --namespace="$ns" rollout status "$ctrl" --timeout=300s \
+      || { echo "::error::${stage}: ${ctrl} never became Ready"; kurly::diagnose "$ns"; return 1; }
+  done
+  local cj
+  for cj in $(kubectl --namespace="$ns" get cronjob --output=name 2>/dev/null); do
+    found=1
+    local job="smoke-${cj##*/}"
+    kubectl --namespace="$ns" create job "$job" --from="$cj"
+    kubectl --namespace="$ns" wait --for=condition=complete "job/${job}" --timeout=300s \
+      || { echo "::error::${stage}: ${cj} test job did not complete"; kurly::diagnose "$ns"; return 1; }
+  done
+  [ "$found" = 1 ] || { echo "::error::${stage}: rendered no runnable controller"; return 1; }
+  echo "ok: ${stage} is healthy on a live cluster"
+}
+
 # Dumps everything useful about a namespace on failure, grouped in the log.
 kurly::diagnose() {
   local ns="$1"
