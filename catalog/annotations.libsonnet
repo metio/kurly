@@ -3996,7 +3996,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Synapse server. serverName is the permanent Matrix server name; reportStats toggles anonymous stats. Data at /data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='synapse'),
-          d.arg('image', d.T.string, default='docker.io/matrixdotorg/synapse:v1.119.0'),
+          d.arg('image', d.T.string, default='docker.io/matrixdotorg/synapse:v1.157.1'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('serverName', d.T.string, example='matrix.example.com'),

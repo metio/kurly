@@ -24,7 +24,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='synapse',
-  image='docker.io/matrixdotorg/synapse:v1.119.0',
+  image='docker.io/matrixdotorg/synapse:v1.157.1',
   storageSize='10Gi',
   storageClass=null,
   serverName=null,

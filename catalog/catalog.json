@@ -25750,7 +25750,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/matrixdotorg/synapse:v1.119.0",
+                     "default": "docker.io/matrixdotorg/synapse:v1.157.1",
                      "name": "image",
                      "required": false,
                      "type": "string"
