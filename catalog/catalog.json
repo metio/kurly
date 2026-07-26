@@ -28869,7 +28869,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/xwiki:16-postgres-tomcat",
+                     "default": "docker.io/xwiki:18-postgres-tomcat",
                      "name": "image",
                      "required": false,
                      "type": "string"

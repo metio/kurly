@@ -22,7 +22,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='xwiki',
-  image='docker.io/xwiki:16-postgres-tomcat',
+  image='docker.io/xwiki:18-postgres-tomcat',
   storageSize='10Gi',
   storageClass=null,
   secretName='xwiki-secrets',

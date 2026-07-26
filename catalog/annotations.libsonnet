@@ -4047,7 +4047,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The XWiki server. secretName holds the DB_* connection (envFrom). Data at /usr/local/xwiki. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='xwiki'),
-          d.arg('image', d.T.string, default='docker.io/xwiki:16-postgres-tomcat'),
+          d.arg('image', d.T.string, default='docker.io/xwiki:18-postgres-tomcat'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='xwiki-secrets'),
