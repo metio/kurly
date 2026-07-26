@@ -19542,7 +19542,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/openhab/openhab:4.3.0",
+                     "default": "docker.io/openhab/openhab:5.2.0",
                      "name": "image",
                      "required": false,
                      "type": "string"

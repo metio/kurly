@@ -4172,7 +4172,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The openHAB server. confSize/userdataSize/addonsSize size the three PVCs. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='openhab'),
-          d.arg('image', d.T.string, default='docker.io/openhab/openhab:4.3.0'),
+          d.arg('image', d.T.string, default='docker.io/openhab/openhab:5.2.0'),
           d.arg('confSize', d.T.quantity, default='2Gi'),
           d.arg('userdataSize', d.T.quantity, default='5Gi'),
           d.arg('addonsSize', d.T.quantity, default='2Gi'),
