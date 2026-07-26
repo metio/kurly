@@ -17775,7 +17775,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/nats:2.10-alpine",
+                     "default": "docker.io/library/nats:2.14-alpine",
                      "name": "image",
                      "required": false,
                      "type": "string"

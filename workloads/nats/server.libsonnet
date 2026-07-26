@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='nats',
-  image='docker.io/library/nats:2.10-alpine',
+  image='docker.io/library/nats:2.14-alpine',
   storageSize='10Gi',
   storageClass=null,
   env={},
