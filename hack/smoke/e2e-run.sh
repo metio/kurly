@@ -15,6 +15,11 @@
 #            change detection and runs exactly those.
 set -euo pipefail
 cd "$(dirname "$0")/../.."
+# Ignore any per-user kubectl preferences (~/.kube/kuberc): a contributor running
+# this locally may have defaults like `apply: server-side` or `delete: interactive`
+# that would make the run diverge from CI (which has no kuberc) or silently cancel
+# deletes. CI is unaffected — there is no kuberc there.
+export KUBERC=/dev/null
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 
@@ -49,6 +54,10 @@ for id in "${changed[@]}"; do
     kurly::deep "$id" || { echo "::error::deep check failed for ${id}"; ok=false; }
   fi
   [ "$ok" = true ] || failed+=("$id")
+  # Free this workload's resources before the next one, pass or fail — diagnostics
+  # on failure are already printed by the scenario/deep check above. Keeps the one
+  # shared cluster from filling up across the walk.
+  kurly::cleanup_workload "$id"
   echo "::endgroup::"
 done
 
