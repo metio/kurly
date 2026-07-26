@@ -24069,7 +24069,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/rundeck/rundeck:5.9.0",
+                     "default": "docker.io/rundeck/rundeck:7.0.1",
                      "name": "image",
                      "required": false,
                      "type": "string"
