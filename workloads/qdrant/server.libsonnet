@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='qdrant',
-  image='docker.io/qdrant/qdrant:v1.13.0',
+  image='docker.io/qdrant/qdrant:v1.18.3',
   storageSize='10Gi',
   storageClass=null,
   env={},

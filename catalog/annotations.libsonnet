@@ -3242,7 +3242,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Qdrant server. Collections at /qdrant/storage; gRPC (:6334) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='qdrant'),
-          d.arg('image', d.T.string, default='docker.io/qdrant/qdrant:v1.13.0'),
+          d.arg('image', d.T.string, default='docker.io/qdrant/qdrant:v1.18.3'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
