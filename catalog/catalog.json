@@ -26254,7 +26254,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/technitium/dns-server:13.2.0",
+                     "default": "docker.io/technitium/dns-server:13.6.0",
                      "name": "image",
                      "required": false,
                      "type": "string"
