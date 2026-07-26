@@ -25,7 +25,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `bugsink` | |
-| `image` | `docker.io/bugsink/bugsink:2.4.0` | |
+| `image` | `docker.io/bugsink/bugsink:2.5.0` | |
 | `replicas` | `2` | stateless — scale freely |
 | `baseUrl` | inferred | the public URL (validated Host header) |
 | `behindHttps` | `true` | secure-cookie / HTTPS handling |
