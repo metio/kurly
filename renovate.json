@@ -15,16 +15,11 @@
   "separateMultipleMajor": false,
   "packageRules": [
     {
-      "description": "Operator-backed databases pin a server VERSION that maps to an image tag; a major jump needs the operator to support it and a data migration, so those majors are taken deliberately, never by an auto-PR. Renovate tracks only minor/patch here — no respawning old-major branches.",
+      "description": "Zero-manual-work policy: every workload tracks the latest published version, majors included. The e2e smoke suite is the safety net — a break becomes a new test, never a pinned-back version. Renovate opens and auto-merges the bump once CI is green.",
       "matchDatasources": ["docker"],
-      "matchPackageNames": [
-        "docker.io/library/mysql",
-        "docker.io/library/mongo",
-        "docker.io/library/cassandra",
-        "docker.io/opensearchproject/opensearch"
-      ],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
+      "matchUpdateTypes": ["major", "minor", "patch", "digest"],
+      "automerge": true,
+      "automergeStrategy": "squash"
     },
     {
       "description": "Placeholder images in illustrative code (ghcr.io/example/*, ghcr.io/acme/*) carry no real tags — never look them up.",
