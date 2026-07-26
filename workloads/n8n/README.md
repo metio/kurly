@@ -22,7 +22,7 @@ kurly.list(n8n(host='n8n.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `n8n` | |
-| `image` | `docker.io/n8nio/n8n:2.31.4` | |
+| `image` | `docker.io/n8nio/n8n:2.32.3` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the SQLite data volume (`/home/node/.n8n`) |
 | `host` | inferred | the public hostname (webhooks need it) |
 | `env` | `{}` | extra `N8N_*` / `DB_*` settings |
