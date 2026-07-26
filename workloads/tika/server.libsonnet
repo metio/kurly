@@ -16,7 +16,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='tika',
-  image='docker.io/apache/tika:2.9.2.1',
+  image='docker.io/apache/tika:3.3.1.0',
   replicas=2,
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },

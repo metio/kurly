@@ -3288,7 +3288,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Apache Tika server. Stateless; usually reached in-cluster.', [
           d.arg('name', d.T.string, default='tika'),
-          d.arg('image', d.T.string, default='docker.io/apache/tika:2.9.2.1'),
+          d.arg('image', d.T.string, default='docker.io/apache/tika:3.3.1.0'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
