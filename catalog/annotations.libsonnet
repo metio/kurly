@@ -3348,7 +3348,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Node-RED server. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='node-red'),
-          d.arg('image', d.T.string, default='docker.io/nodered/node-red:4.0.9'),
+          d.arg('image', d.T.string, default='docker.io/nodered/node-red:5.0.1'),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
