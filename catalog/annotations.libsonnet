@@ -2681,7 +2681,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Flame server. Set PASSWORD via env/envFromSecret. Data at /app/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='flame'),
-          d.arg('image', d.T.string, default='docker.io/pawelmalak/flame:2.3.1'),
+          d.arg('image', d.T.string, default='docker.io/pawelmalak/flame:2.4.0'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),

@@ -8663,7 +8663,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/pawelmalak/flame:2.3.1",
+                     "default": "docker.io/pawelmalak/flame:2.4.0",
                      "name": "image",
                      "required": false,
                      "type": "string"

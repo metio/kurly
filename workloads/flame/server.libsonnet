@@ -22,7 +22,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='flame',
-  image='docker.io/pawelmalak/flame:2.3.1',
+  image='docker.io/pawelmalak/flame:2.4.0',
   storageSize='1Gi',
   storageClass=null,
   env={},
