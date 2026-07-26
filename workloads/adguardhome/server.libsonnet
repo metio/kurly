@@ -27,7 +27,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='adguardhome',
-  image='docker.io/adguard/adguardhome:v0.107.65',
+  image='docker.io/adguard/adguardhome:v0.107.78',
   storageSize='2Gi',
   storageClass=null,
   env={},

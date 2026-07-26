@@ -2637,7 +2637,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/adguard/adguardhome:v0.107.65",
+                     "default": "docker.io/adguard/adguardhome:v0.107.78",
                      "name": "image",
                      "required": false,
                      "type": "string"

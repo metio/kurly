@@ -2780,7 +2780,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The AdGuard Home server. Config and data under /opt/adguardhome; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='adguardhome'),
-          d.arg('image', d.T.string, default='docker.io/adguard/adguardhome:v0.107.65'),
+          d.arg('image', d.T.string, default='docker.io/adguard/adguardhome:v0.107.78'),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
