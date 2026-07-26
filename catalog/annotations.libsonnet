@@ -3453,7 +3453,14 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nextcloud/server.libsonnet' },
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/nextcloud/server.libsonnet',
+          secretKeys: [
+            { key: 'NEXTCLOUD_ADMIN_USER', generate: 'literal', value: 'admin' },
+            { key: 'NEXTCLOUD_ADMIN_PASSWORD', generate: 'password', length: 32 },
+          ],
+        },
       },
     },
     rundeck: {
@@ -4214,7 +4221,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/authentik/server.libsonnet' },
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/authentik/server.libsonnet',
+          secretKeys: [
+            { key: 'AUTHENTIK_SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+        },
         worker: d.fn("The authentik background worker (migrations, scheduled tasks, outposts). Shares the server's Secret via envFrom. No Service.", [
           d.arg('name', d.T.string, default='authentik-worker'),
           d.arg('image', d.T.string),
@@ -5833,7 +5846,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/immich/server.libsonnet' },
+        ]) + {
+          kind: 'http',
+          importPath: 'github.com/metio/kurly/workloads/immich/server.libsonnet',
+          secretKeys: [
+            { key: 'DB_PASSWORD', generate: 'password', length: 32 },
+          ],
+        },
         'machine-learning': d.fn("Immich's inference service on :3003, model cache on a ReadWriteOnce volume at /cache (one replica, recreated). The server reaches it through its Service at http://<name>:3003.", [
           d.arg('name', d.T.string, default='immich-machine-learning'),
           d.arg('image', d.T.string),

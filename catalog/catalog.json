@@ -3615,6 +3615,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "AUTHENTIK_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -12854,6 +12861,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -20226,6 +20240,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "NEXTCLOUD_ADMIN_USER",
+                     "value": "admin"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "NEXTCLOUD_ADMIN_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
