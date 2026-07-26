@@ -19,7 +19,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='joomla',
-  image='docker.io/library/joomla:5.2',
+  image='docker.io/library/joomla:5.4',
   storageSize='10Gi',
   storageClass=null,
   secretName='joomla-secrets',
