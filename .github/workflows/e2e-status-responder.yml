@@ -12,9 +12,14 @@ name: E2E status-responder
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/status-responder/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-status-responder-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   status-responder:
     uses: ./.github/workflows/e2e.yml

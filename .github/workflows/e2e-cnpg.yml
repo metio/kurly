@@ -9,9 +9,14 @@ name: E2E cnpg
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/cnpg-cluster/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-cnpg-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   cnpg:
     uses: ./.github/workflows/e2e.yml

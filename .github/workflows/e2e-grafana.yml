@@ -12,9 +12,15 @@ name: E2E grafana
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/grafana/**'
+      - 'workloads/prometheus/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-grafana-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   grafana:
     uses: ./.github/workflows/e2e.yml

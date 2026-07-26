@@ -12,9 +12,15 @@ name: E2E cnpg-backup
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/seaweedfs/**'
+      - 'workloads/cnpg-cluster/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-cnpg-backup-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   cnpg-backup:
     uses: ./.github/workflows/e2e.yml

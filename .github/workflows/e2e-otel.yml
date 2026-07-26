@@ -12,9 +12,14 @@ name: E2E otel-collector
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/otel-collector/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-otel-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   otel-collector:
     uses: ./.github/workflows/e2e.yml
