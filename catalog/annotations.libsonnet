@@ -4273,7 +4273,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/frontend.libsonnet' },
         exporter: d.fn('The Penpot exporter (headless-browser rendering) on :6061. secretName holds PENPOT_PUBLIC_URI and PENPOT_REDIS_URI (envFrom).', [
           d.arg('name', d.T.string, default='penpot-exporter'),
-          d.arg('image', d.T.string, default='docker.io/penpotapp/exporter:2.3.2'),
+          d.arg('image', d.T.string, default='docker.io/penpotapp/exporter:2.17.0'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('secretName', d.T.string, default='penpot-secrets'),
           d.arg('env', d.T.object, default={}),

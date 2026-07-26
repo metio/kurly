@@ -17,7 +17,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='penpot-exporter',
-  image='docker.io/penpotapp/exporter:2.3.2',
+  image='docker.io/penpotapp/exporter:2.17.0',
   replicas=1,
   secretName='penpot-secrets',
   env={},
