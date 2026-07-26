@@ -4327,7 +4327,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lemmy/ui.libsonnet' },
         pictrs: d.fn('The pict-rs image server on :8080. secretName holds PICTRS__SERVER__API_KEY (envFrom). Images at /mnt. Reached in-cluster by the backend.', [
           d.arg('name', d.T.string, default='pictrs'),
-          d.arg('image', d.T.string, default='docker.io/asonix/pictrs:0.5.16'),
+          d.arg('image', d.T.string, default='docker.io/asonix/pictrs:0.5.24'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='pictrs-secrets'),

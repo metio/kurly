@@ -13299,7 +13299,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/asonix/pictrs:0.5.16",
+                     "default": "docker.io/asonix/pictrs:0.5.24",
                      "name": "image",
                      "required": false,
                      "type": "string"
