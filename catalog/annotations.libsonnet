@@ -3462,7 +3462,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Rundeck server. grailsUrl is the public URL (RUNDECK_GRAILS_URL); secretName holds the admin credentials (envFrom). Data at /home/rundeck/server/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='rundeck'),
-          d.arg('image', d.T.string, default='docker.io/rundeck/rundeck:5.9.0'),
+          d.arg('image', d.T.string, default='docker.io/rundeck/rundeck:5.20.1'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('grailsUrl', d.T.string, example='https://rundeck.example.com'),

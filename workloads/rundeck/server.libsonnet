@@ -23,7 +23,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='rundeck',
-  image='docker.io/rundeck/rundeck:5.9.0',
+  image='docker.io/rundeck/rundeck:5.20.1',
   storageSize='10Gi',
   storageClass=null,
   grailsUrl=null,
