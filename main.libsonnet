@@ -291,6 +291,59 @@ local itemsOf(value) =
     globalDefault: globalDefault,
   } + std.prune({ description: description, preemptionPolicy: preemptionPolicy }),
 
+  // production bundles the standard production concerns onto a composed app, so a
+  // consumer — a self-service portal deploying one tenant — writes ONE call
+  // instead of hand-assembling exposure + TLS + DNS + a firewall + a resource
+  // tier every time. It returns the parts kurly.list renders: the app with those
+  // features composed on, plus the cert-manager Certificate the exposure
+  // terminates on when an issuer is named.
+  //
+  //   kurly.list(kurly.production(
+  //     server(),
+  //     host='tenant1.example.com', gateway='shared',
+  //     tls='tenant1-tls', issuer='letsencrypt-prod',
+  //     resourceTier='small', replicas=2, priorityClassName='standard',
+  //     allowFrom=[{ pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress' }],
+  //   ))
+  //
+  // Each concern is applied only when asked for: no `host` skips exposure (a
+  // worker/backend that only reaches out); no `issuer` leaves the certificate to
+  // the operator; empty allow-lists skip the NetworkPolicy. Exposure attaches an
+  // HTTPRoute to a shared `gateway`, or generates a dedicated one with
+  // `gatewayClass`. The pieces are the same composable features a consumer could
+  // apply by hand — this only spares the portal from repeating the recipe per
+  // tenant, and it renders and tests like any other composition.
+  production(
+    app,
+    host=null,
+    gateway=null,
+    gatewayNamespace=null,
+    sectionName=null,
+    gatewayClass=null,
+    gatewayAnnotations={},
+    tls=null,
+    issuer=null,
+    issuerKind='ClusterIssuer',
+    resourceTier=null,
+    allowFrom=[],
+    allowTo=[],
+    networkVariant='kubernetes',
+    replicas=null,
+    priorityClassName=null,
+  )::
+    local exposed =
+      if host == null then app
+      else if gatewayClass != null then app + $.expose.ownGateway(host, gatewayClass, annotations=gatewayAnnotations, tls=tls)
+      else app + $.expose.gateway(host, gateway, gatewayNamespace=gatewayNamespace, sectionName=sectionName);
+    local composed =
+      exposed
+      + (if resourceTier == null then {} else $.resourcePreset(resourceTier))
+      + (if allowFrom == [] && allowTo == [] then {} else $.network[networkVariant](allowFrom=allowFrom, allowTo=allowTo))
+      + (if replicas == null then {} else $.replicas(replicas))
+      + (if priorityClassName == null then {} else $.priorityClassName(priorityClassName));
+    [composed]
+    + (if issuer != null && tls != null then [$.certificate(tls, [host], issuer, issuerKind=issuerKind)] else []),
+
   // A workload's stages are the ORDERED, GATED phases of installing ONE
   // application — apply a phase, wait for it to go healthy, then the next — not
   // environment tiers. Each stage is its OWN file under workloads/<name>/: a

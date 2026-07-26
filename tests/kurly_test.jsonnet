@@ -778,6 +778,29 @@ local podOf(app) = app.deployment.spec.template.spec;
     kurly.resourceQuota(requestsMemory='16Gi', limitsMemory='24Gi', pods=50).spec.hard,
     { 'requests.memory': '16Gi', 'limits.memory': '24Gi', pods: '50' }
   ),
+  // --- production bundle ------------------------------------------------------
+  // production composes exposure + TLS + network + resources onto an http app and
+  // returns the app's manifests plus the Certificate the exposure terminates on.
+  production_bundles_the_parts: std.assertEqual(
+    std.set([m.kind for m in kurly.list(kurly.production(
+      kurly.http('app', 'ghcr.io/example/app:1.0.0'),
+      host='h.example.com',
+      gateway='shared',
+      tls='h-tls',
+      issuer='letsencrypt-prod',
+      resourceTier='small',
+      allowTo=[{ cidr: '10.0.0.0/8' }],
+    )).items]),
+    ['Certificate', 'Deployment', 'HTTPRoute', 'NetworkPolicy', 'Service', 'ServiceAccount']
+  ),
+  // A worker has no host, so production skips exposure and mints no certificate.
+  production_worker_skips_exposure: std.assertEqual(
+    std.set([m.kind for m in kurly.list(kurly.production(
+      kurly.worker('w', 'ghcr.io/example/w:1.0.0'), resourceTier='nano', replicas=1,
+    )).items]),
+    ['Deployment', 'ServiceAccount']
+  ),
+
   // priorityClass authors a cluster-scoped tier; preemptionPolicy is pruned unless set.
   priority_class_shape: std.assertEqual(
     [
