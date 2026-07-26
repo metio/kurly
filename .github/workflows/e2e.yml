@@ -1,141 +1,75 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# Reusable per-workload e2e: on the newest four Kubernetes minors (fetched
-# dynamically, so a new release is tested with no edit), spin a throwaway kind
-# cluster, run one workload's scenario (install its operator, render it as a
-# consumer would, apply it, wait for it to become healthy), and tear the cluster
-# down. Each workload calls this from its own thin workflow with a `paths` regex
-# scoped to that workload (plus the shared library + this file), and self-gates on
-# a diff — so a change to one workload never runs or blocks another's e2e, and the
-# per-workload aggregate stays green-by-skip when its sources are untouched.
-#
-# kind and kubectl come from the flake devShell (same versions as local), never a
-# marketplace action. fail-fast is off so one bad k8s minor never masks the others.
+# The single e2e pipeline. One job on one kind cluster (latest Kubernetes) walks
+# the workloads a PR changed, running each one's fast check then its deep check
+# (delivery through the latest Flux, JaaS, and stageset-controller). Unchanged
+# workloads are skipped, so a Renovate image bump exercises exactly the workload
+# it touched — one long-running run, never hundreds of parallel jobs. A manual
+# dispatch may name an explicit space-separated `workloads` selection.
 name: E2E
 on:
-  workflow_call:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
     inputs:
-      workload:
-        description: The workload name (for job titles).
-        required: true
-        type: string
-      paths:
-        description: Regex of changed paths that make this workload's e2e relevant.
-        required: true
-        type: string
-      scenario:
-        description: The scenario script under hack/smoke/ to run.
-        required: true
-        type: string
-      max_versions:
-        description: How many of the newest Kubernetes minors to run the matrix on.
+      workloads:
+        description: 'Space-separated workloads to run; empty runs all changed.'
         required: false
         type: string
-        default: '4'
-      registry:
-        description: >-
-          Create the kind cluster with a host port-map (localhost:5001 → NodePort
-          30500) so a scenario can stand up an in-cluster registry and serve
-          branch-built images to Flux over an OCIRepository. Off by default; the
-          stageset scenarios set it.
-        required: false
-        type: boolean
-        default: false
 permissions:
   contents: read
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   changes:
-    name: Did this PR touch ${{ inputs.workload }}?
+    name: Which workloads changed?
     runs-on: ubuntu-latest
     timeout-minutes: 15
     outputs:
-      relevant: ${{ steps.scope.outputs.relevant }}
+      list: ${{ steps.detect.outputs.list }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - id: scope
+      - id: detect
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
-          PATHS: ${{ inputs.paths }}
+          WORKLOADS: ${{ inputs.workloads }}
         run: |
           set -uo pipefail
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || \
-             git diff --name-only "origin/${BASE_REF}" HEAD | grep -qE "$PATHS"; then
-            echo "relevant=true" >> "$GITHUB_OUTPUT"
+          if [ -n "${WORKLOADS}" ]; then
+            list="${WORKLOADS}"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            list="$(printf '%s\n' workloads/*/ | sed -E 's#workloads/([^/]+)/#\1#' | tr '\n' ' ')"
           else
-            echo "relevant=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::${{ inputs.workload }} sources untouched — its e2e skips (aggregate stays green)."
+            list="$(git diff --name-only "origin/${BASE_REF}"...HEAD \
+              | grep -oE '^workloads/[a-z0-9-]+/' | sed -E 's#workloads/([^/]+)/#\1#' | sort -u | tr '\n' ' ')"
           fi
-  discover:
-    name: Discover the newest Kubernetes versions
+          echo "list=${list}" >> "$GITHUB_OUTPUT"
+          if [ -z "${list// /}" ]; then
+            echo "::notice::no workloads changed — the e2e run is a no-op"
+          else
+            echo "::notice::e2e will run: ${list}"
+          fi
+  e2e:
+    name: Fast + deep e2e for changed workloads
     needs: changes
-    if: needs.changes.outputs.relevant == 'true'
+    if: needs.changes.outputs.list != ''
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    outputs:
-      k8s: ${{ steps.versions.outputs.k8s }}
-    steps:
-      - id: versions
-        env:
-          MAX: ${{ inputs.max_versions }}
-        run: |
-          set -uo pipefail
-          # Newest N kindest/node minors, latest patch each. If kind cannot run a
-          # brand-new minor yet, that surfaces as a failure — the signal to bump
-          # the flake's kind, not silent staleness.
-          k8s=$(curl -fsSL "https://hub.docker.com/v2/repositories/kindest/node/tags?page_size=100" \
-            | jq -r '.results[].name' | grep -E '^v1\.[0-9]+\.[0-9]+$' \
-            | awk -F. '{print $1"."$2" "$0}' | sort -k1,1V -k2,2V \
-            | awk '{l[$1]=$2} END{for(m in l)print l[m]}' | sort -V | tail -"${MAX}" \
-            | jq -R . | jq -cs . 2>/dev/null || echo '[]')
-          [ "$(jq 'length' <<<"$k8s" 2>/dev/null || echo 0)" -gt 0 ] || k8s='["v1.33.1"]'
-          echo "k8s=$k8s" >> "$GITHUB_OUTPUT"
-          echo "k8s=$k8s"
-  smoke:
-    name: ${{ inputs.workload }} on k8s ${{ matrix.k8s_version }}
-    needs: [changes, discover]
-    if: needs.changes.outputs.relevant == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        k8s_version: ${{ fromJSON(needs.discover.outputs.k8s) }}
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
-      - name: Create the kind cluster (k8s ${{ matrix.k8s_version }})
-        env:
-          REGISTRY: ${{ inputs.registry }}
+      - name: Create the kind cluster (latest Kubernetes) with a registry port-map
         run: |
-          set -euo pipefail
-          args=(--name kurly-e2e --image "kindest/node:${{ matrix.k8s_version }}" --wait 180s)
-          # For OCI-source scenarios, the committed config maps a host port to a
-          # fixed NodePort so the runner can push branch-built images into an
-          # in-cluster registry that Flux then pulls over the cluster network.
-          if [ "$REGISTRY" = "true" ]; then
-            args+=(--config hack/smoke/kind-registry-config.yaml)
-          fi
-          nix develop --command kind create cluster "${args[@]}"
-      - name: Run the ${{ inputs.workload }} scenario
+          nix develop --command kind create cluster --wait 120s \
+            --config hack/smoke/kind-registry-config.yaml
+      - name: Walk the changed workloads (fast then deep)
         env:
-          KURLY_GIT_BRANCH: ${{ github.head_ref || github.ref_name }}
-        run: nix develop --command bash ${{ inputs.scenario }}
-      - name: Delete the kind cluster
-        if: always()
-        run: nix develop --command kind delete cluster --name kurly-e2e
-  e2e:
-    name: E2E ${{ inputs.workload }}
-    needs: [changes, discover, smoke]
-    if: always()
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Verify every job succeeded or skipped
-        env:
-          NEEDS: ${{ toJSON(needs) }}
-        run: |
-          bad=$(echo "$NEEDS" | jq -r 'to_entries[] | select(.value.result != "success" and .value.result != "skipped") | "\(.key)=\(.value.result)"')
-          [ -z "$bad" ] || { echo "::error::$bad"; exit 1; }
+          BASE_REF: ${{ github.base_ref || 'main' }}
+          WORKLOADS: ${{ needs.changes.outputs.list }}
+        run: nix develop --command bash hack/smoke/e2e-run.sh

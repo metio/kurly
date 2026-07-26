@@ -228,6 +228,146 @@ kurly::validate_cr() {
   echo "ok: ${stage} validates against the operator schema on a live cluster"
 }
 
+# Extracts a stage parameter's simple quoted default (dbHost='x' -> x); empty when
+# the default is a computed expression rather than a literal.
+kurly::_param() { grep -oE "^[[:space:]]*$2='[^']*'" "$1" 2>/dev/null | head -1 | sed -E "s/.*='([^']*)'.*/\1/" || true; }
+
+# The workloads a PR changed relative to the default branch — one per line. On a
+# manual dispatch (no base to diff), or when $WORKLOADS is set explicitly, that
+# selection wins instead. This is what keeps the single pipeline short: only
+# changed workloads run.
+kurly::changed_workloads() {
+  if [ -n "${WORKLOADS:-}" ]; then
+    printf '%s\n' $WORKLOADS
+    return 0
+  fi
+  local base="origin/${BASE_REF:-main}"
+  git diff --name-only "$base"...HEAD 2>/dev/null \
+    | grep -oE '^workloads/[a-z0-9-]+/' | sed -E 's#workloads/([^/]+)/#\1#' | sort -u
+}
+
+# Provisions a workload's declared dependencies + Secret into <ns>, reading the
+# catalog and the stage's default connection params at runtime — the same wiring
+# the generated fast scenario bakes in, reusable by the deep check.
+kurly::provision_deps() {
+  local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName
+  primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.database then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+    dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
+    dbName="$(kurly::_param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(kurly::_param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
+    dbUser="$(kurly::_param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
+    kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser"
+  fi
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.cache then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+    redisHost="$(kurly::_param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
+    kurly::cache "$ns" "$redisHost"
+  fi
+  for st in $(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[].id' catalog/catalog.json); do
+    f="workloads/${id}/${st}.libsonnet"
+    secretName="$(kurly::_param "$f" secretName)"; [ -n "$secretName" ] || secretName="$id"
+    kurly::secret "$ns" "$secretName" "$f"
+  done
+}
+
+# Deep check: deliver a workload through the real production path — build + push
+# its source image, let Flux pull it (OCIRepository), JaaS render it
+# (JsonnetSnippet), and stageset-controller apply it (StageSet) — then wait for
+# its controllers to roll out. The flux/jaas/stageset stack (latest of each) and
+# the kurly library image are installed/published once by the pipeline before the
+# loop. A custom-resource workload has no controller of its own, so it is
+# fast-check only and this is a no-op.
+kurly::deep() {
+  local id="$1" ns="kurly-deep-${id}" st f snip ctrl kind name apiv
+  # Skip workloads whose stages render only a custom resource (no controller).
+  if ! kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>/dev/null \
+      | jq -e '.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")' >/dev/null 2>&1; then
+    echo "== deep: ${id} renders no standard controller (operator/CR) — fast check only =="
+    return 0
+  fi
+  echo "== DEEP ${id}: deliver through Flux -> JaaS -> stageset =="
+  kurly::namespace "$ns" >/dev/null
+  kurly::grant_tenant_publish_rbac "$ns"
+  # The ServiceAccount the StageSet applies its manifests as (cluster-admin — e2e
+  # simplicity, a throwaway cluster).
+  kubectl --namespace="$ns" create serviceaccount stageset-deployer --dry-run=client --output=yaml | kubectl apply --filename=-
+  kubectl create clusterrolebinding "stageset-deployer-${ns}" --clusterrole=cluster-admin \
+    --serviceaccount="${ns}:stageset-deployer" --dry-run=client --output=yaml | kubectl apply --filename=-
+  kurly::provision_deps "$id" "$ns"
+  kurly::publish_images "$id"
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata: { name: k8s-libsonnet, namespace: ${ns} }
+spec: { interval: 1h, url: oci://ghcr.io/metio/joi-jsonnet-libs-k8s-libsonnet, ref: { tag: latest } }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetLibrary
+metadata: { name: k8s-libsonnet, namespace: ${ns} }
+spec: { sourceRef: { kind: OCIRepository, name: k8s-libsonnet } }
+EOF
+  kurly::emit_oci_library "$ns" kurly kurly
+  kurly::emit_oci_library "$ns" "kurly-${id}" "kurly-${id}"
+  kurly::wait_ocirepository "$ns" k8s-libsonnet
+  kurly::wait_ocirepository "$ns" kurly
+  kurly::wait_ocirepository "$ns" "kurly-${id}"
+
+  for st in $(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[].id' catalog/catalog.json); do
+    f="workloads/${id}/${st}.libsonnet"
+    snip="${id}-${st}"
+    # Discover the stage's primary controller so the StageSet's readyChecks and
+    # version source name a real object.
+    ctrl="$(kurly::render "$f" "+ k.hostUsers()" | jq -c '[.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")][0]')"
+    [ "$ctrl" != null ] && [ -n "$ctrl" ] || { echo "== deep: ${st} has no controller, skipping stage =="; continue; }
+    kind="$(jq -r '.kind' <<<"$ctrl")"; name="$(jq -r '.metadata.name' <<<"$ctrl")"; apiv="$(jq -r '.apiVersion' <<<"$ctrl")"
+    kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: ${snip}, namespace: ${ns} }
+spec:
+  serviceAccountName: default
+  entryFile: main.jsonnet
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local stage = import 'github.com/metio/kurly/${f}';
+      local rendered = kurly.list(stage() + kurly.hostUsers());
+      rendered { items: [ item { metadata+: { namespace: '${ns}' } } for item in rendered.items ] }
+EOF
+    kurly::wait_ready jsonnetsnippet "$snip" 60
+    kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: stages.metio.wtf/v1
+kind: StageSet
+metadata: { name: ${snip}, namespace: ${ns} }
+spec:
+  interval: 1m
+  serviceAccountName: stageset-deployer
+  version:
+    fromObject: { stage: ${st}, apiVersion: ${apiv}, kind: ${kind}, name: ${name} }
+  stages:
+    - name: ${st}
+      sourceRef: { name: ${snip} }
+      readyChecks:
+        checks:
+          - { apiVersion: ${apiv}, kind: ${kind}, name: ${name}, namespace: ${ns} }
+EOF
+    kurly::wait_ready stageset "$snip" 90
+    kubectl --namespace="$ns" rollout status "${kind,,}/${name}" --timeout=300s \
+      || { echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; return 1; }
+  done
+  echo "ok: ${id} delivered end-to-end through Flux -> JaaS -> stageset"
+}
+
+# Blocks until a resource's Ready condition is true (or times out loudly).
+kurly::wait_ready() {
+  local res="$1" name="$2" tries="${3:-60}" i
+  for i in $(seq 1 "$tries"); do
+    [ "$(kubectl get "$res" "$name" -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}' 2>/dev/null || true)" = True ] \
+      && return 0
+    sleep 3
+  done
+  echo "::error::${res}/${name} never became Ready"; return 1
+}
+
 # Dumps everything useful about a namespace on failure, grouped in the log.
 kurly::diagnose() {
   local ns="$1"

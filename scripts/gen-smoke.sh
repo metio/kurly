@@ -2,13 +2,15 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# Generates a live-cluster e2e for every workload that boots from its own
-# published image, driven entirely by the catalog. For each workload it emits a
-# `hack/smoke/scenario-<id>.sh` (provision any declared dependency, mint the
-# Secret the app reads, boot every stage, wait for health) and a thin
-# `.github/workflows/e2e-<id>.yml` (self-gated on the workload's paths, delegating
-# to the reusable e2e workflow) — the same shape the hand-written scenarios use,
-# so `gen-maturity` lifts each covered workload to the `e2e` tier automatically.
+# Generates the fast-check e2e scenario for every workload that boots from its own
+# published image, driven entirely by the catalog: `hack/smoke/scenario-<id>.sh`
+# provisions any declared dependency, mints the Secret the app reads, boots every
+# stage, and waits for health. `gen-maturity` lifts each covered workload to the
+# `e2e` tier from the scenario's existence.
+#
+# There are NO per-workload workflows — a single `.github/workflows/e2e.yml`
+# pipeline detects which workloads a PR changed and runs their fast check (this
+# scenario) then their deep check, so CI is one run, never hundreds.
 #
 # It touches ONLY generated files: a scenario carrying the marker below is
 # regenerated in place, one lacking it (a hand-authored scenario like tik's) is
@@ -40,45 +42,6 @@ param() { grep -oE "^[[:space:]]*$2='[^']*'" "$1" 2>/dev/null | head -1 | sed -E
 is_hand_written() {
   local scenario="hack/smoke/scenario-$1.sh"
   [ -f "$scenario" ] && ! grep -qF "$marker" "$scenario"
-}
-
-# Emits the thin per-workload e2e workflow (shared by both scenario kinds). A
-# constant job id `e2e` keeps it valid for names starting with a digit (2fauth);
-# the paths regex can exceed yamllint's line length, so it is a single line with
-# the one rule silenced.
-gen_workflow() {
-  local id="$1" workflow=".github/workflows/e2e-${id}.yml"
-  {
-    printf '# %s: The kurly Authors\n' "$spdx_copy"
-    printf '# %s: 0BSD\n\n' "$spdx_lic"
-    printf '%s\n' "$marker"
-    printf '# Per-workload e2e for %s. Self-gates on a diff scoped to this workload (plus the\n' "$id"
-    printf '# shared library and the e2e machinery), delegating the matrix + run to the\n'
-    printf '# reusable e2e workflow.\n'
-    printf 'name: E2E %s\n' "$id"
-    # Workflow-level path filter: GitHub does not even START this workflow unless
-    # the PR touches this workload'\''s directory. A Renovate image bump runs exactly
-    # one e2e; a shared change queues NONE — no per-workload runner is spun up just
-    # to self-skip, which is what fans ~300 jobs out and blows the CI budget.
-    printf 'on:\n  pull_request:\n    branches: [main]\n    paths:\n      - '\''workloads/%s/**'\''\n  workflow_dispatch:\n' "$id"
-    printf 'permissions:\n  contents: read\n'
-    # A new push to the same ref cancels this workload'\''s superseded in-flight run,
-    # so a rapid series of commits never stacks up kind clusters.
-    printf 'concurrency:\n  group: e2e-%s-${{ github.ref }}\n  cancel-in-progress: true\n' "$id"
-    printf 'jobs:\n  e2e:\n'
-    printf '    uses: ./.github/workflows/e2e.yml\n'
-    printf '    with:\n'
-    printf '      workload: %s\n' "$id"
-    # Scope the trigger to the workload'\''s OWN directory only. A Renovate image
-    # bump touches workloads/<id>/ and runs exactly this one e2e; a shared change
-    # (lib/, main.libsonnet, the smoke harness) must NOT fan out to all ~300
-    # workloads — the full sweep is dispatch/scheduled, not per-PR.
-    printf "      paths: '^workloads/%s/'\n" "$id"
-    printf '      scenario: hack/smoke/scenario-%s.sh\n' "$id"
-    # Fast feedback: one k8s minor, so a Renovate image bump gets a quick
-    # broken/not-broken verdict. Deeper multi-version + traffic tests come later.
-    printf "      max_versions: '1'\n"
-  } >"$workflow"
 }
 
 emit_header() {
@@ -116,7 +79,6 @@ while IFS=$'\t' read -r id stages; do
     printf '%s' "$boot_lines"
   } >"$scenario"
   chmod +x "$scenario"
-  gen_workflow "$id"
   generated=$((generated + 1))
 done < <(jq -r '
   .workloads[]
@@ -174,7 +136,6 @@ while IFS=$'\t' read -r id stages db cache; do
     printf '%s' "$boot_lines"
   } >"$scenario"
   chmod +x "$scenario"
-  gen_workflow "$id"
   generated_dep=$((generated_dep + 1))
 done < <(jq -r '
   .workloads[]
