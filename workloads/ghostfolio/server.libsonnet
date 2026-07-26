@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='ghostfolio',
-  image='docker.io/ghostfolio/ghostfolio:latest@sha256:969327948d76b31251237e04842939d01956e278be273a1851f626ade5f10601',
+  image='docker.io/ghostfolio/ghostfolio:latest@sha256:6e99d235d99dc01a205ad3cda46ab8b08fea6b732015b8c8906d5300017efa18',
   replicas=2,
   secretName='ghostfolio-secrets',
   env={},

@@ -927,7 +927,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Ghostfolio server. Provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='ghostfolio'),
-          d.arg('image', d.T.string, default='docker.io/ghostfolio/ghostfolio:latest@sha256:969327948d76b31251237e04842939d01956e278be273a1851f626ade5f10601'),
+          d.arg('image', d.T.string, default='docker.io/ghostfolio/ghostfolio:latest@sha256:6e99d235d99dc01a205ad3cda46ab8b08fea6b732015b8c8906d5300017efa18'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='ghostfolio-secrets'),
           d.arg('env', d.T.object, default={}),
