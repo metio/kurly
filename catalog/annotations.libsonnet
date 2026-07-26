@@ -5657,6 +5657,21 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    ente: {
+      summary: 'Ente — a self-hosted, end-to-end-encrypted photo and video backup (the Google Photos alternative). The museum server is a stateless API keeping metadata in PostgreSQL and encrypted blobs in S3-compatible object storage; the Ente clients (mobile, desktop, web) point at it. Compose it with a cnpg-cluster and an S3 store such as seaweedfs.',
+      requires: { database: true, objectStorage: 'required' },
+      stages: {
+        server: d.fn('The Ente museum API on :8080, stateless (metadata in PostgreSQL, blobs in S3). Reads its base config from the image and merges the operator-supplied credentials file (`credentialsSecret`, a Secret with a credentials.yaml key carrying the DB DSN, the S3 endpoint/bucket/keys, and the app secrets); ENTE_CREDENTIALS_FILE points at it. Any value is also overridable by an ENTE_-prefixed env var.', [
+          d.arg('name', d.T.string, default='ente'),
+          d.arg('image', d.T.string, default='ghcr.io/ente/server:latest@sha256:e9e06eb01834c38f41a3a09f9a64885b631346ce0005ccff2153faea403bd6e2'),
+          d.arg('credentialsSecret', d.T.string, default='ente-credentials'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ente/server.libsonnet' },
+      },
+    },
     immich: {
       summary: 'Immich — a self-hosted photo and video backup. The server keeps the media library on a PersistentVolume and reaches a PostgreSQL with the VectorChord extension plus a Redis; the machine-learning stage serves inference (smart search, faces) from a model cache. Compose both with a cnpg-cluster on a VectorChord image and a valkey.',
       requires: { database: { extensions: ['vchord'] }, cache: true },

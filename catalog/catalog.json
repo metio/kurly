@@ -7666,6 +7666,77 @@
          "summary": "An Endurain server (a self-hosted fitness and training-activity tracker) backed by an external PostgreSQL and Redis, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named endurain-db and a valkey named endurain-cache. kurly authors no Secret; DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "id": "ente",
+         "maturity": {
+            "tier": "rendered"
+         },
+         "requires": {
+            "database": true,
+            "objectStorage": "required"
+         },
+         "stages": [
+            {
+               "args": [
+                  {
+                     "default": "ente",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/ente/server:latest@sha256:e9e06eb01834c38f41a3a09f9a64885b631346ce0005ccff2153faea403bd6e2",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ente-credentials",
+                     "name": "credentialsSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Ente museum API on :8080, stateless (metadata in PostgreSQL, blobs in S3). Reads its base config from the image and merges the operator-supplied credentials file (`credentialsSecret`, a Secret with a credentials.yaml key carrying the DB DSN, the S3 endpoint/bucket/keys, and the app secrets); ENTE_CREDENTIALS_FILE points at it. Any value is also overridable by an ENTE_-prefixed env var.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/ente/server.libsonnet",
+               "kind": "http",
+               "storage": {
+                  "pvcs": 0
+               }
+            }
+         ],
+         "summary": "Ente — a self-hosted, end-to-end-encrypted photo and video backup (the Google Photos alternative). The museum server is a stateless API keeping metadata in PostgreSQL and encrypted blobs in S3-compatible object storage; the Ente clients (mobile, desktop, web) point at it. Compose it with a cnpg-cluster and an S3 store such as seaweedfs."
+      },
+      {
          "id": "esphome",
          "maturity": {
             "tier": "rendered"
