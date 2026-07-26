@@ -3979,7 +3979,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The NocoBase server. secretName holds the DB_* connection and APP_KEY (envFrom). Storage at /app/nocobase/storage. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='nocobase'),
-          d.arg('image', d.T.string, default='docker.io/nocobase/nocobase:1.4.0'),
+          d.arg('image', d.T.string, default='docker.io/nocobase/nocobase:2.1.29'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='nocobase-secrets'),
