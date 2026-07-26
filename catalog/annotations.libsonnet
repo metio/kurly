@@ -5659,6 +5659,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     immich: {
       summary: 'Immich — a self-hosted photo and video backup. The server keeps the media library on a PersistentVolume and reaches a PostgreSQL with the VectorChord extension plus a Redis; the machine-learning stage serves inference (smart search, faces) from a model cache. Compose both with a cnpg-cluster on a VectorChord image and a valkey.',
+      requires: { database: { extensions: ['vchord'] }, cache: true },
       stages: {
         server: d.fn('The Immich API and web app on :2283, media library on a ReadWriteOnce volume at /data (one replica, recreated). Reaches PostgreSQL/VectorChord and Redis by the given hosts; the password comes from `secretName` as DB_PASSWORD (an Immich-shaped Secret the operator supplies, e.g. via kurly.externalSecret from the CNPG cluster Secret).', [
           d.arg('name', d.T.string, default='immich'),

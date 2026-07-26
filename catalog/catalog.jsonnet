@@ -372,6 +372,24 @@ local entries(section) = [
   for name in std.objectFields(section)
 ];
 
+// The number of PersistentVolumes a stage's default render actually claims —
+// owned PVCs plus a StatefulSet's per-pod volumeClaimTemplates. Derived by
+// rendering the stage (the same function the catalog already imports), so it
+// cannot drift from what the workload emits: `pvcs: 0` means the stage runs
+// without a PVC (its state lives in a database, object storage, or nowhere),
+// which is the fleet an operator with only S3 wants to find. A custom-resource
+// stage whose operator provisions storage at runtime (a CNPG Cluster) claims no
+// PVC in its own manifest and so reads 0 here — see its `requires` for the
+// dependency it carries instead.
+local pvcCount(fn) =
+  local items = main.list(fn()).items;
+  std.length([m for m in items if m.kind == 'PersistentVolumeClaim'])
+  + std.foldl(
+    function(acc, m) acc + std.length(std.get(m.spec, 'volumeClaimTemplates', [])),
+    [m for m in items if m.kind == 'StatefulSet'],
+    0
+  );
+
 // Flattens the annotated workloads into catalog entries, checking every stage
 // against stageImports: the annotated stage keys and the imported stage keys
 // must be the same set, and each import must resolve to a function.
@@ -391,8 +409,16 @@ local workloadEntries =
       id: workload,
       summary: ann.workloads[workload].summary,
       maturity: maturity.of(workload),
+      // The external infrastructure the workload depends on, hand-annotated —
+      // a database (with any PostgreSQL extensions it needs, like vchord), a
+      // cache/Redis, and whether it needs S3-compatible object storage
+      // (required/optional). Absent when the workload carries none. Backfilled
+      // per workload; the derived per-stage `storage.pvcs` below is automatic.
+      requires: std.get(ann.workloads[workload], 'requires', {}),
       stages: [
-        { id: stage } + ann.workloads[workload].stages[stage]
+        { id: stage }
+        + ann.workloads[workload].stages[stage]
+        + { storage: { pvcs: pvcCount(stageImports[workload + '/' + stage]) } }
         for stage in std.objectFields(ann.workloads[workload].stages)
       ],
     }
