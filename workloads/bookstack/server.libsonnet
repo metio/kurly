@@ -62,6 +62,10 @@ function(
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // The LinuxServer.io s6-overlay init starts as root and drops to PUID/PGID,
+  // so it needs to gain privileges and keep the SETUID/SETGID capabilities.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
