@@ -23430,7 +23430,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/redis:7.4.1",
+                     "default": "docker.io/library/redis:7.4.9",
                      "name": "image",
                      "required": false,
                      "type": "string"

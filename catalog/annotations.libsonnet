@@ -3645,7 +3645,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A Redis server. secretName holds the credentials (envFrom). Data at /data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='redis'),
-          d.arg('image', d.T.string, default='docker.io/library/redis:7.4.1'),
+          d.arg('image', d.T.string, default='docker.io/library/redis:7.4.9'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='redis-secrets'),
