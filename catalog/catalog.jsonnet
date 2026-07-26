@@ -346,6 +346,9 @@ local stageImports = {
   'seaweedfs/volume': import 'github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet',
   'seaweedfs/filer': import 'github.com/metio/kurly/workloads/seaweedfs/filer.libsonnet',
   'memcached/cache': import 'github.com/metio/kurly/workloads/memcached/cache.libsonnet',
+  'immich/server': import 'github.com/metio/kurly/workloads/immich/server.libsonnet',
+  'immich/machine-learning': import 'github.com/metio/kurly/workloads/immich/machine-learning.libsonnet',
+  'frigate/server': import 'github.com/metio/kurly/workloads/frigate/server.libsonnet',
   'valkey/instance': import 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
   'valkey/cache': import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet',
 };
