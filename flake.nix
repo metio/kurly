@@ -119,6 +119,20 @@
             ];
             text = builtins.readFile ./scripts/gen-maturity.sh;
           };
+          # Derives each stage's image architectures from the registry manifest
+          # lists into catalog/architectures.gen.libsonnet. Hits the network, so
+          # it is run on demand / on a schedule, not in the per-PR gate.
+          gen-architectures = pkgs.writeShellApplication {
+            name = "gen-architectures";
+            runtimeInputs = with pkgs; [
+              skopeo
+              jq
+              git
+              gnused
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-architectures.sh;
+          };
           check-catalog = pkgs.writeShellApplication {
             name = "check-catalog";
             runtimeInputs = with pkgs; [
@@ -241,6 +255,7 @@
             check-coverage
             check-security
             gen-maturity
+            gen-architectures
             gen-readme
             gen-docs-data
             verify
@@ -261,6 +276,7 @@
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
+              echo "  gen-architectures  derive each image's CPU architectures from the registry"
               echo "  gen-readme       splice the deploy walkthrough into every workload README"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
               echo "  verify           run every gate locally (what CI runs)"

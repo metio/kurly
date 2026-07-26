@@ -2388,6 +2388,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "2fauth",
@@ -2481,6 +2487,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "activepieces",
@@ -2566,6 +2576,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "actualbudget",
@@ -2644,6 +2659,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "adguardhome",
@@ -2724,6 +2746,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "adminer",
@@ -2797,6 +2828,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "airsonic-advanced",
@@ -2893,6 +2928,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "alertmanager",
@@ -2993,6 +3035,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "alist",
@@ -3073,6 +3118,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "answer",
@@ -3151,6 +3200,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "anythingllm",
@@ -3232,6 +3284,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "apprise",
@@ -3313,6 +3368,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "audiobookshelf",
@@ -3391,6 +3450,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "authelia",
@@ -3483,6 +3547,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "authentik",
@@ -3552,6 +3620,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "authentik-worker",
@@ -3634,6 +3706,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "automatisch",
@@ -3703,6 +3780,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "automatisch-worker",
@@ -3784,6 +3866,12 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "baikal",
@@ -3865,6 +3953,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "baserow",
@@ -3955,6 +4047,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "bazarr",
@@ -4051,6 +4147,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "beszel",
@@ -4132,6 +4233,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "bigcapital",
@@ -4194,6 +4298,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "bigcapital",
@@ -4292,6 +4400,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "bigcapital",
@@ -4370,6 +4482,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "blackbox-exporter",
@@ -4445,6 +4563,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "blinko",
@@ -4537,6 +4659,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "bookstack",
@@ -4645,6 +4771,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "browserless",
@@ -4726,6 +4856,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "bugsink",
@@ -4819,6 +4953,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "cal-com",
@@ -4903,6 +5040,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "calibre",
@@ -4999,6 +5140,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "calibre-web",
@@ -5095,6 +5240,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "calibre-web-automated",
@@ -5197,6 +5345,7 @@
          "requires": { },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "cassandra",
@@ -5282,6 +5431,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "changedetection",
@@ -5366,6 +5520,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "chatpad",
@@ -5439,6 +5596,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "clickhouse",
@@ -5523,6 +5684,7 @@
          "requires": { },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "postgres",
@@ -5698,6 +5860,7 @@
          "requires": { },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "postgres",
@@ -5739,6 +5902,7 @@
                }
             },
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "postgres",
@@ -5790,6 +5954,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "cobalt",
@@ -5868,6 +6035,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "code-server",
@@ -5954,6 +6125,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "commafeed",
@@ -6032,6 +6207,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "convertx",
@@ -6110,6 +6289,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "couchdb",
@@ -6194,6 +6377,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "cryptpad",
@@ -6272,6 +6458,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "cyberchef",
@@ -6345,6 +6534,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "dashy",
@@ -6425,6 +6619,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "davis",
@@ -6504,6 +6701,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "davos",
@@ -6600,6 +6801,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "deluge",
@@ -6698,6 +6903,13 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "dex",
@@ -6784,6 +6996,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "directus",
@@ -6898,6 +7114,14 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "docker-registry-ui",
@@ -6987,6 +7211,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "docmost",
@@ -7080,6 +7308,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "documenso",
@@ -7166,6 +7397,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "docuseal",
@@ -7244,6 +7479,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "dokuwiki",
@@ -7322,6 +7561,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "dragonfly",
@@ -7389,6 +7632,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "draw-io",
@@ -7462,6 +7708,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "drawio",
@@ -7537,6 +7787,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "drupal",
@@ -7623,6 +7882,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "duplicati",
@@ -7719,6 +7982,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "ejabberd",
@@ -7797,6 +8063,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "element-web",
@@ -7893,6 +8163,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "emby",
@@ -7989,6 +8263,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "emqx",
@@ -8070,6 +8348,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "endurain",
@@ -8187,6 +8468,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "ente-server",
@@ -8250,6 +8534,9 @@
                }
             },
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "ente-web",
@@ -8329,6 +8616,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "esphome",
@@ -8409,6 +8700,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "etherpad",
@@ -8506,6 +8801,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "excalidraw",
@@ -8579,6 +8877,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "expenseowl",
@@ -8659,6 +8960,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "ferretdb",
@@ -8740,6 +9045,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "fider",
@@ -8825,6 +9134,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "filebrowser",
@@ -8905,6 +9219,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "filestash",
@@ -8985,6 +9302,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "firefly-iii",
@@ -9093,6 +9414,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "flame",
@@ -9171,6 +9495,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "flaresolverr",
@@ -9250,6 +9580,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "flatnotes",
@@ -9334,6 +9668,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "focalboard",
@@ -9412,6 +9749,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "foldingathome",
@@ -9511,6 +9852,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "forgejo",
@@ -9621,6 +9967,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "formbricks",
@@ -9708,6 +10058,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "freshrss",
@@ -9792,6 +10147,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "frigate",
@@ -9899,6 +10258,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "gatus",
@@ -9984,6 +10348,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "ghost",
@@ -10095,6 +10463,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "ghostfolio",
@@ -10176,6 +10547,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "riscv64"
+               ],
                "args": [
                   {
                      "default": "gitea",
@@ -10272,6 +10648,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "glance",
@@ -10347,6 +10728,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "glitchtip",
@@ -10428,6 +10812,9 @@
                }
             },
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "glitchtip-worker",
@@ -10513,6 +10900,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "gogs",
@@ -10593,6 +10985,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "gokapi",
@@ -10671,6 +11066,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "gotenberg",
@@ -10744,6 +11146,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "riscv64"
+               ],
                "args": [
                   {
                      "default": "gotify",
@@ -10824,6 +11233,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "gotosocial",
@@ -10908,6 +11321,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "grafana",
@@ -10998,6 +11416,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "grav",
@@ -11097,6 +11519,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "greenlight",
@@ -11176,6 +11601,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "grist",
@@ -11254,6 +11683,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "grocy",
@@ -11352,6 +11785,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "guacamole",
@@ -11438,6 +11875,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "healthchecks",
@@ -11536,6 +11978,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "hedgedoc",
@@ -11626,6 +12072,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "heimdall",
@@ -11722,6 +12172,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "hollama",
@@ -11795,6 +12248,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "homarr",
@@ -11879,6 +12336,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "home-assistant",
@@ -11957,6 +12420,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "homebox",
@@ -12035,6 +12502,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "homepage",
@@ -12119,6 +12590,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "homer",
@@ -12203,6 +12679,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "immich-machine-learning",
@@ -12271,6 +12751,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "immich",
@@ -12387,6 +12871,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "influxdb",
@@ -12471,6 +12959,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "inspircd",
@@ -12551,6 +13043,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "invoiceninja",
@@ -12659,6 +13155,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "it-tools",
@@ -12732,6 +13232,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "jackett",
@@ -12828,6 +13332,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "jellyfin",
@@ -12924,6 +13432,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "jellyseerr",
@@ -13002,6 +13514,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "jenkins",
@@ -13082,6 +13601,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "joomla",
@@ -13168,6 +13696,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "joplin",
@@ -13255,6 +13787,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "kanboard",
@@ -13333,6 +13870,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "karakeep",
@@ -13435,6 +13975,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "kavita",
@@ -13515,6 +14060,7 @@
          },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "keycloak",
@@ -13607,6 +14153,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "kimai",
@@ -13686,6 +14236,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "komga",
@@ -13767,6 +14322,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "kutt",
@@ -13848,6 +14407,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "leantime",
@@ -13935,6 +14497,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "lemmy",
@@ -14004,6 +14570,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "pictrs",
@@ -14078,6 +14649,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "lemmy-ui",
@@ -14163,6 +14738,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "librespeed",
@@ -14259,6 +14838,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "lidarr",
@@ -14357,6 +14940,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "linkding",
@@ -14435,6 +15023,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "linkstack",
@@ -14516,6 +15107,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "linkwarden",
@@ -14608,6 +15203,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "listmonk",
@@ -14718,6 +15318,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "lldap",
@@ -14808,6 +15413,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "lobe-chat",
@@ -14883,6 +15491,7 @@
          },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "loki",
@@ -14962,6 +15571,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "lychee",
@@ -15052,6 +15665,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "mailhog",
@@ -15125,6 +15741,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "mailpit",
@@ -15208,6 +15827,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mailu",
@@ -15309,6 +15933,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mailu",
@@ -15410,6 +16039,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mailu",
@@ -15517,6 +16151,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mailu",
@@ -15618,6 +16257,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mailu",
@@ -15719,6 +16363,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mailu",
@@ -15824,6 +16473,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "maloja",
@@ -15902,6 +16554,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "mariadb",
@@ -15990,6 +16648,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mastodon-sidekiq",
@@ -16059,6 +16721,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mastodon-streaming",
@@ -16128,6 +16794,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mastodon",
@@ -16215,6 +16885,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "matomo",
@@ -16317,6 +16996,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "matrix-conduit",
@@ -16410,6 +17093,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "mattermost",
@@ -16502,6 +17188,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mautic",
@@ -16619,6 +17309,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "maybe",
@@ -16727,6 +17422,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "mazanoke",
@@ -16802,6 +17500,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mealie",
@@ -16888,6 +17590,13 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "mediawiki",
@@ -16966,6 +17675,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "meilisearch",
@@ -17050,6 +17763,15 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "memcached",
@@ -17108,6 +17830,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "memos",
@@ -17186,6 +17913,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "mermaid-live-editor",
@@ -17261,6 +17991,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "metabase",
@@ -17358,6 +18092,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "metrics-server",
@@ -17444,6 +18185,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "metube",
@@ -17522,6 +18267,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "microbin",
@@ -17602,6 +18350,12 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "riscv64"
+               ],
                "args": [
                   {
                      "default": "miniflux",
@@ -17687,6 +18441,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "minio",
@@ -17775,6 +18534,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "misskey",
@@ -17859,6 +18622,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mongo",
@@ -17945,6 +18712,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mongo-express",
@@ -18024,6 +18795,7 @@
          "requires": { },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "mongodb",
@@ -18105,6 +18877,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "monica",
@@ -18213,6 +18994,14 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "mosquitto",
@@ -18296,6 +19085,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mumble",
@@ -18380,6 +19174,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mylar3",
@@ -18476,6 +19274,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "mysql",
@@ -18560,6 +19362,7 @@
          "requires": { },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "mysql",
@@ -18654,6 +19457,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "n8n",
@@ -18738,6 +19545,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "nats",
@@ -18816,6 +19630,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "riscv64"
+               ],
                "args": [
                   {
                      "default": "navidrome",
@@ -18894,6 +19715,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "neo4j",
@@ -18978,6 +19803,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "netbootxyz",
@@ -19077,6 +19906,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "netbox",
@@ -19199,6 +20032,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "netbox-worker",
@@ -19305,6 +20142,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "nextcloud",
@@ -19395,6 +20241,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "nginx-proxy-manager",
@@ -19475,6 +20325,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "nocobase",
@@ -19562,6 +20416,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "nocodb",
@@ -19652,6 +20511,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "node-red",
@@ -19730,6 +20593,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "ntfy",
@@ -19814,6 +20682,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "nzbget",
@@ -19910,6 +20782,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "nzbhydra2",
@@ -20008,6 +20884,13 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "oauth2-proxy",
@@ -20089,6 +20972,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "odoo",
@@ -20173,6 +21061,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "ollama",
@@ -20251,6 +21143,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "ombi",
@@ -20349,6 +21245,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "onlyoffice",
@@ -20435,6 +21335,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "open-webui",
@@ -20525,6 +21429,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "opencost",
@@ -20610,6 +21518,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "openhab",
@@ -20700,6 +21612,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "openobserve",
@@ -20787,6 +21703,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "openproject",
@@ -20877,6 +21797,7 @@
          "requires": { },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "opensearch",
@@ -20964,6 +21885,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "organizr",
@@ -21042,6 +21966,15 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "otel-collector",
@@ -21089,6 +22022,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "outline",
@@ -21177,6 +22114,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "overleaf",
@@ -21279,6 +22219,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "overseerr",
@@ -21357,6 +22302,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "owncast",
@@ -21435,6 +22386,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "owntracks-recorder",
@@ -21516,6 +22470,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "pairdrop",
@@ -21583,6 +22541,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "paisa",
@@ -21664,6 +22625,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "paperless-ngx",
@@ -21786,6 +22751,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "passwordpusher",
@@ -21869,6 +22837,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "peertube",
@@ -21987,6 +22959,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "penpot-backend",
@@ -22067,6 +23043,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "penpot-exporter",
@@ -22136,6 +23116,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "penpot-frontend",
@@ -22223,6 +23207,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "pgadmin",
@@ -22309,6 +23297,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "photoprism",
@@ -22407,6 +23399,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "photoview",
@@ -22499,6 +23496,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "phpmyadmin",
@@ -22578,6 +23584,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "riscv64"
+               ],
                "args": [
                   {
                      "default": "pihole",
@@ -22671,6 +23684,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "pilos",
@@ -22755,6 +23771,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "pingvin-share",
@@ -22835,6 +23854,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "piwigo",
@@ -22934,6 +23957,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "planka",
@@ -23019,6 +24047,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "plex",
@@ -23115,6 +24147,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "pocket-id",
@@ -23199,6 +24235,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "pocketbase",
@@ -23277,6 +24316,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "portainer",
@@ -23360,6 +24405,15 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "postgres",
@@ -23446,6 +24500,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "prestashop",
@@ -23530,6 +24589,14 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "privatebin",
@@ -23610,6 +24677,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "projectsend",
@@ -23706,6 +24778,14 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "prometheus",
@@ -23839,6 +24919,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "prowlarr",
@@ -23935,6 +25019,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "pyload-ng",
@@ -24031,6 +25119,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "qbittorrent",
@@ -24127,6 +25219,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "qdrant",
@@ -24205,6 +25301,14 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "rabbitmq",
@@ -24289,6 +25393,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "radarr",
@@ -24385,6 +25493,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "radicale",
@@ -24465,6 +25577,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "rallly",
@@ -24550,6 +25665,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "readarr",
@@ -24646,6 +25764,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "readeck",
@@ -24724,6 +25846,15 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "redis",
@@ -24810,6 +25941,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "redis-commander",
@@ -24891,6 +26025,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "redmine",
@@ -24977,6 +26120,14 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "registry",
@@ -25055,6 +26206,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "resilio-sync",
@@ -25153,6 +26308,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "rocketchat",
@@ -25238,6 +26397,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "roundcube",
@@ -25328,6 +26493,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "rss-bridge",
@@ -25403,6 +26573,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "rundeck",
@@ -25493,6 +26666,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "sabnzbd",
@@ -25591,6 +26768,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "searxng",
@@ -25677,6 +26859,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "seatsurfing",
@@ -25756,6 +26941,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "seaweedfs-filer",
@@ -25807,6 +26998,12 @@
                }
             },
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "seaweedfs-master",
@@ -25852,6 +27049,12 @@
                }
             },
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "seaweedfs",
@@ -25896,6 +27099,12 @@
                }
             },
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "seaweedfs-volume",
@@ -25963,6 +27172,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm"
+               ],
                "args": [
                   {
                      "default": "shaarli",
@@ -26043,6 +27256,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "shiori",
@@ -26123,6 +27341,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "shlink",
@@ -26226,6 +27448,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "silverbullet",
@@ -26310,6 +27537,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "siyuan",
@@ -26388,6 +27620,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "smtp4dev",
@@ -26469,6 +27704,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "snappymail",
@@ -26549,6 +27787,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "snipe-it",
@@ -26659,6 +27901,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "sonarqube",
@@ -26761,6 +28007,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "sonarr",
@@ -26857,6 +28107,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "spegel",
@@ -27050,6 +28305,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "forbidden",
@@ -27110,6 +28369,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "stirling-pdf",
@@ -27190,6 +28453,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "synapse",
@@ -27280,6 +28547,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "syncthing",
@@ -27376,6 +28647,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "tachidesk",
@@ -27456,6 +28734,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "tandoor",
@@ -27540,6 +28821,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "tautulli",
@@ -27640,6 +28925,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "teable",
@@ -27724,6 +29012,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "technitium",
@@ -27810,6 +29103,7 @@
          },
          "stages": [
             {
+               "architectures": null,
                "args": [
                   {
                      "default": "tempo",
@@ -27876,6 +29170,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "thanos-compact",
@@ -27968,6 +29267,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "thanos-query",
@@ -28048,6 +29352,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "thanos-query-frontend",
@@ -28117,6 +29426,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "thanos-receive",
@@ -28209,6 +29523,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "thanos-ruler",
@@ -28307,6 +29626,11 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "thanos-store",
@@ -28397,6 +29721,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "thelounge",
@@ -28475,6 +29804,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "tik",
@@ -28524,6 +29856,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "tika",
@@ -28599,6 +29936,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "traccar",
@@ -28682,6 +30023,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "transmission",
@@ -28778,6 +30123,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "trilium",
@@ -28856,6 +30206,9 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "tvheadend",
@@ -28956,6 +30309,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "twenty",
@@ -29042,6 +30399,10 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "twenty-worker",
@@ -29127,6 +30488,10 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "typesense",
@@ -29213,6 +30578,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "umami",
@@ -29292,6 +30661,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "uptime-kuma",
@@ -29370,6 +30744,12 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "valkey",
@@ -29409,6 +30789,12 @@
                }
             },
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "valkey",
@@ -29466,6 +30852,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "vaultwarden",
@@ -29556,6 +30947,13 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le"
+               ],
                "args": [
                   {
                      "default": "victoriametrics",
@@ -29642,6 +31040,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "vikunja",
@@ -29734,6 +31135,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "wallabag",
@@ -29842,6 +31248,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "wallos",
@@ -29922,6 +31333,11 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "webtrees",
@@ -30014,6 +31430,9 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64"
+               ],
                "args": [
                   {
                      "default": "wekan",
@@ -30102,6 +31521,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "wger",
@@ -30216,6 +31639,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "whoogle",
@@ -30291,6 +31719,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "wikijs",
@@ -30390,6 +31822,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "wordpress",
@@ -30494,6 +31935,10 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "xwiki",
@@ -30580,6 +32025,15 @@
          },
          "stages": [
             {
+               "architectures": [
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
+               ],
                "args": [
                   {
                      "default": "yourls",
@@ -30665,6 +32119,11 @@
          "requires": { },
          "stages": [
             {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
                "args": [
                   {
                      "default": "znc",
