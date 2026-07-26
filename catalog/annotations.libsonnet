@@ -826,7 +826,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The draw.io server. Stateless; compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='draw-io'),
-          d.arg('image', d.T.string, default='docker.io/jgraph/drawio:latest@sha256:51adba39a4a13cd0cb2979916ea9ee6e4438564e76acd51f92e79fc65e728b73'),
+          d.arg('image', d.T.string, default='docker.io/jgraph/drawio:latest@sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
