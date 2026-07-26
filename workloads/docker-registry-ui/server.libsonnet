@@ -18,7 +18,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='docker-registry-ui',
-  image='docker.io/joxit/docker-registry-ui:2.5.7',
+  image='docker.io/joxit/docker-registry-ui:2.6.0',
   replicas=2,
   registryUrl=null,
   registryTitle='Docker Registry',

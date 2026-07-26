@@ -3807,7 +3807,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Docker Registry UI server. registryUrl points at the registry (NGINX_PROXY_PASS_URL); registryTitle sets the page title. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='docker-registry-ui'),
-          d.arg('image', d.T.string, default='docker.io/joxit/docker-registry-ui:2.5.7'),
+          d.arg('image', d.T.string, default='docker.io/joxit/docker-registry-ui:2.6.0'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('registryUrl', d.T.string, example='https://registry.example.com'),
           d.arg('registryTitle', d.T.string, default='Docker Registry'),
