@@ -3178,7 +3178,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mumble/Murmur server on :64738 (TCP control + UDP voice). secretName holds MUMBLE_SUPERUSER_PASSWORD (envFrom). Data at /data. Expose to clients (often a LoadBalancer); add a second Service for UDP.', [
           d.arg('name', d.T.string, default='mumble'),
-          d.arg('image', d.T.string, default='docker.io/mumblevoip/mumble-server:v1.5.735-0'),
+          d.arg('image', d.T.string, default='docker.io/mumblevoip/mumble-server:v1.6.870-0'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='mumble-secrets'),

@@ -17354,7 +17354,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/mumblevoip/mumble-server:v1.5.735-0",
+                     "default": "docker.io/mumblevoip/mumble-server:v1.6.870-0",
                      "name": "image",
                      "required": false,
                      "type": "string"

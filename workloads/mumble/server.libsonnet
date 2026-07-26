@@ -24,7 +24,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='mumble',
-  image='docker.io/mumblevoip/mumble-server:v1.5.735-0',
+  image='docker.io/mumblevoip/mumble-server:v1.6.870-0',
   storageSize='1Gi',
   storageClass=null,
   secretName='mumble-secrets',
