@@ -5794,7 +5794,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       requires: { database: 'required', objectStorage: 'required' },
       stages: {
         server: d.fn('The Ente museum API on :8080, stateless (metadata in PostgreSQL, blobs in S3). Reads its base config from the image and merges the operator-supplied credentials file (`credentialsSecret`, a Secret with a credentials.yaml key carrying the DB DSN, the S3 endpoint/bucket/keys, and the app secrets); ENTE_CREDENTIALS_FILE points at it. Any value is also overridable by an ENTE_-prefixed env var.', [
-          d.arg('name', d.T.string, default='ente'),
+          d.arg('name', d.T.string, default='ente-server'),
           d.arg('image', d.T.string, default='ghcr.io/ente/server:latest@sha256:e9e06eb01834c38f41a3a09f9a64885b631346ce0005ccff2153faea403bd6e2'),
           d.arg('credentialsSecret', d.T.string, default='ente-credentials'),
           d.arg('env', d.T.object, default={}),
