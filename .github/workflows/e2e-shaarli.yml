@@ -9,6 +9,8 @@ name: E2E shaarli
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/shaarli/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: shaarli
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/shaarli/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-shaarli)\.sh|\.github/workflows/e2e(-shaarli)?\.yml)'
+      paths: '^workloads/shaarli/'
       scenario: hack/smoke/scenario-shaarli.sh
       max_versions: '1'

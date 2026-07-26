@@ -9,6 +9,8 @@ name: E2E owntracks-recorder
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/owntracks-recorder/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: owntracks-recorder
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/owntracks-recorder/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-owntracks-recorder)\.sh|\.github/workflows/e2e(-owntracks-recorder)?\.yml)'
+      paths: '^workloads/owntracks-recorder/'
       scenario: hack/smoke/scenario-owntracks-recorder.sh
       max_versions: '1'

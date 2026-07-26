@@ -9,6 +9,8 @@ name: E2E ombi
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/ombi/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: ombi
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/ombi/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-ombi)\.sh|\.github/workflows/e2e(-ombi)?\.yml)'
+      paths: '^workloads/ombi/'
       scenario: hack/smoke/scenario-ombi.sh
       max_versions: '1'

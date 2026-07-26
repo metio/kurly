@@ -9,6 +9,8 @@ name: E2E librespeed
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/librespeed/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: librespeed
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/librespeed/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-librespeed)\.sh|\.github/workflows/e2e(-librespeed)?\.yml)'
+      paths: '^workloads/librespeed/'
       scenario: hack/smoke/scenario-librespeed.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E uptime-kuma
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/uptime-kuma/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: uptime-kuma
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/uptime-kuma/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-uptime-kuma)\.sh|\.github/workflows/e2e(-uptime-kuma)?\.yml)'
+      paths: '^workloads/uptime-kuma/'
       scenario: hack/smoke/scenario-uptime-kuma.sh
       max_versions: '1'

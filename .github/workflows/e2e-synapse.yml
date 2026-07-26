@@ -9,6 +9,8 @@ name: E2E synapse
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/synapse/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: synapse
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/synapse/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-synapse)\.sh|\.github/workflows/e2e(-synapse)?\.yml)'
+      paths: '^workloads/synapse/'
       scenario: hack/smoke/scenario-synapse.sh
       max_versions: '1'

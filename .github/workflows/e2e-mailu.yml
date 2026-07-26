@@ -9,6 +9,8 @@ name: E2E mailu
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mailu/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mailu
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mailu/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mailu)\.sh|\.github/workflows/e2e(-mailu)?\.yml)'
+      paths: '^workloads/mailu/'
       scenario: hack/smoke/scenario-mailu.sh
       max_versions: '1'

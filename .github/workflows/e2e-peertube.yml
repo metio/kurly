@@ -9,6 +9,8 @@ name: E2E peertube
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/peertube/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: peertube
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/peertube/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-peertube)\.sh|\.github/workflows/e2e(-peertube)?\.yml)'
+      paths: '^workloads/peertube/'
       scenario: hack/smoke/scenario-peertube.sh
       max_versions: '1'

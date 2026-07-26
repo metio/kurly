@@ -9,6 +9,8 @@ name: E2E blackbox-exporter
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/blackbox-exporter/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: blackbox-exporter
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/blackbox-exporter/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-blackbox-exporter)\.sh|\.github/workflows/e2e(-blackbox-exporter)?\.yml)'
+      paths: '^workloads/blackbox-exporter/'
       scenario: hack/smoke/scenario-blackbox-exporter.sh
       max_versions: '1'

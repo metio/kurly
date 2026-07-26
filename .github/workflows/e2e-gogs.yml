@@ -9,6 +9,8 @@ name: E2E gogs
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/gogs/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: gogs
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/gogs/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-gogs)\.sh|\.github/workflows/e2e(-gogs)?\.yml)'
+      paths: '^workloads/gogs/'
       scenario: hack/smoke/scenario-gogs.sh
       max_versions: '1'

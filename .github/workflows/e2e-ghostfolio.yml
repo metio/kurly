@@ -9,6 +9,8 @@ name: E2E ghostfolio
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/ghostfolio/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: ghostfolio
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/ghostfolio/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-ghostfolio)\.sh|\.github/workflows/e2e(-ghostfolio)?\.yml)'
+      paths: '^workloads/ghostfolio/'
       scenario: hack/smoke/scenario-ghostfolio.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E baikal
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/baikal/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: baikal
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/baikal/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-baikal)\.sh|\.github/workflows/e2e(-baikal)?\.yml)'
+      paths: '^workloads/baikal/'
       scenario: hack/smoke/scenario-baikal.sh
       max_versions: '1'

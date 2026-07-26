@@ -9,6 +9,8 @@ name: E2E technitium
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/technitium/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: technitium
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/technitium/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-technitium)\.sh|\.github/workflows/e2e(-technitium)?\.yml)'
+      paths: '^workloads/technitium/'
       scenario: hack/smoke/scenario-technitium.sh
       max_versions: '1'

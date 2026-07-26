@@ -9,6 +9,8 @@ name: E2E joplin
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/joplin/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: joplin
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/joplin/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-joplin)\.sh|\.github/workflows/e2e(-joplin)?\.yml)'
+      paths: '^workloads/joplin/'
       scenario: hack/smoke/scenario-joplin.sh
       max_versions: '1'

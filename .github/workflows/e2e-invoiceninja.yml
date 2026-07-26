@@ -9,6 +9,8 @@ name: E2E invoiceninja
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/invoiceninja/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: invoiceninja
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/invoiceninja/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-invoiceninja)\.sh|\.github/workflows/e2e(-invoiceninja)?\.yml)'
+      paths: '^workloads/invoiceninja/'
       scenario: hack/smoke/scenario-invoiceninja.sh
       max_versions: '1'

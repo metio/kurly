@@ -9,6 +9,8 @@ name: E2E greenlight
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/greenlight/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: greenlight
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/greenlight/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-greenlight)\.sh|\.github/workflows/e2e(-greenlight)?\.yml)'
+      paths: '^workloads/greenlight/'
       scenario: hack/smoke/scenario-greenlight.sh
       max_versions: '1'

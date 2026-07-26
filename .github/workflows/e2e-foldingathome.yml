@@ -9,6 +9,8 @@ name: E2E foldingathome
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/foldingathome/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: foldingathome
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/foldingathome/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-foldingathome)\.sh|\.github/workflows/e2e(-foldingathome)?\.yml)'
+      paths: '^workloads/foldingathome/'
       scenario: hack/smoke/scenario-foldingathome.sh
       max_versions: '1'

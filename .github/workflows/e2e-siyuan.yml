@@ -9,6 +9,8 @@ name: E2E siyuan
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/siyuan/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: siyuan
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/siyuan/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-siyuan)\.sh|\.github/workflows/e2e(-siyuan)?\.yml)'
+      paths: '^workloads/siyuan/'
       scenario: hack/smoke/scenario-siyuan.sh
       max_versions: '1'

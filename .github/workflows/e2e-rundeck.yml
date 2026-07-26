@@ -9,6 +9,8 @@ name: E2E rundeck
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/rundeck/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: rundeck
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/rundeck/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-rundeck)\.sh|\.github/workflows/e2e(-rundeck)?\.yml)'
+      paths: '^workloads/rundeck/'
       scenario: hack/smoke/scenario-rundeck.sh
       max_versions: '1'

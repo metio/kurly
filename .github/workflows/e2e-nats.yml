@@ -9,6 +9,8 @@ name: E2E nats
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/nats/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: nats
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/nats/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nats)\.sh|\.github/workflows/e2e(-nats)?\.yml)'
+      paths: '^workloads/nats/'
       scenario: hack/smoke/scenario-nats.sh
       max_versions: '1'

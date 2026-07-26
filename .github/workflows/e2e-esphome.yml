@@ -9,6 +9,8 @@ name: E2E esphome
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/esphome/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: esphome
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/esphome/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-esphome)\.sh|\.github/workflows/e2e(-esphome)?\.yml)'
+      paths: '^workloads/esphome/'
       scenario: hack/smoke/scenario-esphome.sh
       max_versions: '1'

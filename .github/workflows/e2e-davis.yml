@@ -9,6 +9,8 @@ name: E2E davis
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/davis/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: davis
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/davis/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-davis)\.sh|\.github/workflows/e2e(-davis)?\.yml)'
+      paths: '^workloads/davis/'
       scenario: hack/smoke/scenario-davis.sh
       max_versions: '1'

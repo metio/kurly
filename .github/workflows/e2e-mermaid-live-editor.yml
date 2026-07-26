@@ -9,6 +9,8 @@ name: E2E mermaid-live-editor
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mermaid-live-editor/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mermaid-live-editor
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mermaid-live-editor/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mermaid-live-editor)\.sh|\.github/workflows/e2e(-mermaid-live-editor)?\.yml)'
+      paths: '^workloads/mermaid-live-editor/'
       scenario: hack/smoke/scenario-mermaid-live-editor.sh
       max_versions: '1'

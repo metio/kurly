@@ -9,6 +9,8 @@ name: E2E wikijs
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/wikijs/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: wikijs
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/wikijs/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-wikijs)\.sh|\.github/workflows/e2e(-wikijs)?\.yml)'
+      paths: '^workloads/wikijs/'
       scenario: hack/smoke/scenario-wikijs.sh
       max_versions: '1'

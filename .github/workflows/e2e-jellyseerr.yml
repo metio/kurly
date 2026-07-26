@@ -9,6 +9,8 @@ name: E2E jellyseerr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/jellyseerr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: jellyseerr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/jellyseerr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-jellyseerr)\.sh|\.github/workflows/e2e(-jellyseerr)?\.yml)'
+      paths: '^workloads/jellyseerr/'
       scenario: hack/smoke/scenario-jellyseerr.sh
       max_versions: '1'

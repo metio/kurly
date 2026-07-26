@@ -9,6 +9,8 @@ name: E2E metrics-server
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/metrics-server/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: metrics-server
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/metrics-server/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-metrics-server)\.sh|\.github/workflows/e2e(-metrics-server)?\.yml)'
+      paths: '^workloads/metrics-server/'
       scenario: hack/smoke/scenario-metrics-server.sh
       max_versions: '1'

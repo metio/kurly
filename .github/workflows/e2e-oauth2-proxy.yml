@@ -9,6 +9,8 @@ name: E2E oauth2-proxy
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/oauth2-proxy/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: oauth2-proxy
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/oauth2-proxy/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-oauth2-proxy)\.sh|\.github/workflows/e2e(-oauth2-proxy)?\.yml)'
+      paths: '^workloads/oauth2-proxy/'
       scenario: hack/smoke/scenario-oauth2-proxy.sh
       max_versions: '1'

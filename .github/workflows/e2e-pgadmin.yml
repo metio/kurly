@@ -9,6 +9,8 @@ name: E2E pgadmin
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/pgadmin/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: pgadmin
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/pgadmin/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-pgadmin)\.sh|\.github/workflows/e2e(-pgadmin)?\.yml)'
+      paths: '^workloads/pgadmin/'
       scenario: hack/smoke/scenario-pgadmin.sh
       max_versions: '1'

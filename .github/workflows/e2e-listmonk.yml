@@ -9,6 +9,8 @@ name: E2E listmonk
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/listmonk/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: listmonk
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/listmonk/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-listmonk)\.sh|\.github/workflows/e2e(-listmonk)?\.yml)'
+      paths: '^workloads/listmonk/'
       scenario: hack/smoke/scenario-listmonk.sh
       max_versions: '1'

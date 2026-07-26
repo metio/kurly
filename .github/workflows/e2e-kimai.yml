@@ -9,6 +9,8 @@ name: E2E kimai
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/kimai/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: kimai
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/kimai/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-kimai)\.sh|\.github/workflows/e2e(-kimai)?\.yml)'
+      paths: '^workloads/kimai/'
       scenario: hack/smoke/scenario-kimai.sh
       max_versions: '1'

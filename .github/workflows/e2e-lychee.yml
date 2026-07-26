@@ -9,6 +9,8 @@ name: E2E lychee
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/lychee/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: lychee
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/lychee/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-lychee)\.sh|\.github/workflows/e2e(-lychee)?\.yml)'
+      paths: '^workloads/lychee/'
       scenario: hack/smoke/scenario-lychee.sh
       max_versions: '1'

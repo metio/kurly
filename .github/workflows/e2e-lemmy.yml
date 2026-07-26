@@ -9,6 +9,8 @@ name: E2E lemmy
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/lemmy/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: lemmy
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/lemmy/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-lemmy)\.sh|\.github/workflows/e2e(-lemmy)?\.yml)'
+      paths: '^workloads/lemmy/'
       scenario: hack/smoke/scenario-lemmy.sh
       max_versions: '1'

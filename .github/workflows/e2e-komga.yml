@@ -9,6 +9,8 @@ name: E2E komga
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/komga/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: komga
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/komga/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-komga)\.sh|\.github/workflows/e2e(-komga)?\.yml)'
+      paths: '^workloads/komga/'
       scenario: hack/smoke/scenario-komga.sh
       max_versions: '1'

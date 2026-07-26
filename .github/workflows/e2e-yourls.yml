@@ -9,6 +9,8 @@ name: E2E yourls
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/yourls/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: yourls
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/yourls/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-yourls)\.sh|\.github/workflows/e2e(-yourls)?\.yml)'
+      paths: '^workloads/yourls/'
       scenario: hack/smoke/scenario-yourls.sh
       max_versions: '1'

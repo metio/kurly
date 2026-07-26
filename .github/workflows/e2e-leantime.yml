@@ -9,6 +9,8 @@ name: E2E leantime
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/leantime/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: leantime
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/leantime/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-leantime)\.sh|\.github/workflows/e2e(-leantime)?\.yml)'
+      paths: '^workloads/leantime/'
       scenario: hack/smoke/scenario-leantime.sh
       max_versions: '1'

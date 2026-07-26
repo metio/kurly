@@ -9,6 +9,8 @@ name: E2E bugsink
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/bugsink/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: bugsink
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/bugsink/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-bugsink)\.sh|\.github/workflows/e2e(-bugsink)?\.yml)'
+      paths: '^workloads/bugsink/'
       scenario: hack/smoke/scenario-bugsink.sh
       max_versions: '1'

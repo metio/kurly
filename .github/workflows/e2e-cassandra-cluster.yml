@@ -7,6 +7,8 @@ name: E2E cassandra-cluster
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/cassandra-cluster/**'
   workflow_dispatch:
 permissions:
   contents: read

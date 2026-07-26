@@ -9,6 +9,8 @@ name: E2E matomo
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/matomo/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: matomo
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/matomo/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-matomo)\.sh|\.github/workflows/e2e(-matomo)?\.yml)'
+      paths: '^workloads/matomo/'
       scenario: hack/smoke/scenario-matomo.sh
       max_versions: '1'

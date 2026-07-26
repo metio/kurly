@@ -9,6 +9,8 @@ name: E2E linkwarden
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/linkwarden/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: linkwarden
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/linkwarden/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-linkwarden)\.sh|\.github/workflows/e2e(-linkwarden)?\.yml)'
+      paths: '^workloads/linkwarden/'
       scenario: hack/smoke/scenario-linkwarden.sh
       max_versions: '1'

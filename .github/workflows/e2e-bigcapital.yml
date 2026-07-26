@@ -9,6 +9,8 @@ name: E2E bigcapital
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/bigcapital/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: bigcapital
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/bigcapital/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-bigcapital)\.sh|\.github/workflows/e2e(-bigcapital)?\.yml)'
+      paths: '^workloads/bigcapital/'
       scenario: hack/smoke/scenario-bigcapital.sh
       max_versions: '1'

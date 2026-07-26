@@ -9,6 +9,8 @@ name: E2E twenty
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/twenty/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: twenty
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/twenty/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-twenty)\.sh|\.github/workflows/e2e(-twenty)?\.yml)'
+      paths: '^workloads/twenty/'
       scenario: hack/smoke/scenario-twenty.sh
       max_versions: '1'

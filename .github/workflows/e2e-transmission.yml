@@ -9,6 +9,8 @@ name: E2E transmission
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/transmission/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: transmission
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/transmission/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-transmission)\.sh|\.github/workflows/e2e(-transmission)?\.yml)'
+      paths: '^workloads/transmission/'
       scenario: hack/smoke/scenario-transmission.sh
       max_versions: '1'

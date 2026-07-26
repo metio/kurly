@@ -9,6 +9,8 @@ name: E2E wallabag
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/wallabag/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: wallabag
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/wallabag/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-wallabag)\.sh|\.github/workflows/e2e(-wallabag)?\.yml)'
+      paths: '^workloads/wallabag/'
       scenario: hack/smoke/scenario-wallabag.sh
       max_versions: '1'

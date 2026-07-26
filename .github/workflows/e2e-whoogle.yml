@@ -9,6 +9,8 @@ name: E2E whoogle
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/whoogle/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: whoogle
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/whoogle/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-whoogle)\.sh|\.github/workflows/e2e(-whoogle)?\.yml)'
+      paths: '^workloads/whoogle/'
       scenario: hack/smoke/scenario-whoogle.sh
       max_versions: '1'

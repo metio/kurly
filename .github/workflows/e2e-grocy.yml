@@ -9,6 +9,8 @@ name: E2E grocy
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/grocy/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: grocy
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/grocy/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-grocy)\.sh|\.github/workflows/e2e(-grocy)?\.yml)'
+      paths: '^workloads/grocy/'
       scenario: hack/smoke/scenario-grocy.sh
       max_versions: '1'

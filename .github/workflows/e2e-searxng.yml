@@ -9,6 +9,8 @@ name: E2E searxng
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/searxng/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: searxng
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/searxng/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-searxng)\.sh|\.github/workflows/e2e(-searxng)?\.yml)'
+      paths: '^workloads/searxng/'
       scenario: hack/smoke/scenario-searxng.sh
       max_versions: '1'

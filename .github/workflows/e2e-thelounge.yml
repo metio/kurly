@@ -9,6 +9,8 @@ name: E2E thelounge
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/thelounge/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: thelounge
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/thelounge/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-thelounge)\.sh|\.github/workflows/e2e(-thelounge)?\.yml)'
+      paths: '^workloads/thelounge/'
       scenario: hack/smoke/scenario-thelounge.sh
       max_versions: '1'

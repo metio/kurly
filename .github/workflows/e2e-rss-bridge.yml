@@ -9,6 +9,8 @@ name: E2E rss-bridge
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/rss-bridge/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: rss-bridge
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/rss-bridge/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-rss-bridge)\.sh|\.github/workflows/e2e(-rss-bridge)?\.yml)'
+      paths: '^workloads/rss-bridge/'
       scenario: hack/smoke/scenario-rss-bridge.sh
       max_versions: '1'

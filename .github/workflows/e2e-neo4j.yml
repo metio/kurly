@@ -9,6 +9,8 @@ name: E2E neo4j
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/neo4j/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: neo4j
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/neo4j/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-neo4j)\.sh|\.github/workflows/e2e(-neo4j)?\.yml)'
+      paths: '^workloads/neo4j/'
       scenario: hack/smoke/scenario-neo4j.sh
       max_versions: '1'

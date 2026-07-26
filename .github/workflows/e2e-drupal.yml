@@ -9,6 +9,8 @@ name: E2E drupal
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/drupal/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: drupal
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/drupal/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-drupal)\.sh|\.github/workflows/e2e(-drupal)?\.yml)'
+      paths: '^workloads/drupal/'
       scenario: hack/smoke/scenario-drupal.sh
       max_versions: '1'

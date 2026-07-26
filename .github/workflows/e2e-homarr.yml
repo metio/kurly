@@ -9,6 +9,8 @@ name: E2E homarr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/homarr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: homarr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/homarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-homarr)\.sh|\.github/workflows/e2e(-homarr)?\.yml)'
+      paths: '^workloads/homarr/'
       scenario: hack/smoke/scenario-homarr.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E docker-registry-ui
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/docker-registry-ui/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: docker-registry-ui
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/docker-registry-ui/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-docker-registry-ui)\.sh|\.github/workflows/e2e(-docker-registry-ui)?\.yml)'
+      paths: '^workloads/docker-registry-ui/'
       scenario: hack/smoke/scenario-docker-registry-ui.sh
       max_versions: '1'

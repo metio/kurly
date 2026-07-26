@@ -9,6 +9,8 @@ name: E2E readeck
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/readeck/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: readeck
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/readeck/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-readeck)\.sh|\.github/workflows/e2e(-readeck)?\.yml)'
+      paths: '^workloads/readeck/'
       scenario: hack/smoke/scenario-readeck.sh
       max_versions: '1'

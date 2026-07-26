@@ -9,6 +9,8 @@ name: E2E qbittorrent
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/qbittorrent/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: qbittorrent
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/qbittorrent/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-qbittorrent)\.sh|\.github/workflows/e2e(-qbittorrent)?\.yml)'
+      paths: '^workloads/qbittorrent/'
       scenario: hack/smoke/scenario-qbittorrent.sh
       max_versions: '1'

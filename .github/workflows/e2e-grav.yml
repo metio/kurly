@@ -9,6 +9,8 @@ name: E2E grav
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/grav/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: grav
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/grav/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-grav)\.sh|\.github/workflows/e2e(-grav)?\.yml)'
+      paths: '^workloads/grav/'
       scenario: hack/smoke/scenario-grav.sh
       max_versions: '1'

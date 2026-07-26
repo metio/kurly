@@ -9,6 +9,8 @@ name: E2E guacamole
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/guacamole/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: guacamole
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/guacamole/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-guacamole)\.sh|\.github/workflows/e2e(-guacamole)?\.yml)'
+      paths: '^workloads/guacamole/'
       scenario: hack/smoke/scenario-guacamole.sh
       max_versions: '1'

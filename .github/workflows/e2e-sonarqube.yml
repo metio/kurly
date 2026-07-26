@@ -9,6 +9,8 @@ name: E2E sonarqube
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/sonarqube/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: sonarqube
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/sonarqube/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-sonarqube)\.sh|\.github/workflows/e2e(-sonarqube)?\.yml)'
+      paths: '^workloads/sonarqube/'
       scenario: hack/smoke/scenario-sonarqube.sh
       max_versions: '1'

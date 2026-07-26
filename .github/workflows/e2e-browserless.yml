@@ -9,6 +9,8 @@ name: E2E browserless
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/browserless/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: browserless
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/browserless/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-browserless)\.sh|\.github/workflows/e2e(-browserless)?\.yml)'
+      paths: '^workloads/browserless/'
       scenario: hack/smoke/scenario-browserless.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E resilio-sync
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/resilio-sync/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: resilio-sync
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/resilio-sync/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-resilio-sync)\.sh|\.github/workflows/e2e(-resilio-sync)?\.yml)'
+      paths: '^workloads/resilio-sync/'
       scenario: hack/smoke/scenario-resilio-sync.sh
       max_versions: '1'

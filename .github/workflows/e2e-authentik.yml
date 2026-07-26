@@ -9,6 +9,8 @@ name: E2E authentik
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/authentik/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: authentik
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/authentik/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-authentik)\.sh|\.github/workflows/e2e(-authentik)?\.yml)'
+      paths: '^workloads/authentik/'
       scenario: hack/smoke/scenario-authentik.sh
       max_versions: '1'

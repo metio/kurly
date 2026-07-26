@@ -9,6 +9,8 @@ name: E2E shlink
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/shlink/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: shlink
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/shlink/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-shlink)\.sh|\.github/workflows/e2e(-shlink)?\.yml)'
+      paths: '^workloads/shlink/'
       scenario: hack/smoke/scenario-shlink.sh
       max_versions: '1'

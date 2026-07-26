@@ -9,6 +9,8 @@ name: E2E nzbget
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/nzbget/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: nzbget
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/nzbget/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nzbget)\.sh|\.github/workflows/e2e(-nzbget)?\.yml)'
+      paths: '^workloads/nzbget/'
       scenario: hack/smoke/scenario-nzbget.sh
       max_versions: '1'

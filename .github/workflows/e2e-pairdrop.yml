@@ -9,6 +9,8 @@ name: E2E pairdrop
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/pairdrop/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: pairdrop
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/pairdrop/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-pairdrop)\.sh|\.github/workflows/e2e(-pairdrop)?\.yml)'
+      paths: '^workloads/pairdrop/'
       scenario: hack/smoke/scenario-pairdrop.sh
       max_versions: '1'

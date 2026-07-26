@@ -9,6 +9,8 @@ name: E2E focalboard
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/focalboard/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: focalboard
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/focalboard/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-focalboard)\.sh|\.github/workflows/e2e(-focalboard)?\.yml)'
+      paths: '^workloads/focalboard/'
       scenario: hack/smoke/scenario-focalboard.sh
       max_versions: '1'

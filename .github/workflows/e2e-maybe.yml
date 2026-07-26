@@ -9,6 +9,8 @@ name: E2E maybe
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/maybe/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: maybe
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/maybe/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-maybe)\.sh|\.github/workflows/e2e(-maybe)?\.yml)'
+      paths: '^workloads/maybe/'
       scenario: hack/smoke/scenario-maybe.sh
       max_versions: '1'

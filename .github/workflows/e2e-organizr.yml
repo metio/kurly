@@ -9,6 +9,8 @@ name: E2E organizr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/organizr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: organizr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/organizr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-organizr)\.sh|\.github/workflows/e2e(-organizr)?\.yml)'
+      paths: '^workloads/organizr/'
       scenario: hack/smoke/scenario-organizr.sh
       max_versions: '1'

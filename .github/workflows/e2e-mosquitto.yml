@@ -9,6 +9,8 @@ name: E2E mosquitto
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mosquitto/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mosquitto
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mosquitto/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mosquitto)\.sh|\.github/workflows/e2e(-mosquitto)?\.yml)'
+      paths: '^workloads/mosquitto/'
       scenario: hack/smoke/scenario-mosquitto.sh
       max_versions: '1'

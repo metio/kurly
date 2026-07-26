@@ -9,6 +9,8 @@ name: E2E maloja
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/maloja/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: maloja
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/maloja/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-maloja)\.sh|\.github/workflows/e2e(-maloja)?\.yml)'
+      paths: '^workloads/maloja/'
       scenario: hack/smoke/scenario-maloja.sh
       max_versions: '1'

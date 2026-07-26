@@ -9,6 +9,8 @@ name: E2E syncthing
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/syncthing/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: syncthing
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/syncthing/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-syncthing)\.sh|\.github/workflows/e2e(-syncthing)?\.yml)'
+      paths: '^workloads/syncthing/'
       scenario: hack/smoke/scenario-syncthing.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E gotify
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/gotify/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: gotify
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/gotify/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-gotify)\.sh|\.github/workflows/e2e(-gotify)?\.yml)'
+      paths: '^workloads/gotify/'
       scenario: hack/smoke/scenario-gotify.sh
       max_versions: '1'

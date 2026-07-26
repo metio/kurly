@@ -9,6 +9,8 @@ name: E2E ntfy
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/ntfy/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: ntfy
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/ntfy/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-ntfy)\.sh|\.github/workflows/e2e(-ntfy)?\.yml)'
+      paths: '^workloads/ntfy/'
       scenario: hack/smoke/scenario-ntfy.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E cryptpad
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/cryptpad/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: cryptpad
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/cryptpad/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cryptpad)\.sh|\.github/workflows/e2e(-cryptpad)?\.yml)'
+      paths: '^workloads/cryptpad/'
       scenario: hack/smoke/scenario-cryptpad.sh
       max_versions: '1'

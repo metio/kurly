@@ -9,6 +9,8 @@ name: E2E tautulli
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/tautulli/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: tautulli
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/tautulli/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tautulli)\.sh|\.github/workflows/e2e(-tautulli)?\.yml)'
+      paths: '^workloads/tautulli/'
       scenario: hack/smoke/scenario-tautulli.sh
       max_versions: '1'

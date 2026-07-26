@@ -9,6 +9,8 @@ name: E2E inspircd
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/inspircd/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: inspircd
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/inspircd/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-inspircd)\.sh|\.github/workflows/e2e(-inspircd)?\.yml)'
+      paths: '^workloads/inspircd/'
       scenario: hack/smoke/scenario-inspircd.sh
       max_versions: '1'

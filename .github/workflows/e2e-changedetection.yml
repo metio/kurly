@@ -9,6 +9,8 @@ name: E2E changedetection
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/changedetection/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: changedetection
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/changedetection/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-changedetection)\.sh|\.github/workflows/e2e(-changedetection)?\.yml)'
+      paths: '^workloads/changedetection/'
       scenario: hack/smoke/scenario-changedetection.sh
       max_versions: '1'

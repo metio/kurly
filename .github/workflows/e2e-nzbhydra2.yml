@@ -9,6 +9,8 @@ name: E2E nzbhydra2
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/nzbhydra2/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: nzbhydra2
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/nzbhydra2/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nzbhydra2)\.sh|\.github/workflows/e2e(-nzbhydra2)?\.yml)'
+      paths: '^workloads/nzbhydra2/'
       scenario: hack/smoke/scenario-nzbhydra2.sh
       max_versions: '1'

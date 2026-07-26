@@ -9,6 +9,8 @@ name: E2E expenseowl
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/expenseowl/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: expenseowl
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/expenseowl/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-expenseowl)\.sh|\.github/workflows/e2e(-expenseowl)?\.yml)'
+      paths: '^workloads/expenseowl/'
       scenario: hack/smoke/scenario-expenseowl.sh
       max_versions: '1'

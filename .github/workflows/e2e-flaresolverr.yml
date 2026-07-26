@@ -9,6 +9,8 @@ name: E2E flaresolverr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/flaresolverr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: flaresolverr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/flaresolverr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-flaresolverr)\.sh|\.github/workflows/e2e(-flaresolverr)?\.yml)'
+      paths: '^workloads/flaresolverr/'
       scenario: hack/smoke/scenario-flaresolverr.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E actualbudget
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/actualbudget/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: actualbudget
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/actualbudget/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-actualbudget)\.sh|\.github/workflows/e2e(-actualbudget)?\.yml)'
+      paths: '^workloads/actualbudget/'
       scenario: hack/smoke/scenario-actualbudget.sh
       max_versions: '1'

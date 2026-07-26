@@ -9,6 +9,8 @@ name: E2E snappymail
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/snappymail/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: snappymail
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/snappymail/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-snappymail)\.sh|\.github/workflows/e2e(-snappymail)?\.yml)'
+      paths: '^workloads/snappymail/'
       scenario: hack/smoke/scenario-snappymail.sh
       max_versions: '1'

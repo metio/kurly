@@ -9,6 +9,8 @@ name: E2E excalidraw
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/excalidraw/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: excalidraw
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/excalidraw/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-excalidraw)\.sh|\.github/workflows/e2e(-excalidraw)?\.yml)'
+      paths: '^workloads/excalidraw/'
       scenario: hack/smoke/scenario-excalidraw.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E drawio
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/drawio/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: drawio
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/drawio/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-drawio)\.sh|\.github/workflows/e2e(-drawio)?\.yml)'
+      paths: '^workloads/drawio/'
       scenario: hack/smoke/scenario-drawio.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E calibre-web-automated
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/calibre-web-automated/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: calibre-web-automated
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/calibre-web-automated/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-calibre-web-automated)\.sh|\.github/workflows/e2e(-calibre-web-automated)?\.yml)'
+      paths: '^workloads/calibre-web-automated/'
       scenario: hack/smoke/scenario-calibre-web-automated.sh
       max_versions: '1'

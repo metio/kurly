@@ -9,6 +9,8 @@ name: E2E docmost
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/docmost/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: docmost
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/docmost/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-docmost)\.sh|\.github/workflows/e2e(-docmost)?\.yml)'
+      paths: '^workloads/docmost/'
       scenario: hack/smoke/scenario-docmost.sh
       max_versions: '1'

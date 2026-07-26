@@ -9,6 +9,8 @@ name: E2E duplicati
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/duplicati/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: duplicati
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/duplicati/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-duplicati)\.sh|\.github/workflows/e2e(-duplicati)?\.yml)'
+      paths: '^workloads/duplicati/'
       scenario: hack/smoke/scenario-duplicati.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E frigate
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/frigate/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: frigate
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/frigate/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-frigate)\.sh|\.github/workflows/e2e(-frigate)?\.yml)'
+      paths: '^workloads/frigate/'
       scenario: hack/smoke/scenario-frigate.sh
       max_versions: '1'

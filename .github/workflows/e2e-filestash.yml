@@ -9,6 +9,8 @@ name: E2E filestash
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/filestash/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: filestash
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/filestash/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-filestash)\.sh|\.github/workflows/e2e(-filestash)?\.yml)'
+      paths: '^workloads/filestash/'
       scenario: hack/smoke/scenario-filestash.sh
       max_versions: '1'

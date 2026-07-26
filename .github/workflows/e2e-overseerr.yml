@@ -9,6 +9,8 @@ name: E2E overseerr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/overseerr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: overseerr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/overseerr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-overseerr)\.sh|\.github/workflows/e2e(-overseerr)?\.yml)'
+      paths: '^workloads/overseerr/'
       scenario: hack/smoke/scenario-overseerr.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E miniflux
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/miniflux/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: miniflux
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/miniflux/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-miniflux)\.sh|\.github/workflows/e2e(-miniflux)?\.yml)'
+      paths: '^workloads/miniflux/'
       scenario: hack/smoke/scenario-miniflux.sh
       max_versions: '1'

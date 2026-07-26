@@ -9,6 +9,8 @@ name: E2E odoo
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/odoo/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: odoo
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/odoo/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-odoo)\.sh|\.github/workflows/e2e(-odoo)?\.yml)'
+      paths: '^workloads/odoo/'
       scenario: hack/smoke/scenario-odoo.sh
       max_versions: '1'

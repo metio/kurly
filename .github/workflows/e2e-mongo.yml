@@ -9,6 +9,8 @@ name: E2E mongo
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mongo/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mongo
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mongo/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mongo)\.sh|\.github/workflows/e2e(-mongo)?\.yml)'
+      paths: '^workloads/mongo/'
       scenario: hack/smoke/scenario-mongo.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E tachidesk
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/tachidesk/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: tachidesk
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/tachidesk/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tachidesk)\.sh|\.github/workflows/e2e(-tachidesk)?\.yml)'
+      paths: '^workloads/tachidesk/'
       scenario: hack/smoke/scenario-tachidesk.sh
       max_versions: '1'

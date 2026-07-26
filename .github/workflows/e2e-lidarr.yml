@@ -9,6 +9,8 @@ name: E2E lidarr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/lidarr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: lidarr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/lidarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-lidarr)\.sh|\.github/workflows/e2e(-lidarr)?\.yml)'
+      paths: '^workloads/lidarr/'
       scenario: hack/smoke/scenario-lidarr.sh
       max_versions: '1'

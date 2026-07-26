@@ -9,6 +9,8 @@ name: E2E openhab
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/openhab/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: openhab
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/openhab/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-openhab)\.sh|\.github/workflows/e2e(-openhab)?\.yml)'
+      paths: '^workloads/openhab/'
       scenario: hack/smoke/scenario-openhab.sh
       max_versions: '1'

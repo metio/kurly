@@ -9,6 +9,8 @@ name: E2E znc
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/znc/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: znc
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/znc/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-znc)\.sh|\.github/workflows/e2e(-znc)?\.yml)'
+      paths: '^workloads/znc/'
       scenario: hack/smoke/scenario-znc.sh
       max_versions: '1'

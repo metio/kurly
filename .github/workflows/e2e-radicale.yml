@@ -9,6 +9,8 @@ name: E2E radicale
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/radicale/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: radicale
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/radicale/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-radicale)\.sh|\.github/workflows/e2e(-radicale)?\.yml)'
+      paths: '^workloads/radicale/'
       scenario: hack/smoke/scenario-radicale.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E rocketchat
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/rocketchat/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: rocketchat
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/rocketchat/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-rocketchat)\.sh|\.github/workflows/e2e(-rocketchat)?\.yml)'
+      paths: '^workloads/rocketchat/'
       scenario: hack/smoke/scenario-rocketchat.sh
       max_versions: '1'

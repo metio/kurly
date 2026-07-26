@@ -9,6 +9,8 @@ name: E2E kutt
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/kutt/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: kutt
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/kutt/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-kutt)\.sh|\.github/workflows/e2e(-kutt)?\.yml)'
+      paths: '^workloads/kutt/'
       scenario: hack/smoke/scenario-kutt.sh
       max_versions: '1'

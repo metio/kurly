@@ -9,6 +9,8 @@ name: E2E cyberchef
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/cyberchef/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: cyberchef
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/cyberchef/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cyberchef)\.sh|\.github/workflows/e2e(-cyberchef)?\.yml)'
+      paths: '^workloads/cyberchef/'
       scenario: hack/smoke/scenario-cyberchef.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E openobserve
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/openobserve/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: openobserve
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/openobserve/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-openobserve)\.sh|\.github/workflows/e2e(-openobserve)?\.yml)'
+      paths: '^workloads/openobserve/'
       scenario: hack/smoke/scenario-openobserve.sh
       max_versions: '1'

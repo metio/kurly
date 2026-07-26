@@ -9,6 +9,8 @@ name: E2E registry
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/registry/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: registry
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/registry/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-registry)\.sh|\.github/workflows/e2e(-registry)?\.yml)'
+      paths: '^workloads/registry/'
       scenario: hack/smoke/scenario-registry.sh
       max_versions: '1'

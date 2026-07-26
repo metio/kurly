@@ -9,6 +9,8 @@ name: E2E paperless-ngx
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/paperless-ngx/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: paperless-ngx
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/paperless-ngx/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-paperless-ngx)\.sh|\.github/workflows/e2e(-paperless-ngx)?\.yml)'
+      paths: '^workloads/paperless-ngx/'
       scenario: hack/smoke/scenario-paperless-ngx.sh
       max_versions: '1'

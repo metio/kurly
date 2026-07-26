@@ -9,6 +9,8 @@ name: E2E deluge
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/deluge/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: deluge
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/deluge/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-deluge)\.sh|\.github/workflows/e2e(-deluge)?\.yml)'
+      paths: '^workloads/deluge/'
       scenario: hack/smoke/scenario-deluge.sh
       max_versions: '1'
