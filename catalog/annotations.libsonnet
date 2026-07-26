@@ -4233,7 +4233,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Outline server. url is the public URL; secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='outline'),
-          d.arg('image', d.T.string, default='docker.io/outlinewiki/outline:0.81.1'),
+          d.arg('image', d.T.string, default='docker.io/outlinewiki/outline:0.87.4'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('url', d.T.string, example='https://wiki.example.com'),
           d.arg('secretName', d.T.string, default='outline-secrets'),
