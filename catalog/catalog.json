@@ -350,6 +350,20 @@
          ]
       },
       {
+         "args": [ ],
+         "group": "security",
+         "help": "Allows the process to gain privileges its parent lacks — required to exec a binary carrying file capabilities (relaxes allowPrivilegeEscalation=false).",
+         "id": "allowPrivilegeEscalation",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
          "args": [
             {
                "example": {
@@ -846,6 +860,20 @@
          "group": "container",
          "help": "The IP families EVERY Service the workload renders asks for. A cluster is single-stack IPv4, single-stack IPv6, or dual-stack; pinning a family it lacks gets the Service rejected, so kurly names none and lets the cluster decide.",
          "id": "ipFamilies",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [ ],
+         "group": "security",
+         "help": "Keeps the runtime default Linux capabilities instead of dropping ALL — the way a root process keeps CAP_NET_BIND_SERVICE to bind a privileged port.",
+         "id": "keepCapabilities",
          "kinds": [
             "http",
             "worker",

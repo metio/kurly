@@ -213,6 +213,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     rootUser: d.fn('Drops runAsNonRoot so the container may run as the image USER; add runAs(0) to pin uid 0.', []) + { kinds: allKinds, group: 'security' },
     writableRootFilesystem: d.fn('Makes the root filesystem writable (relaxes readOnlyRootFilesystem).', []) + { kinds: allKinds, group: 'security' },
     hostUsers: d.fn('Shares the host user namespace instead of an own one — needed on Windows nodes and where user namespaces are unavailable (relaxes hostUsers=false).', []) + { kinds: allKinds, group: 'security' },
+    allowPrivilegeEscalation: d.fn('Allows the process to gain privileges its parent lacks — required to exec a binary carrying file capabilities (relaxes allowPrivilegeEscalation=false).', []) + { kinds: allKinds, group: 'security' },
+    keepCapabilities: d.fn('Keeps the runtime default Linux capabilities instead of dropping ALL — the way a root process keeps CAP_NET_BIND_SERVICE to bind a privileged port.', []) + { kinds: allKinds, group: 'security' },
     supplementalGroups: d.fn("Extra group memberships for every container in the pod — how a pod reaches storage owned by a fixed GID it does not run as (a shared NFS/CephFS export). Distinct from fsGroup, which changes ownership of the pod's own volumes.", [
       d.arg('groups', d.T.array, required=true, example=[2000]),
     ]) + { kinds: allKinds, group: 'security' },

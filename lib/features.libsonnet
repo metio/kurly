@@ -278,6 +278,14 @@ local resourcePresets = {
   rootUser():: { config+:: { runAsNonRoot: false } },
   writableRootFilesystem():: { config+:: { readOnlyRootFilesystem: false } },
   hostUsers():: { config+:: { hostUsers: true } },
+  // Allow the process to gain privileges its parent lacks — required to exec a
+  // binary that carries file capabilities (e.g. an image whose entrypoint has
+  // cap_net_bind_service set), which the default noNewPrivileges posture blocks.
+  allowPrivilegeEscalation():: { config+:: { allowPrivilegeEscalation: true } },
+  // Keep the container runtime's default Linux capabilities instead of dropping
+  // ALL — the way an app that binds a privileged port (<1024) as root keeps
+  // CAP_NET_BIND_SERVICE.
+  keepCapabilities():: { config+:: { dropAllCapabilities: false } },
 
   // Extra group memberships for every container in the pod — the way to reach
   // storage owned by a fixed GID the pod does not run as (a shared NFS/CephFS

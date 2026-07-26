@@ -49,7 +49,16 @@ function(
   // filesystem alongside its data volume.
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
-  + kurly.store('/opt/adguardhome', storageSize, storageClass=storageClass)
+  // The image's AdGuardHome binary carries cap_net_bind_service (for the DNS port
+  // 53), so it must be allowed to gain privileges on exec and keep the default
+  // capability set rather than dropping ALL.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
+  // The image ships its binary at /opt/adguardhome/AdGuardHome, so the data volume
+  // mounts a SUBDIR (…/work) rather than the whole directory — mounting over
+  // /opt/adguardhome would hide the executable. Config and work both live under it.
+  + kurly.args(['--no-check-update', '-h', '0.0.0.0', '-c', '/opt/adguardhome/work/AdGuardHome.yaml', '-w', '/opt/adguardhome/work'])
+  + kurly.store('/opt/adguardhome/work', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
