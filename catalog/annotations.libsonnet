@@ -3257,7 +3257,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Typesense server. secretName holds TYPESENSE_API_KEY (envFrom). Data at /data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='typesense'),
-          d.arg('image', d.T.string, default='docker.io/typesense/typesense:27.1'),
+          d.arg('image', d.T.string, default='docker.io/typesense/typesense:30.2'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='typesense-secrets'),

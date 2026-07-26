@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='typesense',
-  image='docker.io/typesense/typesense:27.1',
+  image='docker.io/typesense/typesense:30.2',
   storageSize='10Gi',
   storageClass=null,
   secretName='typesense-secrets',
