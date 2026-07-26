@@ -22,7 +22,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='redmine',
-  image='docker.io/library/redmine:6.0.5',
+  image='docker.io/library/redmine:6.1.3',
   storageSize='10Gi',
   storageClass=null,
   secretName='redmine-secrets',

@@ -3007,7 +3007,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Redmine server. secretName holds the database connection (REDMINE_DB_* / DATABASE_URL) and REDMINE_SECRET_KEY_BASE (envFrom). Files at /usr/src/redmine/files. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='redmine'),
-          d.arg('image', d.T.string, default='docker.io/library/redmine:6.0.5'),
+          d.arg('image', d.T.string, default='docker.io/library/redmine:6.1.3'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='redmine-secrets'),
