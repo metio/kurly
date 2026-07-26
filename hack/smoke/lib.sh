@@ -12,9 +12,12 @@ set -euo pipefail
 # kurly imports k8s-libsonnet (vendored fresh) and resolves its own canonical
 # path through a vendor symlink, exactly as the render gates do.
 kurly::vendor() {
-  jb install >/dev/null
   mkdir -p vendor/github.com/metio
   ln -sfn ../../.. vendor/github.com/metio/kurly
+  # Idempotent: skip the (slow, and parallel-unsafe) jb install once the vendor
+  # tree is populated, so many scenarios can share one pre-vendored checkout.
+  [ -f vendor/.kurly-vendored ] && return 0
+  jb install >/dev/null && touch vendor/.kurly-vendored
 }
 
 # Renders a workload stage (a function(params) app) to a kind: List, the way a
@@ -76,6 +79,37 @@ kurly::verify_min_resources() {
 # triggered once as a Job and awaited. Extra Jsonnet composed onto the app is
 # passed as $3 (e.g. a Secret-backed env the app needs to boot).
 #
+# Waits for a controller to become Ready, but FAILS FAST the moment one of its
+# pods is clearly broken — CrashLoopBackOff, an image that will not pull
+# (ImagePullBackOff/ErrImagePull), or repeated restarts — instead of blocking the
+# full rollout timeout. Faster feedback that a version/manifest is broken, and it
+# keeps the single-cluster e2e walk moving. Timeout via KURLY_ROLLOUT_TIMEOUT
+# (seconds, default 300).
+kurly::await_ready() {
+  local ns="$1" ctrl="$2" timeout="${KURLY_ROLLOUT_TIMEOUT:-300}" deadline waitreason restarts
+  deadline=$((SECONDS + timeout))
+  while [ "$SECONDS" -lt "$deadline" ]; do
+    if kubectl --namespace="$ns" rollout status "$ctrl" --timeout=4s >/dev/null 2>&1; then
+      return 0
+    fi
+    # A pod stuck waiting on its image or crashing will never roll out — bail now.
+    waitreason="$(kubectl --namespace="$ns" get pods \
+      -o jsonpath='{range .items[*]}{range .status.containerStatuses[*]}{.state.waiting.reason}{"\n"}{end}{end}' 2>/dev/null \
+      | grep -E 'CrashLoopBackOff|ImagePullBackOff|ErrImagePull|CreateContainerConfigError|InvalidImageName' | head -1 || true)"
+    if [ -n "$waitreason" ]; then
+      echo "::error::${ctrl}: pod broken (${waitreason})"; return 1
+    fi
+    restarts="$(kubectl --namespace="$ns" get pods \
+      -o jsonpath='{range .items[*]}{range .status.containerStatuses[*]}{.restartCount}{"\n"}{end}{end}' 2>/dev/null \
+      | sort -rn | head -1 || true)"
+    if [ "${restarts:-0}" -ge 3 ]; then
+      echo "::error::${ctrl}: pod restarting repeatedly (restarts=${restarts})"; return 1
+    fi
+    sleep 4
+  done
+  echo "::error::${ctrl}: not Ready within ${timeout}s"; return 1
+}
+
 #   kurly::boot workloads/adguardhome/server.libsonnet kurly-adguardhome
 kurly::boot() {
   local stage="$1" ns="$2" extra="${3:-}"
@@ -85,7 +119,7 @@ kurly::boot() {
   local ctrl found=0
   for ctrl in $(kubectl --namespace="$ns" get deployment,statefulset,daemonset --output=name 2>/dev/null); do
     found=1
-    kubectl --namespace="$ns" rollout status "$ctrl" --timeout=300s \
+    kurly::await_ready "$ns" "$ctrl" \
       || { echo "::error::${stage}: ${ctrl} never became Ready"; kurly::diagnose "$ns"; return 1; }
   done
   local cj
