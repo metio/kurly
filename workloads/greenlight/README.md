@@ -27,7 +27,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `greenlight` | |
-| `image` | `docker.io/bigbluebutton/greenlight:v3.8.2.3` | |
+| `image` | `docker.io/bigbluebutton/greenlight:v3.8.2.4` | |
 | `replicas` | `2` | stateless — scale freely |
 | `secretName` | `greenlight-secrets` | `DATABASE_URL`, `REDIS_URL`, `SECRET_KEY_BASE`, `BIGBLUEBUTTON_ENDPOINT`, `BIGBLUEBUTTON_SECRET` (envFrom) |
 | `env` / `resources` / `labels` / `annotations` | | |
