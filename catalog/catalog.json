@@ -22941,7 +22941,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/rabbitmq:4.0.4-management",
+                     "default": "docker.io/library/rabbitmq:4.3.3-management",
                      "name": "image",
                      "required": false,
                      "type": "string"

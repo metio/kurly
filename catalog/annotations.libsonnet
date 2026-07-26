@@ -3708,7 +3708,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The RabbitMQ server. secretName holds RABBITMQ_DEFAULT_USER/PASS (envFrom). Data at /var/lib/rabbitmq; the management UI (:15672) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='rabbitmq'),
-          d.arg('image', d.T.string, default='docker.io/library/rabbitmq:4.0.4-management'),
+          d.arg('image', d.T.string, default='docker.io/library/rabbitmq:4.3.3-management'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='rabbitmq-secrets'),
