@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='kutt',
-  image='docker.io/kutt/kutt:v3.2.0',
+  image='docker.io/kutt/kutt:v3.2.6',
   replicas=2,
   secretName='kutt-secrets',
   env={},

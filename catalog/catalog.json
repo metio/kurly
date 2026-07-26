@@ -13077,7 +13077,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/kutt/kutt:v3.2.0",
+                     "default": "docker.io/kutt/kutt:v3.2.6",
                      "name": "image",
                      "required": false,
                      "type": "string"

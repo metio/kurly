@@ -3546,7 +3546,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Kutt server. secretName holds the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='kutt'),
-          d.arg('image', d.T.string, default='docker.io/kutt/kutt:v3.2.0'),
+          d.arg('image', d.T.string, default='docker.io/kutt/kutt:v3.2.6'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='kutt-secrets'),
           d.arg('env', d.T.object, default={}),
