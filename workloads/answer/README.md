@@ -22,7 +22,7 @@ kurly.list(answer())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `answer` | |
-| `image` | `docker.io/apache/answer:v2.0.1` | |
+| `image` | `docker.io/apache/answer:2.0.2` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | data and uploads (`/data`) |
 | `env` / `resources` / `labels` / `annotations` | | |
 
