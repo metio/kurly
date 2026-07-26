@@ -4262,7 +4262,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/backend.libsonnet' },
         frontend: d.fn('The Penpot frontend (the user-facing nginx web app) on :80. backendUri/exporterUri point at the other stages by Service name. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='penpot-frontend'),
-          d.arg('image', d.T.string, default='docker.io/penpotapp/frontend:2.3.2'),
+          d.arg('image', d.T.string, default='docker.io/penpotapp/frontend:2.17.0'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('backendUri', d.T.string, default='http://penpot-backend:6060'),
           d.arg('exporterUri', d.T.string, default='http://penpot-exporter:6061'),
