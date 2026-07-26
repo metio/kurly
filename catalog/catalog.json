@@ -21399,7 +21399,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/pihole/pihole:2025.08.0",
+                     "default": "docker.io/pihole/pihole:2026.07.2",
                      "name": "image",
                      "required": false,
                      "type": "string"

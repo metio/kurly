@@ -2942,7 +2942,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Pi-hole server. timezone sets TZ; secretName holds FTLCONF_webserver_api_password (envFrom). Config at /etc/pihole; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pihole'),
-          d.arg('image', d.T.string, default='docker.io/pihole/pihole:2025.08.0'),
+          d.arg('image', d.T.string, default='docker.io/pihole/pihole:2026.07.2'),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('timezone', d.T.string, default='UTC'),
