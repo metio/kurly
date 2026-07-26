@@ -3512,7 +3512,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ClickHouse server. secretName holds CLICKHOUSE_USER/PASSWORD/DB (envFrom). Data at /var/lib/clickhouse; native protocol (:9000) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='clickhouse'),
-          d.arg('image', d.T.string, default='docker.io/clickhouse/clickhouse-server:24.8'),
+          d.arg('image', d.T.string, default='docker.io/clickhouse/clickhouse-server:24.12'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='clickhouse-secrets'),

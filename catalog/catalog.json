@@ -5276,7 +5276,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/clickhouse/clickhouse-server:24.8",
+                     "default": "docker.io/clickhouse/clickhouse-server:24.12",
                      "name": "image",
                      "required": false,
                      "type": "string"

@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='clickhouse',
-  image='docker.io/clickhouse/clickhouse-server:24.8',
+  image='docker.io/clickhouse/clickhouse-server:24.12',
   storageSize='20Gi',
   storageClass=null,
   secretName='clickhouse-secrets',
