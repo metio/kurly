@@ -3962,7 +3962,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A PrestaShop server. secretName holds the DB credentials (envFrom). Data at /var/www/html. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='prestashop'),
-          d.arg('image', d.T.string, default='docker.io/prestashop/prestashop:8.1'),
+          d.arg('image', d.T.string, default='docker.io/prestashop/prestashop:9.1'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='prestashop-secrets'),
