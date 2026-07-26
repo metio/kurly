@@ -2334,7 +2334,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -3281,7 +3281,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -3422,7 +3422,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -3638,7 +3638,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -3890,7 +3890,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -6595,7 +6595,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -7614,7 +7614,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -8906,7 +8906,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "optional",
             "database": true
          },
          "stages": [
@@ -9460,7 +9460,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -9697,7 +9697,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -10407,7 +10407,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -11446,7 +11446,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": {
                "extensions": [
                   "vchord"
@@ -12928,7 +12928,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -14289,7 +14289,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true
+            "cache": "required"
          },
          "stages": [
             {
@@ -15029,7 +15029,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -15624,7 +15624,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -16709,7 +16709,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -17945,7 +17945,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -18827,7 +18827,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true
+            "cache": "optional"
          },
          "stages": [
             {
@@ -19560,7 +19560,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "optional",
             "database": true
          },
          "stages": [
@@ -19845,7 +19845,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -19929,7 +19929,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -20386,7 +20386,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -20580,7 +20580,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -20693,7 +20693,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -21338,7 +21338,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
@@ -23363,7 +23363,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true
+            "cache": "required"
          },
          "stages": [
             {
@@ -24099,7 +24099,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true
+            "cache": "optional"
          },
          "stages": [
             {
@@ -26015,7 +26015,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -26241,7 +26241,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "optional",
             "objectStorage": "required"
          },
          "stages": [
@@ -27260,7 +27260,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true,
             "objectStorage": "optional"
          },
@@ -28338,7 +28338,7 @@
             "tier": "rendered"
          },
          "requires": {
-            "cache": true,
+            "cache": "required",
             "database": true
          },
          "stages": [
