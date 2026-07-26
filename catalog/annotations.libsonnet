@@ -4031,7 +4031,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Docker Registry server. Images at /var/lib/registry. Usually reached in-cluster. Compose an exposure onto the HTTP port only if reached from outside (with TLS/auth in front).', [
           d.arg('name', d.T.string, default='registry'),
-          d.arg('image', d.T.string, default='docker.io/library/registry:2.8.3'),
+          d.arg('image', d.T.string, default='docker.io/library/registry:3.1.1'),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),

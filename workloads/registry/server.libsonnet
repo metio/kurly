@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='registry',
-  image='docker.io/library/registry:2.8.3',
+  image='docker.io/library/registry:3.1.1',
   storageSize='50Gi',
   storageClass=null,
   env={},
