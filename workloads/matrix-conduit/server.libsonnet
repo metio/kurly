@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='matrix-conduit',
-  image='docker.io/matrixconduit/matrix-conduit:v0.9.0',
+  image='docker.io/matrixconduit/matrix-conduit:v0.10.12',
   storageSize='10Gi',
   storageClass=null,
   serverName=null,

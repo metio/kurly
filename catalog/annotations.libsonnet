@@ -3528,7 +3528,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Conduit Matrix homeserver. serverName is permanent (baked into ids); allowRegistration toggles open sign-up. Data at /var/lib/matrix-conduit. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='matrix-conduit'),
-          d.arg('image', d.T.string, default='docker.io/matrixconduit/matrix-conduit:v0.9.0'),
+          d.arg('image', d.T.string, default='docker.io/matrixconduit/matrix-conduit:v0.10.12'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('serverName', d.T.string, example='matrix.example.com'),

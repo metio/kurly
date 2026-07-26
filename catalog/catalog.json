@@ -15486,7 +15486,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/matrixconduit/matrix-conduit:v0.9.0",
+                     "default": "docker.io/matrixconduit/matrix-conduit:v0.10.12",
                      "name": "image",
                      "required": false,
                      "type": "string"
