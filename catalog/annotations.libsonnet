@@ -5802,6 +5802,16 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ente/server.libsonnet' },
+        web: d.fn('The Ente web front end — one image bundling every web app (Photos on :3000, Albums :3002, Cast :3004, Share :3005, Embed :3006). Stateless; it talks to the museum from the browser, so apiOrigin/albumsOrigin are the PUBLIC URLs the browser reaches, not in-cluster Services. Expose :3000 for the main UI; route the extra ports for the public-album/cast/share apps.', [
+          d.arg('name', d.T.string, default='ente-web'),
+          d.arg('image', d.T.string, default='ghcr.io/ente/web:latest@sha256:d9fe114825b27bd51be61a091e61b0e64117edb5bfd8cfb419ea404d4170e614'),
+          d.arg('apiOrigin', d.T.string, default='https://ente-api.example.com'),
+          d.arg('albumsOrigin', d.T.string, default='https://albums.example.com'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ente/web.libsonnet' },
       },
     },
     immich: {

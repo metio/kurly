@@ -6,14 +6,16 @@ SPDX-License-Identifier: 0BSD
 # ente
 
 [Ente](https://ente.io) — a self-hosted, end-to-end-encrypted photo and video backup, a private
-alternative to Google Photos. The **museum** server is a single stateless `kurly.http` API on
-`:8080`: it keeps metadata in PostgreSQL and the encrypted blobs in S3-compatible object storage,
-so the workload itself needs **no PersistentVolume**. The Ente apps (mobile, desktop, web) point at
-this API.
+alternative to Google Photos. It runs as **two stages**: the **museum** server (a stateless
+`kurly.http` API on `:8080` keeping metadata in PostgreSQL and the encrypted blobs in S3-compatible
+object storage, so it needs **no PersistentVolume**) and the **web** front end (the browser UI,
+Photos on `:3000` plus the sibling album/cast/share apps). The mobile and desktop apps also point at
+the museum API directly.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local museum = import 'github.com/metio/kurly/workloads/ente/server.libsonnet';
+local web = import 'github.com/metio/kurly/workloads/ente/web.libsonnet';
 local cnpg = import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet';
 local seaweedfs = import 'github.com/metio/kurly/workloads/seaweedfs/server.libsonnet';
 
@@ -21,6 +23,9 @@ kurly.list([
   cnpg(name='ente-db', database='ente'),
   seaweedfs(name='ente-objects'),
   museum(),
+  // The web UI reaches the museum from the BROWSER, so apiOrigin is the museum's
+  // public URL, not the in-cluster Service.
+  web(apiOrigin='https://ente-api.example.com'),
   // The credentials file museum reads (DB DSN + S3 endpoint/bucket/keys + app
   // secrets), assembled by the operator from the database and object-store
   // above — kurly authors no Secret. Fill it from your secret store:
@@ -58,7 +63,7 @@ reach.
 ## Deploy with JaaS
 
 Make the kurly library and this workload importable as `JsonnetLibrary`s, render
-each stage with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
+each stages with a `JsonnetSnippet`, and roll them out with a `StageSet`. Both images
 are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 
 ```yaml
@@ -86,7 +91,7 @@ spec: { sourceRef: { kind: OCIRepository, name: kurly-ente } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: ente, namespace: ente }
+metadata: { name: ente-server, namespace: ente }
 spec:
   serviceAccountName: ente-renderer
   files:
@@ -98,9 +103,24 @@ spec:
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
     - { kind: JsonnetLibrary, name: kurly-ente, importPath: github.com/metio/kurly/workloads/ente }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: ente-web, namespace: ente }
+spec:
+  serviceAccountName: ente-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local web = import 'github.com/metio/kurly/workloads/ente/web.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(web())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-ente, importPath: github.com/metio/kurly/workloads/ente }
 ```
 
-A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
+A `StageSet` deploys the stages in order, pinning artifact revisions at the start of
 the run and gating each stage before the next.
 
 ```yaml
@@ -115,10 +135,18 @@ spec:
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: ente
+        name: ente-server
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: ente }
+          - { apiVersion: apps/v1, kind: Deployment, name: ente-server }
+    - name: web
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: ente-web
+      readyChecks:
+        checks:
+          - { apiVersion: apps/v1, kind: Deployment, name: ente-web }
 ```
 
 <!-- END generated: jaas-deploy -->

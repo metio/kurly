@@ -7924,6 +7924,70 @@
                "storage": {
                   "pvcs": 0
                }
+            },
+            {
+               "args": [
+                  {
+                     "default": "ente-web",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ghcr.io/ente/web:latest@sha256:d9fe114825b27bd51be61a091e61b0e64117edb5bfd8cfb419ea404d4170e614",
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "https://ente-api.example.com",
+                     "name": "apiOrigin",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "https://albums.example.com",
+                     "name": "albumsOrigin",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "help": "The Ente web front end — one image bundling every web app (Photos on :3000, Albums :3002, Cast :3004, Share :3005, Embed :3006). Stateless; it talks to the museum from the browser, so apiOrigin/albumsOrigin are the PUBLIC URLs the browser reaches, not in-cluster Services. Expose :3000 for the main UI; route the extra ports for the public-album/cast/share apps.",
+               "id": "web",
+               "importPath": "github.com/metio/kurly/workloads/ente/web.libsonnet",
+               "kind": "http",
+               "storage": {
+                  "pvcs": 0
+               }
             }
          ],
          "summary": "Ente — a self-hosted, end-to-end-encrypted photo and video backup (the Google Photos alternative). The museum server is a stateless API keeping metadata in PostgreSQL and encrypted blobs in S3-compatible object storage; the Ente clients (mobile, desktop, web) point at it. Compose it with a cnpg-cluster and an S3 store such as seaweedfs."
