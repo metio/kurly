@@ -18,7 +18,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='jellyseerr',
-  image='docker.io/fallenbagel/jellyseerr:2.7.0',
+  image='docker.io/fallenbagel/jellyseerr:2.7.3',
   storageSize='2Gi',
   storageClass=null,
   env={},

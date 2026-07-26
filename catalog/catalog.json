@@ -12280,7 +12280,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/fallenbagel/jellyseerr:2.7.0",
+                     "default": "docker.io/fallenbagel/jellyseerr:2.7.3",
                      "name": "image",
                      "required": false,
                      "type": "string"
