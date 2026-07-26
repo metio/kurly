@@ -45,3 +45,7 @@ function(
     ['--appendonly', 'yes', '--dir', '/data']
     + (if maxMemory == null then [] else ['--maxmemory', maxMemory, '--maxmemory-policy', 'allkeys-lru'])
   )
+  // A memory limit so an unbounded dataset (or a maxMemory raised past it) is
+  // OOM-capped rather than left to starve its node's neighbours. Set it above
+  // maxMemory when you set one; override the whole block with kurly.resources.
+  + kurly.resources(requests={ cpu: '50m', memory: '128Mi' }, limits={ memory: '512Mi' })

@@ -135,6 +135,11 @@ function(
   + kurly.headlessService(port=6379, publishNotReady=true)
   + kurly.rollingUpdate(maxSurge=1, maxUnavailable=0)
   + kurly.terminationGracePeriod(120)
+  // The main Valkey container's memory limit — above the 256mb maxMemory so the
+  // replication buffers of a hand-off do not push the pod past its cap and starve
+  // its node's neighbours. Raise it with the maxMemory (override via kurly.resources);
+  // the labeler sidecar caps itself.
+  + kurly.resources(requests={ cpu: '50m', memory: '128Mi' }, limits={ memory: '512Mi' })
   // No securityContext here: the init container inherits the workload's composed
   // posture, so kurly.runAs() and the security profiles reach it. Pinning a uid
   // here would leave it behind on a cluster where uids are assigned rather than

@@ -210,6 +210,87 @@ local itemsOf(value) =
     } + std.prune({ duration: duration, renewBefore: renewBefore }),
   },
 
+  // limitRange authors a LimitRange — the namespace-scoped default that stops a
+  // noisy neighbour before it starts. Every kurly workload already caps its own
+  // memory, but a hand-applied pod (or a Deployment from outside kurly) can still
+  // be BestEffort and eat a node; a LimitRange gives EVERY container in the
+  // namespace a default request and a default LIMIT (so nothing runs uncapped),
+  // and an optional per-container `max`. Drop it into a namespace once:
+  //
+  //   kurly.list([ kurly.limitRange(maxMemory='4Gi') ])
+  //
+  // `default*` are the limit/request a container inherits when it declares none;
+  // `max*` reject a container asking for more. CPU carries only a default request
+  // (no limit — a CPU limit throttles idle headroom, unlike memory). ephemeral-
+  // storage is opt-in: set it to bound the node-disk vector too.
+  limitRange(name='resource-defaults', defaultMemory='512Mi', requestMemory='128Mi', requestCpu='100m', maxMemory=null, defaultEphemeral=null, maxEphemeral=null):: {
+    apiVersion: 'v1',
+    kind: 'LimitRange',
+    metadata: { name: name, labels: { 'app.kubernetes.io/managed-by': 'kurly' } },
+    spec: {
+      limits: [std.prune({
+        type: 'Container',
+        default: std.prune({ memory: defaultMemory, 'ephemeral-storage': defaultEphemeral }),
+        defaultRequest: std.prune({ cpu: requestCpu, memory: requestMemory, 'ephemeral-storage': defaultEphemeral }),
+        max: (
+          if maxMemory == null && maxEphemeral == null then null
+          else std.prune({ memory: maxMemory, 'ephemeral-storage': maxEphemeral })
+        ),
+      })],
+    },
+  },
+
+  // resourceQuota authors a ResourceQuota — the namespace's total ceiling, so one
+  // tenant namespace cannot starve the cluster no matter how many pods it runs.
+  // It caps the SUM across the namespace (each field omitted when null): the
+  // aggregate requests and limits, the ephemeral-storage requested, and the pod
+  // count. A namespace with a requests quota needs every pod to declare requests —
+  // pair it with a limitRange so kurly's (and everyone's) pods always do.
+  //
+  //   kurly.list([
+  //     kurly.limitRange(),
+  //     kurly.resourceQuota(requestsCpu='8', requestsMemory='16Gi', limitsMemory='24Gi', pods=50),
+  //   ])
+  resourceQuota(name='namespace-quota', requestsCpu=null, requestsMemory=null, limitsCpu=null, limitsMemory=null, requestsStorage=null, ephemeralStorage=null, pods=null):: {
+    apiVersion: 'v1',
+    kind: 'ResourceQuota',
+    metadata: { name: name, labels: { 'app.kubernetes.io/managed-by': 'kurly' } },
+    spec: {
+      hard: std.prune({
+        'requests.cpu': requestsCpu,
+        'requests.memory': requestsMemory,
+        'limits.cpu': limitsCpu,
+        'limits.memory': limitsMemory,
+        'requests.storage': requestsStorage,
+        'requests.ephemeral-storage': ephemeralStorage,
+        pods: (if pods == null then null else std.toString(pods)),
+      }),
+    },
+  },
+
+  // priorityClass authors a PriorityClass — the cluster-scoped tier that decides
+  // who wins when a node runs short: under memory pressure the kubelet evicts the
+  // LOWEST-priority pods first, and a pending high-priority pod can preempt lower
+  // ones to schedule. It is the other half of noisy-neighbour control — limits cap
+  // each pod, priority decides who survives contention. Create the tiers once, then
+  // assign them per workload with kurly.priorityClassName:
+  //
+  //   kurly.list([ kurly.priorityClass('critical', 1000000),
+  //                kurly.priorityClass('bulk', 100, preemptionPolicy='Never') ])
+  //   // then, on a workload:  + kurly.priorityClassName('critical')
+  //
+  // `value` orders the tiers (higher wins). preemptionPolicy 'Never' lets a pod
+  // wait for room rather than evicting others (a batch tier that must not disturb
+  // serving pods). globalDefault applies the tier to every pod that names none —
+  // at most one PriorityClass cluster-wide may set it.
+  priorityClass(name, value, description=null, preemptionPolicy=null, globalDefault=false):: {
+    apiVersion: 'scheduling.k8s.io/v1',
+    kind: 'PriorityClass',
+    metadata: { name: name, labels: { 'app.kubernetes.io/managed-by': 'kurly' } },
+    value: value,
+    globalDefault: globalDefault,
+  } + std.prune({ description: description, preemptionPolicy: preemptionPolicy }),
+
   // A workload's stages are the ORDERED, GATED phases of installing ONE
   // application — apply a phase, wait for it to go healthy, then the next — not
   // environment tiers. Each stage is its OWN file under workloads/<name>/: a

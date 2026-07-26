@@ -1875,6 +1875,54 @@
       {
          "args": [
             {
+               "default": "resource-defaults",
+               "name": "name",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "512Mi",
+               "name": "defaultMemory",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "default": "128Mi",
+               "name": "requestMemory",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "default": "100m",
+               "name": "requestCpu",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "4Gi",
+               "name": "maxMemory",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "1Gi",
+               "name": "defaultEphemeral",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "10Gi",
+               "name": "maxEphemeral",
+               "required": false,
+               "type": "quantity"
+            }
+         ],
+         "help": "Authors a LimitRange — the namespace default that stops a noisy neighbour before it starts. Every kurly workload already caps its own memory, but a hand-applied or non-kurly pod can be BestEffort and eat a node; a LimitRange gives every container in the namespace a default request and a default LIMIT (so nothing runs uncapped) and an optional per-container max. CPU carries only a default request (no limit — a CPU limit throttles idle headroom, unlike memory). ephemeral-storage is opt-in, to bound the node-disk vector.",
+         "id": "limitRange"
+      },
+      {
+         "args": [
+            {
                "name": "parts",
                "required": true,
                "type": "any"
@@ -1899,6 +1947,95 @@
          ],
          "help": "Points every image in already-rendered manifests at another registry, for a cluster that pulls from a private one. Rewrites the rendered output, not config: an initContainer, a grafted-on sidecar and a custom resource's image are all unreachable from config, so a config-level knob would redirect the main container and leave the rest pulling from the internet. Only the registry (the first path segment) changes; repository, tag and digest are untouched.",
          "id": "mirror"
+      },
+      {
+         "args": [
+            {
+               "example": "critical",
+               "name": "name",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": 1000000,
+               "name": "value",
+               "required": true,
+               "type": "int"
+            },
+            {
+               "name": "description",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "example": "Never",
+               "name": "preemptionPolicy",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": false,
+               "name": "globalDefault",
+               "required": false,
+               "type": "bool"
+            }
+         ],
+         "help": "Authors a PriorityClass — the cluster-scoped tier that decides who wins under contention: the kubelet evicts the lowest-priority pods first under node pressure, and a pending high-priority pod can preempt lower ones. The other half of noisy-neighbour control (limits cap each pod; priority decides who survives). Create the tiers once, then assign per workload with kurly.priorityClassName. value orders them (higher wins); preemptionPolicy 'Never' waits for room rather than evicting others; globalDefault applies to pods naming none (at most one cluster-wide).",
+         "id": "priorityClass"
+      },
+      {
+         "args": [
+            {
+               "default": "namespace-quota",
+               "name": "name",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "example": "8",
+               "name": "requestsCpu",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "16Gi",
+               "name": "requestsMemory",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "16",
+               "name": "limitsCpu",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "24Gi",
+               "name": "limitsMemory",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "200Gi",
+               "name": "requestsStorage",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": "40Gi",
+               "name": "ephemeralStorage",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "example": 50,
+               "name": "pods",
+               "required": false,
+               "type": "int"
+            }
+         ],
+         "help": "Authors a ResourceQuota — the namespace total ceiling, so one tenant namespace cannot starve the cluster. Caps the SUM across the namespace (each field omitted when null): the aggregate requests and limits, the storage requested, and the pod count. A requests quota needs every pod to declare requests, so pair it with a limitRange.",
+         "id": "resourceQuota"
       }
    ],
    "kinds": [

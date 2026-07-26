@@ -13,12 +13,12 @@ package main
 import rego.v1
 
 # The pod-bearing kinds and where their containers live.
-containers(obj) := obj.spec.template.spec.containers if obj.kind in {"Deployment", "DaemonSet"}
+containers(obj) := obj.spec.template.spec.containers if obj.kind in {"Deployment", "DaemonSet", "StatefulSet", "Job"}
 
 containers(obj) := obj.spec.jobTemplate.spec.template.spec.containers if obj.kind == "CronJob"
 
 # The kinds kurly stamps with its managed-by label.
-managed := {"Deployment", "Service", "CronJob", "DaemonSet", "Ingress", "PersistentVolumeClaim", "ConfigMap", "HTTPRoute", "Gateway", "ListenerSet", "NetworkPolicy", "GlobalNetworkPolicy", "CiliumNetworkPolicy", "CiliumClusterwideNetworkPolicy"}
+managed := {"Deployment", "Service", "CronJob", "DaemonSet", "Ingress", "PersistentVolumeClaim", "ConfigMap", "HTTPRoute", "Gateway", "ListenerSet", "NetworkPolicy", "GlobalNetworkPolicy", "CiliumNetworkPolicy", "CiliumClusterwideNetworkPolicy", "LimitRange", "ResourceQuota", "PriorityClass"}
 
 # Every kurly-owned object carries the managed-by label, so an operator can tell
 # what kurly produced from what they hand-wrote.
@@ -41,6 +41,19 @@ deny contains msg if {
 	not contains(container.image, ":")
 	not contains(container.image, "@")
 	msg := sprintf("container %q image %q is untagged — pin a specific tag or digest", [container.name, container.image])
+}
+
+# Every long-running container carries a memory limit, so a workload that leaks
+# or bursts is OOM-capped to its own pod rather than starving its node and getting
+# the neighbours evicted. Only memory is required: CPU is deliberately
+# request-only (a CPU limit throttles idle headroom; the request already splits
+# CPU fairly under contention). Guaranteed by base.core's default resources, so
+# this holds for every workload unless a feature strips the limit — which is the
+# regression this catches.
+deny contains msg if {
+	some container in containers(input)
+	object.get(container, ["resources", "limits", "memory"], "") == ""
+	msg := sprintf("container %q has no memory limit — cap a noisy neighbour to its own pod", [container.name])
 }
 
 # Selector stability: a Deployment/DaemonSet matchLabels carries only the stable

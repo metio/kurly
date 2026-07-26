@@ -753,6 +753,40 @@ local podOf(app) = app.deployment.spec.template.spec;
     kurly.mirror('r.internal', { kind: 'ConfigMap', data: { image: 'docker.io/team/ref:1.0' } }),
     { kind: 'ConfigMap', data: { image: 'docker.io/team/ref:1.0' } }
   ),
+
+  // --- noisy-neighbour resource controls --------------------------------------
+  // Every workload caps its own memory by default (base.core sets a memory limit),
+  // so a leak is OOM-capped to its own pod instead of starving the node.
+  default_memory_limit: std.assertEqual(
+    containerOf(kurly.http('web', 'ghcr.io/example/web:1.0.0')).resources.limits.memory,
+    '512Mi'
+  ),
+  // limitRange gives a namespace's containers a default request AND limit (so a
+  // BestEffort pod cannot run uncapped), with an optional per-container max and
+  // no CPU limit.
+  limit_range_defaults_and_max: std.assertEqual(
+    kurly.limitRange(maxMemory='4Gi', defaultEphemeral='1Gi').spec.limits[0],
+    {
+      type: 'Container',
+      default: { memory: '512Mi', 'ephemeral-storage': '1Gi' },
+      defaultRequest: { cpu: '100m', memory: '128Mi', 'ephemeral-storage': '1Gi' },
+      max: { memory: '4Gi' },
+    }
+  ),
+  // resourceQuota caps the namespace totals, dropping every unset field.
+  resource_quota_prunes_unset: std.assertEqual(
+    kurly.resourceQuota(requestsMemory='16Gi', limitsMemory='24Gi', pods=50).spec.hard,
+    { 'requests.memory': '16Gi', 'limits.memory': '24Gi', pods: '50' }
+  ),
+  // priorityClass authors a cluster-scoped tier; preemptionPolicy is pruned unless set.
+  priority_class_shape: std.assertEqual(
+    [
+      kurly.priorityClass('bulk', 100, preemptionPolicy='Never').value,
+      kurly.priorityClass('bulk', 100, preemptionPolicy='Never').preemptionPolicy,
+      std.objectHas(kurly.priorityClass('critical', 1000000), 'preemptionPolicy'),
+    ],
+    [100, 'Never', false]
+  ),
   // A CNPG Cluster carries its own pull secrets: the operator pulls PostgreSQL,
   // so there is no pod for kurly.imagePullSecrets() to attach to.
   cnpg_cluster_takes_pull_secrets: std.assertEqual(

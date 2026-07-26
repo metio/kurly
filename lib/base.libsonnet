@@ -207,7 +207,14 @@ local exclusionConflicts(exclusive) = [
       version: null,
       labels: {},
       annotations: {},
-      resources: { requests: { cpu: '100m', memory: '128Mi' } },
+      // A default memory LIMIT (not just a request) so a workload that leaks or
+      // bursts is OOM-capped to its own pod rather than pushing its node into
+      // memory pressure and getting its neighbours evicted — a workload firewalls
+      // its blast radius by default. CPU carries no limit on purpose: a CPU limit
+      // throttles even idle headroom, while the request already splits CPU fairly
+      // under contention. A workload with a heavier footprint raises the limit
+      // through kurly.resources (which merges, keeping these requests).
+      resources: { requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } },
       // The Service in front of the workload. Its port is the contract with
       // clients; its type and annotations are the cluster's business — a cloud
       // load balancer is configured through Service ANNOTATIONS and nothing
