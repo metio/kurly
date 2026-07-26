@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='ollama',
-  image='docker.io/ollama/ollama:0.5.4',
+  image='docker.io/ollama/ollama:0.32.2',
   storageSize='50Gi',
   storageClass=null,
   env={},

@@ -3759,7 +3759,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Ollama server. Models at /models. Usually reached in-cluster (e.g. from open-webui). Compose an exposure onto the HTTP port only if reached from outside.', [
           d.arg('name', d.T.string, default='ollama'),
-          d.arg('image', d.T.string, default='docker.io/ollama/ollama:0.5.4'),
+          d.arg('image', d.T.string, default='docker.io/ollama/ollama:0.32.2'),
           d.arg('storageSize', d.T.quantity, default='50Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),

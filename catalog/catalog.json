@@ -19130,7 +19130,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/ollama/ollama:0.5.4",
+                     "default": "docker.io/ollama/ollama:0.32.2",
                      "name": "image",
                      "required": false,
                      "type": "string"
