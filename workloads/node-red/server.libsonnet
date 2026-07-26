@@ -17,7 +17,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='node-red',
-  image='docker.io/nodered/node-red:4.0.9',
+  image='docker.io/nodered/node-red:4.1.11',
   storageSize='5Gi',
   storageClass=null,
   env={},

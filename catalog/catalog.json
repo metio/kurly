@@ -18639,7 +18639,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/nodered/node-red:4.0.9",
+                     "default": "docker.io/nodered/node-red:4.1.11",
                      "name": "image",
                      "required": false,
                      "type": "string"
