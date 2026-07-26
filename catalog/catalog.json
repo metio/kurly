@@ -10294,7 +10294,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/superseriousbusiness/gotosocial:0.20.1",
+                     "default": "docker.io/superseriousbusiness/gotosocial:0.22.1",
                      "name": "image",
                      "required": false,
                      "type": "string"

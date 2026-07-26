@@ -2665,7 +2665,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The GoToSocial server. host is the permanent instance domain. Data at /gotosocial/storage. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='gotosocial'),
-          d.arg('image', d.T.string, default='docker.io/superseriousbusiness/gotosocial:0.20.1'),
+          d.arg('image', d.T.string, default='docker.io/superseriousbusiness/gotosocial:0.22.1'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('host', d.T.string, example='social.example.com'),
