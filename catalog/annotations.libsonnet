@@ -4014,7 +4014,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The ONLYOFFICE Document Server. secretName holds JWT_SECRET (envFrom). Data at /var/www/onlyoffice/Data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='onlyoffice'),
-          d.arg('image', d.T.string, default='docker.io/onlyoffice/documentserver:8.2.1'),
+          d.arg('image', d.T.string, default='docker.io/onlyoffice/documentserver:8.3.3'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='onlyoffice-secrets'),

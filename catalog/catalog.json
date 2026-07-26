@@ -19296,7 +19296,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/onlyoffice/documentserver:8.2.1",
+                     "default": "docker.io/onlyoffice/documentserver:8.3.3",
                      "name": "image",
                      "required": false,
                      "type": "string"

@@ -22,7 +22,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='onlyoffice',
-  image='docker.io/onlyoffice/documentserver:8.2.1',
+  image='docker.io/onlyoffice/documentserver:8.3.3',
   storageSize='10Gi',
   storageClass=null,
   secretName='onlyoffice-secrets',
