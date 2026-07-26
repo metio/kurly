@@ -18,7 +18,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='pocketbase',
-  image='ghcr.io/muchobien/pocketbase:latest@sha256:cd66d436afed100204a62b03810eb75c5b70edbaf377b68230f1f799bafc4952',
+  image='ghcr.io/muchobien/pocketbase:latest@sha256:c0667fe6c5197ff226ff642120ab1ad870c3f2f27300940a61e5a7fa082b6816',
   storageSize='5Gi',
   storageClass=null,
   env={},
