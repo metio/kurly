@@ -7261,7 +7261,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/drupal:11.0",
+                     "default": "docker.io/library/drupal:11.4",
                      "name": "image",
                      "required": false,
                      "type": "string"

@@ -19,7 +19,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='drupal',
-  image='docker.io/library/drupal:11.0',
+  image='docker.io/library/drupal:11.4',
   storageSize='10Gi',
   storageClass=null,
   secretName='drupal-secrets',
