@@ -3194,7 +3194,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The VictoriaMetrics server. retentionPeriod is in months. Data at /victoria-metrics-data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='victoriametrics'),
-          d.arg('image', d.T.string, default='docker.io/victoriametrics/victoria-metrics:v1.109.0'),
+          d.arg('image', d.T.string, default='docker.io/victoriametrics/victoria-metrics:v1.148.0'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('retentionPeriod', d.T.string, default='1'),

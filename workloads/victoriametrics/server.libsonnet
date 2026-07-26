@@ -17,7 +17,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='victoriametrics',
-  image='docker.io/victoriametrics/victoria-metrics:v1.109.0',
+  image='docker.io/victoriametrics/victoria-metrics:v1.148.0',
   storageSize='20Gi',
   storageClass=null,
   retentionPeriod='1',
