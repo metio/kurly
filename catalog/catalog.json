@@ -21325,7 +21325,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/phpmyadmin:5.2.2",
+                     "default": "docker.io/library/phpmyadmin:5.2.3",
                      "name": "image",
                      "required": false,
                      "type": "string"

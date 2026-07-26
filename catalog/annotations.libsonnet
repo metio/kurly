@@ -2991,7 +2991,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The phpMyAdmin server. dbHost sets PMA_HOST (the MySQL/MariaDB host). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='phpmyadmin'),
-          d.arg('image', d.T.string, default='docker.io/library/phpmyadmin:5.2.2'),
+          d.arg('image', d.T.string, default='docker.io/library/phpmyadmin:5.2.3'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('dbHost', d.T.string, example='mysql'),
           d.arg('env', d.T.object, default={}),

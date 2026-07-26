@@ -18,7 +18,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='phpmyadmin',
-  image='docker.io/library/phpmyadmin:5.2.2',
+  image='docker.io/library/phpmyadmin:5.2.3',
   replicas=2,
   dbHost=null,
   env={},
