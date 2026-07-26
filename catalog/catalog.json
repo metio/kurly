@@ -11773,7 +11773,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/influxdb:2.7.11",
+                     "default": "docker.io/library/influxdb:2.9.1",
                      "name": "image",
                      "required": false,
                      "type": "string"

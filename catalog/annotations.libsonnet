@@ -3396,7 +3396,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The InfluxDB server. secretName holds the DOCKER_INFLUXDB_INIT_* setup values (envFrom). Data at /var/lib/influxdb2. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='influxdb'),
-          d.arg('image', d.T.string, default='docker.io/library/influxdb:2.7.11'),
+          d.arg('image', d.T.string, default='docker.io/library/influxdb:2.9.1'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='influxdb-secrets'),

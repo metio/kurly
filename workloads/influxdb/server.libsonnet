@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='influxdb',
-  image='docker.io/library/influxdb:2.7.11',
+  image='docker.io/library/influxdb:2.9.1',
   storageSize='20Gi',
   storageClass=null,
   secretName='influxdb-secrets',
