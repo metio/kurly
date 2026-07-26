@@ -18,7 +18,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='jenkins',
-  image='docker.io/jenkins/jenkins:2.479.2-lts',
+  image='docker.io/jenkins/jenkins:2.568.1-lts',
   storageSize='20Gi',
   storageClass=null,
   env={},

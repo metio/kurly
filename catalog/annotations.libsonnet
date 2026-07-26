@@ -748,7 +748,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Jenkins controller. JENKINS_HOME at /var/jenkins_home on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='jenkins'),
-          d.arg('image', d.T.string, default='docker.io/jenkins/jenkins:2.479.2-lts'),
+          d.arg('image', d.T.string, default='docker.io/jenkins/jenkins:2.568.1-lts'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),

@@ -12353,7 +12353,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/jenkins/jenkins:2.479.2-lts",
+                     "default": "docker.io/jenkins/jenkins:2.568.1-lts",
                      "name": "image",
                      "required": false,
                      "type": "string"
