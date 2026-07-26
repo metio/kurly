@@ -3877,7 +3877,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The YOURLS server. site sets YOURLS_SITE (the public URL); secretName holds YOURLS_DB_* and the admin credentials (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='yourls'),
-          d.arg('image', d.T.string, default='docker.io/library/yourls:1.10.1'),
+          d.arg('image', d.T.string, default='docker.io/library/yourls:1.10.4'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('site', d.T.string, example='https://s.example.com'),
           d.arg('secretName', d.T.string, default='yourls-secrets'),

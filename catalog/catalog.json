@@ -28950,7 +28950,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/yourls:1.10.1",
+                     "default": "docker.io/library/yourls:1.10.4",
                      "name": "image",
                      "required": false,
                      "type": "string"

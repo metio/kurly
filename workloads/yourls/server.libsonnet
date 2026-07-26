@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='yourls',
-  image='docker.io/library/yourls:1.10.1',
+  image='docker.io/library/yourls:1.10.4',
   replicas=2,
   site=null,
   secretName='yourls-secrets',
