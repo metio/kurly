@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='mariadb',
-  image='docker.io/library/mariadb:11.4.4',
+  image='docker.io/library/mariadb:11.8.8',
   storageSize='10Gi',
   storageClass=null,
   secretName='mariadb-secrets',

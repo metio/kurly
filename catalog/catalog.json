@@ -15096,7 +15096,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/mariadb:11.4.4",
+                     "default": "docker.io/library/mariadb:11.8.8",
                      "name": "image",
                      "required": false,
                      "type": "string"
