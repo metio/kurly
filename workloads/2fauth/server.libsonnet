@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='2fauth',
-  image='docker.io/2fauth/2fauth:5.6.0',
+  image='docker.io/2fauth/2fauth:8.0.1',
   storageSize='1Gi',
   storageClass=null,
   appUrl=null,

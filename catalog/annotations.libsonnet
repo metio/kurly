@@ -3378,7 +3378,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The 2FAuth server. appUrl is the public URL; secretName holds APP_KEY (envFrom). Data at /2fauth. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='2fauth'),
-          d.arg('image', d.T.string, default='docker.io/2fauth/2fauth:5.6.0'),
+          d.arg('image', d.T.string, default='docker.io/2fauth/2fauth:8.0.1'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('appUrl', d.T.string, example='https://2fa.example.com'),
