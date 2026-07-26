@@ -411,12 +411,10 @@ local workloadEntries =
       summary: ann.workloads[workload].summary,
       maturity: maturity.of(workload),
       // The external infrastructure the workload depends on, hand-annotated —
-      // a database, a cache/Redis, and S3-compatible object storage, each
-      // required or optional (optional = the workload runs without it, on a
-      // fallback: embedded SQLite, cookie sessions, a local PVC), plus any
-      // PostgreSQL extensions the database needs (databaseExtensions, like
-      // vchord). Absent when the workload carries none. Backfilled per workload;
-      // the derived per-stage `storage.pvcs` below is automatic.
+      // a database (with any PostgreSQL extensions it needs, like vchord), a
+      // cache/Redis, and whether it needs S3-compatible object storage
+      // (required/optional). Absent when the workload carries none. Backfilled
+      // per workload; the derived per-stage `storage.pvcs` below is automatic.
       requires: std.get(ann.workloads[workload], 'requires', {}),
       stages: [
         { id: stage }

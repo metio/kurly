@@ -35,6 +35,11 @@ fail() {
 }
 
 kurly::vendor
+
+# First prove the server starts at the minimum resources the catalog advertises,
+# in its own throwaway namespace, before the functional S3 test at defaults.
+kurly::verify_min_resources workloads/seaweedfs/server.libsonnet
+
 kurly::namespace "$ns"
 
 echo "== apply the seaweedfs server =="

@@ -164,6 +164,11 @@ kubectl --namespace="$gw_ns" wait --for=condition=Programmed gateway/shared-gw -
   || fail "the shared Gateway never became Programmed"
 
 kurly::vendor
+
+# Prove the responder starts at the minimum resources the catalog advertises,
+# before the functional gateway routing test below.
+kurly::verify_min_resources workloads/status-responder/responder.libsonnet
+
 kurly::namespace "$shared_ns"
 kurly::namespace "$app_ns"
 

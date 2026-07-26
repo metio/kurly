@@ -32,6 +32,41 @@ kurly::namespace() {
   kubectl create namespace "$1" --dry-run=client --output=yaml | kubectl apply --filename=-
 }
 
+# CI-verifies a stage's declared minimum resources: renders it with the catalog's
+# `minimumResources` as its requests AND (for memory + ephemeral-storage, the two
+# that fail a pod rather than merely throttle it) its LIMITS, applies it to a
+# throwaway namespace, and waits for its controller to roll out. If the declared
+# minimum is too low the pod OOMs or is evicted and never becomes Ready, so this
+# fails — turning the catalog number into a verified-sufficient floor rather than a
+# guess. Called from a workload's OWN e2e scenario (gated on that workload's
+# paths), so the check runs only when the workload it verifies changes.
+#
+#   kurly::verify_min_resources workloads/seaweedfs/server.libsonnet
+kurly::verify_min_resources() {
+  local stage="$1" extra="${2:-}"
+  local mr cpu mem eph
+  mr="$(jq -c --arg ip "github.com/metio/kurly/${stage}" \
+    '.workloads[].stages[] | select(.importPath==$ip) | .minimumResources // empty' catalog/catalog.json)"
+  [ -n "$mr" ] || { echo "::error::${stage} declares no minimumResources in the catalog"; return 1; }
+  cpu="$(jq -r '.cpu' <<<"$mr")"; mem="$(jq -r '.memory' <<<"$mr")"; eph="$(jq -r '.ephemeralStorage' <<<"$mr")"
+  local ns=min-resources
+  kurly::namespace "$ns" >/dev/null
+  echo "== verify ${stage} starts at its declared minimum (cpu=${cpu}, memory=${mem}, ephemeral-storage=${eph}) =="
+  # requests carry the cpu floor; memory + ephemeral-storage are also limits, so an
+  # insufficient number OOMs / evicts the pod instead of silently over-scheduling.
+  # kind-in-CI cannot nest user namespaces, so hostUsers is relaxed (as elsewhere).
+  local render="+ k.resources(requests={cpu: '${cpu}', memory: '${mem}', 'ephemeral-storage': '${eph}'}, limits={memory: '${mem}', 'ephemeral-storage': '${eph}'}) + k.hostUsers() ${extra}"
+  kurly::render "$stage" "$render" | kubectl apply --namespace="$ns" --filename=-
+  local ctrl
+  for ctrl in $(kubectl --namespace="$ns" get deployment,statefulset --output=name); do
+    kubectl --namespace="$ns" rollout status "$ctrl" --timeout=300s \
+      || { echo "::error::${stage} did not become Ready at its declared minimum resources"; kurly::diagnose "$ns"; return 1; }
+  done
+  # Free the namespace so a second stage in the same scenario starts clean.
+  kubectl delete namespace "$ns" --wait=false >/dev/null 2>&1 || true
+  echo "ok: ${stage} starts at its declared minimum resources"
+}
+
 # Dumps everything useful about a namespace on failure, grouped in the log.
 kurly::diagnose() {
   local ns="$1"
