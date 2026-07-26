@@ -763,7 +763,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Portainer server. Database at /data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='portainer'),
-          d.arg('image', d.T.string, default='docker.io/portainer/portainer-ce:2.21.4'),
+          d.arg('image', d.T.string, default='docker.io/portainer/portainer-ce:2.43.0'),
           d.arg('serviceAccountName', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),

@@ -25,7 +25,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='portainer',
-  image='docker.io/portainer/portainer-ce:2.21.4',
+  image='docker.io/portainer/portainer-ce:2.43.0',
   serviceAccountName=null,
   storageSize='1Gi',
   storageClass=null,
