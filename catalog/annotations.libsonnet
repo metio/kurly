@@ -4250,7 +4250,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         backend: d.fn('The Penpot backend (API + data) on :6060. publicUri sets PENPOT_PUBLIC_URI; secretName holds the PostgreSQL/Redis connection and PENPOT_SECRET_KEY (envFrom). Assets at /opt/data (put on S3 to scale out).', [
           d.arg('name', d.T.string, default='penpot-backend'),
-          d.arg('image', d.T.string, default='docker.io/penpotapp/backend:2.3.2'),
+          d.arg('image', d.T.string, default='docker.io/penpotapp/backend:2.17.0'),
           d.arg('storageSize', d.T.quantity, default='20Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('publicUri', d.T.string, example='https://design.example.com'),

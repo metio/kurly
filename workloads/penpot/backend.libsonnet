@@ -23,7 +23,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='penpot-backend',
-  image='docker.io/penpotapp/backend:2.3.2',
+  image='docker.io/penpotapp/backend:2.17.0',
   storageSize='20Gi',
   storageClass=null,
   publicUri=null,
