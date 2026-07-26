@@ -62,6 +62,9 @@ gen_workflow() {
     # to self-skip, which is what fans ~300 jobs out and blows the CI budget.
     printf 'on:\n  pull_request:\n    branches: [main]\n    paths:\n      - '\''workloads/%s/**'\''\n  workflow_dispatch:\n' "$id"
     printf 'permissions:\n  contents: read\n'
+    # A new push to the same ref cancels this workload'\''s superseded in-flight run,
+    # so a rapid series of commits never stacks up kind clusters.
+    printf 'concurrency:\n  group: e2e-%s-${{ github.ref }}\n  cancel-in-progress: true\n' "$id"
     printf 'jobs:\n  e2e:\n'
     printf '    uses: ./.github/workflows/e2e.yml\n'
     printf '    with:\n'
