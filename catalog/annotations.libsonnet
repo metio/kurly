@@ -3597,7 +3597,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The A MariaDB server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='mariadb'),
-          d.arg('image', d.T.string, default='docker.io/library/mariadb:11.4.4'),
+          d.arg('image', d.T.string, default='docker.io/library/mariadb:12.3.2'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='mariadb-secrets'),
