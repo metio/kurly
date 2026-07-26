@@ -777,7 +777,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Documenso server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='documenso'),
-          d.arg('image', d.T.string, default='docker.io/documenso/documenso:latest@sha256:cd38a43c050fd14435653c0f66faf8dad538de8ebb7a072c72fb0ab6371d770f'),
+          d.arg('image', d.T.string, default='docker.io/documenso/documenso:latest@sha256:945bd2c04306bd5d78def0c4ceafdffb6b0a106cd6a2543db5acda9a6424b2d9'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('webappUrl', d.T.string),
           d.arg('secretName', d.T.string, default='documenso-secrets'),
