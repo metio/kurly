@@ -840,7 +840,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The PocketBase server. Data at /pb_data on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pocketbase'),
-          d.arg('image', d.T.string, default='ghcr.io/muchobien/pocketbase:latest@sha256:cd66d436afed100204a62b03810eb75c5b70edbaf377b68230f1f799bafc4952'),
+          d.arg('image', d.T.string, default='ghcr.io/muchobien/pocketbase:latest@sha256:c0667fe6c5197ff226ff642120ab1ad870c3f2f27300940a61e5a7fa082b6816'),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
