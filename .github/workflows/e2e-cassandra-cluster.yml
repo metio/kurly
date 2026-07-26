@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Per-workload e2e for cassandra-cluster (operator schema check). Self-gated on this
+# workload plus the shared library and e2e machinery.
+name: E2E cassandra-cluster
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  e2e:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      workload: cassandra-cluster
+      # yamllint disable-line rule:line-length
+      paths: '^(workloads/cassandra-cluster/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-cassandra-cluster)\.sh|\.github/workflows/e2e(-cassandra-cluster)?\.yml)'
+      scenario: hack/smoke/scenario-cassandra-cluster.sh
+      max_versions: '1'
