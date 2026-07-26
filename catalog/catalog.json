@@ -19709,7 +19709,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/openproject/openproject:15",
+                     "default": "docker.io/openproject/openproject:17",
                      "name": "image",
                      "required": false,
                      "type": "string"

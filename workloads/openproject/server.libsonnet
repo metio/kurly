@@ -22,7 +22,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='openproject',
-  image='docker.io/openproject/openproject:15',
+  image='docker.io/openproject/openproject:17',
   storageSize='20Gi',
   storageClass=null,
   hostName=null,
