@@ -21,7 +21,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='redis',
-  image='docker.io/library/redis:7.4.1',
+  image='docker.io/library/redis:8.8.0',
   storageSize='10Gi',
   storageClass=null,
   secretName='redis-secrets',
