@@ -3791,7 +3791,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Technitium DNS server. secretName holds DNS_SERVER_ADMIN_PASSWORD (envFrom). Config at /etc/dns; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='technitium'),
-          d.arg('image', d.T.string, default='docker.io/technitium/dns-server:13.2.0'),
+          d.arg('image', d.T.string, default='docker.io/technitium/dns-server:15.4.0'),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='technitium-secrets'),

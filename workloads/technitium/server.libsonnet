@@ -25,7 +25,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='technitium',
-  image='docker.io/technitium/dns-server:13.2.0',
+  image='docker.io/technitium/dns-server:15.4.0',
   storageSize='2Gi',
   storageClass=null,
   secretName='technitium-secrets',
