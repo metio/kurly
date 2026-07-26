@@ -16,7 +16,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='gotenberg',
-  image='docker.io/gotenberg/gotenberg:8.15.3',
+  image='docker.io/gotenberg/gotenberg:8.34.0',
   replicas=2,
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },

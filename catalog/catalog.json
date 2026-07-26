@@ -10151,7 +10151,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/gotenberg/gotenberg:8.15.3",
+                     "default": "docker.io/gotenberg/gotenberg:8.34.0",
                      "name": "image",
                      "required": false,
                      "type": "string"
