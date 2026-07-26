@@ -4306,7 +4306,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         backend: d.fn('The Lemmy backend (API + federation) on :8536. configSecret is an existing Secret holding config.hjson, mounted at /config. Reached in-cluster by the ui.', [
           d.arg('name', d.T.string, default='lemmy'),
-          d.arg('image', d.T.string, default='docker.io/dessalines/lemmy:0.19.7'),
+          d.arg('image', d.T.string, default='docker.io/dessalines/lemmy:0.19.20'),
           d.arg('replicas', d.T.int, default=1),
           d.arg('configSecret', d.T.string, default='lemmy-config'),
           d.arg('env', d.T.object, default={}),
