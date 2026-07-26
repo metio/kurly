@@ -12,20 +12,33 @@
   "git-submodules": {
     "enabled": true
   },
+  "packageRules": [
+    {
+      "description": "Placeholder images in illustrative code (ghcr.io/example/*, ghcr.io/acme/*) carry no real tags — never look them up.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/example/**", "ghcr.io/acme/**"],
+      "enabled": false
+    },
+    {
+      "description": "tik and the kurly library ship calendar-versioned tags (YYYY.M.D), which the default docker versioning cannot order.",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["ghcr.io/metio/tik", "ghcr.io/metio/kurly"],
+      "versioning": "loose"
+    }
+  ],
   "customManagers": [
     {
-      "description": "The tik workload's default image, pinned in the stage, its catalog annotation, and the generated catalog.json. Matching all three keeps them in lockstep so the check-catalog gate stays green on the bump PR.",
+      "description": "Every workload's default image, pinned in its stage, its catalog annotation, and the generated catalog.json (and any README that names it) — matched together so the three stay in lockstep and the check-catalog gate stays green on the bump PR. A single generic manager covers every fully-qualified image rather than one manager per image; the placeholder registries are disabled in packageRules above.",
       "customType": "regex",
       "datasourceTemplate": "docker",
-      "depNameTemplate": "ghcr.io/metio/tik",
-      "versioningTemplate": "loose",
       "managerFilePatterns": [
         "/^workloads/.+\\.libsonnet$/",
+        "/^workloads/.+\\.md$/",
         "/^catalog/annotations\\.libsonnet$/",
         "/^catalog/catalog\\.json$/"
       ],
       "matchStrings": [
-        "ghcr\\.io/metio/tik:(?<currentValue>[0-9][0-9A-Za-z._-]+)"
+        "(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9._-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
       ]
     },
     {
@@ -62,108 +75,6 @@
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\s+[A-Z0-9_]+_VERSION=\"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "description": "The Valkey image the valkey workload runs, pinned in its stages, catalog, and README so a bump is a visible Renovate PR that triggers the valkey e2e (not a silently floating tag).",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/valkey/valkey",
-      "managerFilePatterns": [
-        "/^workloads/valkey/.+\\.libsonnet$/",
-        "/^workloads/valkey/README\\.md$/",
-        "/^catalog/annotations\\.libsonnet$/",
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "docker\\.io/valkey/valkey:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
-      ]
-    },
-    {
-      "description": "The kubectl sidecar image the valkey cache uses for its primary-following labeler.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/alpine/k8s",
-      "managerFilePatterns": [
-        "/^workloads/valkey/cache\\.libsonnet$/"
-      ],
-      "matchStrings": [
-        "docker\\.io/alpine/k8s:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
-      ]
-    },
-    {
-      "description": "The OpenTelemetry Collector (contrib) image the otel-collector agent runs, pinned in its stage, catalog, and README so a bump is a visible Renovate PR.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/otel/opentelemetry-collector-contrib",
-      "managerFilePatterns": [
-        "/^workloads/otel-collector/.+\\.libsonnet$/",
-        "/^workloads/otel-collector/README\\.md$/",
-        "/^catalog/annotations\\.libsonnet$/",
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "docker\\.io/otel/opentelemetry-collector-contrib:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
-      ]
-    },
-    {
-      "description": "The SeaweedFS image the seaweedfs server runs, pinned in its stage, catalog, and README so a bump is a visible Renovate PR.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/chrislusf/seaweedfs",
-      "managerFilePatterns": [
-        "/^workloads/seaweedfs/.+\\.libsonnet$/",
-        "/^workloads/seaweedfs/README\\.md$/",
-        "/^catalog/annotations\\.libsonnet$/",
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "docker\\.io/chrislusf/seaweedfs:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
-      ]
-    },
-    {
-      "description": "The Prometheus image the prometheus workload's CR runs, pinned in its stage, catalog, and README so a bump is a visible Renovate PR.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/prom/prometheus",
-      "managerFilePatterns": [
-        "/^workloads/prometheus/.+\\.libsonnet$/",
-        "/^workloads/prometheus/README\\.md$/",
-        "/^catalog/annotations\\.libsonnet$/",
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "docker\\.io/prom/prometheus:(?<currentValue>v[0-9][0-9A-Za-z.-]+)"
-      ]
-    },
-    {
-      "description": "The Grafana image the grafana workload's CR runs, pinned in its stage, catalog, and README so a bump is a visible Renovate PR.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/grafana/grafana",
-      "managerFilePatterns": [
-        "/^workloads/grafana/.+\\.libsonnet$/",
-        "/^workloads/grafana/README\\.md$/",
-        "/^catalog/annotations\\.libsonnet$/",
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "docker\\.io/grafana/grafana:(?<currentValue>[0-9][0-9A-Za-z.-]+)"
-      ]
-    },
-    {
-      "description": "The Alertmanager image the alertmanager workload's CR runs, pinned in its stage, catalog, and README so a bump is a visible Renovate PR.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/prom/alertmanager",
-      "managerFilePatterns": [
-        "/^workloads/alertmanager/.+\\.libsonnet$/",
-        "/^workloads/alertmanager/README\\.md$/",
-        "/^catalog/annotations\\.libsonnet$/",
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "docker\\.io/prom/alertmanager:(?<currentValue>v[0-9][0-9A-Za-z.-]+)"
       ]
     }
   ]
