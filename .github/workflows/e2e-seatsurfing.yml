@@ -9,6 +9,8 @@ name: E2E seatsurfing
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/seatsurfing/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: seatsurfing
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/seatsurfing/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-seatsurfing)\.sh|\.github/workflows/e2e(-seatsurfing)?\.yml)'
+      paths: '^workloads/seatsurfing/'
       scenario: hack/smoke/scenario-seatsurfing.sh
       max_versions: '1'

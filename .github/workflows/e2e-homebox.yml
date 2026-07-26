@@ -9,6 +9,8 @@ name: E2E homebox
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/homebox/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: homebox
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/homebox/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-homebox)\.sh|\.github/workflows/e2e(-homebox)?\.yml)'
+      paths: '^workloads/homebox/'
       scenario: hack/smoke/scenario-homebox.sh
       max_versions: '1'

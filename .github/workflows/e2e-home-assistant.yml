@@ -9,6 +9,8 @@ name: E2E home-assistant
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/home-assistant/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: home-assistant
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/home-assistant/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-home-assistant)\.sh|\.github/workflows/e2e(-home-assistant)?\.yml)'
+      paths: '^workloads/home-assistant/'
       scenario: hack/smoke/scenario-home-assistant.sh
       max_versions: '1'

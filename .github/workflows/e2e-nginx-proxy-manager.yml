@@ -9,6 +9,8 @@ name: E2E nginx-proxy-manager
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/nginx-proxy-manager/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: nginx-proxy-manager
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/nginx-proxy-manager/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nginx-proxy-manager)\.sh|\.github/workflows/e2e(-nginx-proxy-manager)?\.yml)'
+      paths: '^workloads/nginx-proxy-manager/'
       scenario: hack/smoke/scenario-nginx-proxy-manager.sh
       max_versions: '1'

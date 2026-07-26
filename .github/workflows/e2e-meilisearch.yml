@@ -9,6 +9,8 @@ name: E2E meilisearch
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/meilisearch/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: meilisearch
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/meilisearch/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-meilisearch)\.sh|\.github/workflows/e2e(-meilisearch)?\.yml)'
+      paths: '^workloads/meilisearch/'
       scenario: hack/smoke/scenario-meilisearch.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E airsonic-advanced
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/airsonic-advanced/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: airsonic-advanced
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/airsonic-advanced/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-airsonic-advanced)\.sh|\.github/workflows/e2e(-airsonic-advanced)?\.yml)'
+      paths: '^workloads/airsonic-advanced/'
       scenario: hack/smoke/scenario-airsonic-advanced.sh
       max_versions: '1'

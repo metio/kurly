@@ -9,6 +9,8 @@ name: E2E penpot
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/penpot/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: penpot
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/penpot/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-penpot)\.sh|\.github/workflows/e2e(-penpot)?\.yml)'
+      paths: '^workloads/penpot/'
       scenario: hack/smoke/scenario-penpot.sh
       max_versions: '1'

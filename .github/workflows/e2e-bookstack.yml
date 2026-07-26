@@ -9,6 +9,8 @@ name: E2E bookstack
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/bookstack/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: bookstack
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/bookstack/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-bookstack)\.sh|\.github/workflows/e2e(-bookstack)?\.yml)'
+      paths: '^workloads/bookstack/'
       scenario: hack/smoke/scenario-bookstack.sh
       max_versions: '1'

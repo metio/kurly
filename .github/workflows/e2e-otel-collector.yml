@@ -9,6 +9,8 @@ name: E2E otel-collector
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/otel-collector/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: otel-collector
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/otel-collector/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-otel-collector)\.sh|\.github/workflows/e2e(-otel-collector)?\.yml)'
+      paths: '^workloads/otel-collector/'
       scenario: hack/smoke/scenario-otel-collector.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E authelia
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/authelia/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: authelia
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/authelia/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-authelia)\.sh|\.github/workflows/e2e(-authelia)?\.yml)'
+      paths: '^workloads/authelia/'
       scenario: hack/smoke/scenario-authelia.sh
       max_versions: '1'

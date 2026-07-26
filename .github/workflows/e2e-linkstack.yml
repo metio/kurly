@@ -9,6 +9,8 @@ name: E2E linkstack
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/linkstack/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: linkstack
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/linkstack/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-linkstack)\.sh|\.github/workflows/e2e(-linkstack)?\.yml)'
+      paths: '^workloads/linkstack/'
       scenario: hack/smoke/scenario-linkstack.sh
       max_versions: '1'

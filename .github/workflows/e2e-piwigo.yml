@@ -9,6 +9,8 @@ name: E2E piwigo
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/piwigo/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: piwigo
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/piwigo/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-piwigo)\.sh|\.github/workflows/e2e(-piwigo)?\.yml)'
+      paths: '^workloads/piwigo/'
       scenario: hack/smoke/scenario-piwigo.sh
       max_versions: '1'

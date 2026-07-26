@@ -9,6 +9,8 @@ name: E2E lldap
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/lldap/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: lldap
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/lldap/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-lldap)\.sh|\.github/workflows/e2e(-lldap)?\.yml)'
+      paths: '^workloads/lldap/'
       scenario: hack/smoke/scenario-lldap.sh
       max_versions: '1'

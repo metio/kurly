@@ -9,6 +9,8 @@ name: E2E monica
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/monica/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: monica
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/monica/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-monica)\.sh|\.github/workflows/e2e(-monica)?\.yml)'
+      paths: '^workloads/monica/'
       scenario: hack/smoke/scenario-monica.sh
       max_versions: '1'

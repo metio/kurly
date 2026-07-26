@@ -56,14 +56,21 @@ gen_workflow() {
     printf '# shared library and the e2e machinery), delegating the matrix + run to the\n'
     printf '# reusable e2e workflow.\n'
     printf 'name: E2E %s\n' "$id"
-    printf 'on:\n  pull_request:\n    branches: [main]\n  workflow_dispatch:\n'
+    # Workflow-level path filter: GitHub does not even START this workflow unless
+    # the PR touches this workload'\''s directory. A Renovate image bump runs exactly
+    # one e2e; a shared change queues NONE — no per-workload runner is spun up just
+    # to self-skip, which is what fans ~300 jobs out and blows the CI budget.
+    printf 'on:\n  pull_request:\n    branches: [main]\n    paths:\n      - '\''workloads/%s/**'\''\n  workflow_dispatch:\n' "$id"
     printf 'permissions:\n  contents: read\n'
     printf 'jobs:\n  e2e:\n'
     printf '    uses: ./.github/workflows/e2e.yml\n'
     printf '    with:\n'
     printf '      workload: %s\n' "$id"
-    printf '      # yamllint disable-line rule:line-length\n'
-    printf "      paths: '^(workloads/%s/|lib/|main\\\\.libsonnet|hack/smoke/(lib|scenario-%s)\\\\.sh|\\\\.github/workflows/e2e(-%s)?\\\\.yml)'\n" "$id" "$id" "$id"
+    # Scope the trigger to the workload'\''s OWN directory only. A Renovate image
+    # bump touches workloads/<id>/ and runs exactly this one e2e; a shared change
+    # (lib/, main.libsonnet, the smoke harness) must NOT fan out to all ~300
+    # workloads — the full sweep is dispatch/scheduled, not per-PR.
+    printf "      paths: '^workloads/%s/'\n" "$id"
     printf '      scenario: hack/smoke/scenario-%s.sh\n' "$id"
     # Fast feedback: one k8s minor, so a Renovate image bump gets a quick
     # broken/not-broken verdict. Deeper multi-version + traffic tests come later.

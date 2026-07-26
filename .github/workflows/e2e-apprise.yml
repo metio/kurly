@@ -9,6 +9,8 @@ name: E2E apprise
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/apprise/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: apprise
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/apprise/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-apprise)\.sh|\.github/workflows/e2e(-apprise)?\.yml)'
+      paths: '^workloads/apprise/'
       scenario: hack/smoke/scenario-apprise.sh
       max_versions: '1'

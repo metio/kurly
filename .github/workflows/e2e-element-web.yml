@@ -9,6 +9,8 @@ name: E2E element-web
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/element-web/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: element-web
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/element-web/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-element-web)\.sh|\.github/workflows/e2e(-element-web)?\.yml)'
+      paths: '^workloads/element-web/'
       scenario: hack/smoke/scenario-element-web.sh
       max_versions: '1'

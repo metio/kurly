@@ -9,6 +9,8 @@ name: E2E spegel
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/spegel/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: spegel
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/spegel/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-spegel)\.sh|\.github/workflows/e2e(-spegel)?\.yml)'
+      paths: '^workloads/spegel/'
       scenario: hack/smoke/scenario-spegel.sh
       max_versions: '1'

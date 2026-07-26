@@ -9,6 +9,8 @@ name: E2E mysql
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mysql/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mysql
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mysql/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mysql)\.sh|\.github/workflows/e2e(-mysql)?\.yml)'
+      paths: '^workloads/mysql/'
       scenario: hack/smoke/scenario-mysql.sh
       max_versions: '1'

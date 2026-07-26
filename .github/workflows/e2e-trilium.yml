@@ -9,6 +9,8 @@ name: E2E trilium
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/trilium/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: trilium
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/trilium/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-trilium)\.sh|\.github/workflows/e2e(-trilium)?\.yml)'
+      paths: '^workloads/trilium/'
       scenario: hack/smoke/scenario-trilium.sh
       max_versions: '1'

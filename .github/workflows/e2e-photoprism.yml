@@ -9,6 +9,8 @@ name: E2E photoprism
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/photoprism/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: photoprism
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/photoprism/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-photoprism)\.sh|\.github/workflows/e2e(-photoprism)?\.yml)'
+      paths: '^workloads/photoprism/'
       scenario: hack/smoke/scenario-photoprism.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E overleaf
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/overleaf/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: overleaf
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/overleaf/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-overleaf)\.sh|\.github/workflows/e2e(-overleaf)?\.yml)'
+      paths: '^workloads/overleaf/'
       scenario: hack/smoke/scenario-overleaf.sh
       max_versions: '1'

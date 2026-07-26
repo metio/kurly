@@ -9,6 +9,8 @@ name: E2E glance
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/glance/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: glance
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/glance/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-glance)\.sh|\.github/workflows/e2e(-glance)?\.yml)'
+      paths: '^workloads/glance/'
       scenario: hack/smoke/scenario-glance.sh
       max_versions: '1'

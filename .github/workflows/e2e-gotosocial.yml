@@ -9,6 +9,8 @@ name: E2E gotosocial
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/gotosocial/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: gotosocial
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/gotosocial/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-gotosocial)\.sh|\.github/workflows/e2e(-gotosocial)?\.yml)'
+      paths: '^workloads/gotosocial/'
       scenario: hack/smoke/scenario-gotosocial.sh
       max_versions: '1'

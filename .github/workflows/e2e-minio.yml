@@ -9,6 +9,8 @@ name: E2E minio
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/minio/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: minio
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/minio/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-minio)\.sh|\.github/workflows/e2e(-minio)?\.yml)'
+      paths: '^workloads/minio/'
       scenario: hack/smoke/scenario-minio.sh
       max_versions: '1'

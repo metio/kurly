@@ -9,6 +9,8 @@ name: E2E calibre
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/calibre/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: calibre
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/calibre/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-calibre)\.sh|\.github/workflows/e2e(-calibre)?\.yml)'
+      paths: '^workloads/calibre/'
       scenario: hack/smoke/scenario-calibre.sh
       max_versions: '1'

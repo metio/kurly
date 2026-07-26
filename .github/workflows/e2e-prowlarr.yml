@@ -9,6 +9,8 @@ name: E2E prowlarr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/prowlarr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: prowlarr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/prowlarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-prowlarr)\.sh|\.github/workflows/e2e(-prowlarr)?\.yml)'
+      paths: '^workloads/prowlarr/'
       scenario: hack/smoke/scenario-prowlarr.sh
       max_versions: '1'

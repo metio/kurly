@@ -9,6 +9,8 @@ name: E2E navidrome
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/navidrome/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: navidrome
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/navidrome/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-navidrome)\.sh|\.github/workflows/e2e(-navidrome)?\.yml)'
+      paths: '^workloads/navidrome/'
       scenario: hack/smoke/scenario-navidrome.sh
       max_versions: '1'

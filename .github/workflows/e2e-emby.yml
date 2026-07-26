@@ -9,6 +9,8 @@ name: E2E emby
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/emby/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: emby
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/emby/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-emby)\.sh|\.github/workflows/e2e(-emby)?\.yml)'
+      paths: '^workloads/emby/'
       scenario: hack/smoke/scenario-emby.sh
       max_versions: '1'

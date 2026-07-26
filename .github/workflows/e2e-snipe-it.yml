@@ -9,6 +9,8 @@ name: E2E snipe-it
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/snipe-it/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: snipe-it
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/snipe-it/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-snipe-it)\.sh|\.github/workflows/e2e(-snipe-it)?\.yml)'
+      paths: '^workloads/snipe-it/'
       scenario: hack/smoke/scenario-snipe-it.sh
       max_versions: '1'

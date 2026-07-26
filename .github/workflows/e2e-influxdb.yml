@@ -9,6 +9,8 @@ name: E2E influxdb
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/influxdb/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: influxdb
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/influxdb/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-influxdb)\.sh|\.github/workflows/e2e(-influxdb)?\.yml)'
+      paths: '^workloads/influxdb/'
       scenario: hack/smoke/scenario-influxdb.sh
       max_versions: '1'

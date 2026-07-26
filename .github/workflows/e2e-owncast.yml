@@ -9,6 +9,8 @@ name: E2E owncast
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/owncast/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: owncast
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/owncast/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-owncast)\.sh|\.github/workflows/e2e(-owncast)?\.yml)'
+      paths: '^workloads/owncast/'
       scenario: hack/smoke/scenario-owncast.sh
       max_versions: '1'

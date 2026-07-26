@@ -9,6 +9,8 @@ name: E2E phpmyadmin
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/phpmyadmin/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: phpmyadmin
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/phpmyadmin/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-phpmyadmin)\.sh|\.github/workflows/e2e(-phpmyadmin)?\.yml)'
+      paths: '^workloads/phpmyadmin/'
       scenario: hack/smoke/scenario-phpmyadmin.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E qdrant
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/qdrant/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: qdrant
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/qdrant/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-qdrant)\.sh|\.github/workflows/e2e(-qdrant)?\.yml)'
+      paths: '^workloads/qdrant/'
       scenario: hack/smoke/scenario-qdrant.sh
       max_versions: '1'

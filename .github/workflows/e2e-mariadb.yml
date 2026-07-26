@@ -9,6 +9,8 @@ name: E2E mariadb
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mariadb/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mariadb
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mariadb/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mariadb)\.sh|\.github/workflows/e2e(-mariadb)?\.yml)'
+      paths: '^workloads/mariadb/'
       scenario: hack/smoke/scenario-mariadb.sh
       max_versions: '1'

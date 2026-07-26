@@ -9,6 +9,8 @@ name: E2E freshrss
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/freshrss/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: freshrss
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/freshrss/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-freshrss)\.sh|\.github/workflows/e2e(-freshrss)?\.yml)'
+      paths: '^workloads/freshrss/'
       scenario: hack/smoke/scenario-freshrss.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E beszel
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/beszel/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: beszel
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/beszel/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-beszel)\.sh|\.github/workflows/e2e(-beszel)?\.yml)'
+      paths: '^workloads/beszel/'
       scenario: hack/smoke/scenario-beszel.sh
       max_versions: '1'

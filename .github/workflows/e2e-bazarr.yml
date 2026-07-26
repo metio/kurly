@@ -9,6 +9,8 @@ name: E2E bazarr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/bazarr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: bazarr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/bazarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-bazarr)\.sh|\.github/workflows/e2e(-bazarr)?\.yml)'
+      paths: '^workloads/bazarr/'
       scenario: hack/smoke/scenario-bazarr.sh
       max_versions: '1'

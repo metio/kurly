@@ -9,6 +9,8 @@ name: E2E jackett
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/jackett/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: jackett
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/jackett/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-jackett)\.sh|\.github/workflows/e2e(-jackett)?\.yml)'
+      paths: '^workloads/jackett/'
       scenario: hack/smoke/scenario-jackett.sh
       max_versions: '1'

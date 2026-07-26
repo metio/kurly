@@ -9,6 +9,8 @@ name: E2E redis
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/redis/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: redis
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/redis/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-redis)\.sh|\.github/workflows/e2e(-redis)?\.yml)'
+      paths: '^workloads/redis/'
       scenario: hack/smoke/scenario-redis.sh
       max_versions: '1'

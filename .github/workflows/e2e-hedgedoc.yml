@@ -9,6 +9,8 @@ name: E2E hedgedoc
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/hedgedoc/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: hedgedoc
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/hedgedoc/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-hedgedoc)\.sh|\.github/workflows/e2e(-hedgedoc)?\.yml)'
+      paths: '^workloads/hedgedoc/'
       scenario: hack/smoke/scenario-hedgedoc.sh
       max_versions: '1'

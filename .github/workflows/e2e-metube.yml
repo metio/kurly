@@ -9,6 +9,8 @@ name: E2E metube
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/metube/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: metube
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/metube/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-metube)\.sh|\.github/workflows/e2e(-metube)?\.yml)'
+      paths: '^workloads/metube/'
       scenario: hack/smoke/scenario-metube.sh
       max_versions: '1'

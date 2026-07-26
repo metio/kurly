@@ -9,6 +9,8 @@ name: E2E shiori
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/shiori/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: shiori
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/shiori/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-shiori)\.sh|\.github/workflows/e2e(-shiori)?\.yml)'
+      paths: '^workloads/shiori/'
       scenario: hack/smoke/scenario-shiori.sh
       max_versions: '1'

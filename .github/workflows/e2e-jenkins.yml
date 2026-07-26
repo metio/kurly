@@ -9,6 +9,8 @@ name: E2E jenkins
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/jenkins/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: jenkins
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/jenkins/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-jenkins)\.sh|\.github/workflows/e2e(-jenkins)?\.yml)'
+      paths: '^workloads/jenkins/'
       scenario: hack/smoke/scenario-jenkins.sh
       max_versions: '1'

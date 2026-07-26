@@ -9,6 +9,8 @@ name: E2E wordpress
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/wordpress/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: wordpress
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/wordpress/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-wordpress)\.sh|\.github/workflows/e2e(-wordpress)?\.yml)'
+      paths: '^workloads/wordpress/'
       scenario: hack/smoke/scenario-wordpress.sh
       max_versions: '1'

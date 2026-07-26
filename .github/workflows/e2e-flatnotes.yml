@@ -9,6 +9,8 @@ name: E2E flatnotes
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/flatnotes/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: flatnotes
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/flatnotes/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-flatnotes)\.sh|\.github/workflows/e2e(-flatnotes)?\.yml)'
+      paths: '^workloads/flatnotes/'
       scenario: hack/smoke/scenario-flatnotes.sh
       max_versions: '1'

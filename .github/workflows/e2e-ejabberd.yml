@@ -9,6 +9,8 @@ name: E2E ejabberd
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/ejabberd/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: ejabberd
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/ejabberd/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-ejabberd)\.sh|\.github/workflows/e2e(-ejabberd)?\.yml)'
+      paths: '^workloads/ejabberd/'
       scenario: hack/smoke/scenario-ejabberd.sh
       max_versions: '1'

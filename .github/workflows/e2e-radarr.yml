@@ -9,6 +9,8 @@ name: E2E radarr
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/radarr/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: radarr
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/radarr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-radarr)\.sh|\.github/workflows/e2e(-radarr)?\.yml)'
+      paths: '^workloads/radarr/'
       scenario: hack/smoke/scenario-radarr.sh
       max_versions: '1'

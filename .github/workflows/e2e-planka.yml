@@ -9,6 +9,8 @@ name: E2E planka
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/planka/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: planka
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/planka/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-planka)\.sh|\.github/workflows/e2e(-planka)?\.yml)'
+      paths: '^workloads/planka/'
       scenario: hack/smoke/scenario-planka.sh
       max_versions: '1'

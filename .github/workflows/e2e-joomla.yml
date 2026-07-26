@@ -9,6 +9,8 @@ name: E2E joomla
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/joomla/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: joomla
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/joomla/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-joomla)\.sh|\.github/workflows/e2e(-joomla)?\.yml)'
+      paths: '^workloads/joomla/'
       scenario: hack/smoke/scenario-joomla.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E vaultwarden
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/vaultwarden/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: vaultwarden
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/vaultwarden/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-vaultwarden)\.sh|\.github/workflows/e2e(-vaultwarden)?\.yml)'
+      paths: '^workloads/vaultwarden/'
       scenario: hack/smoke/scenario-vaultwarden.sh
       max_versions: '1'

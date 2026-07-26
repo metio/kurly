@@ -9,6 +9,8 @@ name: E2E umami
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/umami/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: umami
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/umami/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-umami)\.sh|\.github/workflows/e2e(-umami)?\.yml)'
+      paths: '^workloads/umami/'
       scenario: hack/smoke/scenario-umami.sh
       max_versions: '1'

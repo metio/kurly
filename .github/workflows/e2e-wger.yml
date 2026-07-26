@@ -9,6 +9,8 @@ name: E2E wger
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/wger/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: wger
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/wger/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-wger)\.sh|\.github/workflows/e2e(-wger)?\.yml)'
+      paths: '^workloads/wger/'
       scenario: hack/smoke/scenario-wger.sh
       max_versions: '1'

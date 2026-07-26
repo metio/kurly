@@ -9,6 +9,8 @@ name: E2E rabbitmq
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/rabbitmq/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: rabbitmq
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/rabbitmq/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-rabbitmq)\.sh|\.github/workflows/e2e(-rabbitmq)?\.yml)'
+      paths: '^workloads/rabbitmq/'
       scenario: hack/smoke/scenario-rabbitmq.sh
       max_versions: '1'

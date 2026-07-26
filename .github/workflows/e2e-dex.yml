@@ -9,6 +9,8 @@ name: E2E dex
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/dex/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: dex
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/dex/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-dex)\.sh|\.github/workflows/e2e(-dex)?\.yml)'
+      paths: '^workloads/dex/'
       scenario: hack/smoke/scenario-dex.sh
       max_versions: '1'

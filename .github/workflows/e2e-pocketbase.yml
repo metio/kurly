@@ -9,6 +9,8 @@ name: E2E pocketbase
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/pocketbase/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: pocketbase
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/pocketbase/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-pocketbase)\.sh|\.github/workflows/e2e(-pocketbase)?\.yml)'
+      paths: '^workloads/pocketbase/'
       scenario: hack/smoke/scenario-pocketbase.sh
       max_versions: '1'

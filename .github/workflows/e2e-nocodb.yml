@@ -9,6 +9,8 @@ name: E2E nocodb
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/nocodb/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: nocodb
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/nocodb/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nocodb)\.sh|\.github/workflows/e2e(-nocodb)?\.yml)'
+      paths: '^workloads/nocodb/'
       scenario: hack/smoke/scenario-nocodb.sh
       max_versions: '1'

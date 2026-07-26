@@ -9,6 +9,8 @@ name: E2E baserow
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/baserow/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: baserow
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/baserow/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-baserow)\.sh|\.github/workflows/e2e(-baserow)?\.yml)'
+      paths: '^workloads/baserow/'
       scenario: hack/smoke/scenario-baserow.sh
       max_versions: '1'

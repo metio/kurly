@@ -9,6 +9,8 @@ name: E2E mylar3
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mylar3/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mylar3
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mylar3/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mylar3)\.sh|\.github/workflows/e2e(-mylar3)?\.yml)'
+      paths: '^workloads/mylar3/'
       scenario: hack/smoke/scenario-mylar3.sh
       max_versions: '1'

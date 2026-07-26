@@ -9,6 +9,8 @@ name: E2E memos
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/memos/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: memos
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/memos/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-memos)\.sh|\.github/workflows/e2e(-memos)?\.yml)'
+      paths: '^workloads/memos/'
       scenario: hack/smoke/scenario-memos.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E mumble
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mumble/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mumble
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mumble/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mumble)\.sh|\.github/workflows/e2e(-mumble)?\.yml)'
+      paths: '^workloads/mumble/'
       scenario: hack/smoke/scenario-mumble.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E filebrowser
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/filebrowser/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: filebrowser
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/filebrowser/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-filebrowser)\.sh|\.github/workflows/e2e(-filebrowser)?\.yml)'
+      paths: '^workloads/filebrowser/'
       scenario: hack/smoke/scenario-filebrowser.sh
       max_versions: '1'

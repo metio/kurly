@@ -9,6 +9,8 @@ name: E2E wekan
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/wekan/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: wekan
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/wekan/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-wekan)\.sh|\.github/workflows/e2e(-wekan)?\.yml)'
+      paths: '^workloads/wekan/'
       scenario: hack/smoke/scenario-wekan.sh
       max_versions: '1'

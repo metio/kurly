@@ -9,6 +9,8 @@ name: E2E nextcloud
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/nextcloud/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: nextcloud
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/nextcloud/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nextcloud)\.sh|\.github/workflows/e2e(-nextcloud)?\.yml)'
+      paths: '^workloads/nextcloud/'
       scenario: hack/smoke/scenario-nextcloud.sh
       max_versions: '1'

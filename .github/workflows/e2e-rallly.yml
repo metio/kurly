@@ -9,6 +9,8 @@ name: E2E rallly
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/rallly/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: rallly
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/rallly/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-rallly)\.sh|\.github/workflows/e2e(-rallly)?\.yml)'
+      paths: '^workloads/rallly/'
       scenario: hack/smoke/scenario-rallly.sh
       max_versions: '1'

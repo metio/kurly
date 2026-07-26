@@ -9,6 +9,8 @@ name: E2E plex
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/plex/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: plex
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/plex/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-plex)\.sh|\.github/workflows/e2e(-plex)?\.yml)'
+      paths: '^workloads/plex/'
       scenario: hack/smoke/scenario-plex.sh
       max_versions: '1'

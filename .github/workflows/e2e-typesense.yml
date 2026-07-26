@@ -9,6 +9,8 @@ name: E2E typesense
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/typesense/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: typesense
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/typesense/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-typesense)\.sh|\.github/workflows/e2e(-typesense)?\.yml)'
+      paths: '^workloads/typesense/'
       scenario: hack/smoke/scenario-typesense.sh
       max_versions: '1'

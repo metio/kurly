@@ -9,6 +9,8 @@ name: E2E mautic
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mautic/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mautic
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mautic/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mautic)\.sh|\.github/workflows/e2e(-mautic)?\.yml)'
+      paths: '^workloads/mautic/'
       scenario: hack/smoke/scenario-mautic.sh
       max_versions: '1'

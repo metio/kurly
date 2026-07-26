@@ -9,6 +9,8 @@ name: E2E healthchecks
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/healthchecks/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: healthchecks
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/healthchecks/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-healthchecks)\.sh|\.github/workflows/e2e(-healthchecks)?\.yml)'
+      paths: '^workloads/healthchecks/'
       scenario: hack/smoke/scenario-healthchecks.sh
       max_versions: '1'

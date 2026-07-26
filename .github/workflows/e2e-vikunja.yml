@@ -9,6 +9,8 @@ name: E2E vikunja
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/vikunja/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: vikunja
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/vikunja/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-vikunja)\.sh|\.github/workflows/e2e(-vikunja)?\.yml)'
+      paths: '^workloads/vikunja/'
       scenario: hack/smoke/scenario-vikunja.sh
       max_versions: '1'

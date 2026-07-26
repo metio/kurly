@@ -9,6 +9,8 @@ name: E2E pilos
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/pilos/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: pilos
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/pilos/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-pilos)\.sh|\.github/workflows/e2e(-pilos)?\.yml)'
+      paths: '^workloads/pilos/'
       scenario: hack/smoke/scenario-pilos.sh
       max_versions: '1'

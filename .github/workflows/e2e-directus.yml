@@ -9,6 +9,8 @@ name: E2E directus
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/directus/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: directus
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/directus/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-directus)\.sh|\.github/workflows/e2e(-directus)?\.yml)'
+      paths: '^workloads/directus/'
       scenario: hack/smoke/scenario-directus.sh
       max_versions: '1'

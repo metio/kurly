@@ -9,6 +9,8 @@ name: E2E mealie
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mealie/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mealie
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mealie/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mealie)\.sh|\.github/workflows/e2e(-mealie)?\.yml)'
+      paths: '^workloads/mealie/'
       scenario: hack/smoke/scenario-mealie.sh
       max_versions: '1'

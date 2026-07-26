@@ -9,6 +9,8 @@ name: E2E openproject
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/openproject/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: openproject
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/openproject/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-openproject)\.sh|\.github/workflows/e2e(-openproject)?\.yml)'
+      paths: '^workloads/openproject/'
       scenario: hack/smoke/scenario-openproject.sh
       max_versions: '1'

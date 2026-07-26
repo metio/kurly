@@ -9,6 +9,8 @@ name: E2E microbin
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/microbin/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: microbin
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/microbin/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-microbin)\.sh|\.github/workflows/e2e(-microbin)?\.yml)'
+      paths: '^workloads/microbin/'
       scenario: hack/smoke/scenario-microbin.sh
       max_versions: '1'

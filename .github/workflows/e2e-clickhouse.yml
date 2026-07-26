@@ -9,6 +9,8 @@ name: E2E clickhouse
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/clickhouse/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: clickhouse
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/clickhouse/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-clickhouse)\.sh|\.github/workflows/e2e(-clickhouse)?\.yml)'
+      paths: '^workloads/clickhouse/'
       scenario: hack/smoke/scenario-clickhouse.sh
       max_versions: '1'

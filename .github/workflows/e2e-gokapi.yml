@@ -9,6 +9,8 @@ name: E2E gokapi
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/gokapi/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: gokapi
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/gokapi/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-gokapi)\.sh|\.github/workflows/e2e(-gokapi)?\.yml)'
+      paths: '^workloads/gokapi/'
       scenario: hack/smoke/scenario-gokapi.sh
       max_versions: '1'

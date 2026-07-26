@@ -9,6 +9,8 @@ name: E2E metabase
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/metabase/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: metabase
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/metabase/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-metabase)\.sh|\.github/workflows/e2e(-metabase)?\.yml)'
+      paths: '^workloads/metabase/'
       scenario: hack/smoke/scenario-metabase.sh
       max_versions: '1'

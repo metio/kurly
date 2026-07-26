@@ -9,6 +9,8 @@ name: E2E blinko
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/blinko/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: blinko
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/blinko/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-blinko)\.sh|\.github/workflows/e2e(-blinko)?\.yml)'
+      paths: '^workloads/blinko/'
       scenario: hack/smoke/scenario-blinko.sh
       max_versions: '1'

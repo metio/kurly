@@ -9,6 +9,8 @@ name: E2E opencost
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/opencost/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: opencost
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/opencost/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-opencost)\.sh|\.github/workflows/e2e(-opencost)?\.yml)'
+      paths: '^workloads/opencost/'
       scenario: hack/smoke/scenario-opencost.sh
       max_versions: '1'

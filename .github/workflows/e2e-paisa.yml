@@ -9,6 +9,8 @@ name: E2E paisa
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/paisa/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: paisa
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/paisa/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-paisa)\.sh|\.github/workflows/e2e(-paisa)?\.yml)'
+      paths: '^workloads/paisa/'
       scenario: hack/smoke/scenario-paisa.sh
       max_versions: '1'

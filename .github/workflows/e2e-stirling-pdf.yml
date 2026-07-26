@@ -9,6 +9,8 @@ name: E2E stirling-pdf
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/stirling-pdf/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: stirling-pdf
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/stirling-pdf/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-stirling-pdf)\.sh|\.github/workflows/e2e(-stirling-pdf)?\.yml)'
+      paths: '^workloads/stirling-pdf/'
       scenario: hack/smoke/scenario-stirling-pdf.sh
       max_versions: '1'

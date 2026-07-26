@@ -9,6 +9,8 @@ name: E2E firefly-iii
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/firefly-iii/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: firefly-iii
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/firefly-iii/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-firefly-iii)\.sh|\.github/workflows/e2e(-firefly-iii)?\.yml)'
+      paths: '^workloads/firefly-iii/'
       scenario: hack/smoke/scenario-firefly-iii.sh
       max_versions: '1'

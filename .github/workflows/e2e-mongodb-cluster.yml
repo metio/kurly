@@ -7,6 +7,8 @@ name: E2E mongodb-cluster
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mongodb-cluster/**'
   workflow_dispatch:
 permissions:
   contents: read

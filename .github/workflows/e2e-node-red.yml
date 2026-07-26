@@ -9,6 +9,8 @@ name: E2E node-red
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/node-red/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: node-red
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/node-red/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-node-red)\.sh|\.github/workflows/e2e(-node-red)?\.yml)'
+      paths: '^workloads/node-red/'
       scenario: hack/smoke/scenario-node-red.sh
       max_versions: '1'

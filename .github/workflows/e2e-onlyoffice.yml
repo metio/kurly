@@ -9,6 +9,8 @@ name: E2E onlyoffice
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/onlyoffice/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: onlyoffice
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/onlyoffice/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-onlyoffice)\.sh|\.github/workflows/e2e(-onlyoffice)?\.yml)'
+      paths: '^workloads/onlyoffice/'
       scenario: hack/smoke/scenario-onlyoffice.sh
       max_versions: '1'

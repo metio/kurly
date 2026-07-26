@@ -9,6 +9,8 @@ name: E2E privatebin
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/privatebin/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: privatebin
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/privatebin/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-privatebin)\.sh|\.github/workflows/e2e(-privatebin)?\.yml)'
+      paths: '^workloads/privatebin/'
       scenario: hack/smoke/scenario-privatebin.sh
       max_versions: '1'

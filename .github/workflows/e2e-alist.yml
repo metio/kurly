@@ -9,6 +9,8 @@ name: E2E alist
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/alist/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: alist
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/alist/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-alist)\.sh|\.github/workflows/e2e(-alist)?\.yml)'
+      paths: '^workloads/alist/'
       scenario: hack/smoke/scenario-alist.sh
       max_versions: '1'

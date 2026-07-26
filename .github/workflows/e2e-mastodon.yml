@@ -9,6 +9,8 @@ name: E2E mastodon
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mastodon/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mastodon
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mastodon/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mastodon)\.sh|\.github/workflows/e2e(-mastodon)?\.yml)'
+      paths: '^workloads/mastodon/'
       scenario: hack/smoke/scenario-mastodon.sh
       max_versions: '1'

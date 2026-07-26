@@ -9,6 +9,8 @@ name: E2E projectsend
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/projectsend/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: projectsend
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/projectsend/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-projectsend)\.sh|\.github/workflows/e2e(-projectsend)?\.yml)'
+      paths: '^workloads/projectsend/'
       scenario: hack/smoke/scenario-projectsend.sh
       max_versions: '1'

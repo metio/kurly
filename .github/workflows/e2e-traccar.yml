@@ -9,6 +9,8 @@ name: E2E traccar
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/traccar/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: traccar
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/traccar/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-traccar)\.sh|\.github/workflows/e2e(-traccar)?\.yml)'
+      paths: '^workloads/traccar/'
       scenario: hack/smoke/scenario-traccar.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E karakeep
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/karakeep/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: karakeep
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/karakeep/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-karakeep)\.sh|\.github/workflows/e2e(-karakeep)?\.yml)'
+      paths: '^workloads/karakeep/'
       scenario: hack/smoke/scenario-karakeep.sh
       max_versions: '1'

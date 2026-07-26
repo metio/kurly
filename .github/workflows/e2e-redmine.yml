@@ -9,6 +9,8 @@ name: E2E redmine
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/redmine/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: redmine
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/redmine/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-redmine)\.sh|\.github/workflows/e2e(-redmine)?\.yml)'
+      paths: '^workloads/redmine/'
       scenario: hack/smoke/scenario-redmine.sh
       max_versions: '1'

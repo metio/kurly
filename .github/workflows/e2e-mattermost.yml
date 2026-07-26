@@ -9,6 +9,8 @@ name: E2E mattermost
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mattermost/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mattermost
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mattermost/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mattermost)\.sh|\.github/workflows/e2e(-mattermost)?\.yml)'
+      paths: '^workloads/mattermost/'
       scenario: hack/smoke/scenario-mattermost.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E netbox
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/netbox/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: netbox
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/netbox/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-netbox)\.sh|\.github/workflows/e2e(-netbox)?\.yml)'
+      paths: '^workloads/netbox/'
       scenario: hack/smoke/scenario-netbox.sh
       max_versions: '1'

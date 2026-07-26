@@ -9,6 +9,8 @@ name: E2E linkding
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/linkding/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: linkding
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/linkding/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-linkding)\.sh|\.github/workflows/e2e(-linkding)?\.yml)'
+      paths: '^workloads/linkding/'
       scenario: hack/smoke/scenario-linkding.sh
       max_versions: '1'

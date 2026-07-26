@@ -9,6 +9,8 @@ name: E2E webtrees
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/webtrees/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: webtrees
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/webtrees/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-webtrees)\.sh|\.github/workflows/e2e(-webtrees)?\.yml)'
+      paths: '^workloads/webtrees/'
       scenario: hack/smoke/scenario-webtrees.sh
       max_versions: '1'

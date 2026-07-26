@@ -9,6 +9,8 @@ name: E2E open-webui
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/open-webui/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: open-webui
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/open-webui/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-open-webui)\.sh|\.github/workflows/e2e(-open-webui)?\.yml)'
+      paths: '^workloads/open-webui/'
       scenario: hack/smoke/scenario-open-webui.sh
       max_versions: '1'

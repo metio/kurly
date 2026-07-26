@@ -9,6 +9,8 @@ name: E2E immich
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/immich/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: immich
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/immich/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-immich)\.sh|\.github/workflows/e2e(-immich)?\.yml)'
+      paths: '^workloads/immich/'
       scenario: hack/smoke/scenario-immich.sh
       max_versions: '1'

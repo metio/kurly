@@ -9,6 +9,8 @@ name: E2E dokuwiki
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/dokuwiki/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: dokuwiki
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/dokuwiki/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-dokuwiki)\.sh|\.github/workflows/e2e(-dokuwiki)?\.yml)'
+      paths: '^workloads/dokuwiki/'
       scenario: hack/smoke/scenario-dokuwiki.sh
       max_versions: '1'

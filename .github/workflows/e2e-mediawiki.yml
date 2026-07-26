@@ -9,6 +9,8 @@ name: E2E mediawiki
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/mediawiki/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: mediawiki
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/mediawiki/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mediawiki)\.sh|\.github/workflows/e2e(-mediawiki)?\.yml)'
+      paths: '^workloads/mediawiki/'
       scenario: hack/smoke/scenario-mediawiki.sh
       max_versions: '1'

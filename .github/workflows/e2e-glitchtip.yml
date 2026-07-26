@@ -9,6 +9,8 @@ name: E2E glitchtip
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/glitchtip/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: glitchtip
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/glitchtip/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-glitchtip)\.sh|\.github/workflows/e2e(-glitchtip)?\.yml)'
+      paths: '^workloads/glitchtip/'
       scenario: hack/smoke/scenario-glitchtip.sh
       max_versions: '1'

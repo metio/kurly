@@ -9,6 +9,8 @@ name: E2E heimdall
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/heimdall/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: heimdall
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/heimdall/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-heimdall)\.sh|\.github/workflows/e2e(-heimdall)?\.yml)'
+      paths: '^workloads/heimdall/'
       scenario: hack/smoke/scenario-heimdall.sh
       max_versions: '1'

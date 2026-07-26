@@ -9,6 +9,8 @@ name: E2E it-tools
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/it-tools/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: it-tools
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/it-tools/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-it-tools)\.sh|\.github/workflows/e2e(-it-tools)?\.yml)'
+      paths: '^workloads/it-tools/'
       scenario: hack/smoke/scenario-it-tools.sh
       max_versions: '1'

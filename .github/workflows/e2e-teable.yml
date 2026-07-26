@@ -9,6 +9,8 @@ name: E2E teable
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/teable/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: teable
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/teable/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-teable)\.sh|\.github/workflows/e2e(-teable)?\.yml)'
+      paths: '^workloads/teable/'
       scenario: hack/smoke/scenario-teable.sh
       max_versions: '1'

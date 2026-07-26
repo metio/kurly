@@ -9,6 +9,8 @@ name: E2E tvheadend
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/tvheadend/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: tvheadend
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/tvheadend/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tvheadend)\.sh|\.github/workflows/e2e(-tvheadend)?\.yml)'
+      paths: '^workloads/tvheadend/'
       scenario: hack/smoke/scenario-tvheadend.sh
       max_versions: '1'

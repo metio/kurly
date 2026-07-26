@@ -9,6 +9,8 @@ name: E2E tandoor
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/tandoor/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: tandoor
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/tandoor/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tandoor)\.sh|\.github/workflows/e2e(-tandoor)?\.yml)'
+      paths: '^workloads/tandoor/'
       scenario: hack/smoke/scenario-tandoor.sh
       max_versions: '1'

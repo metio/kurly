@@ -9,6 +9,8 @@ name: E2E ghost
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/ghost/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: ghost
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/ghost/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-ghost)\.sh|\.github/workflows/e2e(-ghost)?\.yml)'
+      paths: '^workloads/ghost/'
       scenario: hack/smoke/scenario-ghost.sh
       max_versions: '1'

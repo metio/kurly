@@ -9,6 +9,8 @@ name: E2E convertx
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/convertx/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: convertx
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/convertx/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-convertx)\.sh|\.github/workflows/e2e(-convertx)?\.yml)'
+      paths: '^workloads/convertx/'
       scenario: hack/smoke/scenario-convertx.sh
       max_versions: '1'

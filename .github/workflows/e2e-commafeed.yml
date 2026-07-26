@@ -9,6 +9,8 @@ name: E2E commafeed
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/commafeed/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: commafeed
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/commafeed/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-commafeed)\.sh|\.github/workflows/e2e(-commafeed)?\.yml)'
+      paths: '^workloads/commafeed/'
       scenario: hack/smoke/scenario-commafeed.sh
       max_versions: '1'

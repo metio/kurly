@@ -9,6 +9,8 @@ name: E2E grist
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/grist/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: grist
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/grist/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-grist)\.sh|\.github/workflows/e2e(-grist)?\.yml)'
+      paths: '^workloads/grist/'
       scenario: hack/smoke/scenario-grist.sh
       max_versions: '1'

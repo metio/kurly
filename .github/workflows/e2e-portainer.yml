@@ -9,6 +9,8 @@ name: E2E portainer
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/portainer/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: portainer
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/portainer/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-portainer)\.sh|\.github/workflows/e2e(-portainer)?\.yml)'
+      paths: '^workloads/portainer/'
       scenario: hack/smoke/scenario-portainer.sh
       max_versions: '1'

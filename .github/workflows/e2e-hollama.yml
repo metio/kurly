@@ -9,6 +9,8 @@ name: E2E hollama
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/hollama/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: hollama
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/hollama/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-hollama)\.sh|\.github/workflows/e2e(-hollama)?\.yml)'
+      paths: '^workloads/hollama/'
       scenario: hack/smoke/scenario-hollama.sh
       max_versions: '1'

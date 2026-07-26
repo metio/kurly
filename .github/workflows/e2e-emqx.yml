@@ -9,6 +9,8 @@ name: E2E emqx
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/emqx/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: emqx
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/emqx/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-emqx)\.sh|\.github/workflows/e2e(-emqx)?\.yml)'
+      paths: '^workloads/emqx/'
       scenario: hack/smoke/scenario-emqx.sh
       max_versions: '1'

@@ -9,6 +9,8 @@ name: E2E ferretdb
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/ferretdb/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: ferretdb
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/ferretdb/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-ferretdb)\.sh|\.github/workflows/e2e(-ferretdb)?\.yml)'
+      paths: '^workloads/ferretdb/'
       scenario: hack/smoke/scenario-ferretdb.sh
       max_versions: '1'

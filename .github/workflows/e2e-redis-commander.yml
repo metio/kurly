@@ -9,6 +9,8 @@ name: E2E redis-commander
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/redis-commander/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: redis-commander
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/redis-commander/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-redis-commander)\.sh|\.github/workflows/e2e(-redis-commander)?\.yml)'
+      paths: '^workloads/redis-commander/'
       scenario: hack/smoke/scenario-redis-commander.sh
       max_versions: '1'

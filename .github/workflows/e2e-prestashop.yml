@@ -9,6 +9,8 @@ name: E2E prestashop
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/prestashop/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: prestashop
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/prestashop/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-prestashop)\.sh|\.github/workflows/e2e(-prestashop)?\.yml)'
+      paths: '^workloads/prestashop/'
       scenario: hack/smoke/scenario-prestashop.sh
       max_versions: '1'

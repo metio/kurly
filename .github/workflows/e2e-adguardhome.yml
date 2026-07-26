@@ -9,6 +9,8 @@ name: E2E adguardhome
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/adguardhome/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,7 +19,6 @@ jobs:
     uses: ./.github/workflows/e2e.yml
     with:
       workload: adguardhome
-      # yamllint disable-line rule:line-length
-      paths: '^(workloads/adguardhome/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-adguardhome)\.sh|\.github/workflows/e2e(-adguardhome)?\.yml)'
+      paths: '^workloads/adguardhome/'
       scenario: hack/smoke/scenario-adguardhome.sh
       max_versions: '1'
