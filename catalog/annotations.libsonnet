@@ -3479,7 +3479,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Mosquitto broker on :1883. config is mosquitto.conf, mounted verbatim. Data at /mosquitto/data. Expose to devices (often a LoadBalancer), not an HTTP ingress.', [
           d.arg('name', d.T.string, default='mosquitto'),
-          d.arg('image', d.T.string, default='docker.io/eclipse-mosquitto:2.0.20'),
+          d.arg('image', d.T.string, default='docker.io/eclipse-mosquitto:2.0.22'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('config', d.T.string),

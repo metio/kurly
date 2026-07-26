@@ -33,7 +33,7 @@ local defaultConfig = |||
 
 function(
   name='mosquitto',
-  image='docker.io/eclipse-mosquitto:2.0.20',
+  image='docker.io/eclipse-mosquitto:2.0.22',
   storageSize='1Gi',
   storageClass=null,
   config=defaultConfig,

@@ -17276,7 +17276,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/eclipse-mosquitto:2.0.20",
+                     "default": "docker.io/eclipse-mosquitto:2.0.22",
                      "name": "image",
                      "required": false,
                      "type": "string"
