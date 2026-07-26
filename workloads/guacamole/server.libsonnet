@@ -24,7 +24,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 function(
   name='guacamole',
-  image='docker.io/guacamole/guacamole:1.5.5',
+  image='docker.io/guacamole/guacamole:1.6.0',
   guacdImage='docker.io/guacamole/guacd:1.5.5',
   replicas=2,
   secretName='guacamole-secrets',

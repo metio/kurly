@@ -10797,7 +10797,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/guacamole/guacamole:1.5.5",
+                     "default": "docker.io/guacamole/guacamole:1.6.0",
                      "name": "image",
                      "required": false,
                      "type": "string"
