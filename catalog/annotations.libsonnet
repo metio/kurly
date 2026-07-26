@@ -4191,7 +4191,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         server: d.fn('The Guacamole server plus its guacd sidecar. guacdImage sets the sidecar image; secretName holds the database connection (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='guacamole'),
           d.arg('image', d.T.string, default='docker.io/guacamole/guacamole:1.5.5'),
-          d.arg('guacdImage', d.T.string, default='docker.io/guacamole/guacd:1.5.5'),
+          d.arg('guacdImage', d.T.string, default='docker.io/guacamole/guacd:1.6.0'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('secretName', d.T.string, default='guacamole-secrets'),
           d.arg('env', d.T.object, default={}),

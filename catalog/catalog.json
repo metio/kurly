@@ -10803,7 +10803,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/guacamole/guacd:1.5.5",
+                     "default": "docker.io/guacamole/guacd:1.6.0",
                      "name": "guacdImage",
                      "required": false,
                      "type": "string"
