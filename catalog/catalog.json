@@ -2565,6 +2565,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -2657,6 +2664,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "AP_ENCRYPTION_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "AP_JWT_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -3878,6 +3897,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_SECRET_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ENCRYPTION_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "WEBHOOK_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -4135,6 +4171,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "BASEROW_JWT_SIGNING_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "BASEROW_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -4498,6 +4546,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "JWT_SECRET",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "SYSTEM_DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "TENANT_DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -4745,6 +4810,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "NEXTAUTH_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -4859,6 +4931,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -5039,6 +5118,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -5128,6 +5214,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "CALENDSO_ENCRYPTION_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "NEXTAUTH_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -5772,6 +5870,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "CLICKHOUSE_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -6211,6 +6316,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "HASHED_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -6465,6 +6577,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "COUCHDB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -6789,6 +6908,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -7202,6 +7328,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "ADMIN_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -7393,6 +7531,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -7483,6 +7628,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "NEXTAUTH_SECRET",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "NEXT_PRIVATE_ENCRYPTION_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -8553,6 +8715,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -8889,6 +9063,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "ADMIN_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -9222,6 +9403,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "JWT_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -9502,6 +9690,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -9756,6 +9956,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "FLATNOTES_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "FLATNOTES_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -10144,6 +10356,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "ENCRYPTION_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "NEXTAUTH_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -10346,6 +10570,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "FRIGATE_RTSP_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 2
                }
@@ -10633,6 +10864,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "ACCESS_TOKEN_SALT",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "JWT_SECRET_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "REDIS_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -10910,6 +11158,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -11689,6 +11944,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "BIGBLUEBUTTON_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -12064,6 +12326,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -12160,6 +12429,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "CMD_SESSION_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -12424,6 +12700,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_ENCRYPTION_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -13054,6 +13337,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DOCKER_INFLUXDB_INIT_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -13250,6 +13540,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -14070,6 +14372,22 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "MEILI_MASTER_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "NEXTAUTH_SECRET",
+                     "length": 64
+                  },
+                  {
+                     "generate": "external",
+                     "key": "OPENAI_API_KEY"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -14331,6 +14649,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -14500,6 +14825,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "JWT_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -14589,6 +14921,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "LEAN_DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "LEAN_SESSION_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -15296,6 +15640,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "NEXTAUTH_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -15508,6 +15859,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "LLDAP_JWT_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -15760,6 +16118,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -16038,6 +16403,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -16826,6 +17198,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "OTP_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -17091,6 +17470,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "MATOMO_DATABASE_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -17401,6 +17787,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "MAUTIC_DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -17517,6 +17910,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "POSTGRES_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -17858,6 +18258,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "MEILI_MASTER_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -18536,6 +18943,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "ADMIN_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -18625,6 +19039,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "MINIO_ROOT_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -19089,6 +19510,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -19269,6 +19702,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "MUMBLE_SUPERUSER_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -20520,6 +20960,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -20618,6 +21065,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "NC_AUTH_JWT_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -21440,6 +21894,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "JWT_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -21536,6 +21997,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "WEBUI_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -21807,6 +22275,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "ZO_ROOT_USER_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -22218,6 +22693,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "UTILS_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -22856,6 +23343,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "PAPERLESS_ADMIN_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "PAPERLESS_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -23062,6 +23561,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "PEERTUBE_DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "PEERTUBE_SECRET",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "PT_INITIAL_ROOT_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -23160,6 +23676,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "PENPOT_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -23402,6 +23925,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "PGADMIN_DEFAULT_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -23504,6 +24034,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "PHOTOPRISM_ADMIN_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -23878,6 +24415,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -24154,6 +24698,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "S3_SECRET_ACCESS_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -25772,6 +26328,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "SECRET_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -26964,6 +27527,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SEARXNG_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -27048,6 +27618,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "JWT_SIGNING_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -27555,6 +28132,17 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "external",
+                     "key": "GEOLITE_LICENSE_KEY"
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -28006,6 +28594,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -28114,6 +28714,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "SONAR_JDBC_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -28928,6 +29535,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "POSTGRES_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -29119,6 +29738,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -29208,6 +29834,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DNS_SERVER_ADMIN_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -30516,6 +31149,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -30683,6 +31323,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "TYPESENSE_API_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -30768,6 +31415,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -31746,6 +32400,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DJANGO_DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -32040,6 +32706,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "WORDPRESS_DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -32130,6 +32803,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }

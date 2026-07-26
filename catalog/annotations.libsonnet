@@ -456,7 +456,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wordpress/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wordpress/server.libsonnet', secretKeys: [{ key: 'WORDPRESS_DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     etherpad: {
@@ -475,7 +475,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/etherpad/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/etherpad/server.libsonnet', secretKeys: [{ key: 'ADMIN_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     hedgedoc: {
@@ -493,7 +493,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/hedgedoc/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/hedgedoc/server.libsonnet', secretKeys: [{ key: 'CMD_SESSION_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     dex: {
@@ -565,7 +565,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/umami/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/umami/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     linkwarden: {
@@ -583,7 +583,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/linkwarden/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/linkwarden/server.libsonnet', secretKeys: [{ key: 'NEXTAUTH_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     miniflux: {
@@ -600,7 +600,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/miniflux/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/miniflux/server.libsonnet', secretKeys: [{ key: 'ADMIN_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     freshrss: {
@@ -633,7 +633,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/flatnotes/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/flatnotes/server.libsonnet', secretKeys: [{ key: 'FLATNOTES_PASSWORD', generate: 'password', length: 32 }, { key: 'FLATNOTES_SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     trilium: {
@@ -680,7 +680,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/code-server/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/code-server/server.libsonnet', secretKeys: [{ key: 'HASHED_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     beszel: {
@@ -788,7 +788,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/documenso/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/documenso/server.libsonnet', secretKeys: [{ key: 'NEXTAUTH_SECRET', generate: 'hex', length: 64 }, { key: 'NEXT_PRIVATE_ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY', generate: 'hex', length: 64 }] },
       },
     },
     'cal-com': {
@@ -805,7 +805,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/cal-com/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/cal-com/server.libsonnet', secretKeys: [{ key: 'CALENDSO_ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'NEXTAUTH_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     alist: {
@@ -867,7 +867,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/teable/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/teable/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     readarr: {
@@ -921,7 +921,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tandoor/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tandoor/server.libsonnet', secretKeys: [{ key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     ghostfolio: {
@@ -937,7 +937,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet', secretKeys: [{ key: 'ACCESS_TOKEN_SALT', generate: 'hex', length: 64 }, { key: 'JWT_SECRET_KEY', generate: 'hex', length: 64 }, { key: 'REDIS_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     'lobe-chat': {
@@ -1026,7 +1026,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/davis/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/davis/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     'pingvin-share': {
@@ -1117,7 +1117,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/leantime/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/leantime/server.libsonnet', secretKeys: [{ key: 'LEAN_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'LEAN_SESSION_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     maloja: {
@@ -1430,7 +1430,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bigcapital/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bigcapital/server.libsonnet', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }, { key: 'SYSTEM_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'TENANT_DB_PASSWORD', generate: 'password', length: 32 }] },
         webapp: d.fn('The Bigcapital front end (single-page web app) on :80. Stateless — scales via replicas. The gateway proxies to it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),
           d.arg('name', d.T.string),
@@ -1468,7 +1468,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/twenty/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/twenty/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
         worker: d.fn('The Twenty background worker (BullMQ jobs), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs `yarn worker:prod`. Scales horizontally via replicas. A Twenty deployment needs at least one.', [
           d.arg('name', d.T.string, default='twenty-worker'),
           d.arg('image', d.T.string),
@@ -1499,7 +1499,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '4Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/sonarqube/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/sonarqube/server.libsonnet', secretKeys: [{ key: 'SONAR_JDBC_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     peertube: {
@@ -1521,7 +1521,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/peertube/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/peertube/server.libsonnet', secretKeys: [{ key: 'PEERTUBE_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'PEERTUBE_SECRET', generate: 'hex', length: 64 }, { key: 'PT_INITIAL_ROOT_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     maybe: {
@@ -1542,7 +1542,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/maybe/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/maybe/server.libsonnet', secretKeys: [{ key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     mautic: {
@@ -1564,7 +1564,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mautic/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mautic/server.libsonnet', secretKeys: [{ key: 'MAUTIC_DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     invoiceninja: {
@@ -1585,7 +1585,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/invoiceninja/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/invoiceninja/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }, { key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     'paperless-ngx': {
@@ -1608,7 +1608,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet', secretKeys: [{ key: 'PAPERLESS_ADMIN_PASSWORD', generate: 'password', length: 32 }, { key: 'PAPERLESS_SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     wger: {
@@ -1630,7 +1630,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wger/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wger/server.libsonnet', secretKeys: [{ key: 'DJANGO_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     endurain: {
@@ -1652,7 +1652,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/endurain/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/endurain/server.libsonnet', secretKeys: [{ key: 'DB_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     seatsurfing: {
@@ -1668,7 +1668,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/seatsurfing/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/seatsurfing/server.libsonnet', secretKeys: [{ key: 'JWT_SIGNING_KEY', generate: 'hex', length: 64 }] },
       },
     },
     ejabberd: {
@@ -1948,7 +1948,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mailu/admin.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mailu/admin.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
         imap: d.fn('The Mailu mail store (Dovecot): holds the maildirs at /mail on the shared volume and serves IMAP/POP3 to front and LMTP delivery to postfix.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
@@ -2512,7 +2512,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lldap/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lldap/server.libsonnet', secretKeys: [{ key: 'LLDAP_JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     qbittorrent: {
@@ -2839,7 +2839,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/healthchecks/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/healthchecks/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     searxng: {
@@ -2856,7 +2856,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/searxng/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/searxng/server.libsonnet', secretKeys: [{ key: 'SEARXNG_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     convertx: {
@@ -2919,7 +2919,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pgadmin/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pgadmin/server.libsonnet', secretKeys: [{ key: 'PGADMIN_DEFAULT_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     tachidesk: {
@@ -2967,7 +2967,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kimai/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kimai/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     adminer: {
@@ -3186,7 +3186,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mumble/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mumble/server.libsonnet', secretKeys: [{ key: 'MUMBLE_SUPERUSER_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     victoriametrics: {
@@ -3218,7 +3218,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openobserve/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openobserve/server.libsonnet', secretKeys: [{ key: 'ZO_ROOT_USER_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     meilisearch: {
@@ -3234,7 +3234,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/meilisearch/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/meilisearch/server.libsonnet', secretKeys: [{ key: 'MEILI_MASTER_KEY', generate: 'hex', length: 64 }] },
       },
     },
     qdrant: {
@@ -3265,7 +3265,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/typesense/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/typesense/server.libsonnet', secretKeys: [{ key: 'TYPESENSE_API_KEY', generate: 'hex', length: 64 }] },
       },
     },
     browserless: {
@@ -3326,7 +3326,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/open-webui/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/open-webui/server.libsonnet', secretKeys: [{ key: 'WEBUI_SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     glance: {
@@ -3387,7 +3387,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/2fauth/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/2fauth/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }] },
       },
     },
     influxdb: {
@@ -3404,7 +3404,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/influxdb/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/influxdb/server.libsonnet', secretKeys: [{ key: 'DOCKER_INFLUXDB_INIT_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     couchdb: {
@@ -3420,7 +3420,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/couchdb/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/couchdb/server.libsonnet', secretKeys: [{ key: 'COUCHDB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     'home-assistant': {
@@ -3527,7 +3527,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/clickhouse/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/clickhouse/server.libsonnet', secretKeys: [{ key: 'CLICKHOUSE_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     'matrix-conduit': {
@@ -3560,7 +3560,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kutt/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kutt/server.libsonnet', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     emby: {
@@ -3707,7 +3707,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/minio/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/minio/server.libsonnet', secretKeys: [{ key: 'MINIO_ROOT_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     rabbitmq: {
@@ -3740,7 +3740,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/formbricks/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/formbricks/server.libsonnet', secretKeys: [{ key: 'ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'NEXTAUTH_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     plex: {
@@ -3806,7 +3806,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/technitium/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/technitium/server.libsonnet', secretKeys: [{ key: 'DNS_SERVER_ADMIN_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     'docker-registry-ui': {
@@ -3857,7 +3857,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/planka/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/planka/server.libsonnet', secretKeys: [{ key: 'S3_SECRET_ACCESS_KEY', generate: 'hex', length: 64 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     photoview: {
@@ -3994,7 +3994,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocobase/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocobase/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }] },
       },
     },
     synapse: {
@@ -4029,7 +4029,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/onlyoffice/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/onlyoffice/server.libsonnet', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     registry: {
@@ -4062,7 +4062,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/xwiki/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/xwiki/server.libsonnet', secretKeys: [{ key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     'redis-commander': {
@@ -4254,7 +4254,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/outline/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/outline/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }, { key: 'UTILS_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     penpot: {
@@ -4272,7 +4272,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/backend.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/backend.libsonnet', secretKeys: [{ key: 'PENPOT_SECRET_KEY', generate: 'hex', length: 64 }] },
         frontend: d.fn('The Penpot frontend (the user-facing nginx web app) on :80. backendUri/exporterUri point at the other stages by Service name. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='penpot-frontend'),
           d.arg('image', d.T.string),
@@ -4385,7 +4385,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet' },
+        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet', secretKeys: [{ key: 'OTP_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     'oauth2-proxy': {
@@ -4547,7 +4547,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/karakeep/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/karakeep/server.libsonnet', secretKeys: [{ key: 'MEILI_MASTER_KEY', generate: 'hex', length: 64 }, { key: 'NEXTAUTH_SECRET', generate: 'hex', length: 64 }, { key: 'OPENAI_API_KEY', generate: 'external' }] },
       },
     },
     homarr: {
@@ -4563,7 +4563,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/homarr/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/homarr/server.libsonnet', secretKeys: [{ key: 'SECRET_ENCRYPTION_KEY', generate: 'hex', length: 64 }] },
       },
     },
     mattermost: {
@@ -4632,7 +4632,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/activepieces/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/activepieces/server.libsonnet', secretKeys: [{ key: 'AP_ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'AP_JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     automatisch: {
@@ -4648,7 +4648,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/automatisch/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/automatisch/server.libsonnet', secretKeys: [{ key: 'APP_SECRET_KEY', generate: 'hex', length: 64 }, { key: 'ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'WEBHOOK_SECRET_KEY', generate: 'hex', length: 64 }] },
         worker: d.fn("The Automatisch background worker (runs the flow executions the server enqueues onto Redis). Shares the server's Secret via envFrom. No Service.", [
           d.arg('name', d.T.string, default='automatisch-worker'),
           d.arg('image', d.T.string),
@@ -4708,7 +4708,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pilos/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pilos/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }] },
       },
     },
     greenlight: {
@@ -4724,7 +4724,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/greenlight/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/greenlight/server.libsonnet', secretKeys: [{ key: 'BIGBLUEBUTTON_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     docmost: {
@@ -4742,7 +4742,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/docmost/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/docmost/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     bugsink: {
@@ -4760,7 +4760,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bugsink/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bugsink/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     blinko: {
@@ -4778,7 +4778,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/blinko/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/blinko/server.libsonnet', secretKeys: [{ key: 'NEXTAUTH_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     answer: {
@@ -4813,7 +4813,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '3Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/photoprism/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/photoprism/server.libsonnet', secretKeys: [{ key: 'PHOTOPRISM_ADMIN_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     lychee: {
@@ -4831,7 +4831,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lychee/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lychee/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }] },
       },
     },
     commafeed: {
@@ -4865,7 +4865,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/glitchtip/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/glitchtip/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
         worker: d.fn('The GlitchTip Celery worker (with beat scheduler), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs ./bin/run-celery-with-beat.sh. Scales horizontally via replicas. A GlitchTip deployment needs at least one.', [
           d.arg('name', d.T.string, default='glitchtip-worker'),
           d.arg('image', d.T.string),
@@ -4918,7 +4918,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/monica/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/monica/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }, { key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     fider: {
@@ -4935,7 +4935,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/fider/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/fider/server.libsonnet', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     'firefly-iii': {
@@ -4956,7 +4956,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/firefly-iii/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/firefly-iii/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }, { key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     mediawiki: {
@@ -5009,7 +5009,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/shlink/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/shlink/server.libsonnet', secretKeys: [{ key: 'DB_PASSWORD', generate: 'password', length: 32 }, { key: 'GEOLITE_LICENSE_KEY', generate: 'external' }] },
       },
     },
     rallly: {
@@ -5026,7 +5026,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rallly/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rallly/server.libsonnet', secretKeys: [{ key: 'SECRET_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     baserow: {
@@ -5044,7 +5044,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/baserow/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/baserow/server.libsonnet', secretKeys: [{ key: 'BASEROW_JWT_SIGNING_KEY', generate: 'hex', length: 64 }, { key: 'BASEROW_SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     nocodb: {
@@ -5062,7 +5062,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocodb/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocodb/server.libsonnet', secretKeys: [{ key: 'NC_AUTH_JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     'snipe-it': {
@@ -5083,7 +5083,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/snipe-it/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/snipe-it/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }, { key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     bookstack: {
@@ -5104,7 +5104,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bookstack/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bookstack/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }] },
       },
     },
     matomo: {
@@ -5124,7 +5124,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/matomo/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/matomo/server.libsonnet', secretKeys: [{ key: 'MATOMO_DATABASE_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     wikijs: {
@@ -5222,7 +5222,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/directus/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/directus/server.libsonnet', secretKeys: [{ key: 'ADMIN_PASSWORD', generate: 'password', length: 32 }, { key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     ferretdb: {
@@ -5882,7 +5882,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/frigate/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/frigate/server.libsonnet', secretKeys: [{ key: 'FRIGATE_RTSP_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
   },
