@@ -3334,7 +3334,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn("The Glance server. config is Glance's own glance.yml (pages/columns/widgets), rendered to the mounted glance.yml. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='glance'),
-          d.arg('image', d.T.string, default='docker.io/glanceapp/glance:v0.8.4'),
+          d.arg('image', d.T.string, default='docker.io/glanceapp/glance:v0.8.5'),
           d.arg('config', d.T.object, default={}),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),

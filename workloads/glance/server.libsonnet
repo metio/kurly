@@ -32,7 +32,7 @@ local defaultConfig = {
 
 function(
   name='glance',
-  image='docker.io/glanceapp/glance:v0.8.4',
+  image='docker.io/glanceapp/glance:v0.8.5',
   config=defaultConfig,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
