@@ -133,6 +133,24 @@
             ];
             text = builtins.readFile ./scripts/gen-architectures.sh;
           };
+          # Generates a live-cluster e2e scenario + thin workflow for every
+          # standalone workload from the catalog, and the coverage ledger
+          # (hack/smoke/COVERAGE.md). Idempotent and marker-guarded, so it never
+          # clobbers a hand-written scenario.
+          gen-smoke = pkgs.writeShellApplication {
+            name = "gen-smoke";
+            runtimeInputs = with pkgs; [
+              jq
+              gnugrep
+              findutils
+              coreutils
+            ];
+            # The emitted scenarios and embedded jq programs carry literal
+            # `$(...)` and jq `$vars` in single quotes on purpose — generated text
+            # and jq syntax, not shell expansions.
+            excludeShellChecks = [ "SC2016" ];
+            text = builtins.readFile ./scripts/gen-smoke.sh;
+          };
           check-catalog = pkgs.writeShellApplication {
             name = "check-catalog";
             runtimeInputs = with pkgs; [
@@ -257,6 +275,7 @@
             gen-maturity
             gen-architectures
             gen-readme
+            gen-smoke
             gen-docs-data
             verify
           ];
