@@ -15,7 +15,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='adminer',
-  image='docker.io/library/adminer:5.3.0',
+  image='docker.io/library/adminer:5.5.0',
   replicas=2,
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },

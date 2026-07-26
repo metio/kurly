@@ -2976,7 +2976,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Adminer server. Stateless; connects to whatever database you point it at. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='adminer'),
-          d.arg('image', d.T.string, default='docker.io/library/adminer:5.3.0'),
+          d.arg('image', d.T.string, default='docker.io/library/adminer:5.5.0'),
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
