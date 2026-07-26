@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/jenkins/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-jenkins)\.sh|\.github/workflows/e2e(-jenkins)?\.yml)'
       scenario: hack/smoke/scenario-jenkins.sh
+      max_versions: '1'

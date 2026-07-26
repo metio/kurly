@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/technitium/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-technitium)\.sh|\.github/workflows/e2e(-technitium)?\.yml)'
       scenario: hack/smoke/scenario-technitium.sh
+      max_versions: '1'

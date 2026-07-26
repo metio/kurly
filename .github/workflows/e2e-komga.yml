@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/komga/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-komga)\.sh|\.github/workflows/e2e(-komga)?\.yml)'
       scenario: hack/smoke/scenario-komga.sh
+      max_versions: '1'

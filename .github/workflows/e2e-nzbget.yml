@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/nzbget/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-nzbget)\.sh|\.github/workflows/e2e(-nzbget)?\.yml)'
       scenario: hack/smoke/scenario-nzbget.sh
+      max_versions: '1'

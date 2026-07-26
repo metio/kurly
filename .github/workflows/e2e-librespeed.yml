@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/librespeed/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-librespeed)\.sh|\.github/workflows/e2e(-librespeed)?\.yml)'
       scenario: hack/smoke/scenario-librespeed.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/authelia/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-authelia)\.sh|\.github/workflows/e2e(-authelia)?\.yml)'
       scenario: hack/smoke/scenario-authelia.sh
+      max_versions: '1'

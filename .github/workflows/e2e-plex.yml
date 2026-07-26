@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/plex/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-plex)\.sh|\.github/workflows/e2e(-plex)?\.yml)'
       scenario: hack/smoke/scenario-plex.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/clickhouse/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-clickhouse)\.sh|\.github/workflows/e2e(-clickhouse)?\.yml)'
       scenario: hack/smoke/scenario-clickhouse.sh
+      max_versions: '1'

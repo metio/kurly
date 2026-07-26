@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/kavita/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-kavita)\.sh|\.github/workflows/e2e(-kavita)?\.yml)'
       scenario: hack/smoke/scenario-kavita.sh
+      max_versions: '1'

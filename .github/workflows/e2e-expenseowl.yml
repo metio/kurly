@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/expenseowl/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-expenseowl)\.sh|\.github/workflows/e2e(-expenseowl)?\.yml)'
       scenario: hack/smoke/scenario-expenseowl.sh
+      max_versions: '1'

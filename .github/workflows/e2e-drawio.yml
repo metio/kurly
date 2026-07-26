@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/drawio/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-drawio)\.sh|\.github/workflows/e2e(-drawio)?\.yml)'
       scenario: hack/smoke/scenario-drawio.sh
+      max_versions: '1'

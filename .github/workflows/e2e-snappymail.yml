@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/snappymail/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-snappymail)\.sh|\.github/workflows/e2e(-snappymail)?\.yml)'
       scenario: hack/smoke/scenario-snappymail.sh
+      max_versions: '1'

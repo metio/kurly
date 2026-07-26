@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/portainer/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-portainer)\.sh|\.github/workflows/e2e(-portainer)?\.yml)'
       scenario: hack/smoke/scenario-portainer.sh
+      max_versions: '1'

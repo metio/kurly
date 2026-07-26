@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/linkstack/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-linkstack)\.sh|\.github/workflows/e2e(-linkstack)?\.yml)'
       scenario: hack/smoke/scenario-linkstack.sh
+      max_versions: '1'

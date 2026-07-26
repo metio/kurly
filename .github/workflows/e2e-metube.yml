@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/metube/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-metube)\.sh|\.github/workflows/e2e(-metube)?\.yml)'
       scenario: hack/smoke/scenario-metube.sh
+      max_versions: '1'

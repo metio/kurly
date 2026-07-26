@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/tika/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tika)\.sh|\.github/workflows/e2e(-tika)?\.yml)'
       scenario: hack/smoke/scenario-tika.sh
+      max_versions: '1'

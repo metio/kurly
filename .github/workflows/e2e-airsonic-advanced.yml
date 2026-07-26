@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/airsonic-advanced/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-airsonic-advanced)\.sh|\.github/workflows/e2e(-airsonic-advanced)?\.yml)'
       scenario: hack/smoke/scenario-airsonic-advanced.sh
+      max_versions: '1'

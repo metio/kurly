@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/mariadb/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mariadb)\.sh|\.github/workflows/e2e(-mariadb)?\.yml)'
       scenario: hack/smoke/scenario-mariadb.sh
+      max_versions: '1'

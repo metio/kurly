@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/privatebin/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-privatebin)\.sh|\.github/workflows/e2e(-privatebin)?\.yml)'
       scenario: hack/smoke/scenario-privatebin.sh
+      max_versions: '1'

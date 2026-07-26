@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/glance/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-glance)\.sh|\.github/workflows/e2e(-glance)?\.yml)'
       scenario: hack/smoke/scenario-glance.sh
+      max_versions: '1'

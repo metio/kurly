@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/openobserve/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-openobserve)\.sh|\.github/workflows/e2e(-openobserve)?\.yml)'
       scenario: hack/smoke/scenario-openobserve.sh
+      max_versions: '1'

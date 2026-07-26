@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/typesense/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-typesense)\.sh|\.github/workflows/e2e(-typesense)?\.yml)'
       scenario: hack/smoke/scenario-typesense.sh
+      max_versions: '1'

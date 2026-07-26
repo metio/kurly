@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/maloja/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-maloja)\.sh|\.github/workflows/e2e(-maloja)?\.yml)'
       scenario: hack/smoke/scenario-maloja.sh
+      max_versions: '1'

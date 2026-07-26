@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/znc/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-znc)\.sh|\.github/workflows/e2e(-znc)?\.yml)'
       scenario: hack/smoke/scenario-znc.sh
+      max_versions: '1'

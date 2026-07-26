@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/uptime-kuma/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-uptime-kuma)\.sh|\.github/workflows/e2e(-uptime-kuma)?\.yml)'
       scenario: hack/smoke/scenario-uptime-kuma.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/grav/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-grav)\.sh|\.github/workflows/e2e(-grav)?\.yml)'
       scenario: hack/smoke/scenario-grav.sh
+      max_versions: '1'

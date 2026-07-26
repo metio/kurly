@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/adguardhome/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-adguardhome)\.sh|\.github/workflows/e2e(-adguardhome)?\.yml)'
       scenario: hack/smoke/scenario-adguardhome.sh
+      max_versions: '1'

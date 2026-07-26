@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/mermaid-live-editor/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mermaid-live-editor)\.sh|\.github/workflows/e2e(-mermaid-live-editor)?\.yml)'
       scenario: hack/smoke/scenario-mermaid-live-editor.sh
+      max_versions: '1'

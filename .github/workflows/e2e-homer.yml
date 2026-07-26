@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/homer/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-homer)\.sh|\.github/workflows/e2e(-homer)?\.yml)'
       scenario: hack/smoke/scenario-homer.sh
+      max_versions: '1'

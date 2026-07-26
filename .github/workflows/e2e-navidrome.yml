@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/navidrome/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-navidrome)\.sh|\.github/workflows/e2e(-navidrome)?\.yml)'
       scenario: hack/smoke/scenario-navidrome.sh
+      max_versions: '1'

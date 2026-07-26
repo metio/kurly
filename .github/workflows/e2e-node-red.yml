@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/node-red/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-node-red)\.sh|\.github/workflows/e2e(-node-red)?\.yml)'
       scenario: hack/smoke/scenario-node-red.sh
+      max_versions: '1'

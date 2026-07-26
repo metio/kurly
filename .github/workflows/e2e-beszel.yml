@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/beszel/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-beszel)\.sh|\.github/workflows/e2e(-beszel)?\.yml)'
       scenario: hack/smoke/scenario-beszel.sh
+      max_versions: '1'

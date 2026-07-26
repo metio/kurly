@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/redis/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-redis)\.sh|\.github/workflows/e2e(-redis)?\.yml)'
       scenario: hack/smoke/scenario-redis.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/changedetection/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-changedetection)\.sh|\.github/workflows/e2e(-changedetection)?\.yml)'
       scenario: hack/smoke/scenario-changedetection.sh
+      max_versions: '1'

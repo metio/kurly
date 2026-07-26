@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/organizr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-organizr)\.sh|\.github/workflows/e2e(-organizr)?\.yml)'
       scenario: hack/smoke/scenario-organizr.sh
+      max_versions: '1'

@@ -100,6 +100,111 @@ kurly::boot() {
   echo "ok: ${stage} is healthy on a live cluster"
 }
 
+# A single shared test password every provisioned dependency and minted Secret
+# uses, so an app's DB_PASSWORD Secret key matches the database it connects to.
+KURLY_E2E_PASSWORD="kurlye2epassword"
+
+# Mints the Secret a stage reads, from the catalog's per-stage `secretKeys`
+# contract: each key is generated as a password (the shared test password, so it
+# matches the provisioned database), a fixed hex string, or its declared literal.
+# kurly authors no Secret itself — a consumer supplies it — so the e2e supplies a
+# throwaway one shaped exactly like the catalog says the app needs.
+#   kurly::secret <ns> <secret-name> <stage-file>
+kurly::secret() {
+  local ns="$1" name="$2" stage="$3"
+  local keys
+  keys="$(jq -c --arg ip "github.com/metio/kurly/${stage}" \
+    '.workloads[].stages[] | select(.importPath==$ip) | .secretKeys // []' catalog/catalog.json)"
+  [ "$keys" != "[]" ] && [ -n "$keys" ] || return 0
+  local args=() k gen val
+  while read -r k; do
+    gen="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .generate' <<<"$keys")"
+    case "$gen" in
+      password) val="$KURLY_E2E_PASSWORD" ;;
+      hex) val="0123456789abcdef0123456789abcdef" ;;
+      literal) val="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .value' <<<"$keys")" ;;
+      *) val="$KURLY_E2E_PASSWORD" ;;
+    esac
+    args+=("--from-literal=${k}=${val}")
+  done < <(jq -r '.[].key' <<<"$keys")
+  kubectl --namespace="$ns" create secret generic "$name" "${args[@]}" \
+    --dry-run=client --output=yaml | kubectl apply --filename=-
+}
+
+# A throwaway PostgreSQL for an app's e2e: a single Deployment + Service at the
+# service name the app defaults to (so it connects with no param override), seeded
+# with the app's database, user, and the shared test password. Not hardened (it is
+# a disposable dependency, torn down with the cluster), so it boots on kind's
+# default posture without relaxation. Extra "-c name=value" server settings and a
+# custom image (e.g. one carrying an extension) may be passed as $5 / $6.
+#   kurly::postgres <ns> <service> <db> <user> [image] [extraArgs]
+kurly::postgres() {
+  local ns="$1" svc="$2" db="$3" user="$4" image="${5:-docker.io/library/postgres:17}" extra="${6:-}"
+  echo "== provision postgres ${svc} (db=${db}, user=${user}) =="
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ${svc}, labels: { app: ${svc} } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ${svc} } }
+  template:
+    metadata: { labels: { app: ${svc} } }
+    spec:
+      containers:
+        - name: postgres
+          image: ${image}
+          args: ["postgres"${extra:+, ${extra}}]
+          env:
+            - { name: POSTGRES_DB, value: "${db}" }
+            - { name: POSTGRES_USER, value: "${user}" }
+            - { name: POSTGRES_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
+            - { name: PGDATA, value: /var/lib/postgresql/data/pgdata }
+          ports: [{ containerPort: 5432 }]
+          volumeMounts: [{ name: data, mountPath: /var/lib/postgresql/data }]
+      volumes: [{ name: data, emptyDir: {} }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ${svc} }
+spec:
+  selector: { app: ${svc} }
+  ports: [{ port: 5432, targetPort: 5432 }]
+EOF
+  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
+}
+
+# A throwaway Valkey (Redis) for an app's e2e, at the service name the app
+# defaults to. Authless (matches the app defaulting to no REDIS_PASSWORD).
+#   kurly::cache <ns> <service>
+kurly::cache() {
+  local ns="$1" svc="$2"
+  echo "== provision valkey ${svc} =="
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ${svc}, labels: { app: ${svc} } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ${svc} } }
+  template:
+    metadata: { labels: { app: ${svc} } }
+    spec:
+      containers:
+        - name: valkey
+          image: docker.io/valkey/valkey:8
+          ports: [{ containerPort: 6379 }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ${svc} }
+spec:
+  selector: { app: ${svc} }
+  ports: [{ port: 6379, targetPort: 6379 }]
+EOF
+  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
+}
+
 # Dumps everything useful about a namespace on failure, grouped in the log.
 kurly::diagnose() {
   local ns="$1"

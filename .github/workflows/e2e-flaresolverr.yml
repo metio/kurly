@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/flaresolverr/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-flaresolverr)\.sh|\.github/workflows/e2e(-flaresolverr)?\.yml)'
       scenario: hack/smoke/scenario-flaresolverr.sh
+      max_versions: '1'

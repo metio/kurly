@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/mailpit/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-mailpit)\.sh|\.github/workflows/e2e(-mailpit)?\.yml)'
       scenario: hack/smoke/scenario-mailpit.sh
+      max_versions: '1'

@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/tautulli/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-tautulli)\.sh|\.github/workflows/e2e(-tautulli)?\.yml)'
       scenario: hack/smoke/scenario-tautulli.sh
+      max_versions: '1'

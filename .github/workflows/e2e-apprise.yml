@@ -20,3 +20,4 @@ jobs:
       # yamllint disable-line rule:line-length
       paths: '^(workloads/apprise/|lib/|main\.libsonnet|hack/smoke/(lib|scenario-apprise)\.sh|\.github/workflows/e2e(-apprise)?\.yml)'
       scenario: hack/smoke/scenario-apprise.sh
+      max_versions: '1'
