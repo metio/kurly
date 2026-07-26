@@ -20,7 +20,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='couchdb',
-  image='docker.io/library/couchdb:3.4.2',
+  image='docker.io/library/couchdb:3.5.2',
   storageSize='10Gi',
   storageClass=null,
   secretName='couchdb-secrets',

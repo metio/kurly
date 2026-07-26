@@ -3412,7 +3412,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The CouchDB server. secretName holds COUCHDB_USER and COUCHDB_PASSWORD (envFrom). Data at /opt/couchdb/data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='couchdb'),
-          d.arg('image', d.T.string, default='docker.io/library/couchdb:3.4.2'),
+          d.arg('image', d.T.string, default='docker.io/library/couchdb:3.5.2'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='couchdb-secrets'),
