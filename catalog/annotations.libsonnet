@@ -2911,7 +2911,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The pgAdmin server. secretName holds PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD (envFrom). Config at /var/lib/pgadmin. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pgadmin'),
-          d.arg('image', d.T.string, default='docker.io/dpage/pgadmin4:9.8'),
+          d.arg('image', d.T.string, default='docker.io/dpage/pgadmin4:9.16'),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='pgadmin-secrets'),

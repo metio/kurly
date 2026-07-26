@@ -22,7 +22,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='pgadmin',
-  image='docker.io/dpage/pgadmin4:9.8',
+  image='docker.io/dpage/pgadmin4:9.16',
   storageSize='1Gi',
   storageClass=null,
   secretName='pgadmin-secrets',

@@ -21064,7 +21064,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/dpage/pgadmin4:9.8",
+                     "default": "docker.io/dpage/pgadmin4:9.16",
                      "name": "image",
                      "required": false,
                      "type": "string"
