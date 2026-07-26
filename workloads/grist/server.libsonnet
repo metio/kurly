@@ -17,7 +17,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='grist',
-  image='docker.io/gristlabs/grist:1.2.0',
+  image='docker.io/gristlabs/grist:1.7.16',
   storageSize='10Gi',
   storageClass=null,
   env={},

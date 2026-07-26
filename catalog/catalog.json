@@ -10631,7 +10631,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/gristlabs/grist:1.2.0",
+                     "default": "docker.io/gristlabs/grist:1.7.16",
                      "name": "image",
                      "required": false,
                      "type": "string"

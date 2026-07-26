@@ -733,7 +733,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       stages: {
         server: d.fn('The Grist server. Documents at /persist on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='grist'),
-          d.arg('image', d.T.string, default='docker.io/gristlabs/grist:1.2.0'),
+          d.arg('image', d.T.string, default='docker.io/gristlabs/grist:1.7.16'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
