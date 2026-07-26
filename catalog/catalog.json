@@ -2457,6 +2457,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/2fauth/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -2539,6 +2545,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/activepieces/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -2611,6 +2623,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/actualbudget/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -2683,6 +2701,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/adguardhome/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -2752,6 +2776,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/adminer/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -2842,6 +2872,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/airsonic-advanced/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -2939,6 +2975,7 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/alertmanager/server.libsonnet",
                "kind": "alertmanager",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -3013,6 +3050,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/alist/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3087,6 +3130,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/answer/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3162,6 +3211,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/anythingllm/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3237,6 +3292,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/apprise/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3309,6 +3370,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/audiobookshelf/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3392,6 +3459,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/authelia/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3468,6 +3541,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/authentik/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -3531,6 +3610,12 @@
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/authentik/worker.libsonnet",
                "kind": "worker",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -3607,6 +3692,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/automatisch/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -3670,6 +3761,12 @@
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/automatisch/worker.libsonnet",
                "kind": "worker",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -3744,6 +3841,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/baikal/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3831,6 +3934,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/baserow/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3921,6 +4030,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bazarr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -3993,6 +4108,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/beszel/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -4062,6 +4183,12 @@
                "id": "gateway",
                "importPath": "github.com/metio/kurly/workloads/bigcapital/gateway.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -4154,6 +4281,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bigcapital/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -4216,6 +4349,12 @@
                "id": "webapp",
                "importPath": "github.com/metio/kurly/workloads/bigcapital/webapp.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -4283,6 +4422,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/blackbox-exporter/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -4369,6 +4514,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/blinko/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -4473,6 +4624,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bookstack/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -4546,6 +4703,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/browserless/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -4633,6 +4796,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bugsink/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -4713,6 +4882,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cal-com/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -4803,6 +4978,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/calibre/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -4893,6 +5074,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/calibre-web/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -4989,6 +5176,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/calibre-web-automated/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 2
                }
@@ -5073,6 +5266,7 @@
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/cassandra-cluster/cluster.libsonnet",
                "kind": "cassandra",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -5151,6 +5345,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/changedetection/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -5218,6 +5418,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/chatpad/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -5296,6 +5502,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/clickhouse/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -5470,6 +5682,7 @@
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet",
                "kind": "cnpg",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -5520,6 +5733,7 @@
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet",
                "kind": "cnpg",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -5560,6 +5774,7 @@
                "id": "namespaced",
                "importPath": "github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet",
                "kind": "cnpg",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -5632,6 +5847,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cobalt/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -5710,6 +5931,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/code-server/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -5784,6 +6011,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/commafeed/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -5856,6 +6089,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/convertx/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -5934,6 +6173,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/couchdb/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6006,6 +6251,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cryptpad/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6073,6 +6324,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cyberchef/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -6145,6 +6402,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/dashy/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6220,6 +6483,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/davis/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -6310,6 +6579,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/davos/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6400,6 +6675,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/deluge/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6480,6 +6761,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/dex/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6590,6 +6877,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/directus/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6669,6 +6962,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -6757,6 +7056,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/docmost/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6838,6 +7143,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/documenso/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -6912,6 +7223,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/docuseal/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -6984,6 +7301,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/dokuwiki/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7045,6 +7368,12 @@
                "id": "instance",
                "importPath": "github.com/metio/kurly/workloads/dragonfly/instance.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7112,6 +7441,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/draw-io/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -7179,6 +7514,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/drawio/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -7259,6 +7600,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/drupal/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7351,6 +7698,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/duplicati/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7423,6 +7776,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ejabberd/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7513,6 +7872,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/element-web/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -7603,6 +7968,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/emby/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7675,6 +8046,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/emqx/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7786,6 +8163,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/endurain/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -7856,6 +8239,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ente/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -7919,6 +8308,12 @@
                "id": "web",
                "importPath": "github.com/metio/kurly/workloads/ente/web.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -7991,6 +8386,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/esphome/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -8084,6 +8485,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/etherpad/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -8151,6 +8558,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/excalidraw/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -8223,6 +8636,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/expenseowl/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -8298,6 +8717,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ferretdb/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -8379,6 +8804,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/fider/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -8451,6 +8882,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/filebrowser/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -8525,6 +8962,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/filestash/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -8629,6 +9072,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/firefly-iii/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -8701,6 +9150,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/flame/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -8774,6 +9229,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/flaresolverr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -8852,6 +9313,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/flatnotes/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -8924,6 +9391,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/focalboard/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -9014,6 +9487,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/foldingathome/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -9119,6 +9598,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/forgejo/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -9200,6 +9685,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/formbricks/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -9280,6 +9771,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/freshrss/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -9381,6 +9878,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/frigate/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 2
                }
@@ -9458,6 +9961,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gatus/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -9562,6 +10071,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ghost/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -9638,6 +10153,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ghostfolio/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -9730,6 +10251,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gitea/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -9796,6 +10323,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/glance/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -9884,6 +10417,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/glitchtip/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -9953,6 +10492,12 @@
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/glitchtip/worker.libsonnet",
                "kind": "worker",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -10025,6 +10570,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gogs/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10099,6 +10650,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gokapi/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10166,6 +10723,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gotenberg/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -10238,6 +10801,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gotify/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10318,6 +10887,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gotosocial/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10407,6 +10982,7 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grafana/server.libsonnet",
                "kind": "grafana",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -10497,6 +11073,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grav/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10573,6 +11155,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/greenlight/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -10645,6 +11233,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grist/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10735,6 +11329,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grocy/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10815,6 +11415,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/guacamole/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -10907,6 +11513,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/healthchecks/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -10993,6 +11605,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/hedgedoc/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11083,6 +11701,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/heimdall/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11150,6 +11774,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/hollama/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -11228,6 +11858,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homarr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11300,6 +11936,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/home-assistant/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11372,6 +12014,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homebox/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11450,6 +12098,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homepage/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11522,6 +12176,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homer/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11600,6 +12260,12 @@
                "id": "machine-learning",
                "importPath": "github.com/metio/kurly/workloads/immich/machine-learning.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11698,6 +12364,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/immich/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11778,6 +12450,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/influxdb/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11850,6 +12528,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/inspircd/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -11954,6 +12638,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/invoiceninja/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12021,6 +12711,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/it-tools/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -12111,6 +12807,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jackett/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12201,6 +12903,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jellyfin/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12273,6 +12981,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jellyseerr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12345,6 +13059,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jenkins/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12425,6 +13145,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/joomla/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12506,6 +13232,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/joplin/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -12580,6 +13312,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kanboard/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12676,6 +13414,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/karakeep/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12748,6 +13492,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kavita/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -12839,6 +13589,7 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/keycloak/server.libsonnet",
                "kind": "keycloak",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -12914,6 +13665,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kimai/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -12986,6 +13743,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/komga/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13062,6 +13825,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kutt/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -13142,6 +13911,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/leantime/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13218,6 +13993,12 @@
                "id": "backend",
                "importPath": "github.com/metio/kurly/workloads/lemmy/backend.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -13286,6 +14067,12 @@
                "id": "pictrs",
                "importPath": "github.com/metio/kurly/workloads/lemmy/pictrs.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13355,6 +14142,12 @@
                "id": "ui",
                "importPath": "github.com/metio/kurly/workloads/lemmy/ui.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -13445,6 +14238,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/librespeed/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13535,6 +14334,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lidarr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13609,6 +14414,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/linkding/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13681,6 +14492,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/linkstack/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13768,6 +14585,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/linkwarden/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13872,6 +14695,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/listmonk/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -13958,6 +14787,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lldap/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -14025,6 +14860,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lobe-chat/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14103,6 +14944,7 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/loki/server.libsonnet",
                "kind": "loki",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -14189,6 +15031,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lychee/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -14256,6 +15104,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mailhog/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14331,6 +15185,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mailpit/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -14438,6 +15298,12 @@
                "id": "admin",
                "importPath": "github.com/metio/kurly/workloads/mailu/admin.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": false,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14533,6 +15399,12 @@
                "id": "antispam",
                "importPath": "github.com/metio/kurly/workloads/mailu/antispam.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": false,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14634,6 +15506,12 @@
                "id": "front",
                "importPath": "github.com/metio/kurly/workloads/mailu/front.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": false,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14729,6 +15607,12 @@
                "id": "imap",
                "importPath": "github.com/metio/kurly/workloads/mailu/imap.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": false,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14824,6 +15708,12 @@
                "id": "smtp",
                "importPath": "github.com/metio/kurly/workloads/mailu/smtp.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": false,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14913,6 +15803,12 @@
                "id": "webmail",
                "importPath": "github.com/metio/kurly/workloads/mailu/webmail.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": false,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -14985,6 +15881,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/maloja/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15063,6 +15965,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mariadb/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15140,6 +16048,12 @@
                "id": "sidekiq",
                "importPath": "github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet",
                "kind": "worker",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -15203,6 +16117,12 @@
                "id": "streaming",
                "importPath": "github.com/metio/kurly/workloads/mastodon/streaming.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -15272,6 +16192,12 @@
                "id": "web",
                "importPath": "github.com/metio/kurly/workloads/mastodon/web.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -15370,6 +16296,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/matomo/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15454,6 +16386,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/matrix-conduit/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15541,6 +16479,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mattermost/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15651,6 +16595,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mautic/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15756,6 +16706,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/maybe/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15823,6 +16779,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mazanoke/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -15903,6 +16865,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mealie/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -15977,6 +16945,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mediawiki/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16055,6 +17029,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/meilisearch/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16105,6 +17085,12 @@
                "id": "cache",
                "importPath": "github.com/metio/kurly/workloads/memcached/cache.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -16179,6 +17165,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/memos/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16246,6 +17238,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mermaid-live-editor/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -16339,6 +17337,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/metabase/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -16419,6 +17423,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/metrics-server/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -16491,6 +17501,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/metube/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16563,6 +17579,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/microbin/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16644,6 +17666,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/miniflux/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -16722,6 +17750,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/minio/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16804,6 +17838,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/misskey/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16882,6 +17922,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mongo/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -16957,6 +18003,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mongo-express/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -17035,6 +18087,7 @@
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/mongodb-cluster/cluster.libsonnet",
                "kind": "mongodb",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -17139,6 +18192,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/monica/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17216,6 +18275,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mosquitto/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17294,6 +18359,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mumble/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17384,6 +18455,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mylar3/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17462,6 +18539,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mysql/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17553,6 +18636,7 @@
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet",
                "kind": "mysql",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -17633,6 +18717,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/n8n/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17705,6 +18795,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nats/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17777,6 +18873,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/navidrome/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17855,6 +18957,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/neo4j/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -17945,6 +19053,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/netbootxyz/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18074,6 +19188,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/netbox/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18161,6 +19281,12 @@
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/netbox/worker.libsonnet",
                "kind": "worker",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -18248,6 +19374,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nextcloud/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18320,6 +19452,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nginx-proxy-manager/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18400,6 +19538,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nocobase/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18487,6 +19631,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nocodb/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18559,6 +19709,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/node-red/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18637,6 +19793,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ntfy/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18727,6 +19889,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nzbget/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18817,6 +19985,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nzbhydra2/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -18892,6 +20066,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/oauth2-proxy/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -18972,6 +20152,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/odoo/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19044,6 +20230,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ollama/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19134,6 +20326,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ombi/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19214,6 +20412,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/onlyoffice/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19300,6 +20504,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/open-webui/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19379,6 +20589,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/opencost/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -19463,6 +20679,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/openhab/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 3
                }
@@ -19541,6 +20763,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/openobserve/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19628,6 +20856,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/openproject/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19714,6 +20948,7 @@
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/opensearch-cluster/cluster.libsonnet",
                "kind": "opensearch",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -19786,6 +21021,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/organizr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -19823,6 +21064,12 @@
                "id": "agent",
                "importPath": "github.com/metio/kurly/workloads/otel-collector/agent.libsonnet",
                "kind": "daemon",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -19906,6 +21153,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/outline/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -20005,6 +21258,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/overleaf/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20077,6 +21336,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/overseerr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20149,6 +21414,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/owncast/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20224,6 +21495,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/owntracks-recorder/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20285,6 +21562,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pairdrop/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -20357,6 +21640,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/paisa/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20474,6 +21763,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20549,6 +21844,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/passwordpusher/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -20661,6 +21962,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/peertube/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20749,6 +22056,12 @@
                "id": "backend",
                "importPath": "github.com/metio/kurly/workloads/penpot/backend.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -20812,6 +22125,12 @@
                "id": "exporter",
                "importPath": "github.com/metio/kurly/workloads/penpot/exporter.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -20881,6 +22200,12 @@
                "id": "frontend",
                "importPath": "github.com/metio/kurly/workloads/penpot/frontend.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -20961,6 +22286,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pgadmin/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21053,6 +22384,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/photoprism/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21139,6 +22476,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/photoview/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 2
                }
@@ -21214,6 +22557,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/phpmyadmin/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -21298,6 +22647,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pihole/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21379,6 +22734,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pilos/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21451,6 +22812,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pingvin-share/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21543,6 +22910,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/piwigo/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21625,6 +22998,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/planka/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -21715,6 +23094,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/plex/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21793,6 +23178,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pocket-id/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21865,6 +23256,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pocketbase/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -21942,6 +23339,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/portainer/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22020,6 +23423,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/postgres/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22100,6 +23509,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/prestashop/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22172,6 +23587,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/privatebin/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22264,6 +23685,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/projectsend/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22396,6 +23823,7 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/prometheus/server.libsonnet",
                "kind": "prometheus",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -22486,6 +23914,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/prowlarr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22576,6 +24010,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pyload-ng/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22666,6 +24106,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/qbittorrent/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22738,6 +24184,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/qdrant/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22816,6 +24268,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rabbitmq/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22906,6 +24364,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/radarr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -22978,6 +24442,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/radicale/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23059,6 +24529,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rallly/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -23149,6 +24625,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/readarr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23221,6 +24703,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/readeck/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23299,6 +24787,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/redis/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23374,6 +24868,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/redis-commander/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -23454,6 +24954,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/redmine/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23528,6 +25034,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/registry/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23618,6 +25130,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/resilio-sync/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23699,6 +25217,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rocketchat/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -23783,6 +25307,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/roundcube/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -23850,6 +25380,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rss-bridge/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -23936,6 +25472,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rundeck/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24026,6 +25568,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/sabnzbd/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24106,6 +25654,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/searxng/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -24181,6 +25735,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/seatsurfing/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -24236,6 +25796,12 @@
                "id": "filer",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/filer.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24275,6 +25841,12 @@
                "id": "master",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/master.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24312,6 +25884,12 @@
                   "cpu": "100m",
                   "ephemeralStorage": "256Mi",
                   "memory": "256Mi"
+               },
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
                },
                "storage": {
                   "pvcs": 1
@@ -24364,6 +25942,12 @@
                "id": "volume",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24436,6 +26020,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/shaarli/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24510,6 +26100,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/shiori/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24609,6 +26205,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/shlink/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -24687,6 +26289,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/silverbullet/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24759,6 +26367,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/siyuan/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24834,6 +26448,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/smtp4dev/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -24906,6 +26526,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/snappymail/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25010,6 +26636,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/snipe-it/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25108,6 +26740,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/sonarqube/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25198,6 +26836,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/sonarr/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25385,6 +27029,12 @@
                "id": "mirror",
                "importPath": "github.com/metio/kurly/workloads/spegel/mirror.libsonnet",
                "kind": "daemon",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": false,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -25438,6 +27088,12 @@
                   "cpu": "10m",
                   "ephemeralStorage": "64Mi",
                   "memory": "32Mi"
+               },
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
                },
                "storage": {
                   "pvcs": 0
@@ -25511,6 +27167,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/stirling-pdf/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25597,6 +27259,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/synapse/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25687,6 +27355,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/syncthing/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25759,6 +27433,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tachidesk/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25839,6 +27519,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tandoor/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -25929,6 +27615,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tautulli/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26011,6 +27703,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/teable/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -26089,6 +27787,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/technitium/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26153,6 +27857,7 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tempo/server.libsonnet",
                "kind": "tempo",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -26252,6 +27957,12 @@
                "id": "compact",
                "importPath": "github.com/metio/kurly/workloads/thanos/compact.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26326,6 +28037,12 @@
                "id": "query",
                "importPath": "github.com/metio/kurly/workloads/thanos/query.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -26389,6 +28106,12 @@
                "id": "query-frontend",
                "importPath": "github.com/metio/kurly/workloads/thanos/query-frontend.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -26475,6 +28198,12 @@
                "id": "receive",
                "importPath": "github.com/metio/kurly/workloads/thanos/receive.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26572,6 +28301,7 @@
                "id": "ruler",
                "importPath": "github.com/metio/kurly/workloads/thanos/ruler.libsonnet",
                "kind": "thanos-ruler",
+               "posture": null,
                "storage": {
                   "pvcs": 0
                }
@@ -26646,6 +28376,12 @@
                "id": "store",
                "importPath": "github.com/metio/kurly/workloads/thanos/store.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26718,6 +28454,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/thelounge/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26761,6 +28503,12 @@
                "id": "backend",
                "importPath": "github.com/metio/kurly/workloads/tik/backend.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26828,6 +28576,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tika/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -26907,6 +28661,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/traccar/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -26997,6 +28757,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/transmission/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27069,6 +28835,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/trilium/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27159,6 +28931,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tvheadend/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27253,6 +29031,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/twenty/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27322,6 +29106,12 @@
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/twenty/worker.libsonnet",
                "kind": "worker",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -27400,6 +29190,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/typesense/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27475,6 +29271,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/umami/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -27547,6 +29349,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/uptime-kuma/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27590,6 +29398,12 @@
                "id": "cache",
                "importPath": "github.com/metio/kurly/workloads/valkey/cache.libsonnet",
                "kind": "worker",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -27629,6 +29443,12 @@
                "id": "instance",
                "importPath": "github.com/metio/kurly/workloads/valkey/instance.libsonnet",
                "kind": "stateful",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27715,6 +29535,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/vaultwarden/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27793,6 +29619,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/victoriametrics/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27879,6 +29711,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/vikunja/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -27983,6 +29821,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wallabag/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -28055,6 +29899,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wallos/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -28141,6 +29991,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/webtrees/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -28222,6 +30078,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wekan/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -28333,6 +30195,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wger/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -28400,6 +30268,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/whoogle/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -28493,6 +30367,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wikijs/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -28591,6 +30471,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wordpress/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -28671,6 +30557,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/xwiki/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 1
                }
@@ -28752,6 +30644,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/yourls/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
                "storage": {
                   "pvcs": 0
                }
@@ -28824,6 +30722,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/znc/server.libsonnet",
                "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
                "storage": {
                   "pvcs": 1
                }

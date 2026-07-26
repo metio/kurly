@@ -392,6 +392,37 @@ local pvcCount(fn) =
     0
   );
 
+// The pod templates a stage renders — where its security context lives.
+local podTemplates(items) = [
+  if m.kind == 'CronJob' then m.spec.jobTemplate.spec.template else m.spec.template
+  for m in items
+  if std.member(['Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob'], m.kind)
+];
+
+// The multi-tenant security posture a stage's DEFAULT render carries, derived
+// (like storage.pvcs) so it never drifts from what the workload emits — the
+// portal reads it to refuse or gate the recipes that need root before hosting a
+// stranger's workload on a shared node. `null` for a custom-resource stage whose
+// pods the operator (not kurly) runs, so the posture is not kurly's to state.
+//   runsAsRoot           — a pod without runAsNonRoot (kurly.rootUser / privileged)
+//   writableRootFilesystem — a container without a read-only root fs
+//   ownUserNamespace     — hostUsers:false, so a breakout lands unprivileged on the host
+//   multiTenantSafe      — none of the above relaxations; the hardened default stands
+local posture(fn) =
+  local tmpls = podTemplates(main.list(fn()).items);
+  if tmpls == [] then null
+  else
+    local containers = std.flattenArrays([std.get(t.spec, 'containers', []) for t in tmpls]);
+    local nonRoot = std.all([std.get(std.get(t.spec, 'securityContext', {}), 'runAsNonRoot', false) for t in tmpls]);
+    local readOnly = containers != [] && std.all([std.get(std.get(c, 'securityContext', {}), 'readOnlyRootFilesystem', false) for c in containers]);
+    local ownUserNs = std.all([std.get(t.spec, 'hostUsers', true) == false for t in tmpls]);
+    {
+      runsAsRoot: !nonRoot,
+      writableRootFilesystem: !readOnly,
+      ownUserNamespace: ownUserNs,
+      multiTenantSafe: nonRoot && readOnly && ownUserNs,
+    };
+
 // Flattens the annotated workloads into catalog entries, checking every stage
 // against stageImports: the annotated stage keys and the imported stage keys
 // must be the same set, and each import must resolve to a function.
@@ -421,6 +452,7 @@ local workloadEntries =
         { id: stage }
         + ann.workloads[workload].stages[stage]
         + { storage: { pvcs: pvcCount(stageImports[workload + '/' + stage]) } }
+        + { posture: posture(stageImports[workload + '/' + stage]) }
         for stage in std.objectFields(ann.workloads[workload].stages)
       ],
     }
