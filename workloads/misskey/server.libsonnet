@@ -23,7 +23,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='misskey',
-  image='docker.io/misskey/misskey:2024.11.0',
+  image='docker.io/misskey/misskey:2026.6.0',
   storageSize='20Gi',
   storageClass=null,
   configSecret='misskey-config',
