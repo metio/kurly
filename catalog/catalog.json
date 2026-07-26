@@ -7688,7 +7688,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/emqx/emqx:5.8.0",
+                     "default": "docker.io/emqx/emqx:6.2.2",
                      "name": "image",
                      "required": false,
                      "type": "string"
