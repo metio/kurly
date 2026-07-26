@@ -22217,7 +22217,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/prestashop/prestashop:8.1",
+                     "default": "docker.io/prestashop/prestashop:8.2",
                      "name": "image",
                      "required": false,
                      "type": "string"

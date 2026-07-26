@@ -19,7 +19,7 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 function(
   name='prestashop',
-  image='docker.io/prestashop/prestashop:8.1',
+  image='docker.io/prestashop/prestashop:8.2',
   storageSize='10Gi',
   storageClass=null,
   secretName='prestashop-secrets',
