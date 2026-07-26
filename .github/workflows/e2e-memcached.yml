@@ -15,9 +15,14 @@ name: E2E memcached
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/memcached/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-memcached-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   memcached:
     uses: ./.github/workflows/e2e.yml

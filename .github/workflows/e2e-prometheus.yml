@@ -12,9 +12,14 @@ name: E2E prometheus
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/prometheus/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-prometheus-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   prometheus:
     uses: ./.github/workflows/e2e.yml

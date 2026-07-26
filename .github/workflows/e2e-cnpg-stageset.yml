@@ -13,9 +13,20 @@ name: E2E cnpg (stageset)
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/cnpg-cluster/**'
+      - 'workloads/cnpg-image-catalog/**'
+      - 'lib/**'
+      - 'main.libsonnet'
+      - 'Containerfile'
+      - 'workload.Containerfile'
+      - 'hack/smoke/kind-registry-config.yaml'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-cnpg-stageset-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   cnpg-stageset:
     uses: ./.github/workflows/e2e.yml

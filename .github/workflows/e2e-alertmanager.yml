@@ -12,9 +12,15 @@ name: E2E alertmanager
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/alertmanager/**'
+      - 'workloads/prometheus/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-alertmanager-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   alertmanager:
     uses: ./.github/workflows/e2e.yml

@@ -9,9 +9,14 @@ name: E2E valkey
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/valkey/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-valkey-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   valkey:
     uses: ./.github/workflows/e2e.yml

@@ -10,9 +10,14 @@ name: E2E seaweedfs
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/seaweedfs/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-seaweedfs-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   seaweedfs:
     uses: ./.github/workflows/e2e.yml

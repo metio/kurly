@@ -13,9 +13,16 @@ name: E2E bollwerk
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'bollwerk/**'
+      - 'lib/**'
+      - 'main.libsonnet'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-bollwerk-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   bollwerk:
     uses: ./.github/workflows/e2e.yml

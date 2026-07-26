@@ -13,9 +13,15 @@ name: E2E loki
 on:
   pull_request:
     branches: [main]
+    paths:
+      - 'workloads/loki/**'
+      - 'workloads/seaweedfs/**'
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: e2e-loki-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   loki:
     uses: ./.github/workflows/e2e.yml
