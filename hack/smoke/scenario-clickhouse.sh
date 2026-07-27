@@ -10,4 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
+kurly::namespace kurly-clickhouse
+kurly::secret kurly-clickhouse clickhouse workloads/clickhouse/server.libsonnet
 kurly::boot workloads/clickhouse/server.libsonnet kurly-clickhouse

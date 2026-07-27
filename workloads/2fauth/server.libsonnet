@@ -21,12 +21,16 @@ local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
 local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
-  name='2fauth',
+  // A Kubernetes Service name must be a DNS-1035 label — it must start with a
+  // letter, so the app's "2fauth" cannot be the default (the Deployment tolerates
+  // a leading digit under DNS-1123, but the Service does not). Default to the
+  // spelled-out name; a consumer may still pass any DNS-1035-valid name.
+  name='twofauth',
   image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
   appUrl=null,
-  secretName='2fauth',
+  secretName='twofauth',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},

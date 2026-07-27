@@ -65,6 +65,16 @@ while IFS=$'\t' read -r id stages; do
     file="workloads/${id}/${stage}.libsonnet"
     [ -f "$file" ] || { echo "::error::${file} referenced by the catalog does not exist"; exit 1; }
     if [ "${#arr[@]}" -eq 1 ]; then ns="kurly-${id}"; else ns="kurly-${id}-${stage}"; fi
+    # A stage that reads a Secret (envFromSecret) declares secretKeys in the
+    # catalog even without a database/cache dependency; mint that Secret before
+    # booting or the container fails with "secret not found".
+    if [ "$(jq -r --arg ip "github.com/metio/kurly/${file}" '[.workloads[].stages[] | select(.importPath==$ip) | .secretKeys // []] | add | length' "$catalog")" != 0 ]; then
+      secretName="$(param "$file" secretName)"; [ -n "$secretName" ] || secretName="$id"
+      # The namespace must exist before the Secret is applied; kurly::boot also
+      # ensures it (idempotent), so creating it here first is safe.
+      boot_lines+="kurly::namespace ${ns}"$'\n'
+      boot_lines+="kurly::secret ${ns} ${secretName} ${file}"$'\n'
+    fi
     boot_lines+="kurly::boot ${file} ${ns}"$'\n'
   done
 
