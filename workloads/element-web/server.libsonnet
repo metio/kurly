@@ -48,6 +48,9 @@ function(
   + kurly.env(env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // The image substitutes ${ELEMENT_WEB_PORT} into its nginx template, which the
+  // Service-link environment would overwrite with a tcp:// URL nginx rejects.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

@@ -59,11 +59,18 @@ function(
   + kurly.recreate()
   + kurly.port(5222)
   + kurly.servicePort(5222)
-  + (if env == {} then {} else kurly.env(env))
+  // Erlang writes its distribution cookie into $HOME, which the read-only root
+  // filesystem does not allow — and the cookie must stay the same across restarts
+  // for a node to rejoin its cluster, so it belongs on the volume.
+  + kurly.env({ HOME: '/home/ejabberd/database' } + env)
   // The community image runs as uid 9000; pin it and its fsGroup so the database
   // volume is writable and the restricted posture admits the pod.
   + kurly.runAs(9000, gid=9000, fsGroup=9000)
   + kurly.store('/home/ejabberd/database', storageSize, storageClass=storageClass)
+  // Erlang writes its distribution cookie into $HOME on start, and the logs the
+  // runtime keeps alongside it — neither fits a read-only root filesystem, so both
+  // get their own writable directory.
+  + kurly.scratch('/home/ejabberd/logs', '64Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
