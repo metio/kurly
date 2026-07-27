@@ -20,6 +20,10 @@ function(
   name='authentik-worker',
   image=defaultImage,
   replicas=1,
+  dbHost='authentik-db-rw',
+  database='authentik',
+  dbUser='authentik',
+  redisHost='authentik-cache-headless',
   secretName='authentik',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },
@@ -29,9 +33,14 @@ function(
   kurly.worker(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.command(['worker'])
+  + kurly.args(['worker'])
   + kurly.envFromSecret(secretName)
-  + kurly.env(env)
+  + kurly.env({
+    AUTHENTIK_POSTGRESQL__HOST: dbHost,
+    AUTHENTIK_POSTGRESQL__NAME: database,
+    AUTHENTIK_POSTGRESQL__USER: dbUser,
+    AUTHENTIK_REDIS__HOST: redisHost,
+  } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')

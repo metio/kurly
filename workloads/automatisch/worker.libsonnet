@@ -21,7 +21,11 @@ function(
   name='automatisch-worker',
   image=defaultImage,
   replicas=1,
-  // The same Secret the server uses (PostgreSQL/Redis connection and the keys).
+  dbHost='automatisch-db-rw',
+  database='automatisch',
+  dbUser='automatisch',
+  redisHost='automatisch-cache-headless',
+  // The same Secret the server uses (the keys and the DB password).
   secretName='automatisch',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
@@ -33,10 +37,21 @@ function(
   + kurly.replicas(replicas)
   + kurly.command(['yarn', 'start:worker'])
   + kurly.envFromSecret(secretName)
-  + kurly.env({ APP_ENV: 'production', WORKER: 'true' } + env)
+  + kurly.env({
+    APP_ENV: 'production',
+    WORKER: 'true',
+    POSTGRES_HOST: dbHost,
+    POSTGRES_PORT: '5432',
+    POSTGRES_DATABASE: database,
+    POSTGRES_USERNAME: dbUser,
+    REDIS_HOST: redisHost,
+  } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
+  // The app writes logs to its working directory, which uid 1000 cannot create
+  // in the read-only image tree; give it a writable scratch there.
+  + kurly.scratch('/automatisch/packages/backend/logs', '128Mi')
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),

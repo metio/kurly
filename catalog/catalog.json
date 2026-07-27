@@ -3805,6 +3805,30 @@
                      "type": "int"
                   },
                   {
+                     "default": "authentik-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "authentik",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "authentik",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "authentik-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "authentik",
                      "name": "secretName",
                      "required": false,
@@ -3852,6 +3876,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "password",
+                     "key": "AUTHENTIK_POSTGRESQL__PASSWORD",
+                     "length": 32
+                  },
+                  {
                      "generate": "hex",
                      "key": "AUTHENTIK_SECRET_KEY",
                      "length": 64
@@ -3883,6 +3912,30 @@
                      "name": "replicas",
                      "required": false,
                      "type": "int"
+                  },
+                  {
+                     "default": "authentik-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "authentik",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "authentik",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "authentik-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
                   },
                   {
                      "default": "authentik",
@@ -3972,6 +4025,30 @@
                      "type": "int"
                   },
                   {
+                     "default": "automatisch-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "automatisch",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "automatisch",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "automatisch-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "automatisch",
                      "name": "secretName",
                      "required": false,
@@ -4019,6 +4096,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "password",
+                     "key": "POSTGRES_PASSWORD",
+                     "length": 32
+                  },
+                  {
                      "generate": "hex",
                      "key": "APP_SECRET_KEY",
                      "length": 64
@@ -4061,6 +4143,30 @@
                      "name": "replicas",
                      "required": false,
                      "type": "int"
+                  },
+                  {
+                     "default": "automatisch-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "automatisch",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "automatisch",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "automatisch-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
                   },
                   {
                      "default": "automatisch",

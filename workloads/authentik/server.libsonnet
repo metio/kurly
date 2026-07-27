@@ -27,6 +27,13 @@ function(
   name='authentik',
   image=defaultImage,
   replicas=2,
+  // The PostgreSQL and Redis authentik connects to. Non-secret connection
+  // settings are env; the DB password lives in the Secret alongside
+  // AUTHENTIK_SECRET_KEY (envFrom).
+  dbHost='authentik-db-rw',
+  database='authentik',
+  dbUser='authentik',
+  redisHost='authentik-cache-headless',
   secretName='authentik',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } },
@@ -36,17 +43,25 @@ function(
   kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.command(['server'])
+  + kurly.args(['server'])
   + kurly.port(9000)
   + kurly.servicePort(9000)
   + kurly.extraPort('https', 9443)
   + kurly.envFromSecret(secretName)
-  + kurly.env(env)
+  + kurly.env({
+    AUTHENTIK_POSTGRESQL__HOST: dbHost,
+    AUTHENTIK_POSTGRESQL__NAME: database,
+    AUTHENTIK_POSTGRESQL__USER: dbUser,
+    AUTHENTIK_REDIS__HOST: redisHost,
+  } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/-/health/ready/', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/-/health/live/', port: 'http' } })
+  // The server applies database migrations on first boot before it serves; a
+  // startup probe holds liveness until it is up (~5min grace).
+  + kurly.startupProbe({ httpGet: { path: '/-/health/live/', port: 'http' }, failureThreshold: 60, periodSeconds: 5 })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),

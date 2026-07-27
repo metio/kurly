@@ -29,8 +29,12 @@ function(
   name='automatisch',
   image=defaultImage,
   replicas=2,
-  // The Secret holding the PostgreSQL/Redis connection and the ENCRYPTION_KEY /
-  // WEBHOOK_SECRET_KEY / APP_SECRET_KEY (kurly mints none), via envFrom.
+  // The PostgreSQL and Redis connection settings are env; the DB password lives
+  // in the Secret with the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY.
+  dbHost='automatisch-db-rw',
+  database='automatisch',
+  dbUser='automatisch',
+  redisHost='automatisch-cache-headless',
   secretName='automatisch',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
@@ -43,10 +47,21 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
-  + kurly.env({ APP_ENV: 'production', PORT: '3000' } + env)
+  + kurly.env({
+    APP_ENV: 'production',
+    PORT: '3000',
+    POSTGRES_HOST: dbHost,
+    POSTGRES_PORT: '5432',
+    POSTGRES_DATABASE: database,
+    POSTGRES_USERNAME: dbUser,
+    REDIS_HOST: redisHost,
+  } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
+  // The app writes logs to its working directory, which uid 1000 cannot create
+  // in the read-only image tree; give it a writable scratch there.
+  + kurly.scratch('/automatisch/packages/backend/logs', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
