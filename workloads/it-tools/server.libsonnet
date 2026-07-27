@@ -35,6 +35,9 @@ function(
   // the root filesystem stays writable for nginx's runtime state.
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // The bundled nginx starts as root and chowns its cache dir to the worker
+  // uid, so it needs CAP_CHOWN kept rather than dropping ALL capabilities.
+  + kurly.keepCapabilities()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
