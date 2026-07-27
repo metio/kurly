@@ -32,7 +32,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `twenty` | |
-| `image` | `docker.io/twentycrm/twenty:v2.24.0` | |
+| `image` | `docker.io/twentycrm/twenty:v2.24.1` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | local uploads |
 | `redisHost` | `twenty-cache` | the Redis/valkey Service |
 | `serverUrl` | inferred | the public URL |
