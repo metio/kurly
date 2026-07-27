@@ -22,7 +22,7 @@ kurly.list(kanboard())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `kanboard` | |
-| `image` | `docker.io/kanboard/kanboard:v1.2.52` | |
+| `image` | `docker.io/kanboard/kanboard:v1.2.53` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the data volume (`/var/www/app/data`) |
 | `env` | `{}` | extra environment (`DATABASE_URL` for external Postgres, `PLUGIN_INSTALLER`, …) |
 | `resources` / `labels` / `annotations` | | |
