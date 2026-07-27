@@ -7169,6 +7169,10 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "APP_SECRET",
                      "length": 64

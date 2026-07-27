@@ -1032,7 +1032,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/davis/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/davis/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'APP_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     'pingvin-share': {

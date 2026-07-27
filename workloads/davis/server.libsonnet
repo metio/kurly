@@ -32,12 +32,16 @@ function(
   kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.port(80)
+  // The bundled Caddy serves the app on :9000; the Service keeps :80.
+  + kurly.port(9000)
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // php-fpm starts as root and drops its worker pool to the web user, so it keeps
+  // the SETUID/SETGID capabilities; without them it exits on a config error.
+  + kurly.keepCapabilities()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
