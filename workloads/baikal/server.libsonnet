@@ -55,6 +55,10 @@ function(
   + kurly.servicePort(80)
   + (if env == {} then {} else kurly.env(env))
   + kurly.rootUser()
+  // The image entrypoint chowns its web root before dropping privileges, so it
+  // needs CAP_CHOWN kept and privilege escalation allowed.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/baikal/Specific', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
