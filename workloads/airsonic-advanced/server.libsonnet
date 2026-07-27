@@ -30,7 +30,9 @@ function(
   pgid=1000,
   timezone='UTC',
   env={},
-  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
+  // A JVM running a first-boot database migration needs headroom; 512Mi OOMKills
+  // it mid-start.
+  resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},
   annotations={},
 )
@@ -50,6 +52,10 @@ function(
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
+  // The Java/Tomcat app runs a first-boot database migration before it binds
+  // :4040; a startup probe gives it up to ~5min to come up before liveness
+  // begins, so it is not killed mid-migration.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, failureThreshold: 60, periodSeconds: 5 })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),
