@@ -33,8 +33,14 @@ case "$context" in
 esac
 
 echo "== install the bollwerk policies =="
-jsonnet -J vendor -e 'local b = import "bollwerk/bollwerk.libsonnet"; b.list' \
-  | kubectl apply --filename=-
+# The policies are cluster-scoped, so they outlive this scenario's namespace and
+# would govern every workload booted on the shared e2e cluster afterwards —
+# denying, among others, the throwaway dependencies other scenarios provision.
+# Keep the rendered set so the exit trap can remove exactly what was installed.
+policies="$(mktemp)"
+trap 'kubectl delete --filename="$policies" --ignore-not-found --interactive=false >/dev/null 2>&1 || true; rm -f "$policies"' EXIT
+jsonnet -J vendor -e 'local b = import "bollwerk/bollwerk.libsonnet"; b.list' >"$policies"
+kubectl apply --filename="$policies"
 
 ns=bollwerk-e2e
 kurly::namespace "$ns"

@@ -35,7 +35,9 @@ function(
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image's own blessuser account — Node looks its uid up in /etc/passwd on
+  // start and aborts when it is not there.
+  + kurly.runAs(999, gid=999, fsGroup=999)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '512Mi')
   // /docs is served without the access TOKEN, so it is a usable health path (/ is

@@ -363,6 +363,17 @@ kurly::cleanup_workload() {
   # --interactive=false: kubectl prompts for delete confirmation and reads EOF as
   # "no" in a non-interactive shell, silently cancelling the delete otherwise.
   kubectl delete clusterrolebinding "stageset-deployer-kurly-deep-${id}" --interactive=false --ignore-not-found >/dev/null 2>&1 || true
+  # Cluster-scoped objects outlive the namespace, and a workload that ships
+  # admission policies (bollwerk) would keep enforcing them over every workload
+  # booted afterwards on this shared cluster. Everything kurly renders carries the
+  # managed-by label, so the sweep is precise.
+  local kind
+  for kind in validatingadmissionpolicybinding validatingadmissionpolicy \
+    mutatingwebhookconfiguration validatingwebhookconfiguration \
+    clusterrolebinding clusterrole priorityclass ingressclass storageclass; do
+    kubectl delete "$kind" --selector=app.kubernetes.io/managed-by=kurly \
+      --interactive=false --ignore-not-found >/dev/null 2>&1 || true
+  done
   [ "${#nss[@]}" -gt 0 ] || return 0
   echo "== cleanup ${id}: deleting namespaces ${nss[*]} =="
   # A blocking delete (kubectl's default --wait) returns only once the namespaces
