@@ -5264,6 +5264,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "TOKEN",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }

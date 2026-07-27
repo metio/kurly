@@ -10,4 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
+kurly::namespace kurly-browserless
+kurly::secret kurly-browserless browserless workloads/browserless/server.libsonnet
 kurly::boot workloads/browserless/server.libsonnet kurly-browserless

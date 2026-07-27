@@ -38,8 +38,11 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '512Mi')
-  + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
+  // /docs is served without the access TOKEN, so it is a usable health path (/ is
+  // token-gated). Chrome is slow to start, so a startup probe holds liveness.
+  + kurly.readinessProbe({ httpGet: { path: '/docs', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, failureThreshold: 30, periodSeconds: 5 })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)
   + kurly.annotations(annotations)
