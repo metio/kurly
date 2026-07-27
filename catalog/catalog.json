@@ -7796,6 +7796,14 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
+                     "generate": "redisUrl",
+                     "key": "REDIS_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "APP_SECRET",
                      "length": 64
@@ -7892,6 +7900,14 @@
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "NEXT_PRIVATE_DATABASE_URL"
+                  },
+                  {
+                     "generate": "postgresUrl",
+                     "key": "NEXT_PRIVATE_DIRECT_DATABASE_URL"
+                  },
                   {
                      "generate": "hex",
                      "key": "NEXTAUTH_SECRET",

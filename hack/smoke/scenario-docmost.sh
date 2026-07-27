@@ -18,4 +18,4 @@ kurly::postgres "$ns" docmost-db-rw docmost docmost
 kurly::cache "$ns" docmost-cache-headless
 
 kurly::secret "$ns" docmost workloads/docmost/server.libsonnet
-kurly::boot workloads/docmost/server.libsonnet "$ns"
+kurly::boot workloads/docmost/server.libsonnet "$ns" "+ k.env({ APP_URL: 'http://docmost:3000' })"

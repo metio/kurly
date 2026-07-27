@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" documenso-db-rw documenso documenso
 
 kurly::secret "$ns" documenso workloads/documenso/server.libsonnet
-kurly::boot workloads/documenso/server.libsonnet "$ns"
+kurly::boot workloads/documenso/server.libsonnet "$ns" "+ k.env({ NEXTAUTH_URL: 'http://documenso:3000', NEXT_PUBLIC_WEBAPP_URL: 'http://documenso:3000' })"
