@@ -123,6 +123,10 @@ local resourcePresets = {
   readinessProbe(probe):: { config+:: { readinessProbe: probe } },
   livenessProbe(probe):: { config+:: { livenessProbe: probe } },
   startupProbe(probe):: { config+:: { startupProbe: probe } },
+  // Suppresses the legacy {SVCNAME}_SERVICE_* environment variables Kubernetes
+  // injects — needed by apps that read their own NAME-prefixed env as config (a
+  // Service named after the app then collides with its configuration keys).
+  disableServiceLinks():: { config+:: { enableServiceLinks: false } },
   // Container lifecycle handlers (postStart / preStop), passed through verbatim.
   lifecycle(preStop=null, postStart=null):: {
     config+:: { lifecycle+: std.prune({ preStop: preStop, postStart: postStart }) },

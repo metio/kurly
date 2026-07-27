@@ -308,6 +308,10 @@ local exclusionConflicts(exclusive) = [
       dnsPolicy: null,
       dnsConfig: null,  // { nameservers, searches, options }
       hostAliases: [],  // [ { ip, hostnames }, … ]
+      // null keeps the Kubernetes default (service-link env injection on); false
+      // suppresses the legacy {SVCNAME}_SERVICE_* env vars that collide with apps
+      // reading their own NAME-prefixed env as configuration.
+      enableServiceLinks: null,
       // Owned manifests a feature adds beyond the pod controller (null/absent by
       // default). rbac additionally makes the pod run under the ServiceAccount it
       // creates (podServiceAccount below).
@@ -560,6 +564,7 @@ local exclusionConflicts(exclusive) = [
       + (if cfg.dnsPolicy == null then {} else { dnsPolicy: cfg.dnsPolicy })
       + (if cfg.dnsConfig == null then {} else { dnsConfig: cfg.dnsConfig })
       + (if cfg.hostAliases == [] then {} else { hostAliases: cfg.hostAliases })
+      + (if cfg.enableServiceLinks == null then {} else { enableServiceLinks: cfg.enableServiceLinks })
       + (if this.podServiceAccount == null then {} else { serviceAccountName: this.podServiceAccount }),
 
     // The volumes half of the pod template, kept alongside podSecurity so every

@@ -154,6 +154,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     startupProbe: d.fn('A startup probe spec (exec/tcpSocket/httpGet with failureThreshold/periodSeconds), gating readiness and liveness until a slow-starting app first comes up.', [
       d.arg('probe', d.T.object, required=true, example={ tcpSocket: { port: 8080 }, failureThreshold: 30, periodSeconds: 5 }),
     ]) + { kinds: allKinds, group: 'container' },
+    disableServiceLinks: d.fn('Suppresses the legacy {SVCNAME}_SERVICE_* env vars Kubernetes injects — for apps that read their own NAME-prefixed env as configuration and collide with them.', []) + { kinds: allKinds, group: 'container' },
     lifecycle: d.fn('Container lifecycle handlers (postStart / preStop), passed through verbatim.', [
       d.arg('preStop', d.T.object, example={ exec: { command: ['sh', '-c', 'valkey-cli failover'] } }),
       d.arg('postStart', d.T.object),
@@ -3511,12 +3512,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('config', d.T.object, default={}),
+          d.arg('users', d.T.object, default={}),
           d.arg('secretName', d.T.string, default='authelia'),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/authelia/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/authelia/server.libsonnet', secretKeys: [{ key: 'AUTHELIA_SESSION_SECRET', generate: 'hex', length: 64 }, { key: 'AUTHELIA_STORAGE_ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     clickhouse: {

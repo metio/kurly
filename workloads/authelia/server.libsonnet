@@ -32,13 +32,31 @@ local defaultImage = std.rstripChars(importstr './server.image', '\n');
 // A minimal skeleton — complete it for your domain, identity backend and access rules.
 local defaultConfig = {
   theme: 'light',
-  server: { address: 'tcp://0.0.0.0:9091' },
+  // The read-only root filesystem blocks Authelia's internal healthcheck from
+  // writing /app/.healthcheck.env; kurly uses HTTP probes instead, so disable it.
+  server: { address: 'tcp://0.0.0.0:9091', disable_healthcheck: true },
   log: { level: 'info' },
-  authentication_backend: { file: { path: '/config/users_database.yml' } },
+  // The file backend reads the users database mounted alongside this config.
+  authentication_backend: { file: { path: '/config/generated/users_database.yml' } },
   access_control: { default_policy: 'one_factor' },
   session: { cookies: [{ domain: 'example.com', authelia_url: 'https://auth.example.com' }] },
   storage: { 'local': { path: '/config/db.sqlite3' } },
   notifier: { filesystem: { filename: '/config/notification.txt' } },
+};
+
+// A skeleton users database so a default render boots; replace it (or point the
+// file backend at your own) for a real deployment. The password hash is for the
+// literal "authelia" — change it before exposing the instance.
+local defaultUsers = {
+  users: {
+    authelia: {
+      disabled: false,
+      displayname: 'Authelia User',
+      password: '$argon2id$v=19$m=65536,t=3,p=4$BpLnfgDsc2WD8F2q$o/vzA4myCqZZ36bUGsDY//8mKUYNZZaR0t4MFFSs+iM',
+      email: 'authelia@example.com',
+      groups: ['admins'],
+    },
+  },
 };
 
 function(
@@ -47,6 +65,7 @@ function(
   storageSize='1Gi',
   storageClass=null,
   config=defaultConfig,
+  users=defaultUsers,
   secretName='authelia',
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
@@ -59,9 +78,15 @@ function(
   + kurly.recreate()
   + kurly.port(9091)
   + kurly.servicePort(9091)
-  + kurly.config({ 'configuration.yml': std.manifestYamlDoc(config) }, mountPath='/config/generated')
+  + kurly.config({ 'configuration.yml': std.manifestYamlDoc(config), 'users_database.yml': std.manifestYamlDoc(users) }, mountPath='/config/generated')
   + kurly.envFromSecret(secretName)
-  + kurly.env({ X_AUTHELIA_CONFIG: '/config/generated/configuration.yml' } + env)
+  // Authelia reads AUTHELIA_* env as configuration, so the AUTHELIA_SERVICE_*
+  // vars Kubernetes injects for the Service collide with its config — suppress them.
+  + kurly.disableServiceLinks()
+  // The current image expects the config path as an argument (the old
+  // X_AUTHELIA_CONFIG env is gone).
+  + kurly.args(['--config', '/config/generated/configuration.yml'])
+  + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/health', port: 'http' } })

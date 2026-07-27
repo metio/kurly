@@ -527,6 +527,20 @@
          ]
       },
       {
+         "args": [ ],
+         "group": "container",
+         "help": "Suppresses the legacy {SVCNAME}_SERVICE_* env vars Kubernetes injects — for apps that read their own NAME-prefixed env as configuration and collide with them.",
+         "id": "disableServiceLinks",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
          "args": [
             {
                "example": "None",
@@ -3683,6 +3697,11 @@
                      "type": "object"
                   },
                   {
+                     "name": "users",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
                      "default": "authelia",
                      "name": "secretName",
                      "required": false,
@@ -3728,6 +3747,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "AUTHELIA_SESSION_SECRET",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "AUTHELIA_STORAGE_ENCRYPTION_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
