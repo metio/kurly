@@ -250,6 +250,7 @@ local exclusionConflicts(exclusive) = [
       // that run before the main one — all passed through verbatim.
       readinessProbe: null,
       livenessProbe: null,
+      startupProbe: null,
       lifecycle: {},
       initContainers: [],
       // Extra containers beside the workload's own. Like initContainers they are
@@ -676,6 +677,9 @@ local exclusionConflicts(exclusive) = [
         else k.core.v1.container.livenessProbe.httpGet.withPath(cfg.probePath)
              + k.core.v1.container.livenessProbe.httpGet.withPort('http')
       )
+      // A startupProbe gates readiness and liveness until the app first comes up,
+      // so a slow starter is not killed by liveness before it binds.
+      + (if cfg.startupProbe != null then { startupProbe: cfg.startupProbe } else {})
       + (if cfg.lifecycle == {} then {} else { lifecycle: cfg.lifecycle })
       + (if this.containerSecurity == {} then {} else { securityContext: this.containerSecurity }),
   },

@@ -122,6 +122,7 @@ local resourcePresets = {
   // http probes — passed through verbatim.
   readinessProbe(probe):: { config+:: { readinessProbe: probe } },
   livenessProbe(probe):: { config+:: { livenessProbe: probe } },
+  startupProbe(probe):: { config+:: { startupProbe: probe } },
   // Container lifecycle handlers (postStart / preStop), passed through verbatim.
   lifecycle(preStop=null, postStart=null):: {
     config+:: { lifecycle+: std.prune({ preStop: preStop, postStart: postStart }) },

@@ -1610,6 +1610,33 @@
       {
          "args": [
             {
+               "example": {
+                  "failureThreshold": 30,
+                  "periodSeconds": 5,
+                  "tcpSocket": {
+                     "port": 8080
+                  }
+               },
+               "name": "probe",
+               "required": true,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "A startup probe spec (exec/tcpSocket/httpGet with failureThreshold/periodSeconds), gating readiness and liveness until a slow-starting app first comes up.",
+         "id": "startupProbe",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": "/var/lib/tik",
                "name": "mountPath",
                "required": true,

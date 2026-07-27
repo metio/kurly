@@ -151,6 +151,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     livenessProbe: d.fn('An explicit liveness probe spec (exec/tcpSocket/httpGet), overriding the default http probe.', [
       d.arg('probe', d.T.object, required=true, example={ tcpSocket: { port: 6379 } }),
     ]) + { kinds: allKinds, group: 'container' },
+    startupProbe: d.fn('A startup probe spec (exec/tcpSocket/httpGet with failureThreshold/periodSeconds), gating readiness and liveness until a slow-starting app first comes up.', [
+      d.arg('probe', d.T.object, required=true, example={ tcpSocket: { port: 8080 }, failureThreshold: 30, periodSeconds: 5 }),
+    ]) + { kinds: allKinds, group: 'container' },
     lifecycle: d.fn('Container lifecycle handlers (postStart / preStop), passed through verbatim.', [
       d.arg('preStop', d.T.object, example={ exec: { command: ['sh', '-c', 'valkey-cli failover'] } }),
       d.arg('postStart', d.T.object),
