@@ -22,7 +22,10 @@ local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='cal-com',
   image=defaultImage,
-  replicas=2,
+  // Cal.com applies its Prisma migrations on start, and two instances coming up
+  // together race for them — so it starts single and is scaled once the schema is
+  // in place.
+  replicas=1,
   webappUrl=null,
   secretName='cal-com',
   env={},
@@ -38,9 +41,14 @@ function(
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1001, gid=1001, fsGroup=1001)
+  // The image runs as root and owns its build tree, which yarn and Prisma write
+  // into while the app boots.
+  + kurly.rootUser()
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
+  // The first start migrates the schema and seeds the app catalogue before the
+  // server binds, which takes minutes.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 60 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
