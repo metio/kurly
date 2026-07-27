@@ -55,6 +55,10 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
+  // The all-in-one image starts as root, chowns its data dirs, and drops to its
+  // own user via gosu — so it needs CAP_CHOWN/SETGID kept and privilege escalation.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/baserow/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/_health/', port: 'http' }, initialDelaySeconds: 30, periodSeconds: 15, failureThreshold: 20 })

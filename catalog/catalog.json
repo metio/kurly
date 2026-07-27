@@ -4399,6 +4399,14 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
+                     "generate": "redisUrl",
+                     "key": "REDIS_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "BASEROW_JWT_SIGNING_KEY",
                      "length": 64
