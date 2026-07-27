@@ -36,7 +36,9 @@ function(
   + kurly.version(version)
   + kurly.replicas(1)
   + kurly.recreate()
-  + kurly.port(80)
+  // Apache in this image serves on :8080 as the unprivileged web user; the Service
+  // keeps :80.
+  + kurly.port(8080)
   + kurly.servicePort(80)
   + (if env == {} then {} else kurly.env(env))
   + kurly.rootUser()
