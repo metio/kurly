@@ -3297,7 +3297,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "storage": {

@@ -34,7 +34,12 @@ function(
   + kurly.port(5244)
   + kurly.servicePort(5244)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image entrypoint starts as root, chowns its data dir, then drops to its
+  // own user via su-exec — so it needs to start as root, keep CAP_CHOWN/SETGID,
+  // and be allowed to change uid rather than being pinned to a non-root user.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/opt/alist/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/ping', port: 'http' } })
