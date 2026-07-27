@@ -23,6 +23,11 @@ function(
   name='ghostfolio',
   image=defaultImage,
   replicas=2,
+  // The Redis it queues jobs and caches market data in. It is named after the
+  // convention kurly's valkey workload follows, so a default deployment connects
+  // with no override; the password comes from the Secret.
+  redisHost='ghostfolio-cache-headless',
+  redisPort=6379,
   secretName='ghostfolio',
   env={},
   resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
@@ -35,7 +40,7 @@ function(
   + kurly.port(3333)
   + kurly.servicePort(3333)
   + kurly.envFromSecret(secretName)
-  + kurly.env(env)
+  + kurly.env({ REDIS_HOST: redisHost, REDIS_PORT: std.toString(redisPort) } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')

@@ -177,7 +177,7 @@ kurly::secret() {
       # The throwaway postgres serves plaintext, and a client that defaults to
       # sslmode=require (Go's pq, among others) fails its first query without this.
       postgresUrl) val="postgresql://${id}:${KURLY_E2E_PASSWORD}@${id}-db-rw:5432/${id}?sslmode=disable" ;;
-      redisUrl) val="redis://${id}-cache-headless:6379" ;;
+      redisUrl) val="redis://:${KURLY_E2E_PASSWORD}@${id}-cache-headless:6379" ;;
       *) val="$KURLY_E2E_PASSWORD" ;;
     esac
     args+=("--from-literal=${k}=${val}")
@@ -260,6 +260,9 @@ spec:
       containers:
         - name: valkey
           image: docker.io/valkey/valkey:8
+          # Password-protected, because an app given a REDIS_PASSWORD sends AUTH —
+          # which a server without one rejects outright.
+          args: ["valkey-server", "--requirepass", "${KURLY_E2E_PASSWORD}"]
           ports: [{ containerPort: 6379 }]
 ---
 apiVersion: v1

@@ -943,7 +943,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet', secretKeys: [{ key: 'ACCESS_TOKEN_SALT', generate: 'hex', length: 64 }, { key: 'JWT_SECRET_KEY', generate: 'hex', length: 64 }, { key: 'REDIS_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'ACCESS_TOKEN_SALT', generate: 'hex', length: 64 }, { key: 'JWT_SECRET_KEY', generate: 'hex', length: 64 }, { key: 'REDIS_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     'lobe-chat': {
@@ -4237,6 +4237,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           importPath: 'github.com/metio/kurly/workloads/authentik/server.libsonnet',
           secretKeys: [
             { key: 'AUTHENTIK_POSTGRESQL__PASSWORD', generate: 'password', length: 32 },
+            { key: 'AUTHENTIK_REDIS__PASSWORD', generate: 'password', length: 32 },
             { key: 'AUTHENTIK_SECRET_KEY', generate: 'hex', length: 64 },
           ],
         },
@@ -5209,7 +5210,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghost/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ghost/server.libsonnet', secretKeys: [{ key: 'database__connection__password', generate: 'password', length: 32 }] },
       },
     },
     metabase: {

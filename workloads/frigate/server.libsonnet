@@ -69,6 +69,8 @@ function(
   // Frigate's s6 supervisor and ffmpeg run as root and write across the root
   // filesystem, so run as root with a writable root filesystem.
   + kurly.rootUser()
+  // The init hands its shared-memory log directories to the app user.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.store('/media', mediaSize, storageClass=storageClass)

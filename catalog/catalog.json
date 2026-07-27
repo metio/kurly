@@ -3881,6 +3881,11 @@
                      "length": 32
                   },
                   {
+                     "generate": "password",
+                     "key": "AUTHENTIK_REDIS__PASSWORD",
+                     "length": 32
+                  },
+                  {
                      "generate": "hex",
                      "key": "AUTHENTIK_SECRET_KEY",
                      "length": 64
@@ -11151,6 +11156,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "database__connection__password",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -11237,6 +11249,10 @@
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
                   {
                      "generate": "hex",
                      "key": "ACCESS_TOKEN_SALT",
