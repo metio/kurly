@@ -34,7 +34,7 @@ volume (one replica, recreated), authenticated by an API key from its own Secret
 
 ## Maturity
 
-**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
 
 ## Deploy with JaaS
 

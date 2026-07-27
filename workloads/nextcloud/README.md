@@ -19,7 +19,7 @@ SQLite suits a small instance; point it at an external PostgreSQL/MySQL and S3 p
 
 ## Maturity
 
-**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
 
 ## Deploy with JaaS
 

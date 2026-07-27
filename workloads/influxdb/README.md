@@ -19,7 +19,7 @@ The `DOCKER_INFLUXDB_INIT_*` setup values come from a Secret via `envFrom` — k
 
 ## Maturity
 
-**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
 
 ## Deploy with JaaS
 
