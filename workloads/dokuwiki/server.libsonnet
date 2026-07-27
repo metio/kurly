@@ -41,7 +41,12 @@ function(
   + (if env == {} then {} else kurly.env(env))
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // The entrypoint hands /storage to www-data before dropping to it.
+  + kurly.keepCapabilities()
   + kurly.store('/storage', storageSize, storageClass=storageClass)
+  // The entrypoint relinks the bundled plugins and templates onto the volume on
+  // every start, which takes a while before anything listens.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 60 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

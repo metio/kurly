@@ -63,6 +63,9 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/directus/uploads', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')
+  // pm2 keeps its runtime state under the node user's home, which the read-only
+  // root filesystem does not provide.
+  + kurly.scratch('/home/node/.pm2', '64Mi')
   + kurly.readinessProbe({ httpGet: { path: '/server/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/server/health', port: 'http' } })
   + kurly.resources(

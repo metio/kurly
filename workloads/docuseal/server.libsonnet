@@ -39,7 +39,10 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image runs the app as root and owns /data as root; it writes its generated
+  // environment file there on first start.
+  + kurly.rootUser()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

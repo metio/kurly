@@ -29,7 +29,9 @@ function(
   annotations={},
 )
   local baseEnv =
-    { NGINX_PROXY_PASS_URL: 'unset', SINGLE_REGISTRY: 'true', REGISTRY_TITLE: registryTitle }
+    // nginx refuses to start on a proxy_pass that is not a URL, so the placeholder
+    // is a parseable one: point registryUrl at the registry you actually run.
+    { NGINX_PROXY_PASS_URL: 'http://localhost:5000', SINGLE_REGISTRY: 'true', REGISTRY_TITLE: registryTitle }
     + (if registryUrl == null then {} else { NGINX_PROXY_PASS_URL: registryUrl });
   kurly.http(name, image)
   + kurly.version(version)
@@ -41,6 +43,9 @@ function(
   // root filesystem stays writable for nginx's runtime state.
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // The entrypoint rewrites the bundled UI's index.html, which the image owns as the
+  // nginx user — root needs DAC_OVERRIDE for that, and the workers need SETUID/SETGID.
+  + kurly.keepCapabilities()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

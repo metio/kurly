@@ -506,6 +506,10 @@ kurly::diagnose() {
   kubectl --namespace="$ns" get pods --show-labels 2>/dev/null || true
   kubectl --namespace="$ns" describe pods 2>/dev/null | tail -120 || true
   kubectl --namespace="$ns" logs --selector=app.kubernetes.io/managed-by=kurly --all-containers=true --tail=100 2>/dev/null || true
+  # A container in CrashLoopBackOff has no live logs — the output that explains why
+  # it died belongs to the previous instance.
+  echo "--- previous container logs ---"
+  kubectl --namespace="$ns" logs --selector=app.kubernetes.io/managed-by=kurly --all-containers=true --tail=100 --previous 2>/dev/null || true
   kubectl --namespace="$ns" get events --sort-by=.lastTimestamp 2>/dev/null | tail -40 || true
   echo "::endgroup::"
 }
