@@ -10321,6 +10321,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "literal",
+                     "key": "FLATNOTES_USERNAME",
+                     "value": "admin"
+                  },
+                  {
                      "generate": "password",
                      "key": "FLATNOTES_PASSWORD",
                      "length": 32

@@ -38,7 +38,12 @@ function(
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
-  + kurly.store('/data', storageSize, storageClass=storageClass)
+  // The bundled config keeps the SQLite database and uploaded files under the
+  // app's own data directory, relative to its working directory.
+  + kurly.store('/opt/focalboard/data', storageSize, storageClass=storageClass)
+  // The app reads PORT from the environment, which the Service-link variables
+  // would overwrite with a tcp:// URL.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

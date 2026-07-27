@@ -639,7 +639,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/flatnotes/server.libsonnet', secretKeys: [{ key: 'FLATNOTES_PASSWORD', generate: 'password', length: 32 }, { key: 'FLATNOTES_SECRET_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/flatnotes/server.libsonnet', secretKeys: [{ key: 'FLATNOTES_USERNAME', generate: 'literal', value: 'admin' }, { key: 'FLATNOTES_PASSWORD', generate: 'password', length: 32 }, { key: 'FLATNOTES_SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     trilium: {

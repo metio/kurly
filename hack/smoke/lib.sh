@@ -227,6 +227,18 @@ spec:
   ports: [{ port: 5432, targetPort: 5432 }]
 EOF
   kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
+  # A workload written for CloudNativePG reads its credentials from the operator's
+  # generated `<cluster>-app` Secret rather than from its own; the throwaway server
+  # stands in for the cluster, so publish the same Secret under the same name.
+  local cluster="${svc%-rw}"
+  kubectl --namespace="$ns" create secret generic "${cluster}-app" \
+    --from-literal=username="$user" \
+    --from-literal=password="$KURLY_E2E_PASSWORD" \
+    --from-literal=dbname="$db" \
+    --from-literal=host="$svc" \
+    --from-literal=port=5432 \
+    --from-literal=uri="postgresql://${user}:${KURLY_E2E_PASSWORD}@${svc}:5432/${db}?sslmode=disable" \
+    --dry-run=client --output=yaml | kubectl apply --filename=-
 }
 
 # A throwaway Valkey (Redis) for an app's e2e, at the service name the app

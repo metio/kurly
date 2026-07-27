@@ -46,6 +46,12 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '32Mi')
+  // The app rewrites the served index.html with its runtime configuration on
+  // start, so the root filesystem cannot stay read-only.
+  + kurly.writableRootFilesystem()
+  // The app reads PORT from the environment, which the Service-link variables
+  // would overwrite with a tcp:// URL.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
