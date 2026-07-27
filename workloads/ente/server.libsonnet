@@ -17,7 +17,9 @@
 // and point ENTE_CREDENTIALS_FILE at it (the default below). Every config value
 // can also be overridden by an ENTE_-prefixed env var (db.host -> ENTE_DB_HOST).
 //
-// Stateless (state lives in PostgreSQL and S3), so scale it by replicas.
+// Stateless (state lives in PostgreSQL and S3), so scale it by replicas — after
+// the first start, which runs the schema migrations under a lock a second
+// instance would race for.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 local version = std.rstripChars(importstr './version.txt', '\n');
@@ -28,6 +30,10 @@ function(
   // Museum publishes only commit-tagged and moving tags, so it is pinned as
   // latest@digest — a known artifact that Renovate refreshes.
   image=defaultImage,
+  // Museum runs its schema migrations on every start, and two instances starting
+  // together race for the migration lock — so it starts single and is scaled up
+  // once the schema is in place.
+  replicas=1,
   credentialsSecret='ente',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
@@ -36,6 +42,7 @@ function(
 )
   kurly.http(name, image)
   + kurly.version(version)
+  + kurly.replicas(replicas)
   + kurly.port(8080)
   + kurly.servicePort(8080)
   + kurly.runAs(1000, gid=1000)

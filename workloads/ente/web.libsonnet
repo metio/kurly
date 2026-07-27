@@ -43,8 +43,11 @@ function(
   + kurly.extraPort('embed', 3006)
   // A Next.js server writes its cache and temp files across the filesystem, so
   // pin a non-root uid and keep the root filesystem writable.
-  + kurly.runAs(1000, gid=1000)
+  // The nginx entrypoint rewrites the config the image owns as root before the
+  // workers drop privileges, so it starts as root and keeps DAC_OVERRIDE.
+  + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  + kurly.keepCapabilities()
   + kurly.env({ ENTE_API_ORIGIN: apiOrigin, ENTE_ALBUMS_ORIGIN: albumsOrigin } + env)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
