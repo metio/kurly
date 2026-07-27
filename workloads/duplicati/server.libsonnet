@@ -15,6 +15,11 @@
 // hardening (dropped capabilities, seccomp, no privilege escalation, resource limits).
 // Set puid/pgid to own the mounted files.
 //
+// SECRETS: Duplicati refuses to start without SETTINGS_ENCRYPTION_KEY — the key it
+// encrypts its settings database with. It reads that (and an optional
+// DUPLICATI__WEBSERVICE_PASSWORD for the web UI) from the Secret named by
+// secretName; kurly authors none.
+//
 // Single writer: the config lives on a ReadWriteOnce volume, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 local version = std.rstripChars(importstr './version.txt', '\n');
@@ -24,6 +29,7 @@ function(
   image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
+  secretName='duplicati',
   puid=1000,
   pgid=1000,
   timezone='UTC',
@@ -38,6 +44,7 @@ function(
   + kurly.recreate()
   + kurly.port(8200)
   + kurly.servicePort(8200)
+  + kurly.envFromSecret(secretName)
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
@@ -46,6 +53,8 @@ function(
   + kurly.allowPrivilegeEscalation()
   + kurly.keepCapabilities()
   + kurly.store('/config', storageSize, storageClass=storageClass)
+  // The s6 init unpacks and prepares the app before the web service binds.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 30 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

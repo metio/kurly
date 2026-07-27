@@ -3058,7 +3058,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/duplicati/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/duplicati/server.libsonnet', secretKeys: [{ key: 'SETTINGS_ENCRYPTION_KEY', generate: 'hex', length: 32 }, { key: 'DUPLICATI__WEBSERVICE_PASSWORD', generate: 'password', length: 24 }] },
       },
     },
     'resilio-sync': {
@@ -3967,7 +3967,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/drupal/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/drupal/server.libsonnet', secretKeys: [{ key: 'DRUPAL_DATABASE_HOST', generate: 'literal', value: 'drupal-db-rw' }, { key: 'DRUPAL_DATABASE_PORT', generate: 'literal', value: '5432' }, { key: 'DRUPAL_DATABASE_NAME', generate: 'literal', value: 'drupal' }, { key: 'DRUPAL_DATABASE_USERNAME', generate: 'literal', value: 'drupal' }, { key: 'DRUPAL_DATABASE_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     prestashop: {

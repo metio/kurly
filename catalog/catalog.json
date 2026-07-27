@@ -8005,7 +8005,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "storage": {
@@ -8409,6 +8409,33 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "DRUPAL_DATABASE_HOST",
+                     "value": "drupal-db-rw"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DRUPAL_DATABASE_PORT",
+                     "value": "5432"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DRUPAL_DATABASE_NAME",
+                     "value": "drupal"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DRUPAL_DATABASE_USERNAME",
+                     "value": "drupal"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DRUPAL_DATABASE_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -8511,6 +8538,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SETTINGS_ENCRYPTION_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DUPLICATI__WEBSERVICE_PASSWORD",
+                     "length": 24
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
