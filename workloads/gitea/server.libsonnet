@@ -55,6 +55,9 @@ function(
   + kurly.env(baseEnv + env)
   // The s6-overlay init needs root and a writable root filesystem; it drops to USER_UID.
   + kurly.rootUser()
+  // The entrypoint hands /data to the git user and drops to it with su-exec.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/healthz', port: 'http' } })
