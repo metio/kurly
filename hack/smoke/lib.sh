@@ -165,6 +165,12 @@ kurly::secret() {
         len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 64' <<<"$keys")"
         val="$(head -c "$len" /dev/urandom | od -An -tx1 | tr -d ' \n' | cut -c "1-${len}")"
         ;;
+      # A url-safe base64 key of the declared BYTE length — what Fernet and the
+      # libraries that wrap it require; a hex string of the same length is rejected.
+      base64)
+        len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 32' <<<"$keys")"
+        val="$(head -c "$len" /dev/urandom | base64 | tr '+/' '-_' | tr -d '\n')"
+        ;;
       literal) val="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .value' <<<"$keys")" ;;
       # Composite connection strings some apps read as a single secret (Prisma's
       # DATABASE_URL, etc.), built from the provisioned dependency.

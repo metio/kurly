@@ -9028,10 +9028,10 @@
                "importPath": "github.com/metio/kurly/workloads/endurain/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
-                  "writableRootFilesystem": false
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
                },
                "secretKeys": [
                   {
@@ -9043,6 +9043,11 @@
                      "generate": "hex",
                      "key": "SECRET_KEY",
                      "length": 64
+                  },
+                  {
+                     "generate": "base64",
+                     "key": "FERNET_KEY",
+                     "length": 32
                   }
                ],
                "storage": {

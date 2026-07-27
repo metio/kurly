@@ -72,9 +72,19 @@ function(
   + kurly.servicePort(8080)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.store('/app/backend/app/user_images', storageSize, storageClass=storageClass)
+  // The entrypoint starts as root and switches to the UID/GID it is given, so it
+  // needs to gain privileges and keep SETUID/SETGID.
+  + kurly.rootUser()
+  // The entrypoint writes the frontend's runtime configuration into the built
+  // bundle it serves, so the root filesystem cannot stay read-only.
+  + kurly.writableRootFilesystem()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
+  // Uploaded activity files and user images live under the backend's data dir.
+  + kurly.store('/app/backend/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')
+  // The backend logs to a file next to its code rather than to stdout.
+  + kurly.scratch('/app/backend/logs', '128Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

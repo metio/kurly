@@ -1,5 +1,6 @@
 {
   "cobalt": "+ k.env({ API_URL: 'http://cobalt:9000/' })",
   "docmost": "+ k.env({ APP_URL: 'http://docmost:3000' })",
-  "documenso": "+ k.env({ NEXTAUTH_URL: 'http://documenso:3000', NEXT_PUBLIC_WEBAPP_URL: 'http://documenso:3000' })"
+  "documenso": "+ k.env({ NEXTAUTH_URL: 'http://documenso:3000', NEXT_PUBLIC_WEBAPP_URL: 'http://documenso:3000' })",
+  "endurain": "+ k.env({ ENDURAIN_HOST: 'http://endurain:8080' })"
 }

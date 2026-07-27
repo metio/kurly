@@ -18,4 +18,4 @@ kurly::postgres "$ns" endurain-db-rw endurain endurain
 kurly::cache "$ns" endurain-cache
 
 kurly::secret "$ns" endurain workloads/endurain/server.libsonnet
-kurly::boot workloads/endurain/server.libsonnet "$ns"
+kurly::boot workloads/endurain/server.libsonnet "$ns" "+ k.env({ ENDURAIN_HOST: 'http://endurain:8080' })"
