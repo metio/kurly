@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/cobalt/server.libsonnet kurly-cobalt
+kurly::boot workloads/cobalt/server.libsonnet kurly-cobalt "+ k.env({ API_URL: 'http://cobalt:9000/' })"

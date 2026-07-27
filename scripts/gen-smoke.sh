@@ -38,6 +38,16 @@ generated=0 generated_dep=0 skipped_hand=0
 # the default is a computed expression rather than a literal.
 param() { grep -oE "^[[:space:]]*$2='[^']*'" "$1" 2>/dev/null | head -1 | sed -E "s/.*='([^']*)'.*/\1/" || true; }
 
+# Extra Jsonnet composed onto a stage before it boots, from hack/smoke/extra.json —
+# how an app that refuses to start without a deployment-specific value (its own
+# public URL, a licence key) is given one for the smoke, without inventing a
+# default the workload itself must not carry. Keyed by "<id>/<stage>", falling back
+# to "<id>" for every stage of a workload.
+extra=hack/smoke/extra.json
+extra_for() {
+  jq -r --arg k "$1" --arg id "${1%%/*}" '.[$k] // .[$id] // ""' "$extra"
+}
+
 # A generated scenario is regenerated in place; a hand-written one is left alone.
 is_hand_written() {
   local scenario="hack/smoke/scenario-$1.sh"
@@ -75,7 +85,8 @@ while IFS=$'\t' read -r id stages; do
       boot_lines+="kurly::namespace ${ns}"$'\n'
       boot_lines+="kurly::secret ${ns} ${secretName} ${file}"$'\n'
     fi
-    boot_lines+="kurly::boot ${file} ${ns}"$'\n'
+    ex="$(extra_for "${id}/${stage}")"
+    boot_lines+="kurly::boot ${file} ${ns}${ex:+ \"${ex}\"}"$'\n'
   done
 
   {
@@ -135,7 +146,8 @@ while IFS=$'\t' read -r id stages db cache; do
     [ -f "$file" ] || { echo "::error::${file} referenced by the catalog does not exist"; exit 1; }
     secretName="$(param "$file" secretName)"; [ -n "$secretName" ] || secretName="$id"
     boot_lines+="kurly::secret \"\$ns\" ${secretName} ${file}"$'\n'
-    boot_lines+="kurly::boot ${file} \"\$ns\""$'\n'
+    ex="$(extra_for "${id}/${stage}")"
+    boot_lines+="kurly::boot ${file} \"\$ns\"${ex:+ \"${ex}\"}"$'\n'
   done
 
   {

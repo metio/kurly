@@ -27,6 +27,14 @@ precedence = "override"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
 
+# hack/smoke/extra.json gives the e2e generator the deployment-specific values a
+# few apps refuse to start without; JSON carries no inline header.
+[[annotations]]
+path = "hack/smoke/extra.json"
+precedence = "override"
+SPDX-FileCopyrightText = "The kurly Authors"
+SPDX-License-Identifier = "0BSD"
+
 # flake.lock is nix-generated JSON; it pins the toolchain both CI and local
 # shells resolve from flake.nix.
 [[annotations]]

@@ -1,0 +1,3 @@
+{
+  "cobalt": "+ k.env({ API_URL: 'http://cobalt:9000/' })"
+}
