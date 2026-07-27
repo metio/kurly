@@ -23,6 +23,10 @@ function(
   image=defaultImage,
   storageSize='2Gi',
   storageClass=null,
+  // The Secret holding HBOX_AUTH_API_KEY_PEPPER — at least 32 bytes, and rotating
+  // it invalidates every issued API key, so it is supplied rather than generated
+  // per start. kurly authors none.
+  secretName='homebox',
   env={},
   resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
   labels={},
@@ -40,6 +44,7 @@ function(
   } + env)
   // A static Go binary, uid-agnostic; pin a non-root uid and its fsGroup so the
   // data volume is writable and the restricted posture admits the pod.
+  + kurly.envFromSecret(secretName)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')

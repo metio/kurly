@@ -13300,6 +13300,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "base64",
+                     "key": "HBOX_AUTH_API_KEY_PEPPER",
+                     "length": 48
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
