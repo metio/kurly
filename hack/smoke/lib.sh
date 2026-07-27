@@ -245,7 +245,9 @@ EOF
 # defaults to. Authless (matches the app defaulting to no REDIS_PASSWORD).
 #   kurly::cache <ns> <service>
 kurly::cache() {
-  local ns="$1" svc="$2"
+  # An app whose queue library cannot send AUTH (bigcapital's) passes an empty
+  # password to get an open server.
+  local ns="$1" svc="$2" password="${3-$KURLY_E2E_PASSWORD}"
   echo "== provision valkey ${svc} =="
   kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: apps/v1
@@ -262,7 +264,7 @@ spec:
           image: docker.io/valkey/valkey:8
           # Password-protected, because an app given a REDIS_PASSWORD sends AUTH —
           # which a server without one rejects outright.
-          args: ["valkey-server", "--requirepass", "${KURLY_E2E_PASSWORD}"]
+          args: ["valkey-server"${password:+, "--requirepass", "${password}"}]
           ports: [{ containerPort: 6379 }]
 ---
 apiVersion: v1
@@ -280,6 +282,59 @@ EOF
 # same password for root). Many self-hosted apps need MySQL/MariaDB rather than
 # PostgreSQL.
 #   kurly::mysql <ns> <service> <db> <user>
+# A throwaway MongoDB for an app's e2e: a single Deployment + Service at the
+# service name the app defaults to. Unauthenticated, like the other disposable
+# dependencies — an app that also wants credentials passes them in its own URL.
+#   kurly::mongodb <ns> <service>
+# A throwaway S3-compatible object store for an app's e2e: kurly's own seaweedfs
+# workload, which serves its S3 gateway on :8333 with anonymous access, plus the
+# bucket the app expects. The endpoint is
+# http://seaweedfs.<ns>.svc:8333 — an app that also wants credentials is given
+# dummy ones, which seaweedfs ignores in this mode.
+#   kurly::objectstorage <ns> <bucket>
+kurly::objectstorage() {
+  local ns="$1" bucket="$2"
+  echo "== provision seaweedfs S3 (bucket=${bucket}) =="
+  kurly::render workloads/seaweedfs/server.libsonnet "+ k.hostUsers()" \
+    | kubectl apply --namespace="$ns" --filename=-
+  kubectl --namespace="$ns" rollout status statefulset/seaweedfs --timeout=300s
+  # Creating a bucket is a plain PUT against the gateway, so no client image with
+  # an S3 SDK is needed.
+  kubectl --namespace="$ns" run s3-init --rm --attach --restart=Never \
+    --image=docker.io/curlimages/curl:8.21.0 --command -- \
+    curl -sf -X PUT "http://seaweedfs-0.seaweedfs-headless.${ns}.svc:8333/${bucket}" >/dev/null
+}
+
+kurly::mongodb() {
+  local ns="$1" svc="$2"
+  echo "== provision mongodb ${svc} =="
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ${svc}, labels: { app: ${svc} } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ${svc} } }
+  template:
+    metadata: { labels: { app: ${svc} } }
+    spec:
+      containers:
+        - name: mongodb
+          image: docker.io/library/mongo:8
+          ports: [{ containerPort: 27017 }]
+          volumeMounts: [{ name: data, mountPath: /data/db }]
+      volumes: [{ name: data, emptyDir: {} }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ${svc} }
+spec:
+  selector: { app: ${svc} }
+  ports: [{ port: 27017, targetPort: 27017 }]
+EOF
+  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
+}
+
 kurly::mysql() {
   local ns="$1" svc="$2" db="$3" user="$4"
   echo "== provision mariadb ${svc} (db=${db}, user=${user}) =="

@@ -33,6 +33,11 @@ function(
   redisHost='bigcapital-cache',
   // The public base URL of the deployment.
   baseUrl=null,
+  // The S3-compatible object storage attachments are kept in. The server refuses
+  // to start without a bucket; its credentials come from the Secret.
+  s3Endpoint=null,
+  s3Bucket='bigcapital',
+  s3Region='us-east-1',
   // The Secret holding SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET
   // (kurly mints none), via envFrom.
   secretName='bigcapital',
@@ -55,7 +60,14 @@ function(
     MONGODB_DATABASE_URL: 'mongodb://' + mongoHost + ':27017/bigcapital',
     REDIS_HOST: redisHost,
     REDIS_PORT: '6379',
-  } + (if baseUrl == null then {} else { BASE_URL: baseUrl });
+    // The job queue is configured separately from the cache and defaults to a
+    // Redis on localhost, so it is pointed at the same server explicitly.
+    QUEUE_HOST: redisHost,
+    QUEUE_PORT: '6379',
+    S3_BUCKET: s3Bucket,
+    S3_REGION: s3Region,
+  } + (if baseUrl == null then {} else { BASE_URL: baseUrl })
+                 + (if s3Endpoint == null then {} else { S3_ENDPOINT: s3Endpoint });
 
   kurly.http(resolvedName, image)
   + kurly.version(version)

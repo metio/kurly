@@ -4619,7 +4619,8 @@
          },
          "requires": {
             "cache": "required",
-            "database": "required"
+            "database": "required",
+            "objectStorage": "required"
          },
          "stages": [
             {
@@ -4786,6 +4787,16 @@
                   "writableRootFilesystem": false
                },
                "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "S3_ACCESS_KEY_ID",
+                     "value": "bigcapital"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "S3_SECRET_ACCESS_KEY",
+                     "length": 32
+                  },
                   {
                      "generate": "hex",
                      "key": "JWT_SECRET",
@@ -5470,7 +5481,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [

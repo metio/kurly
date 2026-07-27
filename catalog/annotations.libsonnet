@@ -1420,7 +1420,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     bigcapital: {
       summary: 'A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom.',
-      requires: { database: 'required', cache: 'required' },
+      requires: { database: 'required', cache: 'required', objectStorage: 'required' },
       stages: {
         server: d.fn('The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),
@@ -1436,7 +1436,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bigcapital/server.libsonnet', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }, { key: 'SYSTEM_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'TENANT_DB_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/bigcapital/server.libsonnet', secretKeys: [{ key: 'S3_ACCESS_KEY_ID', generate: 'literal', value: 'bigcapital' }, { key: 'S3_SECRET_ACCESS_KEY', generate: 'password', length: 32 }, { key: 'JWT_SECRET', generate: 'hex', length: 64 }, { key: 'SYSTEM_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'TENANT_DB_PASSWORD', generate: 'password', length: 32 }] },
         webapp: d.fn('The Bigcapital front end (single-page web app) on :80. Stateless — scales via replicas. The gateway proxies to it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),
           d.arg('name', d.T.string),
