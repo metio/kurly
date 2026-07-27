@@ -12329,7 +12329,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [
@@ -12854,6 +12854,10 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "CMD_DB_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "CMD_SESSION_SECRET",
                      "length": 64
@@ -13120,7 +13124,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [

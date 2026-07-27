@@ -43,8 +43,11 @@ function(
   + kurly.servicePort(7575)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint writes the nginx configuration it generates and starts nginx,
+  // both of which the image owns as root.
+  + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  + kurly.keepCapabilities()
   + kurly.store('/appdata', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
