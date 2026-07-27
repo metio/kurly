@@ -10314,10 +10314,10 @@
                "importPath": "github.com/metio/kurly/workloads/flatnotes/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": false
+                  "writableRootFilesystem": true
                },
                "secretKeys": [
                   {
@@ -10725,6 +10725,10 @@
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
                   {
                      "generate": "hex",
                      "key": "ENCRYPTION_KEY",
