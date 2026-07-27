@@ -11,11 +11,11 @@
 //
 // Serves the web app and API on :80 — compose an exposure onto it.
 //
-// BACKENDS & SECRETS: Activepieces reads its PostgreSQL and Redis connection, plus
-// AP_ENCRYPTION_KEY and AP_JWT_SECRET, from the environment. kurly authors no Secret;
-// provide one holding them (AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY, AP_JWT_SECRET),
-// pulled in via envFrom. The defaults pair with a cnpg-cluster named activepieces-db and
-// a Redis.
+// BACKENDS & SECRETS: the PostgreSQL and Redis connection settings are env, from
+// the dbHost/database/dbUser/redisHost parameters (defaults pair with a
+// cnpg-cluster named activepieces-db and a Redis). The Secret holds only the
+// sensitive values — AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET —
+// pulled in via envFrom; kurly authors no Secret.
 //
 // Stateless: flow state lives in PostgreSQL and Redis, not on a volume, so this is a
 // plain rolling Deployment.
@@ -28,9 +28,18 @@ function(
   name='activepieces',
   image=defaultImage,
   replicas=2,
-  // The public URL (Activepieces builds absolute links and webhook URLs from it).
-  frontendUrl=null,
-  // The Secret holding AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET
+  // The public URL (Activepieces builds absolute links and webhook URLs from it,
+  // and the server refuses to start without it). Defaults to a localhost URL so a
+  // default render boots; point it at the real host for a real deployment.
+  frontendUrl='http://localhost:80',
+  // The PostgreSQL and Redis the server connects to. The non-secret connection
+  // settings are env; the password lives in the Secret (AP_POSTGRES_PASSWORD),
+  // pulled in via envFrom alongside AP_ENCRYPTION_KEY and AP_JWT_SECRET.
+  dbHost='activepieces-db-rw',
+  database='activepieces',
+  dbUser='activepieces',
+  redisHost='activepieces-cache-headless',
+  // The Secret holding AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET
   // (kurly mints none), via envFrom.
   secretName='activepieces',
   env={},
@@ -38,9 +47,17 @@ function(
   labels={},
   annotations={},
 )
-  local baseEnv =
-    { AP_QUEUE_MODE: 'REDIS', AP_EXECUTION_MODE: 'UNSANDBOXED' }
-    + (if frontendUrl == null then {} else { AP_FRONTEND_URL: frontendUrl });
+  local baseEnv = {
+    AP_QUEUE_MODE: 'REDIS',
+    AP_EXECUTION_MODE: 'UNSANDBOXED',
+    AP_FRONTEND_URL: frontendUrl,
+    AP_POSTGRES_HOST: dbHost,
+    AP_POSTGRES_PORT: '5432',
+    AP_POSTGRES_DATABASE: database,
+    AP_POSTGRES_USERNAME: dbUser,
+    AP_REDIS_HOST: redisHost,
+    AP_REDIS_PORT: '6379',
+  };
 
   kurly.http(name, image)
   + kurly.version(version)

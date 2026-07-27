@@ -4621,20 +4621,24 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     activepieces: {
-      summary: 'An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. kurly authors no Secret; AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET come from a provided Secret via envFrom. Stateless: a plain rolling Deployment. Serves on :80.',
+      summary: 'An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. Connection settings are env from the dbHost/database/dbUser/redisHost parameters; a provided Secret holds AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET via envFrom (kurly authors none). Stateless: a plain rolling Deployment. Serves on :80.',
       requires: { database: 'required', cache: 'required' },
       stages: {
-        server: d.fn('The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). secretName holds AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
+        server: d.fn('The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). Connection settings are env from dbHost/database/dbUser/redisHost; secretName holds AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='activepieces'),
           d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=2),
-          d.arg('frontendUrl', d.T.string, example='https://flows.example.com'),
+          d.arg('frontendUrl', d.T.string, default='http://localhost:80'),
+          d.arg('dbHost', d.T.string, default='activepieces-db-rw'),
+          d.arg('database', d.T.string, default='activepieces'),
+          d.arg('dbUser', d.T.string, default='activepieces'),
+          d.arg('redisHost', d.T.string, default='activepieces-cache-headless'),
           d.arg('secretName', d.T.string, default='activepieces'),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/activepieces/server.libsonnet', secretKeys: [{ key: 'AP_ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'AP_JWT_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/activepieces/server.libsonnet', secretKeys: [{ key: 'AP_POSTGRES_PASSWORD', generate: 'password', length: 32 }, { key: 'AP_ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'AP_JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     automatisch: {
