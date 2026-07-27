@@ -22,8 +22,11 @@ function(
   image=defaultImage,
   storageSize='1Gi',
   storageClass=null,
-  env={ APPRISE_STATEFUL_MODE: 'simple' },
-  resources={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } },
+  // Cap gunicorn at two workers — the default scales with CPU count and each
+  // worker's memory adds up fast on a many-core node.
+  env={ APPRISE_STATEFUL_MODE: 'simple', APPRISE_WORKER_COUNT: '2' },
+  // nginx + gunicorn workers + supervisord together exceed 256Mi and OOMKill.
+  resources={ requests: { cpu: '50m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},
   annotations={},
 )
@@ -35,10 +38,17 @@ function(
   + kurly.servicePort(8000)
   + kurly.env(env)
   + kurly.rootUser()
+  // The image's init creates its runtime user (useradd) and drops privileges, so
+  // it needs privilege escalation allowed and the default capabilities kept.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/status', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/status', port: 'http' } })
+  // supervisord brings up gunicorn + nginx; a startup probe holds liveness until
+  // the HTTP port is actually serving.
+  + kurly.startupProbe({ httpGet: { path: '/status', port: 'http' }, failureThreshold: 30, periodSeconds: 5 })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)
   + kurly.annotations(annotations)
