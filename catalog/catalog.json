@@ -13789,6 +13789,26 @@
                },
                "secretKeys": [
                   {
+                     "generate": "literal",
+                     "key": "DOCKER_INFLUXDB_INIT_MODE",
+                     "value": "setup"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DOCKER_INFLUXDB_INIT_USERNAME",
+                     "value": "admin"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DOCKER_INFLUXDB_INIT_ORG",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DOCKER_INFLUXDB_INIT_BUCKET",
+                     "value": "default"
+                  },
+                  {
                      "generate": "password",
                      "key": "DOCKER_INFLUXDB_INIT_PASSWORD",
                      "length": 32

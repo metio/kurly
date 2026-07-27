@@ -39,11 +39,33 @@ function(
   appUrl=null,
   // The Secret holding DB_PASSWORD and APP_KEY (kurly mints none), via envFrom.
   secretName='invoiceninja',
+  // The web server in front of php-fpm. The application image ships FastCGI only,
+  // so nginx serves the document root beside it in the same pod.
+  nginxImage='docker.io/library/nginx:1.29.4-alpine',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},
   annotations={},
 )
+  // nginx in front of php-fpm: static files served directly, everything else
+  // forwarded to the application container over the pod's loopback.
+  local nginxConf = |||
+    server {
+      listen 80;
+      root /var/www/app/public;
+      index index.php;
+      client_max_body_size 64M;
+      location / {
+        try_files $uri $uri/ /index.php?$query_string;
+      }
+      location ~ \.php$ {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+      }
+    }
+  |||;
   local baseEnv = {
     DB_CONNECTION: 'mysql',
     DB_HOST: dbHost,
@@ -62,7 +84,32 @@ function(
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
-  + kurly.store('/var/www/html/storage', storageSize, storageClass=storageClass)
+  // php-fpm drops its worker pool from root, and the nginx sidecar hands its cache
+  // directories to the nginx user before dropping to it.
+  + kurly.keepCapabilities()
+  + kurly.store('/var/www/app/storage', storageSize, storageClass=storageClass)
+  // The document root is shared with the nginx sidecar: nginx serves the static
+  // files itself and hands every PHP request to php-fpm on localhost, so both
+  // containers must see the same tree. An init container seeds it from the image.
+  + kurly.scratch('/var/www/app/public', '512Mi')
+  + kurly.initContainer({
+    name: 'public',
+    image: image,
+    command: ['sh', '-c', 'cp -a /var/www/app/public/. /shared-public/'],
+    volumeMounts: [{ name: 'var-www-app-public', mountPath: '/shared-public' }],
+  })
+  + kurly.config({ 'default.conf': nginxConf }, '/etc/nginx/conf.d')
+  + kurly.sidecar({
+    name: 'nginx',
+    image: nginxImage,
+    ports: [{ containerPort: 80, name: 'http', protocol: 'TCP' }],
+    volumeMounts: [
+      { name: 'var-www-app-public', mountPath: '/var/www/app/public' },
+      { name: 'config', mountPath: '/etc/nginx/conf.d', readOnly: true },
+    ],
+    readinessProbe: { tcpSocket: { port: 80 } },
+    resources: { requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } },
+  })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

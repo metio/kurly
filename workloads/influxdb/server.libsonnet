@@ -40,6 +40,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({ DOCKER_INFLUXDB_INIT_MODE: 'setup' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint assembles the server's configuration under /tmp before starting.
+  + kurly.scratch('/tmp', '32Mi')
   + kurly.store('/var/lib/influxdb2', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/health', port: 'http' } })
