@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-redmine
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" redmine-db-rw redmine redmine
+kurly::mysql "$ns" redmine-db redmine redmine
 
 kurly::secret "$ns" redmine workloads/redmine/server.libsonnet
 kurly::boot workloads/redmine/server.libsonnet "$ns"

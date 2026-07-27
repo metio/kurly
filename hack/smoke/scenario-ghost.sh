@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-ghost
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" ghost-db ghost ghost
+kurly::mysql "$ns" ghost-db ghost ghost
 
 kurly::secret "$ns" ghost workloads/ghost/server.libsonnet
 kurly::boot workloads/ghost/server.libsonnet "$ns"

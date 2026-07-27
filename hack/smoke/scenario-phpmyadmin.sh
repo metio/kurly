@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-phpmyadmin
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" phpmyadmin-db-rw phpmyadmin phpmyadmin
+kurly::mysql "$ns" phpmyadmin-db phpmyadmin phpmyadmin
 
 kurly::secret "$ns" phpmyadmin workloads/phpmyadmin/server.libsonnet
 kurly::boot workloads/phpmyadmin/server.libsonnet "$ns"

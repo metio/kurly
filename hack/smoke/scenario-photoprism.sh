@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-photoprism
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" photoprism-db-rw photoprism photoprism
+kurly::mysql "$ns" photoprism-db photoprism photoprism
 
 kurly::secret "$ns" photoprism workloads/photoprism/server.libsonnet
 kurly::boot workloads/photoprism/server.libsonnet "$ns"

@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-snipe-it
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" snipe-it-db snipeit snipeit
+kurly::mysql "$ns" snipe-it-db snipeit snipeit
 
 kurly::secret "$ns" snipe-it workloads/snipe-it/server.libsonnet
 kurly::boot workloads/snipe-it/server.libsonnet "$ns"

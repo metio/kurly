@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-matomo
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" matomo-db matomo matomo
+kurly::mysql "$ns" matomo-db matomo matomo
 
 kurly::secret "$ns" matomo workloads/matomo/server.libsonnet
 kurly::boot workloads/matomo/server.libsonnet "$ns"

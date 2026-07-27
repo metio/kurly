@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-kimai
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" kimai-db-rw kimai kimai
+kurly::mysql "$ns" kimai-db kimai kimai
 
 kurly::secret "$ns" kimai workloads/kimai/server.libsonnet
 kurly::boot workloads/kimai/server.libsonnet "$ns"

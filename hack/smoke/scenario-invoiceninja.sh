@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-invoiceninja
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" invoiceninja-db invoiceninja invoiceninja
+kurly::mysql "$ns" invoiceninja-db invoiceninja invoiceninja
 
 kurly::secret "$ns" invoiceninja workloads/invoiceninja/server.libsonnet
 kurly::boot workloads/invoiceninja/server.libsonnet "$ns"

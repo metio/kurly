@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-monica
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" monica-db monica monica
+kurly::mysql "$ns" monica-db monica monica
 
 kurly::secret "$ns" monica workloads/monica/server.libsonnet
 kurly::boot workloads/monica/server.libsonnet "$ns"

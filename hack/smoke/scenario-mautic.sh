@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-mautic
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" mautic-db mautic mautic
+kurly::mysql "$ns" mautic-db mautic mautic
 
 kurly::secret "$ns" mautic workloads/mautic/server.libsonnet
 kurly::boot workloads/mautic/server.libsonnet "$ns"

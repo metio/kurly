@@ -247,6 +247,46 @@ EOF
   kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
 }
 
+# A throwaway MariaDB for an app's e2e, at the service name the app defaults to,
+# seeded with the app's database, user, and the shared test password (and the
+# same password for root). Many self-hosted apps need MySQL/MariaDB rather than
+# PostgreSQL.
+#   kurly::mysql <ns> <service> <db> <user>
+kurly::mysql() {
+  local ns="$1" svc="$2" db="$3" user="$4"
+  echo "== provision mariadb ${svc} (db=${db}, user=${user}) =="
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ${svc}, labels: { app: ${svc} } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ${svc} } }
+  template:
+    metadata: { labels: { app: ${svc} } }
+    spec:
+      containers:
+        - name: mariadb
+          image: docker.io/library/mariadb:11
+          env:
+            - { name: MARIADB_ROOT_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
+            - { name: MARIADB_DATABASE, value: "${db}" }
+            - { name: MARIADB_USER, value: "${user}" }
+            - { name: MARIADB_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
+          ports: [{ containerPort: 3306 }]
+          volumeMounts: [{ name: data, mountPath: /var/lib/mysql }]
+      volumes: [{ name: data, emptyDir: {} }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ${svc} }
+spec:
+  selector: { app: ${svc} }
+  ports: [{ port: 3306, targetPort: 3306 }]
+EOF
+  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
+}
+
 # Fast check for an operator/custom-resource workload (no image of its own): it
 # installs the operator's CRDs and validates the rendered custom resource against
 # the real schema with a server-side dry-run — catching a version or field the
@@ -317,10 +357,17 @@ kurly::provision_deps() {
   local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName
   primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.database then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
-    dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
     dbName="$(kurly::_param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(kurly::_param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
     dbUser="$(kurly::_param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
-    kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser"
+    # MySQL/MariaDB apps read port 3306 (postgres apps 5432); provision the engine
+    # the app actually connects to, at the host it defaults to.
+    if grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
+      dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
+      kurly::mysql "$ns" "$dbHost" "$dbName" "$dbUser"
+    else
+      dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
+      kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser"
+    fi
   fi
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.cache then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     redisHost="$(kurly::_param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"

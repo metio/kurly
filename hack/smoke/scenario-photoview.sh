@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-photoview
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" photoview-db-rw photoview photoview
+kurly::mysql "$ns" photoview-db photoview photoview
 
 kurly::secret "$ns" photoview workloads/photoview/server.libsonnet
 kurly::boot workloads/photoview/server.libsonnet "$ns"

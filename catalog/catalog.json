@@ -5171,6 +5171,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "password",
+                     "key": "DB_PASS",
+                     "length": 32
+                  },
+                  {
                      "generate": "hex",
                      "key": "APP_KEY",
                      "length": 64

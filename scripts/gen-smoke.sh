@@ -112,10 +112,17 @@ while IFS=$'\t' read -r id stages db cache; do
 
   prov=""
   if [ "$db" = "1" ]; then
-    dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
     dbName="$(param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
     dbUser="$(param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
-    prov+="kurly::postgres \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
+    # MySQL/MariaDB apps read port 3306 (postgres apps 5432); provision the engine
+    # the app connects to, at the host it defaults to.
+    if grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
+      dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
+      prov+="kurly::mysql \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
+    else
+      dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
+      prov+="kurly::postgres \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
+    fi
   fi
   if [ "$cache" = "1" ]; then
     redisHost="$(param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"

@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-bookstack
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" bookstack-db bookstack bookstack
+kurly::mysql "$ns" bookstack-db bookstack bookstack
 
 kurly::secret "$ns" bookstack workloads/bookstack/server.libsonnet
 kurly::boot workloads/bookstack/server.libsonnet "$ns"

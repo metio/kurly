@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-webtrees
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" webtrees-db-rw webtrees webtrees
+kurly::mysql "$ns" webtrees-db webtrees webtrees
 
 kurly::secret "$ns" webtrees workloads/webtrees/server.libsonnet
 kurly::boot workloads/webtrees/server.libsonnet "$ns"
