@@ -4843,7 +4843,7 @@
                      "type": "string"
                   },
                   {
-                     "example": "https://notes.example.com",
+                     "default": "http://localhost:1111",
                      "name": "nextauthUrl",
                      "required": false,
                      "type": "string"
@@ -4895,6 +4895,10 @@
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
                   {
                      "generate": "hex",
                      "key": "NEXTAUTH_SECRET",

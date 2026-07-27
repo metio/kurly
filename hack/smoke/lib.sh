@@ -150,6 +150,10 @@ kurly::secret() {
   keys="$(jq -c --arg ip "github.com/metio/kurly/${stage}" \
     '.workloads[].stages[] | select(.importPath==$ip) | .secretKeys // []' catalog/catalog.json)"
   [ "$keys" != "[]" ] && [ -n "$keys" ] || return 0
+  # The workload id, so a connection-URL key can be built from the throwaway
+  # postgres/valkey this app's deps were provisioned under (the <id>-db-rw /
+  # <id>-cache-headless convention in kurly::provision_deps).
+  local id; id="$(sed -E 's#^workloads/([^/]+)/.*#\1#' <<<"$stage")"
   local args=() k gen val
   while read -r k; do
     gen="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .generate' <<<"$keys")"
@@ -157,6 +161,10 @@ kurly::secret() {
       password) val="$KURLY_E2E_PASSWORD" ;;
       hex) val="0123456789abcdef0123456789abcdef" ;;
       literal) val="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .value' <<<"$keys")" ;;
+      # Composite connection strings some apps read as a single secret (Prisma's
+      # DATABASE_URL, etc.), built from the provisioned dependency.
+      postgresUrl) val="postgresql://${id}:${KURLY_E2E_PASSWORD}@${id}-db-rw:5432/${id}" ;;
+      redisUrl) val="redis://${id}-cache-headless:6379" ;;
       *) val="$KURLY_E2E_PASSWORD" ;;
     esac
     args+=("--from-literal=${k}=${val}")

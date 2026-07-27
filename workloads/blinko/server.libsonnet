@@ -29,7 +29,9 @@ function(
   storageSize='5Gi',
   storageClass=null,
   // The public URL (NextAuth needs it).
-  nextauthUrl=null,
+  // NextAuth needs a base URL to start; defaults to a localhost URL so a default
+  // render boots — point it at the real host for a real deployment.
+  nextauthUrl='http://localhost:1111',
   // The Secret holding DATABASE_URL and NEXTAUTH_SECRET (kurly mints none), via
   // envFrom.
   secretName='blinko',
