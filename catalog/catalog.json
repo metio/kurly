@@ -15730,6 +15730,10 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "NEXTAUTH_SECRET",
                      "length": 64
