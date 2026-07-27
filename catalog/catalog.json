@@ -6833,6 +6833,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "literal",
+                     "key": "COUCHDB_USER",
+                     "value": "admin"
+                  },
+                  {
                      "generate": "password",
                      "key": "COUCHDB_PASSWORD",
                      "length": 32

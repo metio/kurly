@@ -25,11 +25,16 @@ function(
   kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.port(8000)
+  // The image's nginx serves the static app on :80; the Service keeps :8000, so
+  // an exposure composed onto this workload is unaffected.
+  + kurly.port(80)
   + kurly.servicePort(8000)
   + kurly.env(env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // nginx starts as root and hands its cache and temp directories to the nginx
+  // user before dropping to it, so it keeps CHOWN/SETUID/SETGID.
+  + kurly.keepCapabilities()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

@@ -40,6 +40,9 @@ function(
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/opt/couchdb/data', storageSize, storageClass=storageClass)
+  // The entrypoint writes the admin account and cookie it derives from the
+  // environment into a config drop-in before starting the database.
+  + kurly.scratch('/opt/couchdb/etc/local.d', '8Mi')
   + kurly.readinessProbe({ httpGet: { path: '/_up', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/_up', port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
