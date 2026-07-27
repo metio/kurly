@@ -174,7 +174,9 @@ kurly::secret() {
       literal) val="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .value' <<<"$keys")" ;;
       # Composite connection strings some apps read as a single secret (Prisma's
       # DATABASE_URL, etc.), built from the provisioned dependency.
-      postgresUrl) val="postgresql://${id}:${KURLY_E2E_PASSWORD}@${id}-db-rw:5432/${id}" ;;
+      # The throwaway postgres serves plaintext, and a client that defaults to
+      # sslmode=require (Go's pq, among others) fails its first query without this.
+      postgresUrl) val="postgresql://${id}:${KURLY_E2E_PASSWORD}@${id}-db-rw:5432/${id}?sslmode=disable" ;;
       redisUrl) val="redis://${id}-cache-headless:6379" ;;
       *) val="$KURLY_E2E_PASSWORD" ;;
     esac

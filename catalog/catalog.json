@@ -9640,6 +9640,12 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "FERRETDB_POSTGRESQL_URL"
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -9732,6 +9738,35 @@
                   "writableRootFilesystem": false
                },
                "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "EMAIL_NOREPLY",
+                     "value": "noreply@example.com"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "EMAIL_SMTP_HOST",
+                     "value": "localhost"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "EMAIL_SMTP_PORT",
+                     "value": "25"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "EMAIL_SMTP_USERNAME",
+                     "value": "fider"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "EMAIL_SMTP_PASSWORD",
+                     "length": 24
+                  },
                   {
                      "generate": "hex",
                      "key": "JWT_SECRET",

@@ -4963,7 +4963,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/fider/server.libsonnet', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/fider/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'EMAIL_NOREPLY', generate: 'literal', value: 'noreply@example.com' }, { key: 'EMAIL_SMTP_HOST', generate: 'literal', value: 'localhost' }, { key: 'EMAIL_SMTP_PORT', generate: 'literal', value: '25' }, { key: 'EMAIL_SMTP_USERNAME', generate: 'literal', value: 'fider' }, { key: 'EMAIL_SMTP_PASSWORD', generate: 'password', length: 24 }, { key: 'JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     'firefly-iii': {
@@ -5266,7 +5266,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ferretdb/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/ferretdb/server.libsonnet', secretKeys: [{ key: 'FERRETDB_POSTGRESQL_URL', generate: 'postgresUrl' }] },
       },
     },
     neo4j: {

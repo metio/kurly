@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" fider-db-rw fider fider
 
 kurly::secret "$ns" fider workloads/fider/server.libsonnet
-kurly::boot workloads/fider/server.libsonnet "$ns"
+kurly::boot workloads/fider/server.libsonnet "$ns" "+ k.env({ BASE_URL: 'http://fider:3000' })"
