@@ -2641,8 +2641,32 @@
                      "type": "int"
                   },
                   {
-                     "example": "https://flows.example.com",
+                     "default": "http://localhost:80",
                      "name": "frontendUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "activepieces-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "activepieces",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "activepieces",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "activepieces-cache-headless",
+                     "name": "redisHost",
                      "required": false,
                      "type": "string"
                   },
@@ -2682,7 +2706,7 @@
                      "type": "object"
                   }
                ],
-               "help": "The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). secretName holds AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.",
+               "help": "The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). Connection settings are env from dbHost/database/dbUser/redisHost; secretName holds AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/activepieces/server.libsonnet",
                "kind": "http",
@@ -2693,6 +2717,11 @@
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "AP_POSTGRES_PASSWORD",
+                     "length": 32
+                  },
                   {
                      "generate": "hex",
                      "key": "AP_ENCRYPTION_KEY",
@@ -2709,7 +2738,7 @@
                }
             }
          ],
-         "summary": "An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. kurly authors no Secret; AP_POSTGRES_*, AP_REDIS_*, AP_ENCRYPTION_KEY and AP_JWT_SECRET come from a provided Secret via envFrom. Stateless: a plain rolling Deployment. Serves on :80."
+         "summary": "An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. Connection settings are env from the dbHost/database/dbUser/redisHost parameters; a provided Secret holds AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET via envFrom (kurly authors none). Stateless: a plain rolling Deployment. Serves on :80."
       },
       {
          "id": "actualbudget",
