@@ -12334,6 +12334,19 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
+                     "generate": "redisUrl",
+                     "key": "REDIS_URL"
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY_BASE",
+                     "length": 128
+                  },
+                  {
                      "generate": "hex",
                      "key": "BIGBLUEBUTTON_SECRET",
                      "length": 64
@@ -12611,6 +12624,28 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRESQL_HOSTNAME",
+                     "value": "guacamole-db-rw"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRESQL_DATABASE",
+                     "value": "guacamole"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRESQL_USER",
+                     "value": "guacamole"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "POSTGRESQL_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }

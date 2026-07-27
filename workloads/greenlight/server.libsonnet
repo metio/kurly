@@ -43,10 +43,14 @@ function(
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
   + kurly.env({ RAILS_ENV: 'production' } + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image runs the app as root and owns its directory as root; Rails writes
+  // its bootsnap cache and precompiled assets there on start.
+  + kurly.rootUser()
   + kurly.writableRootFilesystem()
-  + kurly.scratch('/tmp', '64Mi')
-  + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
+  // Rails redirects every plain request to https in production, and the kubelet
+  // follows the redirect and then speaks TLS to the plain port — so readiness is
+  // a connection check rather than an HTTP one.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
