@@ -63,6 +63,9 @@ function(
     IMMICH_MACHINE_LEARNING_URL: machineLearningUrl,
   } + env)
   + kurly.envFromSecret(secretName)
+  // The Service is named after the app, so the Service-link environment defines
+  // IMMICH_PORT as a tcp:// URL — which the server parses as its listen port.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ httpGet: { path: '/api/server/ping', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/api/server/ping', port: 'http' } })
   + kurly.resources(

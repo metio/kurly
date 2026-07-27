@@ -5880,6 +5880,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           importPath: 'github.com/metio/kurly/workloads/immich/server.libsonnet',
           secretKeys: [
             { key: 'DB_PASSWORD', generate: 'password', length: 32 },
+            { key: 'REDIS_PASSWORD', generate: 'password', length: 32 },
           ],
         },
         'machine-learning': d.fn("Immich's inference service on :3003, model cache on a ReadWriteOnce volume at /cache (one replica, recreated). The server reaches it through its Service at http://<name>:3003.", [

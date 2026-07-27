@@ -13690,6 +13690,11 @@
                      "generate": "password",
                      "key": "DB_PASSWORD",
                      "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "REDIS_PASSWORD",
+                     "length": 32
                   }
                ],
                "storage": {

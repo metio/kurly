@@ -132,7 +132,15 @@ while IFS=$'\t' read -r id stages db cache; do
       prov+="kurly::mysql \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
     else
       dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
-      prov+="kurly::postgres \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
+      # A workload that needs a PostgreSQL extension gets a server image carrying
+      # it — the stock image would fail its first CREATE EXTENSION.
+      pgimage=""
+      case "$(jq -r --arg id "$id" '.workloads[] | select(.id==$id) | .requires.databaseExtensions // [] | join(",")' "$catalog")" in
+        # VectorChord only works when the server preloads it, and immich pins the
+        # extension version range it supports.
+        *vchord*) pgimage=" ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 '\"-c\", \"shared_preload_libraries=vchord.so\"'" ;;
+      esac
+      prov+="kurly::postgres \"\$ns\" ${dbHost} ${dbName} ${dbUser}${pgimage}"$'\n'
     fi
   fi
   if [ "$cache" = "1" ]; then
