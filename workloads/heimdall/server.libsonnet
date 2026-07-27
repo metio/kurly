@@ -48,6 +48,9 @@ function(
   + kurly.allowPrivilegeEscalation()
   + kurly.keepCapabilities()
   + kurly.store('/config', storageSize, storageClass=storageClass)
+  // Installing the app into a fresh volume on first start takes a while before
+  // anything listens.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
