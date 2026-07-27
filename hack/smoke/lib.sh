@@ -159,7 +159,12 @@ kurly::secret() {
     gen="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .generate' <<<"$keys")"
     case "$gen" in
       password) val="$KURLY_E2E_PASSWORD" ;;
-      hex) val="0123456789abcdef0123456789abcdef" ;;
+      hex)
+        # A random hex string of the DECLARED length — apps like Django reject a
+        # short or low-entropy SECRET_KEY (security.W009), so honour the length.
+        len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 64' <<<"$keys")"
+        val="$(head -c "$len" /dev/urandom | od -An -tx1 | tr -d ' \n' | cut -c "1-${len}")"
+        ;;
       literal) val="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .value' <<<"$keys")" ;;
       # Composite connection strings some apps read as a single secret (Prisma's
       # DATABASE_URL, etc.), built from the provisioned dependency.

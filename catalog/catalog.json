@@ -5370,6 +5370,10 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "SECRET_KEY",
                      "length": 64
