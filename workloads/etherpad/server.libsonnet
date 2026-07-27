@@ -52,9 +52,14 @@ function(
   + kurly.port(9001)
   + kurly.servicePort(9001)
   + kurly.envFromSecret(secretName)
-  + kurly.env(baseEnv + env)
+  + kurly.env({ HOME: '/home/etherpad', XDG_CACHE_HOME: '/home/etherpad/.cache' } + baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.scratch('/tmp', '64Mi')
+  // Etherpad inventories its plugins with pnpm on every start, which needs a
+  // writable home and store on the read-only root filesystem.
+  + kurly.scratch('/home/etherpad', '256Mi')
+  // …and records the plugins it found next to its code.
+  + kurly.scratch('/opt/etherpad-lite/var', '64Mi')
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.resources(

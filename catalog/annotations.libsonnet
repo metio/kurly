@@ -481,7 +481,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/etherpad/server.libsonnet', secretKeys: [{ key: 'ADMIN_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/etherpad/server.libsonnet', secretKeys: [{ key: 'DB_PASS', generate: 'password', length: 32 }, { key: 'ADMIN_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     hedgedoc: {

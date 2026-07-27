@@ -39,6 +39,8 @@ function(
   + (if env == {} then {} else kurly.env(env))
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // nginx hands its cache directories to the nginx user before dropping to it.
+  + kurly.keepCapabilities()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.resources(
