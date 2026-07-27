@@ -16,7 +16,7 @@
 # continuity is the zero-downtime proof. There are deliberately NO migrations —
 # the cache is ephemeral (the dataset moves by replication, not a volume), so a
 # migration would be contrived; the point is many upgrades, zero downtime, none.
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 

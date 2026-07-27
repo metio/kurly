@@ -33,7 +33,7 @@
 # workload version, NOT the image tag. The scenario keeps the two in lockstep
 # (each hop composes `+ kurly.version(<tag>)`) so a human reading the log sees
 # one number move.
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 

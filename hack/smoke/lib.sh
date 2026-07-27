@@ -302,17 +302,31 @@ EOF
 #   kurly::validate_cr <ns> <stage-file> <crd-url>...
 kurly::validate_cr() {
   local ns="$1" stage="$2"; shift 2
-  local url
+  local url names attempt
   for url in "$@"; do
     echo "== install CRD ${url##*/} =="
-    kubectl apply --server-side --force-conflicts --filename="$url"
+    mapfile -t names < <(kubectl apply --server-side --force-conflicts --filename="$url" --output=name)
+    printf '%s\n' "${names[@]}"
+    # A freshly applied CRD is not servable until the apiserver establishes it, so a
+    # dry-run right after the apply fails with "no matches for kind".
+    [ "${#names[@]}" -gt 0 ] \
+      && kubectl wait --for=condition=Established --timeout=120s "${names[@]}" >/dev/null 2>&1
   done
+  # kubectl caches discovery per cluster; drop it so the new group is visible.
+  rm -rf "${HOME}/.kube/cache/discovery" 2>/dev/null || true
   kurly::namespace "$ns" >/dev/null
   echo "== validate the rendered custom resource against the operator schema =="
-  kurly::render "$stage" \
-    | kubectl apply --namespace="$ns" --server-side --dry-run=server --filename=- \
-    || { echo "::error::${stage}: the custom resource was rejected by the operator schema"; return 1; }
-  echo "ok: ${stage} validates against the operator schema on a live cluster"
+  for attempt in 1 2 3 4 5; do
+    if kurly::render "$stage" \
+      | kubectl apply --namespace="$ns" --server-side --dry-run=server --filename=-; then
+      echo "ok: ${stage} validates against the operator schema on a live cluster"
+      return 0
+    fi
+    echo "validate attempt ${attempt} failed — retrying"
+    sleep 5
+  done
+  echo "::error::${stage}: the custom resource was rejected by the operator schema"
+  return 1
 }
 
 # Frees everything a workload's fast + deep checks created, so the shared single

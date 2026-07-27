@@ -17,7 +17,7 @@
 # requests without an auth-config dance; the cluster still carries dummy S3
 # credentials because barmanObjectStore requires them configured, and SeaweedFS
 # ignores them in this mode. A real deployment puts credentials on both sides.
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 

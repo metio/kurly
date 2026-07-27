@@ -47,7 +47,7 @@
 # workload label stamps kurly, not the resolved PostgreSQL image). That
 # decoupling is exactly why tik owns the migration scenario and this one does
 # not.
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 

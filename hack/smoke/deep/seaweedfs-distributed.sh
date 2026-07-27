@@ -14,7 +14,7 @@
 #      worked, read straight from the master's topology.
 #   3. An object PUT through the filer's S3 gateway reads back byte-for-byte —
 #      the whole path (client → filer → master → volume, over routable IPs) serves.
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
 
