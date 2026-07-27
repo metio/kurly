@@ -13,9 +13,9 @@
 // Serves the web app on :8083 — compose an exposure onto it.
 //
 // LINUXSERVER IMAGE: the s6-overlay init runs as root and drops to the PUID/PGID user, so this
-// runs as root with a writable root filesystem — kurly keeps the rest of the hardening (dropped
-// capabilities, seccomp, no privilege escalation, resource limits). Set puid/pgid to own the
-// mounted files.
+// runs as root with a writable root filesystem and keeps the SETUID/SETGID/CHOWN capabilities it
+// needs to hand the library to that user — kurly keeps the rest of the hardening (seccomp,
+// resource limits). Set puid/pgid to own the mounted files.
 //
 // Single writer: config and library live on ReadWriteOnce volumes, so one replica, recreated.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
@@ -44,8 +44,15 @@ function(
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // The s6-overlay init starts as root and drops to PUID/PGID, and the ingest service
+  // chowns the mounted library, so it needs to gain privileges and keep SETUID/SETGID/CHOWN.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.store('/config', configSize, storageClass=storageClass)
   + kurly.store('/calibre-library', librarySize, storageClass=storageClass)
+  // Unpacking the bundled Calibre binaries takes minutes on a cold volume — gate the
+  // liveness probe until the web app binds.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 60 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
