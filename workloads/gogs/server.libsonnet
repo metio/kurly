@@ -44,6 +44,9 @@ function(
   // The image runs its init as root and serves as the git user; the root filesystem
   // stays writable for its runtime state.
   + kurly.rootUser()
+  // The s6 init drops to the git user to run the app.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/healthcheck', port: 'http' } })
