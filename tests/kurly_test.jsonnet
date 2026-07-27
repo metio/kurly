@@ -272,6 +272,14 @@ local podOf(app) = app.deployment.spec.template.spec;
     [v.emptyDir.sizeLimit for v in podOf(stateful).volumes if v.name == 'tmp'][0],
     '32Mi'
   ),
+  // A volume name is derived from the mount path, and a path may hold characters a
+  // DNS-1123 name may not — a dot ('/etc/clickhouse-server/users.d'), an upper-case
+  // letter, an underscore. Each collapses to a hyphen, so the pod spec stays valid.
+  volume_name_from_a_path_is_dns_1123: std.assertEqual(
+    local pod = podOf(kurly.worker('w', 'img:1') + kurly.scratch('/etc/App_Server/users.d'));
+    [v.name for v in pod.volumes if std.startsWith(v.name, 'etc-')],
+    ['etc-app-server-users-d']
+  ),
   // kurly.runAs pins uid/gid on the container and fsGroup on the pod.
   user_and_fsgroup: std.assertEqual(
     [

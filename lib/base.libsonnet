@@ -11,8 +11,18 @@ local k = import './k.libsonnet';
 local networkPolicy = import './networkpolicy.libsonnet';
 
 // A volume name derived from a mount path: '/var/lib/tik' -> 'var-lib-tik'.
-// Keeps generated volume names DNS-1123 and unique per distinct mount path.
-local volumeName(path) = std.strReplace(std.lstripChars(path, '/'), '/', '-');
+// Keeps generated volume names DNS-1123 and unique per distinct mount path: every
+// character a volume name may not carry (a dot in '/etc/clickhouse-server/users.d',
+// an upper-case letter, an underscore) collapses to the same separator the path
+// separator does, and leading/trailing separators are trimmed.
+local volumeName(path) =
+  local safe = 'abcdefghijklmnopqrstuvwxyz0123456789-';
+  local sanitized = std.join('', [
+    local lower = std.asciiLower(c);
+    if std.member(safe, lower) then lower else '-'
+    for c in std.stringChars(path)
+  ]);
+  std.stripChars(sanitized, '-');
 
 // The PersistentVolumeClaim backing a store, and the ConfigMap holding a
 // workload's config files, are written as plain manifests (like the expose

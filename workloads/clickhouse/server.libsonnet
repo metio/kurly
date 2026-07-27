@@ -41,6 +41,17 @@ function(
   + kurly.env(env)
   + kurly.runAs(101, gid=101, fsGroup=101)
   + kurly.store('/var/lib/clickhouse', storageSize, storageClass=storageClass)
+  // The entrypoint assembles its user/config overrides under /tmp before starting
+  // the server, so it needs a writable one on the read-only root filesystem.
+  + kurly.scratch('/tmp', '128Mi')
+  // Given CLICKHOUSE_USER/CLICKHOUSE_PASSWORD the entrypoint writes the account
+  // into an overrides drop-in, so that directory must be writable too. It is empty
+  // in the image, so an emptyDir hides nothing.
+  + kurly.scratch('/etc/clickhouse-server/users.d', '8Mi')
+  // The server logs to files, not stdout, and refuses to start when it cannot open
+  // them — the query log and traces live on the data volume, these are the daemon's
+  // own log files.
+  + kurly.scratch('/var/log/clickhouse-server', '256Mi')
   + kurly.readinessProbe({ httpGet: { path: '/ping', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/ping', port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
