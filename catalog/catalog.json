@@ -10057,7 +10057,7 @@
                   {
                      "generate": "hex",
                      "key": "APP_KEY",
-                     "length": 64
+                     "length": 32
                   },
                   {
                      "generate": "password",
@@ -10143,7 +10143,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "storage": {
