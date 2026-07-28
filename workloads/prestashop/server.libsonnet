@@ -40,6 +40,10 @@ function(
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
+  // The first start installs the shop into its volume and database, which takes
+  // minutes; a restart in the middle leaves the installer's lock behind and every
+  // later attempt refuses to run.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 60 })
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

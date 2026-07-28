@@ -40,6 +40,9 @@ function(
   + kurly.env({ QDRANT__STORAGE__STORAGE_PATH: '/qdrant/storage' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/qdrant/storage', storageSize, storageClass=storageClass)
+  // The server writes an initialization marker beside its storage, in the working
+  // directory the image sets.
+  + kurly.scratch('/qdrant/snapshots', '256Mi')
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

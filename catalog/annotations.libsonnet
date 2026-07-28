@@ -4013,7 +4013,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/prestashop/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/prestashop/server.libsonnet', secretKeys: [{ key: 'DB_SERVER', generate: 'literal', value: 'prestashop-db' }, { key: 'DB_NAME', generate: 'literal', value: 'prestashop' }, { key: 'DB_USER', generate: 'literal', value: 'prestashop' }, { key: 'DB_PASSWD', generate: 'password', length: 32 }, { key: 'ADMIN_MAIL', generate: 'literal', value: 'admin@example.com' }, { key: 'ADMIN_PASSWD', generate: 'password', length: 24 }] },
       },
     },
     nocobase: {

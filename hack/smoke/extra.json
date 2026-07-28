@@ -10,5 +10,6 @@
   "ntfy": "+ k.env({ NTFY_BASE_URL: 'http://ntfy:80' })",
   "outline": "+ k.env({ URL: 'http://outline:3000', COLLABORATION_URL: 'ws://outline:3000' })",
   "peertube": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })",
-  "planka": "+ k.env({ BASE_URL: 'http://planka:1337' })"
+  "planka": "+ k.env({ BASE_URL: 'http://planka:1337' })",
+  "prestashop": "+ k.env({ PS_INSTALL_AUTO: '1', PS_DOMAIN: 'prestashop', PS_HANDLE_DYNAMIC_DOMAIN: '0', PS_ERASE_DB: '0' })"
 }

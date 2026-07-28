@@ -26524,6 +26524,38 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "DB_SERVER",
+                     "value": "prestashop-db"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DB_NAME",
+                     "value": "prestashop"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DB_USER",
+                     "value": "prestashop"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "ADMIN_MAIL",
+                     "value": "admin@example.com"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "ADMIN_PASSWD",
+                     "length": 24
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
