@@ -30,6 +30,8 @@ on:
       - 'lib/**'
       - Containerfile
       - workload.Containerfile
+      - catalog.Containerfile
+      - 'catalog/**'
       - 'workloads/**'
       # A workload README is documentation, not shipped in the source artifact,
       # so a README-only edit must not cut a release.
@@ -37,7 +39,7 @@ on:
   workflow_dispatch:
     inputs:
       unit:
-        description: Unit to force-release ("library" or a directory name under workloads/). Leave empty to release every unit.
+        description: Unit to force-release ("library", "catalog", or a directory name under workloads/). Leave empty to release every unit.
         required: false
 permissions:
   contents: read
@@ -55,6 +57,7 @@ jobs:
     timeout-minutes: 15
     outputs:
       library: ${{ steps.changed.outputs.library }}
+      catalog: ${{ steps.changed.outputs.catalog }}
       workloads: ${{ steps.changed.outputs.workloads }}
       any: ${{ steps.changed.outputs.any }}
       version: ${{ steps.version.outputs.version }}
@@ -73,20 +76,26 @@ jobs:
         run: |
           set -euo pipefail
           all_workloads() { find workloads -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort || true; }
-          # "library" is the library unit's tag prefix — a workload directory
-          # of that name would collide with it.
-          if all_workloads | grep -qx 'library'; then
-            echo "::error::a workload must not be named 'library' (reserved for the library unit's tags)"
-            exit 1
-          fi
+          # Each non-workload unit's name is also its tag prefix, so a workload
+          # directory of that name would collide with it.
+          for reserved in library catalog; do
+            if all_workloads | grep -qx "$reserved"; then
+              echo "::error::a workload must not be named '$reserved' (reserved for that unit's tags)"
+              exit 1
+            fi
+          done
           library=false
+          catalog=false
           workloads=""
           if [ "$EVENT" = "workflow_dispatch" ]; then
             if [ -z "$UNIT_INPUT" ]; then
               library=true
+              catalog=true
               workloads="$(all_workloads)"
             elif [ "$UNIT_INPUT" = "library" ]; then
               library=true
+            elif [ "$UNIT_INPUT" = "catalog" ]; then
+              catalog=true
             elif [ -d "workloads/$UNIT_INPUT" ]; then
               workloads="$UNIT_INPUT"
             else
@@ -99,6 +108,7 @@ jobs:
             # unit as changed instead of silently releasing nothing.
             if [ -z "$BEFORE" ] || ! git rev-parse -q --verify "${BEFORE}^{commit}" >/dev/null 2>&1; then
               library=true
+              catalog=true
               workloads="$(all_workloads)"
             else
               diff="$(git diff --name-only "$BEFORE" "$SHA")"
@@ -106,6 +116,11 @@ jobs:
               # lib/ (and its Containerfile). Matching only root-level *.libsonnet
               # would miss every lib/ change and silently skip a library release.
               echo "$diff" | grep -qE '^([^/]+\.libsonnet|lib/.*\.libsonnet|Containerfile)$' && library=true
+              # The catalog artifact is the generated catalog.json and the file
+              # that packages it. Gating on catalog/** matters beyond release
+              # noise: a consumer pins this image, so republishing it on every
+              # merge would open a pull request there for changes it cannot see.
+              echo "$diff" | grep -qE '^(catalog/.*|catalog\.Containerfile)$' && catalog=true
               # A README-only change to a workload is not a release (the README
               # is docs, not part of the shipped source artifact). And only a
               # workload whose directory still EXISTS is releasable — a DELETED
@@ -123,8 +138,9 @@ jobs:
           fi
           {
             echo "library=$library"
+            echo "catalog=$catalog"
             echo "workloads=$(printf '%s\n' "$workloads" | grep -v '^$' | jq --raw-input . | jq --slurp --compact-output .)"
-            if [ "$library" = "true" ] || [ -n "$workloads" ]; then echo "any=true"; else echo "any=false"; fi
+            if [ "$library" = "true" ] || [ "$catalog" = "true" ] || [ -n "$workloads" ]; then echo "any=true"; else echo "any=false"; fi
           } >> "$GITHUB_OUTPUT"
       - id: version
         name: Compute the shared version for this run
@@ -226,6 +242,87 @@ jobs:
           \`ghcr.io/metio/kurly:${VERSION}\` — single layer, jb vendor-tree
           layout; register it as a JsonnetLibrary (Flux OCIRepository source)
           or mount it as an image volume. Signed with cosign keyless.
+          EOF
+          git tag "$tag" "$SHA"
+          git push origin "$tag"
+          gh release create "$tag" --title "$tag" --notes-file "$NOTES"
+  catalog:
+    name: Release catalog
+    needs: [discover, validate]
+    if: needs.discover.outputs.catalog == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # push the catalog-<version> tag + GitHub Release
+      packages: write # push to GHCR
+      id-token: write # cosign keyless image signing
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Assert single layer and a readable catalog in the built image
+        # Single layer, like the library and workload images. And the layer has
+        # to carry a catalog a consumer can actually READ: parse it out of the
+        # image's own filesystem and check the fields every consumer keys on —
+        # the schema version it refuses to boot on, and a non-empty workload
+        # list. A published-but-empty catalog would otherwise reach a consumer
+        # as "every product disappeared".
+        run: |
+          set -euo pipefail
+          docker buildx build --load --file catalog.Containerfile --tag kurly-catalog-verify:latest .
+          n=$(docker image inspect kurly-catalog-verify:latest --format '{{ len .RootFS.Layers }}')
+          [ "$n" = "1" ] || { echo "::error::catalog image has $n layers, expected 1"; exit 1; }
+          tree="$(mktemp -d)"
+          # A FROM-scratch image carries no command, and `docker create` rejects
+          # that — pass a throwaway one; the container exists only to export its
+          # filesystem.
+          cid="$(docker create kurly-catalog-verify:latest /nonexistent)"
+          docker export "$cid" | tar -xf - -C "$tree"
+          docker rm "$cid" >/dev/null
+          version="$(jq -r '.schemaVersion // empty' "$tree/catalog.json")"
+          [ -n "$version" ] || { echo "::error::catalog image carries no schemaVersion"; exit 1; }
+          count="$(jq -r '.workloads | length' "$tree/catalog.json")"
+          [ "$count" -gt 0 ] || { echo "::error::catalog image carries an empty workload list"; exit 1; }
+          echo "catalog image carries schemaVersion ${version} and ${count} workloads"
+      - name: Build, push and sign the image
+        uses: metio/ci/container-release@a221440cbc128a3736a2f950c8c8497d441384ed # 2026.7.26085035
+        with:
+          image: ghcr.io/metio/kurly/catalog
+          version: ${{ needs.discover.outputs.version }}
+          file: ./catalog.Containerfile
+      - id: prev
+        name: Find this unit's previous tag
+        run: echo "prev=$(git tag --list 'catalog-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
+      - id: notes
+        name: Generate Release Notes
+        uses: metio/ci/release-notes@a221440cbc128a3736a2f950c8c8497d441384ed # 2026.7.26085035
+        env:
+          # The org cliff config renders the unit name into the notes header.
+          CHART: catalog
+        with:
+          version: catalog-${{ needs.discover.outputs.version }}
+          previous: ${{ steps.prev.outputs.prev }}
+          # Path-scoped notes since this unit's last tag; tag-pattern keeps
+          # another unit's tag inside the range from splitting the notes.
+          include-paths: catalog catalog.Containerfile
+          tag-pattern: ^catalog-
+      - name: Tag and publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.discover.outputs.version }}
+          SHA: ${{ github.sha }}
+          NOTES: ${{ steps.notes.outputs.file }}
+        run: |
+          set -euo pipefail
+          tag="catalog-${VERSION}"
+          cat >> "$NOTES" <<EOF
+
+          ## Artifacts
+
+          \`ghcr.io/metio/kurly/catalog:${VERSION}\` — single layer holding
+          \`/catalog.json\`; pin it by digest and copy the file out
+          (\`COPY --from\`). Signed with cosign keyless.
           EOF
           git tag "$tag" "$SHA"
           git push origin "$tag"
