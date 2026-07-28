@@ -36,6 +36,8 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.store('/home/suwayomi/.local/share/Tachidesk', storageSize, storageClass=storageClass)
+  // The JVM server unpacks its web UI and starts its browser tooling before it listens.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

@@ -12,9 +12,9 @@
 //
 // Serves the client-server and federation API on :8008 — compose an exposure onto it.
 //
-// FIRST RUN: the image generates a homeserver.yaml and signing keys into /data from
-// SYNAPSE_SERVER_NAME on first start. The server name is baked into every id and cannot be
-// changed later, so set it deliberately. For anything beyond a small instance, edit the
+// FIRST RUN: an init container runs the image's `generate` step once, writing a
+// homeserver.yaml and signing keys into /data from SYNAPSE_SERVER_NAME. The server name is
+// baked into every id and cannot be changed later, so set it deliberately. For anything beyond a small instance, edit the
 // generated homeserver.yaml on the volume to point at an external PostgreSQL (the default is
 // SQLite) and to tune federation.
 //
@@ -48,6 +48,19 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
+  // The image does not build a configuration from the environment any more: it
+  // needs a homeserver.yaml and signing keys on the volume. `generate` writes them
+  // from SYNAPSE_SERVER_NAME, and the guard keeps a restart from replacing the keys
+  // an existing server's identity depends on.
+  + kurly.initContainer({
+    name: 'generate',
+    image: image,
+    command: ['sh', '-c', 'test -f /data/homeserver.yaml || /start.py generate'],
+    env: [{ name: k, value: baseEnv[k] } for k in std.objectFields(baseEnv)],
+    volumeMounts: [{ name: 'store', mountPath: '/data' }],
+  })
+  // Synapse generates its signing keys and runs its migrations before it listens.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
