@@ -25951,6 +25951,10 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "S3_SECRET_ACCESS_KEY",
                      "length": 64

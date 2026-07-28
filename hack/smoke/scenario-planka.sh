@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" planka-db-rw planka planka
 
 kurly::secret "$ns" planka workloads/planka/server.libsonnet
-kurly::boot workloads/planka/server.libsonnet "$ns"
+kurly::boot workloads/planka/server.libsonnet "$ns" "+ k.env({ BASE_URL: 'http://planka:1337' })"

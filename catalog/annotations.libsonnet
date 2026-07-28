@@ -3889,7 +3889,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/planka/server.libsonnet', secretKeys: [{ key: 'S3_SECRET_ACCESS_KEY', generate: 'hex', length: 64 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/planka/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'S3_SECRET_ACCESS_KEY', generate: 'hex', length: 64 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     photoview: {
