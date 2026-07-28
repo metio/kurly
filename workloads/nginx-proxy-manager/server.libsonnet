@@ -43,6 +43,9 @@ function(
   + kurly.extraPort('proxy-https', 443)
   + kurly.env(env)
   + kurly.rootUser()
+  // Its s6 init prepares the runtime directories and drops to the app user.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

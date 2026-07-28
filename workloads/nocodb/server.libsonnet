@@ -34,7 +34,7 @@ function(
   // The Secret holding NC_DB and NC_AUTH_JWT_SECRET (kurly mints none), via envFrom.
   secretName='nocodb',
   env={},
-  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
+  resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},
   annotations={},
 )
@@ -50,11 +50,14 @@ function(
   + kurly.servicePort(8080)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image runs the app as root and owns its tree as root.
+  + kurly.rootUser()
   + kurly.store('/usr/app/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')
-  + kurly.readinessProbe({ httpGet: { path: '/api/health', port: 'http' } })
-  + kurly.livenessProbe({ httpGet: { path: '/api/health', port: 'http' } })
+  // The first start builds its metadata database before the API answers.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
+  + kurly.readinessProbe({ httpGet: { path: '/api/v1/health', port: 'http' } })
+  + kurly.livenessProbe({ httpGet: { path: '/api/v1/health', port: 'http' } })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),
