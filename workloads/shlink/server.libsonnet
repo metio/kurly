@@ -53,8 +53,18 @@ function(
   + kurly.servicePort(8080)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image's own account owns the data directory Shlink generates its proxies in.
+  + kurly.runAs(1001, gid=0, fsGroup=0)
   + kurly.scratch('/tmp', '64Mi')
+  // Shlink generates its Doctrine proxies and caches beside its configuration on
+  // every start, which the read-only root filesystem does not allow.
+  + kurly.scratch('/etc/shlink/data/proxies', '32Mi')
+  + kurly.scratch('/etc/shlink/data/cache', '64Mi')
+  + kurly.scratch('/etc/shlink/data/log', '64Mi')
+  + kurly.scratch('/etc/shlink/data/locks', '8Mi')
+  // The first start migrates its schema, generates proxies and fetches the GeoLite
+  // database before the API answers.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ httpGet: { path: '/rest/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/rest/health', port: 'http' } })
   + kurly.resources(
