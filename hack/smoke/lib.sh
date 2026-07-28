@@ -225,6 +225,12 @@ spec:
             - { name: POSTGRES_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
             - { name: PGDATA, value: /var/lib/postgresql/data/pgdata }
           ports: [{ containerPort: 5432 }]
+          # Rollout completion alone says only that the process started; an app that
+          # connects once and exits (rather than retrying) races it without this.
+          readinessProbe:
+            exec: { command: ["pg_isready", "-U", "${user}", "-d", "${db}"] }
+            periodSeconds: 2
+            failureThreshold: 30
           volumeMounts: [{ name: data, mountPath: /var/lib/postgresql/data }]
       volumes: [{ name: data, emptyDir: {} }]
 ---
@@ -331,6 +337,10 @@ spec:
         - name: mongodb
           image: docker.io/library/mongo:8
           ports: [{ containerPort: 27017 }]
+          readinessProbe:
+            tcpSocket: { port: 27017 }
+            periodSeconds: 2
+            failureThreshold: 30
           volumeMounts: [{ name: data, mountPath: /data/db }]
       volumes: [{ name: data, emptyDir: {} }]
 ---

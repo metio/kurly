@@ -43,8 +43,10 @@ function(
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.scratch('/tmp', '32Mi')
-  + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
-  + kurly.livenessProbe({ httpGet: { path: '/healthz', port: 'http' } })
+  // The server exposes no health endpoint of its own — every path is part of the
+  // application — so health is a connection check.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
+  + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),

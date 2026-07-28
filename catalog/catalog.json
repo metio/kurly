@@ -28707,6 +28707,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "RUNDECK_ADMIN_PASSWORD",
+                     "length": 24
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -28990,6 +28997,15 @@
                   "writableRootFilesystem": false
                },
                "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "CRYPT_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "postgresUrl",
+                     "key": "POSTGRES_URL"
+                  },
                   {
                      "generate": "hex",
                      "key": "JWT_SIGNING_KEY",

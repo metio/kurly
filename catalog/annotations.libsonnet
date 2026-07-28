@@ -1683,7 +1683,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/seatsurfing/server.libsonnet', secretKeys: [{ key: 'JWT_SIGNING_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/seatsurfing/server.libsonnet', secretKeys: [{ key: 'CRYPT_KEY', generate: 'hex', length: 32 }, { key: 'POSTGRES_URL', generate: 'postgresUrl' }, { key: 'JWT_SIGNING_KEY', generate: 'hex', length: 64 }] },
       },
     },
     ejabberd: {
@@ -3502,7 +3502,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rundeck/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rundeck/server.libsonnet', secretKeys: [{ key: 'RUNDECK_ADMIN_PASSWORD', generate: 'password', length: 24 }] },
       },
     },
     mosquitto: {
