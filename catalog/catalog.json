@@ -24603,11 +24603,22 @@
                "importPath": "github.com/metio/kurly/workloads/passwordpusher/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": false
+                  "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY_BASE",
+                     "length": 128
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -24725,12 +24736,17 @@
                "importPath": "github.com/metio/kurly/workloads/peertube/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": false
                },
                "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "PEERTUBE_ADMIN_EMAIL",
+                     "value": "admin@example.com"
+                  },
                   {
                      "generate": "password",
                      "key": "PEERTUBE_DB_PASSWORD",

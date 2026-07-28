@@ -36,12 +36,18 @@ function(
   kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.port(5100)
+  // The image's server listens on :80; the Service keeps the app's conventional
+  // :5100 for consumers.
+  + kurly.port(80)
   + kurly.servicePort(5100)
   + kurly.envFromSecret(secretName)
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.scratch('/tmp', '64Mi')
+  // Rails migrates and warms its caches before it listens.
+  // Rails compiles its bootsnap cache and runs its queue inside the app directory.
+  + kurly.writableRootFilesystem()
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.resources(

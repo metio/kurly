@@ -79,7 +79,10 @@ function(
   + kurly.env(baseEnv + env)
   // The image runs as uid 999; pin it and its fsGroup so the data volume is
   // writable and the restricted posture admits the pod.
-  + kurly.runAs(999, gid=999, fsGroup=999)
+  // Its init hands the config and data directories to the app user.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '256Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

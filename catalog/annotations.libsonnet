@@ -1532,7 +1532,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/peertube/server.libsonnet', secretKeys: [{ key: 'PEERTUBE_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'PEERTUBE_SECRET', generate: 'hex', length: 64 }, { key: 'PT_INITIAL_ROOT_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/peertube/server.libsonnet', secretKeys: [{ key: 'PEERTUBE_ADMIN_EMAIL', generate: 'literal', value: 'admin@example.com' }, { key: 'PEERTUBE_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'PEERTUBE_SECRET', generate: 'hex', length: 64 }, { key: 'PT_INITIAL_ROOT_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     maybe: {
@@ -1726,7 +1726,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/passwordpusher/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/passwordpusher/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'SECRET_KEY_BASE', generate: 'hex', length: 128 }] },
       },
     },
     baikal: {
