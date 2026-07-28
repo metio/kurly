@@ -23,6 +23,14 @@ function(
   name='kutt',
   image=defaultImage,
   replicas=2,
+  // The PostgreSQL and Redis it stores links and rate-limit state in; the database
+  // password comes from the Secret.
+  dbHost='kutt-db-rw',
+  dbPort=5432,
+  dbName='kutt',
+  dbUser='kutt',
+  redisHost='kutt-cache-headless',
+  redisPort=6379,
   secretName='kutt',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
@@ -35,7 +43,17 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
-  + kurly.env(env)
+  + kurly.env({
+    // knex picks its driver from DB_CLIENT; without it the app falls back to the
+    // bundled SQLite file, which has nowhere to live here.
+    DB_CLIENT: 'pg',
+    DB_HOST: dbHost,
+    DB_PORT: std.toString(dbPort),
+    DB_DATABASE: dbName,
+    DB_USER: dbUser,
+    REDIS_HOST: redisHost,
+    REDIS_PORT: std.toString(redisPort),
+  } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '64Mi')
