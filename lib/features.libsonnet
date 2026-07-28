@@ -13,17 +13,10 @@
 //   + kurly.config({ 'pipelines.edn': edn })
 //   + kurly.runAs(12345)
 //   + kurly.recreate()
-// Named resource presets — a memory request equal to its limit (a Guaranteed
-// memory footprint) and a CPU request with no limit (CPU throttling is usually
-// worse than letting a pod burst). resourcePreset picks one; resources sets an
-// explicit pair.
-local resourcePresets = {
-  nano: { requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '64Mi' } },
-  micro: { requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '128Mi' } },
-  small: { requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '256Mi' } },
-  medium: { requests: { cpu: '500m', memory: '512Mi' }, limits: { memory: '512Mi' } },
-  large: { requests: { cpu: '1', memory: '1Gi' }, limits: { memory: '1Gi' } },
-};
+// The named resource sizes resourcePreset picks from live in their own file: the
+// catalog publishes their values, so a consumer reads the numbers rather than
+// transcribing them.
+local resourcePresets = import './resource-presets.libsonnet';
 
 {
   // Container basics.

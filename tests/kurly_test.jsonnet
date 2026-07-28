@@ -280,6 +280,12 @@ local podOf(app) = app.deployment.spec.template.spec;
     [v.name for v in pod.volumes if std.startsWith(v.name, 'etc-')],
     ['etc-app-server-users-d']
   ),
+  // The catalog publishes the preset values, so a consumer reads them instead of
+  // keeping a copy; this pins the two to each other.
+  resource_preset_matches_the_published_value: std.assertEqual(
+    containerOf(kurly.worker('w', 'img:1') + kurly.resourcePreset('small')).resources,
+    (import 'github.com/metio/kurly/lib/resource-presets.libsonnet').small
+  ),
   // kurly.addCapabilities grants named privileges back on top of the dropped-ALL
   // default, so the manifest states exactly which ones the app holds.
   added_capabilities_compose_with_the_drop: std.assertEqual(

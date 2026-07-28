@@ -2549,6 +2549,53 @@
          ]
       }
    ],
+   "resourcePresets": {
+      "large": {
+         "limits": {
+            "memory": "1Gi"
+         },
+         "requests": {
+            "cpu": "1",
+            "memory": "1Gi"
+         }
+      },
+      "medium": {
+         "limits": {
+            "memory": "512Mi"
+         },
+         "requests": {
+            "cpu": "500m",
+            "memory": "512Mi"
+         }
+      },
+      "micro": {
+         "limits": {
+            "memory": "128Mi"
+         },
+         "requests": {
+            "cpu": "100m",
+            "memory": "128Mi"
+         }
+      },
+      "nano": {
+         "limits": {
+            "memory": "64Mi"
+         },
+         "requests": {
+            "cpu": "50m",
+            "memory": "64Mi"
+         }
+      },
+      "small": {
+         "limits": {
+            "memory": "256Mi"
+         },
+         "requests": {
+            "cpu": "250m",
+            "memory": "256Mi"
+         }
+      }
+   },
    "schemaVersion": 1,
    "security": [
       {
