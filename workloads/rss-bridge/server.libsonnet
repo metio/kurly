@@ -37,7 +37,11 @@ function(
   // The Apache master runs as root then serves as www-data; the root filesystem stays
   // writable for Apache's runtime state.
   + kurly.rootUser()
+  // nginx and php-fpm prepare their runtime directories and socket as root.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
+  // php-fpm binds its socket under /run/php.
+  + kurly.scratch('/run/php', '8Mi')
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
