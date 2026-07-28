@@ -40,7 +40,9 @@ function(
   + kurly.port(8080)
   + kurly.servicePort(8080)
   + (if env == {} then {} else kurly.env(env))
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint prepares its working directories under /tmp and hands them over.
+  + kurly.rootUser()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/configs', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/v1/info/status', port: 'http' }, initialDelaySeconds: 20, periodSeconds: 15, failureThreshold: 12 })
