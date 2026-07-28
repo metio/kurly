@@ -38,6 +38,8 @@ function(
   // The bundled Apache/PHP master runs as root then serves as www-data; the root
   // filesystem stays writable for its runtime state.
   + kurly.rootUser()
+  // The entrypoint hands the application tree to the web user.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html/db', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

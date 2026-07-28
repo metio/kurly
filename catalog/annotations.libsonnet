@@ -3627,7 +3627,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/webtrees/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/webtrees/server.libsonnet', secretKeys: [{ key: 'DB_HOST', generate: 'literal', value: 'webtrees-db' }, { key: 'DB_PORT', generate: 'literal', value: '3306' }, { key: 'DB_NAME', generate: 'literal', value: 'webtrees' }, { key: 'DB_USER', generate: 'literal', value: 'webtrees' }, { key: 'DB_PASS', generate: 'password', length: 32 }, { key: 'BASE_URL', generate: 'literal', value: 'http://webtrees' }] },
       },
     },
     mariadb: {

@@ -33648,6 +33648,38 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "DB_HOST",
+                     "value": "webtrees-db"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DB_PORT",
+                     "value": "3306"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DB_NAME",
+                     "value": "webtrees"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "DB_USER",
+                     "value": "webtrees"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_PASS",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "BASE_URL",
+                     "value": "http://webtrees"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
