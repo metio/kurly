@@ -32578,6 +32578,10 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "PG_DATABASE_URL"
+                  },
+                  {
                      "generate": "hex",
                      "key": "APP_SECRET",
                      "length": 64

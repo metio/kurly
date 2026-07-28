@@ -1482,7 +1482,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/twenty/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/twenty/server.libsonnet', secretKeys: [{ key: 'PG_DATABASE_URL', generate: 'postgresUrl' }, { key: 'APP_SECRET', generate: 'hex', length: 64 }] },
         worker: d.fn('The Twenty background worker (BullMQ jobs), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs `yarn worker:prod`. Scales horizontally via replicas. A Twenty deployment needs at least one.', [
           d.arg('name', d.T.string, default='twenty-worker'),
           d.arg('image', d.T.string),

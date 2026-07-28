@@ -446,11 +446,18 @@ kurly::cleanup_workload() {
   # managed-by label, so the sweep is precise.
   local kind
   for kind in validatingadmissionpolicybinding validatingadmissionpolicy \
-    mutatingwebhookconfiguration validatingwebhookconfiguration \
+    mutatingwebhookconfiguration validatingwebhookconfiguration apiservice \
     clusterrolebinding clusterrole priorityclass ingressclass storageclass; do
     kubectl delete "$kind" --selector=app.kubernetes.io/managed-by=kurly \
       --interactive=false --ignore-not-found >/dev/null 2>&1 || true
   done
+  # A cluster add-on states its own namespace (kube-system, opencost, spegel …), so
+  # its objects survive the kurly-<id> namespace sweep. A left-behind APIService with
+  # no healthy backend breaks discovery — and with it the deletion of EVERY
+  # namespace, poisoning the rest of the walk.
+  kubectl delete deployment,daemonset,service,serviceaccount --all-namespaces \
+    --selector="app.kubernetes.io/managed-by=kurly,app.kubernetes.io/name=${id}" \
+    --interactive=false --ignore-not-found >/dev/null 2>&1 || true
   [ "${#nss[@]}" -gt 0 ] || return 0
   echo "== cleanup ${id}: deleting namespaces ${nss[*]} =="
   # A blocking delete (kubectl's default --wait) returns only once the namespaces
