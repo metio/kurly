@@ -5284,7 +5284,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/neo4j/server.libsonnet', secretKeys: [{ key: 'NEO4J_AUTH', generate: 'literal', value: 'neo4j/kurlye2epassword' }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/neo4j/server.libsonnet', secretKeys: [{ key: 'NEO4J_AUTH', generate: 'literal', value: 'neo4j/Kurly-e2e-Passw0rd' }] },
       },
     },
     'cassandra-cluster': {

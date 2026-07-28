@@ -21085,7 +21085,7 @@
                   {
                      "generate": "literal",
                      "key": "NEO4J_AUTH",
-                     "value": "neo4j/kurlye2epassword"
+                     "value": "neo4j/Kurly-e2e-Passw0rd"
                   }
                ],
                "storage": {

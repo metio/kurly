@@ -136,7 +136,9 @@ kurly::boot() {
 
 # A single shared test password every provisioned dependency and minted Secret
 # uses, so an app's DB_PASSWORD Secret key matches the database it connects to.
-KURLY_E2E_PASSWORD="kurlye2epassword"
+# Complex enough for the apps that enforce a policy (an upper-case letter, a digit,
+# and a symbol), and free of characters that would need escaping inside a URL.
+KURLY_E2E_PASSWORD="Kurly-e2e-Passw0rd"
 
 # Mints the Secret a stage reads, from the catalog's per-stage `secretKeys`
 # contract: each key is generated as a password (the shared test password, so it
