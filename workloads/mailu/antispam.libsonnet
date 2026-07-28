@@ -71,6 +71,10 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(mailuEnv)
   + kurly.rootUser()
+  // Each Mailu image starts as root and drops to the mailu user, so it keeps the
+  // SETUID/SETGID capabilities that requires.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.hostUsers()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
