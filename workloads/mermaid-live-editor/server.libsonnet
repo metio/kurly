@@ -29,8 +29,11 @@ function(
   + kurly.port(8080)
   + kurly.servicePort(8080)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // nginx starts as root, prepares its cache directories, then drops to the nginx
+  // user for the workers.
+  + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  + kurly.keepCapabilities()
   + kurly.scratch('/tmp', '32Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
