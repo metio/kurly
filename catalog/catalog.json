@@ -27324,6 +27324,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "RABBITMQ_DEFAULT_USER",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "RABBITMQ_DEFAULT_PASS",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
