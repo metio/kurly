@@ -25,7 +25,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `miniflux` | |
-| `image` | `docker.io/miniflux/miniflux:2.3.2` | |
+| `image` | `docker.io/miniflux/miniflux:2.3.3` | |
 | `secretName` | `miniflux-secrets` | Secret with `DATABASE_URL` and `ADMIN_PASSWORD` (envFrom) |
 | `adminUser` | `admin` | the first-run admin username |
 | `replicas` | `1` | stateless — scale out freely |
