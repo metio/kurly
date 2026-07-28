@@ -34,6 +34,9 @@ function(
 )
   local baseEnv =
     {
+      // The binary insists on a config path even when every setting comes from the
+      // environment; pointing it at the empty file the image ships satisfies that.
+      CONDUIT_CONFIG: '',
       CONDUIT_DATABASE_PATH: '/var/lib/matrix-conduit',
       CONDUIT_DATABASE_BACKEND: 'rocksdb',
       CONDUIT_PORT: '6167',
