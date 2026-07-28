@@ -22,6 +22,11 @@ local defaultImage = std.rstripChars(importstr './server.image', '\n');
 function(
   name='nocobase',
   image=defaultImage,
+  // The PostgreSQL it stores everything in; the password comes from the Secret.
+  dbHost='nocobase-db-rw',
+  dbPort=5432,
+  dbName='nocobase',
+  dbUser='nocobase',
   storageSize='10Gi',
   storageClass=null,
   secretName='nocobase',
@@ -37,10 +42,22 @@ function(
   + kurly.port(80)
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
-  + kurly.env({ DB_DIALECT: 'postgres' } + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  + kurly.env({
+    DB_DIALECT: 'postgres',
+    DB_HOST: dbHost,
+    DB_PORT: std.toString(dbPort),
+    DB_DATABASE: dbName,
+    DB_USER: dbUser,
+  } + env)
+  // The image runs the app as root and owns its tree as root.
+  + kurly.rootUser()
+  // The bundled nginx writes its logs and cache in directories the image owns.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/app/nocobase/storage', storageSize, storageClass=storageClass)
+  // The bundled nginx answers only once the app behind it has installed itself,
+  // which takes minutes on an empty database.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 40 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

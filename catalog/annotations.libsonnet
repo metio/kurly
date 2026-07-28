@@ -4002,7 +4002,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocobase/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/nocobase/server.libsonnet', secretKeys: [{ key: 'DB_PASSWORD', generate: 'password', length: 32 }, { key: 'APP_KEY', generate: 'hex', length: 64 }] },
       },
     },
     synapse: {
@@ -4419,7 +4419,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/oauth2-proxy/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/oauth2-proxy/server.libsonnet', secretKeys: [{ key: 'OAUTH2_PROXY_PROVIDER', generate: 'literal', value: 'oidc' }, { key: 'OAUTH2_PROXY_OIDC_ISSUER_URL', generate: 'literal', value: 'https://accounts.google.com' }, { key: 'OAUTH2_PROXY_CLIENT_ID', generate: 'literal', value: 'kurly-smoke' }, { key: 'OAUTH2_PROXY_CLIENT_SECRET', generate: 'password', length: 32 }, { key: 'OAUTH2_PROXY_COOKIE_SECRET', generate: 'base64', length: 32 }, { key: 'OAUTH2_PROXY_EMAIL_DOMAINS', generate: 'literal', value: '*' }, { key: 'OAUTH2_PROXY_UPSTREAMS', generate: 'literal', value: 'static://200' }] },
       },
     },
     emqx: {

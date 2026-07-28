@@ -21739,10 +21739,15 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  },
                   {
                      "generate": "hex",
                      "key": "APP_KEY",
@@ -22313,6 +22318,43 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "OAUTH2_PROXY_PROVIDER",
+                     "value": "oidc"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "OAUTH2_PROXY_OIDC_ISSUER_URL",
+                     "value": "https://accounts.google.com"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "OAUTH2_PROXY_CLIENT_ID",
+                     "value": "kurly-smoke"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "OAUTH2_PROXY_CLIENT_SECRET",
+                     "length": 32
+                  },
+                  {
+                     "generate": "base64",
+                     "key": "OAUTH2_PROXY_COOKIE_SECRET",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "OAUTH2_PROXY_EMAIL_DOMAINS",
+                     "value": "*"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "OAUTH2_PROXY_UPSTREAMS",
+                     "value": "static://200"
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -23158,7 +23200,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [
