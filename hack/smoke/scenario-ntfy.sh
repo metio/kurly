@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/ntfy/server.libsonnet kurly-ntfy
+kurly::boot workloads/ntfy/server.libsonnet kurly-ntfy "+ k.env({ NTFY_BASE_URL: 'http://ntfy:80' })"

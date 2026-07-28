@@ -3162,7 +3162,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mongo-express/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mongo-express/server.libsonnet', secretKeys: [{ key: 'ME_CONFIG_MONGODB_URL', generate: 'literal', value: 'mongodb://mongo-express-db:27017/' }, { key: 'ME_CONFIG_BASICAUTH_USERNAME', generate: 'literal', value: 'admin' }, { key: 'ME_CONFIG_BASICAUTH_PASSWORD', generate: 'password', length: 24 }] },
       },
     },
     thelounge: {

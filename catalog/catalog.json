@@ -20015,6 +20015,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "ME_CONFIG_MONGODB_URL",
+                     "value": "mongodb://mongo-express-db:27017/"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "ME_CONFIG_BASICAUTH_USERNAME",
+                     "value": "admin"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "ME_CONFIG_BASICAUTH_PASSWORD",
+                     "length": 24
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }

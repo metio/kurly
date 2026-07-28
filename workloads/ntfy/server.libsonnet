@@ -44,7 +44,9 @@ function(
   + kurly.recreate()
   + kurly.port(80)
   + kurly.servicePort(80)
-  + kurly.command(['serve'])
+  // The image's entrypoint is the ntfy binary itself, so the subcommand is an
+  // argument — as a command it would replace the binary and never be found.
+  + kurly.args(['serve'])
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/var/lib/ntfy', storageSize, storageClass=storageClass)
