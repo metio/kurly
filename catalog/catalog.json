@@ -23030,7 +23030,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "storage": {
@@ -23122,6 +23122,11 @@
                   "writableRootFilesystem": false
                },
                "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "ZO_ROOT_USER_EMAIL",
+                     "value": "admin@example.com"
+                  },
                   {
                      "generate": "password",
                      "key": "ZO_ROOT_USER_PASSWORD",

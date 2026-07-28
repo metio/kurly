@@ -3225,7 +3225,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openobserve/server.libsonnet', secretKeys: [{ key: 'ZO_ROOT_USER_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openobserve/server.libsonnet', secretKeys: [{ key: 'ZO_ROOT_USER_EMAIL', generate: 'literal', value: 'admin@example.com' }, { key: 'ZO_ROOT_USER_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     meilisearch: {

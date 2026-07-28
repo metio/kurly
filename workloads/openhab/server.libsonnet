@@ -40,7 +40,9 @@ function(
   + kurly.port(8080)
   + kurly.servicePort(8080)
   + kurly.env(env)
-  + kurly.runAs(9001, gid=9001, fsGroup=9001)
+  // The entrypoint links the host timezone and prepares its runtime directories.
+  + kurly.rootUser()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   // Three distinct PVCs: configuration, runtime userdata, and installed add-ons.
   + kurly.store('/openhab/conf', confSize, storageClass=storageClass)
