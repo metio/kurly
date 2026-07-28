@@ -18,4 +18,4 @@ kurly::postgres "$ns" teable-db-rw teable teable
 kurly::cache "$ns" teable-cache-headless
 
 kurly::secret "$ns" teable workloads/teable/server.libsonnet
-kurly::boot workloads/teable/server.libsonnet "$ns"
+kurly::boot workloads/teable/server.libsonnet "$ns" "+ k.env({ PUBLIC_ORIGIN: 'http://teable:3000' })"

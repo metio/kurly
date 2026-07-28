@@ -876,7 +876,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/teable/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/teable/server.libsonnet', secretKeys: [{ key: 'PRISMA_DATABASE_URL', generate: 'postgresUrl' }, { key: 'BACKEND_CACHE_REDIS_URI', generate: 'redisUrl' }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     readarr: {
@@ -930,7 +930,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tandoor/server.libsonnet', secretKeys: [{ key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/tandoor/server.libsonnet', secretKeys: [{ key: 'DB_ENGINE', generate: 'literal', value: 'django.db.backends.postgresql' }, { key: 'POSTGRES_HOST', generate: 'literal', value: 'tandoor-db-rw' }, { key: 'POSTGRES_PORT', generate: 'literal', value: '5432' }, { key: 'POSTGRES_DB', generate: 'literal', value: 'tandoor' }, { key: 'POSTGRES_USER', generate: 'literal', value: 'tandoor' }, { key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     ghostfolio: {

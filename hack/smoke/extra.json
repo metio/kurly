@@ -12,5 +12,6 @@
   "peertube": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })",
   "planka": "+ k.env({ BASE_URL: 'http://planka:1337' })",
   "prestashop": "+ k.env({ PS_INSTALL_AUTO: '1', PS_DOMAIN: 'prestashop', PS_HANDLE_DYNAMIC_DOMAIN: '0', PS_ERASE_DB: '0' })",
-  "shlink": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })"
+  "shlink": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })",
+  "teable": "+ k.env({ PUBLIC_ORIGIN: 'http://teable:3000' })"
 }

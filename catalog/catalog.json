@@ -30926,10 +30926,35 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "DB_ENGINE",
+                     "value": "django.db.backends.postgresql"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRES_HOST",
+                     "value": "tandoor-db-rw"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRES_PORT",
+                     "value": "5432"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRES_DB",
+                     "value": "tandoor"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRES_USER",
+                     "value": "tandoor"
+                  },
                   {
                      "generate": "password",
                      "key": "POSTGRES_PASSWORD",
@@ -31133,6 +31158,14 @@
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "PRISMA_DATABASE_URL"
+                  },
+                  {
+                     "generate": "redisUrl",
+                     "key": "BACKEND_CACHE_REDIS_URI"
+                  },
                   {
                      "generate": "hex",
                      "key": "SECRET_KEY",

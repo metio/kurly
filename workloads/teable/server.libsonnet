@@ -28,7 +28,7 @@ function(
   publicOrigin=null,
   secretName='teable',
   env={},
-  resources={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } },
+  resources={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '2Gi' } },
   labels={},
   annotations={},
 )
@@ -39,8 +39,11 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
-  + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // corepack caches into the account's home, which the image does not give its
+  // unprivileged user — point it at the writable scratch instead.
+  + kurly.env({ HOME: '/tmp' } + baseEnv + env)
+  // The image's own nodejs account owns the asset cache it writes on start.
+  + kurly.runAs(1001, gid=1001, fsGroup=1001)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })

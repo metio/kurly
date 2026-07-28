@@ -36,13 +36,21 @@ function(
   + kurly.version(version)
   + kurly.replicas(1)
   + kurly.recreate()
-  + kurly.port(8080)
+  // The bundled nginx serves on TANDOOR_PORT, which defaults to :80.
+  + kurly.port(80)
   + kurly.servicePort(8080)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint collects static files into the app tree the image owns.
+  + kurly.rootUser()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/opt/recipes/mediafiles', storageSize, storageClass=storageClass)
+  // The first start migrates the schema and collects static files before it listens.
+  // The Service is named after the app, so the Service-link environment defines
+  // TANDOOR_PORT as a tcp:// URL — which its nginx template uses as a listen address.
+  + kurly.disableServiceLinks()
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
