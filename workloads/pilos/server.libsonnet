@@ -49,9 +49,13 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
   + kurly.rootUser()
+  // nginx and php-fpm prepare their runtime directories and socket as root.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html/storage/app', storageSize, storageClass=storageClass)
-  + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
+  // The bundled nginx answers a request whose Host it does not know with 400, and
+  // the kubelet probes by pod IP — so readiness is a connection check.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),

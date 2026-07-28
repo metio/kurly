@@ -31,7 +31,8 @@ function(
   + kurly.version(version)
   + kurly.replicas(1)
   + kurly.recreate()
-  + kurly.port(8080)
+  // PocketBase serves on :8090; the Service keeps :8080 for consumers.
+  + kurly.port(8090)
   + kurly.servicePort(8080)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
