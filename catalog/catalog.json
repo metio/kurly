@@ -4741,6 +4741,23 @@
                      "type": "string"
                   },
                   {
+                     "name": "s3Endpoint",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "bigcapital",
+                     "name": "s3Bucket",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "us-east-1",
+                     "name": "s3Region",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "bigcapital",
                      "name": "secretName",
                      "required": false,
@@ -6901,6 +6918,18 @@
                      "type": "string"
                   },
                   {
+                     "default": "http://localhost:3000",
+                     "name": "mainDomain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "http://localhost:3001",
+                     "name": "sandboxDomain",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "name": "env",
                      "required": false,
                      "type": "object"
@@ -8497,6 +8526,12 @@
                      "type": "string"
                   },
                   {
+                     "default": "duplicati",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": 1000,
                      "name": "puid",
                      "required": false,
@@ -9098,6 +9133,12 @@
                      "name": "image",
                      "required": false,
                      "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
                   },
                   {
                      "default": "ente",
@@ -11214,6 +11255,18 @@
                      "type": "int"
                   },
                   {
+                     "default": "ghostfolio-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 6379,
+                     "name": "redisPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
                      "default": "ghostfolio",
                      "name": "secretName",
                      "required": false,
@@ -13272,6 +13325,12 @@
                      "type": "string"
                   },
                   {
+                     "default": "homebox",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "name": "env",
                      "required": false,
                      "type": "object"
@@ -13971,6 +14030,12 @@
                      "type": "string"
                   },
                   {
+                     "default": "docker.io/library/nginx:1.29.4-alpine",
+                     "name": "nginxImage",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "name": "env",
                      "required": false,
                      "type": "object"
@@ -14516,6 +14581,30 @@
                      "type": "string"
                   },
                   {
+                     "default": "joomla-db",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "joomla",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "joomla",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mysqli",
+                     "name": "dbType",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
                      "default": "joomla",
                      "name": "secretName",
                      "required": false,
@@ -14630,6 +14719,30 @@
                   {
                      "example": "https://joplin.example.com",
                      "name": "appBaseUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "joplin-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "joplin",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "joplin",
+                     "name": "dbUser",
                      "required": false,
                      "type": "string"
                   },
@@ -15284,6 +15397,42 @@
                   {
                      "default": 2,
                      "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "kutt-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "kutt",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "kutt",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "kutt-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 6379,
+                     "name": "redisPort",
                      "required": false,
                      "type": "int"
                   },
@@ -17714,6 +17863,42 @@
                      "type": "int"
                   },
                   {
+                     "default": "mastodon-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "mastodon",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mastodon",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mastodon-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 6379,
+                     "name": "redisPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
                      "default": "mastodon",
                      "name": "secretName",
                      "required": false,
@@ -17820,6 +18005,42 @@
                   {
                      "default": 2,
                      "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "mastodon-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "mastodon",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mastodon",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mastodon-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 6379,
+                     "name": "redisPort",
                      "required": false,
                      "type": "int"
                   },
@@ -17938,6 +18159,42 @@
                      "name": "localDomain",
                      "required": false,
                      "type": "string"
+                  },
+                  {
+                     "default": "mastodon-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "mastodon",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mastodon",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "mastodon-cache-headless",
+                     "name": "redisHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 6379,
+                     "name": "redisPort",
+                     "required": false,
+                     "type": "int"
                   },
                   {
                      "default": "mastodon",
@@ -21613,6 +21870,12 @@
                      "type": "string"
                   },
                   {
+                     "default": "1Gi",
+                     "name": "certificateStorageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
                      "name": "env",
                      "required": false,
                      "type": "object"
@@ -21682,6 +21945,30 @@
                   },
                   {
                      "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "nocobase-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "nocobase",
+                     "name": "dbName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "nocobase",
+                     "name": "dbUser",
                      "required": false,
                      "type": "string"
                   },
