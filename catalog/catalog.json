@@ -19918,6 +19918,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "MONGO_INITDB_ROOT_USERNAME",
+                     "value": "root"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "MONGO_INITDB_ROOT_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }

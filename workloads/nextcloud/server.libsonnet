@@ -45,6 +45,9 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
+  // The entrypoint syncs the application tree onto the volume and hands it to the
+  // web user.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/status.php', port: 'http' } })

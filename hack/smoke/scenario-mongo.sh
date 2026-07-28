@@ -10,4 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
+kurly::namespace kurly-mongo
+kurly::secret kurly-mongo mongo workloads/mongo/server.libsonnet
 kurly::boot workloads/mongo/server.libsonnet kurly-mongo
