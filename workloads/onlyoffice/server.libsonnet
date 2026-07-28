@@ -41,6 +41,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({ JWT_ENABLED: 'true' } + env)
   + kurly.rootUser()
+  // The entrypoint unpacks the bundled dictionaries and fonts the image owns.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/onlyoffice/Data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/healthcheck', port: 'http' } })

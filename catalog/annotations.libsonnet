@@ -4272,7 +4272,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/outline/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY', generate: 'hex', length: 64 }, { key: 'UTILS_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/outline/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'REDIS_URL', generate: 'redisUrl' }, { key: 'SECRET_KEY', generate: 'hex', length: 64 }, { key: 'UTILS_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     penpot: {

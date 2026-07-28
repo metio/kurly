@@ -7,5 +7,6 @@
   "gotosocial": "+ k.env({ GTS_HOST: 'social.example.com' })",
   "lychee": "+ k.env({ APP_URL: 'http://lychee:80', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2', FRANKENPHP_WORKER: '0' })",
   "matrix-conduit": "+ k.env({ CONDUIT_SERVER_NAME: 'matrix.example.com' })",
-  "ntfy": "+ k.env({ NTFY_BASE_URL: 'http://ntfy:80' })"
+  "ntfy": "+ k.env({ NTFY_BASE_URL: 'http://ntfy:80' })",
+  "outline": "+ k.env({ URL: 'http://outline:3000', COLLABORATION_URL: 'ws://outline:3000' })"
 }

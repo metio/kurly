@@ -18,4 +18,4 @@ kurly::postgres "$ns" outline-db-rw outline outline
 kurly::cache "$ns" outline-cache-headless
 
 kurly::secret "$ns" outline workloads/outline/server.libsonnet
-kurly::boot workloads/outline/server.libsonnet "$ns"
+kurly::boot workloads/outline/server.libsonnet "$ns" "+ k.env({ URL: 'http://outline:3000', COLLABORATION_URL: 'ws://outline:3000' })"
