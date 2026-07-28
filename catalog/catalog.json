@@ -20618,6 +20618,28 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "MYSQL_ROOT_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "MYSQL_DATABASE",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "MYSQL_USER",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "MYSQL_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -21059,6 +21081,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "NEO4J_AUTH",
+                     "value": "neo4j/kurlye2epassword"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }

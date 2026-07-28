@@ -10,4 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
+kurly::namespace kurly-mysql
+kurly::secret kurly-mysql mysql workloads/mysql/server.libsonnet
 kurly::boot workloads/mysql/server.libsonnet kurly-mysql

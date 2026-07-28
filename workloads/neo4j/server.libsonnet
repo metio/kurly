@@ -62,6 +62,9 @@ function(
   + kurly.runAs(7474, gid=7474, fsGroup=7474)
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
+  // Neo4j validates every NEO4J_-prefixed variable as a setting, and the
+  // Service-link environment adds names it does not recognise.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ tcpSocket: { port: 'bolt' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'bolt' } })
   + kurly.resources(

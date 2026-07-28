@@ -3636,7 +3636,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mysql/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mysql/server.libsonnet', secretKeys: [{ key: 'MYSQL_ROOT_PASSWORD', generate: 'password', length: 32 }, { key: 'MYSQL_DATABASE', generate: 'literal', value: 'kurly' }, { key: 'MYSQL_USER', generate: 'literal', value: 'kurly' }, { key: 'MYSQL_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     postgres: {
@@ -5284,7 +5284,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/neo4j/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/neo4j/server.libsonnet', secretKeys: [{ key: 'NEO4J_AUTH', generate: 'literal', value: 'neo4j/kurlye2epassword' }] },
       },
     },
     'cassandra-cluster': {
