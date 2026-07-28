@@ -26318,9 +26318,9 @@
                "importPath": "github.com/metio/kurly/workloads/portainer/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": false
                },
                "storage": {
@@ -27893,6 +27893,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "REDIS_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "REDIS_ARGS",
+                     "value": "--requirepass Kurly-e2e-Passw0rd"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }

@@ -42,6 +42,8 @@ function(
   + kurly.port(9000)
   + kurly.servicePort(9000)
   + kurly.env(env)
+  // The image runs as root and manages its own data directory.
+  + kurly.rootUser()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

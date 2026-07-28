@@ -3691,7 +3691,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/redis/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/redis/server.libsonnet', secretKeys: [{ key: 'REDIS_PASSWORD', generate: 'password', length: 32 }, { key: 'REDIS_ARGS', generate: 'literal', value: '--requirepass Kurly-e2e-Passw0rd' }] },
       },
     },
     mongo: {
