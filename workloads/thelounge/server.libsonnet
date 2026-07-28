@@ -33,7 +33,9 @@ function(
   + kurly.port(9000)
   + kurly.servicePort(9000)
   + kurly.env({ THELOUNGE_HOME: '/var/opt/thelounge' } + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint adjusts its data directory before dropping to the app user.
+  + kurly.rootUser()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/opt/thelounge', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

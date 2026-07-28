@@ -35,9 +35,14 @@ function(
   + kurly.port(8080)
   + kurly.servicePort(8080)
   + kurly.env({ TRILIUM_DATA_DIR: '/home/node/trilium-data' } + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint hands its data directory to the node user.
+  + kurly.rootUser()
+  + kurly.keepCapabilities()
   + kurly.store('/home/node/trilium-data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')
+  // The Service is named after the app, so the Service-link environment defines
+  // TRILIUM_PORT as a tcp:// URL — which the server reads as its listen port.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ httpGet: { path: '/api/health-check', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
