@@ -23683,6 +23683,13 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "OVERLEAF_MONGO_URL",
+                     "value": "mongodb://overleaf-mongo:27017/sharelatex"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -24210,10 +24217,15 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "PAPERLESS_DBPASS",
+                     "length": 32
+                  },
                   {
                      "generate": "password",
                      "key": "PAPERLESS_ADMIN_PASSWORD",

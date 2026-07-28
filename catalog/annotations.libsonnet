@@ -1415,7 +1415,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/overleaf/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/overleaf/server.libsonnet', secretKeys: [{ key: 'OVERLEAF_MONGO_URL', generate: 'literal', value: 'mongodb://overleaf-mongo:27017/sharelatex' }] },
       },
     },
     bigcapital: {
@@ -1614,7 +1614,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet', secretKeys: [{ key: 'PAPERLESS_ADMIN_PASSWORD', generate: 'password', length: 32 }, { key: 'PAPERLESS_SECRET_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet', secretKeys: [{ key: 'PAPERLESS_DBPASS', generate: 'password', length: 32 }, { key: 'PAPERLESS_ADMIN_PASSWORD', generate: 'password', length: 32 }, { key: 'PAPERLESS_SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
     wger: {
