@@ -44,9 +44,16 @@ function(
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The all-in-one image's entrypoint switches users with su while it prepares the
+  // application, which needs root and the SETUID/SETGID capabilities.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/openproject/assets', storageSize, storageClass=storageClass)
+  // The first start migrates the schema and precompiles assets before Rails binds,
+  // which takes many minutes.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 80 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

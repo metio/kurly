@@ -3934,7 +3934,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '4Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openproject/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/openproject/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'SECRET_KEY_BASE', generate: 'hex', length: 128 }] },
       },
     },
     joomla: {

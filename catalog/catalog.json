@@ -23161,6 +23161,17 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY_BASE",
+                     "length": 128
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
