@@ -37,6 +37,9 @@ function(
   + kurly.servicePort(8888)
   + kurly.env(env)
   + kurly.rootUser()
+  // The entrypoint hands its data directory to the web user before dropping to it.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/lib/snappymail', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

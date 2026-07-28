@@ -39,9 +39,13 @@ function(
   + kurly.recreate()
   + kurly.port(6806)
   + kurly.servicePort(6806)
-  + kurly.args(['--workspace=/siyuan/workspace'])
+  // The kernel takes a subcommand; without one it prints its usage and exits.
+  + kurly.args(['serve', '--workspace=/siyuan/workspace'])
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint creates its account and hands the workspace to it.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/siyuan/workspace', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
