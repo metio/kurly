@@ -3714,7 +3714,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/minio/server.libsonnet', secretKeys: [{ key: 'MINIO_ROOT_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/minio/server.libsonnet', secretKeys: [{ key: 'MINIO_ROOT_USER', generate: 'literal', value: 'kurlyadmin' }, { key: 'MINIO_ROOT_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     rabbitmq: {
@@ -4947,7 +4947,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/monica/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 64 }, { key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/monica/server.libsonnet', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 32 }, { key: 'DB_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     fider: {

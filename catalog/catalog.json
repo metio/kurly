@@ -19728,6 +19728,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "literal",
+                     "key": "MINIO_ROOT_USER",
+                     "value": "kurlyadmin"
+                  },
+                  {
                      "generate": "password",
                      "key": "MINIO_ROOT_PASSWORD",
                      "length": 32
@@ -20201,7 +20206,7 @@
                   {
                      "generate": "hex",
                      "key": "APP_KEY",
-                     "length": 64
+                     "length": 32
                   },
                   {
                      "generate": "password",
