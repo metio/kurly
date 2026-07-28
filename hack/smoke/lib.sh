@@ -178,6 +178,8 @@ kurly::secret() {
       # sslmode=require (Go's pq, among others) fails its first query without this.
       postgresUrl) val="postgresql://${id}:${KURLY_E2E_PASSWORD}@${id}-db-rw:5432/${id}?sslmode=disable" ;;
       redisUrl) val="redis://:${KURLY_E2E_PASSWORD}@${id}-cache-headless:6379" ;;
+      # The MySQL equivalent, for apps that take one connection string.
+      mysqlUrl) val="mysql://${id}:${KURLY_E2E_PASSWORD}@${id}-db:3306/${id}" ;;
       *) val="$KURLY_E2E_PASSWORD" ;;
     esac
     args+=("--from-literal=${k}=${val}")

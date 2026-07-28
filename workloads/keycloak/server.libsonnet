@@ -68,7 +68,8 @@ function(
            "keycloak: kurly features do not apply to a custom resource — use this workload's own parameters (instances, dbHost/dbName/dbSecret, hostname, tlsSecret, labels/annotations) instead.",
 
     keycloak: {
-      apiVersion: 'k8s.keycloak.org/v2beta1',
+      // The Keycloak operator serves its CR at v2alpha1 — there is no later version.
+      apiVersion: 'k8s.keycloak.org/v2alpha1',
       kind: 'Keycloak',
       metadata: std.prune({
         name: name,

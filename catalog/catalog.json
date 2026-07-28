@@ -14873,7 +14873,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [
@@ -15154,6 +15154,10 @@
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "mysqlUrl",
+                     "key": "DATABASE_URL"
+                  },
                   {
                      "generate": "hex",
                      "key": "APP_SECRET",

@@ -2973,7 +2973,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kimai/server.libsonnet', secretKeys: [{ key: 'APP_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/kimai/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'mysqlUrl' }, { key: 'APP_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     adminer: {
