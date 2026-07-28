@@ -161,21 +161,54 @@ document.addEventListener('alpine:init', () => {
       return Array.from(seen.values());
     },
 
-    // ---- outputs ---------------------------------------------------------
-    get snippet() {
-      if (!this.selected) return '';
-      const w = this.selected.workload;
-      const s = this.selected.stage;
+    // ---- helpers ---------------------------------------------------------
+    // A Jsonnet identifier for a workload id. Ids are DNS-1123 names, which allow
+    // hyphens and a leading digit; an identifier allows neither, so `cal-com`
+    // becomes `cal_com` and `2fauth` becomes `_2fauth`.
+    ident(id) {
+      const safe = id.replace(/[^A-Za-z0-9_]/g, '_');
+      return /^[0-9]/.test(safe) ? `_${safe}` : safe;
+    },
+
+    // The name a stage's objects carry — its `name` parameter's default, which is
+    // what a ready check has to look for.
+    stageName(w, s) {
+      const arg = (s.args || []).find((a) => a.name === 'name');
+      return arg && arg.default != null ? String(arg.default) : `${w.id}-${s.id}`;
+    },
+
+    // The controller a stage rolls out, so a StageSet can gate on it. A stage
+    // whose kind is a custom resource is reconciled by its operator into objects
+    // this cannot name, so it carries no check rather than a wrong one.
+    stageCheck(kind) {
+      const controllers = {
+        http: { apiVersion: 'apps/v1', kind: 'Deployment' },
+        worker: { apiVersion: 'apps/v1', kind: 'Deployment' },
+        stateful: { apiVersion: 'apps/v1', kind: 'StatefulSet' },
+        daemon: { apiVersion: 'apps/v1', kind: 'DaemonSet' },
+        cron: { apiVersion: 'batch/v1', kind: 'CronJob' },
+      };
+      return controllers[kind] || null;
+    },
+
+    // The snippet for ONE stage. The stage the visitor configured carries their
+    // parameters and composed features; every other stage of the same workload
+    // renders with its defaults, so the wiring deploys the whole workload rather
+    // than the one piece that happened to be on screen.
+    snippetFor(w, s) {
+      const configured = this.selected && this.selected.stage === s;
+      const alias = this.ident(w.id);
       const header = [
         "local kurly = import 'github.com/metio/kurly/main.libsonnet';",
-        `local ${w.id} = import '${s.importPath}';`,
+        `local ${alias} = import '${s.importPath}';`,
         '',
       ];
-      const terms = [`${w.id}(${this.argExprs(s.args, this.workloadArgs).join(', ')})`];
-      this.composed.forEach((c) => terms.push(`+ ${this.callExpr(c)}`));
+      const args = configured ? this.argExprs(s.args, this.workloadArgs).join(', ') : '';
+      const terms = [`${alias}(${args})`];
+      if (configured) this.composed.forEach((c) => terms.push(`+ ${this.callExpr(c)}`));
       const body = `kurly.list(\n    ${terms.join('\n    ')}\n  )`;
 
-      const tlas = this.tlas;
+      const tlas = configured ? this.tlas : [];
       if (tlas.length === 0) return `${header.join('\n')}${body}`;
       const params = tlas
         .map((t) =>
@@ -185,9 +218,21 @@ document.addEventListener('alpine:init', () => {
       return `${header.join('\n')}function(${params})\n  ${body}`;
     },
 
+    // ---- outputs ---------------------------------------------------------
+    get snippet() {
+      if (!this.selected) return '';
+      return this.snippetFor(this.selected.workload, this.selected.stage);
+    },
+
     // The full JaaS wiring: the two source images (kurly recipes + this
-    // workload's source), a JsonnetLibrary for each, the JsonnetSnippet carrying
-    // the composed snippet, and the StageSet that deploys it.
+    // workload's source), a JsonnetLibrary for each, one JsonnetSnippet per stage
+    // of the workload, and the StageSet that deploys them in order.
+    //
+    // A StageSet exists to run ORDERED, GATED stages, so every stage the workload
+    // declares gets its own snippet and its own entry: a multi-stage workload
+    // whose StageSet named one stage would deploy one part of itself, and stages
+    // all pointing at a single artifact would each apply the whole workload,
+    // leaving the gating with nothing to order.
     get jaas() {
       if (!this.selected) return '';
       const w = this.selected.workload;
@@ -196,18 +241,57 @@ document.addEventListener('alpine:init', () => {
       const workloadDir = s.importPath.replace(/\/[^/]+$/, ''); // drop the file name
       const ociPath = workloadDir.replace(/^github\.com\//, ''); // metio/kurly/workloads/tik
       const libName = `kurly-${w.id}`;
-      const indented = this.snippet
-        .split('\n')
-        .map((l) => (l ? `      ${l}` : ''))
-        .join('\n');
+      const stages = w.stages || [s];
+
       // A TLA is one list entry keyed by name. Values bind as strings, which is
       // what every parameter here wants — a snippet taking a number parses it
-      // itself, so nothing needs `code: true`.
+      // itself, so nothing needs `code: true`. Only the configured stage carries
+      // them; the rest render with their defaults.
       const tlaLines = this.tlas.map((t) => {
         const example = t.arg.example != null ? t.arg.example : t.arg.default != null ? t.arg.default : '';
         return `    - name: ${t.name}\n      value: "${example}"`;
       });
       const tlaBlock = tlaLines.length ? `  tlas:\n${tlaLines.join('\n')}\n` : '';
+
+      const snippets = stages.map((st) => {
+        const name = this.stageName(w, st);
+        const indented = this.snippetFor(w, st)
+          .split('\n')
+          .map((l) => (l ? `      ${l}` : ''))
+          .join('\n');
+        const tlas = st === s ? tlaBlock : '';
+        return `apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
+metadata: { name: ${name}, namespace: ${ns} }
+spec:
+  serviceAccountName: ${w.id}-renderer
+  files:
+    main.jsonnet: |
+${indented}
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: ${libName}, importPath: ${workloadDir} }
+${tlas}`;
+      });
+
+      const stageEntries = stages.map((st) => {
+        const name = this.stageName(w, st);
+        const check = this.stageCheck(st.kind);
+        const readyChecks = check
+          ? `
+      readyChecks:
+        checks:
+          - apiVersion: ${check.apiVersion}
+            kind: ${check.kind}
+            name: ${name}`
+          : '';
+        return `    - name: ${st.id}
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: ${name}${readyChecks}`;
+      });
+
       return `apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata: { name: kurly, namespace: ${ns} }
@@ -228,18 +312,7 @@ kind: JsonnetLibrary
 metadata: { name: ${libName}, namespace: ${ns} }
 spec: { sourceRef: { kind: OCIRepository, name: ${libName} } }
 ---
-apiVersion: jaas.metio.wtf/v1
-kind: JsonnetSnippet
-metadata: { name: ${w.id}, namespace: ${ns} }
-spec:
-  serviceAccountName: ${w.id}-renderer
-  files:
-    main.jsonnet: |
-${indented}
-  libraries:
-    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: ${libName}, importPath: ${workloadDir} }
-${tlaBlock}---
+${snippets.join('---\n')}---
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
 metadata: { name: ${w.id}, namespace: ${ns} }
@@ -247,16 +320,7 @@ spec:
   serviceAccountName: ${w.id}-deployer
   rollbackOnFailure: true
   stages:
-    - name: ${s.id}
-      sourceRef:
-        apiVersion: jaas.metio.wtf/v1
-        kind: JsonnetSnippet
-        name: ${w.id}
-      readyChecks:
-        checks:
-          - apiVersion: apps/v1
-            kind: Deployment
-            name: ${w.id}`;
+${stageEntries.join('\n')}`;
     },
 
     async copy(text) {

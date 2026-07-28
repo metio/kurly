@@ -57,6 +57,9 @@
           # catalog/catalog.json copied into docs/data/ by gen-docs-data.
           docsTools = with pkgs; [
             hugo
+            # The docs site ships the assembler, a browser component whose output
+            # visitors paste into their clusters; check-assembler drives it.
+            nodejs-slim
           ];
 
           # Kubernetes static analysis, weighted toward custom policy: conftest
@@ -91,6 +94,18 @@
             name = "check-fmt";
             runtimeInputs = [ pkgs.go-jsonnet ];
             text = builtins.readFile ./scripts/check-fmt.sh;
+          };
+          # Drives the docs site's assembler the way the page does and checks that
+          # what it hands a visitor actually parses — as Jsonnet, and as YAML.
+          check-assembler = pkgs.writeShellApplication {
+            name = "check-assembler";
+            runtimeInputs = with pkgs; [
+              nodejs-slim
+              go-jsonnet
+              yq-go
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/check-assembler.sh;
           };
           check-tests = pkgs.writeShellApplication {
             name = "check-tests";
@@ -268,6 +283,7 @@
             check-catalog
             check-readme
             check-tests
+            check-assembler
             check-examples
             check-readme-examples
             check-coverage
