@@ -28,6 +28,7 @@ function(
   image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
+  certificateStorageSize='1Gi',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},
@@ -48,6 +49,9 @@ function(
   + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
+  // The image refuses to start unless its certificate store is a mount of its own;
+  // the certificates belong with the rest of the state, so it is a second claim.
+  + kurly.store('/etc/letsencrypt', certificateStorageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

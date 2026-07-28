@@ -21607,7 +21607,7 @@
                   "writableRootFilesystem": true
                },
                "storage": {
-                  "pvcs": 1
+                  "pvcs": 2
                }
             }
          ],
@@ -21796,9 +21796,9 @@
                "importPath": "github.com/metio/kurly/workloads/nocodb/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": false
                },
                "secretKeys": [
