@@ -12,7 +12,7 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 # renovate: datasource=github-tags depName=mysql/mysql-operator
-MYSQL_CLUSTER_VERSION="9.1.0-2.2.3"
+MYSQL_CLUSTER_VERSION="9.7.0-2.2.8"
 
 kurly::validate_cr kurly-mysql-cluster workloads/mysql-cluster/cluster.libsonnet \
   "https://raw.githubusercontent.com/mysql/mysql-operator/${MYSQL_CLUSTER_VERSION}/deploy/deploy-crds.yaml"

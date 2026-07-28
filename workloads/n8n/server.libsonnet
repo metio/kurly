@@ -29,7 +29,7 @@ function(
   // The public hostname n8n serves at (webhook URLs need it).
   host=null,
   env={},
-  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
+  resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},
   annotations={},
 )
