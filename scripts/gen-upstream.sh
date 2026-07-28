@@ -53,6 +53,7 @@ spdx='^[A-Za-z0-9.+-]+( (AND|OR|WITH) [A-Za-z0-9.+-]+)*$'
 
 covered=0
 total=0
+count="$(find workloads -mindepth 1 -maxdepth 1 -type d | wc -l)"
 missing=""
 kept=""
 
@@ -83,7 +84,9 @@ for dir in workloads/*/; do
   # covers the ones it does not (a timeout, a rate limit answered as an error),
   # backing off so a burst of three hundred inspects does not sustain one.
   labels=""
+  attempts=0
   for delay in 0 5 20; do
+    attempts=$((attempts + 1))
     [ "$delay" = 0 ] || sleep "$delay"
     if labels="$(timeout 60 skopeo inspect --retry-times 3 --no-tags "docker://${image}" 2>/dev/null | jq -c '.Labels // {}')"; then
       [ -n "$labels" ] && break
@@ -91,6 +94,7 @@ for dir in workloads/*/; do
     labels=""
   done
   if [ -z "$labels" ]; then
+    printf '%3d/%-3d %-28s unreachable\n' "$total" "$count" "$id"
     # The registry never answered. Keep what the last run derived rather than
     # publishing an absence that reads like a decision.
     kept="${kept}${id} "
@@ -121,6 +125,11 @@ for dir in workloads/*/; do
     continue
   fi
   covered=$((covered + 1))
+  # Progress, per image: the sweep takes an hour or more against a rate-limiting
+  # registry, and a run that says nothing for that long hides both its progress
+  # and the fact that a second copy of it is running.
+  printf '%3d/%-3d %-28s %s\n' "$total" "$count" "$id" \
+    "$( [ "$attempts" -gt 1 ] && printf 'retried %sx ' "$attempts"; [ -n "$license" ] && printf '%s ' "$license"; [ -n "$source" ] && printf 'src ' )"
 
   {
     # jsonnetfmt quotes a key only when it must; emit quoted and let it decide.
