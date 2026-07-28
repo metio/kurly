@@ -100,6 +100,9 @@ function(
   // Startup runs database migrations before unit begins serving, so gate readiness
   // on the login page and keep liveness a plain socket check that won't restart a
   // pod still catching up on a long migration.
+  // The first start applies the whole Django migration set before anything
+  // listens, which takes minutes.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 60 })
   + kurly.readinessProbe({ httpGet: { path: '/login/', port: 'http' }, initialDelaySeconds: 30, periodSeconds: 15, failureThreshold: 20 })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' }, initialDelaySeconds: 60, periodSeconds: 30 })
   + kurly.resources(

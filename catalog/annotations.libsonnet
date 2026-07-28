@@ -1900,6 +1900,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + {
           kind: 'http',
           importPath: 'github.com/metio/kurly/workloads/netbox/server.libsonnet',
+          secretKeys: [{ key: 'secret_key', generate: 'hex', length: 64 }, { key: 'db_password', generate: 'password', length: 32 }, { key: 'redis_password', generate: 'password', length: 32 }, { key: 'superuser_password', generate: 'password', length: 24 }, { key: 'superuser_api_token', generate: 'hex', length: 40 }, { key: 'email_password', generate: 'password', length: 16 }],
         },
         worker: d.fn('The NetBox RQ background worker, draining the high/default/low queues (webhooks, report/script runs, housekeeping). Same image and Secret as the server, no Service. dbHost/dbName/dbUser/redisHost/secretName match the server. Scales horizontally via replicas — workers coordinate through the shared Redis queue. A NetBox deployment needs at least one.', [
           d.arg('name', d.T.string, default='netbox-worker'),
