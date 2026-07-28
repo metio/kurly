@@ -41,6 +41,10 @@ function(
   + kurly.env({} + env)
   + kurly.runAs(999, gid=999, fsGroup=999)
   + kurly.store('/var/lib/mysql', storageSize, storageClass=storageClass)
+  // InnoDB writes its temporary files under /tmp, and the server binds its unix
+  // socket under /run/mysqld.
+  + kurly.scratch('/tmp', '256Mi')
+  + kurly.scratch('/run/mysqld', '8Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

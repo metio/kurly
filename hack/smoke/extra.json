@@ -4,5 +4,6 @@
   "documenso": "+ k.env({ NEXTAUTH_URL: 'http://documenso:3000', NEXT_PUBLIC_WEBAPP_URL: 'http://documenso:3000' })",
   "endurain": "+ k.env({ ENDURAIN_HOST: 'http://endurain:8080' })",
   "fider": "+ k.env({ BASE_URL: 'http://fider:3000' })",
-  "gotosocial": "+ k.env({ GTS_HOST: 'social.example.com' })"
+  "gotosocial": "+ k.env({ GTS_HOST: 'social.example.com' })",
+  "lychee": "+ k.env({ APP_URL: 'http://lychee:80', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2', FRANKENPHP_WORKER: '0' })"
 }

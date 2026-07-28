@@ -33,7 +33,7 @@ function(
   // The Secret holding APP_KEY (kurly mints none), via envFrom.
   secretName='lychee',
   env={},
-  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
+  resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},
   annotations={},
 )
@@ -64,6 +64,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
+  // The entrypoint hands the application's storage tree to the web user.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/uploads', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

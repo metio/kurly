@@ -9061,7 +9061,7 @@
                      "length": 64
                   },
                   {
-                     "generate": "base64",
+                     "generate": "base64url",
                      "key": "FERNET_KEY",
                      "length": 32
                   }
@@ -16659,9 +16659,9 @@
                },
                "secretKeys": [
                   {
-                     "generate": "hex",
+                     "generate": "base64",
                      "key": "APP_KEY",
-                     "length": 64
+                     "length": 32
                   }
                ],
                "storage": {
@@ -17557,7 +17557,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "storage": {
@@ -17650,6 +17650,28 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "MARIADB_ROOT_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "MARIADB_DATABASE",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "MARIADB_USER",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "MARIADB_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }

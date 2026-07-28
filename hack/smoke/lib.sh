@@ -165,9 +165,14 @@ kurly::secret() {
         len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 64' <<<"$keys")"
         val="$(head -c "$len" /dev/urandom | od -An -tx1 | tr -d ' \n' | cut -c "1-${len}")"
         ;;
-      # A url-safe base64 key of the declared BYTE length — what Fernet and the
-      # libraries that wrap it require; a hex string of the same length is rejected.
+      # A base64 key of the declared BYTE length. Two alphabets, because apps
+      # disagree: Fernet and the libraries wrapping it require the url-safe one,
+      # while a Laravel APP_KEY is rejected unless it is standard base64.
       base64)
+        len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 32' <<<"$keys")"
+        val="$(head -c "$len" /dev/urandom | base64 | tr -d '\n')"
+        ;;
+      base64url)
         len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 32' <<<"$keys")"
         val="$(head -c "$len" /dev/urandom | base64 | tr '+/' '-_' | tr -d '\n')"
         ;;

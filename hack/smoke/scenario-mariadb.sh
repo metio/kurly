@@ -10,4 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
+kurly::namespace kurly-mariadb
+kurly::secret kurly-mariadb mariadb workloads/mariadb/server.libsonnet
 kurly::boot workloads/mariadb/server.libsonnet kurly-mariadb

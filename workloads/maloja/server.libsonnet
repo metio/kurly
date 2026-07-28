@@ -33,7 +33,10 @@ function(
   + kurly.port(42010)
   + kurly.servicePort(42010)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The s6-overlay init prepares /run as root and drops to the app user.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/mljdata', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
