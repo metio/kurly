@@ -24,18 +24,22 @@ function(
   backendUri='http://penpot-backend:6060',
   exporterUri='http://penpot-exporter:6061',
   env={},
-  resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } },
+  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},
   annotations={},
 )
   kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.port(80)
+  // The image's nginx serves on :8080 as the penpot user; the Service keeps :80.
+  + kurly.port(8080)
   + kurly.servicePort(80)
   + kurly.env({ PENPOT_BACKEND_URI: backendUri, PENPOT_EXPORTER_URI: exporterUri } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // It starts its browser pool (exporter) / waits for the backend it proxies
+  // (frontend) before answering.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

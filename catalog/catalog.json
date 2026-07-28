@@ -24560,6 +24560,26 @@
                },
                "secretKeys": [
                   {
+                     "generate": "literal",
+                     "key": "PENPOT_DATABASE_URI",
+                     "value": "postgresql://penpot-db-rw/penpot"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "PENPOT_DATABASE_USERNAME",
+                     "value": "penpot"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "PENPOT_DATABASE_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "PENPOT_REDIS_URI",
+                     "value": "redis://:Kurly-e2e-Passw0rd@penpot-cache-headless:6379/0"
+                  },
+                  {
                      "generate": "hex",
                      "key": "PENPOT_SECRET_KEY",
                      "length": 64

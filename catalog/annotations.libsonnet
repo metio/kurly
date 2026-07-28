@@ -4290,7 +4290,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/backend.libsonnet', secretKeys: [{ key: 'PENPOT_SECRET_KEY', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/penpot/backend.libsonnet', secretKeys: [{ key: 'PENPOT_DATABASE_URI', generate: 'literal', value: 'postgresql://penpot-db-rw/penpot' }, { key: 'PENPOT_DATABASE_USERNAME', generate: 'literal', value: 'penpot' }, { key: 'PENPOT_DATABASE_PASSWORD', generate: 'password', length: 32 }, { key: 'PENPOT_REDIS_URI', generate: 'literal', value: 'redis://:Kurly-e2e-Passw0rd@penpot-cache-headless:6379/0' }, { key: 'PENPOT_SECRET_KEY', generate: 'hex', length: 64 }] },
         frontend: d.fn('The Penpot frontend (the user-facing nginx web app) on :80. backendUri/exporterUri point at the other stages by Service name. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='penpot-frontend'),
           d.arg('image', d.T.string),
