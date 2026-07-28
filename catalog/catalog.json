@@ -33329,6 +33329,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "VIKUNJA_SERVICE_JWTSECRET",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "VIKUNJA_DATABASE_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -33444,6 +33456,18 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "SYMFONY__ENV__DATABASE_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SYMFONY__ENV__SECRET",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }

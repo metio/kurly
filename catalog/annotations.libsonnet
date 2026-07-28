@@ -537,7 +537,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/vikunja/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/vikunja/server.libsonnet', secretKeys: [{ key: 'VIKUNJA_SERVICE_JWTSECRET', generate: 'hex', length: 64 }, { key: 'VIKUNJA_DATABASE_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     listmonk: {
@@ -4977,7 +4977,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wallabag/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/wallabag/server.libsonnet', secretKeys: [{ key: 'SYMFONY__ENV__DATABASE_PASSWORD', generate: 'password', length: 32 }, { key: 'SYMFONY__ENV__SECRET', generate: 'hex', length: 64 }] },
       },
     },
     monica: {

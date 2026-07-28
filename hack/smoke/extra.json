@@ -14,5 +14,6 @@
   "prestashop": "+ k.env({ PS_INSTALL_AUTO: '1', PS_DOMAIN: 'prestashop', PS_HANDLE_DYNAMIC_DOMAIN: '0', PS_ERASE_DB: '0' })",
   "shlink": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })",
   "teable": "+ k.env({ PUBLIC_ORIGIN: 'http://teable:3000' })",
-  "twenty": "+ k.env({ SERVER_URL: 'http://twenty:3000' })"
+  "twenty": "+ k.env({ SERVER_URL: 'http://twenty:3000' })",
+  "vikunja": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"
 }
