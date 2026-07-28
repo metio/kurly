@@ -76,6 +76,8 @@ function(
   // SonarQube writes unpacked plugins and work files under /opt/sonarqube/temp;
   // back it with an emptyDir so the root filesystem stays read-only.
   + kurly.scratch('/opt/sonarqube/temp', '2Gi')
+  // The bundled Elasticsearch writes its JVM flag files under /tmp before starting.
+  + kurly.scratch('/tmp', '256Mi')
   + kurly.readinessProbe({ httpGet: { path: '/api/system/status', port: 'http' }, initialDelaySeconds: 60, periodSeconds: 30, failureThreshold: 20 })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' }, initialDelaySeconds: 60, periodSeconds: 30 })
   + kurly.resources(
