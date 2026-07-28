@@ -41,6 +41,8 @@ function(
   + kurly.env({ PGDATA: '/var/lib/postgresql/data/pgdata' } + env)
   + kurly.runAs(999, gid=999, fsGroup=999)
   + kurly.store('/var/lib/postgresql/data', storageSize, storageClass=storageClass)
+  // The server binds its unix socket and lock file under /var/run/postgresql.
+  + kurly.scratch('/var/run/postgresql', '8Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

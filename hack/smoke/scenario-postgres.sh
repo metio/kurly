@@ -10,4 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
+kurly::namespace kurly-postgres
+kurly::secret kurly-postgres postgres workloads/postgres/server.libsonnet
 kurly::boot workloads/postgres/server.libsonnet kurly-postgres

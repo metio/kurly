@@ -26412,6 +26412,23 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "POSTGRES_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRES_DB",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "POSTGRES_USER",
+                     "value": "kurly"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
