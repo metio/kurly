@@ -70,6 +70,11 @@ function(
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
   + kurly.store('/home/wger/media', storageSize, storageClass=storageClass)
+  // The Service is named after the app, so the Service-link environment defines
+  // WGER_PORT as a tcp:// URL — which its entrypoint appends to its bind address.
+  + kurly.disableServiceLinks()
+  // The first start migrates the schema and collects static files before it listens.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 40 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

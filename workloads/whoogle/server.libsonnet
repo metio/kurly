@@ -29,7 +29,8 @@ function(
   + kurly.port(5000)
   + kurly.servicePort(5000)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image's own whoogle account owns the static tree it builds into on start.
+  + kurly.runAs(927, gid=927, fsGroup=927)
   + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

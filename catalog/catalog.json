@@ -34084,6 +34084,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASS",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
