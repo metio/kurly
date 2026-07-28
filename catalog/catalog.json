@@ -28426,6 +28426,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "MONGO_URL",
+                     "value": "mongodb://rocketchat-mongo:27017/rocketchat?replicaSet=rs0"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "MONGO_OPLOG_URL",
+                     "value": "mongodb://rocketchat-mongo:27017/local?replicaSet=rs0"
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }

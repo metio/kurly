@@ -60,6 +60,9 @@ function(
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
+  // The app reads its port from the environment, which the Service-link variables
+  // would overwrite with a tcp:// URL.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
