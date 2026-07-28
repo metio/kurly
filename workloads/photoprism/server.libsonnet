@@ -69,7 +69,10 @@ function(
   + kurly.servicePort(2342)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The s6-overlay init prepares /run as root and drops to the app user.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/photoprism/storage', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/v1/status', port: 'http' }, initialDelaySeconds: 20, periodSeconds: 15, failureThreshold: 12 })

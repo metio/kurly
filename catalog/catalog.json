@@ -25116,6 +25116,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "literal",
+                     "key": "PGADMIN_DEFAULT_EMAIL",
+                     "value": "admin@example.com"
+                  },
+                  {
                      "generate": "password",
                      "key": "PGADMIN_DEFAULT_PASSWORD",
                      "length": 32
@@ -25220,7 +25225,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [

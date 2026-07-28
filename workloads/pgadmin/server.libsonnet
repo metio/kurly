@@ -36,7 +36,9 @@ function(
   + kurly.version(version)
   + kurly.replicas(1)
   + kurly.recreate()
-  + kurly.port(80)
+  // Under a restricted security context the image serves on :8080 (it cannot bind a
+  // privileged port), which is exactly how kurly runs it.
+  + kurly.port(8080)
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)

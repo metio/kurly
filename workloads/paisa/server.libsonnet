@@ -44,7 +44,9 @@ function(
   + kurly.recreate()
   + kurly.port(7500)
   + kurly.servicePort(7500)
-  + (if env == {} then {} else kurly.env(env))
+  // Paisa resolves its ledger and cache relative to the account's home, which on the
+  // read-only root filesystem must be the volume it keeps its data on.
+  + kurly.env({ HOME: '/data' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '32Mi')

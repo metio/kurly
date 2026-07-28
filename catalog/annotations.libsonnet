@@ -2939,7 +2939,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pgadmin/server.libsonnet', secretKeys: [{ key: 'PGADMIN_DEFAULT_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pgadmin/server.libsonnet', secretKeys: [{ key: 'PGADMIN_DEFAULT_EMAIL', generate: 'literal', value: 'admin@example.com' }, { key: 'PGADMIN_DEFAULT_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     tachidesk: {
