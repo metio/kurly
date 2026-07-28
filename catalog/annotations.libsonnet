@@ -513,7 +513,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     dex: {
       summary: 'A Dex server (an OpenID Connect / OAuth 2.0 identity provider that federates to upstream connectors — LDAP, SAML, GitHub, Google, …) on the official image. A plain composable http workload; with the SQLite storage backend its state lives on a PersistentVolume, no external database. Driven entirely by a config.yaml (issuer, storage, connectors, staticClients) mounted from a Secret — kurly authors none. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves OIDC on :5556.',
-      category: 'infrastructure',
+      category: 'identity',
       requires: { database: 'optional' },
       stages: {
         server: d.fn('The Dex server (runs `dex serve /etc/dex/config.yaml`). SQLite state at /var/dex on the volume. configSecret is the Secret holding config.yaml (mounted at /etc/dex; it carries client and connector secrets). Point storage at PostgreSQL in the config, or the kubernetes backend with kurly.rbac, to scale past SQLite. Compose an exposure onto the HTTP port.', [
@@ -1763,7 +1763,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     ejabberd: {
       summary: 'An ejabberd server (a robust, scalable XMPP/messaging server) on the official community image. A plain composable http workload that keeps its Mnesia database and uploads on a PersistentVolume — no external database by default. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves XMPP client :5222, s2s :5269, and admin/HTTP :5280; mount ejabberd.yml at /home/ejabberd/conf.',
-      category: 'infrastructure',
+      category: 'messaging',
       stages: {
         server: d.fn('The ejabberd server. Keeps its Mnesia database at /home/ejabberd/database on the volume; mount ejabberd.yml at /home/ejabberd/conf (kurly.config; credentials from a Secret). Route the XMPP ports as TCP and expose :5280 for admin.', [
           d.arg('name', d.T.string, default='ejabberd'),
@@ -1779,7 +1779,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     inspircd: {
       summary: 'An InspIRCd server (a modular IRC daemon) on the official image. A plain composable http workload that keeps its runtime data (logs, TLS material) on a PersistentVolume and reads its configuration from a mounted config. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves IRC-over-TLS on :6697; needs an inspircd.conf mounted at /inspircd/conf.',
-      category: 'infrastructure',
+      category: 'messaging',
       stages: {
         server: d.fn('The InspIRCd server. Keeps runtime data at /inspircd/data on the volume; mount its configuration at /inspircd/conf (kurly.config, or a Secret for oper/link credentials). Route the port as TCP.', [
           d.arg('name', d.T.string, default='inspircd'),
@@ -1880,7 +1880,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     znc: {
       summary: 'A ZNC server (an IRC bouncer that stays connected and replays what you missed) on the official image. A plain composable http workload that keeps its configuration, module data, and buffers on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves IRC and the web admin on :6697; needs a znc.conf (with credentials) on the volume before it starts.',
-      category: 'infrastructure',
+      category: 'messaging',
       stages: {
         server: d.fn('The ZNC server. Keeps everything at /znc-data on the volume. Provide a znc.conf at /znc-data/configs/znc.conf (generate with `znc --makeconf` or mount from a Secret — it holds passwords). Route the port as TCP.', [
           d.arg('name', d.T.string, default='znc'),
@@ -2024,7 +2024,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     mailu: {
       summary: 'A Mailu mail server (SMTP, IMAP/POP3, webmail, antispam) as six coordinated http stages — front (the edge), admin (config + API + DB + DKIM), imap (Dovecot), smtp (Postfix), antispam (Rspamd), and webmail (Roundcube). Run all six pointed at the same namePrefix, secretName, and a shared ReadWriteMany storageClaim, plus a Redis (the valkey workload). Mailu images run as root with a writable root filesystem, so these relax kurly restricted defaults while keeping dropped capabilities and no privilege escalation. Each service is one replica, recreated; expose only front.',
-      category: 'infrastructure',
+      category: 'application',
       requires: { cache: 'required' },
       stages: {
         front: d.fn('The Mailu edge (nginx): terminates SMTP/IMAP/POP3/ManageSieve and the web UI and proxies to the other services. The one stage you expose. domain/hostnames identify the mail server; secretName carries SECRET_KEY (envFrom, kurly mints none); storageClaim is the shared RWM volume; redisAddress points at a valkey. Publishes 25/465/587/110/995/143/993/4190/80/443.', [
@@ -2637,7 +2637,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     lldap: {
       summary: 'An LLDAP server (a light LDAP implementation for authentication: a simple user/group directory with a friendly web UI, a lightweight stand-in for OpenLDAP) on the official image; with the default SQLite backend its directory lives on a PersistentVolume. Apps bind over LDAP on :3890, a separate port to add a Service for. kurly authors no Secret; LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL (LLDAP_DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :17170.',
-      category: 'infrastructure',
+      category: 'identity',
       requires: { database: 'optional' },
       stages: {
         server: d.fn('The LLDAP server. baseDn sets LLDAP_LDAP_BASE_DN; secretName holds LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS (envFrom). Directory at /data; LDAP (:3890) needs an extra Service. Compose an exposure onto the HTTP port.', [
@@ -2931,7 +2931,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     adguardhome: {
       summary: 'An AdGuard Home server (a self-hosted, network-wide DNS ad- and tracker-blocker with a friendly web UI, an alternative to Pi-hole) on the official image; its configuration and runtime data live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. The config and work directory both live under /opt/adguardhome, so a single volume persists everything; it binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI (setup wizard) serves on :3000.',
-      category: 'infrastructure',
+      category: 'networking',
       stages: {
         server: d.fn('The AdGuard Home server. Config and data under /opt/adguardhome; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='adguardhome'),
@@ -3107,7 +3107,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     pihole: {
       summary: 'A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80.',
-      category: 'infrastructure',
+      category: 'networking',
       stages: {
         server: d.fn('The Pi-hole server. timezone sets TZ; secretName holds FTLCONF_webserver_api_password (envFrom). Config at /etc/pihole; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pihole'),
@@ -3409,7 +3409,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     meilisearch: {
       summary: 'A Meilisearch server (a fast, typo-tolerant, self-hosted search engine with a simple REST API) on the official image; its indexes live on a PersistentVolume. The search companion several apps expect (e.g. karakeep). kurly authors no Secret; MEILI_MASTER_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7700.',
-      category: 'infrastructure',
+      category: 'search',
       stages: {
         server: d.fn('The Meilisearch server. secretName holds MEILI_MASTER_KEY (envFrom). Indexes at /meili_data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='meilisearch'),
@@ -3426,7 +3426,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     qdrant: {
       summary: 'A Qdrant server (a self-hosted vector database and similarity-search engine for embeddings, used for AI/semantic-search and RAG) on the official image; its collections live on a PersistentVolume. It also serves gRPC on :6334, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the REST API on :6333.',
-      category: 'infrastructure',
+      category: 'search',
       stages: {
         server: d.fn('The Qdrant server. Collections at /qdrant/storage; gRPC (:6334) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='qdrant'),
@@ -3442,7 +3442,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     typesense: {
       summary: 'A Typesense server (a fast, typo-tolerant, self-hosted search engine with a clean API) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; TYPESENSE_API_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8108.',
-      category: 'infrastructure',
+      category: 'search',
       stages: {
         server: d.fn('The Typesense server. secretName holds TYPESENSE_API_KEY (envFrom). Data at /data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='typesense'),
@@ -3607,7 +3607,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     couchdb: {
       summary: 'An Apache CouchDB server (a self-hosted, document-oriented NoSQL database that speaks HTTP/JSON and syncs with offline-first apps) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; COUCHDB_USER and COUCHDB_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5984.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         server: d.fn('The CouchDB server. secretName holds COUCHDB_USER and COUCHDB_PASSWORD (envFrom). Data at /opt/couchdb/data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='couchdb'),
@@ -3685,7 +3685,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     mosquitto: {
       summary: 'An Eclipse Mosquitto server (a lightweight, self-hosted MQTT message broker for IoT and home automation). Mosquitto speaks MQTT, not HTTP: it listens on :1883, its mosquitto.conf is mounted as a ConfigMap and passed verbatim, and its persistence database lives on a PersistentVolume. The default allows anonymous clients; a real broker sets up authentication. WebSockets (:9001) need a listener in the config and a second Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.',
-      category: 'infrastructure',
+      category: 'messaging',
       stages: {
         server: d.fn('The Mosquitto broker on :1883. config is mosquitto.conf, mounted verbatim. Data at /mosquitto/data. Expose to devices (often a LoadBalancer), not an HTTP ingress.', [
           d.arg('name', d.T.string, default='mosquitto'),
@@ -3702,7 +3702,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     authelia: {
       summary: 'An Authelia server (a self-hosted authentication and authorization gateway adding SSO and 2FA in front of your apps via a reverse proxy forward-auth) on the official image. Its behaviour is its configuration.yml, mounted as a ConfigMap and passed verbatim; with the default SQLite storage its database lives on a PersistentVolume. The default config is a minimal skeleton that MUST be completed. kurly authors no Secret; the session/storage/JWT secrets come from a provided Secret via envFrom (as AUTHELIA_* env). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091.',
-      category: 'infrastructure',
+      category: 'identity',
       stages: {
         server: d.fn("The Authelia server. config is Authelia's own configuration.yml (complete the skeleton); secretName holds the AUTHELIA_* secrets (envFrom). Data at /config. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='authelia'),
@@ -3721,7 +3721,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     clickhouse: {
       summary: 'A ClickHouse server (a fast, self-hosted column-oriented SQL database for real-time analytics) on the official single-node image; its data lives on a PersistentVolume. The native protocol (:9000) needs a separate Service. kurly authors no Secret; CLICKHOUSE_USER/PASSWORD/DB come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves HTTP on :8123.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         server: d.fn('The ClickHouse server. secretName holds CLICKHOUSE_USER/PASSWORD/DB (envFrom). Data at /var/lib/clickhouse; native protocol (:9000) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='clickhouse'),
@@ -3817,7 +3817,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     mariadb: {
       summary: 'A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         server: d.fn('The A MariaDB server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='mariadb'),
@@ -3834,7 +3834,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     mysql: {
       summary: 'A MySQL server — the popular open-source relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         server: d.fn('The A MySQL server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='mysql'),
@@ -3851,7 +3851,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     postgres: {
       summary: 'A PostgreSQL server — a powerful, open-source object-relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :5432; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :5432.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         server: d.fn('The A PostgreSQL server. secretName holds the credentials (envFrom). Data at /var/lib/postgresql/data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='postgres'),
@@ -3868,7 +3868,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     redis: {
       summary: 'A Redis server — an in-memory data store used as a cache, message broker and database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :6379; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :6379.',
-      category: 'infrastructure',
+      category: 'cache',
       stages: {
         server: d.fn('The A Redis server. secretName holds the credentials (envFrom). Data at /data. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='redis'),
@@ -3885,7 +3885,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     mongo: {
       summary: 'A MongoDB server — a self-hosted, document-oriented NoSQL database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :27017; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :27017.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         server: d.fn('The A MongoDB server. secretName holds the credentials (envFrom). Data at /data/db. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='mongo'),
@@ -3902,7 +3902,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'nginx-proxy-manager': {
       summary: "An Nginx Proxy Manager server (a self-hosted reverse-proxy with a web UI, free Let's Encrypt certificates, access lists and custom nginx config) on the official image; its SQLite database and config live on a PersistentVolume. The reverse proxy listens on :80/:443, separate ports that need their own Service. It binds the privileged ports so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI serves on :81.",
-      category: 'infrastructure',
+      category: 'networking',
       stages: {
         server: d.fn('The Nginx Proxy Manager server. Data at /data; the proxy (:80/:443) needs an extra Service. Compose an exposure onto the admin HTTP port.', [
           d.arg('name', d.T.string, default='nginx-proxy-manager'),
@@ -3919,7 +3919,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     minio: {
       summary: 'A MinIO server (a high-performance, self-hosted, S3-compatible object storage server) on the official image; its objects live on a PersistentVolume. Single-node MinIO (a real object store runs distributed across nodes/disks). The web console (:9001) needs a separate Service. kurly authors no Secret; MINIO_ROOT_USER/PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the S3 API on :9000.',
-      category: 'infrastructure',
+      category: 'storage',
       stages: {
         server: d.fn('The MinIO server. secretName holds MINIO_ROOT_USER/PASSWORD (envFrom). Objects at /data; the console (:9001) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='minio'),
@@ -3936,7 +3936,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     rabbitmq: {
       summary: 'A RabbitMQ server (a widely-used, self-hosted message broker implementing AMQP) on the official management image; the broker speaks AMQP on :5672 with data on a PersistentVolume. Single node (not a cluster). The management UI (:15672) needs a separate Service. kurly authors no Secret; RABBITMQ_DEFAULT_USER/PASS come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves AMQP on :5672.',
-      category: 'infrastructure',
+      category: 'messaging',
       stages: {
         server: d.fn('The RabbitMQ server. secretName holds RABBITMQ_DEFAULT_USER/PASS (envFrom). Data at /var/lib/rabbitmq; the management UI (:15672) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='rabbitmq'),
@@ -4024,7 +4024,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     technitium: {
       summary: 'A Technitium DNS Server (a self-hosted, privacy-focused DNS server with ad-blocking, DNS-over-HTTPS/TLS and a full web console) on the official image; its configuration and zones live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; DNS_SERVER_ADMIN_PASSWORD comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The web console serves on :5380.',
-      category: 'infrastructure',
+      category: 'networking',
       stages: {
         server: d.fn('The Technitium DNS server. secretName holds DNS_SERVER_ADMIN_PASSWORD (envFrom). Config at /etc/dns; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='technitium'),
@@ -4132,7 +4132,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'pocket-id': {
       summary: 'A Pocket ID server (a simple, self-hosted OIDC provider for passkey logins, no passwords) on the official image; with the default SQLite backend its database and keys live on a PersistentVolume. appUrl is the public HTTPS URL passkeys bind to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1411.',
-      category: 'infrastructure',
+      category: 'identity',
       stages: {
         server: d.fn('The Pocket ID server. appUrl is the public HTTPS URL (issuer/callback origin). Data at /app/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pocket-id'),
@@ -4285,7 +4285,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     registry: {
       summary: 'A Docker Registry server (the reference OCI registry: a self-hosted store and distribution point for container images) on the official image; its stored images live on a PersistentVolume. Usually reached in-cluster; the docker-registry-ui workload gives it a web interface. The bare registry is unauthenticated and plaintext — front it with TLS and auth or keep it in-cluster. Single writer over a ReadWriteOnce volume: one replica, recreated (back it with S3 for a scaled registry). Serves on :5000.',
-      category: 'infrastructure',
+      category: 'storage',
       requires: { objectStorage: 'optional' },
       stages: {
         server: d.fn('The Docker Registry server. Images at /var/lib/registry. Usually reached in-cluster. Compose an exposure onto the HTTP port only if reached from outside (with TLS/auth in front).', [
@@ -4353,7 +4353,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     snappymail: {
       summary: 'A SnappyMail server (a fast, modern, self-hosted webmail client that connects to your existing IMAP/SMTP servers) on the official image (pinned by digest; Renovate maintains it); config and per-account data on a PersistentVolume. SnappyMail is a client and does not run a mail server itself. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888.',
-      category: 'infrastructure',
+      category: 'application',
       stages: {
         server: d.fn('The SnappyMail server. Configure IMAP/SMTP in the admin panel. Data at /var/lib/snappymail. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='snappymail'),
@@ -4472,7 +4472,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     authentik: {
       summary: 'An authentik server (a self-hosted identity provider and SSO: OAuth2, SAML, LDAP, forward-auth) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web/API server (HTTP :9000) and a background worker (migrations, scheduled tasks, outposts). kurly authors no Secret; the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Pairs with a cnpg-cluster named authentik-db and a Redis. Stateless.',
-      category: 'infrastructure',
+      category: 'identity',
       requires: { database: 'required', cache: 'required' },
       stages: {
         server: d.fn('The authentik web/API server. secretName holds the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.', [
@@ -4686,7 +4686,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'oauth2-proxy': {
       summary: 'An OAuth2 Proxy server (a reverse proxy and forward-auth service that puts an OAuth2/OIDC login in front of your apps, delegating to Keycloak, authentik, Pocket ID, Google, GitHub) on the official image. Stateless (sessions in a signed cookie or shared Redis): a plain rolling Deployment. kurly authors no Secret; the provider settings, client id/secret and cookie secret come from a provided Secret via envFrom (OAUTH2_PROXY_*). Serves on :4180 — front an app or wire as a reverse proxy forward-auth.',
-      category: 'infrastructure',
+      category: 'identity',
       requires: { cache: 'optional' },
       stages: {
         server: d.fn('The OAuth2 Proxy server. secretName holds the OAUTH2_PROXY_* provider settings and secrets (envFrom). Front an app (OAUTH2_PROXY_UPSTREAMS) or use as forward-auth at /oauth2/auth.', [
@@ -4703,7 +4703,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     emqx: {
       summary: 'An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.',
-      category: 'infrastructure',
+      category: 'messaging',
       stages: {
         server: d.fn('The EMQX broker on :1883. Data at /opt/emqx/data; the dashboard (:18083) needs an extra Service. Expose to devices (often a LoadBalancer).', [
           d.arg('name', d.T.string, default='emqx'),
@@ -4719,7 +4719,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     nats: {
       summary: 'A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222.',
-      category: 'infrastructure',
+      category: 'messaging',
       stages: {
         server: d.fn('The NATS server on :4222 (JetStream enabled). Store at /data; monitoring (:8222) needs an extra Service. Usually reached in-cluster.', [
           d.arg('name', d.T.string, default='nats'),
@@ -4987,7 +4987,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     spegel: {
       summary: "Spegel — a stateless, cluster-local OCI registry mirror (spegel.dev). A DaemonSet that serves image layers already present in each node's containerd content store to its peers over a peer-to-peer router, so a pull satisfied by any node never leaves the cluster; an init container writes containerd's registry-mirror config to pull through the local mirror first. Genuinely node-level infrastructure, so it authors its manifests directly (DaemonSet + init container + hostPath containerd socket/content, a NodePort the kubelet reaches the mirror on, and a headless Service peers bootstrap against via DNS) rather than composing a base kind. namespace is load-bearing: the bootstrap DNS name embeds it, so it must match where you deploy. Runs as root with hostPath mounts (the socket is root-owned); the posture is hardened as far as that allows. kurly features do not apply.",
-      category: 'infrastructure',
+      category: 'networking',
       stages: {
         mirror: d.fn("The Spegel DaemonSet and its Services. namespace MUST match the deploy namespace (the peer-bootstrap DNS name embeds it). containerdSock/containerdContentPath/containerdRegistryConfigPath point at the node's containerd; the kubelet reaches the local mirror at both registryHostPort (straight to the local pod) and registryNodePort (through kube-proxy), so set registryHostPort=null where host ports are forbidden. dataDir persists routing state (null to disable).", [
           d.arg('name', d.T.string, default='spegel'),
@@ -5317,7 +5317,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     roundcube: {
       summary: 'A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
-      category: 'infrastructure',
+      category: 'application',
       stages: {
         server: d.fn('The Roundcube server. imapHost/smtpHost point at the mail server (e.g. ssl://mail.example.com:993). Keeps contacts/preferences in SQLite at /var/roundcube/db. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='roundcube'),
@@ -5580,7 +5580,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     ferretdb: {
       summary: 'A FerretDB server (an open-source, MongoDB-compatible database) — the Apache-2.0 alternative to MongoDB Community (SSPL) for a platform that monetizes hosting. A stateless proxy that speaks the MongoDB wire protocol and stores everything in a PostgreSQL backend (with the DocumentDB extension), so it needs no volume and can run several replicas. kurly authors no Secret; FERRETDB_POSTGRESQL_URL comes from a provided Secret via envFrom. Serves MongoDB wire on :27017.',
-      category: 'infrastructure',
+      category: 'database',
       requires: { database: 'required' },
       stages: {
         server: d.fn('The FerretDB proxy. secretName holds FERRETDB_POSTGRESQL_URL (with the backend password, envFrom). The backend is a PostgreSQL with the DocumentDB extension — run one with cnpg-cluster pinned to imageName=ghcr.io/ferretdb/postgres-documentdb. Scales horizontally via replicas. Route :27017 as TCP for MongoDB clients.', [
@@ -5597,7 +5597,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     neo4j: {
       summary: 'A Neo4j graph database on the official Community image. Unlike the other database workloads, Neo4j Community has no operator and does not cluster (clustering is Enterprise), so this is a plain composable http single-instance workload rather than a CR — its graph lives on a PersistentVolume. Community Edition is GPLv3 (fine to run). kurly authors no Secret; NEO4J_AUTH comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves HTTP on :7474 and Bolt on :7687.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         server: d.fn('The Neo4j server. Graph at /data on the volume. secretName holds NEO4J_AUTH (neo4j/<password>, envFrom). Compose an exposure onto the HTTP port; route Bolt (:7687) as TCP. Clustering/HA needs Neo4j Enterprise, beyond this recipe.', [
           d.arg('name', d.T.string, default='neo4j'),
@@ -5614,7 +5614,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'cassandra-cluster': {
       summary: 'A highly-available Apache Cassandra cluster as a cass-operator CassandraDatacenter custom resource. Cassandra is Apache-2.0 — a clean default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires cass-operator; the operator mints the superuser Secret.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         cluster: d.fn('The CassandraDatacenter CR. name is the datacenter name; clusterName defaults to it. size is the node count. config is extra cassandra.yaml/JVM tuning (cass-operator schema, verbatim). Render with kurly.list.', [
           d.arg('name', d.T.string, default='cassandra'),
@@ -5635,7 +5635,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'mongodb-cluster': {
       summary: 'A highly-available MongoDB replica set as a MongoDB Community Operator MongoDBCommunity custom resource. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the MongoDB Community Operator and a consumer-provided admin-password Secret. WARNING: MongoDB Community Edition is SSPL-licensed (restricts offering it as a service) — the operator is Apache-2.0 but the server is not; prefer FerretDB (Apache-2.0) if SSPL is a problem for a monetized hosting platform.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         cluster: d.fn('The MongoDBCommunity CR (a SCRAM-authenticated ReplicaSet). members are replica-set members (odd count for quorum). secretName is a Secret you provide with the admin password (key `password`); adminUser is created on bootstrap. Storage is set via the operator StatefulSet override. Render with kurly.list.', [
           d.arg('name', d.T.string, default='mongodb'),
@@ -5656,7 +5656,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'opensearch-cluster': {
       summary: 'A highly-available OpenSearch cluster as an OpenSearch Operator OpenSearchCluster custom resource, with optional OpenSearch Dashboards. OpenSearch is the Apache-2.0 fork of Elasticsearch — no SSPL/Elastic-License restriction on offering it as a service, the right default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the OpenSearch Operator.',
-      category: 'infrastructure',
+      category: 'search',
       stages: {
         cluster: d.fn('The OpenSearchCluster CR. replicas is the default node pool size (each node is cluster_manager+data+ingest; split into dedicated pools via the raw + hatch for large clusters). dashboards runs OpenSearch Dashboards alongside. Render with kurly.list.', [
           d.arg('name', d.T.string, default='opensearch'),
@@ -5677,7 +5677,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'mysql-cluster': {
       summary: 'A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none).',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         cluster: d.fn('The MySQL InnoDBCluster CR. Adapt with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource). secretName is a Secret you provide with rootUser/rootHost/rootPassword. instances are Group Replication members (odd count for quorum); routerInstances the routing tier.', [
           d.arg('name', d.T.string, default='mysql'),
@@ -5700,7 +5700,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'cnpg-cluster': {
       summary: 'A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         cluster: d.fn('The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind). Point it at a cnpg-image-catalog with catalog/major to keep the image choice in one place, or pin imageName directly; the two are mutually exclusive.', [
           d.arg('name', d.T.string, default='postgres'),
@@ -5735,7 +5735,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'cnpg-image-catalog': {
       summary: 'The PostgreSQL images a fleet of CloudNativePG clusters may run, as an ImageCatalog or ClusterImageCatalog custom resource — one image per major, so a patch bump is one line and rolls every cluster on that major. Requires the CloudNativePG operator.',
-      category: 'infrastructure',
+      category: 'database',
       stages: {
         namespaced: d.fn('A namespaced ImageCatalog, owned by the team that owns the databases. Keys of `images` are PostgreSQL major versions; a cnpg-cluster pins one with catalog/major and the catalog owns the patch.', [
           d.arg('name', d.T.string, default='postgres'),
@@ -5761,7 +5761,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     dragonfly: {
       summary: "A RESP-speaking in-memory store with a per-pod PVC and a headless Service. Answers the same protocol as Valkey, but is not a fork of it: it rejects Redis flags, persists through snapshots, and runs one io thread per core it can see — which in a container is the node's, so the thread count is pinned and the memory floor it demands (256MiB per thread) is asserted at render.",
-      category: 'infrastructure',
+      category: 'cache',
       stages: {
         instance: d.fn('The Dragonfly server. threads pins --proactor_threads and sizes the CPU (Dragonfly runs a thread per core); maxMemoryMB must be at least 256 per thread or Dragonfly exits at startup, so the render fails first. Name it for its role and a consumer never learns which RESP store it got.', [
           d.arg('name', d.T.string, default='dragonfly'),
@@ -5834,7 +5834,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     keycloak: {
       summary: 'A Keycloak identity server as an official keycloak-operator `Keycloak` custom resource. Authors the CR (like loki and tempo) for the operator to reconcile into a StatefulSet, Services, and the admin credentials Secret. Requires the keycloak-operator (whose recent releases let one operator manage instances across many namespaces) and a PostgreSQL database — pairs with the cnpg-cluster workload.',
-      category: 'infrastructure',
+      category: 'identity',
       requires: { database: 'required' },
       stages: {
         server: d.fn("The Keycloak server. It needs a PostgreSQL database: dbHost/dbName/dbSecret default to a cnpg-cluster named keycloak-db (its -rw Service and the -app Secret CNPG mints, keys username/password). hostname is the public URL for production; tlsSecret names the cert Keycloak terminates, or plain HTTP (httpEnabled) behind a TLS-terminating proxy. The operator chooses the Keycloak image unless image pins one. kurly authors no Secret — the database and TLS Secrets are the consumer's.", [
@@ -6088,7 +6088,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     seaweedfs: {
       summary: "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups.",
-      category: 'infrastructure',
+      category: 'storage',
       stages: {
         server: d.fn('The all-in-one server. Serves S3 on 8333 over the data volume at /data; the master/volume/filer ports serve the cluster itself. The default allows anonymous access, fine inside a trusted namespace. Splitting the roles into dedicated tiers is a different topology, not more replicas, so it would be its own stage.', [
           d.arg('name', d.T.string, default='seaweedfs'),
@@ -6139,7 +6139,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     memcached: {
       summary: "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace.",
-      category: 'infrastructure',
+      category: 'cache',
       stages: {
         cache: d.fn('The memcached shards: a StatefulSet (for stable DNS names, not storage) and the headless Service that names them. Clients consistent-hash keys over memcached-0..N-1; scaling reshuffles that ring, so treat replicas as part of the client configuration. The container memory limit is derived from memoryMB, since -m caps only the item cache.', [
           d.arg('name', d.T.string, default='memcached'),
@@ -6155,7 +6155,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     valkey: {
       summary: 'A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image.',
-      category: 'infrastructure',
+      category: 'cache',
       stages: {
         instance: d.fn('The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app). `image` also accepts a Redis build — Valkey is its BSD fork and takes the same configuration — so name the workload for its role rather than its engine, and a consumer holding an endpoint never learns which it got.', [
           d.arg('name', d.T.string, default='valkey'),

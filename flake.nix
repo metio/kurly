@@ -148,6 +148,25 @@
             ];
             text = builtins.readFile ./scripts/gen-architectures.sh;
           };
+          # Asks a kind cluster's API server which bollwerk policies each stage
+          # violates, into catalog/bsi.gen.libsonnet. Needs a cluster (only an API
+          # server evaluates the policies' CEL faithfully), so it runs in the e2e
+          # workflow rather than the per-PR gate.
+          gen-bsi = pkgs.writeShellApplication {
+            name = "gen-bsi";
+            # The cleanup function runs from a trap, which shellcheck cannot see.
+            excludeShellChecks = [ "SC2329" ];
+            runtimeInputs = with pkgs; [
+              go-jsonnet
+              jsonnet-bundler
+              kubectl
+              jq
+              gnugrep
+              gawk
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-bsi.sh;
+          };
           # Reads each workload's image labels from the registry into
           # catalog/upstream.gen.libsonnet (license, source repository, title).
           # Hits the network, so it is run on demand / on a schedule.
@@ -304,6 +323,7 @@
             gen-maturity
             gen-architectures
             gen-upstream
+            gen-bsi
             gen-readme
             gen-smoke
             gen-docs-data

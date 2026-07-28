@@ -10,6 +10,7 @@
 // catalog that lies. Render from the repo root:
 //
 //   jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json
+local bollwerk = import '../bollwerk/bollwerk.libsonnet';
 local expose = import '../lib/expose.libsonnet';
 local features = import '../lib/features.libsonnet';
 local migrations = import '../lib/migrations.libsonnet';
@@ -19,6 +20,7 @@ local security = import '../lib/security.libsonnet';
 local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
+local bsiViolations = import './bsi.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
 local upstream = import './upstream.gen.libsonnet';
 
@@ -426,6 +428,63 @@ local posture(fn) =
       multiTenantSafe: nonRoot && readOnly && ownUserNs,
     };
 
+// Whether a stage is a CLUSTER add-on rather than something a tenant runs: it
+// holds cluster-wide RBAC, reaches the node it lands on, or runs on every node.
+// Each of those is visible in what the stage renders, so this is a fact rather
+// than a judgement — a consumer deciding who may run what reads it instead of
+// keeping a list of exceptions that ages.
+//
+// The reasons are reported alongside the verdict, because "cluster-scoped" is
+// acted on and an unexplained boolean invites a hand-maintained override.
+// The kinds kurly renders that live outside a namespace. RBAC and the add-on
+// kinds are Kubernetes' own; ClusterImageCatalog is CNPG's cluster-scoped
+// counterpart to the namespaced ImageCatalog, and a stage that renders one
+// configures the cluster rather than a tenant.
+local clusterScopedKinds = [
+  'APIService',
+  'ClusterImageCatalog',
+  'ClusterRole',
+  'ClusterRoleBinding',
+  'CustomResourceDefinition',
+  'IngressClass',
+  'MutatingWebhookConfiguration',
+  'Namespace',
+  'PriorityClass',
+  'StorageClass',
+  'ValidatingAdmissionPolicy',
+  'ValidatingAdmissionPolicyBinding',
+  'ValidatingWebhookConfiguration',
+];
+
+local clusterScoped(fn) =
+  local items = main.list(fn()).items;
+  local tmpls = podTemplates(items);
+  local kinds = std.set([item.kind for item in items]);
+  local clusterRbac = std.setInter(kinds, ['ClusterRole', 'ClusterRoleBinding']) != [];
+  local apiService = std.member(kinds, 'APIService');
+  // A stage whose every object lives outside a namespace configures the cluster
+  // itself — a CNPG ClusterImageCatalog names the images every tenant's database
+  // may run, and belongs to whoever runs the cluster.
+  local clusterObjects = std.setInter(kinds, std.set(clusterScopedKinds)) == kinds;
+  local daemonSet = std.member(kinds, 'DaemonSet');
+  local hostNetwork = std.any([std.get(t.spec, 'hostNetwork', false) for t in tmpls]);
+  local hostPid = std.any([std.get(t.spec, 'hostPID', false) || std.get(t.spec, 'hostIPC', false) for t in tmpls]);
+  local hostPath = std.any([
+    std.objectHas(volume, 'hostPath')
+    for t in tmpls
+    for volume in std.get(t.spec, 'volumes', [])
+  ]);
+  local reasons = std.prune([
+    if clusterRbac then 'clusterRbac' else null,
+    if apiService then 'apiService' else null,
+    if clusterObjects then 'clusterScopedObjects' else null,
+    if daemonSet then 'daemonSet' else null,
+    if hostNetwork then 'hostNetwork' else null,
+    if hostPid then 'hostNamespaces' else null,
+    if hostPath then 'hostPath' else null,
+  ]);
+  { clusterScoped: reasons != [] } + (if reasons == [] then {} else { clusterScopedBecause: reasons });
+
 // Flattens the annotated workloads into catalog entries, checking every stage
 // against stageImports: the annotated stage keys and the imported stage keys
 // must be the same set, and each import must resolve to a function.
@@ -439,7 +498,22 @@ local stageKeys = std.set([
 // needs the difference: adminer, phpmyadmin and redis-commander are ordinary
 // `http` stages, but nobody hosts a database console as their product — they run
 // it beside one. The vocabulary is deliberately small; a workload states one.
-local categories = ['application', 'infrastructure', 'observability', 'tool', 'admin'];
+// Kept fine-grained on purpose: a consumer grouping three hundred entries needs
+// sections a reader recognises, and one bucket holding every database, cache and
+// identity provider is no more useful than no bucket at all.
+local categories = [
+  'admin',
+  'application',
+  'cache',
+  'database',
+  'identity',
+  'messaging',
+  'networking',
+  'observability',
+  'search',
+  'storage',
+  'tool',
+];
 
 // What the catalogue says about the software itself: the licence it is published
 // under, the name it calls itself, and where it comes from. A workload's own
@@ -473,6 +547,32 @@ local softwareFacts(workload) =
     { category: category }
   );
 
+// What bollwerk checks, straight from the policies themselves: their ids, whether
+// each is a must or a should, and the BSI requirement it implements. Nothing here
+// is transcribed — the annotations are the policies' own.
+local bsiPolicies = {
+  [item.metadata.name]: {
+    id: item.metadata.annotations['policies.opencode.de/ID'],
+    category: item.metadata.annotations['policies.opencode.de/category'],
+    requirement: item.metadata.annotations['policies.opencode.de/bsi-requirement'],
+    protectionRequirement: item.metadata.annotations['policies.opencode.de/bsi-protection-requirement'],
+  }
+  for item in bollwerk.list.items
+  if item.kind == 'ValidatingAdmissionPolicy'
+};
+
+// Which of them a stage breaks, as an API server judged it (gen-bsi). A stage the
+// generator could not judge — a custom resource whose CRD it does not install —
+// carries null rather than an empty list, because "not measured" is not "clean".
+local bsiOf(key) =
+  if !std.objectHas(bsiViolations, key) then null
+  else {
+    violates: bsiViolations[key],
+    // The requirements those violations touch, deduplicated: a consumer showing
+    // a compliance summary wants the requirement, not the policy id.
+    requirements: std.set([bsiPolicies[name].requirement for name in bsiViolations[key]]),
+  };
+
 local workloadEntries =
   assert reconcile('workload stages', stageKeys, std.objectFields(stageImports));
   // Every generated architecture entry maps to a real stage — a renamed or
@@ -484,6 +584,13 @@ local workloadEntries =
   // workload leaves no stale licence or upstream behind.
   assert std.all([std.objectHas(ann.workloads, key) for key in std.objectFields(upstream)]) :
          'upstream.gen.libsonnet names a workload that does not exist — rerun gen-upstream';
+  assert std.all([std.member(stageKeys, key) for key in std.objectFields(bsiViolations)]) :
+         'bsi.gen.libsonnet names a stage that does not exist — rerun gen-bsi';
+  assert std.all([
+    std.objectHas(bsiPolicies, name)
+    for key in std.objectFields(bsiViolations)
+    for name in bsiViolations[key]
+  ]) : 'bsi.gen.libsonnet names a policy bollwerk no longer ships — rerun gen-bsi';
   assert std.all([
     std.isFunction(stageImports[key])
     for key in std.objectFields(stageImports)
@@ -507,6 +614,9 @@ local workloadEntries =
         + ann.workloads[workload].stages[stage]
         + { storage: { pvcs: pvcCount(stageImports[workload + '/' + stage]) } }
         + { posture: posture(stageImports[workload + '/' + stage]) }
+        + clusterScoped(stageImports[workload + '/' + stage])
+        // Which bollwerk policies the stage breaks, from bsi.gen.libsonnet.
+        + { bsi: bsiOf(workload + '/' + stage) }
         // The linux CPU architectures the stage's pinned image publishes, from
         // architectures.gen.libsonnet (generated by gen-architectures). null when
         // the image has no entry yet (a new workload before a regen) or the stage
@@ -544,6 +654,9 @@ local workloadEntries =
   // The values behind kurly.resourcePreset's names, so a consumer sizing (or
   // costing) a deployment reads them instead of keeping its own copy.
   resourcePresets: resourcePresets,
+  // The policy set every stage's `bsi` field refers to, with the BSI requirement
+  // each one implements.
+  bsiPolicies: bsiPolicies,
   workloads: workloadEntries,
   kinds: entries(ann.kinds),
   features: entries(ann.features),
