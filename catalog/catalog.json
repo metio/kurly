@@ -28116,6 +28116,33 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "REDMINE_DB_MYSQL",
+                     "value": "redmine-db"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "REDMINE_DB_DATABASE",
+                     "value": "redmine"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "REDMINE_DB_USERNAME",
+                     "value": "redmine"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "REDMINE_DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "REDMINE_SECRET_KEY_BASE",
+                     "length": 128
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
