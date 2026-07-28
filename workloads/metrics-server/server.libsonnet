@@ -84,6 +84,13 @@ function(
   + {
     config+:: { serviceAccountName: name },
 
+    // The add-on is a fixed part of the cluster rather than a tenant workload: its
+    // ServiceAccount, RoleBinding, and the ClusterRoleBindings that name it as a
+    // subject all live in one namespace, so the Deployment and Service state the
+    // same one instead of taking whichever namespace they are applied into.
+    deployment+: { metadata+: { namespace: namespace } },
+    service+: { metadata+: { namespace: namespace } },
+
     ownedManifests+: [
       {
         apiVersion: 'v1',
