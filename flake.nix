@@ -148,6 +148,19 @@
             ];
             text = builtins.readFile ./scripts/gen-architectures.sh;
           };
+          # Reads each workload's image labels from the registry into
+          # catalog/upstream.gen.libsonnet (license, source repository, title).
+          # Hits the network, so it is run on demand / on a schedule.
+          gen-upstream = pkgs.writeShellApplication {
+            name = "gen-upstream";
+            runtimeInputs = with pkgs; [
+              skopeo
+              jq
+              gnugrep
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-upstream.sh;
+          };
           # Generates a live-cluster e2e scenario + thin workflow for every
           # standalone workload from the catalog, and the coverage ledger
           # (hack/smoke/COVERAGE.md). Idempotent and marker-guarded, so it never
@@ -290,6 +303,7 @@
             check-security
             gen-maturity
             gen-architectures
+            gen-upstream
             gen-readme
             gen-smoke
             gen-docs-data

@@ -20,6 +20,7 @@ local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
+local upstream = import './upstream.gen.libsonnet';
 
 // Each workload stage, imported by the canonical path a consumer's snippet uses
 // (resolved via the vendor/github.com/metio/kurly symlink check-catalog creates).
@@ -433,6 +434,45 @@ local stageKeys = std.set([
   for workload in std.objectFields(ann.workloads)
   for stage in std.objectFields(ann.workloads[workload].stages)
 ]);
+// What KIND of software a workload is, as opposed to how it is deployed (which
+// `stage.kind` already says). A consumer that presents this catalogue to people
+// needs the difference: adminer, phpmyadmin and redis-commander are ordinary
+// `http` stages, but nobody hosts a database console as their product — they run
+// it beside one. The vocabulary is deliberately small; a workload states one.
+local categories = ['application', 'infrastructure', 'observability', 'tool', 'admin'];
+
+// What the catalogue says about the software itself: the licence it is published
+// under, the name it calls itself, and where it comes from. A workload's own
+// annotation wins over the image label, because a maintainer who checked the
+// upstream beats a label written by a build pipeline; the label fills the gap
+// where nobody has checked yet, and the field is simply absent where neither
+// knows. Absent is honest — a guessed licence is worse than none.
+local softwareFacts(workload) =
+  local ann_ = ann.workloads[workload];
+  local derived = std.get(upstream, workload, {});
+  local pick(field, fallback) =
+    local value = std.get(ann_, field, std.get(derived, fallback, null));
+    if value == null then {} else { [field]: value };
+  pick('license', 'license')
+  + pick('name', 'title')
+  + (
+    local repo = std.get(std.get(ann_, 'upstream', {}), 'repo', std.get(derived, 'source', null));
+    local homepage = std.get(std.get(ann_, 'upstream', {}), 'homepage', std.get(derived, 'homepage', null));
+    local entries = (if repo == null then {} else { repo: repo })
+                    + (if homepage == null then {} else { homepage: homepage });
+    if entries == {} then {} else { upstream: entries }
+  )
+  + (
+    // Every workload states one: a consumer presenting this catalogue decides
+    // what to show from it, and an absent category would silently read as
+    // "unclassified" for something that is simply new.
+    local category = std.get(ann_, 'category', null);
+    assert category != null : 'workloads: %s declares no category (one of %s)' % [workload, std.join(', ', categories)];
+    assert std.member(categories, category) :
+           'workloads: %s declares an unknown category %s' % [workload, category];
+    { category: category }
+  );
+
 local workloadEntries =
   assert reconcile('workload stages', stageKeys, std.objectFields(stageImports));
   // Every generated architecture entry maps to a real stage — a renamed or
@@ -440,6 +480,10 @@ local workloadEntries =
   // allowed: a new workload reads null until gen-architectures is rerun.)
   assert std.all([std.member(stageKeys, key) for key in std.objectFields(architectures)]) :
          'architectures.gen.libsonnet names a stage that does not exist — rerun gen-architectures';
+  // Same discipline for the derived software facts: a renamed or removed
+  // workload leaves no stale licence or upstream behind.
+  assert std.all([std.objectHas(ann.workloads, key) for key in std.objectFields(upstream)]) :
+         'upstream.gen.libsonnet names a workload that does not exist — rerun gen-upstream';
   assert std.all([
     std.isFunction(stageImports[key])
     for key in std.objectFields(stageImports)
@@ -449,6 +493,9 @@ local workloadEntries =
       id: workload,
       summary: ann.workloads[workload].summary,
       maturity: maturity.of(workload),
+    }
+    + softwareFacts(workload)
+    + {
       // The external infrastructure the workload depends on, hand-annotated —
       // a database (with any PostgreSQL extensions it needs, like vchord), a
       // cache/Redis, and whether it needs S3-compatible object storage

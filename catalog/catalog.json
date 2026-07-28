@@ -2616,6 +2616,7 @@
    ],
    "workloads": [
       {
+         "category": "application",
          "id": "2fauth",
          "maturity": {
             "tier": "e2e"
@@ -2719,6 +2720,7 @@
          "summary": "A 2FAuth server (a self-hosted web app to manage TOTP/HOTP two-factor accounts and generate one-time codes) on the official image; with the default SQLite backend its database lives on a PersistentVolume. kurly authors no Secret; APP_KEY (encrypts stored 2FA secrets) comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "activepieces",
          "maturity": {
             "tier": "e2e"
@@ -2852,6 +2854,7 @@
          "summary": "An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. Connection settings are env from the dbHost/database/dbUser/redisHost parameters; a provided Secret holds AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET via envFrom (kurly authors none). Stateless: a plain rolling Deployment. Serves on :80."
       },
       {
+         "category": "application",
          "id": "actualbudget",
          "maturity": {
             "tier": "e2e"
@@ -2935,6 +2938,7 @@
          "summary": "An Actual Budget server (a local-first personal finance and budgeting app). A plain composable http workload that keeps its budgets and sync state in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :5006."
       },
       {
+         "category": "infrastructure",
          "id": "adguardhome",
          "maturity": {
             "tier": "e2e"
@@ -3020,6 +3024,7 @@
          "summary": "An AdGuard Home server (a self-hosted, network-wide DNS ad- and tracker-blocker with a friendly web UI, an alternative to Pi-hole) on the official image; its configuration and runtime data live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. The config and work directory both live under /opt/adguardhome, so a single volume persists everything; it binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI (setup wizard) serves on :3000."
       },
       {
+         "category": "admin",
          "id": "adminer",
          "maturity": {
             "tier": "e2e"
@@ -3104,6 +3109,7 @@
          "summary": "An Adminer server (a full-featured database management tool in a single PHP file: MySQL, PostgreSQL, SQLite and more) on the official image. Stateless: a plain rolling Deployment. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "airsonic-advanced",
          "maturity": {
             "tier": "e2e"
@@ -3204,6 +3210,7 @@
          "summary": "An Airsonic-Advanced server — a free, self-hosted music streaming server, an actively-maintained fork of Airsonic. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4040."
       },
       {
+         "category": "observability",
          "id": "alertmanager",
          "maturity": {
             "tier": "e2e"
@@ -3309,6 +3316,7 @@
          "summary": "An Alertmanager as a prometheus-operator `Alertmanager` custom resource: it receives alerts from a Prometheus, groups and deduplicates them, and routes them to receivers. Authors the CR (like prometheus) for the operator to reconcile into a StatefulSet and the `alertmanager-operated` Service. Requires the prometheus-operator installed. Routing comes from the AlertmanagerConfig objects it selects."
       },
       {
+         "category": "application",
          "id": "alist",
          "maturity": {
             "tier": "e2e"
@@ -3392,6 +3400,7 @@
          "summary": "An AList server (a self-hosted file list / WebDAV program fronting many storage backends — local disk, S3, WebDAV, cloud drives — behind one web UI) on the official image. A plain composable http workload that keeps its SQLite database and configuration on a PersistentVolume under /opt/alist/data. Single writer over a ReadWriteOnce volume: one replica, recreated. On first start it logs a randomly generated admin password. Serves the UI and WebDAV on :5244."
       },
       {
+         "category": "application",
          "id": "answer",
          "maturity": {
             "tier": "e2e"
@@ -3476,6 +3485,7 @@
          "summary": "An Apache Answer server (a self-hosted Q&A platform for a community knowledge base, à la Stack Overflow) on the official image. A plain composable http workload — with the SQLite backend its data and uploads live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80. Configure external PostgreSQL/MySQL via the installer to scale out."
       },
       {
+         "category": "application",
          "id": "anythingllm",
          "maturity": {
             "tier": "e2e"
@@ -3560,6 +3570,7 @@
          "summary": "An AnythingLLM server (a self-hosted, all-in-one AI application: chat with your documents through RAG, agents and many LLM/embedding providers) on the official image. A plain composable http workload that keeps its storage (embedded vector database, uploaded documents, settings) on a PersistentVolume under /app/server/storage. Point it at your LLM and embedding providers with the documented environment variables; kurly authors no Secret. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3001."
       },
       {
+         "category": "tool",
          "id": "apprise",
          "maturity": {
             "tier": "e2e"
@@ -3644,6 +3655,7 @@
          "summary": "An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "audiobookshelf",
          "maturity": {
             "tier": "e2e"
@@ -3726,6 +3738,7 @@
          "summary": "An Audiobookshelf server (a self-hosted audiobook and podcast server) on the official image. A plain composable http workload that keeps its config, metadata, and library on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "authelia",
          "maturity": {
             "tier": "e2e"
@@ -3842,6 +3855,7 @@
          "summary": "An Authelia server (a self-hosted authentication and authorization gateway adding SSO and 2FA in front of your apps via a reverse proxy forward-auth) on the official image. Its behaviour is its configuration.yml, mounted as a ConfigMap and passed verbatim; with the default SQLite storage its database lives on a PersistentVolume. The default config is a minimal skeleton that MUST be completed. kurly authors no Secret; the session/storage/JWT secrets come from a provided Secret via envFrom (as AUTHELIA_* env). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091."
       },
       {
+         "category": "infrastructure",
          "id": "authentik",
          "maturity": {
             "tier": "e2e"
@@ -4066,6 +4080,7 @@
          "summary": "An authentik server (a self-hosted identity provider and SSO: OAuth2, SAML, LDAP, forward-auth) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web/API server (HTTP :9000) and a background worker (migrations, scheduled tasks, outposts). kurly authors no Secret; the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Pairs with a cnpg-cluster named authentik-db and a Redis. Stateless."
       },
       {
+         "category": "application",
          "id": "automatisch",
          "maturity": {
             "tier": "e2e"
@@ -4297,6 +4312,7 @@
          "summary": "An Automatisch server (a self-hosted, open-source business-automation / workflow tool, an open alternative to Zapier) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web server (HTTP :3000) and a background worker that runs the flow executions the server enqueues onto Redis. Pairs with a cnpg-cluster named automatisch-db and a Redis. kurly authors no Secret; the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Stateless."
       },
       {
+         "category": "application",
          "id": "baikal",
          "maturity": {
             "tier": "e2e"
@@ -4383,6 +4399,7 @@
          "summary": "A Baikal server (a lightweight CalDAV + CardDAV server on sabre/dav) on the maintained ckulka image. A plain composable http workload that keeps its configuration and SQLite database on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "baserow",
          "maturity": {
             "tier": "e2e"
@@ -4500,6 +4517,7 @@
          "summary": "A Baserow server (an open-source, no-code database and Airtable alternative) on the official all-in-one image, which bundles the backend, frontend, Celery workers, and (by default) an embedded PostgreSQL and Redis — everything in /baserow/data, so a single instance needs nothing external. The image supervises multiple processes and writes the rootfs, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the signing keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "bazarr",
          "maturity": {
             "tier": "e2e"
@@ -4600,6 +4618,7 @@
          "summary": "A Bazarr server — a companion to Sonarr and Radarr that manages and downloads subtitles. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6767."
       },
       {
+         "category": "observability",
          "id": "beszel",
          "maturity": {
             "tier": "e2e"
@@ -4683,6 +4702,7 @@
          "summary": "A Beszel hub (a lightweight server-monitoring dashboard) on the official image. A plain composable http workload that keeps its data in SQLite on a PersistentVolume — no external database. Beszel agents run on the monitored machines and report to this hub. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090."
       },
       {
+         "category": "application",
          "id": "bigcapital",
          "maturity": {
             "tier": "rendered"
@@ -4980,6 +5000,7 @@
          "summary": "A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom."
       },
       {
+         "category": "observability",
          "id": "blackbox-exporter",
          "maturity": {
             "tier": "e2e"
@@ -5059,6 +5080,7 @@
          "summary": "The Prometheus blackbox_exporter: it probes endpoints from the outside (HTTP, TCP, DNS, ICMP) and turns each probe into metrics. A plain composable http workload, deployed once as the prober kurly.expose.probe points a workload Probe at. Serves /probe on :9115."
       },
       {
+         "category": "application",
          "id": "blinko",
          "maturity": {
             "tier": "e2e"
@@ -5166,6 +5188,7 @@
          "summary": "A Blinko server (a self-hosted, AI-powered note-taking app for quickly capturing ideas) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named blinko-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1111."
       },
       {
+         "category": "application",
          "id": "bookstack",
          "maturity": {
             "tier": "e2e"
@@ -5292,6 +5315,7 @@
          "summary": "A BookStack server (a simple, self-hosted platform for organising and storing documentation) on the maintained LinuxServer image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and uploads on a PersistentVolume. The LinuxServer s6 image runs as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASS and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "tool",
          "id": "browserless",
          "maturity": {
             "tier": "e2e"
@@ -5382,6 +5406,7 @@
          "summary": "A Browserless server (a headless-Chromium service exposing a REST/WebSocket API for rendering, screenshots, PDF generation and scraping) on the official image. Stateless: a plain rolling Deployment. The browser companion apps like changedetection and karakeep expect. kurly authors no Secret; TOKEN comes from a provided Secret via envFrom. Serves on :3000."
       },
       {
+         "category": "observability",
          "id": "bugsink",
          "maturity": {
             "tier": "e2e"
@@ -5490,6 +5515,7 @@
          "summary": "A Bugsink server (a self-hosted, Sentry-compatible error tracker: it ingests the same events your existing Sentry SDKs emit) on the official image, backed by an external PostgreSQL or MySQL. Pairs with a cnpg-cluster named bugsink-db. kurly authors no Secret; DATABASE_URL and SECRET_KEY come from a provided Secret via envFrom. Stateless (events live in the DB): a plain rolling Deployment. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "cal-com",
          "maturity": {
             "tier": "e2e"
@@ -5591,6 +5617,7 @@
          "summary": "A Cal.com server (a self-hosted, open-source scheduling platform, an alternative to Calendly) on the official image, backed by an external PostgreSQL. A plain composable http workload. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET, CALENDSO_ENCRYPTION_KEY and the integration credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named cal-com-db. Stateless: a plain rolling Deployment. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "calibre",
          "maturity": {
             "tier": "e2e"
@@ -5691,6 +5718,7 @@
          "summary": "A Calibre server (the full Calibre e-book management desktop app, served in the browser over a remote-desktop session) on the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "calibre-web",
          "maturity": {
             "tier": "e2e"
@@ -5791,6 +5819,7 @@
          "summary": "A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083."
       },
       {
+         "category": "application",
          "id": "calibre-web-automated",
          "maturity": {
             "tier": "e2e"
@@ -5896,6 +5925,7 @@
          "summary": "A Calibre-Web Automated server (a self-hosted web reader and library manager for a Calibre ebook library, adding automatic ingest and format conversion on top of Calibre-Web) on the LinuxServer.io-based image. A plain composable http workload that keeps its application config on one PersistentVolume under /config and the Calibre library on another under /calibre-library. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8083."
       },
       {
+         "category": "infrastructure",
          "id": "cassandra-cluster",
          "maturity": {
             "tier": "e2e"
@@ -5982,6 +6012,7 @@
          "summary": "A highly-available Apache Cassandra cluster as a cass-operator CassandraDatacenter custom resource. Cassandra is Apache-2.0 — a clean default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires cass-operator; the operator mints the superuser Secret."
       },
       {
+         "category": "application",
          "id": "changedetection",
          "maturity": {
             "tier": "e2e"
@@ -6071,6 +6102,7 @@
          "summary": "A changedetection.io server (self-hosted website change detection: watch pages and get notified when they change) on the official image; its datastore (SQLite plus page snapshots) lives on a PersistentVolume. Fetching JavaScript pages needs a companion Playwright/Chrome service (PLAYWRIGHT_DRIVER_URL); the plain HTTP fetcher works without it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000."
       },
       {
+         "category": "application",
          "id": "chatpad",
          "maturity": {
             "tier": "e2e"
@@ -6147,6 +6179,7 @@
          "summary": "A Chatpad AI server (a self-hosted, clean web UI for OpenAI chat models) on the official image. A plain composable http workload. Conversations and the API key are stored client-side, so the server only serves static assets and holds no data — a plain, horizontally scalable Deployment. The browser talks to OpenAI directly with the user own key. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "clickhouse",
          "maturity": {
             "tier": "e2e"
@@ -6242,6 +6275,7 @@
          "summary": "A ClickHouse server (a fast, self-hosted column-oriented SQL database for real-time analytics) on the official single-node image; its data lives on a PersistentVolume. The native protocol (:9000) needs a separate Service. kurly authors no Secret; CLICKHOUSE_USER/PASSWORD/DB come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves HTTP on :8123."
       },
       {
+         "category": "infrastructure",
          "id": "cnpg-cluster",
          "maturity": {
             "tier": "tested"
@@ -6418,6 +6452,7 @@
          "summary": "A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator."
       },
       {
+         "category": "infrastructure",
          "id": "cnpg-image-catalog",
          "maturity": {
             "tier": "tested"
@@ -6512,6 +6547,7 @@
          "summary": "The PostgreSQL images a fleet of CloudNativePG clusters may run, as an ImageCatalog or ClusterImageCatalog custom resource — one image per major, so a patch bump is one line and rolls every cluster on that major. Requires the CloudNativePG operator."
       },
       {
+         "category": "tool",
          "id": "cobalt",
          "maturity": {
             "tier": "e2e"
@@ -6593,6 +6629,7 @@
          "summary": "A cobalt API server (a self-hosted media-downloader backend: give it a link and it returns a clean download for supported sites) on the official image. A plain composable http workload. The API is stateless — it streams and re-muxes on demand and keeps nothing — so a plain, horizontally scalable Deployment. This is the API only; run a cobalt web frontend separately for the UI. Serves on :9000."
       },
       {
+         "category": "application",
          "id": "code-server",
          "maturity": {
             "tier": "e2e"
@@ -6688,6 +6725,7 @@
          "summary": "A code-server instance (VS Code running in the browser, on a remote server) on the official image. A plain composable http workload — your projects, extensions, and settings live on a PersistentVolume. kurly authors no Secret; PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "commafeed",
          "maturity": {
             "tier": "e2e"
@@ -6772,6 +6810,7 @@
          "summary": "A CommaFeed server (a self-hosted Google Reader-style RSS/Atom feed reader) on the official image. A plain composable http workload — the H2 variant keeps its feeds in an embedded database on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8082. Use the PostgreSQL image variant to scale past the embedded DB."
       },
       {
+         "category": "tool",
          "id": "convertx",
          "maturity": {
             "tier": "e2e"
@@ -6854,6 +6893,7 @@
          "summary": "A ConvertX server (a self-hosted online file converter supporting 1000+ formats) on the official image; its SQLite database and in-flight files live on a PersistentVolume. kurly authors no Secret; JWT_SECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "infrastructure",
          "id": "couchdb",
          "maturity": {
             "tier": "e2e"
@@ -6954,6 +6994,7 @@
          "summary": "An Apache CouchDB server (a self-hosted, document-oriented NoSQL database that speaks HTTP/JSON and syncs with offline-first apps) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; COUCHDB_USER and COUCHDB_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5984."
       },
       {
+         "category": "application",
          "id": "cryptpad",
          "maturity": {
             "tier": "e2e"
@@ -7047,6 +7088,7 @@
          "summary": "A CryptPad server (end-to-end encrypted, collaborative documents and spreadsheets) on the official image. A plain composable http workload that keeps its encrypted blocks, blobs, and datastore on a PersistentVolume — no external database. The Node app writes under /cryptpad, so it relaxes read-only-rootfs while keeping non-root and dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000; needs a config.js with a main and a separate sandbox origin."
       },
       {
+         "category": "tool",
          "id": "cyberchef",
          "maturity": {
             "tier": "e2e"
@@ -7123,6 +7165,7 @@
          "summary": "A CyberChef server (GCHQ's \"cyber Swiss-army knife\" for encoding, encryption, compression and data analysis, all in the browser) on the official image. Stateless: a plain rolling Deployment. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "dashy",
          "maturity": {
             "tier": "e2e"
@@ -7206,6 +7249,7 @@
          "summary": "A Dashy server (a highly customizable, self-hosted dashboard for your services) on the official image. A plain composable http workload — its configuration lives on a PersistentVolume, no external database. The image rebuilds assets on a config change and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "davis",
          "maturity": {
             "tier": "e2e"
@@ -7301,6 +7345,7 @@
          "summary": "A Davis server (a self-hosted CalDAV and CardDAV server with a simple admin UI, built on sabre/dav) on the official image, backed by an external database (MySQL/MariaDB, PostgreSQL, or SQLite). A plain composable http workload. kurly authors no Secret; DATABASE_URL, APP_SECRET and the admin login come from a provided Secret via envFrom. Pair it with a database you run separately. Stateless: calendars and contacts live in the database, so a plain rolling Deployment. Serves on :80."
       },
       {
+         "category": "application",
          "id": "davos",
          "maturity": {
             "tier": "e2e"
@@ -7401,6 +7446,7 @@
          "summary": "A davos server — a self-hosted FTP automation tool that watches remote directories and downloads on a schedule. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "deluge",
          "maturity": {
             "tier": "e2e"
@@ -7501,6 +7547,7 @@
          "summary": "A Deluge server — a lightweight, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8112."
       },
       {
+         "category": "infrastructure",
          "id": "dex",
          "maturity": {
             "tier": "e2e"
@@ -7594,6 +7641,7 @@
          "summary": "A Dex server (an OpenID Connect / OAuth 2.0 identity provider that federates to upstream connectors — LDAP, SAML, GitHub, Google, …) on the official image. A plain composable http workload; with the SQLite storage backend its state lives on a PersistentVolume, no external database. Driven entirely by a config.yaml (issuer, storage, connectors, staticClients) mounted from a Secret — kurly authors none. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves OIDC on :5556."
       },
       {
+         "category": "application",
          "id": "directus",
          "maturity": {
             "tier": "e2e"
@@ -7726,6 +7774,7 @@
          "summary": "A Directus server (an open-source headless CMS and data platform over your SQL database) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named directus-db. kurly authors no Secret; DB_PASSWORD, KEY, SECRET, and the admin password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8055."
       },
       {
+         "category": "admin",
          "id": "docker-registry-ui",
          "maturity": {
             "tier": "e2e"
@@ -7819,6 +7868,7 @@
          "summary": "A Docker Registry UI server (a clean, self-hosted web interface for browsing a Docker/OCI registry: repositories, tags, inspect and delete images) on the official image. Stateless: a plain rolling Deployment that talks to the registry you point it at. Serves on :80."
       },
       {
+         "category": "application",
          "id": "docmost",
          "maturity": {
             "tier": "e2e"
@@ -7932,6 +7982,7 @@
          "summary": "A Docmost server (a self-hosted, open-source collaborative wiki and documentation platform) on the official image, backed by an external PostgreSQL and Redis, with attachments on a PersistentVolume. Pairs with a cnpg-cluster named docmost-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL and APP_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "documenso",
          "maturity": {
             "tier": "e2e"
@@ -8047,6 +8098,7 @@
          "summary": "A Documenso server (a self-hosted, open-source alternative to DocuSign for signing documents) on the official image, backed by an external PostgreSQL. A plain composable http workload. kurly authors no Secret; NEXTAUTH_SECRET, NEXT_PRIVATE_ENCRYPTION_KEY, NEXT_PRIVATE_DATABASE_URL and the SMTP settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named documenso-db. Stateless: a plain rolling Deployment. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "docuseal",
          "maturity": {
             "tier": "e2e"
@@ -8131,6 +8183,7 @@
          "summary": "A DocuSeal server (a self-hosted document-signing platform: build fillable PDF forms and collect legally-binding e-signatures, an open alternative to DocuSign) on the official image; with the default SQLite backend its database and uploaded documents live on a PersistentVolume. Point it at an external PostgreSQL (DATABASE_URL) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "dokuwiki",
          "maturity": {
             "tier": "e2e"
@@ -8213,6 +8266,7 @@
          "summary": "A DokuWiki server (a simple, database-less wiki that stores its pages as flat files) on the official image. A plain composable http workload — all content lives on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "dragonfly",
          "maturity": {
             "tier": "e2e"
@@ -8284,6 +8338,7 @@
          "summary": "A RESP-speaking in-memory store with a per-pod PVC and a headless Service. Answers the same protocol as Valkey, but is not a fork of it: it rejects Redis flags, persists through snapshots, and runs one io thread per core it can see — which in a container is the node's, so the thread count is pinned and the memory floor it demands (256MiB per thread) is asserted at render."
       },
       {
+         "category": "tool",
          "id": "draw-io",
          "maturity": {
             "tier": "e2e"
@@ -8360,6 +8415,7 @@
          "summary": "A draw.io / diagrams.net server (a self-hosted, client-side diagram editor) on the official image. A plain composable http workload. The editor runs entirely in the browser; the server only serves static assets and a stateless export/proxy endpoint, so it holds no data — a plain, horizontally scalable Deployment. Serves on :8080."
       },
       {
+         "category": "tool",
          "id": "drawio",
          "maturity": {
             "tier": "e2e"
@@ -8437,6 +8493,7 @@
          "summary": "A draw.io server — the self-hosted diagrams.net web editor for flowcharts, UML and network diagrams. On the official image; stateless (a plain rolling Deployment). Serves on :8080."
       },
       {
+         "category": "application",
          "id": "drupal",
          "maturity": {
             "tier": "e2e"
@@ -8559,6 +8616,7 @@
          "summary": "A Drupal server — a powerful, self-hosted open-source CMS and content framework (backed by MySQL/PostgreSQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "duplicati",
          "maturity": {
             "tier": "e2e"
@@ -8679,6 +8737,7 @@
          "summary": "A Duplicati server — a self-hosted, encrypted backup client for cloud and remote storage, managed from the browser. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8200."
       },
       {
+         "category": "infrastructure",
          "id": "ejabberd",
          "maturity": {
             "tier": "e2e"
@@ -8760,6 +8819,7 @@
          "summary": "An ejabberd server (a robust, scalable XMPP/messaging server) on the official community image. A plain composable http workload that keeps its Mnesia database and uploads on a PersistentVolume — no external database by default. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves XMPP client :5222, s2s :5269, and admin/HTTP :5280; mount ejabberd.yml at /home/ejabberd/conf."
       },
       {
+         "category": "application",
          "id": "element-web",
          "maturity": {
             "tier": "e2e"
@@ -8860,6 +8920,7 @@
          "summary": "An Element Web server (the popular self-hosted web client for the Matrix network) on the official image. It serves a static app configured by a single config.json, mounted into the web root via a subPath ConfigMap mount beside the app assets, so it is stateless. Element is a client only; point it at a Matrix homeserver (e.g. matrix-conduit). Serves on :80."
       },
       {
+         "category": "application",
          "id": "emby",
          "maturity": {
             "tier": "e2e"
@@ -8960,6 +9021,7 @@
          "summary": "An Emby server (a self-hosted media server for streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Mount your media libraries and add them in the UI. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096."
       },
       {
+         "category": "infrastructure",
          "id": "emqx",
          "maturity": {
             "tier": "e2e"
@@ -9042,6 +9104,7 @@
          "summary": "An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883."
       },
       {
+         "category": "application",
          "id": "endurain",
          "maturity": {
             "tier": "e2e"
@@ -9179,6 +9242,7 @@
          "summary": "An Endurain server (a self-hosted fitness and training-activity tracker) backed by an external PostgreSQL and Redis, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named endurain-db and a valkey named endurain-cache. kurly authors no Secret; DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "ente",
          "maturity": {
             "tier": "e2e"
@@ -9336,6 +9400,7 @@
          "summary": "Ente — a self-hosted, end-to-end-encrypted photo and video backup (the Google Photos alternative). The museum server is a stateless API keeping metadata in PostgreSQL and encrypted blobs in S3-compatible object storage; the Ente clients (mobile, desktop, web) point at it. Compose it with a cnpg-cluster and an S3 store such as seaweedfs."
       },
       {
+         "category": "application",
          "id": "esphome",
          "maturity": {
             "tier": "e2e"
@@ -9418,6 +9483,7 @@
          "summary": "An ESPHome dashboard server — the web dashboard and compiler for ESP8266/ESP32 smart-home firmware; runs as root, configs on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6052."
       },
       {
+         "category": "application",
          "id": "etherpad",
          "maturity": {
             "tier": "e2e"
@@ -9533,6 +9599,7 @@
          "summary": "An Etherpad server (a real-time collaborative document editor) on the official image, backed by an external PostgreSQL. Its documents live in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named etherpad-db. kurly authors no Secret; DB_PASS, ADMIN_PASSWORD, and APIKEY come from a provided Secret via envFrom. Serves on :9001."
       },
       {
+         "category": "tool",
          "id": "excalidraw",
          "maturity": {
             "tier": "e2e"
@@ -9609,6 +9676,7 @@
          "summary": "An Excalidraw server (a virtual hand-drawn-style whiteboard) on the official image. Excalidraw is a client-side app — the container serves static assets and drawings live in the browser — so this workload is stateless and scales via replicas. The nginx image binds :80 as root, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Serves on :80."
       },
       {
+         "category": "application",
          "id": "expenseowl",
          "maturity": {
             "tier": "e2e"
@@ -9690,6 +9758,7 @@
          "summary": "An ExpenseOwl server (a simple, self-hosted expense tracker). A plain composable http workload that keeps its expenses in a file-backed store on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080."
       },
       {
+         "category": "infrastructure",
          "id": "ferretdb",
          "maturity": {
             "tier": "e2e"
@@ -9781,6 +9850,7 @@
          "summary": "A FerretDB server (an open-source, MongoDB-compatible database) — the Apache-2.0 alternative to MongoDB Community (SSPL) for a platform that monetizes hosting. A stateless proxy that speaks the MongoDB wire protocol and stores everything in a PostgreSQL backend (with the DocumentDB extension), so it needs no volume and can run several replicas. kurly authors no Secret; FERRETDB_POSTGRESQL_URL comes from a provided Secret via envFrom. Serves MongoDB wire on :27017."
       },
       {
+         "category": "application",
          "id": "fider",
          "maturity": {
             "tier": "e2e"
@@ -9908,6 +9978,7 @@
          "summary": "A Fider server (an open-source platform to collect and prioritize customer feedback) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named fider-db. kurly authors no Secret; DATABASE_URL, JWT_SECRET, and SMTP creds come from a provided Secret via envFrom. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "filebrowser",
          "maturity": {
             "tier": "e2e"
@@ -9991,6 +10062,7 @@
          "summary": "A File Browser server (a self-hosted web file manager: browse, upload, edit and share files through a clean UI) on the official image; its SQLite database lives on a PersistentVolume. It manages the directory mounted at /srv — compose the volume to serve onto that path. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "filestash",
          "maturity": {
             "tier": "e2e"
@@ -10074,6 +10146,7 @@
          "summary": "A Filestash server (a self-hosted web file manager with a modern UI in front of many storage backends: SFTP, FTP, S3, WebDAV, Git) on the official image (pinned by digest; Renovate maintains it); config on a PersistentVolume. Files live on the configured backends, not here. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8334."
       },
       {
+         "category": "application",
          "id": "firefly-iii",
          "maturity": {
             "tier": "e2e"
@@ -10200,6 +10273,7 @@
          "summary": "A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "flame",
          "maturity": {
             "tier": "e2e"
@@ -10281,6 +10355,7 @@
          "summary": "A Flame server (a self-hosted, minimalist start page and application/bookmark dashboard for your homelab, with a built-in editor) on the official image; its SQLite database lives on a PersistentVolume. Set the admin PASSWORD via a Secret (kurly authors none). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5005."
       },
       {
+         "category": "tool",
          "id": "flaresolverr",
          "maturity": {
             "tier": "e2e"
@@ -10366,6 +10441,7 @@
          "summary": "A FlareSolverr server (a proxy that solves Cloudflare and DDoS-GUARD browser challenges by driving a headless browser, so scrapers and the *arr indexers can reach protected sites) on the official image. Stateless: a plain rolling Deployment. An internal helper — other workloads point their FlareSolverr URL at http://flaresolverr:8191, so it usually needs no exposure. Serves on :8191."
       },
       {
+         "category": "application",
          "id": "flatnotes",
          "maturity": {
             "tier": "e2e"
@@ -10471,6 +10547,7 @@
          "summary": "A flatnotes server (a self-hosted, database-less note-taking app that stores everything as flat markdown files) on the official image. A plain composable http workload — your notes live on a PersistentVolume, no external database. kurly authors no Secret; the username, password, and secret key come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "focalboard",
          "maturity": {
             "tier": "e2e"
@@ -10552,6 +10629,7 @@
          "summary": "A Focalboard server — a self-hosted project-management and kanban tool, an open alternative to Trello/Notion/Asana. On the official image; with the default SQLite backend its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "foldingathome",
          "maturity": {
             "tier": "e2e"
@@ -10652,6 +10730,7 @@
          "summary": "A Folding@home client — the distributed-computing client for disease research, with its web control panel. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7396."
       },
       {
+         "category": "application",
          "id": "forgejo",
          "maturity": {
             "tier": "e2e"
@@ -10768,6 +10847,7 @@
          "summary": "A Forgejo Git forge (a maintained Gitea fork): repository hosting, issues, pull requests, and a package registry. A plain composable http workload on the rootless image, with its data on a PersistentVolume and its database external — pairs with the cnpg-cluster workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI/git-over-HTTP on :3000 and git-over-SSH on :2222."
       },
       {
+         "category": "application",
          "id": "formbricks",
          "maturity": {
             "tier": "e2e"
@@ -10875,6 +10955,7 @@
          "summary": "A Formbricks server (a self-hosted, open-source experience-management and survey platform) on the official image, backed by an external PostgreSQL. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named formbricks-db. Stateless: a plain rolling Deployment. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "freshrss",
          "maturity": {
             "tier": "e2e"
@@ -10966,6 +11047,7 @@
          "summary": "A FreshRSS server (a free, self-hosted RSS and Atom feed aggregator) on the official image. A plain composable http workload that keeps its feeds and articles in SQLite on a PersistentVolume by default — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "frigate",
          "maturity": {
             "tier": "e2e"
@@ -11084,6 +11166,7 @@
          "summary": "Frigate — a self-hosted NVR with real-time object detection. Keeps its config and SQLite database on one volume and recordings on another, decodes frames through a shared-memory scratch, and exposes an authenticated UI on :8971. Ships a minimal starter config (CPU detector, no cameras); replace it with your own. Hardware detectors (Coral, GPU) need device access added with the raw + escape hatch."
       },
       {
+         "category": "observability",
          "id": "gatus",
          "maturity": {
             "tier": "e2e"
@@ -11172,6 +11255,7 @@
          "summary": "A Gatus server (a self-hosted, developer-oriented health dashboard and status page: it probes endpoints on a schedule, evaluates conditions and alerts) on the official image. Its whole behaviour is its config (endpoints, conditions, alerting, storage), mounted as a ConfigMap and passed verbatim; its history database lives on a PersistentVolume. The default watches one sample endpoint and persists history to SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "ghost",
          "maturity": {
             "tier": "e2e"
@@ -11293,6 +11377,7 @@
          "summary": "A Ghost server (a modern publishing and newsletter platform) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with content on a PersistentVolume. kurly authors no Secret; the database password comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :2368."
       },
       {
+         "category": "application",
          "id": "ghostfolio",
          "maturity": {
             "tier": "e2e"
@@ -11411,6 +11496,7 @@
          "summary": "A Ghostfolio server (a self-hosted, open-source wealth-management and portfolio tracker for stocks, ETFs, crypto and more) on the official image, backed by an external PostgreSQL and Redis. A plain composable http workload. kurly authors no Secret; DATABASE_URL, the Redis settings, ACCESS_TOKEN_SALT and JWT_SECRET_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named ghostfolio-db and a Redis. Stateless: a plain rolling Deployment. Serves on :3333."
       },
       {
+         "category": "application",
          "id": "gitea",
          "maturity": {
             "tier": "e2e"
@@ -11514,6 +11600,7 @@
          "summary": "A Gitea server (a lightweight, self-hosted Git service with issues, pull requests, a package registry and CI via Actions) on the official image; with the default SQLite backend its repositories and data live on a PersistentVolume. Git-over-SSH uses :22, a separate port to add a Service for. Point it at an external PostgreSQL/MySQL (GITEA__database__*) to scale past the single SQLite writer. The official image uses s6-overlay, so it runs as root and drops to uid/gid. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "glance",
          "maturity": {
             "tier": "e2e"
@@ -11591,6 +11678,7 @@
          "summary": "A Glance server (a self-hosted dashboard that puts feeds, RSS, weather, markets, monitoring and homelab widgets on one fast page) on the official image. Its layout is its glance.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state. Stateless: the default shows a minimal page. Serves on :8080."
       },
       {
+         "category": "observability",
          "id": "glitchtip",
          "maturity": {
             "tier": "e2e"
@@ -11773,6 +11861,7 @@
          "summary": "A GlitchTip deployment (an open-source, Sentry-compatible error-tracking and performance-monitoring platform) as two stages — server (the web/ingest API) and worker (the Celery worker with beat) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named glitchtip-db and a valkey named glitchtip-cache. kurly authors no Secret; DATABASE_URL and SECRET_KEY come from a provided Secret via envFrom. The server is stateless and scales via replicas."
       },
       {
+         "category": "application",
          "id": "gogs",
          "maturity": {
             "tier": "e2e"
@@ -11856,6 +11945,7 @@
          "summary": "A Gogs server (a painless, self-hosted Git service: a lightweight, fast Git server with a clean web UI) on the official image; with the default SQLite backend its repositories and data live on a PersistentVolume. Git-over-SSH uses :22, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "tool",
          "id": "gokapi",
          "maturity": {
             "tier": "e2e"
@@ -11939,6 +12029,7 @@
          "summary": "A Gokapi server (a self-hosted, lightweight file-sharing server with expiring links and a download limit, similar to the discontinued Firefox Send) on the official image; its database, configuration and (by default) stored files on a PersistentVolume under /app/data. A plain composable http workload. Uploaded files can instead go to S3 when the AWS_* settings are provided. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :53842."
       },
       {
+         "category": "tool",
          "id": "gotenberg",
          "maturity": {
             "tier": "e2e"
@@ -12019,6 +12110,7 @@
          "summary": "A Gotenberg server (a stateless API for converting HTML, Markdown and Office documents to PDF, powered by Chromium and LibreOffice) on the official image. Stateless: a plain rolling Deployment. The PDF-conversion companion apps like paperless-ngx and DocuSeal expect. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "gotify",
          "maturity": {
             "tier": "e2e"
@@ -12104,6 +12196,7 @@
          "summary": "A Gotify server (a simple server for sending and receiving push notifications). A plain composable http workload that keeps its messages, apps, and clients in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and API on :80."
       },
       {
+         "category": "application",
          "id": "gotosocial",
          "maturity": {
             "tier": "e2e"
@@ -12194,6 +12287,7 @@
          "summary": "A GoToSocial server (a lightweight, self-hosted ActivityPub/Fediverse social server, an alternative to Mastodon that federates with it) on the official image; with the default SQLite backend its database and stored media live on a PersistentVolume. The host (part of every @handle) is fixed at first run and cannot be changed later. Point it at an external PostgreSQL (GTS_DB_TYPE=postgres + GTS_DB_*) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "observability",
          "id": "grafana",
          "maturity": {
             "tier": "e2e"
@@ -12289,6 +12383,7 @@
          "summary": "A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed."
       },
       {
+         "category": "application",
          "id": "grav",
          "maturity": {
             "tier": "e2e"
@@ -12389,6 +12484,7 @@
          "summary": "A Grav server (a modern, flat-file CMS: fast, database-free content management with a Markdown-driven admin) on the LinuxServer.io image; because Grav is flat-file, its whole site (content, config, plugins, cache) lives on a PersistentVolume — no external database. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "greenlight",
          "maturity": {
             "tier": "e2e"
@@ -12494,6 +12590,7 @@
          "summary": "A Greenlight 3 server (the official BigBlueButton front-end: a Rails app for scheduling and joining BBB rooms and meetings) on the official image, backed by an external PostgreSQL and Redis. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named greenlight-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_* endpoint/secret come from a provided Secret via envFrom. Stateless (recordings live on the BBB server): a plain rolling Deployment. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "grist",
          "maturity": {
             "tier": "e2e"
@@ -12576,6 +12673,7 @@
          "summary": "A Grist server (a self-hosted, open-source relational spreadsheet: the flexibility of a spreadsheet with the structure of a database, plus Python formulas and access rules) on the official image. A plain composable http workload that keeps its documents (SQLite) on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8484."
       },
       {
+         "category": "application",
          "id": "grocy",
          "maturity": {
             "tier": "e2e"
@@ -12676,6 +12774,7 @@
          "summary": "A Grocy server — a self-hosted groceries and household management tool: stock, shopping lists, chores and recipes. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "guacamole",
          "maturity": {
             "tier": "e2e"
@@ -12788,6 +12887,7 @@
          "summary": "An Apache Guacamole server (a clientless remote-desktop gateway for RDP/VNC/SSH from a browser) on the official image, backed by an external PostgreSQL or MySQL. Guacamole is two processes — the web app and the guacd proxy daemon — so this runs guacd as a SIDECAR in the same pod (reached on localhost:4822). kurly authors no Secret; the database connection (POSTGRESQL_*/MYSQL_*) comes from a provided Secret via envFrom, and the schema must be initialised. Pairs with a cnpg-cluster named guacamole-db. Stateless: a plain rolling Deployment. Serves on :8080."
       },
       {
+         "category": "observability",
          "id": "healthchecks",
          "maturity": {
             "tier": "e2e"
@@ -12898,6 +12998,7 @@
          "summary": "A Healthchecks server (a self-hosted cron-job and background-task monitoring service: jobs ping a URL when they finish, and it alerts when a ping is late or missing) on the official image; with the default SQLite backend its database lives on a PersistentVolume. kurly authors no Secret; SECRET_KEY comes from a provided Secret via envFrom. Point it at an external PostgreSQL (DB=postgres + DB_*) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "hedgedoc",
          "maturity": {
             "tier": "e2e"
@@ -13005,6 +13106,7 @@
          "summary": "A HedgeDoc server (real-time, collaborative markdown notes) on the official image, backed by an external PostgreSQL, with uploaded files on a PersistentVolume. Pairs with a cnpg-cluster named hedgedoc-db. kurly authors no Secret; CMD_DB_URL and CMD_SESSION_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "heimdall",
          "maturity": {
             "tier": "e2e"
@@ -13105,6 +13207,7 @@
          "summary": "A Heimdall server — an elegant dashboard and application launcher for your self-hosted services. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "hollama",
          "maturity": {
             "tier": "e2e"
@@ -13181,6 +13284,7 @@
          "summary": "A Hollama server (a minimal, self-hosted web UI for Ollama and OpenAI-compatible LLMs) on the official image. A plain composable http workload. Sessions and settings are stored client-side, so the server holds no data — a plain, horizontally scalable Deployment. The browser talks to your Ollama / OpenAI endpoint directly. Serves on :4173."
       },
       {
+         "category": "application",
          "id": "homarr",
          "maturity": {
             "tier": "e2e"
@@ -13276,6 +13380,7 @@
          "summary": "A Homarr server (a sleek, self-hosted dashboard for your homelab) on the official image; its SQLite database and config live on a PersistentVolume, so it needs no external database. kurly authors no Secret; SECRET_ENCRYPTION_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7575."
       },
       {
+         "category": "application",
          "id": "home-assistant",
          "maturity": {
             "tier": "e2e"
@@ -13360,6 +13465,7 @@
          "summary": "A Home Assistant server (Home Assistant Core: the leading self-hosted home-automation platform) on the official image; its configuration and state database live on a PersistentVolume. It runs as root with a writable root filesystem. Local-network discovery (mDNS/SSDP) does not work through a ClusterIP; devices reachable by IP/MQTT/cloud work, and USB radios need a network coordinator. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8123."
       },
       {
+         "category": "application",
          "id": "homebox",
          "maturity": {
             "tier": "e2e"
@@ -13455,6 +13561,7 @@
          "summary": "A Homebox server (a simple home/household inventory and asset manager). A plain composable http workload on the rootless image that keeps its inventory in SQLite and attachments on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :7745."
       },
       {
+         "category": "application",
          "id": "homepage",
          "maturity": {
             "tier": "e2e"
@@ -13543,6 +13650,7 @@
          "summary": "A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "homer",
          "maturity": {
             "tier": "e2e"
@@ -13626,6 +13734,7 @@
          "summary": "A Homer server (a simple, static dashboard for your self-hosted services) on the official image. A plain composable http workload — its configuration and custom assets live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the dashboard on :8080."
       },
       {
+         "category": "application",
          "id": "immich",
          "maturity": {
             "tier": "e2e"
@@ -13834,6 +13943,7 @@
          "summary": "Immich — a self-hosted photo and video backup. The server keeps the media library on a PersistentVolume and reaches a PostgreSQL with the VectorChord extension plus a Redis; the machine-learning stage serves inference (smart search, faces) from a model cache. Compose both with a cnpg-cluster on a VectorChord image and a valkey."
       },
       {
+         "category": "application",
          "id": "influxdb",
          "maturity": {
             "tier": "e2e"
@@ -13951,6 +14061,7 @@
          "summary": "An InfluxDB 2 server (a self-hosted time-series database for metrics, events and IoT data with a built-in UI) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; the DOCKER_INFLUXDB_INIT_* setup values come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8086."
       },
       {
+         "category": "infrastructure",
          "id": "inspircd",
          "maturity": {
             "tier": "e2e"
@@ -14033,6 +14144,7 @@
          "summary": "An InspIRCd server (a modular IRC daemon) on the official image. A plain composable http workload that keeps its runtime data (logs, TLS material) on a PersistentVolume and reads its configuration from a mounted config. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves IRC-over-TLS on :6697; needs an inspircd.conf mounted at /inspircd/conf."
       },
       {
+         "category": "application",
          "id": "invoiceninja",
          "maturity": {
             "tier": "e2e"
@@ -14165,6 +14277,7 @@
          "summary": "An Invoice Ninja server (self-hosted invoicing, quotes, and payments) on the official image, backed by an external MySQL/MariaDB, with uploads and PDFs on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "tool",
          "id": "it-tools",
          "maturity": {
             "tier": "e2e"
@@ -14242,6 +14355,7 @@
          "summary": "An IT-Tools server — a large collection of handy client-side online tools for developers and sysadmins. On the official image; stateless (a plain rolling Deployment). Serves on :80."
       },
       {
+         "category": "application",
          "id": "jackett",
          "maturity": {
             "tier": "e2e"
@@ -14342,6 +14456,7 @@
          "summary": "A Jackett server — a proxy server that exposes many tracker indexers through one API. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9117."
       },
       {
+         "category": "application",
          "id": "jellyfin",
          "maturity": {
             "tier": "e2e"
@@ -14442,6 +14557,7 @@
          "summary": "A Jellyfin server — a free, self-hosted media server for streaming your movies, shows and music. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096."
       },
       {
+         "category": "application",
          "id": "jellyseerr",
          "maturity": {
             "tier": "e2e"
@@ -14524,6 +14640,7 @@
          "summary": "A Jellyseerr server — a request-management and media-discovery companion for Jellyfin, Emby and Plex. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055."
       },
       {
+         "category": "application",
          "id": "jenkins",
          "maturity": {
             "tier": "e2e"
@@ -14609,6 +14726,7 @@
          "summary": "A Jenkins controller (the self-hosted automation server for building, testing and deploying software) on the official LTS image. A plain composable http workload that keeps JENKINS_HOME (jobs, plugins, config, build history) on a PersistentVolume. Single controller over a ReadWriteOnce volume: one replica, recreated. Inbound agents connect over the same HTTP port (websocket). Serves on :8080."
       },
       {
+         "category": "application",
          "id": "joomla",
          "maturity": {
             "tier": "e2e"
@@ -14755,6 +14873,7 @@
          "summary": "A Joomla server — a popular self-hosted CMS for building websites and online applications (backed by MySQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "joplin",
          "maturity": {
             "tier": "e2e"
@@ -14877,6 +14996,7 @@
          "summary": "A Joplin Server (the self-hosted sync target for the Joplin note-taking apps) on the official image, backed by an external PostgreSQL. kurly authors no Secret; the POSTGRES_* connection comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named joplin-db. Stateless (notes live in PostgreSQL): a plain rolling Deployment. Serves on :22300."
       },
       {
+         "category": "application",
          "id": "kanboard",
          "maturity": {
             "tier": "e2e"
@@ -14962,6 +15082,7 @@
          "summary": "A Kanboard server (a minimalist kanban project-management board) on the official image. A plain composable http workload that keeps board data in SQLite and uploads on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, so it relaxes non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "karakeep",
          "maturity": {
             "tier": "e2e"
@@ -15083,6 +15204,7 @@
          "summary": "A Karakeep server (a self-hosted \"bookmark everything\" app, formerly Hoarder: save links, notes and images and search them with AI tagging) on the official image; its SQLite database and stored assets live on a PersistentVolume. Expects two companion side services it does not bundle: a Meilisearch instance (MEILI_ADDR + MEILI_MASTER_KEY) and a headless Chrome (BROWSER_WEB_URL). kurly authors no Secret; NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "kavita",
          "maturity": {
             "tier": "e2e"
@@ -15166,6 +15288,7 @@
          "summary": "A Kavita server (a fast, cross-platform reading server for comics, manga, and ebooks) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /library on the same volume — no external database. The .NET app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000."
       },
       {
+         "category": "infrastructure",
          "id": "keycloak",
          "maturity": {
             "tier": "e2e"
@@ -15259,6 +15382,7 @@
          "summary": "A Keycloak identity server as an official keycloak-operator `Keycloak` custom resource. Authors the CR (like loki and tempo) for the operator to reconcile into a StatefulSet, Services, and the admin credentials Secret. Requires the keycloak-operator (whose recent releases let one operator manage instances across many namespaces) and a PostgreSQL database — pairs with the cnpg-cluster workload."
       },
       {
+         "category": "application",
          "id": "kimai",
          "maturity": {
             "tier": "e2e"
@@ -15355,6 +15479,7 @@
          "summary": "A Kimai server (a self-hosted, professional time-tracking application for freelancers and teams) on the official Apache image, backed by an external MySQL/MariaDB. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a mysql-cluster named kimai-db. Stateless (timesheets live in MySQL): a plain rolling Deployment. Serves on :8001."
       },
       {
+         "category": "application",
          "id": "komga",
          "maturity": {
             "tier": "e2e"
@@ -15438,6 +15563,7 @@
          "summary": "A Komga server (a media server for comics, manga, and digital books) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /books on the same volume — no external database. The Java app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :25600."
       },
       {
+         "category": "application",
          "id": "kutt",
          "maturity": {
             "tier": "e2e"
@@ -15577,6 +15703,7 @@
          "summary": "A Kutt server (a free, self-hosted modern URL shortener with custom domains, link analytics and an API) on the official image, backed by an external PostgreSQL and Redis. kurly authors no Secret; the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN come from a provided Secret via envFrom. Pairs with a cnpg-cluster named kutt-db and a Redis. Stateless: a plain rolling Deployment. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "leantime",
          "maturity": {
             "tier": "e2e"
@@ -15678,6 +15805,7 @@
          "summary": "A Leantime server (a self-hosted, open-source project-management system for non-project-managers: goals, ideas, tasks, time tracking) on the official image, backed by an external MySQL/MariaDB; uploaded files on a PersistentVolume under /var/www/html/userfiles. A plain composable http workload. kurly authors no Secret; LEAN_DB_* and LEAN_SESSION_PASSWORD come from a provided Secret via envFrom. Pair it with a MySQL/MariaDB you run separately. Single writer over a ReadWriteOnce uploads volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "lemmy",
          "maturity": {
             "tier": "e2e"
@@ -15922,6 +16050,7 @@
          "summary": "Lemmy (a self-hosted, open-source link aggregator and forum for the Fediverse, a Reddit alternative) as three workloads backed by an external PostgreSQL: a backend (API + federation on :8536), a ui (web frontend on :1234), and pictrs (image storage on :8080). The backend reads its config (PostgreSQL connection and pict-rs API key) from /config/config.hjson, mounted from an existing Secret you provide; kurly never mints key material. pictrs stores images on a PersistentVolume. Pairs with a cnpg-cluster named lemmy-db."
       },
       {
+         "category": "application",
          "id": "librespeed",
          "maturity": {
             "tier": "e2e"
@@ -16022,6 +16151,7 @@
          "summary": "A LibreSpeed server — a lightweight, self-hosted network speed test you run in the browser. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "lidarr",
          "maturity": {
             "tier": "e2e"
@@ -16122,6 +16252,7 @@
          "summary": "A Lidarr server — a music collection manager for Usenet and BitTorrent users. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8686."
       },
       {
+         "category": "application",
          "id": "linkding",
          "maturity": {
             "tier": "e2e"
@@ -16207,6 +16338,7 @@
          "summary": "A linkding server (a minimal, self-hosted bookmark manager). A plain composable http workload that keeps its bookmarks in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :9090."
       },
       {
+         "category": "application",
          "id": "linkstack",
          "maturity": {
             "tier": "e2e"
@@ -16288,6 +16420,7 @@
          "summary": "A LinkStack server (a self-hosted, customizable \"link in bio\" page, a private alternative to Linktree) on the official image (pinned by digest; Renovate maintains it); with the default SQLite backend its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "linkwarden",
          "maturity": {
             "tier": "e2e"
@@ -16396,6 +16529,7 @@
          "summary": "A Linkwarden server (a self-hosted bookmark manager that archives a copy of every page) on the official image, backed by an external PostgreSQL, with archived pages on a PersistentVolume. Pairs with a cnpg-cluster named linkwarden-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "listmonk",
          "maturity": {
             "tier": "e2e"
@@ -16523,6 +16657,7 @@
          "summary": "A listmonk server (a self-hosted newsletter and mailing-list manager) on the official image, backed by an external PostgreSQL, with uploaded media on a PersistentVolume. Pairs with a cnpg-cluster named listmonk-db. kurly authors no Secret; the DB and admin passwords come from a provided Secret via envFrom. Run the one-time schema install before first use. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
+         "category": "infrastructure",
          "id": "lldap",
          "maturity": {
             "tier": "e2e"
@@ -16632,6 +16767,7 @@
          "summary": "An LLDAP server (a light LDAP implementation for authentication: a simple user/group directory with a friendly web UI, a lightweight stand-in for OpenLDAP) on the official image; with the default SQLite backend its directory lives on a PersistentVolume. Apps bind over LDAP on :3890, a separate port to add a Service for. kurly authors no Secret; LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL (LLDAP_DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :17170."
       },
       {
+         "category": "application",
          "id": "lobe-chat",
          "maturity": {
             "tier": "e2e"
@@ -16708,6 +16844,7 @@
          "summary": "A LobeChat server (a self-hosted, open-source AI chat UI supporting many LLM providers, plugins and multimodal input) on the official image. A plain composable http workload. In its default mode conversations are stored client-side, so the server holds no data — a plain, horizontally scalable Deployment. Point it at your LLM providers with the documented environment variables; kurly authors no Secret. Serves on :3210."
       },
       {
+         "category": "observability",
          "id": "loki",
          "maturity": {
             "tier": "e2e"
@@ -16788,6 +16925,7 @@
          "summary": "Grafana Loki in microservices mode as a loki-operator `LokiStack` custom resource: one CR reconciles the whole distributed topology (distributor, ingester, querier, query-frontend, compactor, index-gateway, gateway), with `size` scaling the replicas. Authors the CR (like cnpg-cluster) for the operator to own the components, config, and ring. Requires the loki-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3."
       },
       {
+         "category": "application",
          "id": "lychee",
          "maturity": {
             "tier": "rendered"
@@ -16891,6 +17029,7 @@
          "summary": "A Lychee server (a self-hosted photo-management and gallery system) on the official image. A plain composable http workload — with the SQLite backend its config, database, and photos live on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; APP_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "tool",
          "id": "mailhog",
          "maturity": {
             "tier": "e2e"
@@ -16967,6 +17106,7 @@
          "summary": "A MailHog server (a self-hosted email-testing tool for developers that captures the mail your apps send and shows it in a web inbox instead of delivering it) on the official image (pinned by digest; Renovate maintains it). Keeps captured mail in memory: a plain stateless Deployment. Apps send to its SMTP listener on :1025 (needs an extra Service). Serves the web inbox on :8025."
       },
       {
+         "category": "tool",
          "id": "mailpit",
          "maturity": {
             "tier": "e2e"
@@ -17051,6 +17191,7 @@
          "summary": "A Mailpit server (a self-hosted email- and SMTP-testing tool: it catches every message your apps send and shows them in a web UI, with a real SMTP sink and an API) on the official image. A plain composable http workload listening on TWO ports — the web UI/API on :8025 and the SMTP sink on :1025 (via kurly.extraPort). Its message store (SQLite) lives on a PersistentVolume under /data. Single writer over a ReadWriteOnce volume: one replica, recreated. Point your apps at the Service on port 1025 for SMTP."
       },
       {
+         "category": "infrastructure",
          "id": "mailu",
          "maturity": {
             "tier": "rendered"
@@ -17706,6 +17847,7 @@
          "summary": "A Mailu mail server (SMTP, IMAP/POP3, webmail, antispam) as six coordinated http stages — front (the edge), admin (config + API + DB + DKIM), imap (Dovecot), smtp (Postfix), antispam (Rspamd), and webmail (Roundcube). Run all six pointed at the same namePrefix, secretName, and a shared ReadWriteMany storageClaim, plus a Redis (the valkey workload). Mailu images run as root with a writable root filesystem, so these relax kurly restricted defaults while keeping dropped capabilities and no privilege escalation. Each service is one replica, recreated; expose only front."
       },
       {
+         "category": "application",
          "id": "maloja",
          "maturity": {
             "tier": "e2e"
@@ -17787,6 +17929,7 @@
          "summary": "A Maloja server (a self-hosted music scrobble database and listening-statistics server, an alternative to Last.fm) on the official image. A plain composable http workload that keeps its database (SQLite) and configuration on a PersistentVolume under /mljdata. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :42010."
       },
       {
+         "category": "infrastructure",
          "id": "mariadb",
          "maturity": {
             "tier": "e2e"
@@ -17899,6 +18042,7 @@
          "summary": "A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306."
       },
       {
+         "category": "application",
          "id": "mastodon",
          "maturity": {
             "tier": "e2e"
@@ -18357,6 +18501,7 @@
          "summary": "Mastodon (the leading self-hosted ActivityPub/Fediverse microblogging platform) as three workloads backed by an external PostgreSQL and Redis, with media in S3-compatible object storage: a web/API server (:3000), a streaming server for real-time timelines (:4000), and a sidekiq background worker. LOCAL_DOMAIN is baked into every @handle and cannot be changed. kurly authors no Secret; the PostgreSQL/Redis connection, SECRET_KEY_BASE, OTP_SECRET, the VAPID keys and the S3 settings come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named mastodon-db, a Redis and an S3 bucket (e.g. seaweedfs)."
       },
       {
+         "category": "application",
          "id": "matomo",
          "maturity": {
             "tier": "e2e"
@@ -18477,6 +18622,7 @@
          "summary": "A Matomo server (a privacy-focused, self-hosted web-analytics platform — the open-source Google Analytics alternative) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and plugins on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MATOMO_DATABASE_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "matrix-conduit",
          "maturity": {
             "tier": "e2e"
@@ -18571,6 +18717,7 @@
          "summary": "A Conduit server (a lightweight, self-hosted Matrix homeserver written in Rust that federates with the Matrix network) on the official image; its embedded database lives on a PersistentVolume. The serverName is baked into every user and room id at first start and cannot be changed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6167."
       },
       {
+         "category": "application",
          "id": "mattermost",
          "maturity": {
             "tier": "e2e"
@@ -18673,6 +18820,7 @@
          "summary": "A Mattermost server (a self-hosted, open-source team messaging platform à la Slack) on the Team Edition image, backed by an external PostgreSQL, with file uploads on a PersistentVolume. Pairs with a cnpg-cluster named mattermost-db. kurly authors no Secret; MM_SQLSETTINGS_DATASOURCE comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated (point the file store at S3 to scale out). Serves on :8065."
       },
       {
+         "category": "application",
          "id": "mautic",
          "maturity": {
             "tier": "e2e"
@@ -18800,6 +18948,7 @@
          "summary": "A Mautic server (open-source marketing automation) on the official Apache image, backed by an external MySQL/MariaDB, with configuration and media on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MAUTIC_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "maybe",
          "maturity": {
             "tier": "e2e"
@@ -18928,6 +19077,7 @@
          "summary": "A Maybe server (a self-hosted personal finance and net-worth manager) backed by an external PostgreSQL and Redis, with Active Storage uploads on a PersistentVolume. Pairs with a cnpg-cluster named maybe-db and a valkey named maybe-cache. The Rails app writes under /rails, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; POSTGRES_PASSWORD and SECRET_KEY_BASE come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "tool",
          "id": "mazanoke",
          "maturity": {
             "tier": "e2e"
@@ -19004,6 +19154,7 @@
          "summary": "A MAZANOKE server (a self-hosted, client-side image optimizer that compresses and converts images entirely in the browser) on the official image. A plain composable http workload. All processing happens client-side; the server only serves static assets and holds no data — a plain, horizontally scalable Deployment. Serves on :80."
       },
       {
+         "category": "application",
          "id": "mealie",
          "maturity": {
             "tier": "e2e"
@@ -19094,6 +19245,7 @@
          "summary": "A Mealie server (a self-hosted recipe manager and meal planner with a recipe scraper, shopping lists and a REST API) on the official image; with the default SQLite backend its database and uploaded assets live on a PersistentVolume. Point it at an external PostgreSQL (DB_ENGINE=postgres + POSTGRES_*) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
+         "category": "application",
          "id": "mediawiki",
          "maturity": {
             "tier": "e2e"
@@ -19181,6 +19333,7 @@
          "summary": "A MediaWiki server (the wiki engine behind Wikipedia) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploaded files on a PersistentVolume. Configured by a LocalSettings.php mounted from a Secret (it holds the DB password and secret key). The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "meilisearch",
          "maturity": {
             "tier": "e2e"
@@ -19276,6 +19429,7 @@
          "summary": "A Meilisearch server (a fast, typo-tolerant, self-hosted search engine with a simple REST API) on the official image; its indexes live on a PersistentVolume. The search companion several apps expect (e.g. karakeep). kurly authors no Secret; MEILI_MASTER_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7700."
       },
       {
+         "category": "infrastructure",
          "id": "memcached",
          "maturity": {
             "tier": "e2e"
@@ -19341,6 +19495,7 @@
          "summary": "An in-memory cache sharded by the client, as a StatefulSet whose storage is nothing and whose identity is everything. No replication and no persistence: an upgrade always starts cold, and stable pod names are what bound the loss to 1/N of a client's keyspace."
       },
       {
+         "category": "application",
          "id": "memos",
          "maturity": {
             "tier": "e2e"
@@ -19426,6 +19581,7 @@
          "summary": "A Memos server (a lightweight, self-hosted notes and micro-blogging service). A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :5230."
       },
       {
+         "category": "tool",
          "id": "mermaid-live-editor",
          "maturity": {
             "tier": "e2e"
@@ -19502,6 +19658,7 @@
          "summary": "A Mermaid Live Editor server (a self-hosted, in-browser editor for Mermaid diagrams: flowcharts, sequence diagrams, Gantt charts and more from text) on the official image. A plain composable http workload. Diagrams are rendered client-side and shared via URL, so the server only serves static assets and holds no data — a plain, horizontally scalable Deployment. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "metabase",
          "maturity": {
             "tier": "e2e"
@@ -19612,6 +19769,7 @@
          "summary": "A Metabase server (an open-source business-intelligence and analytics tool) on the official image, backed by an external PostgreSQL for its application database. Its state lives in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named metabase-db. kurly authors no Secret; MB_DB_PASS comes from a provided Secret via envFrom. Serves on :3000."
       },
       {
+         "category": "observability",
          "id": "metrics-server",
          "maturity": {
             "tier": "e2e"
@@ -19705,6 +19863,7 @@
          "summary": "The Kubernetes Metrics Server: it scrapes CPU/memory usage from every node's kubelet and serves it through the aggregated metrics.k8s.io API — what kubectl top and Horizontal Pod Autoscalers read. A plain composable http workload that registers an APIService and carries the aggregation RBAC (ServiceAccount, ClusterRoles/Bindings, the kube-system auth-reader RoleBinding)."
       },
       {
+         "category": "application",
          "id": "metube",
          "maturity": {
             "tier": "e2e"
@@ -19787,6 +19946,7 @@
          "summary": "A MeTube server (a web UI for yt-dlp: paste a video or playlist URL and it downloads it to a directory) on the official image; downloaded files live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8081."
       },
       {
+         "category": "application",
          "id": "microbin",
          "maturity": {
             "tier": "e2e"
@@ -19868,6 +20028,7 @@
          "summary": "A MicroBin server (a tiny, self-contained pastebin and file-sharing service). A plain composable http workload that keeps its pastes and uploaded files on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080."
       },
       {
+         "category": "application",
          "id": "miniflux",
          "maturity": {
             "tier": "e2e"
@@ -19972,6 +20133,7 @@
          "summary": "A Miniflux server (a minimalist, opinionated RSS/Atom feed reader) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and the admin password come from a provided Secret via envFrom. Pairs with a cnpg-cluster named miniflux-db. Serves on :8080."
       },
       {
+         "category": "infrastructure",
          "id": "minio",
          "maturity": {
             "tier": "e2e"
@@ -20073,6 +20235,7 @@
          "summary": "A MinIO server (a high-performance, self-hosted, S3-compatible object storage server) on the official image; its objects live on a PersistentVolume. Single-node MinIO (a real object store runs distributed across nodes/disks). The web console (:9001) needs a separate Service. kurly authors no Secret; MINIO_ROOT_USER/PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the S3 API on :9000."
       },
       {
+         "category": "application",
          "id": "misskey",
          "maturity": {
             "tier": "e2e"
@@ -20165,6 +20328,7 @@
          "summary": "A Misskey server (a self-hosted, feature-rich ActivityPub/Fediverse social platform) on the official image, backed by an external PostgreSQL and Redis, with uploaded files on a PersistentVolume. Misskey reads its whole config (including DB/Redis credentials) from /misskey/.config/default.yml; because that holds secrets, kurly mounts it from an existing Secret you provide (kurly never mints key material). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "infrastructure",
          "id": "mongo",
          "maturity": {
             "tier": "rendered"
@@ -20265,6 +20429,7 @@
          "summary": "A MongoDB server — a self-hosted, document-oriented NoSQL database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :27017; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :27017."
       },
       {
+         "category": "admin",
          "id": "mongo-express",
          "maturity": {
             "tier": "rendered"
@@ -20367,6 +20532,7 @@
          "summary": "A mongo-express server (a lightweight, web-based MongoDB admin UI) on the official image. Stateless: a plain rolling Deployment that connects to the MongoDB you point it at. kurly authors no Secret; ME_CONFIG_MONGODB_URL and the basic-auth credentials come from a provided Secret via envFrom. Pairs with a mongodb-cluster. Serves on :8081."
       },
       {
+         "category": "infrastructure",
          "id": "mongodb-cluster",
          "maturity": {
             "tier": "e2e"
@@ -20447,6 +20613,7 @@
          "summary": "A highly-available MongoDB replica set as a MongoDB Community Operator MongoDBCommunity custom resource. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the MongoDB Community Operator and a consumer-provided admin-password Secret. WARNING: MongoDB Community Edition is SSPL-licensed (restricts offering it as a service) — the operator is Apache-2.0 but the server is not; prefer FerretDB (Apache-2.0) if SSPL is a problem for a monetized hosting platform."
       },
       {
+         "category": "application",
          "id": "monica",
          "maturity": {
             "tier": "e2e"
@@ -20578,6 +20745,7 @@
          "summary": "A Monica server (a self-hosted personal relationship manager) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "mosquitto",
          "maturity": {
             "tier": "e2e"
@@ -20669,6 +20837,7 @@
          "summary": "An Eclipse Mosquitto server (a lightweight, self-hosted MQTT message broker for IoT and home automation). Mosquitto speaks MQTT, not HTTP: it listens on :1883, its mosquitto.conf is mounted as a ConfigMap and passed verbatim, and its persistence database lives on a PersistentVolume. The default allows anonymous clients; a real broker sets up authentication. WebSockets (:9001) need a listener in the config and a second Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883."
       },
       {
+         "category": "application",
          "id": "mumble",
          "maturity": {
             "tier": "e2e"
@@ -20765,6 +20934,7 @@
          "summary": "A Mumble server (Murmur: a self-hosted, low-latency voice-chat server for gaming and communities). Modelled as an HTTP workload for its Deployment/Service plumbing, but Mumble speaks its own voice protocol on :64738 (TCP control, UDP voice), with its SQLite database on a PersistentVolume. The Service publishes the TCP port; UDP voice needs a second Service (usually a LoadBalancer). kurly authors no Secret; MUMBLE_SUPERUSER_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated."
       },
       {
+         "category": "application",
          "id": "mylar3",
          "maturity": {
             "tier": "e2e"
@@ -20865,6 +21035,7 @@
          "summary": "A Mylar3 server — a self-hosted comic-book (CBR/CBZ) downloader and library manager. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090."
       },
       {
+         "category": "infrastructure",
          "id": "mysql",
          "maturity": {
             "tier": "e2e"
@@ -20975,6 +21146,7 @@
          "summary": "A MySQL server — the popular open-source relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306."
       },
       {
+         "category": "infrastructure",
          "id": "mysql-cluster",
          "maturity": {
             "tier": "e2e"
@@ -21068,6 +21240,7 @@
          "summary": "A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none)."
       },
       {
+         "category": "application",
          "id": "n8n",
          "maturity": {
             "tier": "e2e"
@@ -21158,6 +21331,7 @@
          "summary": "An n8n server (a fair-code workflow-automation tool with a visual editor) on the official image. A plain composable http workload that keeps its workflows, credentials, and encryption key in SQLite on a PersistentVolume by default — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the editor, API, and webhooks on :5678."
       },
       {
+         "category": "infrastructure",
          "id": "nats",
          "maturity": {
             "tier": "e2e"
@@ -21243,6 +21417,7 @@
          "summary": "A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222."
       },
       {
+         "category": "application",
          "id": "navidrome",
          "maturity": {
             "tier": "e2e"
@@ -21328,6 +21503,7 @@
          "summary": "A Navidrome server (a modern music server and streamer, compatible with Subsonic/Airsonic clients) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and reads a music library from /music on the same volume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4533."
       },
       {
+         "category": "infrastructure",
          "id": "neo4j",
          "maturity": {
             "tier": "e2e"
@@ -21423,6 +21599,7 @@
          "summary": "A Neo4j graph database on the official Community image. Unlike the other database workloads, Neo4j Community has no operator and does not cluster (clustering is Enterprise), so this is a plain composable http single-instance workload rather than a CR — its graph lives on a PersistentVolume. Community Edition is GPLv3 (fine to run). kurly authors no Secret; NEO4J_AUTH comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves HTTP on :7474 and Bolt on :7687."
       },
       {
+         "category": "application",
          "id": "netbootxyz",
          "maturity": {
             "tier": "e2e"
@@ -21523,6 +21700,7 @@
          "summary": "A netboot.xyz server — a self-hosted network-boot menu and asset server for PXE-booting installers and tools. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "netbox",
          "maturity": {
             "tier": "e2e"
@@ -21791,6 +21969,7 @@
          "summary": "A NetBox server (the IPAM/DCIM source of truth: IP address management, data-center infrastructure modelling, and a full REST/GraphQL API). Two composable stages on the community image — server (the web front end) and worker (the RQ background task worker) — with PostgreSQL and Redis external. Pairs with the cnpg-cluster and valkey workloads. Single writer over a ReadWriteOnce media volume: the server is one replica, recreated; the worker scales horizontally."
       },
       {
+         "category": "application",
          "id": "nextcloud",
          "maturity": {
             "tier": "e2e"
@@ -21905,6 +22084,7 @@
          "summary": "A Nextcloud server (a self-hosted content-collaboration platform: file sync and share, calendars, contacts, office documents) on the official Apache image; with the default SQLite backend the whole installation lives on a PersistentVolume. kurly authors no Secret; NEXTCLOUD_ADMIN_* come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL and S3 primary storage to scale out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "nginx-proxy-manager",
          "maturity": {
             "tier": "e2e"
@@ -21993,6 +22173,7 @@
          "summary": "An Nginx Proxy Manager server (a self-hosted reverse-proxy with a web UI, free Let's Encrypt certificates, access lists and custom nginx config) on the official image; its SQLite database and config live on a PersistentVolume. The reverse proxy listens on :80/:443, separate ports that need their own Service. It binds the privileged ports so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI serves on :81."
       },
       {
+         "category": "application",
          "id": "nocobase",
          "maturity": {
             "tier": "e2e"
@@ -22119,6 +22300,7 @@
          "summary": "A NocoBase server (a self-hosted, open-source no-code/low-code platform for building internal tools, databases and workflows) on the official image, backed by an external PostgreSQL, with its storage on a PersistentVolume. kurly authors no Secret; the DB_* connection and APP_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named nocobase-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "nocodb",
          "maturity": {
             "tier": "e2e"
@@ -22224,6 +22406,7 @@
          "summary": "A NocoDB server (an open-source Airtable alternative that turns any SQL database into a smart spreadsheet) on the official image, backed by an external PostgreSQL for its metadata, with attachments on a PersistentVolume. kurly authors no Secret; NC_DB and NC_AUTH_JWT_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "node-red",
          "maturity": {
             "tier": "e2e"
@@ -22306,6 +22489,7 @@
          "summary": "A Node-RED server — a flow-based, low-code programming tool for wiring together APIs, devices and online services; flows and settings on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1880."
       },
       {
+         "category": "tool",
          "id": "ntfy",
          "maturity": {
             "tier": "e2e"
@@ -22395,6 +22579,7 @@
          "summary": "An ntfy server (send push notifications to your phone or desktop over simple HTTP). A plain composable http workload that keeps its message cache and user database in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and pub/sub API on :80."
       },
       {
+         "category": "application",
          "id": "nzbget",
          "maturity": {
             "tier": "e2e"
@@ -22495,6 +22680,7 @@
          "summary": "An NZBGet server — an efficient, self-hosted Usenet downloader written in C++. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6789."
       },
       {
+         "category": "application",
          "id": "nzbhydra2",
          "maturity": {
             "tier": "e2e"
@@ -22595,6 +22781,7 @@
          "summary": "An NZBHydra2 server — a meta-search server that aggregates Usenet indexers behind one search API for the *arr apps. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5076."
       },
       {
+         "category": "infrastructure",
          "id": "oauth2-proxy",
          "maturity": {
             "tier": "e2e"
@@ -22720,6 +22907,7 @@
          "summary": "An OAuth2 Proxy server (a reverse proxy and forward-auth service that puts an OAuth2/OIDC login in front of your apps, delegating to Keycloak, authentik, Pocket ID, Google, GitHub) on the official image. Stateless (sessions in a signed cookie or shared Redis): a plain rolling Deployment. kurly authors no Secret; the provider settings, client id/secret and cookie secret come from a provided Secret via envFrom (OAUTH2_PROXY_*). Serves on :4180 — front an app or wire as a reverse proxy forward-auth."
       },
       {
+         "category": "application",
          "id": "odoo",
          "maturity": {
             "tier": "e2e"
@@ -22833,6 +23021,7 @@
          "summary": "An Odoo server (a self-hosted, all-in-one business/ERP suite: CRM, sales, inventory, accounting, website and more) on the official image, backed by an external PostgreSQL, with its filestore on a PersistentVolume. kurly authors no Secret; the PostgreSQL connection (HOST/USER/PASSWORD) comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named odoo-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8069."
       },
       {
+         "category": "application",
          "id": "ollama",
          "maturity": {
             "tier": "e2e"
@@ -22915,6 +23104,7 @@
          "summary": "An Ollama server (a self-hosted runtime for running large language models locally, with a simple REST API) on the official image; its downloaded models live on a PersistentVolume. Runs on CPU by default; for GPU acceleration schedule it on a GPU node and request the device resource. The backend open-webui and many AI apps talk to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :11434."
       },
       {
+         "category": "application",
          "id": "ombi",
          "maturity": {
             "tier": "e2e"
@@ -23015,6 +23205,7 @@
          "summary": "An Ombi server — a request-management portal for Plex, Emby and Jellyfin. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3579."
       },
       {
+         "category": "application",
          "id": "onlyoffice",
          "maturity": {
             "tier": "e2e"
@@ -23112,6 +23303,7 @@
          "summary": "An ONLYOFFICE Document Server (a self-hosted online office suite for collaborative editing, embedded by Nextcloud/Seafile and others) on the official image; its data lives on a PersistentVolume. The app that embeds it points its connector at this URL. kurly authors no Secret; JWT_SECRET comes from a provided Secret via envFrom. The image bundles its own PostgreSQL and RabbitMQ, so it runs as root. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "open-webui",
          "maturity": {
             "tier": "e2e"
@@ -23215,6 +23407,7 @@
          "summary": "An Open WebUI server (a feature-rich, self-hosted web interface for chatting with local and remote LLMs — Ollama and any OpenAI-compatible API) on the official image; with the default SQLite backend its database and uploads live on a PersistentVolume. kurly authors no Secret; WEBUI_SECRET_KEY comes from a provided Secret via envFrom. Point it at an external PostgreSQL (DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "observability",
          "id": "opencost",
          "maturity": {
             "tier": "rendered"
@@ -23304,6 +23497,7 @@
          "summary": "OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source."
       },
       {
+         "category": "application",
          "id": "openhab",
          "maturity": {
             "tier": "e2e"
@@ -23398,6 +23592,7 @@
          "summary": "An openHAB server (a vendor-neutral, self-hosted home-automation platform integrating a huge range of devices behind one engine, UI and rule system) on the official image; its three persistent directories — config (/openhab/conf), runtime userdata (/openhab/userdata) and installed add-ons (/openhab/addons) — each get their own PersistentVolume (kurly.store composed three times). USB/serial radios are hardware and not modelled. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "observability",
          "id": "openobserve",
          "maturity": {
             "tier": "e2e"
@@ -23498,6 +23693,7 @@
          "summary": "An OpenObserve server (a self-hosted, high-performance observability platform for logs, metrics and traces) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5080."
       },
       {
+         "category": "application",
          "id": "openproject",
          "maturity": {
             "tier": "e2e"
@@ -23606,6 +23802,7 @@
          "summary": "An OpenProject server (a self-hosted, open-source project-management and collaboration suite: work packages, Gantt charts, agile boards, wikis, time tracking) on the official image, backed by an external PostgreSQL, with uploaded assets on a PersistentVolume. kurly authors no Secret; DATABASE_URL, SECRET_KEY_BASE and host settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named openproject-db (a production deployment also wants memcached). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "opensearch-cluster",
          "maturity": {
             "tier": "e2e"
@@ -23694,6 +23891,7 @@
          "summary": "A highly-available OpenSearch cluster as an OpenSearch Operator OpenSearchCluster custom resource, with optional OpenSearch Dashboards. OpenSearch is the Apache-2.0 fork of Elasticsearch — no SSPL/Elastic-License restriction on offering it as a service, the right default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the OpenSearch Operator."
       },
       {
+         "category": "application",
          "id": "organizr",
          "maturity": {
             "tier": "e2e"
@@ -23775,6 +23973,7 @@
          "summary": "An Organizr server (a self-hosted HTPC/homelab services dashboard that ties your apps together behind one tabbed interface with authentication) on the official image (pinned by digest; Renovate maintains it); SQLite config on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "observability",
          "id": "otel-collector",
          "maturity": {
             "tier": "e2e"
@@ -23827,6 +24026,7 @@
          "summary": "An OpenTelemetry Collector as a per-node agent (a DaemonSet), so local workloads send telemetry to a collector on their own node. The collector config — receivers, processors, exporters, and the pipelines wiring them — is passed verbatim (it is the collector's schema, not kurly's); the default is a working OTLP agent that receives, batches, and prints. Fully restricted by default: node-log collection needs a hostPath and is a documented opt-in."
       },
       {
+         "category": "application",
          "id": "outline",
          "maturity": {
             "tier": "e2e"
@@ -23940,6 +24140,7 @@
          "summary": "An Outline server (a fast, collaborative, self-hosted team knowledge base and wiki with real-time editing) on the official image, backed by an external PostgreSQL, Redis and S3-compatible object storage. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider come from a provided Secret via envFrom. Pairs with a cnpg-cluster named outline-db, a Redis and an S3 bucket (e.g. seaweedfs). Stateless. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "overleaf",
          "maturity": {
             "tier": "rendered"
@@ -24055,6 +24256,7 @@
          "summary": "An Overleaf server (the Community Edition of the collaborative LaTeX editor) on the official monolith image, backed by an external MongoDB (a replica set — it uses transactions) and Redis, with projects and compiles on a PersistentVolume. kurly ships no MongoDB recipe; bring your own (Redis can be the valkey workload). The image spawns TeX compiles and writes across the root filesystem, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; OVERLEAF_MONGO_URL comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "overseerr",
          "maturity": {
             "tier": "e2e"
@@ -24138,6 +24340,7 @@
          "summary": "An Overseerr server — a request-management and media-discovery companion for Plex, integrating with Sonarr and Radarr. On the official image; its SQLite configuration and database live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5055."
       },
       {
+         "category": "application",
          "id": "owncast",
          "maturity": {
             "tier": "e2e"
@@ -24222,6 +24425,7 @@
          "summary": "An Owncast server (a self-hosted live video streaming and chat server, an open alternative to Twitch) on the official image; its data (SQLite config, chat history, stream segments) lives on a PersistentVolume. Streaming IN uses RTMP on :1935, a separate port this HTTP workload does not expose — add a Service for it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web player on :8080."
       },
       {
+         "category": "application",
          "id": "owntracks-recorder",
          "maturity": {
             "tier": "e2e"
@@ -24306,6 +24510,7 @@
          "summary": "An OwnTracks Recorder server (a self-hosted store and web UI for the location data OwnTracks phone apps publish) on the official image. A plain composable http workload that keeps its location store on a PersistentVolume under /store. Phone apps can publish over HTTP directly or via an MQTT broker the Recorder subscribes to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083."
       },
       {
+         "category": "tool",
          "id": "pairdrop",
          "maturity": {
             "tier": "e2e"
@@ -24377,6 +24582,7 @@
          "summary": "A PairDrop server (a self-hosted, AirDrop-style local file-sharing app: transfer files and messages between devices peer-to-peer via WebRTC) on the official image. The server only brokers peer connections and keeps no state. One replica: peers pair through in-memory rooms held by a single server instance. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "paisa",
          "maturity": {
             "tier": "e2e"
@@ -24458,6 +24664,7 @@
          "summary": "A Paisa server (a plain-text, double-entry personal finance manager built on ledger/beancount journals). A plain composable http workload that reads its configuration and journal from a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :7500."
       },
       {
+         "category": "application",
          "id": "paperless-ngx",
          "maturity": {
             "tier": "e2e"
@@ -24602,6 +24809,7 @@
          "summary": "A Paperless-ngx server (scan, index, and archive documents with OCR and full-text search) backed by an external PostgreSQL and Redis, with its data/media/consume/export trees on a PersistentVolume. The image runs the web server and Celery workers together. Pairs with a cnpg-cluster named paperless-db and a valkey named paperless-cache. The entrypoint writes to the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; secrets come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "passwordpusher",
          "maturity": {
             "tier": "e2e"
@@ -24697,6 +24905,7 @@
          "summary": "A Password Pusher server (share passwords and secrets over self-destructing, expiring links) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and SECRET_KEY_BASE come from a provided Secret via envFrom. Pairs with a cnpg-cluster named passwordpusher-db. Serves on :5100."
       },
       {
+         "category": "application",
          "id": "peertube",
          "maturity": {
             "tier": "e2e"
@@ -24841,6 +25050,7 @@
          "summary": "A PeerTube server (a decentralized, federated video platform) on the official image, backed by an external PostgreSQL and Redis, with videos/uploads/config on a PersistentVolume. Pairs with a cnpg-cluster named peertube-db and a valkey named peertube-cache. kurly authors no Secret; PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, and the initial root password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
+         "category": "application",
          "id": "penpot",
          "maturity": {
             "tier": "e2e"
@@ -25118,6 +25328,7 @@
          "summary": "Penpot (a self-hosted, open-source design and prototyping platform, an alternative to Figma) as three workloads on the official images, backed by an external PostgreSQL and Redis: a backend (API + data, assets on a PersistentVolume), a frontend (the nginx-served web app on :80 that proxies to the others), and an exporter (headless-browser rendering, :6061). kurly authors no Secret; the PostgreSQL/Redis connection and PENPOT_SECRET_KEY come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named penpot-db and a Redis."
       },
       {
+         "category": "admin",
          "id": "pgadmin",
          "maturity": {
             "tier": "e2e"
@@ -25220,6 +25431,7 @@
          "summary": "A pgAdmin 4 server (the web UI for administering PostgreSQL) on the official image; its session and configuration store (SQLite) lives on a PersistentVolume. kurly authors no Secret; PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD come from a provided Secret via envFrom. The image runs as uid 5050. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "photoprism",
          "maturity": {
             "tier": "e2e"
@@ -25329,6 +25541,7 @@
          "summary": "A PhotoPrism server (an AI-powered, self-hosted photo-management app with face recognition and automatic tagging) on the official image. A plain composable http workload — with the SQLite backend its database, cache, and originals live on a PersistentVolume, no external database. The image runs TensorFlow indexing and writes the rootfs, relaxing read-only-rootfs while keeping non-root and dropped capabilities. kurly authors no Secret; PHOTOPRISM_ADMIN_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :2342."
       },
       {
+         "category": "application",
          "id": "photoview",
          "maturity": {
             "tier": "e2e"
@@ -25437,6 +25650,7 @@
          "summary": "A Photoview server (a self-hosted photo gallery for photographers that scans a media library, builds albums and serves them with face recognition and RAW support) on the official image, backed by an external MySQL/MariaDB or PostgreSQL, with TWO PersistentVolumes — the media library at /photos and a thumbnail cache at /app/cache (kurly.store composed twice). kurly authors no Secret; the database driver and connection come from a provided Secret via envFrom. Pairs with a mysql-cluster named photoview-db. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :80."
       },
       {
+         "category": "admin",
          "id": "phpmyadmin",
          "maturity": {
             "tier": "e2e"
@@ -25527,6 +25741,7 @@
          "summary": "A phpMyAdmin server (the classic web UI for administering MySQL and MariaDB) on the official image. Stateless: a plain rolling Deployment that connects to the MySQL host you point it at. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "pihole",
          "maturity": {
             "tier": "e2e"
@@ -25631,6 +25846,7 @@
          "summary": "A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80."
       },
       {
+         "category": "application",
          "id": "pilos",
          "maturity": {
             "tier": "e2e"
@@ -25728,6 +25944,7 @@
          "summary": "A PILOS server (an open-source, Laravel-based front-end for BigBlueButton from TH Mittelhessen: room and meeting management with LDAP/OIDC support) on the official all-in-one image (nginx + php-fpm), backed by an external PostgreSQL and Redis, with uploaded assets on a PersistentVolume. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named pilos-db and a Redis. kurly authors no Secret; the database/Redis/APP_KEY/BBB settings come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated; the bundled nginx master needs root and a writable rootfs. Serves on :80."
       },
       {
+         "category": "application",
          "id": "pingvin-share",
          "maturity": {
             "tier": "e2e"
@@ -25809,6 +26026,7 @@
          "summary": "A Pingvin Share server (a self-hosted, open-source file-sharing platform, an alternative to WeTransfer) on the official all-in-one image (frontend + backend behind its own reverse proxy); its SQLite database and uploaded shares on a PersistentVolume under /opt/app/backend/data. A plain composable http workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "piwigo",
          "maturity": {
             "tier": "e2e"
@@ -25911,6 +26129,7 @@
          "summary": "A Piwigo server — a self-hosted photo gallery with albums, tagging and user management (backed by MySQL/MariaDB). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "planka",
          "maturity": {
             "tier": "e2e"
@@ -26020,6 +26239,7 @@
          "summary": "A Planka server (a self-hosted, real-time kanban board for teams, an open alternative to Trello) on the official image, backed by an external PostgreSQL, with uploads in S3-compatible object storage so it stays stateless (pair with the seaweedfs workload or any S3 bucket). kurly authors no Secret; DATABASE_URL, SECRET_KEY, the S3_* settings and the admin credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named planka-db. For local-disk uploads instead, compose ReadWriteMany volumes onto the three upload paths and drop the S3 settings. Serves on :1337."
       },
       {
+         "category": "application",
          "id": "plex",
          "maturity": {
             "tier": "e2e"
@@ -26120,6 +26340,7 @@
          "summary": "A Plex Media Server (a self-hosted media server for organising and streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Set PLEX_CLAIM on first run and mount your media libraries. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :32400."
       },
       {
+         "category": "infrastructure",
          "id": "pocket-id",
          "maturity": {
             "tier": "e2e"
@@ -26208,6 +26429,7 @@
          "summary": "A Pocket ID server (a simple, self-hosted OIDC provider for passkey logins, no passwords) on the official image; with the default SQLite backend its database and keys live on a PersistentVolume. appUrl is the public HTTPS URL passkeys bind to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1411."
       },
       {
+         "category": "application",
          "id": "pocketbase",
          "maturity": {
             "tier": "e2e"
@@ -26289,6 +26511,7 @@
          "summary": "A PocketBase server (a self-hosted, open-source backend in one file: an embedded SQLite database, auth, file storage and a REST/realtime API, with an admin dashboard) on the official image. A plain composable http workload that keeps its database, uploads and migrations on a PersistentVolume under /pb_data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and admin UI on :8080."
       },
       {
+         "category": "application",
          "id": "portainer",
          "maturity": {
             "tier": "e2e"
@@ -26378,6 +26601,7 @@
          "summary": "A Portainer CE server (a self-hosted management UI for Docker and Kubernetes) on the official image. A plain composable http workload that keeps its database and settings on a PersistentVolume. Single instance over a ReadWriteOnce volume: one replica, recreated. To administer the cluster it runs in, Portainer needs a ServiceAccount bound to a ClusterRole (cluster-admin for full control); kurly authors no RBAC — create the ServiceAccount and binding yourself and pass serviceAccountName. Serves the HTTP UI on :9000."
       },
       {
+         "category": "infrastructure",
          "id": "postgres",
          "maturity": {
             "tier": "e2e"
@@ -26488,6 +26712,7 @@
          "summary": "A PostgreSQL server — a powerful, open-source object-relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :5432; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :5432."
       },
       {
+         "category": "application",
          "id": "prestashop",
          "maturity": {
             "tier": "rendered"
@@ -26611,6 +26836,7 @@
          "summary": "A PrestaShop server — a self-hosted, open-source e-commerce platform for building online stores (backed by MySQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "privatebin",
          "maturity": {
             "tier": "e2e"
@@ -26697,6 +26923,7 @@
          "summary": "A PrivateBin server (a minimalist, zero-knowledge pastebin: the server stores only encrypted blobs, encrypted and decrypted in the browser) on the official nginx+php-fpm image; with the default filesystem backend its encrypted pastes live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "projectsend",
          "maturity": {
             "tier": "e2e"
@@ -26800,6 +27027,7 @@
          "summary": "A ProjectSend server — a self-hosted, private file-sharing app that assigns uploads to specific clients (backed by MySQL/MariaDB). On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "observability",
          "id": "prometheus",
          "maturity": {
             "tier": "e2e"
@@ -26941,6 +27169,7 @@
          "summary": "A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace."
       },
       {
+         "category": "application",
          "id": "prowlarr",
          "maturity": {
             "tier": "e2e"
@@ -27041,6 +27270,7 @@
          "summary": "A Prowlarr server — an indexer manager and proxy that syncs indexers across the *arr suite. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9696."
       },
       {
+         "category": "application",
          "id": "pyload-ng",
          "maturity": {
             "tier": "e2e"
@@ -27141,6 +27371,7 @@
          "summary": "A pyLoad server — a free and open-source download manager for one-click hosters and more. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
       },
       {
+         "category": "application",
          "id": "qbittorrent",
          "maturity": {
             "tier": "e2e"
@@ -27241,6 +27472,7 @@
          "summary": "A qBittorrent server — a feature-rich, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "infrastructure",
          "id": "qdrant",
          "maturity": {
             "tier": "e2e"
@@ -27323,6 +27555,7 @@
          "summary": "A Qdrant server (a self-hosted vector database and similarity-search engine for embeddings, used for AI/semantic-search and RAG) on the official image; its collections live on a PersistentVolume. It also serves gRPC on :6334, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the REST API on :6333."
       },
       {
+         "category": "infrastructure",
          "id": "rabbitmq",
          "maturity": {
             "tier": "e2e"
@@ -27427,6 +27660,7 @@
          "summary": "A RabbitMQ server (a widely-used, self-hosted message broker implementing AMQP) on the official management image; the broker speaks AMQP on :5672 with data on a PersistentVolume. Single node (not a cluster). The management UI (:15672) needs a separate Service. kurly authors no Secret; RABBITMQ_DEFAULT_USER/PASS come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves AMQP on :5672."
       },
       {
+         "category": "application",
          "id": "radarr",
          "maturity": {
             "tier": "e2e"
@@ -27527,6 +27761,7 @@
          "summary": "A Radarr server — a movie collection manager for Usenet and BitTorrent users. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7878."
       },
       {
+         "category": "application",
          "id": "radicale",
          "maturity": {
             "tier": "e2e"
@@ -27609,6 +27844,7 @@
          "summary": "A Radicale server (a lightweight CalDAV and CardDAV server for calendars and contacts) on the tomsquest image. A plain composable http workload that keeps its collections on a PersistentVolume — no external database. The image runs as its designated uid 2999 with a writable root filesystem (s6 init). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5232; mount a config + htpasswd for real authentication."
       },
       {
+         "category": "application",
          "id": "rallly",
          "maturity": {
             "tier": "e2e"
@@ -27710,6 +27946,7 @@
          "summary": "A Rallly server (a self-hosted scheduling and group-poll tool for finding the best date to meet) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL, SECRET_PASSWORD, and SMTP creds come from a provided Secret via envFrom. Pairs with a cnpg-cluster named rallly-db. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "readarr",
          "maturity": {
             "tier": "e2e"
@@ -27809,6 +28046,7 @@
          "summary": "A Readarr server (an ebook and audiobook collection manager for Usenet and BitTorrent users) on the LinuxServer.io image. A plain composable http workload that keeps its application config (SQLite) on a PersistentVolume under /config. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8787."
       },
       {
+         "category": "application",
          "id": "readeck",
          "maturity": {
             "tier": "e2e"
@@ -27891,6 +28129,7 @@
          "summary": "A Readeck server (a self-hosted read-it-later and web-bookmarking tool that saves clean, readable copies of pages). A plain composable http workload that keeps its bookmarks and saved articles in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8000."
       },
       {
+         "category": "infrastructure",
          "id": "redis",
          "maturity": {
             "tier": "e2e"
@@ -27996,6 +28235,7 @@
          "summary": "A Redis server — an in-memory data store used as a cache, message broker and database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :6379; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :6379."
       },
       {
+         "category": "admin",
          "id": "redis-commander",
          "maturity": {
             "tier": "e2e"
@@ -28080,6 +28320,7 @@
          "summary": "A Redis Commander server (a self-hosted web UI for managing Redis) on the official image (pinned by digest; Renovate maintains it). Stateless: a plain rolling Deployment that connects to the Redis you point it at. Serves on :8081."
       },
       {
+         "category": "application",
          "id": "redmine",
          "maturity": {
             "tier": "e2e"
@@ -28202,6 +28443,7 @@
          "summary": "A Redmine server (a mature, self-hosted project-management web app: issue tracking, wikis, forums, Gantt charts and time tracking) on the official image, backed by an external MySQL/MariaDB or PostgreSQL, with uploaded files on a PersistentVolume. kurly authors no Secret; the database connection and REDMINE_SECRET_KEY_BASE come from a provided Secret via envFrom. Pairs with a mysql-cluster named redmine-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "infrastructure",
          "id": "registry",
          "maturity": {
             "tier": "e2e"
@@ -28290,6 +28532,7 @@
          "summary": "A Docker Registry server (the reference OCI registry: a self-hosted store and distribution point for container images) on the official image; its stored images live on a PersistentVolume. Usually reached in-cluster; the docker-registry-ui workload gives it a web interface. The bare registry is unauthenticated and plaintext — front it with TLS and auth or keep it in-cluster. Single writer over a ReadWriteOnce volume: one replica, recreated (back it with S3 for a scaled registry). Serves on :5000."
       },
       {
+         "category": "application",
          "id": "resilio-sync",
          "maturity": {
             "tier": "e2e"
@@ -28390,6 +28633,7 @@
          "summary": "A Resilio Sync server — a fast, peer-to-peer file-synchronization tool with a web UI. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888."
       },
       {
+         "category": "application",
          "id": "rocketchat",
          "maturity": {
             "tier": "rendered"
@@ -28493,6 +28737,7 @@
          "summary": "A Rocket.Chat server (a self-hosted, open-source team chat platform) on the official image, backed by an external MongoDB replica set (Rocket.Chat requires the oplog). Pairs with a mongodb-cluster named rocketchat-db. kurly authors no Secret; MONGO_URL and MONGO_OPLOG_URL come from a provided Secret via envFrom. Stateless (uploads live in MongoDB GridFS): a plain rolling Deployment. Serves on :3000."
       },
       {
+         "category": "infrastructure",
          "id": "roundcube",
          "maturity": {
             "tier": "e2e"
@@ -28589,6 +28834,7 @@
          "summary": "A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "rss-bridge",
          "maturity": {
             "tier": "e2e"
@@ -28667,6 +28913,7 @@
          "summary": "An RSS-Bridge server (generates RSS/Atom feeds for sites that do not publish their own, from a large library of community bridges) on the official image. It holds no persistent state — feeds are produced on request — so it is a plain stateless Deployment. The Apache master runs as root then serves as www-data. Serves on :80."
       },
       {
+         "category": "application",
          "id": "rundeck",
          "maturity": {
             "tier": "e2e"
@@ -28769,6 +29016,7 @@
          "summary": "A Rundeck server (a self-hosted runbook-automation and operations platform: jobs, workflows, access control and scheduling) on the official image; with the default embedded storage its data lives on a PersistentVolume. kurly authors no Secret; the admin credentials come from a provided Secret via envFrom. Point it at an external MySQL/PostgreSQL to scale past the embedded database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4440."
       },
       {
+         "category": "application",
          "id": "sabnzbd",
          "maturity": {
             "tier": "e2e"
@@ -28869,6 +29117,7 @@
          "summary": "A SABnzbd server — a self-hosted, web-based binary newsreader (Usenet downloader). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "tool",
          "id": "searxng",
          "maturity": {
             "tier": "e2e"
@@ -28967,6 +29216,7 @@
          "summary": "A SearXNG server (a privacy-respecting, self-hosted metasearch engine that aggregates results from many search services without tracking you) on the official image. Its behaviour is its settings.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state of its own. kurly authors no Secret; SEARXNG_SECRET (overriding server.secret_key) comes from a provided Secret via envFrom. A busy instance also wants a Valkey/Redis for the limiter. Stateless: scale freely. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "seatsurfing",
          "maturity": {
             "tier": "e2e"
@@ -29067,6 +29317,7 @@
          "summary": "A Seatsurfing server (desk and meeting-room booking / hot-desking) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; POSTGRES_URL and JWT_SIGNING_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named seatsurfing-db. Serves on :8080."
       },
       {
+         "category": "infrastructure",
          "id": "seaweedfs",
          "maturity": {
             "tier": "e2e"
@@ -29298,6 +29549,7 @@
          "summary": "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups."
       },
       {
+         "category": "application",
          "id": "shaarli",
          "maturity": {
             "tier": "e2e"
@@ -29380,6 +29632,7 @@
          "summary": "A Shaarli server (a self-hosted, database-free bookmarking and link-sharing app) on the official image; because Shaarli is flat-file, its data lives on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "shiori",
          "maturity": {
             "tier": "e2e"
@@ -29465,6 +29718,7 @@
          "summary": "A Shiori server (a simple, self-hosted bookmarks manager with web-page archiving). A plain composable http workload that keeps its bookmarks and archived pages in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080."
       },
       {
+         "category": "application",
          "id": "shlink",
          "maturity": {
             "tier": "rendered"
@@ -29585,6 +29839,7 @@
          "summary": "A Shlink server (a self-hosted URL shortener with a REST API and rich analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named shlink-db. kurly authors no Secret; DB_PASSWORD (and optionally the GeoLite key) come from a provided Secret via envFrom. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "silverbullet",
          "maturity": {
             "tier": "e2e"
@@ -29681,6 +29936,7 @@
          "summary": "A SilverBullet server (an extensible, self-hosted markdown notebook / personal knowledge base) on the official image. A plain composable http workload — your notes are plain markdown files on a PersistentVolume, no external database. kurly authors no Secret; SB_USER comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "siyuan",
          "maturity": {
             "tier": "e2e"
@@ -29764,6 +30020,7 @@
          "summary": "A SiYuan server (a privacy-first, self-hosted personal knowledge-management and note-taking app with block-level editing and a local-first workspace) on the official image; its workspace (notes, assets and the database) lives on a PersistentVolume. Web access is gated by an access-auth code set via SIYUAN_ACCESS_AUTH_CODE (kurly authors no Secret). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6806."
       },
       {
+         "category": "tool",
          "id": "smtp4dev",
          "maturity": {
             "tier": "e2e"
@@ -29848,6 +30105,7 @@
          "summary": "An smtp4dev server (a self-hosted fake SMTP server for development: it receives the mail your apps send and shows it in a web UI, without delivering anything onward) on the official image. A plain composable http workload listening on TWO ports — the web UI on :80 and the SMTP sink on :25 (via kurly.extraPort). Its message database lives on a PersistentVolume under /smtp4dev. Single writer over a ReadWriteOnce volume: one replica, recreated. Point your apps at the Service on port 25 for SMTP."
       },
       {
+         "category": "infrastructure",
          "id": "snappymail",
          "maturity": {
             "tier": "e2e"
@@ -29929,6 +30187,7 @@
          "summary": "A SnappyMail server (a fast, modern, self-hosted webmail client that connects to your existing IMAP/SMTP servers) on the official image (pinned by digest; Renovate maintains it); config and per-account data on a PersistentVolume. SnappyMail is a client and does not run a mail server itself. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888."
       },
       {
+         "category": "application",
          "id": "snipe-it",
          "maturity": {
             "tier": "e2e"
@@ -30055,6 +30314,7 @@
          "summary": "A Snipe-IT server (a free IT asset and license management system) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "sonarqube",
          "maturity": {
             "tier": "e2e"
@@ -30170,6 +30430,7 @@
          "summary": "A SonarQube server (continuous code-quality and static-analysis inspection) on the official Community image, backed by an external PostgreSQL, with data/extensions/search-index on a PersistentVolume. Pairs with a cnpg-cluster named sonarqube-db. Its embedded Elasticsearch needs the node vm.max_map_count >= 262144 (set on the node; kurly injects no privileged initContainer). kurly authors no Secret; SONAR_JDBC_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
+         "category": "application",
          "id": "sonarr",
          "maturity": {
             "tier": "e2e"
@@ -30270,6 +30531,7 @@
          "summary": "A Sonarr server — a PVR for Usenet and BitTorrent users to monitor, download and organise TV series. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8989."
       },
       {
+         "category": "infrastructure",
          "id": "spegel",
          "maturity": {
             "tier": "rendered"
@@ -30468,6 +30730,7 @@
          "summary": "Spegel — a stateless, cluster-local OCI registry mirror (spegel.dev). A DaemonSet that serves image layers already present in each node's containerd content store to its peers over a peer-to-peer router, so a pull satisfied by any node never leaves the cluster; an init container writes containerd's registry-mirror config to pull through the local mirror first. Genuinely node-level infrastructure, so it authors its manifests directly (DaemonSet + init container + hostPath containerd socket/content, a NodePort the kubelet reaches the mirror on, and a headless Service peers bootstrap against via DNS) rather than composing a base kind. namespace is load-bearing: the bootstrap DNS name embeds it, so it must match where you deploy. Runs as root with hostPath mounts (the socket is root-owned); the posture is hardened as far as that allows. kurly features do not apply."
       },
       {
+         "category": "observability",
          "id": "status-responder",
          "maturity": {
             "tier": "e2e"
@@ -30532,6 +30795,7 @@
          "summary": "A tiny HTTP service that answers every request with one fixed status code and message. Deploy it once, globally, and route protected paths to it from a Gateway API HTTPRoute (kurly.expose.guard) to take them off the public internet — the portable substitute for the fixed-response filter Gateway API lacks."
       },
       {
+         "category": "tool",
          "id": "stirling-pdf",
          "maturity": {
             "tier": "e2e"
@@ -30614,6 +30878,7 @@
          "summary": "A Stirling-PDF server (a locally-hosted web toolkit for splitting, merging, converting, and editing PDFs) on the official image. A plain composable http workload — it processes files in memory and keeps configuration on a PersistentVolume, no external database. The image runs LibreOffice and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "synapse",
          "maturity": {
             "tier": "e2e"
@@ -30710,6 +30975,7 @@
          "summary": "A Synapse server (the reference Matrix homeserver from the Matrix.org Foundation) on the official image; its configuration, signing keys and (with the default SQLite backend) database live on a PersistentVolume, generated on first start from SYNAPSE_SERVER_NAME. The server name is baked into every id and cannot be changed. Beyond a small instance, edit the generated homeserver.yaml to point at an external PostgreSQL. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8008."
       },
       {
+         "category": "application",
          "id": "syncthing",
          "maturity": {
             "tier": "e2e"
@@ -30810,6 +31076,7 @@
          "summary": "A Syncthing server — a continuous, self-hosted file-synchronization tool that syncs folders between devices peer-to-peer (sync on :22000). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8384."
       },
       {
+         "category": "application",
          "id": "tachidesk",
          "maturity": {
             "tier": "e2e"
@@ -30895,6 +31162,7 @@
          "summary": "A Suwayomi-Server (formerly Tachidesk): a self-hosted manga reader and library server, on the official image; its library, downloads and settings live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4567."
       },
       {
+         "category": "application",
          "id": "tandoor",
          "maturity": {
             "tier": "e2e"
@@ -31021,6 +31289,7 @@
          "summary": "A Tandoor Recipes server (a self-hosted recipe manager and meal planner with a smart shopping list) on the official image, backed by an external PostgreSQL; uploaded media on a PersistentVolume under /opt/recipes/mediafiles. A plain composable http workload. kurly authors no Secret; SECRET_KEY and the PostgreSQL settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named tandoor-db. Single writer over a ReadWriteOnce media volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "tautulli",
          "maturity": {
             "tier": "e2e"
@@ -31121,6 +31390,7 @@
          "summary": "A Tautulli server — a monitoring and tracking tool for Plex Media Server: history, statistics and notifications. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8181."
       },
       {
+         "category": "application",
          "id": "teable",
          "maturity": {
             "tier": "e2e"
@@ -31227,6 +31497,7 @@
          "summary": "A Teable server (a self-hosted, no-code database built on PostgreSQL that presents as a spreadsheet, an Airtable alternative) on the official image, backed by an external PostgreSQL (and Redis for realtime/caching). A plain composable http workload. kurly authors no Secret; PRISMA_DATABASE_URL, BACKEND_CACHE_REDIS_URI, SECRET_KEY and the mail/storage settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named teable-db and a Redis; attachments go to S3 when configured. Stateless: a plain rolling Deployment. Serves on :3000."
       },
       {
+         "category": "infrastructure",
          "id": "technitium",
          "maturity": {
             "tier": "e2e"
@@ -31323,6 +31594,7 @@
          "summary": "A Technitium DNS Server (a self-hosted, privacy-focused DNS server with ad-blocking, DNS-over-HTTPS/TLS and a full web console) on the official image; its configuration and zones live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; DNS_SERVER_ADMIN_PASSWORD comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The web console serves on :5380."
       },
       {
+         "category": "observability",
          "id": "tempo",
          "maturity": {
             "tier": "e2e"
@@ -31389,6 +31661,7 @@
          "summary": "Grafana Tempo as a tempo-operator `TempoStack` custom resource: one CR reconciles the whole distributed tracing backend (distributor, ingester, querier, query-frontend, compactor) over object storage. Authors the CR (the same shape as loki) for the operator to own the components, config, and Services. Requires the tempo-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3 and the otel-collector workload for span ingestion."
       },
       {
+         "category": "observability",
          "id": "thanos",
          "maturity": {
             "tier": "e2e"
@@ -31943,6 +32216,7 @@
          "summary": "The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed."
       },
       {
+         "category": "application",
          "id": "thelounge",
          "maturity": {
             "tier": "e2e"
@@ -32026,6 +32300,7 @@
          "summary": "A The Lounge server (a modern, self-hosted web IRC client: always-connected, multi-user, accessible from any browser) on the official image; its configuration and per-user data live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
+         "category": "application",
          "id": "tik",
          "maturity": {
             "tier": "e2e"
@@ -32078,6 +32353,7 @@
          "summary": "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store."
       },
       {
+         "category": "tool",
          "id": "tika",
          "maturity": {
             "tier": "e2e"
@@ -32156,6 +32432,7 @@
          "summary": "An Apache Tika server (a content-analysis toolkit that detects and extracts text and metadata from over a thousand file types) on the official image. Stateless: a plain rolling Deployment. The text-extraction companion apps like paperless-ngx expect. Serves on :9998."
       },
       {
+         "category": "application",
          "id": "traccar",
          "maturity": {
             "tier": "e2e"
@@ -32245,6 +32522,7 @@
          "summary": "A Traccar server (a self-hosted GPS tracking platform: it ingests position reports from many GPS devices and phone apps and shows them live on a map) on the official image. Its settings are a traccar.xml mounted as a ConfigMap; with the default embedded H2 database its data lives on a PersistentVolume. It listens for device protocols on extra ports (5000-5150), separate ports to add Services for. Point it at an external PostgreSQL/MySQL (the database.* keys) to scale past the embedded writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8082."
       },
       {
+         "category": "application",
          "id": "transmission",
          "maturity": {
             "tier": "e2e"
@@ -32345,6 +32623,7 @@
          "summary": "A Transmission server — a fast, lightweight, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091."
       },
       {
+         "category": "application",
          "id": "trilium",
          "maturity": {
             "tier": "e2e"
@@ -32428,6 +32707,7 @@
          "summary": "A TriliumNext Notes server (a hierarchical note-taking application for building personal knowledge bases) on the official image. A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :8080."
       },
       {
+         "category": "application",
          "id": "tvheadend",
          "maturity": {
             "tier": "e2e"
@@ -32527,6 +32807,7 @@
          "summary": "A Tvheadend server (a self-hosted TV streaming server and DVR: DVB, IPTV, SAT>IP, with a web UI) on the LinuxServer.io image (pinned by digest; Renovate maintains it); config on a PersistentVolume. HTSP streaming (:9982) needs its own Service; tuners are hardware and not modelled. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :9981."
       },
       {
+         "category": "application",
          "id": "twenty",
          "maturity": {
             "tier": "e2e"
@@ -32721,6 +33002,7 @@
          "summary": "A Twenty server (a modern, open-source CRM) as two stages — server (the web/API front end) and worker (background BullMQ jobs) — on the official image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named twenty-db and a valkey named twenty-cache. kurly authors no Secret; PG_DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. The server keeps local uploads on a ReadWriteOnce volume (one replica, recreated); move to S3 to scale out."
       },
       {
+         "category": "infrastructure",
          "id": "typesense",
          "maturity": {
             "tier": "rendered"
@@ -32816,6 +33098,7 @@
          "summary": "A Typesense server (a fast, typo-tolerant, self-hosted search engine with a clean API) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; TYPESENSE_API_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8108."
       },
       {
+         "category": "application",
          "id": "umami",
          "maturity": {
             "tier": "e2e"
@@ -32912,6 +33195,7 @@
          "summary": "An Umami server (a simple, privacy-focused, self-hosted web-analytics alternative to Google Analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a cnpg-cluster named umami-db. Serves on :3000."
       },
       {
+         "category": "observability",
          "id": "uptime-kuma",
          "maturity": {
             "tier": "e2e"
@@ -32995,6 +33279,7 @@
          "summary": "An Uptime Kuma monitoring server (self-hosted uptime monitoring and status pages). A plain composable http workload that keeps its checks, history, and settings in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the dashboard and status pages on :3001."
       },
       {
+         "category": "infrastructure",
          "id": "valkey",
          "maturity": {
             "tier": "e2e"
@@ -33101,6 +33386,7 @@
          "summary": "A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image."
       },
       {
+         "category": "application",
          "id": "vaultwarden",
          "maturity": {
             "tier": "e2e"
@@ -33198,6 +33484,7 @@
          "summary": "A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080."
       },
       {
+         "category": "observability",
          "id": "victoriametrics",
          "maturity": {
             "tier": "e2e"
@@ -33289,6 +33576,7 @@
          "summary": "A VictoriaMetrics server (a fast, cost-effective, self-hosted time-series database and Prometheus-compatible monitoring backend) on the official single-node image; its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the HTTP API on :8428."
       },
       {
+         "category": "application",
          "id": "vikunja",
          "maturity": {
             "tier": "e2e"
@@ -33396,6 +33684,7 @@
          "summary": "A Vikunja server (a self-hosted to-do and project-management app) on the official all-in-one image. A plain composable http workload that keeps its data in SQLite and file attachments on a PersistentVolume by default — no external database. kurly authors no Secret; VIKUNJA_SERVICE_JWTSECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3456."
       },
       {
+         "category": "application",
          "id": "wallabag",
          "maturity": {
             "tier": "e2e"
@@ -33523,6 +33812,7 @@
          "summary": "A wallabag server (a self-hosted read-it-later app that saves clean, readable copies of web pages) on the official image, backed by an external PostgreSQL, with saved images on a PersistentVolume. Pairs with a cnpg-cluster named wallabag-db. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; the DB password and app secret come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "wallos",
          "maturity": {
             "tier": "e2e"
@@ -33606,6 +33896,7 @@
          "summary": "A Wallos server — a self-hosted subscription tracker and budgeting tool. On the official image; with the default SQLite backend its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "webtrees",
          "maturity": {
             "tier": "e2e"
@@ -33735,6 +34026,7 @@
          "summary": "A webtrees server (a self-hosted, collaborative online genealogy application) on the community image, backed by an external MySQL/MariaDB, with its data on a PersistentVolume. kurly authors no Secret; the DB_* credentials come from a provided Secret via envFrom. Pairs with a mysql-cluster named webtrees-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "wekan",
          "maturity": {
             "tier": "rendered"
@@ -33825,6 +34117,7 @@
          "summary": "A Wekan server (a self-hosted, open-source kanban board à la Trello) on the official image, backed by an external MongoDB. Pairs with a mongodb-cluster named wekan-db. kurly authors no Secret; MONGO_URL comes from a provided Secret via envFrom. Stateless (attachments live in MongoDB GridFS): a plain rolling Deployment. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "wger",
          "maturity": {
             "tier": "e2e"
@@ -33958,6 +34251,7 @@
          "summary": "A wger server (a self-hosted workout, nutrition, and body-weight manager) on the official all-in-one image, backed by an external PostgreSQL and Redis, with uploaded media on a PersistentVolume. Pairs with a cnpg-cluster named wger-db and a valkey named wger-cache. The image runs nginx + uWSGI + Celery and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DJANGO_DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "tool",
          "id": "whoogle",
          "maturity": {
             "tier": "e2e"
@@ -34036,6 +34330,7 @@
          "summary": "A Whoogle Search server (a self-hosted, privacy-respecting metasearch proxy for Google results: no ads, no tracking, no JavaScript required) on the official image. Stateless: a plain rolling Deployment. Configure through WHOOGLE_CONFIG_* env. Serves on :5000."
       },
       {
+         "category": "application",
          "id": "wikijs",
          "maturity": {
             "tier": "e2e"
@@ -34146,6 +34441,7 @@
          "summary": "A Wiki.js server (a modern, open-source wiki) on the official image, backed by an external PostgreSQL. Its content and configuration live in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named wikijs-db. kurly authors no Secret; DB_PASS comes from a provided Secret via envFrom. Serves on :3000."
       },
       {
+         "category": "application",
          "id": "wordpress",
          "maturity": {
             "tier": "e2e"
@@ -34266,6 +34562,7 @@
          "summary": "A WordPress server (the popular CMS and blogging platform) on the official image, backed by an external MySQL/MariaDB, with content (themes, plugins, uploads) on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; WORDPRESS_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
+         "category": "application",
          "id": "xwiki",
          "maturity": {
             "tier": "e2e"
@@ -34363,6 +34660,7 @@
          "summary": "An XWiki server (a powerful, self-hosted enterprise wiki and application-development platform: structured pages, macros, apps, fine-grained rights) on the official PostgreSQL/Tomcat image, backed by an external PostgreSQL, with its permanent directory on a PersistentVolume. kurly authors no Secret; the DB_* connection comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named xwiki-db. The bundled Tomcat runs as root. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
+         "category": "application",
          "id": "yourls",
          "maturity": {
             "tier": "e2e"
@@ -34476,6 +34774,7 @@
          "summary": "A YOURLS server (Your Own URL Shortener: a small, self-hosted PHP app for short links with stats and plugins) on the official image, backed by an external MySQL/MariaDB. kurly authors no Secret; the YOURLS_DB_* and admin YOURLS_USER/YOURLS_PASS come from a provided Secret via envFrom. Pairs with a mysql-cluster named yourls-db. Stateless (links live in MySQL): a plain rolling Deployment. Serves on :80."
       },
       {
+         "category": "infrastructure",
          "id": "znc",
          "maturity": {
             "tier": "e2e"
