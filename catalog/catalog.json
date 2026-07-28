@@ -14561,6 +14561,33 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "JOOMLA_DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "JOOMLA_ADMIN_PASSWORD",
+                     "length": 24
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "JOOMLA_ADMIN_USER",
+                     "value": "kurly admin"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "JOOMLA_ADMIN_USERNAME",
+                     "value": "kurlyadmin"
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "JOOMLA_ADMIN_EMAIL",
+                     "value": "admin@example.com"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -14652,6 +14679,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "POSTGRES_PASSWORD",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }

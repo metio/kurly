@@ -24,6 +24,11 @@ function(
   image=defaultImage,
   replicas=2,
   appBaseUrl=null,
+  // The PostgreSQL it stores notes and users in; the password comes from the Secret.
+  dbHost='joplin-db-rw',
+  dbPort=5432,
+  dbName='joplin',
+  dbUser='joplin',
   secretName='joplin',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
@@ -31,7 +36,14 @@ function(
   annotations={},
 )
   local baseEnv =
-    { APP_PORT: '22300', DB_CLIENT: 'pg' }
+    {
+      APP_PORT: '22300',
+      DB_CLIENT: 'pg',
+      POSTGRES_HOST: dbHost,
+      POSTGRES_PORT: std.toString(dbPort),
+      POSTGRES_DATABASE: dbName,
+      POSTGRES_USER: dbUser,
+    }
     + (if appBaseUrl == null then {} else { APP_BASE_URL: appBaseUrl });
   kurly.http(name, image)
   + kurly.version(version)
@@ -40,11 +52,17 @@ function(
   + kurly.servicePort(22300)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image's own joplin account owns everything the server writes.
+  + kurly.runAs(1001, gid=1001, fsGroup=1001)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '64Mi')
-  + kurly.readinessProbe({ httpGet: { path: '/api/ping', port: 'http' } })
-  + kurly.livenessProbe({ httpGet: { path: '/api/ping', port: 'http' } })
+  // The process manager keeps its own logs and runtime state under /opt/pm2, which
+  // the image owns as root.
+  + kurly.scratch('/opt/pm2', '64Mi')
+  // The server answers only requests whose origin matches APP_BASE_URL, and the
+  // kubelet probes by pod IP — so readiness is a connection check.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
+  + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)
   + kurly.annotations(annotations)

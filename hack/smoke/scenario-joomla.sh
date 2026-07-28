@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-joomla
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" joomla-db-rw joomla joomla
+kurly::mysql "$ns" joomla-db joomla joomla
 
 kurly::secret "$ns" joomla workloads/joomla/server.libsonnet
 kurly::boot workloads/joomla/server.libsonnet "$ns"

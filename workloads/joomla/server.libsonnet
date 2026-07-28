@@ -23,6 +23,11 @@ function(
   image=defaultImage,
   storageSize='10Gi',
   storageClass=null,
+  // The MySQL/MariaDB it stores the site in. The password comes from the Secret.
+  dbHost='joomla-db',
+  dbName='joomla',
+  dbUser='joomla',
+  dbType='mysqli',
   secretName='joomla',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
@@ -36,9 +41,16 @@ function(
   + kurly.port(80)
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
-  + kurly.env({} + env)
+  + kurly.env({
+    JOOMLA_DB_HOST: dbHost,
+    JOOMLA_DB_NAME: dbName,
+    JOOMLA_DB_USER: dbUser,
+    JOOMLA_DB_TYPE: dbType,
+  } + env)
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
+  // The entrypoint unpacks Joomla onto the volume and hands it to the web user.
+  + kurly.keepCapabilities()
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
