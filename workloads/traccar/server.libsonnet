@@ -61,9 +61,15 @@ function(
   + kurly.servicePort(8082)
   + kurly.config({ 'traccar.xml': configXml }, mountPath='/opt/traccar/conf')
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image installs and runs as root and owns its whole installation tree.
+  + kurly.rootUser()
   + kurly.writableRootFilesystem()
   + kurly.store('/opt/traccar/data', storageSize, storageClass=storageClass)
+  // The server writes its log beside its installation, relative to the working
+  // directory the image sets.
+  + kurly.scratch('/opt/traccar/logs', '128Mi')
+  // The JVM applies its database changesets before the web server binds.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
