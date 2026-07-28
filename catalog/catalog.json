@@ -19270,6 +19270,13 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "MB_DB_PASS",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -19620,6 +19627,10 @@
                   "writableRootFilesystem": false
                },
                "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
                   {
                      "generate": "password",
                      "key": "ADMIN_PASSWORD",
