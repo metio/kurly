@@ -19,7 +19,7 @@ Runs as root (s6-overlay), dropping to `puid`/`pgid`. Set `PLEX_CLAIM` (from ple
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
 
 ## Deploy with JaaS
 

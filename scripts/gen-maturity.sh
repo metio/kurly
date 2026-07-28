@@ -6,10 +6,10 @@
 # The point is that the tier cannot lie: it is recomputed from the real signals
 # every run, and check-catalog fails if the committed file is stale.
 #
-#   e2e     — a live-cluster (kind) scenario deploys the workload and waits for it
-#             to become ready: the per-workload fast check
-#             (hack/smoke/scenario-<id>.sh) or a deep scenario
-#             (hack/smoke/deep/*.sh) that exercises it as part of a larger seam
+#   e2e     — a live-cluster (kind) scenario has actually BOOTED the workload and
+#             seen it become ready. Every catalogued workload has a scenario, so the
+#             existence of one proves nothing; the evidence is the dated entry in
+#             catalog/e2e-verified.libsonnet, which is written when a run is green
 #   tested  — tests/*.jsonnet carries workload-specific assertions beyond the
 #             library-wide structural sweep
 #   rendered— everything else: renders and validates (kubeconform) with defaults,
@@ -28,8 +28,10 @@ out=catalog/maturity.gen.libsonnet
 # a catalogued workload).
 workloads="$(find workloads -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)"
 
-# e2e: workloads a smoke scenario deploys. tested: workloads a test asserts on.
-e2e="$(grep -rhoE 'workloads/[a-z0-9-]+' hack/smoke/scenario-*.sh hack/smoke/deep/*.sh 2>/dev/null | sed 's#workloads/##' | sort -u)"
+# e2e: workloads observed booting on a live cluster (the verification ledger, not the
+# mere presence of a scenario). tested: workloads a test asserts on.
+# jsonnetfmt quotes a key only when it has to (a leading digit), so both forms appear.
+e2e="$(grep -oE "^  '?[a-z0-9-]+'?:" catalog/e2e-verified.libsonnet 2>/dev/null | tr -d " ':" | sort -u)"
 tested="$(grep -rhoE 'workloads/[a-z0-9-]+' tests/*.jsonnet 2>/dev/null | sed 's#workloads/##' | sort -u)"
 
 # Keep only names that are real workload directories.

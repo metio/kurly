@@ -4615,7 +4615,7 @@
       {
          "id": "bigcapital",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required",
@@ -6157,7 +6157,7 @@
       {
          "id": "cnpg-cluster",
          "maturity": {
-            "tier": "e2e"
+            "tier": "tested"
          },
          "requires": { },
          "stages": [
@@ -6333,7 +6333,7 @@
       {
          "id": "cnpg-image-catalog",
          "maturity": {
-            "tier": "e2e"
+            "tier": "tested"
          },
          "requires": { },
          "stages": [
@@ -16571,7 +16571,7 @@
       {
          "id": "lychee",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "optional"
@@ -16834,7 +16834,7 @@
       {
          "id": "mailu",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required"
@@ -19840,7 +19840,7 @@
       {
          "id": "mongo",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -19940,7 +19940,7 @@
       {
          "id": "mongo-express",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -22860,7 +22860,7 @@
       {
          "id": "opencost",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -23585,7 +23585,7 @@
       {
          "id": "overleaf",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required",
@@ -24022,7 +24022,7 @@
       {
          "id": "paisa",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -24247,7 +24247,7 @@
       {
          "id": "passwordpusher",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -24331,7 +24331,7 @@
       {
          "id": "peertube",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required",
@@ -24747,7 +24747,7 @@
       {
          "id": "pgadmin",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "optional"
@@ -24844,7 +24844,7 @@
       {
          "id": "photoprism",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "optional"
@@ -24953,7 +24953,7 @@
       {
          "id": "photoview",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -25050,7 +25050,7 @@
       {
          "id": "phpmyadmin",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -25140,7 +25140,7 @@
       {
          "id": "pihole",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -25237,7 +25237,7 @@
       {
          "id": "pilos",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required",
@@ -25334,7 +25334,7 @@
       {
          "id": "pingvin-share",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -25415,7 +25415,7 @@
       {
          "id": "piwigo",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "optional"
@@ -25517,7 +25517,7 @@
       {
          "id": "planka",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required",
@@ -25622,7 +25622,7 @@
       {
          "id": "plex",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -25722,7 +25722,7 @@
       {
          "id": "pocket-id",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -25810,7 +25810,7 @@
       {
          "id": "pocketbase",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -25891,7 +25891,7 @@
       {
          "id": "portainer",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -25980,7 +25980,7 @@
       {
          "id": "postgres",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26073,7 +26073,7 @@
       {
          "id": "prestashop",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -26164,7 +26164,7 @@
       {
          "id": "privatebin",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26250,7 +26250,7 @@
       {
          "id": "projectsend",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -26353,7 +26353,7 @@
       {
          "id": "prometheus",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26494,7 +26494,7 @@
       {
          "id": "prowlarr",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26594,7 +26594,7 @@
       {
          "id": "pyload-ng",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26694,7 +26694,7 @@
       {
          "id": "qbittorrent",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26794,7 +26794,7 @@
       {
          "id": "qdrant",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26876,7 +26876,7 @@
       {
          "id": "rabbitmq",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -26968,7 +26968,7 @@
       {
          "id": "radarr",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -27068,7 +27068,7 @@
       {
          "id": "radicale",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -27150,7 +27150,7 @@
       {
          "id": "rallly",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -27247,7 +27247,7 @@
       {
          "id": "readarr",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -27346,7 +27346,7 @@
       {
          "id": "readeck",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -27428,7 +27428,7 @@
       {
          "id": "redis",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -27521,7 +27521,7 @@
       {
          "id": "redis-commander",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required"
@@ -27605,7 +27605,7 @@
       {
          "id": "redmine",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -27700,7 +27700,7 @@
       {
          "id": "registry",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "objectStorage": "optional"
@@ -27788,7 +27788,7 @@
       {
          "id": "resilio-sync",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -27888,7 +27888,7 @@
       {
          "id": "rocketchat",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -27979,7 +27979,7 @@
       {
          "id": "roundcube",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -28075,7 +28075,7 @@
       {
          "id": "rss-bridge",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -28153,7 +28153,7 @@
       {
          "id": "rundeck",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -28248,7 +28248,7 @@
       {
          "id": "sabnzbd",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -28348,7 +28348,7 @@
       {
          "id": "searxng",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "optional"
@@ -28446,7 +28446,7 @@
       {
          "id": "seatsurfing",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -28537,7 +28537,7 @@
       {
          "id": "seaweedfs",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -28768,7 +28768,7 @@
       {
          "id": "shaarli",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -28850,7 +28850,7 @@
       {
          "id": "shiori",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "optional"
@@ -28935,7 +28935,7 @@
       {
          "id": "shlink",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -29055,7 +29055,7 @@
       {
          "id": "silverbullet",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -29144,7 +29144,7 @@
       {
          "id": "siyuan",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -29227,7 +29227,7 @@
       {
          "id": "smtp4dev",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -29311,7 +29311,7 @@
       {
          "id": "snappymail",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -29392,7 +29392,7 @@
       {
          "id": "snipe-it",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -29518,7 +29518,7 @@
       {
          "id": "sonarqube",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -29633,7 +29633,7 @@
       {
          "id": "sonarr",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -29733,7 +29733,7 @@
       {
          "id": "spegel",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -29931,7 +29931,7 @@
       {
          "id": "status-responder",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -29995,7 +29995,7 @@
       {
          "id": "stirling-pdf",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -30077,7 +30077,7 @@
       {
          "id": "synapse",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "optional"
@@ -30173,7 +30173,7 @@
       {
          "id": "syncthing",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -30273,7 +30273,7 @@
       {
          "id": "tachidesk",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -30358,7 +30358,7 @@
       {
          "id": "tandoor",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -30459,7 +30459,7 @@
       {
          "id": "tautulli",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -30559,7 +30559,7 @@
       {
          "id": "teable",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required",
@@ -30657,7 +30657,7 @@
       {
          "id": "technitium",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -30753,7 +30753,7 @@
       {
          "id": "tempo",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "objectStorage": "required"
@@ -30819,7 +30819,7 @@
       {
          "id": "thanos",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "optional",
@@ -31373,7 +31373,7 @@
       {
          "id": "thelounge",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -31456,7 +31456,7 @@
       {
          "id": "tik",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -31508,7 +31508,7 @@
       {
          "id": "tika",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -31586,7 +31586,7 @@
       {
          "id": "traccar",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -31675,7 +31675,7 @@
       {
          "id": "transmission",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -31775,7 +31775,7 @@
       {
          "id": "trilium",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -31858,7 +31858,7 @@
       {
          "id": "tvheadend",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -31957,7 +31957,7 @@
       {
          "id": "twenty",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required",
@@ -32147,7 +32147,7 @@
       {
          "id": "typesense",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -32242,7 +32242,7 @@
       {
          "id": "umami",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -32334,7 +32334,7 @@
       {
          "id": "uptime-kuma",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -32417,7 +32417,7 @@
       {
          "id": "valkey",
          "maturity": {
-            "tier": "e2e"
+            "tier": "tested"
          },
          "requires": { },
          "stages": [
@@ -32620,7 +32620,7 @@
       {
          "id": "victoriametrics",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -32711,7 +32711,7 @@
       {
          "id": "vikunja",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "optional"
@@ -32806,7 +32806,7 @@
       {
          "id": "wallabag",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -32921,7 +32921,7 @@
       {
          "id": "wallos",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -33004,7 +33004,7 @@
       {
          "id": "webtrees",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -33101,7 +33101,7 @@
       {
          "id": "wekan",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -33191,7 +33191,7 @@
       {
          "id": "wger",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "cache": "required",
@@ -33324,7 +33324,7 @@
       {
          "id": "whoogle",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [
@@ -33402,7 +33402,7 @@
       {
          "id": "wikijs",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -33505,7 +33505,7 @@
       {
          "id": "wordpress",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -33625,7 +33625,7 @@
       {
          "id": "xwiki",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -33722,7 +33722,7 @@
       {
          "id": "yourls",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": {
             "database": "required"
@@ -33818,7 +33818,7 @@
       {
          "id": "znc",
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "requires": { },
          "stages": [

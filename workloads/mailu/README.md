@@ -122,7 +122,7 @@ Mailu options this recipe omits. Compose them as additional workloads and point
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
 
 ## Deploy with JaaS
 

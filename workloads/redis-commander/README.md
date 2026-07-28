@@ -19,7 +19,7 @@ Point it at Redis through `redisHosts` (`REDIS_HOSTS`). Serves on `:8081`.
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
 
 ## Deploy with JaaS
 

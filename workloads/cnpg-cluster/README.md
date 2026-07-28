@@ -196,7 +196,7 @@ can reach it from a pod spec.
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**tested** — this workload has workload-specific assertions in the test suite, on top of rendering cleanly.
 
 ## Deploy with JaaS
 
