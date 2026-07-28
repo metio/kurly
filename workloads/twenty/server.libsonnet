@@ -57,6 +57,8 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.store('/app/packages/twenty-server/.local-storage', storageSize, storageClass=storageClass)
+  // The server migrates its schema and warms its modules before it listens.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 40 })
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

@@ -27,7 +27,7 @@ function(
   storageClass=null,
   secretName='typesense',
   env={},
-  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
+  resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } },
   labels={},
   annotations={},
 )
@@ -41,6 +41,8 @@ function(
   + kurly.env({ TYPESENSE_DATA_DIR: '/data' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/data', storageSize, storageClass=storageClass)
+  // The server writes its temporary files outside the data directory.
+  + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
