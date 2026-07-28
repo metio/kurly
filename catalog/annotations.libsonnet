@@ -4598,7 +4598,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mattermost/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mattermost/server.libsonnet', secretKeys: [{ key: 'MM_SQLSETTINGS_DATASOURCE', generate: 'postgresUrl' }] },
       },
     },
     rocketchat: {

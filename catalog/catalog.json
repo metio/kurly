@@ -18332,6 +18332,12 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "postgresUrl",
+                     "key": "MM_SQLSETTINGS_DATASOURCE"
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
