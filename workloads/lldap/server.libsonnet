@@ -52,7 +52,9 @@ function(
   + kurly.extraPort('ldap', 3890)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The entrypoint hands its own files to the app user before dropping to it.
+  + kurly.rootUser()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

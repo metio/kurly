@@ -555,7 +555,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/listmonk/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/listmonk/server.libsonnet', secretKeys: [{ key: 'LISTMONK_db__password', generate: 'password', length: 32 }, { key: 'LISTMONK_app__admin_password', generate: 'password', length: 24 }] },
       },
     },
     umami: {
@@ -2518,7 +2518,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lldap/server.libsonnet', secretKeys: [{ key: 'LLDAP_JWT_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/lldap/server.libsonnet', secretKeys: [{ key: 'LLDAP_LDAP_USER_PASS', generate: 'password', length: 24 }, { key: 'LLDAP_JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     qbittorrent: {

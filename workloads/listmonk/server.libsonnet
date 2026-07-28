@@ -61,8 +61,19 @@ function(
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/listmonk/uploads', storageSize, storageClass=storageClass)
-  + kurly.readinessProbe({ httpGet: { path: '/api/health', port: 'http' } })
-  + kurly.livenessProbe({ httpGet: { path: '/api/health', port: 'http' } })
+  // listmonk installs its own schema; the install is idempotent, so it runs before
+  // every start and brings a fresh database up without a manual step.
+  + kurly.initContainer({
+    name: 'install',
+    image: image,
+    args: ['./listmonk', '--install', '--idempotent', '--yes'],
+    envFrom: [{ secretRef: { name: secretName } }],
+    env: [{ name: k, value: baseEnv[k] } for k in std.objectFields(baseEnv)],
+  })
+  // /api/health answers 403 to an unauthenticated request, so health is a
+  // connection check.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
+  + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),

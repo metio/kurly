@@ -16284,6 +16284,18 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "LISTMONK_db__password",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "LISTMONK_app__admin_password",
+                     "length": 24
+                  }
+               ],
                "storage": {
                   "pvcs": 1
                }
@@ -16378,10 +16390,15 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": false,
+                  "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
                "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "LLDAP_LDAP_USER_PASS",
+                     "length": 24
+                  },
                   {
                      "generate": "hex",
                      "key": "LLDAP_JWT_SECRET",
