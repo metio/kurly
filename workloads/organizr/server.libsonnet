@@ -36,6 +36,9 @@ function(
   + kurly.servicePort(80)
   + kurly.env(env)
   + kurly.rootUser()
+  // Its s6 init hands the config tree to the app user and prepares nginx's state.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
