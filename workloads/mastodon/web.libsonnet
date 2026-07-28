@@ -29,13 +29,31 @@ function(
   image=defaultImage,
   replicas=2,
   localDomain=null,
+  // The PostgreSQL and Redis it stores everything in; the passwords come from the
+  // Secret.
+  dbHost='mastodon-db-rw',
+  dbPort=5432,
+  dbName='mastodon',
+  dbUser='mastodon',
+  redisHost='mastodon-cache-headless',
+  redisPort=6379,
   secretName='mastodon',
   env={},
   resources={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } },
   labels={},
   annotations={},
 )
-  local baseEnv = if localDomain == null then {} else { LOCAL_DOMAIN: localDomain };
+  local baseEnv =
+    {
+      RAILS_ENV: 'production',
+      DB_HOST: dbHost,
+      DB_PORT: std.toString(dbPort),
+      DB_NAME: dbName,
+      DB_USER: dbUser,
+      REDIS_HOST: redisHost,
+      REDIS_PORT: std.toString(redisPort),
+    }
+    + (if localDomain == null then {} else { LOCAL_DOMAIN: localDomain });
   kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
@@ -43,10 +61,20 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
-  + kurly.env({ RAILS_ENV: 'production' } + baseEnv + env)
+  + kurly.env(baseEnv + env)
   + kurly.runAs(991, gid=991, fsGroup=991)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/mastodon/tmp', '256Mi')
+  // Mastodon needs its schema in place before the server (or a worker) can load
+  // the application; db:prepare creates it on an empty database and migrates an
+  // existing one, so it runs before every start.
+  + kurly.initContainer({
+    name: 'migrate',
+    image: image,
+    command: ['bundle', 'exec', 'rails', 'db:prepare'],
+    envFrom: [{ secretRef: { name: secretName } }],
+    env: [{ name: k, value: baseEnv[k] } for k in std.objectFields(baseEnv)],
+  })
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

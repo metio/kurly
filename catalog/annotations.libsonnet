@@ -4382,7 +4382,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/web.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/web.libsonnet', secretKeys: [{ key: 'DB_PASS', generate: 'password', length: 32 }, { key: 'REDIS_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY_BASE', generate: 'hex', length: 128 }, { key: 'OTP_SECRET', generate: 'hex', length: 128 }, { key: 'ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY', generate: 'hex', length: 32 }, { key: 'ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY', generate: 'hex', length: 32 }, { key: 'ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT', generate: 'hex', length: 32 }] },
         streaming: d.fn("The Mastodon streaming server (real-time timelines over WebSockets) on :4000. Shares the web stage's Secret via envFrom; route /api/v1/streaming to it.", [
           d.arg('name', d.T.string, default='mastodon-streaming'),
           d.arg('image', d.T.string),
@@ -4392,7 +4392,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/streaming.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/mastodon/streaming.libsonnet', secretKeys: [{ key: 'DB_PASS', generate: 'password', length: 32 }, { key: 'REDIS_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY_BASE', generate: 'hex', length: 128 }, { key: 'OTP_SECRET', generate: 'hex', length: 128 }, { key: 'ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY', generate: 'hex', length: 32 }, { key: 'ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY', generate: 'hex', length: 32 }, { key: 'ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT', generate: 'hex', length: 32 }] },
         sidekiq: d.fn("The Mastodon sidekiq background worker (federation, media, scheduled jobs). Shares the web stage's Secret via envFrom. No Service.", [
           d.arg('name', d.T.string, default='mastodon-sidekiq'),
           d.arg('image', d.T.string),
@@ -4402,7 +4402,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet', secretKeys: [{ key: 'OTP_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'worker', importPath: 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet', secretKeys: [{ key: 'DB_PASS', generate: 'password', length: 32 }, { key: 'REDIS_PASSWORD', generate: 'password', length: 32 }, { key: 'SECRET_KEY_BASE', generate: 'hex', length: 128 }, { key: 'OTP_SECRET', generate: 'hex', length: 128 }, { key: 'ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY', generate: 'hex', length: 32 }, { key: 'ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY', generate: 'hex', length: 32 }, { key: 'ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT', generate: 'hex', length: 32 }] },
       },
     },
     'oauth2-proxy': {

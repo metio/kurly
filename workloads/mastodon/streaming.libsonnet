@@ -20,6 +20,14 @@ function(
   name='mastodon-streaming',
   image=defaultImage,
   replicas=2,
+  // The PostgreSQL and Redis it stores everything in; the passwords come from the
+  // Secret.
+  dbHost='mastodon-db-rw',
+  dbPort=5432,
+  dbName='mastodon',
+  dbUser='mastodon',
+  redisHost='mastodon-cache-headless',
+  redisPort=6379,
   secretName='mastodon',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
@@ -32,7 +40,15 @@ function(
   + kurly.port(4000)
   + kurly.servicePort(4000)
   + kurly.envFromSecret(secretName)
-  + kurly.env({ RAILS_ENV: 'production' } + env)
+  + kurly.env({
+    RAILS_ENV: 'production',
+    DB_HOST: dbHost,
+    DB_PORT: std.toString(dbPort),
+    DB_NAME: dbName,
+    DB_USER: dbUser,
+    REDIS_HOST: redisHost,
+    REDIS_PORT: std.toString(redisPort),
+  } + env)
   + kurly.runAs(991, gid=991, fsGroup=991)
   + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/api/v1/streaming/health', port: 'http' } })

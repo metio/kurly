@@ -17739,9 +17739,39 @@
                },
                "secretKeys": [
                   {
+                     "generate": "password",
+                     "key": "DB_PASS",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "REDIS_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY_BASE",
+                     "length": 128
+                  },
+                  {
                      "generate": "hex",
                      "key": "OTP_SECRET",
-                     "length": 64
+                     "length": 128
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT",
+                     "length": 32
                   }
                ],
                "storage": {
@@ -17817,6 +17847,43 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASS",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "REDIS_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY_BASE",
+                     "length": 128
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "OTP_SECRET",
+                     "length": 128
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -17896,6 +17963,43 @@
                   "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASS",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "REDIS_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY_BASE",
+                     "length": 128
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "OTP_SECRET",
+                     "length": 128
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT",
+                     "length": 32
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }

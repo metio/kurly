@@ -19,6 +19,14 @@ function(
   name='mastodon-sidekiq',
   image=defaultImage,
   replicas=1,
+  // The PostgreSQL and Redis it stores everything in; the passwords come from the
+  // Secret.
+  dbHost='mastodon-db-rw',
+  dbPort=5432,
+  dbName='mastodon',
+  dbUser='mastodon',
+  redisHost='mastodon-cache-headless',
+  redisPort=6379,
   secretName='mastodon',
   env={},
   resources={ requests: { cpu: '250m', memory: '768Mi' }, limits: { memory: '1536Mi' } },
@@ -30,7 +38,15 @@ function(
   + kurly.replicas(replicas)
   + kurly.command(['bundle', 'exec', 'sidekiq'])
   + kurly.envFromSecret(secretName)
-  + kurly.env({ RAILS_ENV: 'production' } + env)
+  + kurly.env({
+    RAILS_ENV: 'production',
+    DB_HOST: dbHost,
+    DB_PORT: std.toString(dbPort),
+    DB_NAME: dbName,
+    DB_USER: dbUser,
+    REDIS_HOST: redisHost,
+    REDIS_PORT: std.toString(redisPort),
+  } + env)
   + kurly.runAs(991, gid=991, fsGroup=991)
   + kurly.writableRootFilesystem()
   + kurly.scratch('/mastodon/tmp', '256Mi')
