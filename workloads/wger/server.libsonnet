@@ -63,7 +63,8 @@ function(
   + kurly.version(version)
   + kurly.replicas(1)
   + kurly.recreate()
-  + kurly.port(80)
+  // The image serves on :8000; the Service keeps :80.
+  + kurly.port(8000)
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
