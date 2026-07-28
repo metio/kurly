@@ -1548,7 +1548,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/maybe/server.libsonnet', secretKeys: [{ key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/maybe/server.libsonnet', secretKeys: [{ key: 'SECRET_KEY_BASE', generate: 'hex', length: 128 }, { key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     mautic: {

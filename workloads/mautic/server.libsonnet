@@ -74,6 +74,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
+  // The entrypoint hands its config and log directories to the web user.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

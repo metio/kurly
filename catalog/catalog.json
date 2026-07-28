@@ -18583,6 +18583,11 @@
                },
                "secretKeys": [
                   {
+                     "generate": "hex",
+                     "key": "SECRET_KEY_BASE",
+                     "length": 128
+                  },
+                  {
                      "generate": "password",
                      "key": "POSTGRES_PASSWORD",
                      "length": 32
