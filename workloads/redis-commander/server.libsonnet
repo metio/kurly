@@ -34,7 +34,11 @@ function(
   + kurly.port(8081)
   + kurly.servicePort(8081)
   + kurly.env(baseEnv + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image's own redis account owns the config directory the entrypoint writes.
+  + kurly.runAs(10000, gid=0, fsGroup=0)
+  + kurly.writableRootFilesystem()
+  // The entrypoint writes the configuration it derives from the environment beside
+  // the defaults the image ships, so the whole tree has to be writable.
   + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

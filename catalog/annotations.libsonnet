@@ -5106,7 +5106,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rallly/server.libsonnet', secretKeys: [{ key: 'SECRET_PASSWORD', generate: 'password', length: 32 }] },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/rallly/server.libsonnet', secretKeys: [{ key: 'DATABASE_URL', generate: 'postgresUrl' }, { key: 'SECRET_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     baserow: {

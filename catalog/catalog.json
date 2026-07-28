@@ -27646,6 +27646,10 @@
                },
                "secretKeys": [
                   {
+                     "generate": "postgresUrl",
+                     "key": "DATABASE_URL"
+                  },
+                  {
                      "generate": "password",
                      "key": "SECRET_PASSWORD",
                      "length": 32
