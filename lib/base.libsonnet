@@ -356,6 +356,7 @@ local exclusionConflicts(exclusive) = [
       seccompProfile: 'RuntimeDefault',
       allowPrivilegeEscalation: false,
       dropAllCapabilities: true,
+      addCapabilities: [],  // named capabilities granted back on top of the drop
       readOnlyRootFilesystem: true,
       hostUsers: false,
     },
@@ -633,7 +634,10 @@ local exclusionConflicts(exclusive) = [
       std.prune({
         allowPrivilegeEscalation: if cfg.allowPrivilegeEscalation then null else false,
         readOnlyRootFilesystem: if cfg.readOnlyRootFilesystem then true else null,
-        capabilities: if cfg.dropAllCapabilities then { drop: ['ALL'] } else null,
+        capabilities:
+          local dropped = if cfg.dropAllCapabilities then { drop: ['ALL'] } else {};
+          local added = if std.length(cfg.addCapabilities) > 0 then { add: cfg.addCapabilities } else {};
+          if dropped == {} && added == {} then null else dropped + added,
         runAsUser: cfg.runAsUser,
         runAsGroup: cfg.runAsGroup,
       }),

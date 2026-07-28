@@ -280,6 +280,12 @@ local podOf(app) = app.deployment.spec.template.spec;
     [v.name for v in pod.volumes if std.startsWith(v.name, 'etc-')],
     ['etc-app-server-users-d']
   ),
+  // kurly.addCapabilities grants named privileges back on top of the dropped-ALL
+  // default, so the manifest states exactly which ones the app holds.
+  added_capabilities_compose_with_the_drop: std.assertEqual(
+    containerOf(kurly.worker('w', 'img:1') + kurly.addCapabilities(['NET_BIND_SERVICE'])).securityContext.capabilities,
+    { drop: ['ALL'], add: ['NET_BIND_SERVICE'] }
+  ),
   // kurly.runAs pins uid/gid on the container and fsGroup on the pod.
   user_and_fsgroup: std.assertEqual(
     [

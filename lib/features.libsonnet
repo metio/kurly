@@ -291,6 +291,12 @@ local resourcePresets = {
   // ALL — the way an app that binds a privileged port (<1024) as root keeps
   // CAP_NET_BIND_SERVICE.
   keepCapabilities():: { config+:: { dropAllCapabilities: false } },
+  // Grant named Linux capabilities on top of the dropped-ALL default — the way an
+  // app that needs a specific privilege (a DNS server binding :53 and managing
+  // routes wants NET_BIND_SERVICE and NET_ADMIN) keeps the hardened posture for
+  // everything else. Composes with the drop: the capabilities are added back
+  // explicitly, so the manifest states exactly which privileges the app holds.
+  addCapabilities(capabilities):: { config+:: { addCapabilities: capabilities } },
 
   // Extra group memberships for every container in the pod — the way to reach
   // storage owned by a fixed GID the pod does not run as (a shared NFS/CephFS

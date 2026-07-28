@@ -48,6 +48,11 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({ TZ: timezone } + env)
   + kurly.rootUser()
+  // pihole-FTL sets file capabilities on itself and needs the privileges a DNS
+  // server holds: binding :53, managing its own network state, and raising its
+  // scheduling priority. Everything else stays dropped.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.addCapabilities(['NET_BIND_SERVICE', 'NET_ADMIN', 'NET_RAW', 'SYS_NICE', 'CHOWN', 'SETUID', 'SETGID', 'SETFCAP', 'DAC_OVERRIDE'])
   + kurly.writableRootFilesystem()
   + kurly.store('/etc/pihole', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/admin/', port: 'http' } })

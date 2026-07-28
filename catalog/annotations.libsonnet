@@ -219,6 +219,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     hostUsers: d.fn('Shares the host user namespace instead of an own one — needed on Windows nodes and where user namespaces are unavailable (relaxes hostUsers=false).', []) + { kinds: allKinds, group: 'security' },
     allowPrivilegeEscalation: d.fn('Allows the process to gain privileges its parent lacks — required to exec a binary carrying file capabilities (relaxes allowPrivilegeEscalation=false).', []) + { kinds: allKinds, group: 'security' },
     keepCapabilities: d.fn('Keeps the runtime default Linux capabilities instead of dropping ALL — the way a root process keeps CAP_NET_BIND_SERVICE to bind a privileged port.', []) + { kinds: allKinds, group: 'security' },
+    addCapabilities: d.fn('Grants named Linux capabilities on top of the dropped-ALL default — how an app that needs one specific privilege (a DNS server binding :53 and managing routes) keeps the hardened posture for everything else.', [
+      d.arg('capabilities', d.T.array, required=true, example=['NET_BIND_SERVICE']),
+    ]) + { kinds: allKinds, group: 'security' },
     supplementalGroups: d.fn("Extra group memberships for every container in the pod — how a pod reaches storage owned by a fixed GID it does not run as (a shared NFS/CephFS export). Distinct from fsGroup, which changes ownership of the pod's own volumes.", [
       d.arg('groups', d.T.array, required=true, example=[2000]),
     ]) + { kinds: allKinds, group: 'security' },
@@ -2971,7 +2974,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pihole/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/pihole/server.libsonnet', secretKeys: [{ key: 'FTLCONF_webserver_api_password', generate: 'password', length: 24 }] },
       },
     },
     kimai: {
@@ -3904,7 +3907,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/photoview/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/photoview/server.libsonnet', secretKeys: [{ key: 'PHOTOVIEW_DATABASE_DRIVER', generate: 'literal', value: 'postgres' }, { key: 'PHOTOVIEW_POSTGRES_URL', generate: 'postgresUrl' }] },
       },
     },
     yourls: {
