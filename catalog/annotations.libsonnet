@@ -3924,7 +3924,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/yourls/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/yourls/server.libsonnet', secretKeys: [{ key: 'YOURLS_DB_PASS', generate: 'password', length: 32 }, { key: 'YOURLS_USER', generate: 'literal', value: 'admin' }, { key: 'YOURLS_PASS', generate: 'password', length: 24 }] },
       },
     },
     'pocket-id': {

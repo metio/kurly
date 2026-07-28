@@ -15,5 +15,6 @@
   "shlink": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })",
   "teable": "+ k.env({ PUBLIC_ORIGIN: 'http://teable:3000' })",
   "twenty": "+ k.env({ SERVER_URL: 'http://twenty:3000' })",
-  "vikunja": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"
+  "vikunja": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })",
+  "yourls": "+ k.env({ YOURLS_SITE: 'http://yourls' })"
 }

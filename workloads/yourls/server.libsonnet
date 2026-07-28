@@ -35,13 +35,19 @@ function(
   kurly.http(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.port(80)
+  // The image's Apache serves on :8080 as the unprivileged web user; the Service
+  // keeps :80.
+  + kurly.port(8080)
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
+  // The entrypoint unpacks YOURLS onto the volume and hands it to the web user.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
-  + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
+  // An uninstalled YOURLS redirects into its installer, and the kubelet follows the
+  // chain — so readiness is a connection check.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)

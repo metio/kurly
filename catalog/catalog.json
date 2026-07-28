@@ -34404,6 +34404,23 @@
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "YOURLS_DB_PASS",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "YOURLS_USER",
+                     "value": "admin"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "YOURLS_PASS",
+                     "length": 24
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
