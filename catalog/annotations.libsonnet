@@ -3798,7 +3798,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/odoo/server.libsonnet' },
+        ]) + { kind: 'http', importPath: 'github.com/metio/kurly/workloads/odoo/server.libsonnet', secretKeys: [{ key: 'HOST', generate: 'literal', value: 'odoo-db-rw' }, { key: 'PORT', generate: 'literal', value: '5432' }, { key: 'USER', generate: 'literal', value: 'odoo' }, { key: 'PASSWORD', generate: 'password', length: 32 }] },
       },
     },
     technitium: {

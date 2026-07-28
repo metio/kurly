@@ -28,7 +28,7 @@ function(
   pgid=1000,
   timezone='UTC',
   env={},
-  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
+  resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
   labels={},
   annotations={},
 )
@@ -46,6 +46,8 @@ function(
   + kurly.allowPrivilegeEscalation()
   + kurly.keepCapabilities()
   + kurly.store('/config', storageSize, storageClass=storageClass)
+  // The Java app takes a while to bring its context up on first start.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
