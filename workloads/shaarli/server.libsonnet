@@ -39,9 +39,13 @@ function(
   // The bundled Apache/PHP-FPM master runs as root then serves as www-data; the root
   // filesystem stays writable for its runtime state.
   + kurly.rootUser()
+  // php-fpm hands its socket to the web user before dropping privileges.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/shaarli/data', storageSize, storageClass=storageClass)
-  + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
+  // An uninstalled Shaarli redirects every request into its installer, and the
+  // kubelet follows the chain until it gives up — so readiness is a connection check.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
