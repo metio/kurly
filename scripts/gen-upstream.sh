@@ -32,19 +32,28 @@
 #
 # Network-bound, like gen-architectures: run it on demand or on a schedule, never
 # in the per-PR gate.
+#
+# WORKLOADS (space-separated ids) narrows the sweep to those workloads, keeping
+# what the last run derived for the rest. Asking three hundred registries takes
+# hours against a rate limit, and one bumped image should not have to pay for it.
 set -euo pipefail
 
+only="${WORKLOADS:-}"
 out=catalog/upstream.gen.libsonnet
-tmp="$(mktemp)"
+# Written progressively, next to the output rather than in a temp dir: asking
+# three hundred registries takes hours, and a run that is interrupted at image
+# 279 must not throw away 279 answers. The next run reads whatever is here as
+# what was already derived, so it resumes instead of restarting.
+tmp="${out}.partial"
 previous="$(mktemp)"
-trap 'rm -f "$tmp" "$previous"' EXIT
+trap 'rm -f "$previous"' EXIT
 
-# What the last run derived, so an unreachable registry costs nothing.
-if [ -f "$out" ]; then
-  jsonnet "$out" > "$previous" 2>/dev/null || echo '{}' > "$previous"
-else
-  echo '{}' > "$previous"
-fi
+# What is already derived — the last complete run, plus anything an interrupted
+# one got through.
+{
+  if [ -f "$out" ]; then jsonnet "$out" 2>/dev/null || echo '{}'; else echo '{}'; fi
+  if [ -f "$tmp" ]; then jsonnet <(cat "$tmp"; printf '}\n') 2>/dev/null || echo '{}'; else echo '{}'; fi
+} | jq --slurp '.[0] * .[1]' > "$previous"
 
 # An SPDX expression as it appears in practice: identifiers, an optional `-only`
 # / `-or-later`, joined by AND/OR/WITH. Deliberately shape-only — kurly does not
@@ -80,6 +89,20 @@ for dir in workloads/*/; do
   [ -n "$image" ] || continue
   total=$((total + 1))
 
+  # Outside the requested subset: keep what the last run derived, unasked.
+  if [ -n "$only" ] && ! grep -qw -- "$id" <<<"$only"; then
+    entry="$(jq -c --arg id "$id" '.[$id] // empty' "$previous")"
+    if [ -n "$entry" ]; then
+      covered=$((covered + 1))
+      {
+        printf "  '%s': {\n" "$id"
+        jq -r 'to_entries[] | "    \(.key): '"'"'\(.value)'"'"',"' <<<"$entry"
+        printf '  },\n'
+      } >> "$tmp"
+    fi
+    continue
+  fi
+
   # --retry-times covers the transient failures skopeo recognises; the loop
   # covers the ones it does not (a timeout, a rate limit answered as an error),
   # backing off so a burst of three hundred inspects does not sustain one.
@@ -94,7 +117,7 @@ for dir in workloads/*/; do
     labels=""
   done
   if [ -z "$labels" ]; then
-    printf '%3d/%-3d %-28s unreachable\n' "$total" "$count" "$id"
+    printf '%3d/%-3d %-28s unreachable\n' "$total" "$count" "$id" >&2
     # The registry never answered. Keep what the last run derived rather than
     # publishing an absence that reads like a decision.
     kept="${kept}${id} "
@@ -129,7 +152,7 @@ for dir in workloads/*/; do
   # registry, and a run that says nothing for that long hides both its progress
   # and the fact that a second copy of it is running.
   printf '%3d/%-3d %-28s %s\n' "$total" "$count" "$id" \
-    "$( [ "$attempts" -gt 1 ] && printf 'retried %sx ' "$attempts"; [ -n "$license" ] && printf '%s ' "$license"; [ -n "$source" ] && printf 'src ' )"
+    "$( [ "$attempts" -gt 1 ] && printf 'retried %sx ' "$attempts"; [ -n "$license" ] && printf '%s ' "$license"; [ -n "$source" ] && printf 'src ' )" >&2
 
   {
     # jsonnetfmt quotes a key only when it must; emit quoted and let it decide.
@@ -144,7 +167,6 @@ done
 
 printf '}\n' >> "$tmp"
 mv "$tmp" "$out"
-trap - EXIT
 
 echo "wrote ${out}: ${covered}/${total} workloads carry usable image labels"
 [ -n "$missing" ] && {
