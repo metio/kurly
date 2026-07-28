@@ -40,7 +40,8 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.env(env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image's own misskey account owns the build tree the server writes into.
+  + kurly.runAs(991, gid=991, fsGroup=991)
   + kurly.writableRootFilesystem()
   // The config file carries DB/Redis credentials, so it comes from a Secret, not a ConfigMap.
   + kurly.secretMount(configSecret, '/misskey/.config')
