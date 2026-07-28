@@ -23,6 +23,31 @@ concurrency:
   group: e2e-${{ github.ref }}
   cancel-in-progress: true
 jobs:
+  bsi:
+    name: BSI verdicts still match the policies
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Create the kind cluster (latest Kubernetes)
+        run: nix develop --command kind create cluster --wait 120s
+      # The catalog publishes which bollwerk policies each stage breaks, judged by
+      # an API server. Nothing keeps that true on its own: a relaxed security knob
+      # or an edited policy changes the verdicts, and a published claim about
+      # compliance must not lag either. So it is REGENERATED here and the run
+      # fails if the committed answers differ — the data cannot go stale without
+      # the pull request that staled it going red.
+      - name: Regenerate and compare
+        run: |
+          set -euo pipefail
+          nix develop --command gen-bsi
+          if ! git diff --quiet -- catalog/bsi.gen.libsonnet; then
+            echo "::error::the BSI verdicts changed — run gen-bsi and commit catalog/bsi.gen.libsonnet"
+            git --no-pager diff -- catalog/bsi.gen.libsonnet | head -60
+            exit 1
+          fi
+          echo "the published BSI verdicts match what the API server says"
   changes:
     name: Which workloads changed?
     runs-on: ubuntu-latest
