@@ -599,7 +599,7 @@ EOF
     # first render look exactly like a broken one — and only ever on whichever
     # workload happens to sort first, which is how a day gets lost to a flake.
     kurly::wait_ready jsonnetsnippet "$snip" "$snippetTries" \
-      || { echo "::error::deep ${id}: jsonnetsnippet/${snip} never rendered"; kurly::diagnose_pipeline "$ns"; return 1; }
+      || { kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: jsonnetsnippet/${snip} never rendered"; return 1; }
     snippetTries=60
     kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: stages.metio.wtf/v1
@@ -618,9 +618,9 @@ spec:
           - { apiVersion: ${apiv}, kind: ${kind}, name: ${name}, namespace: ${ns} }
 EOF
     kurly::wait_ready stageset "$snip" 90 \
-      || { echo "::error::deep ${id}: stageset/${snip} never became Ready"; kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; return 1; }
+      || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: stageset/${snip} never became Ready"; return 1; }
     kubectl --namespace="$ns" rollout status "${kind,,}/${name}" --timeout=300s \
-      || { echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; return 1; }
+      || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }
   done
   echo "ok: ${id} delivered end-to-end through Flux -> JaaS -> stageset"
 }
@@ -658,32 +658,10 @@ kurly::diagnose() {
 kurly::diagnose_pipeline() {
   local ns="$1"
   echo "::group::pipeline diagnostics ($ns)"
-  kubectl --namespace="$ns" get gitrepository,ocirepository,jsonnetlibrary,jsonnetsnippet,externalartifact,stageset,stageinventory -o wide 2>/dev/null || true
-  # Every snippet and stageset in the namespace, by name rather than by a name
-  # this function guesses: a diagnostic that asks about the wrong object prints
-  # nothing and reads exactly like a healthy one.
-  #
-  # The CONDITION MESSAGE is the point of all this — `EvaluationFailed` names the
-  # kind of failure, and only the message says which import did not resolve or
-  # which assert fired.
-  echo "--- JsonnetSnippet conditions ---"
-  kubectl --namespace="$ns" get jsonnetsnippet -o jsonpath=\
-'{range .items[*]}{.metadata.name}{"\t"}{range .status.conditions[*]}{.type}={.status} reason={.reason} message={.message}{"\n"}{end}{end}' 2>/dev/null || true
-  echo
-  kubectl --namespace="$ns" describe jsonnetsnippet 2>/dev/null | tail -60 || true
-  echo "--- StageSet conditions ---"
-  kubectl --namespace="$ns" get stageset -o jsonpath=\
-'{range .items[*]}{.metadata.name}{"\t"}{range .status.conditions[*]}{.type}={.status} reason={.reason} message={.message}{"\n"}{end}{end}' 2>/dev/null || true
-  echo
-  kubectl --namespace="$ns" describe stageset 2>/dev/null | tail -60 || true
-  # Did the applied objects land ANYWHERE? A kind:List the applier never expands,
-  # or objects placed in another namespace, both read as NotFound to a readyCheck.
-  echo "--- workload objects in ${ns} ---"
-  kubectl --namespace="$ns" get deployments,statefulsets,daemonsets,services,pods -o wide 2>/dev/null || true
-  echo "--- StageInventory (what stageset applied) ---"
-  kubectl --namespace="$ns" get stageinventory -o yaml 2>/dev/null | grep -iE "kind:|name:|namespace:|apiVersion:" | head -40 || true
-  # The controllers' own pods and logs — where a hang that never writes a CR
-  # condition (an OOMKill, a crash, a stuck fetch) actually shows up.
+  # The controllers' own pods and logs FIRST — bulky, and where a hang that never
+  # writes a condition (an OOMKill, a crash, a stuck fetch) shows up. Ordered
+  # ahead of the conditions on purpose: a long CI log is read from its tail, and
+  # the tail should hold the answer rather than a controller's startup banner.
   echo "--- JaaS operator (pods + logs) ---"
   kubectl --namespace=jaas-system get pods -o wide 2>/dev/null || true
   kubectl --namespace=jaas-system logs --selector=app.kubernetes.io/instance=jaas \
@@ -692,6 +670,26 @@ kurly::diagnose_pipeline() {
   kubectl --namespace=stageset-system get pods -o wide 2>/dev/null || true
   kubectl --namespace=stageset-system logs --selector=app.kubernetes.io/instance=stageset \
     --all-containers=true --tail=80 --prefix 2>/dev/null || true
+  echo "--- sources and objects in ${ns} ---"
+  kubectl --namespace="$ns" get gitrepository,ocirepository,jsonnetlibrary,jsonnetsnippet,externalartifact,stageset,stageinventory -o wide 2>/dev/null || true
+  kubectl --namespace="$ns" get deployments,statefulsets,daemonsets,services,pods -o wide 2>/dev/null || true
+  echo "--- StageInventory (what stageset applied) ---"
+  kubectl --namespace="$ns" get stageinventory -o yaml 2>/dev/null | grep -iE "kind:|name:|namespace:|apiVersion:" | head -40 || true
+  # LAST, and asked by namespace rather than by a guessed name: the condition
+  # MESSAGE. A reason names the kind of failure; only the message says which
+  # import did not resolve or which assert fired.
+  echo "--- CONDITIONS (the answer, kept last so a truncated log still carries it) ---"
+  kubectl --namespace="$ns" get jsonnetsnippet -o jsonpath=\
+'{range .items[*]}snippet/{.metadata.name}{"\n"}{range .status.conditions[*]}  {.type}={.status} reason={.reason}{"\n"}  message={.message}{"\n"}{end}{end}' 2>/dev/null || true
+  echo
+  kubectl --namespace="$ns" get stageset -o jsonpath=\
+'{range .items[*]}stageset/{.metadata.name}{"\n"}{range .status.conditions[*]}  {.type}={.status} reason={.reason}{"\n"}  message={.message}{"\n"}{end}{end}' 2>/dev/null || true
+  echo
+  # Every pod that is not Running, with why — an ImagePullBackOff or a crash loop
+  # is the other half of "the rollout never completed".
+  echo "--- pods not Running ---"
+  kubectl --namespace="$ns" get pods -o json 2>/dev/null \
+    | jq -r '.items[] | select(.status.phase != "Running") | "\(.metadata.name) \(.status.phase) \([.status.containerStatuses[]?.state | to_entries[] | "\(.key): \(.value.reason // "")\(if .value.message then " — " + .value.message else "" end)"] | join("; "))"' 2>/dev/null || true
   echo "::endgroup::"
 }
 
