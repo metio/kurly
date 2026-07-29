@@ -170,6 +170,21 @@
             ];
             text = builtins.readFile ./scripts/gen-bsi.sh;
           };
+          # Writes the artifacts a catalogue describes into it, at release time.
+          # Release-only: the artifacts it names do not exist before the release
+          # that publishes them, so this cannot run in the per-PR gate.
+          stamp-catalog = pkgs.writeShellApplication {
+            name = "stamp-catalog";
+            runtimeInputs = with pkgs; [
+              jq
+              skopeo
+              git
+              gnugrep
+              gnused
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/stamp-catalog.sh;
+          };
           # Writes the SPDX licence register to catalog/spdx.gen.libsonnet, which
           # catalog.jsonnet validates every licence value against. The list comes
           # from the devShell (pinned by flake.lock), so this is offline and
@@ -358,6 +373,7 @@
             check-security
             gen-maturity
             gen-spdx
+            stamp-catalog
             gen-architectures
             gen-forge
             gen-upstream

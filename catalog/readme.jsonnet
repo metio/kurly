@@ -71,21 +71,32 @@ local snippetYaml(w, stage) = std.join('\n', [
   '    - { kind: JsonnetLibrary, name: kurly-%s, importPath: github.com/metio/kurly/workloads/%s }' % [w.id, w.id],
 ]);
 
+// The version the deploy example pins. A README is read by a person setting this
+// up by hand, so it shows a concrete tag rather than teaching digest pinning to
+// somebody who wants to try a wiki — Renovate takes it from there.
+local exampleVersion = '2026.7.29';
+
 // The Flux/JaaS sources shared by every stage, then a snippet per stage.
 local sourcesYaml(w) = std.join('\n---\n', [
   std.join('\n', [
     '# The kurly library (recipes) and this workload (source), both single-layer',
     '# images from their release pipelines, pulled by plain OCIRepositories.',
+    '#',
+    '# Pinned by VERSION, not by `latest`: a moveable tag means the source you',
+    '# render can change under you between reconciles, and there is no saying',
+    '# afterwards which one produced what is running. Renovate keeps these',
+    '# current, and can pin the digest on top if reproducibility has to survive a',
+    '# retagged registry. The catalog names the version each release published.',
     'apiVersion: source.toolkit.fluxcd.io/v1',
     'kind: OCIRepository',
     'metadata: { name: kurly, namespace: %s }' % w.id,
-    'spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }',
+    'spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: %s } }' % exampleVersion,
   ]),
   std.join('\n', [
     'apiVersion: source.toolkit.fluxcd.io/v1',
     'kind: OCIRepository',
     'metadata: { name: kurly-%s, namespace: %s }' % [w.id, w.id],
-    'spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/%s, ref: { tag: latest } }' % w.id,
+    'spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/%s, ref: { tag: %s } }' % [w.id, exampleVersion],
   ]),
   std.join('\n', [
     'apiVersion: jaas.metio.wtf/v1',

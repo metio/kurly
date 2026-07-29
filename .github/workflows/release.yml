@@ -248,8 +248,23 @@ jobs:
           gh release create "$tag" --title "$tag" --notes-file "$NOTES"
   catalog:
     name: Release catalog
-    needs: [discover, validate]
-    if: needs.discover.outputs.catalog == 'true'
+    # The catalogue names the artifacts its facts were generated from, so it must
+    # publish AFTER them: released in parallel, it would stamp whatever the
+    # registry held a moment ago, and the workload whose facts just changed is
+    # exactly the one whose stamp would be missing or stale. Everything else
+    # would stamp correctly from its git tag, so it would look like it worked.
+    #
+    # always(), because a unit not released in this run is skipped rather than
+    # failed, and a skipped dependency would otherwise skip the catalogue too. A
+    # unit that genuinely FAILED still blocks it: a catalogue that names an
+    # artifact whose push did not finish is the specific lie this ordering
+    # exists to prevent.
+    needs: [discover, validate, library, workload]
+    if: >-
+      always() && needs.discover.outputs.catalog == 'true'
+      && needs.validate.result == 'success'
+      && needs.library.result != 'failure'
+      && needs.workload.result != 'failure'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -261,6 +276,35 @@ jobs:
         with:
           fetch-depth: 0
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      # The catalogue names the artifacts its facts came from. Nothing before the
+      # release can do this: those artifacts do not exist yet. Everything the
+      # stamp adds is derived from this run's version, the repository's release
+      # tags, and the registry answering for a NAMED tag — never for "newest".
+      - name: Name the artifacts this catalog describes
+        env:
+          VERSION: ${{ needs.discover.outputs.version }}
+          RELEASED: >-
+            ${{ needs.discover.outputs.library == 'true' && 'library' || '' }}
+            ${{ join(fromJSON(needs.discover.outputs.workloads), ' ') }}
+        run: |
+          set -euo pipefail
+          nix develop --command jb install >/dev/null
+          nix develop --command stamp-catalog
+      # What you can read in git is what ships, with one enumerated exception.
+      # The stamped keys are the only fields allowed to differ, and they are
+      # removed before the comparison rather than the comparison being relaxed —
+      # a release job that changed anything else fails here.
+      - name: The published catalog is the committed one plus the stamp
+        run: |
+          set -euo pipefail
+          stripped="$(mktemp)"
+          jq 'del(.library, .k8sLibsonnet) | .workloads |= map(del(.artifact))' catalog/catalog.json > "$stripped"
+          git show HEAD:catalog/catalog.json | jq . > "${stripped}.committed"
+          diff -u "${stripped}.committed" "$stripped" || {
+            echo "::error::the release changed the catalog beyond the artifact stamp"
+            exit 1
+          }
+          echo "the published catalog is the committed one plus the artifacts it names"
       - name: Assert single layer and a readable catalog in the built image
         # Single layer, like the library and workload images. And the layer has
         # to carry a catalog a consumer can actually READ: parse it out of the

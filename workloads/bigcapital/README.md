@@ -70,15 +70,21 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 ```yaml
 # The kurly library (recipes) and this workload (source), both single-layer
 # images from their release pipelines, pulled by plain OCIRepositories.
+#
+# Pinned by VERSION, not by `latest`: a moveable tag means the source you
+# render can change under you between reconciles, and there is no saying
+# afterwards which one produced what is running. Renovate keeps these
+# current, and can pin the digest on top if reproducibility has to survive a
+# retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata: { name: kurly, namespace: bigcapital }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: latest } }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata: { name: kurly-bigcapital, namespace: bigcapital }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/bigcapital, ref: { tag: latest } }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/bigcapital, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
