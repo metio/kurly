@@ -31,7 +31,7 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 local labelsFor(name) = {
   'app.kubernetes.io/name': name,
   'app.kubernetes.io/managed-by': 'kurly',
-  'app.kubernetes.io/version': version,
+  'kurly.metio.wtf/version': version,
 };
 
 function(

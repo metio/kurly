@@ -23,15 +23,16 @@
 // lokistack-gateway-http.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
-// The workload version, stamped as app.kubernetes.io/version; the release
-// pipeline overwrites version.txt with the calver. (The Loki image itself is the
+// kurly's own packaging version, stamped as kurly.metio.wtf/version; the release
+// pipeline overwrites version.txt with the calver. The application's version is
+// app.kubernetes.io/version, which comes from the image tag. (The Loki image itself is the
 // operator's to choose from its LokiStack version, so there is none to pin here.)
 local version = std.rstripChars(importstr './version.txt', '\n');
 
 local labelsFor(name) = {
   'app.kubernetes.io/name': name,
   'app.kubernetes.io/managed-by': 'kurly',
-  'app.kubernetes.io/version': version,
+  'kurly.metio.wtf/version': version,
 };
 
 function(

@@ -21,10 +21,13 @@
 //     key. kurly authors no Secret; fill it with kurly.externalSecret.
 local version = std.rstripChars(importstr './version.txt', '\n');
 
-local labelsFor(name) = {
+local labelsFor(name, appVersion) = {
   'app.kubernetes.io/name': name,
   'app.kubernetes.io/managed-by': 'kurly',
-  'app.kubernetes.io/version': version,
+  'kurly.metio.wtf/version': version,
+  // The APPLICATION's version, which this workload states outright — the
+  // operator resolves it to an image kurly never names.
+  'app.kubernetes.io/version': appVersion,
 };
 
 function(
@@ -56,7 +59,7 @@ function(
       kind: 'MongoDBCommunity',
       metadata: std.prune({
         name: name,
-        labels: labelsFor(name) + labels,
+        labels: labelsFor(name, mongodbVersion) + labels,
         annotations: (if annotations == {} then null else annotations),
       }),
       spec: {
@@ -96,7 +99,7 @@ function(
             }) },
           ],
           template: { metadata: std.prune({
-            labels: labelsFor(name) + labels,
+            labels: labelsFor(name, mongodbVersion) + labels,
             annotations: (if annotations == {} then null else annotations),
           }) },
         } },

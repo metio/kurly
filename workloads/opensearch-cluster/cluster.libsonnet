@@ -16,10 +16,13 @@
 // PREREQUISITE: the OpenSearch Operator (opensearch-operator) must be installed.
 local version = std.rstripChars(importstr './version.txt', '\n');
 
-local labelsFor(name) = {
+local labelsFor(name, appVersion) = {
   'app.kubernetes.io/name': name,
   'app.kubernetes.io/managed-by': 'kurly',
-  'app.kubernetes.io/version': version,
+  'kurly.metio.wtf/version': version,
+  // The APPLICATION's version, which this workload states outright — the
+  // operator resolves it to an image kurly never names.
+  'app.kubernetes.io/version': appVersion,
 };
 
 function(
@@ -52,7 +55,7 @@ function(
       kind: 'OpenSearchCluster',
       metadata: std.prune({
         name: name,
-        labels: labelsFor(name) + labels,
+        labels: labelsFor(name, opensearchVersion) + labels,
         annotations: (if annotations == {} then null else annotations),
       }),
       spec: {
@@ -81,7 +84,7 @@ function(
               accessModes: ['ReadWriteOnce'],
             }) },
             resources: resources,
-            labels: labelsFor(name) + labels,
+            labels: labelsFor(name, opensearchVersion) + labels,
             annotations: (if annotations == {} then null else annotations),
           }),
         ],

@@ -365,12 +365,31 @@ local exclusionConflicts(exclusive) = [
     // and stable — user labels must never leak in here.
     selectorLabels:: { 'app.kubernetes.io/name': this.config.name },
 
+    // `app.kubernetes.io/version` is the APPLICATION's version by Kubernetes
+    // convention — what the container actually runs — so it comes from the image
+    // reference's tag. kurly's own packaging version is a different fact and gets
+    // its own label; putting kurly's calver under the well-known key told every
+    // consumer that 2FAuth 8.0.1 was version "2026.7.29".
+    //
+    // The tag is the last colon-separated segment of the reference with any
+    // digest stripped, and only when that segment is not part of the path — a
+    // registry with a port (`registry:5000/app`) has a colon and no tag, and a
+    // reference pinned by digest alone has none either. No tag, no claim.
+    local imageTag =
+      local ref = this.config.image;
+      local withoutDigest = std.split(ref, '@')[0];
+      local parts = std.split(withoutDigest, ':');
+      local last = parts[std.length(parts) - 1];
+      if std.length(parts) > 1 && std.length(std.findSubstr('/', last)) == 0 then last else null,
+
     labels:: self.selectorLabels {
       'app.kubernetes.io/managed-by': 'kurly',
     } + (
+      if imageTag == null then {} else { 'app.kubernetes.io/version': imageTag }
+    ) + (
       if this.config.version == null
       then {}
-      else { 'app.kubernetes.io/version': this.config.version }
+      else { 'kurly.metio.wtf/version': this.config.version }
     ) + self.config.labels,
 
     // The volume/mount plumbing, computed once from config so the container

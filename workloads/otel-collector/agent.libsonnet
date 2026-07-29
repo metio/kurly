@@ -18,8 +18,9 @@
 // replaces by passing its own `config`, or builds on by extending this one.
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
-// The workload version, stamped as app.kubernetes.io/version; the release
-// pipeline overwrites version.txt with the calver.
+// kurly's own packaging version, stamped as kurly.metio.wtf/version; the release
+// pipeline overwrites version.txt with the calver. The application's version is
+// app.kubernetes.io/version, which comes from the image tag.
 local version = std.rstripChars(importstr './version.txt', '\n');
 local defaultImage = std.rstripChars(importstr './agent.image', '\n');
 

@@ -187,7 +187,7 @@ function(
     service: {
       apiVersion: 'v1',
       kind: 'Service',
-      metadata: { name: name, labels: { 'app.kubernetes.io/name': name, 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/version': version } },
+      metadata: { name: name, labels: { 'app.kubernetes.io/name': name, 'app.kubernetes.io/managed-by': 'kurly', 'kurly.metio.wtf/version': version } },
       // The IP families come from the same fragment every other Service uses:
       // written by hand they would hold the cluster's default while the headless
       // Service beside them followed the consumer, and clients would reach the

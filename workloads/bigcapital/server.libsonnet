@@ -48,26 +48,26 @@ function(
 )
   local resolvedName = if name != null then name else namePrefix + '-server';
   local baseEnv = {
-    NODE_ENV: 'production',
-    SYSTEM_DB_HOST: dbHost,
-    SYSTEM_DB_PORT: '3306',
-    SYSTEM_DB_USER: dbUser,
-    SYSTEM_DB_NAME: 'bigcapital_system',
-    TENANT_DB_HOST: dbHost,
-    TENANT_DB_PORT: '3306',
-    TENANT_DB_USER: dbUser,
-    TENANT_DB_NAME_PREFIX: 'bigcapital_tenant_',
-    MONGODB_DATABASE_URL: 'mongodb://' + mongoHost + ':27017/bigcapital',
-    REDIS_HOST: redisHost,
-    REDIS_PORT: '6379',
-    // The job queue is configured separately from the cache and defaults to a
-    // Redis on localhost, so it is pointed at the same server explicitly.
-    QUEUE_HOST: redisHost,
-    QUEUE_PORT: '6379',
-    S3_BUCKET: s3Bucket,
-    S3_REGION: s3Region,
-  } + (if baseUrl == null then {} else { BASE_URL: baseUrl })
-                 + (if s3Endpoint == null then {} else { S3_ENDPOINT: s3Endpoint });
+                    NODE_ENV: 'production',
+                    SYSTEM_DB_HOST: dbHost,
+                    SYSTEM_DB_PORT: '3306',
+                    SYSTEM_DB_USER: dbUser,
+                    SYSTEM_DB_NAME: 'bigcapital_system',
+                    TENANT_DB_HOST: dbHost,
+                    TENANT_DB_PORT: '3306',
+                    TENANT_DB_USER: dbUser,
+                    TENANT_DB_NAME_PREFIX: 'bigcapital_tenant_',
+                    MONGODB_DATABASE_URL: 'mongodb://' + mongoHost + ':27017/bigcapital',
+                    REDIS_HOST: redisHost,
+                    REDIS_PORT: '6379',
+                    // The job queue is configured separately from the cache and defaults to a
+                    // Redis on localhost, so it is pointed at the same server explicitly.
+                    QUEUE_HOST: redisHost,
+                    QUEUE_PORT: '6379',
+                    S3_BUCKET: s3Bucket,
+                    S3_REGION: s3Region,
+                  } + (if baseUrl == null then {} else { BASE_URL: baseUrl })
+                  + (if s3Endpoint == null then {} else { S3_ENDPOINT: s3Endpoint });
 
   kurly.http(resolvedName, image)
   + kurly.version(version)

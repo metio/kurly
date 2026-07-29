@@ -15,10 +15,13 @@
 // Secret; point apps at the `<clusterName>-<name>-service` Service.
 local version = std.rstripChars(importstr './version.txt', '\n');
 
-local labelsFor(name) = {
+local labelsFor(name, appVersion) = {
   'app.kubernetes.io/name': name,
   'app.kubernetes.io/managed-by': 'kurly',
-  'app.kubernetes.io/version': version,
+  'kurly.metio.wtf/version': version,
+  // The APPLICATION's version, which this workload states outright — the
+  // operator resolves it to an image kurly never names.
+  'app.kubernetes.io/version': appVersion,
 };
 
 function(
@@ -51,7 +54,7 @@ function(
       kind: 'CassandraDatacenter',
       metadata: std.prune({
         name: name,
-        labels: labelsFor(name) + labels,
+        labels: labelsFor(name, serverVersion) + labels,
         annotations: (if annotations == {} then null else annotations),
       }),
       spec: std.prune({
@@ -74,7 +77,7 @@ function(
         config: (if config == {} then null else config),
         // The operator copies this onto the pods it generates — the Cassandra
         // counterpart to CNPG's inheritedMetadata.
-        additionalLabels: (if labels == {} then null else labelsFor(name) + labels),
+        additionalLabels: (if labels == {} then null else labelsFor(name, serverVersion) + labels),
       }),
     },
   }

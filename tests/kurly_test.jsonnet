@@ -180,6 +180,37 @@ local podOf(app) = app.deployment.spec.template.spec;
     [{ name: 'shop' }]
   ),
 
+  // --- the two versions a rendered object carries ----------------------------------
+  // `app.kubernetes.io/version` is the APPLICATION's, by Kubernetes convention —
+  // so it is the image's tag, not kurly's release. Putting kurly's calver under
+  // the well-known key told every consumer that 2FAuth 8.0.1 was version
+  // "2026.7.29".
+  version_label_is_the_image_tag: std.assertEqual(
+    kurly.http('shop', 'docker.io/acme/shop:1.4.2').deployment.metadata.labels['app.kubernetes.io/version'],
+    '1.4.2'
+  ),
+  // A registry with a port has a colon and no tag; a digest-only reference has
+  // none either. No tag, no claim — the label is absent rather than wrong.
+  version_label_absent_without_a_tag: std.assertEqual(
+    [
+      std.objectHas(kurly.http('shop', 'registry.example.com:5000/shop').deployment.metadata.labels, 'app.kubernetes.io/version'),
+      std.objectHas(kurly.http('shop', 'docker.io/acme/shop@sha256:abc').deployment.metadata.labels, 'app.kubernetes.io/version'),
+    ],
+    [false, false]
+  ),
+  // A digest-pinned reference still states its tag.
+  version_label_reads_past_a_digest: std.assertEqual(
+    kurly.http('shop', 'registry.example.com:5000/acme/shop:2.1@sha256:abc').deployment.metadata.labels['app.kubernetes.io/version'],
+    '2.1'
+  ),
+  // The version label never reaches a selector, so changing what it means does
+  // not touch an immutable field.
+  version_label_stays_out_of_selectors: std.assertEqual(
+    kurly.http('shop', 'docker.io/acme/shop:1.4.2').deployment.spec.selector.matchLabels,
+    // Plus the `name` label k8s-libsonnet's constructors force.
+    { 'app.kubernetes.io/name': 'shop', name: 'shop' }
+  ),
+
   // --- several hostnames on one exposure -------------------------------------------
   // A platform-allocated name and a tenant's own domain answer at once: the
   // allocated one is how a tenant still reaches their application when their own
@@ -933,7 +964,7 @@ local podOf(app) = app.deployment.spec.template.spec;
     {
       'app.kubernetes.io/name': 'postgres',
       'app.kubernetes.io/managed-by': 'kurly',
-      'app.kubernetes.io/version': 'dev',
+      'kurly.metio.wtf/version': 'dev',
       team: 'payments',
     }
   ),
@@ -1317,7 +1348,7 @@ local podOf(app) = app.deployment.spec.template.spec;
     {
       apiVersion: 'monitoring.coreos.com/v1',
       kind: 'Probe',
-      metadata: { name: 'web', labels: { 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/name': 'web' } },
+      metadata: { name: 'web', labels: { 'app.kubernetes.io/managed-by': 'kurly', 'app.kubernetes.io/name': 'web', 'app.kubernetes.io/version': '1' } },
       spec: {
         jobName: 'web',
         module: 'http_2xx',

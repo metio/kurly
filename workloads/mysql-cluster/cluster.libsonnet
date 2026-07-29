@@ -24,10 +24,13 @@ local version = std.rstripChars(importstr './version.txt', '\n');
 
 // The kurly label convention, applied to the CR so the same ownership marker and
 // version stamp ride on it as on every other kurly manifest.
-local labelsFor(name) = {
+local labelsFor(name, appVersion) = {
   'app.kubernetes.io/name': name,
   'app.kubernetes.io/managed-by': 'kurly',
-  'app.kubernetes.io/version': version,
+  'kurly.metio.wtf/version': version,
+  // The APPLICATION's version, which this workload states outright — the
+  // operator resolves it to an image kurly never names.
+  'app.kubernetes.io/version': appVersion,
 };
 
 function(
@@ -71,7 +74,7 @@ function(
       kind: 'InnoDBCluster',
       metadata: std.prune({
         name: name,
-        labels: labelsFor(name) + labels,
+        labels: labelsFor(name, serverVersion) + labels,
         annotations: (if annotations == {} then null else annotations),
       }),
       spec: std.prune({

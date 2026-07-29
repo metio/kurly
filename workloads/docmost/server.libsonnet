@@ -47,7 +47,7 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
-  + kurly.env(baseEnv + { STORAGE_DRIVER: 'local', FILE_UPLOAD_SIZE_LIMIT: '50mb' } + env)
+  + kurly.env(baseEnv { STORAGE_DRIVER: 'local', FILE_UPLOAD_SIZE_LIMIT: '50mb' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.store('/app/data/storage', storageSize, storageClass=storageClass)
