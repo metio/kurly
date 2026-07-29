@@ -556,6 +556,8 @@ EOF
   kurly::wait_ocirepository "$ns" kurly
   kurly::wait_ocirepository "$ns" "kurly-${id}"
 
+  # 360s for the first render, 180s once the artifacts are warm.
+  local snippetTries=120
   for st in $(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[].id' catalog/catalog.json); do
     f="workloads/${id}/${st}.libsonnet"
     snip="${id}-${st}"
@@ -578,7 +580,14 @@ spec:
       local rendered = kurly.list(stage() + kurly.hostUsers());
       rendered { items: [ item { metadata+: { namespace: '${ns}' } } for item in rendered.items ] }
 EOF
-    kurly::wait_ready jsonnetsnippet "$snip" 60
+    # The FIRST snippet of a run pays for a cold cluster: JaaS pulls three OCI
+    # artifacts (k8s-libsonnet, the library, the workload) before it can render
+    # at all, while later snippets reuse them. One timeout for both makes a slow
+    # first render look exactly like a broken one — and only ever on whichever
+    # workload happens to sort first, which is how a day gets lost to a flake.
+    kurly::wait_ready jsonnetsnippet "$snip" "$snippetTries" \
+      || { echo "::error::deep ${id}: jsonnetsnippet/${snip} never rendered"; kurly::diagnose_pipeline "$ns"; return 1; }
+    snippetTries=60
     kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
@@ -595,7 +604,8 @@ spec:
         checks:
           - { apiVersion: ${apiv}, kind: ${kind}, name: ${name}, namespace: ${ns} }
 EOF
-    kurly::wait_ready stageset "$snip" 90
+    kurly::wait_ready stageset "$snip" 90 \
+      || { echo "::error::deep ${id}: stageset/${snip} never became Ready"; kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; return 1; }
     kubectl --namespace="$ns" rollout status "${kind,,}/${name}" --timeout=300s \
       || { echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; return 1; }
   done
