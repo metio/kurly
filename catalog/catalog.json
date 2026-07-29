@@ -9001,7 +9001,8 @@
             "source": "https://github.com/directus/directus",
             "title": "directus"
          },
-         "licenseNotAsserted": true,
+         "license": "BUSL-1.1",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -9769,7 +9770,8 @@
             "source": "https://github.com/dragonflydb/dragonfly",
             "title": "Dragonfly Production Image"
          },
-         "licenseNotAsserted": true,
+         "license": "BUSL-1.1",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -13004,7 +13006,9 @@
             "source": "https://github.com/formbricks/formbricks",
             "title": "formbricks"
          },
-         "licenseNotAsserted": true,
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -23696,7 +23700,8 @@
             "source": "https://github.com/meilisearch/meilisearch",
             "title": "meilisearch"
          },
-         "licenseNotAsserted": true,
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -29528,7 +29533,8 @@
             "source": "https://github.com/outline/outline",
             "title": "outline"
          },
-         "licenseNotAsserted": true,
+         "license": "BUSL-1.1",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -31652,7 +31658,8 @@
             "source": "https://github.com/pi-hole/docker-pi-hole",
             "title": "docker-pi-hole"
          },
-         "licenseNotAsserted": true,
+         "license": "EUPL-1.2",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },

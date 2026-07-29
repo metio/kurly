@@ -3375,6 +3375,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     pihole: {
+      license: 'EUPL-1.2',
       upstream: { repo: 'https://github.com/pi-hole/pi-hole' },
       name: 'Pi-hole',
       summary: 'A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80.',
@@ -3714,6 +3715,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     meilisearch: {
+      license: 'MIT',
       name: 'Meilisearch',
       summary: 'A Meilisearch server (a fast, typo-tolerant, self-hosted search engine with a simple REST API) on the official image; its indexes live on a PersistentVolume. The search companion several apps expect (e.g. karakeep). kurly authors no Secret; MEILI_MASTER_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7700.',
       category: 'search',
@@ -4317,6 +4319,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     formbricks: {
+      license: 'AGPL-3.0',
       name: 'Formbricks',
       summary: 'A Formbricks server (a self-hosted, open-source experience-management and survey platform) on the official image, backed by an external PostgreSQL. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named formbricks-db. Stateless: a plain rolling Deployment. Serves on :3000.',
       category: 'application',
@@ -4936,6 +4939,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     outline: {
+      license: 'BUSL-1.1',
       name: 'Outline',
       summary: 'An Outline server (a fast, collaborative, self-hosted team knowledge base and wiki with real-time editing) on the official image, backed by an external PostgreSQL, Redis and S3-compatible object storage. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider come from a provided Secret via envFrom. Pairs with a cnpg-cluster named outline-db, a Redis and an S3 bucket (e.g. seaweedfs). Stateless. Serves on :3000.',
       category: 'application',
@@ -6073,6 +6077,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     directus: {
+      license: 'BUSL-1.1',
       name: 'Directus',
       summary: 'A Directus server (an open-source headless CMS and data platform over your SQL database) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named directus-db. kurly authors no Secret; DB_PASSWORD, KEY, SECRET, and the admin password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8055.',
       category: 'application',
@@ -6424,6 +6429,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     dragonfly: {
+      license: 'BUSL-1.1',
       name: 'Dragonfly',
       summary: "A RESP-speaking in-memory store with a per-pod PVC and a headless Service. Answers the same protocol as Valkey, but is not a fork of it: it rejects Redis flags, persists through snapshots, and runs one io thread per core it can see — which in a container is the node's, so the thread count is pinned and the memory floor it demands (256MiB per thread) is asserted at render.",
       category: 'cache',
