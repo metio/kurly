@@ -22,7 +22,7 @@ kurly.list(dashy())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `dashy` | |
-| `image` | `docker.io/lissy93/dashy:4.4.17` | |
+| `image` | `docker.io/lissy93/dashy:4.5.0` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | configuration (`/app/user-data`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
