@@ -78,8 +78,13 @@ inspect_one() {
   # applying quickly and least in need of a change window.
   digest=""
   [ -z "$raw" ] || digest="sha256:$(printf '%s' "$raw" | sha256sum | cut -d' ' -f1)"
+  # The reference the digest was observed FOR travels with it. A Renovate bump
+  # rewrites the tag without knowing the new digest, and a digest left beside a
+  # tag it was never resolved from is worse than no digest at all — so the
+  # catalogue drops it the moment the two disagree, and it returns when this
+  # generator next asks.
   printf '  "%s": { architectures: %s%s },\n' "$key" "$arches" \
-    "$([ -n "$digest" ] && printf ", digest: '%s'" "$digest")"
+    "$([ -n "$digest" ] && printf ", digest: '%s', ref: '%s'" "$digest" "$ref")"
 }
 export -f inspect_one
 

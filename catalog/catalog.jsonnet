@@ -662,9 +662,36 @@ local licenseFacts(workload, value, attested) =
     // licence is a choice, an AND is a conjunction — so the flag is left off
     // rather than resolved to a side.
     + (
-      if std.length(identifiers) == 1 then
-        { licenseOsiApproved: if std.objectHas(spdx, identifiers[0]) then spdx[identifiers[0]].osiApproved else false }
-      else {}
+      // Whether a licensee ends up under an OSI-approved licence, evaluated over
+      // the OPERANDS rather than over the string. `A OR B` gives the licensee
+      // the choice, so one approved operand is enough; `A AND B` binds them to
+      // every operand, so all must be. A LicenseRef- is by definition on no
+      // list, which is the point of the namespace — so it is never approved,
+      // and that is what makes `SSPL-1.0 OR LicenseRef-…` come out false rather
+      // than true on the presence of an OR.
+      //
+      // `WITH` attaches an exception to the licence before it, so the licence
+      // decides. Anything this cannot read — parentheses, or AND and OR mixed
+      // without them, where precedence is genuinely ambiguous — leaves the field
+      // ABSENT. A determination that was not made must not be published as
+      // false: a consumer cannot tell a fabricated false from a real one.
+      local approvedOperand(id) = std.objectHas(spdx, id) && spdx[id].osiApproved;
+      local operators = [t for t in std.split(value, ' ') if std.member(['AND', 'OR', 'WITH'], t)];
+      local ops = std.set(operators);
+      local withOperands = [
+        // `A WITH e` is decided by A, so the exception is dropped before the
+        // operands are weighed.
+        identifiers[i]
+        for i in std.range(0, std.length(identifiers) - 1)
+        if i == 0 || operators[i - 1] != 'WITH'
+      ];
+      local parenthesised = std.length(std.findSubstr('(', value)) > 0;
+      local ambiguous = std.length(std.setInter(ops, ['AND', 'OR'])) > 1;
+      if parenthesised || ambiguous then {}
+      else if std.member(ops, 'OR') then
+        { licenseOsiApproved: std.any([approvedOperand(id) for id in withOperands]) }
+      else
+        { licenseOsiApproved: std.all([approvedOperand(id) for id in withOperands]) }
     )
     + (if std.any([std.objectHas(spdx, id) && spdx[id].deprecated for id in identifiers]) then { licenseDeprecated: true } else {});
 
@@ -851,13 +878,18 @@ local workloadEntries =
           + (
             // A stage pinned by digest states it in the reference, so the fact
             // is already in hand and no registry is asked for it. Otherwise it
-            // is what the tag resolved to when one last was.
-            local pinned =
-              local ref = std.get(runs(stageImports[workload + '/' + stage]), 'image', '');
-              local parts = std.split(ref, '@');
-              if std.length(parts) > 1 then parts[1] else null;
-            local resolvedDigest = if resolved == null then null else std.get(resolved, 'digest', null);
-            local digest = if pinned != null then pinned else resolvedDigest;
+            // is what the tag resolved to when one last was — and only while
+            // that is still the same tag. A bump rewrites the reference without
+            // knowing its digest, and a digest beside a tag it was never
+            // resolved from would be a confident wrong answer; the field simply
+            // goes absent until the registry is asked again.
+            local ref = std.get(runs(stageImports[workload + '/' + stage]), 'image', '');
+            local parts = std.split(ref, '@');
+            local pinned = if std.length(parts) > 1 then parts[1] else null;
+            local observed =
+              if resolved == null || std.get(resolved, 'ref', null) != ref then null
+              else std.get(resolved, 'digest', null);
+            local digest = if pinned != null then pinned else observed;
             if digest == null then {} else { imageDigest: digest }
           )
         )

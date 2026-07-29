@@ -15,41 +15,59 @@
   "separateMultipleMajor": false,
   "packageRules": [
     {
-      "description": "Zero-manual-work policy: every workload tracks the latest published version, majors included. The e2e smoke suite is the safety net — a break becomes a new test, never a pinned-back version. Renovate opens and auto-merges the bump once CI is green.",
-      "matchDatasources": ["docker"],
-      "matchUpdateTypes": ["major", "minor", "patch", "digest"],
+      "description": "Zero-manual-work policy: every workload tracks the latest published version, majors included. The e2e smoke suite is the safety net \u2014 a break becomes a new test, never a pinned-back version. Renovate opens and auto-merges the bump once CI is green.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ],
       "automerge": true,
       "automergeStrategy": "squash"
     },
     {
-      "description": "Placeholder images in illustrative code (ghcr.io/example/*, ghcr.io/acme/*) carry no real tags — never look them up.",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/example/**", "ghcr.io/acme/**"],
+      "description": "Placeholder images in illustrative code (ghcr.io/example/*, ghcr.io/acme/*) carry no real tags \u2014 never look them up.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/example/**",
+        "ghcr.io/acme/**"
+      ],
       "enabled": false
     },
     {
       "description": "tik and the kurly library ship calendar-versioned tags (YYYY.M.D), which the default docker versioning cannot order.",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["ghcr.io/metio/tik", "ghcr.io/metio/kurly"],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/metio/tik",
+        "ghcr.io/metio/kurly"
+      ],
       "versioning": "loose"
     }
   ],
   "customManagers": [
     {
-      "description": "Every workload's default image. The PRIMARY image of each stage lives in its own dedicated file (workloads/<name>/<stage>.image), and any secondary image (a sidecar's, a README deploy example's) in that workload's own .libsonnet or README — so a Renovate bump touches ONE workload's file and never a shared one, and hundreds of parallel update branches never collide. The catalog no longer embeds image versions, so annotations.libsonnet and catalog.json are deliberately NOT matched. The placeholder registries are disabled in packageRules above.",
+      "description": "Every workload's default image. The PRIMARY image of each stage lives in its own dedicated file (workloads/<name>/<stage>.image), and any secondary image (a sidecar's, a README deploy example's) in that workload's own .libsonnet or README. catalog.json carries the SAME reference under each stage's `runs.image`, derived by rendering the stage \u2014 so it is matched here too and a bump updates both in ONE pull request, since Renovate branches per dependency and version. Regenerating the catalog is not needed: the value is the same string, not a computation over it. The placeholder registries are disabled in packageRules above.",
       "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [
         "/^workloads/.+\\.image$/",
         "/^workloads/.+\\.libsonnet$/",
-        "/^workloads/.+\\.md$/"
+        "/^workloads/.+\\.md$/",
+        "/^catalog/catalog\\.json$/"
       ],
       "matchStrings": [
         "(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9._-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
       ]
     },
     {
-      "description": "Operator-backed workloads (mysql/mongodb/opensearch/cassandra clusters) pin a VERSION the operator maps to a container image, not a full image ref. Track each through a `// renovate: datasource=... depName=... versioning=...` hint above its `<name>Version='X'` line in the workload's own .libsonnet — a per-workload file, so these bumps never collide either.",
+      "description": "Operator-backed workloads (mysql/mongodb/opensearch/cassandra clusters) pin a VERSION the operator maps to a container image, not a full image ref. Track each through a `// renovate: datasource=... depName=... versioning=...` hint above its `<name>Version='X'` line in the workload's own .libsonnet \u2014 a per-workload file, so these bumps never collide either.",
       "customType": "regex",
       "managerFilePatterns": [
         "/^workloads/.+\\.libsonnet$/"
@@ -92,6 +110,71 @@
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\s+[A-Z0-9_]+_VERSION=\"(?<currentValue>[^\"]+)\""
+      ]
+    },
+    {
+      "description": "cassandra-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/library/cassandra",
+      "versioningTemplate": "docker",
+      "managerFilePatterns": [
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/cassandra-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+      ]
+    },
+    {
+      "description": "mongodb-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/library/mongo",
+      "versioningTemplate": "docker",
+      "managerFilePatterns": [
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/mongodb-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+      ]
+    },
+    {
+      "description": "mysql-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/library/mysql",
+      "versioningTemplate": "docker",
+      "managerFilePatterns": [
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/mysql-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+      ]
+    },
+    {
+      "description": "opensearch-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/opensearchproject/opensearch",
+      "versioningTemplate": "docker",
+      "managerFilePatterns": [
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/opensearch-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+      ]
+    },
+    {
+      "description": "grafana's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/grafana/grafana",
+      "versioningTemplate": "docker",
+      "managerFilePatterns": [
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/grafana/server\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
       ]
     }
   ]

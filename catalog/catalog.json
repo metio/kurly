@@ -6102,6 +6102,7 @@
             "source": "https://github.com/browserless/browserless"
          },
          "license": "SSPL-1.0 OR LicenseRef-Browserless-Commercial",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -7787,7 +7788,7 @@
                "clusterScoped": false,
                "help": "The code-server editor. Workspace, extensions, and settings at /home/coder on the volume. secretName holds PASSWORD (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:49d5e176224523b0c924ee35b05c51e9a87f9c170f650ee0f7da05a4581a79ff",
+               "imageDigest": "sha256:fa367e7eddd303a95c736f7aede351cdee9036a7383cecfd8786bb5bbe78c13b",
                "importPath": "github.com/metio/kurly/workloads/code-server/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -8396,7 +8397,6 @@
             {
                "architectures": [
                   "amd64",
-                  "arm",
                   "arm64"
                ],
                "args": [
@@ -8465,7 +8465,7 @@
                "clusterScoped": false,
                "help": "The Dashy server. Configuration lives at /app/user-data/conf.yml on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:6f9ce4b2b98352376df24de34796cc423f21d216405486e461452dd76becfe2a",
+               "imageDigest": "sha256:824628ee1e2e008b1e8ad1d834257482bca93d3e7c94906f38d3aca5b883c218",
                "importPath": "github.com/metio/kurly/workloads/dashy/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -10037,7 +10037,7 @@
                "clusterScoped": false,
                "help": "The A draw.io server. Stateless. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:edb69ca6dbd2e7d7f2ad0aaca3583f6c4467676210fd4b85bf826f1ca7c335a2",
+               "imageDigest": "sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b",
                "importPath": "github.com/metio/kurly/workloads/drawio/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -11196,6 +11196,7 @@
          },
          "license": "MIT AND GPL-3.0",
          "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -11993,7 +11994,7 @@
                "clusterScoped": false,
                "help": "The File Browser server. Database at /database; compose the volume to serve onto /srv. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:c4c627f687668c5a02ab410d8473712c77be7f1f0ea4f8d624d2a1392c495e76",
+               "imageDigest": "sha256:b1d9980d79d6d0ad334e327eea3501324a07fe2bce94a4cd84187bccbcfbe3f8",
                "importPath": "github.com/metio/kurly/workloads/filebrowser/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -13617,7 +13618,7 @@
                "clusterScoped": false,
                "help": "The Ghost server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). url is the public URL. secretName holds the DB password (envFrom). Content at /var/lib/ghost/content. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:63b12cb176ffe9cfe651b839c18f6c7261004370f566d9ae218cacd67766b2b1",
+               "imageDigest": "sha256:29886ddcf4ae5c005099c8ade34707d7c8d5d71b9dc5e31473c632b27b2ea18a",
                "importPath": "github.com/metio/kurly/workloads/ghost/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -14878,7 +14879,6 @@
                "clusterScoped": false,
                "help": "The Grafana instance. config is grafana.ini (operator sections of string values), merged over defaults that silence phone-home traffic. prometheusUrl points the default datasource at the prometheus workload's prometheus-operated Service; prometheusDatasource=false authors none. The operator mints a random admin password into <name>-admin-credentials.",
                "id": "server",
-               "imageDigest": "sha256:7cb8c64c4d57a57e734073f3cc94620adb24a0acb929bd80ba9f14017e3a975b",
                "importPath": "github.com/metio/kurly/workloads/grafana/server.libsonnet",
                "kind": "grafana",
                "posture": null,
@@ -18510,7 +18510,7 @@
                "clusterScoped": false,
                "help": "The Kanboard server. Keeps board data and uploads at /var/www/app/data on the volume. Point DATABASE_URL (env) at external PostgreSQL to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:8cd46677f1f3b97bb45e8bcf30512ab92f30a9578cee51b406d2dd297a223859",
+               "imageDigest": "sha256:e9dc25fa37246a89a9b353b5657222961bd221afa463c32112307bc0385cca29",
                "importPath": "github.com/metio/kurly/workloads/kanboard/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -24661,7 +24661,7 @@
                "clusterScoped": false,
                "help": "The Miniflux server. secretName holds DATABASE_URL (with the DB password) and ADMIN_PASSWORD (envFrom); adminUser is the first-run admin. Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:cd353a6af9ce663291f405eddef26fa0d567f486b521c5d34e3fb50e41938b9a",
+               "imageDigest": "sha256:49d7b60987616387c306a8023087b31f2c9b7b21288b523026cb04058e8b6dbb",
                "importPath": "github.com/metio/kurly/workloads/miniflux/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -25448,6 +25448,7 @@
             "title": "eclipse-mosquitto"
          },
          "license": "EPL-2.0 OR BSD-3-Clause",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -25894,7 +25895,7 @@
                "clusterScoped": false,
                "help": "The A MySQL server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.",
                "id": "server",
-               "imageDigest": "sha256:c11782aa2a96624c1efc121768641d96954faa136d6aa82751b032d8c426ffbc",
+               "imageDigest": "sha256:cbade841779f1661300e705721f9d2ff159865cc7a8a291affbff43ac6ec7f1d",
                "importPath": "github.com/metio/kurly/workloads/mysql/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -26140,7 +26141,7 @@
                "clusterScoped": false,
                "help": "The n8n server. Keeps everything (SQLite + auto-generated encryption key) at /home/node/.n8n on the volume. host is the public hostname (webhooks need it). Point DB_TYPE at external PostgreSQL and set N8N_ENCRYPTION_KEY via env to scale out. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:c848162d17a99af20792358e4b075658ad00a80301419415305d66d10888d3f2",
+               "imageDigest": "sha256:3647d2b986f03174a7c0c6a0cd57bc870a769ea7a5538838b94d9714b57e9057",
                "importPath": "github.com/metio/kurly/workloads/n8n/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -27052,7 +27053,7 @@
                "clusterScoped": false,
                "help": "The Nextcloud server. trustedDomains sets NEXTCLOUD_TRUSTED_DOMAINS; secretName holds NEXTCLOUD_ADMIN_* (envFrom). Installation at /var/www/html. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:b52f7bc0e496f227b0e85e3b88571a42c68b6245ccde29d577e733227715dcf5",
+               "imageDigest": "sha256:e93ccfc952c95f18175f3d297fb2f60c35070c05ca976050c250a9ddab793e75",
                "importPath": "github.com/metio/kurly/workloads/nextcloud/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -27313,7 +27314,7 @@
                "clusterScoped": false,
                "help": "The NocoBase server. secretName holds the DB_* connection and APP_KEY (envFrom). Storage at /app/nocobase/storage. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:799ca0c5a68276f94140c7b6f84adaa30a60e5467bacb22c827affc3bf240bd8",
+               "imageDigest": "sha256:374578e273d67e017d1074335a74dd8fd1cb8bb1e405e2d55b93b898ecf77fa6",
                "importPath": "github.com/metio/kurly/workloads/nocobase/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -28200,7 +28201,7 @@
                "clusterScoped": false,
                "help": "The Odoo server. secretName holds the PostgreSQL connection (HOST/USER/PASSWORD, envFrom). Filestore at /var/lib/odoo. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:66fae420378996f4c7e633b3fd47bfef0909170d75db897e3935e8ad1162db1a",
+               "imageDigest": "sha256:e415f9924395e7521245813135112f264b9222bcde3b1d3c2ee9ff073081540a",
                "importPath": "github.com/metio/kurly/workloads/odoo/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -28327,7 +28328,7 @@
                "clusterScoped": false,
                "help": "The Ollama server. Models at /models. Usually reached in-cluster (e.g. from open-webui). Compose an exposure onto the HTTP port only if reached from outside.",
                "id": "server",
-               "imageDigest": "sha256:ec24bcaa2a810eb74171ce7c517813ef4821ed678988845e8d76cf62467036d4",
+               "imageDigest": "sha256:10c13eb515db310990527d36ca14a136da4bcc0fbf2bf3b15e9c1f111e9d3cd4",
                "importPath": "github.com/metio/kurly/workloads/ollama/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -34018,7 +34019,7 @@
                "clusterScoped": false,
                "help": "The RabbitMQ server. secretName holds RABBITMQ_DEFAULT_USER/PASS (envFrom). Data at /var/lib/rabbitmq; the management UI (:15672) needs an extra Service. Usually reached in-cluster.",
                "id": "server",
-               "imageDigest": "sha256:d8b3d416236ae5ba3f6a9f4e4651fdacda01780181a7d83a71b640248d8f0a69",
+               "imageDigest": "sha256:4e628d3cbc61ef45c5918e19bb9844874410d96d4ced897ced7d072d63ad555c",
                "importPath": "github.com/metio/kurly/workloads/rabbitmq/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -34749,7 +34750,7 @@
                "clusterScoped": false,
                "help": "The A Redis server. secretName holds the credentials (envFrom). Data at /data. Usually reached in-cluster.",
                "id": "server",
-               "imageDigest": "sha256:234c902a2db49461a129e2d4aeff85b28cf20187ed274a67f6e50995fa713c7b",
+               "imageDigest": "sha256:c88d347edef6249a6d2293f926f1eeb48bd40c57cbcd02c07f52e7f1fd2cb46b",
                "importPath": "github.com/metio/kurly/workloads/redis/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -34986,7 +34987,7 @@
                "clusterScoped": false,
                "help": "The Redmine server. secretName holds the database connection (REDMINE_DB_* / DATABASE_URL) and REDMINE_SECRET_KEY_BASE (envFrom). Files at /usr/src/redmine/files. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:157c712839fe9787eb5cfe8376c38de45042613c511228f01386e8aeab5cfa21",
+               "imageDigest": "sha256:49e5c5aeda67a7adb8edd6f4ed64ade7313d56dc4683f9be0ca5b2a6d05d652e",
                "importPath": "github.com/metio/kurly/workloads/redmine/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -40577,7 +40578,7 @@
                "clusterScoped": false,
                "help": "The Twenty web/API front end on :3000. redisHost defaults to a valkey named twenty-cache; serverUrl is the public URL. secretName holds PG_DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Local uploads at /app/packages/twenty-server/.local-storage. Run a worker alongside. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:76330f4f302a734e8babb888deb9ce27442bbaea74850d5761b15471b07a3e52",
+               "imageDigest": "sha256:cd812094cd3439e91deaf727470ecb302129447306200fff853ba0d7e9609079",
                "importPath": "github.com/metio/kurly/workloads/twenty/server.libsonnet",
                "kind": "http",
                "posture": {
@@ -40684,7 +40685,7 @@
                "clusterScoped": false,
                "help": "The Twenty background worker (BullMQ jobs), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs `yarn worker:prod`. Scales horizontally via replicas. A Twenty deployment needs at least one.",
                "id": "worker",
-               "imageDigest": "sha256:76330f4f302a734e8babb888deb9ce27442bbaea74850d5761b15471b07a3e52",
+               "imageDigest": "sha256:cd812094cd3439e91deaf727470ecb302129447306200fff853ba0d7e9609079",
                "importPath": "github.com/metio/kurly/workloads/twenty/worker.libsonnet",
                "kind": "worker",
                "posture": {
@@ -41297,7 +41298,7 @@
                "clusterScoped": false,
                "help": "The Vaultwarden server. domain is the public URL — WebAuthn/passkeys, attachment links, and email all need it. signupsAllowed is off by default (turn on to bootstrap, then off). env carries extra settings (ADMIN_TOKEN, SMTP_*, or DATABASE_URL to move to external Postgres) — the admin token and any DB password should come from a Secret, kurly mints none. Compose an exposure onto the HTTP port.",
                "id": "server",
-               "imageDigest": "sha256:d626d04934cd1192ad8ced1adb975099fca78cec33ab467d2d3c923cde7f3b0c",
+               "imageDigest": "sha256:e6443e3d5ed8fcee2204b89ec778d7f24d0173bcc42d1ea34f990304f5f63f51",
                "importPath": "github.com/metio/kurly/workloads/vaultwarden/server.libsonnet",
                "kind": "http",
                "posture": {
