@@ -8,11 +8,11 @@
 // repository, the name the repository carries, and whether it is archived. A
 // workload's annotation overrides anything here; see catalog/annotations.libsonnet.
 {
-  'gotify': {
+  gotify: {
     name: 'server',
     homepage: 'https://gotify.net',
   },
-  'komga': {
+  komga: {
     license: 'MIT',
     name: 'komga',
     homepage: 'https://komga.org',

@@ -218,6 +218,8 @@ done <<<"$repos"
 
 printf '}\n' >> "$tmp"
 mv "$tmp" "$out"
+# A catalog/*.libsonnet like any other, so check-fmt formats it too.
+jsonnetfmt --in-place "$out"
 
 echo "wrote ${out}: ${answered}/${total} upstream repositories answered"
 [ -n "$unanswered" ] && echo "::error::upstream repository does not exist (correct it in catalog/annotations.libsonnet): ${unanswered}"

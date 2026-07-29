@@ -24,3 +24,8 @@ docs/static/catalog.json
 # Alpine.js is fetched by gen-docs-data at a Renovate-pinned version, never
 # committed.
 docs/static/js/alpine.min.js
+
+# A network sweep writes its answers next to its output as it goes, so an
+# interrupted run resumes instead of restarting; only the finished file is
+# committed.
+catalog/*.gen.libsonnet.partial

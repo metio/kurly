@@ -139,11 +139,14 @@
           # it is run on demand / on a schedule, not in the per-PR gate.
           gen-architectures = pkgs.writeShellApplication {
             name = "gen-architectures";
+            # inspect_one runs under xargs, where shellcheck cannot see the call.
+            excludeShellChecks = [ "SC2329" ];
             runtimeInputs = with pkgs; [
               skopeo
               jq
               git
               gnused
+              go-jsonnet
               coreutils
             ];
             text = builtins.readFile ./scripts/gen-architectures.sh;
