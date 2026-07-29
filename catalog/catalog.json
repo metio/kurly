@@ -3945,8 +3945,8 @@
                   "writableRootFilesystem": true
                },
                "runs": {
-                  "digest": "sha256:8e407c5831a027a76db3046eb47f20a93ea5d4c8103a63f745786606bc1afef7",
-                  "image": "docker.io/mintplexlabs/anythingllm:latest@sha256:8e407c5831a027a76db3046eb47f20a93ea5d4c8103a63f745786606bc1afef7",
+                  "digest": "sha256:f01086cc34f613cb8ec79bd928882921c0240b5c9fff4470a9560b614eeef54d",
+                  "image": "docker.io/mintplexlabs/anythingllm:latest@sha256:f01086cc34f613cb8ec79bd928882921c0240b5c9fff4470a9560b614eeef54d",
                   "tag": "latest"
                },
                "storage": {
