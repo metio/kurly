@@ -646,20 +646,27 @@ kurly::diagnose_pipeline() {
   local ns="$1"
   echo "::group::pipeline diagnostics ($ns)"
   kubectl --namespace="$ns" get gitrepository,ocirepository,jsonnetlibrary,jsonnetsnippet,externalartifact,stageset,stageinventory -o wide 2>/dev/null || true
-  echo "--- JsonnetSnippet status ---"
-  kubectl --namespace="$ns" get jsonnetsnippet valkey -o jsonpath='{.status}' 2>/dev/null || true
+  # Every snippet and stageset in the namespace, by name rather than by a name
+  # this function guesses: a diagnostic that asks about the wrong object prints
+  # nothing and reads exactly like a healthy one.
+  #
+  # The CONDITION MESSAGE is the point of all this — `EvaluationFailed` names the
+  # kind of failure, and only the message says which import did not resolve or
+  # which assert fired.
+  echo "--- JsonnetSnippet conditions ---"
+  kubectl --namespace="$ns" get jsonnetsnippet -o jsonpath=\
+'{range .items[*]}{.metadata.name}{"\t"}{range .status.conditions[*]}{.type}={.status} reason={.reason} message={.message}{"\n"}{end}{end}' 2>/dev/null || true
   echo
-  kubectl --namespace="$ns" describe jsonnetsnippet valkey 2>/dev/null | tail -40 || true
-  echo "--- StageSet status ---"
-  kubectl --namespace="$ns" get stageset valkey -o jsonpath='{.status}' 2>/dev/null || true
+  kubectl --namespace="$ns" describe jsonnetsnippet 2>/dev/null | tail -60 || true
+  echo "--- StageSet conditions ---"
+  kubectl --namespace="$ns" get stageset -o jsonpath=\
+'{range .items[*]}{.metadata.name}{"\t"}{range .status.conditions[*]}{.type}={.status} reason={.reason} message={.message}{"\n"}{end}{end}' 2>/dev/null || true
   echo
-  kubectl --namespace="$ns" describe stageset valkey 2>/dev/null | tail -40 || true
-  # Did the applied workload objects land ANYWHERE? (A kind:List that the applier
-  # never expands, or objects placed in another namespace, both read as NotFound
-  # to the readyChecks.) And what did stageset record as applied?
-  echo "--- valkey workload objects across all namespaces ---"
-  kubectl get deployments,statefulsets,services,pods --all-namespaces 2>/dev/null \
-    | grep -i valkey || echo "(no valkey workload objects found in any namespace)"
+  kubectl --namespace="$ns" describe stageset 2>/dev/null | tail -60 || true
+  # Did the applied objects land ANYWHERE? A kind:List the applier never expands,
+  # or objects placed in another namespace, both read as NotFound to a readyCheck.
+  echo "--- workload objects in ${ns} ---"
+  kubectl --namespace="$ns" get deployments,statefulsets,daemonsets,services,pods -o wide 2>/dev/null || true
   echo "--- StageInventory (what stageset applied) ---"
   kubectl --namespace="$ns" get stageinventory -o yaml 2>/dev/null | grep -iE "kind:|name:|namespace:|apiVersion:" | head -40 || true
   # The controllers' own pods and logs — where a hang that never writes a CR
