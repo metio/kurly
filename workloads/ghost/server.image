@@ -1,1 +1,1 @@
-docker.io/library/ghost:6.54.0-alpine
+docker.io/library/ghost:6.54.0-alpine@sha256:29886ddcf4ae5c005099c8ade34707d7c8d5d71b9dc5e31473c632b27b2ea18a

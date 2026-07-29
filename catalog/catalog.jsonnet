@@ -430,6 +430,32 @@ local podTemplates(items) = [
 // version for it would be worse than saying nothing.
 local containersOf(tmpl) = std.get(tmpl.spec, 'containers', []) + std.get(tmpl.spec, 'initContainers', []);
 
+// The two facts an image reference carries, published separately so that no
+// consumer takes a reference apart. They drive opposite behaviour: a changed tag
+// is new software and deserves a change window, while a changed digest alone is
+// the same software rebuilt — usually a patched base image — which deserves to
+// be applied promptly and belongs to nobody's "hold major versions" setting.
+// Deriving that distinction by string surgery is how a tenant who asked to defer
+// a feature change silently defers a security patch instead.
+//
+// The splitting happens ONCE, here, because it is easy to get wrong: a registry
+// with a port puts a colon in the host, and a digest-pinned reference carries
+// `:tag@sha256:…`, so a split on the first colon yields `1.2@sha256`. That
+// happened in this repository, to a workload that handed the result to an
+// operator as the version to run.
+//
+// `digest` appears only where the REFERENCE carries one, which makes it a
+// guarantee about what will be deployed rather than an observation of what a
+// registry happened to hold when it was last asked. Those are different facts
+// and do not share a field.
+local referenceParts(reference) =
+  local withoutDigest = std.split(reference, '@')[0];
+  local digestParts = std.split(reference, '@sha256:');
+  local tagParts = std.split(withoutDigest, ':');
+  // A reference need not carry a tag at all — a bare name, or name@digest.
+  (if std.length(tagParts) > 1 then { tag: tagParts[std.length(tagParts) - 1] } else {})
+  + (if std.length(digestParts) > 1 then { digest: 'sha256:' + digestParts[1] } else {});
+
 local runs(fn) =
   local items = main.list(fn()).items;
   local tmpls = podTemplates(items);
@@ -439,7 +465,7 @@ local runs(fn) =
   local own = if tmpls == [] then [] else std.get(tmpls[0].spec, 'containers', []);
   local everyImage = std.set([c.image for t in tmpls for c in containersOf(t) if std.objectHas(c, 'image')]);
   if own != [] then
-    { image: own[0].image }
+    { image: own[0].image } + referenceParts(own[0].image)
     // A stage that also runs a sidecar or an init container ships more than one
     // image, and each is its own update to track — a rebuilt nginx beside an
     // unchanged application is exactly the case a single field would hide.
@@ -470,8 +496,10 @@ local runs(fn) =
       if std.isObject(entry) && std.objectHas(entry, 'image')
     ];
     local direct = [spec.image for spec in specs if std.objectHas(spec, 'image') && std.isString(spec.image)];
-    if direct != [] then { image: direct[0] }
-    else if images != [] then { image: images[0] } + (if std.length(images) > 1 then { alsoRuns: images[1:] } else {})
+    if direct != [] then { image: direct[0] } + referenceParts(direct[0])
+    else if images != [] then
+      { image: images[0] } + referenceParts(images[0])
+      + (if std.length(images) > 1 then { alsoRuns: images[1:] } else {})
     else if stated + nested != [] then { version: (stated + nested)[0] }
     else {};
 
@@ -726,8 +754,15 @@ local packagingRepo(url) =
 // the repository, and a link that pins a year-old commit reads as though that
 // is where the project lives.
 local repoRoot(url) =
-  local cut(u, marker) = if std.length(std.findSubstr(marker, u)) > 0 then std.split(u, marker)[0] else u;
-  cut(cut(cut(url, '/tree/'), '/blob/'), '/-/');
+  // Cut at the EARLIEST marker present rather than at each in turn: GitLab nests
+  // one inside another (`…/immich/-/tree/main`), so cutting at `/tree/` first
+  // leaves `…/immich/-`, and the later `/-/` pass no longer matches — yielding a
+  // repository with a stray `/-` on the end.
+  local at(marker) =
+    local found = std.findSubstr(marker, url);
+    if found == [] then null else found[0];
+  local positions = std.sort([p for p in [at('/-/'), at('/tree/'), at('/blob/')] if p != null]);
+  if positions == [] then url else url[0:positions[0]];
 
 // What the catalogue says about the software, and separately about the image
 // that packages it. The two are different facts and the labels only sometimes
@@ -870,28 +905,6 @@ local workloadEntries =
         + (
           local resolved = std.get(architectures, workload + '/' + stage, null);
           { architectures: if resolved == null then null else resolved.architectures }
-          // What the tag resolved to when the registry was last asked. A stage
-          // pinned by digest already carries it in `runs.image`; this is the
-          // same fact for the tag-pinned majority, and a change in it with no
-          // change in the tag is a rebuild — the base-image-CVE case, invisible
-          // from the reference alone.
-          + (
-            // A stage pinned by digest states it in the reference, so the fact
-            // is already in hand and no registry is asked for it. Otherwise it
-            // is what the tag resolved to when one last was — and only while
-            // that is still the same tag. A bump rewrites the reference without
-            // knowing its digest, and a digest beside a tag it was never
-            // resolved from would be a confident wrong answer; the field simply
-            // goes absent until the registry is asked again.
-            local ref = std.get(runs(stageImports[workload + '/' + stage]), 'image', '');
-            local parts = std.split(ref, '@');
-            local pinned = if std.length(parts) > 1 then parts[1] else null;
-            local observed =
-              if resolved == null || std.get(resolved, 'ref', null) != ref then null
-              else std.get(resolved, 'digest', null);
-            local digest = if pinned != null then pinned else observed;
-            if digest == null then {} else { imageDigest: digest }
-          )
         )
         for stage in std.objectFields(ann.workloads[workload].stages)
       ],

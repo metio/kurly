@@ -66,7 +66,19 @@ function(
   // The image is pinned under the deployment container (so kurly.mirror can
   // redirect it and the tag is explicit); version tells the operator which
   // Grafana it is.
-  local imageTag = std.split(image, ':')[1];
+  //
+  // The tag is the last colon-separated part of the reference BEFORE any digest,
+  // which is not the same as the second: a registry with a port puts a colon in
+  // the host, and a digest-pinned reference carries `:tag@sha256:…`, so splitting
+  // on the first colon and taking what follows yields `13.1.1@sha256` and hands
+  // the operator a version that does not exist.
+  local withoutDigest = std.split(image, '@')[0];
+  local imageTag =
+    local parts = std.split(withoutDigest, ':');
+    // A reference with no tag at all (name@digest, or a bare name) leaves the
+    // path as the only part, and a path is not a version.
+    if std.length(parts) < 2 then error 'grafana: image must carry a tag — the operator is told which Grafana to run by it, and a digest alone does not say'
+    else parts[std.length(parts) - 1];
   {
     // Composed kurly features cannot reach an operator's pods (they write a
     // config no base here reads), so composing one would silently do nothing;

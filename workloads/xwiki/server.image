@@ -1,1 +1,1 @@
-docker.io/xwiki:18-postgres-tomcat
+docker.io/xwiki:18-postgres-tomcat@sha256:11442d454cf499f303e16f4c7d81692574893a1e031733dad70b0395a09d128f

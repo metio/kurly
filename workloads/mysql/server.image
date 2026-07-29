@@ -1,1 +1,1 @@
-docker.io/library/mysql:9.7.1
+docker.io/library/mysql:9.7.1@sha256:cbade841779f1661300e705721f9d2ff159865cc7a8a291affbff43ac6ec7f1d

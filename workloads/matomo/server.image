@@ -1,1 +1,1 @@
-docker.io/library/matomo:5.12.0-apache
+docker.io/library/matomo:5.12.0-apache@sha256:650f4f205b0b8968f430b0fc924e8b37e8ff023948c4db08ea300d154054b257

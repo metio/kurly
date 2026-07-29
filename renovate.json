@@ -176,6 +176,31 @@
       "matchStrings": [
         "\"importPath\": \"github\\.com/metio/kurly/workloads/grafana/server\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
       ]
+    },
+    {
+      "description": "catalog.json publishes each reference's digest beside it, so a consumer never parses one. Anchored on the image line that follows it, which is what names the dependency.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": [
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "\"digest\": \"(?<currentDigest>sha256:[a-f0-9]{64})\",\\s*\"image\": \"(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[^\"@]+)@"
+      ]
+    },
+    {
+      "description": "The same for the published tag, anchored on the image line that precedes it.",
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "managerFilePatterns": [
+        "/^catalog/catalog\\.json$/"
+      ],
+      "matchStrings": [
+        "\"image\": \"(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):[^\"@]+@sha256:[a-f0-9]{64}\",\\s*\"tag\": \"(?<currentValue>[^\"]+)\""
+      ]
     }
-  ]
+  ],
+  "docker": {
+    "pinDigests": true
+  }
 }

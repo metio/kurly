@@ -1,1 +1,1 @@
-docker.io/roundcube/roundcubemail:1.7.2-apache
+docker.io/roundcube/roundcubemail:1.7.2-apache@sha256:aed1b9b5dc34f8db7cf107a5092f04fd84170d42e7e25ac378c32418ab303185

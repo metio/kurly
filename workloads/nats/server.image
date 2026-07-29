@@ -1,1 +1,1 @@
-docker.io/library/nats:2.14-alpine
+docker.io/library/nats:2.14-alpine@sha256:c11af972c99ae542de8925e6a7d9c533aa1eb039660420d2074beed6089b3bf0

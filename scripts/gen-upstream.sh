@@ -40,6 +40,12 @@
 # hours against a rate limit, and one bumped image should not have to pay for it.
 set -euo pipefail
 
+# The workload glob below expands in the shell's collation order, and a locale
+# that ignores punctuation orders `calibre-web` after `calibre` where C orders it
+# before. The generated file would then differ between a contributor's machine
+# and CI, and the drift check would fail on nothing but which one ran it.
+export LC_ALL=C
+
 only="${WORKLOADS:-}"
 out=catalog/upstream.gen.libsonnet
 # Written progressively, next to the output rather than in a temp dir: asking

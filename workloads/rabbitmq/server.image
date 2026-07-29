@@ -1,1 +1,1 @@
-docker.io/library/rabbitmq:4.3.4-management
+docker.io/library/rabbitmq:4.3.4-management@sha256:4e628d3cbc61ef45c5918e19bb9844874410d96d4ced897ced7d072d63ad555c
