@@ -54,7 +54,15 @@ trap 'rm -f "$previous"' EXIT
 # one got through.
 {
   if [ -f "$out" ]; then jsonnet "$out" 2>/dev/null || echo '{}'; else echo '{}'; fi
-  if [ -f "$tmp" ]; then jsonnet <(cat "$tmp"; printf '}\n') 2>/dev/null || echo '{}'; else echo '{}'; fi
+  # Closed into a real file rather than a process substitution: jsonnet reopens
+  # the path it is given, and /dev/fd/N has already been consumed by then.
+  if [ -f "$tmp" ]; then
+    partial="$(mktemp --suffix=.libsonnet)"
+    cat "$tmp" > "$partial"
+    printf '}\n' >> "$partial"
+    jsonnet "$partial" 2>/dev/null || echo '{}'
+    rm -f "$partial"
+  else echo '{}'; fi
 } | jq --slurp '.[0] * .[1]' > "$previous"
 
 # An SPDX expression as it appears in practice: identifiers, an optional `-only`

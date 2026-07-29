@@ -34,12 +34,37 @@ out=catalog/forge.gen.libsonnet
 # next run reads whatever is here as already-derived and resumes.
 tmp="${out}.partial"
 previous="$(mktemp)"
-trap 'rm -f "$previous"' EXIT
+# The partial file is a Jsonnet object with its closing brace still missing, so
+# it is closed into a real file to be read. Not a process substitution: jsonnet
+# reopens the path it is given, and /dev/fd/N is already at end of file by then,
+# so it fails to parse — silently, since a failure here reads as "nothing was
+# derived before".
+partial="$(mktemp --suffix=.libsonnet)"
+trap 'rm -f "$previous" "$partial"' EXIT
+
+closePartial() {
+  [ -f "$tmp" ] || return 1
+  cat "$tmp" > "$partial"
+  printf '}\n' >> "$partial"
+  jsonnet "$partial" 2>/dev/null
+}
 
 {
   if [ -f "$out" ]; then jsonnet "$out" 2>/dev/null || echo '{}'; else echo '{}'; fi
-  if [ -f "$tmp" ]; then jsonnet <(cat "$tmp"; printf '}\n') 2>/dev/null || echo '{}'; else echo '{}'; fi
+  closePartial || echo '{}'
 } | jq --slurp '.[0] * .[1]' > "$previous"
+
+# A leftover partial file means the last run was interrupted, so this one
+# resumes it: whatever that run already asked is kept unasked, and the sweep
+# picks up where it stopped. Without this a crash at workload 280 would cost
+# another five hours to learn what it already knew. A run that starts with no
+# partial file asks everything, which is what makes this a refresh rather than a
+# cache — the point of the generator is that a relicensing shows up as a diff.
+answered_already=""
+if [ -f "$tmp" ]; then
+  answered_already="$(closePartial | jq --raw-output 'keys[]' 2>/dev/null | paste -sd' ' - || true)"
+  [ -z "$answered_already" ] || echo "resuming: $(wc -w <<<"$answered_already") workloads already answered by the interrupted run" >&2
+fi
 
 auth=()
 [ -n "${GITHUB_TOKEN:-}" ] && auth=(--header "Authorization: Bearer ${GITHUB_TOKEN}")
@@ -136,6 +161,10 @@ while IFS=$'\t' read -r id url; do
   }
 
   if [ -n "$only" ] && ! grep -qw -- "$id" <<<"$only"; then
+    keep
+    continue
+  fi
+  if [ -n "$answered_already" ] && grep -qw -- "$id" <<<"$answered_already"; then
     keep
     continue
   fi

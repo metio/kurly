@@ -35,3 +35,304 @@
     license: 'GPL-3.0',
     name: 'airsonic-advanced',
   },
+  'alertmanager': {
+    license: 'Apache-2.0',
+    name: 'alertmanager',
+    homepage: 'https://prometheus.io',
+  },
+  'alist': {
+    license: 'AGPL-3.0',
+    name: 'alist',
+    homepage: 'https://alistgo.com',
+  },
+  'answer': {
+    license: 'Apache-2.0',
+    name: 'answer',
+    homepage: 'https://answer.apache.org',
+  },
+  'anythingllm': {
+    license: 'MIT',
+    name: 'anything-llm',
+    homepage: 'https://anythingllm.com',
+  },
+  'apprise': {
+    license: 'BSD-2-Clause',
+    name: 'apprise',
+    homepage: 'https://hub.docker.com/r/caronc/apprise',
+  },
+  'audiobookshelf': {
+    license: 'GPL-3.0',
+    name: 'audiobookshelf',
+    homepage: 'https://audiobookshelf.org',
+  },
+  'authentik': {
+    name: 'authentik',
+    homepage: 'https://goauthentik.io',
+  },
+  'automatisch': {
+    name: 'automatisch',
+    homepage: 'https://automatisch.io',
+  },
+  'baikal': {
+    license: 'GPL-3.0',
+    name: 'Baikal',
+    homepage: 'https://sabre.io/baikal/',
+  },
+  'baserow': {
+    name: 'baserow',
+    homepage: 'https://baserow.io',
+  },
+  'bazarr': {
+    license: 'GPL-3.0',
+    name: 'bazarr',
+    homepage: 'https://www.bazarr.media',
+  },
+  'beszel': {
+    license: 'MIT',
+    name: 'beszel',
+    homepage: 'https://beszel.dev',
+  },
+  'bigcapital': {
+    license: 'AGPL-3.0',
+    name: 'bigcapital',
+    homepage: 'https://bigcapital.app',
+  },
+  'blackbox-exporter': {
+    license: 'Apache-2.0',
+    name: 'blackbox_exporter',
+    homepage: 'https://prometheus.io',
+  },
+  'blinko': {
+    license: 'GPL-3.0',
+    name: 'blinko',
+    homepage: 'https://blinko.space',
+  },
+  'bookstack': {
+    license: 'MIT',
+    name: 'BookStack',
+    homepage: 'https://codeberg.org/bookstack/bookstack',
+  },
+  'browserless': {
+    name: 'browserless',
+    homepage: 'https://browserless.io',
+  },
+  'bugsink': {
+    name: 'bugsink',
+    homepage: 'https://www.bugsink.com/',
+  },
+  'cal-com': {
+    license: 'MIT',
+    name: 'cal.diy',
+    homepage: 'https://cal.diy',
+  },
+  'calibre': {
+    license: 'GPL-3.0',
+    name: 'calibre',
+    homepage: 'https://calibre-ebook.com',
+  },
+  'calibre-web': {
+    license: 'GPL-3.0',
+    name: 'calibre-web',
+  },
+  'calibre-web-automated': {
+    license: 'GPL-3.0',
+    name: 'Calibre-Web-Automated',
+    homepage: 'https://github.com/crocodilestick/Calibre-Web-Automated',
+  },
+  'cassandra-cluster': {
+    license: 'Apache-2.0',
+    name: 'cass-operator',
+    homepage: 'https://docs.datastax.com/en/cass-operator/doc/cass-operator/cassOperatorGettingStarted.html',
+  },
+  'changedetection': {
+    license: 'Apache-2.0',
+    name: 'changedetection.io',
+    homepage: 'https://changedetection.io',
+  },
+  'chatpad': {
+    license: 'AGPL-3.0',
+    name: 'chatpad',
+    homepage: 'https://chatpad.ai',
+  },
+  'clickhouse': {
+    license: 'Apache-2.0',
+    name: 'ClickHouse',
+    homepage: 'https://clickhouse.com',
+  },
+  'cnpg-cluster': {
+    license: 'Apache-2.0',
+    name: 'cloudnative-pg',
+    homepage: 'https://cloudnative-pg.io',
+  },
+  'cnpg-image-catalog': {
+    license: 'Apache-2.0',
+    name: 'cloudnative-pg',
+    homepage: 'https://cloudnative-pg.io',
+  },
+  'cobalt': {
+    license: 'AGPL-3.0',
+    name: 'cobalt',
+    homepage: 'https://cobalt.tools',
+  },
+  'code-server': {
+    license: 'MIT',
+    name: 'code-server',
+    homepage: 'https://coder.com',
+  },
+  'commafeed': {
+    license: 'Apache-2.0',
+    name: 'commafeed',
+    homepage: 'https://www.commafeed.com',
+  },
+  'convertx': {
+    license: 'AGPL-3.0',
+    name: 'ConvertX',
+  },
+  'couchdb': {
+    license: 'Apache-2.0',
+    name: 'couchdb',
+    homepage: 'https://couchdb.apache.org/',
+  },
+  'cryptpad': {
+    license: 'AGPL-3.0',
+    name: 'cryptpad',
+    homepage: 'https://cryptpad.org',
+  },
+  'cyberchef': {
+    license: 'Apache-2.0',
+    name: 'CyberChef',
+    homepage: 'https://gchq.github.io/CyberChef',
+  },
+  'dashy': {
+    license: 'MIT',
+    name: 'dashy',
+    homepage: 'https://dashy.to',
+  },
+  'davis': {
+    license: 'MIT',
+    name: 'davis',
+    homepage: 'https://github.com/users/tchapi/projects/1/views/1',
+  },
+  'davos': {
+    license: 'MIT',
+    name: 'davos',
+  },
+  'deluge': {
+    name: 'deluge',
+    homepage: 'https://www.deluge-torrent.org',
+  },
+  'dex': {
+    license: 'Apache-2.0',
+    name: 'dex',
+    homepage: 'https://dexidp.io',
+  },
+  'directus': {
+    name: 'directus',
+    homepage: 'https://directus.com',
+  },
+  'docker-registry-ui': {
+    license: 'AGPL-3.0',
+    name: 'docker-registry-ui',
+    homepage: 'https://joxit.dev/docker-registry-ui/',
+  },
+  'docmost': {
+    license: 'AGPL-3.0',
+    name: 'docmost',
+    homepage: 'https://docmost.com',
+  },
+  'documenso': {
+    license: 'AGPL-3.0',
+    name: 'documenso',
+    homepage: 'https://documenso.com',
+  },
+  'docuseal': {
+    license: 'AGPL-3.0',
+    name: 'docuseal',
+    homepage: 'https://www.docuseal.com',
+  },
+  'dokuwiki': {
+    license: 'GPL-2.0',
+    name: 'dokuwiki',
+    homepage: 'http://www.dokuwiki.org',
+  },
+  'dragonfly': {
+    name: 'dragonfly',
+    homepage: 'https://www.dragonflydb.io/',
+  },
+  'draw-io': {
+    license: 'Apache-2.0',
+    name: 'drawio',
+    homepage: 'https://www.drawio.com',
+  },
+  'drawio': {
+    license: 'Apache-2.0',
+    name: 'drawio',
+    homepage: 'https://www.drawio.com',
+  },
+  'drupal': {
+    name: 'drupal',
+    homepage: 'https://drupal.org/project/drupal',
+  },
+  'duplicati': {
+    name: 'duplicati',
+  },
+  'ejabberd': {
+    name: 'ejabberd',
+    homepage: 'https://www.process-one.net/ejabberd/',
+  },
+  'element-web': {
+    license: 'AGPL-3.0',
+    name: 'element-web',
+    homepage: 'https://element.io',
+  },
+  'emqx': {
+    name: 'emqx',
+    homepage: 'https://www.emqx.com',
+  },
+  'endurain': {
+    license: 'AGPL-3.0',
+    name: 'endurain',
+    homepage: 'https://endurain.com',
+  },
+  'ente': {
+    license: 'AGPL-3.0',
+    name: 'ente',
+    homepage: 'https://ente.com',
+  },
+  'esphome': {
+    name: 'esphome',
+    homepage: 'https://esphome.io/',
+  },
+  'etherpad': {
+    license: 'Apache-2.0',
+    name: 'etherpad',
+    homepage: 'https://etherpad.org',
+  },
+  'excalidraw': {
+    license: 'MIT',
+    name: 'excalidraw',
+    homepage: 'https://excalidraw.com',
+  },
+  'expenseowl': {
+    license: 'MIT',
+    name: 'ExpenseOwl',
+  },
+  'ferretdb': {
+    license: 'Apache-2.0',
+    name: 'FerretDB',
+    homepage: 'https://www.ferretdb.com',
+  },
+  'fider': {
+    license: 'AGPL-3.0',
+    name: 'fider',
+    homepage: 'https://fider.io',
+  },
+  'filebrowser': {
+    license: 'Apache-2.0',
+    name: 'filebrowser',
+  },
+  'filestash': {
+    license: 'AGPL-3.0',
+    name: 'filestash',
+    homepage: 'https://www.filestash.app/',
+  },
