@@ -145,9 +145,9 @@
     name: 'Calibre-Web-Automated',
   },
   'cassandra-cluster': {
-    homepage: 'https://docs.datastax.com/en/cass-operator/doc/cass-operator/cassOperatorGettingStarted.html',
+    homepage: 'https://cassandra.apache.org/',
     license: 'Apache-2.0',
-    name: 'cass-operator',
+    name: 'cassandra',
   },
   changedetection: {
     homepage: 'https://changedetection.io',
@@ -165,14 +165,12 @@
     name: 'ClickHouse',
   },
   'cnpg-cluster': {
-    homepage: 'https://cloudnative-pg.io',
-    license: 'Apache-2.0',
-    name: 'cloudnative-pg',
+    homepage: 'https://www.postgresql.org/',
+    name: 'postgres',
   },
   'cnpg-image-catalog': {
-    homepage: 'https://cloudnative-pg.io',
-    license: 'Apache-2.0',
-    name: 'cloudnative-pg',
+    name: 'postgres',
+    homepage: 'https://www.postgresql.org/',
   },
   cobalt: {
     homepage: 'https://cobalt.tools',
@@ -461,9 +459,9 @@
     name: 'healthchecks',
   },
   hedgedoc: {
+    homepage: 'https://hedgedoc.org',
     license: 'AGPL-3.0',
     name: 'hedgedoc',
-    homepage: 'https://hedgedoc.org',
   },
   heimdall: {
     license: 'MIT',
@@ -537,9 +535,9 @@
     name: 'seerr',
   },
   jenkins: {
+    homepage: 'https://www.jenkins.io',
     license: 'MIT',
     name: 'jenkins',
-    homepage: 'https://www.jenkins.io',
   },
   joomla: {
     homepage: 'https://www.joomla.org',
@@ -768,13 +766,13 @@
     name: 'mongo-express',
   },
   'mongodb-cluster': {
-    archived: true,
-    name: 'mongodb-kubernetes-operator',
+    homepage: 'https://www.mongodb.com/',
+    name: 'mongo',
   },
   monica: {
+    homepage: 'https://beta.monicahq.com',
     license: 'AGPL-3.0',
     name: 'monica',
-    homepage: 'https://beta.monicahq.com',
   },
   mosquitto: {
     homepage: 'https://mosquitto.org',
@@ -793,7 +791,8 @@
     name: 'mysql-server',
   },
   'mysql-cluster': {
-    name: 'mysql-operator',
+    homepage: 'http://www.mysql.com/',
+    name: 'mysql-server',
   },
   n8n: {
     homepage: 'https://n8n.io',
@@ -910,8 +909,9 @@
     name: 'openproject',
   },
   'opensearch-cluster': {
+    homepage: 'https://opensearch.org/docs/latest/opensearch/index/',
     license: 'Apache-2.0',
-    name: 'opensearch-k8s-operator',
+    name: 'OpenSearch',
   },
   organizr: {
     license: 'GPL-3.0',
@@ -988,9 +988,9 @@
     name: 'photoview',
   },
   phpmyadmin: {
+    homepage: 'https://www.phpmyadmin.net/',
     license: 'GPL-2.0',
     name: 'phpmyadmin',
-    homepage: 'https://www.phpmyadmin.net/',
   },
   pihole: {
     homepage: 'https://pi-hole.net',

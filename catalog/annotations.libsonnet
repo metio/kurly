@@ -6090,7 +6090,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'cassandra-cluster': {
       name: 'Apache Cassandra',
-      upstream: { repo: 'https://github.com/k8ssandra/cass-operator' },
+      upstream: { repo: 'https://github.com/apache/cassandra' },
       summary: 'A highly-available Apache Cassandra cluster as a cass-operator CassandraDatacenter custom resource. Cassandra is Apache-2.0 — a clean default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires cass-operator; the operator mints the superuser Secret.',
       category: 'database',
       stages: {
@@ -6113,7 +6113,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'mongodb-cluster': {
       name: 'MongoDB',
-      upstream: { repo: 'https://github.com/mongodb/mongodb-kubernetes-operator' },
+      upstream: { repo: 'https://github.com/mongodb/mongo' },
       summary: 'A highly-available MongoDB replica set as a MongoDB Community Operator MongoDBCommunity custom resource. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the MongoDB Community Operator and a consumer-provided admin-password Secret. WARNING: MongoDB Community Edition is SSPL-licensed (restricts offering it as a service) — the operator is Apache-2.0 but the server is not; prefer FerretDB (Apache-2.0) if SSPL is a problem for a monetized hosting platform.',
       category: 'database',
       stages: {
@@ -6136,7 +6136,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'opensearch-cluster': {
       name: 'OpenSearch',
-      upstream: { repo: 'https://github.com/opensearch-project/opensearch-k8s-operator' },
+      upstream: { repo: 'https://github.com/opensearch-project/OpenSearch' },
       summary: 'A highly-available OpenSearch cluster as an OpenSearch Operator OpenSearchCluster custom resource, with optional OpenSearch Dashboards. OpenSearch is the Apache-2.0 fork of Elasticsearch — no SSPL/Elastic-License restriction on offering it as a service, the right default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the OpenSearch Operator.',
       category: 'search',
       stages: {
@@ -6159,7 +6159,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     'mysql-cluster': {
       name: 'MySQL',
-      upstream: { repo: 'https://github.com/mysql/mysql-operator' },
+      upstream: { repo: 'https://github.com/mysql/mysql-server' },
       summary: 'A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none).',
       category: 'database',
       stages: {
@@ -6183,8 +6183,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'cnpg-cluster': {
-      name: 'CloudNativePG',
-      upstream: { repo: 'https://github.com/cloudnative-pg/cloudnative-pg' },
+      name: 'PostgreSQL',
+      upstream: { repo: 'https://github.com/postgres/postgres' },
       summary: 'A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator.',
       category: 'database',
       stages: {
@@ -6345,8 +6345,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'cnpg-image-catalog': {
-      name: 'CloudNativePG',
-      upstream: { repo: 'https://github.com/cloudnative-pg/cloudnative-pg' },
+      name: 'PostgreSQL',
+      upstream: { repo: 'https://github.com/postgres/postgres' },
       summary: 'The PostgreSQL images a fleet of CloudNativePG clusters may run, as an ImageCatalog or ClusterImageCatalog custom resource — one image per major, so a patch bump is one line and rolls every cluster on that major. Requires the CloudNativePG operator.',
       category: 'database',
       stages: {

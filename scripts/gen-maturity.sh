@@ -26,6 +26,12 @@ out=catalog/maturity.gen.libsonnet
 # A workload is a directory under workloads/; a signal counts only when it names a
 # real workload directory (a scenario or test may reference something that is not
 # a catalogued workload).
+# Every sort here is C-collated. A locale that ignores punctuation orders
+# `open-webui` after `openhab` where C orders it before, so the generated file
+# would differ between a contributor's shell and CI — and the drift check would
+# fail on nothing but the machine that ran it.
+export LC_ALL=C
+
 workloads="$(find workloads -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)"
 
 # e2e: workloads observed booting on a live cluster (the verification ledger, not the

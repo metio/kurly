@@ -194,7 +194,7 @@ done < <(jq -r '
   total=$(jq '.workloads | length' "$catalog")
   cov=$(jq '[.workloads[] | select(.maturity.tier == "e2e")] | length' "$catalog")
   printf '**%s / %s workloads have an e2e scenario.**\n' "$cov" "$total"
-  remaining="$(jq -r '.workloads[] | select(.maturity.tier != "e2e") | "- \(.id)"' "$catalog" | sort)"
+  remaining="$(jq -r '.workloads[] | select(.maturity.tier != "e2e") | "- \(.id)"' "$catalog" | LC_ALL=C sort)"
   if [ -n "$remaining" ]; then
     printf '\nWorkloads still awaiting a scenario:\n\n%s\n' "$remaining"
   else
