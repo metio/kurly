@@ -12,7 +12,7 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 # renovate: datasource=github-releases depName=opensearch-project/opensearch-k8s-operator
-OPENSEARCH_CLUSTER_VERSION="2.7.0"
+OPENSEARCH_CLUSTER_VERSION="2.8.0"
 
 kurly::validate_cr kurly-opensearch-cluster workloads/opensearch-cluster/cluster.libsonnet \
   "https://raw.githubusercontent.com/opensearch-project/opensearch-k8s-operator/v${OPENSEARCH_CLUSTER_VERSION}/opensearch-operator/config/crd/bases/opensearch.opster.io_opensearchclusters.yaml"
