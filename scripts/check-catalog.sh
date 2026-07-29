@@ -21,6 +21,43 @@ if ! git diff --quiet -- catalog/maturity.gen.libsonnet 2>/dev/null; then
 fi
 echo "maturity tiers match the smoke scenarios and tests"
 
+# The SPDX register every licence value is checked against comes from the
+# devShell, so it moves when the flake pin moves. Rewrite it and fail if the
+# committed copy is stale, exactly as the maturity tiers are handled — a
+# licence that was valid against last year's list must not stay published as
+# valid against this one's.
+gen-spdx >/dev/null
+if ! git diff --quiet -- catalog/spdx.gen.libsonnet 2>/dev/null; then
+  echo "catalog/spdx.gen.libsonnet is stale — regenerate it:" >&2
+  echo "  gen-spdx" >&2
+  echo >&2
+  git --no-pager diff --stat -- catalog/spdx.gen.libsonnet >&2 || true
+  exit 1
+fi
+echo "the SPDX register matches the one the devShell ships"
+
+# The catalogue drops a licence label SPDX does not recognise rather than
+# publishing it, which is right but silent. Name them here so a junk label stays
+# visible: each one is a workload whose licence nobody knows yet, and the fix is
+# to read the project's own LICENSE and annotate what it says.
+unknown="$(jsonnet -e '
+  local spdx = import "catalog/spdx.gen.libsonnet";
+  local upstream = import "catalog/upstream.gen.libsonnet";
+  std.join(" ", [
+    "%s=%s" % [w, upstream[w].license]
+    for w in std.objectFields(upstream)
+    if std.objectHas(upstream[w], "license")
+       && upstream[w].license != "NOASSERTION"
+       && !std.all([
+         std.objectHas(spdx, std.rstripChars(std.stripChars(t, "()"), "+"))
+         for t in std.split(upstream[w].license, " ")
+         if !std.member(["AND", "OR", "WITH"], t) && std.stripChars(t, "()") != ""
+       ])
+  ])' | jq -r)"
+if [ -n "$unknown" ]; then
+  echo "image labels stating a licence SPDX does not know (dropped, not published): ${unknown}"
+fi
+
 # The generator imports the library, which imports k8s-libsonnet; vendor it.
 [ "${KURLY_VENDORED:-}" = "1" ] || jb install
 

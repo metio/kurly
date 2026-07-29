@@ -13,8 +13,10 @@
 #
 # NOT every label is usable, so each is validated before it is published:
 #
-#   * a license must look like an SPDX expression; images carry things like
-#     "ESPHome" in that field, and a wrong identifier is worse than none
+#   * a license must look like an SPDX expression, so a paragraph of prose never
+#     reaches the file; whether the identifiers in it are ones SPDX actually
+#     knows is settled in catalog.jsonnet against the register, because the
+#     answer changes when the register does and this file is written rarely
 #   * a source must be an https URL
 #
 # Anything that fails validation is dropped, and anything a workload's own
@@ -56,8 +58,10 @@ trap 'rm -f "$previous"' EXIT
 } | jq --slurp '.[0] * .[1]' > "$previous"
 
 # An SPDX expression as it appears in practice: identifiers, an optional `-only`
-# / `-or-later`, joined by AND/OR/WITH. Deliberately shape-only — kurly does not
-# ship an SPDX list, and a shape check already rejects the junk labels carry.
+# / `-or-later`, joined by AND/OR/WITH. Shape only, on purpose: the label is
+# recorded as the image states it, and catalog/spdx.gen.libsonnet decides which
+# identifiers are real. Keeping the raw value is what lets check-catalog name a
+# junk label instead of merely omitting the licence.
 spdx='^[A-Za-z0-9.+-]+( (AND|OR|WITH) [A-Za-z0-9.+-]+)*$'
 
 covered=0

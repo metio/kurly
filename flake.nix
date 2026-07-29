@@ -167,6 +167,22 @@
             ];
             text = builtins.readFile ./scripts/gen-bsi.sh;
           };
+          # Writes the SPDX licence register to catalog/spdx.gen.libsonnet, which
+          # catalog.jsonnet validates every licence value against. The list comes
+          # from the devShell (pinned by flake.lock), so this is offline and
+          # check-catalog reruns it in the per-PR gate.
+          gen-spdx = pkgs.writeShellApplication {
+            name = "gen-spdx";
+            runtimeInputs = with pkgs; [
+              jq
+              go-jsonnet
+              coreutils
+            ];
+            text = ''
+              export SPDX_LICENSE_LIST_DATA=${pkgs.spdx-license-list-data.json}
+              ${builtins.readFile ./scripts/gen-spdx.sh}
+            '';
+          };
           # Reads each workload's image labels from the registry into
           # catalog/upstream.gen.libsonnet (license, source repository, title).
           # Hits the network, so it is run on demand / on a schedule.
@@ -206,7 +222,10 @@
               diffutils
               coreutils
               git
+              jq
+              gnugrep
               gen-maturity
+              gen-spdx
             ];
             text = builtins.readFile ./scripts/check-catalog.sh;
           };
@@ -321,6 +340,7 @@
             check-coverage
             check-security
             gen-maturity
+            gen-spdx
             gen-architectures
             gen-upstream
             gen-bsi
@@ -345,6 +365,7 @@
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
+              echo "  gen-spdx         write the SPDX licence register (checked by check-catalog)"
               echo "  gen-architectures  derive each image's CPU architectures from the registry"
               echo "  gen-readme       splice the deploy walkthrough into every workload README"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"

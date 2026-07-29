@@ -58,9 +58,18 @@ its security posture, whether it is a cluster add-on rather than something a
 tenant runs, which [bollwerk](bollwerk/) policies it breaks and the BSI
 requirements those implement, and the values behind the named resource sizes. The
 rest is stated deliberately — what kind of software a workload is, the external
-infrastructure it needs, the Secret keys it reads, and its licence and upstream
-where those have been established. A fact nobody has checked is left absent
-rather than guessed.
+infrastructure it needs, the Secret keys it reads, and what the software is
+called and where it lives, where those have been established.
+
+A licence is checked against the SPDX register rather than accepted as written,
+and travels with whether it is OSI-approved and whether the identifier is one
+SPDX has deprecated — `GPL-3.0` says neither `-only` nor `-or-later`, and that
+ambiguity is reported rather than resolved by guessing. What an image's own
+labels claim is published separately, under `image`, because a label documents
+the image and not the software: it names base images and taglines as often as
+products, and points at whoever built the image, which for a packaged image is
+not the project that wrote it. A fact nobody has checked is left absent rather
+than guessed.
 
 ## Private registries
 

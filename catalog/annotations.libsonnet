@@ -430,6 +430,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     vaultwarden: {
+      name: 'Vaultwarden',
       summary: 'A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080.',
       category: 'application',
       requires: { database: 'optional' },
@@ -452,6 +453,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     wordpress: {
+      name: 'WordPress',
       summary: 'A WordPress server (the popular CMS and blogging platform) on the official image, backed by an external MySQL/MariaDB, with content (themes, plugins, uploads) on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; WORDPRESS_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       requires: { database: 'required' },
@@ -493,6 +495,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     hedgedoc: {
+      name: 'HedgeDoc',
       summary: 'A HedgeDoc server (real-time, collaborative markdown notes) on the official image, backed by an external PostgreSQL, with uploaded files on a PersistentVolume. Pairs with a cnpg-cluster named hedgedoc-db. kurly authors no Secret; CMD_DB_URL and CMD_SESSION_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       category: 'application',
       requires: { database: 'required' },
@@ -625,6 +628,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     freshrss: {
+      name: 'FreshRSS',
       summary: 'A FreshRSS server (a free, self-hosted RSS and Atom feed aggregator) on the official image. A plain composable http workload that keeps its feeds and articles in SQLite on a PersistentVolume by default — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       requires: { database: 'optional' },
@@ -774,6 +778,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     jenkins: {
+      name: 'Jenkins',
       summary: 'A Jenkins controller (the self-hosted automation server for building, testing and deploying software) on the official LTS image. A plain composable http workload that keeps JENKINS_HOME (jobs, plugins, config, build history) on a PersistentVolume. Single controller over a ReadWriteOnce volume: one replica, recreated. Inbound agents connect over the same HTTP port (websocket). Serves on :8080.',
       category: 'application',
       stages: {
@@ -790,6 +795,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     portainer: {
+      name: 'Portainer CE',
       summary: 'A Portainer CE server (a self-hosted management UI for Docker and Kubernetes) on the official image. A plain composable http workload that keeps its database and settings on a PersistentVolume. Single instance over a ReadWriteOnce volume: one replica, recreated. To administer the cluster it runs in, Portainer needs a ServiceAccount bound to a ClusterRole (cluster-admin for full control); kurly authors no RBAC — create the ServiceAccount and binding yourself and pass serviceAccountName. Serves the HTTP UI on :9000.',
       category: 'application',
       stages: {
@@ -825,6 +831,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'cal-com': {
+      name: 'Cal.com',
       summary: 'A Cal.com server (a self-hosted, open-source scheduling platform, an alternative to Calendly) on the official image, backed by an external PostgreSQL. A plain composable http workload. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET, CALENDSO_ENCRYPTION_KEY and the integration credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named cal-com-db. Stateless: a plain rolling Deployment. Serves on :3000.',
       category: 'application',
       requires: { database: 'required' },
@@ -860,6 +867,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'draw-io': {
+      name: 'draw.io',
       summary: 'A draw.io / diagrams.net server (a self-hosted, client-side diagram editor) on the official image. A plain composable http workload. The editor runs entirely in the browser; the server only serves static assets and a stateless export/proxy endpoint, so it holds no data — a plain, horizontally scalable Deployment. Serves on :8080.',
       category: 'tool',
       stages: {
@@ -985,6 +993,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'lobe-chat': {
+      name: 'LobeChat',
       summary: 'A LobeChat server (a self-hosted, open-source AI chat UI supporting many LLM providers, plugins and multimodal input) on the official image. A plain composable http workload. In its default mode conversations are stored client-side, so the server holds no data — a plain, horizontally scalable Deployment. Point it at your LLM providers with the documented environment variables; kurly authors no Secret. Serves on :3210.',
       category: 'application',
       stages: {
@@ -1256,6 +1265,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     komga: {
+      name: 'Komga',
       summary: 'A Komga server (a media server for comics, manga, and digital books) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /books on the same volume — no external database. The Java app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :25600.',
       category: 'application',
       stages: {
@@ -1288,6 +1298,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'stirling-pdf': {
+      name: 'Stirling PDF',
       summary: 'A Stirling-PDF server (a locally-hosted web toolkit for splitting, merging, converting, and editing PDFs) on the official image. A plain composable http workload — it processes files in memory and keeps configuration on a PersistentVolume, no external database. The image runs LibreOffice and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'tool',
       stages: {
@@ -1675,6 +1686,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'paperless-ngx': {
+      name: 'Paperless-ngx',
       summary: 'A Paperless-ngx server (scan, index, and archive documents with OCR and full-text search) backed by an external PostgreSQL and Redis, with its data/media/consume/export trees on a PersistentVolume. The image runs the web server and Celery workers together. Pairs with a cnpg-cluster named paperless-db and a valkey named paperless-cache. The entrypoint writes to the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; secrets come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
       category: 'application',
       requires: { database: 'required', cache: 'required' },
@@ -1762,6 +1774,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     ejabberd: {
+      name: 'ejabberd',
       summary: 'An ejabberd server (a robust, scalable XMPP/messaging server) on the official community image. A plain composable http workload that keeps its Mnesia database and uploads on a PersistentVolume — no external database by default. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves XMPP client :5222, s2s :5269, and admin/HTTP :5280; mount ejabberd.yml at /home/ejabberd/conf.',
       category: 'messaging',
       stages: {
@@ -1960,6 +1973,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'uptime-kuma': {
+      name: 'Uptime Kuma',
       summary: 'An Uptime Kuma monitoring server (self-hosted uptime monitoring and status pages). A plain composable http workload that keeps its checks, history, and settings in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the dashboard and status pages on :3001.',
       category: 'observability',
       stages: {
@@ -1976,6 +1990,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     netbox: {
+      name: 'NetBox',
       summary: 'A NetBox server (the IPAM/DCIM source of truth: IP address management, data-center infrastructure modelling, and a full REST/GraphQL API). Two composable stages on the community image — server (the web front end) and worker (the RQ background task worker) — with PostgreSQL and Redis external. Pairs with the cnpg-cluster and valkey workloads. Single writer over a ReadWriteOnce media volume: the server is one replica, recreated; the worker scales horizontally.',
       category: 'application',
       requires: { database: 'required', cache: 'required' },
@@ -2120,6 +2135,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     forgejo: {
+      name: 'Forgejo',
       summary: 'A Forgejo Git forge (a maintained Gitea fork): repository hosting, issues, pull requests, and a package registry. A plain composable http workload on the rootless image, with its data on a PersistentVolume and its database external — pairs with the cnpg-cluster workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI/git-over-HTTP on :3000 and git-over-SSH on :2222.',
       category: 'application',
       requires: { database: 'required', cache: 'optional' },
@@ -2930,6 +2946,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     adguardhome: {
+      name: 'AdGuard Home',
       summary: 'An AdGuard Home server (a self-hosted, network-wide DNS ad- and tracker-blocker with a friendly web UI, an alternative to Pi-hole) on the official image; its configuration and runtime data live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. The config and work directory both live under /opt/adguardhome, so a single volume persists everything; it binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI (setup wizard) serves on :3000.',
       category: 'networking',
       stages: {
@@ -3001,6 +3018,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     searxng: {
+      name: 'SearXNG',
       summary: 'A SearXNG server (a privacy-respecting, self-hosted metasearch engine that aggregates results from many search services without tracking you) on the official image. Its behaviour is its settings.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state of its own. kurly authors no Secret; SEARXNG_SECRET (overriding server.secret_key) comes from a provided Secret via envFrom. A busy instance also wants a Valkey/Redis for the limiter. Stateless: scale freely. Serves on :8080.',
       category: 'tool',
       requires: { cache: 'optional' },
@@ -3072,6 +3090,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     pgadmin: {
+      name: 'pgAdmin',
       summary: 'A pgAdmin 4 server (the web UI for administering PostgreSQL) on the official image; its session and configuration store (SQLite) lives on a PersistentVolume. kurly authors no Secret; PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD come from a provided Secret via envFrom. The image runs as uid 5050. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'admin',
       requires: { database: 'optional' },
@@ -3090,6 +3109,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     tachidesk: {
+      name: 'Suwayomi',
       summary: 'A Suwayomi-Server (formerly Tachidesk): a self-hosted manga reader and library server, on the official image; its library, downloads and settings live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4567.',
       category: 'application',
       stages: {
@@ -3106,6 +3126,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     pihole: {
+      name: 'Pi-hole',
       summary: 'A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80.',
       category: 'networking',
       stages: {
@@ -3157,6 +3178,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     phpmyadmin: {
+      name: 'phpMyAdmin',
       summary: 'A phpMyAdmin server (the classic web UI for administering MySQL and MariaDB) on the official image. Stateless: a plain rolling Deployment that connects to the MySQL host you point it at. Serves on :80.',
       category: 'admin',
       requires: { database: 'required' },
@@ -3324,6 +3346,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'mongo-express': {
+      name: 'mongo-express',
       summary: 'A mongo-express server (a lightweight, web-based MongoDB admin UI) on the official image. Stateless: a plain rolling Deployment that connects to the MongoDB you point it at. kurly authors no Secret; ME_CONFIG_MONGODB_URL and the basic-auth credentials come from a provided Secret via envFrom. Pairs with a mongodb-cluster. Serves on :8081.',
       category: 'admin',
       requires: { database: 'required' },
@@ -3341,6 +3364,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     thelounge: {
+      name: 'The Lounge',
       summary: 'A The Lounge server (a modern, self-hosted web IRC client: always-connected, multi-user, accessible from any browser) on the official image; its configuration and per-user data live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
       category: 'application',
       stages: {
@@ -3408,6 +3432,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     meilisearch: {
+      name: 'Meilisearch',
       summary: 'A Meilisearch server (a fast, typo-tolerant, self-hosted search engine with a simple REST API) on the official image; its indexes live on a PersistentVolume. The search companion several apps expect (e.g. karakeep). kurly authors no Secret; MEILI_MASTER_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7700.',
       category: 'search',
       stages: {
@@ -3441,6 +3466,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     typesense: {
+      name: 'Typesense',
       summary: 'A Typesense server (a fast, typo-tolerant, self-hosted search engine with a clean API) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; TYPESENSE_API_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8108.',
       category: 'search',
       stages: {
@@ -3474,6 +3500,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     tika: {
+      name: 'Apache Tika',
       summary: 'An Apache Tika server (a content-analysis toolkit that detects and extracts text and metadata from over a thousand file types) on the official image. Stateless: a plain rolling Deployment. The text-extraction companion apps like paperless-ngx expect. Serves on :9998.',
       category: 'tool',
       stages: {
@@ -3623,6 +3650,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'home-assistant': {
+      name: 'Home Assistant',
       summary: 'A Home Assistant server (Home Assistant Core: the leading self-hosted home-automation platform) on the official image; its configuration and state database live on a PersistentVolume. It runs as root with a writable root filesystem. Local-network discovery (mDNS/SSDP) does not work through a ClusterIP; devices reachable by IP/MQTT/cloud work, and USB radios need a network coordinator. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8123.',
       category: 'application',
       stages: {
@@ -3639,6 +3667,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     nextcloud: {
+      name: 'Nextcloud',
       summary: 'A Nextcloud server (a self-hosted content-collaboration platform: file sync and share, calendars, contacts, office documents) on the official Apache image; with the default SQLite backend the whole installation lives on a PersistentVolume. kurly authors no Secret; NEXTCLOUD_ADMIN_* come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL and S3 primary storage to scale out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       requires: { database: 'optional', objectStorage: 'optional' },
@@ -3684,6 +3713,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mosquitto: {
+      name: 'Eclipse Mosquitto',
       summary: 'An Eclipse Mosquitto server (a lightweight, self-hosted MQTT message broker for IoT and home automation). Mosquitto speaks MQTT, not HTTP: it listens on :1883, its mosquitto.conf is mounted as a ConfigMap and passed verbatim, and its persistence database lives on a PersistentVolume. The default allows anonymous clients; a real broker sets up authentication. WebSockets (:9001) need a listener in the config and a second Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.',
       category: 'messaging',
       stages: {
@@ -3720,6 +3750,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     clickhouse: {
+      name: 'ClickHouse',
       summary: 'A ClickHouse server (a fast, self-hosted column-oriented SQL database for real-time analytics) on the official single-node image; its data lives on a PersistentVolume. The native protocol (:9000) needs a separate Service. kurly authors no Secret; CLICKHOUSE_USER/PASSWORD/DB come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves HTTP on :8123.',
       category: 'database',
       stages: {
@@ -3816,6 +3847,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mariadb: {
+      name: 'MariaDB',
       summary: 'A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
       category: 'database',
       stages: {
@@ -3833,6 +3865,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mysql: {
+      name: 'MySQL',
       summary: 'A MySQL server — the popular open-source relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
       category: 'database',
       stages: {
@@ -3918,6 +3951,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     minio: {
+      name: 'MinIO',
       summary: 'A MinIO server (a high-performance, self-hosted, S3-compatible object storage server) on the official image; its objects live on a PersistentVolume. Single-node MinIO (a real object store runs distributed across nodes/disks). The web console (:9001) needs a separate Service. kurly authors no Secret; MINIO_ROOT_USER/PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the S3 API on :9000.',
       category: 'storage',
       stages: {
@@ -3935,6 +3969,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     rabbitmq: {
+      name: 'RabbitMQ',
       summary: 'A RabbitMQ server (a widely-used, self-hosted message broker implementing AMQP) on the official management image; the broker speaks AMQP on :5672 with data on a PersistentVolume. Single node (not a cluster). The management UI (:15672) needs a separate Service. kurly authors no Secret; RABBITMQ_DEFAULT_USER/PASS come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves AMQP on :5672.',
       category: 'messaging',
       stages: {
@@ -4023,6 +4058,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     technitium: {
+      name: 'Technitium DNS Server',
       summary: 'A Technitium DNS Server (a self-hosted, privacy-focused DNS server with ad-blocking, DNS-over-HTTPS/TLS and a full web console) on the official image; its configuration and zones live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; DNS_SERVER_ADMIN_PASSWORD comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The web console serves on :5380.',
       category: 'networking',
       stages: {
@@ -4702,7 +4738,16 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     emqx: {
-      summary: 'An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.',
+      name: 'EMQX Enterprise',
+      // The image label says `BSL-1.1`, which SPDX reads as the Boost Software
+      // License. It is not: the same image carries `edition=Enterprise` and the
+      // title `emqx-enterprise`, and EMQX relicensed the enterprise edition
+      // under the Business Source License — `BUSL-1.1`. Stated here because the
+      // difference is the whole difference: BUSL is source-available, not open
+      // source, so anyone hosting this owes a licence conversation EMQX's
+      // Apache-2.0 editions (5.8 and earlier) did not require.
+      license: 'BUSL-1.1',
+      summary: 'An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. NOT open source: the pinned 6.x image is the Enterprise edition under the Business Source License (BUSL-1.1) — EMQX relicensed after 5.8, whose images were Apache-2.0. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.',
       category: 'messaging',
       stages: {
         server: d.fn('The EMQX broker on :1883. Data at /opt/emqx/data; the dashboard (:18083) needs an extra Service. Expose to devices (often a LoadBalancer).', [
@@ -4718,6 +4763,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     nats: {
+      name: 'NATS',
       summary: 'A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222.',
       category: 'messaging',
       stages: {
@@ -4751,6 +4797,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     changedetection: {
+      name: 'changedetection.io',
       summary: 'A changedetection.io server (self-hosted website change detection: watch pages and get notified when they change) on the official image; its datastore (SQLite plus page snapshots) lives on a PersistentVolume. Fetching JavaScript pages needs a companion Playwright/Chrome service (PLAYWRIGHT_DRIVER_URL); the plain HTTP fetcher works without it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.',
       category: 'application',
       stages: {
@@ -4893,6 +4940,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     rocketchat: {
+      name: 'Rocket.Chat',
       summary: 'A Rocket.Chat server (a self-hosted, open-source team chat platform) on the official image, backed by an external MongoDB replica set (Rocket.Chat requires the oplog). Pairs with a mongodb-cluster named rocketchat-db. kurly authors no Secret; MONGO_URL and MONGO_OPLOG_URL come from a provided Secret via envFrom. Stateless (uploads live in MongoDB GridFS): a plain rolling Deployment. Serves on :3000.',
       category: 'application',
       requires: { database: 'required' },
@@ -5129,6 +5177,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     photoprism: {
+      name: 'PhotoPrism',
       summary: 'A PhotoPrism server (an AI-powered, self-hosted photo-management app with face recognition and automatic tagging) on the official image. A plain composable http workload — with the SQLite backend its database, cache, and originals live on a PersistentVolume, no external database. The image runs TensorFlow indexing and writes the rootfs, relaxing read-only-rootfs while keeping non-root and dropped capabilities. kurly authors no Secret; PHOTOPRISM_ADMIN_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :2342.',
       category: 'application',
       requires: { database: 'optional' },
@@ -5237,6 +5286,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     monica: {
+      name: 'Monica',
       summary: 'A Monica server (a self-hosted personal relationship manager) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       requires: { database: 'required' },
@@ -5277,6 +5327,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'firefly-iii': {
+      name: 'Firefly III',
       summary: 'A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',
       requires: { database: 'required' },
@@ -5760,6 +5811,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     dragonfly: {
+      name: 'Dragonfly',
       summary: "A RESP-speaking in-memory store with a per-pod PVC and a headless Service. Answers the same protocol as Valkey, but is not a fork of it: it rejects Redis flags, persists through snapshots, and runs one io thread per core it can see — which in a container is the node's, so the thread count is pinned and the memory floor it demands (256MiB per thread) is asserted at render.",
       category: 'cache',
       stages: {
@@ -5833,6 +5885,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     keycloak: {
+      name: 'Keycloak',
       summary: 'A Keycloak identity server as an official keycloak-operator `Keycloak` custom resource. Authors the CR (like loki and tempo) for the operator to reconcile into a StatefulSet, Services, and the admin credentials Secret. Requires the keycloak-operator (whose recent releases let one operator manage instances across many namespaces) and a PostgreSQL database — pairs with the cnpg-cluster workload.',
       category: 'identity',
       requires: { database: 'required' },
@@ -6067,6 +6120,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     opencost: {
+      name: 'OpenCost',
       summary: 'OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source.',
       category: 'observability',
       stages: {
@@ -6087,6 +6141,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     seaweedfs: {
+      name: 'SeaweedFS',
       summary: "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups.",
       category: 'storage',
       stages: {
@@ -6154,6 +6209,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     valkey: {
+      name: 'Valkey',
       summary: 'A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image.',
       category: 'cache',
       stages: {

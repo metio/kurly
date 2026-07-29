@@ -22,6 +22,7 @@ local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
 local bsiViolations = import './bsi.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
+local spdx = import './spdx.gen.libsonnet';
 local upstream = import './upstream.gen.libsonnet';
 
 // Each workload stage, imported by the canonical path a consumer's snippet uses
@@ -515,23 +516,111 @@ local categories = [
   'tool',
 ];
 
-// What the catalogue says about the software itself: the licence it is published
-// under, the name it calls itself, and where it comes from. A workload's own
-// annotation wins over the image label, because a maintainer who checked the
-// upstream beats a label written by a build pipeline; the label fills the gap
-// where nobody has checked yet, and the field is simply absent where neither
-// knows. Absent is honest — a guessed licence is worse than none.
+// The licence, checked against the SPDX register rather than against a shape.
+// The labels state project names (`ESPHome`), spellings SPDX does not use
+// (`AGPLv3`), and identifiers that mean something other than intended
+// (`BSL-1.1` is the Boost licence; an image carrying it beside an
+// `emqx-enterprise` title means the Business Source one, `BUSL-1.1`). Each of
+// those reads as a licence to anyone rendering the field, and a source-offer
+// obligation keyed on identifiers would miss the case entirely.
+//
+// So a label SPDX does not recognise is dropped — the same rule the rest of
+// these facts follow, since a value nobody can act on is not better than
+// silence, and the label is somebody else's data to fix. An ANNOTATION that
+// SPDX does not recognise fails the build instead: that one is ours, a
+// maintainer wrote it having checked, and a typo there should never quietly
+// become an absent licence. check-catalog lists what was dropped, so a junk
+// label stays visible rather than merely absent.
+//
+// Two things travel with the identifier because the string alone does not carry
+// them. Whether it is OSI-approved: a platform that says it hosts open source
+// has to be able to tell that `BUSL-1.1` is source-available and not open
+// source. And whether SPDX has deprecated the spelling: `GPL-3.0` says neither
+// `-only` nor `-or-later`, so it is genuinely ambiguous — worth saying, never
+// worth resolving by guessing, since only the project's own LICENSE file
+// settles it.
+//
+// `NOASSERTION` is not a licence but SPDX's word for a publisher who was asked
+// and declined to say. That is a different fact from nobody having asked, which
+// is what an absent field means, so it is published as its own flag rather than
+// as a licence string every consumer has to know to special-case.
+local licenseFacts(workload, value, attested) =
+  // A licence field may hold an expression rather than one identifier
+  // (`EPL-2.0 OR BSD-3-Clause`). Every identifier in it must be one SPDX knows;
+  // the operators are not identifiers, and a trailing `+` is part of the
+  // spelling rather than of the name.
+  local identifiers = [
+    std.rstripChars(std.stripChars(token, '()'), '+')
+    for token in std.split(value, ' ')
+    if !std.member(['AND', 'OR', 'WITH'], token) && std.stripChars(token, '()') != ''
+  ];
+  local known = [id for id in identifiers if std.objectHas(spdx, id)];
+  if value == null then {}
+  else if value == 'NOASSERTION' then { licenseNotAsserted: true }
+  else if std.length(known) != std.length(identifiers) && !attested then {}
+  else
+    assert std.length(known) == std.length(identifiers) :
+           'workloads: %s is annotated with the licence %s, which SPDX does not know' % [workload, value];
+    {
+      license: value,
+    }
+    // Only a single identifier answers "is this open source" on its own. An
+    // expression needs reading — an OR of a permissive and a proprietary
+    // licence is a choice, an AND is a conjunction — so the flag is left off
+    // rather than resolved to a side.
+    + (if std.length(identifiers) == 1 then { licenseOsiApproved: spdx[identifiers[0]].osiApproved } else {})
+    + (if std.any([spdx[id].deprecated for id in identifiers]) then { licenseDeprecated: true } else {});
+
+// A repository that packages software for a registry, rather than the software's
+// own home. `github.com/linuxserver/docker-jellyfin` builds a Jellyfin image; it
+// is not Jellyfin, and its maintainers are not Jellyfin's. An image label points
+// at whichever of the two built the image, so the two facts have to be told
+// apart before either is published: naming a packager as the upstream project
+// sends anyone acting on the field — crediting, funding, reporting a bug — to
+// the wrong people. The shape is the tell: a packaging repository is almost
+// always named for the tool that consumes it.
+local packagingRepo(url) =
+  local repo = std.reverse(std.split(url, '/'))[0];
+  std.startsWith(url, 'https://github.com/linuxserver/')
+  || std.startsWith(url, 'https://hub.docker.com/')
+  || std.startsWith(repo, 'docker-')
+  || std.endsWith(repo, '-docker');
+
+// What the catalogue says about the software, and separately about the image
+// that packages it. The two are different facts and the labels only sometimes
+// agree with the one wanted: `org.opencontainers.image.title` documents the
+// image, so it holds taglines, base images and editions as often as a product
+// name. So the image's own claims are published as the image's, and the
+// software's `name` is stated by a maintainer or absent — a wrong display name
+// is worse than none, because nobody can tell it is wrong by looking at it.
+//
+// `upstream` sits between the two: the image's source repository is the
+// software's own repository often enough to be worth deriving, so it is —
+// except where it is recognisably a packaging repository, where it is dropped
+// rather than guessed. An annotation always wins: a maintainer who checked
+// beats a label written by a build pipeline.
 local softwareFacts(workload) =
   local ann_ = ann.workloads[workload];
   local derived = std.get(upstream, workload, {});
-  local pick(field, fallback) =
-    local value = std.get(ann_, field, std.get(derived, fallback, null));
-    if value == null then {} else { [field]: value };
-  pick('license', 'license')
-  + pick('name', 'title')
+  local imageEntries =
+    (local t = std.get(derived, 'title', null); if t == null then {} else { title: t })
+    + (local s = std.get(derived, 'source', null); if s == null then {} else { source: s })
+    + (local h = std.get(derived, 'homepage', null); if h == null then {} else { homepage: h });
+  (if imageEntries == {} then {} else { image: imageEntries })
+  + (local n = std.get(ann_, 'name', null); if n == null then {} else { name: n })
+  + licenseFacts(
+    workload,
+    std.get(ann_, 'license', std.get(derived, 'license', null)),
+    attested=std.objectHas(ann_, 'license'),
+  )
   + (
-    local repo = std.get(std.get(ann_, 'upstream', {}), 'repo', std.get(derived, 'source', null));
-    local homepage = std.get(std.get(ann_, 'upstream', {}), 'homepage', std.get(derived, 'homepage', null));
+    local labelled = std.get(derived, 'source', null);
+    local repo = std.get(
+      std.get(ann_, 'upstream', {}),
+      'repo',
+      if labelled != null && !packagingRepo(labelled) then labelled else null
+    );
+    local homepage = std.get(std.get(ann_, 'upstream', {}), 'homepage', null);
     local entries = (if repo == null then {} else { repo: repo })
                     + (if homepage == null then {} else { homepage: homepage });
     if entries == {} then {} else { upstream: entries }

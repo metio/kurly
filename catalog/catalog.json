@@ -2758,10 +2758,14 @@
       {
          "category": "application",
          "id": "2fauth",
+         "image": {
+            "homepage": "https://github.com/Bubka/2FAuth",
+            "source": "https://github.com/Bubka/2FAuth",
+            "title": "2fauth"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "2fauth",
          "requires": { },
          "stages": [
             {
@@ -2870,7 +2874,6 @@
          ],
          "summary": "A 2FAuth server (a self-hosted web app to manage TOTP/HOTP two-factor accounts and generate one-time codes) on the official image; with the default SQLite backend its database lives on a PersistentVolume. kurly authors no Secret; APP_KEY (encrypts stored 2FA secrets) comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.",
          "upstream": {
-            "homepage": "https://github.com/Bubka/2FAuth",
             "repo": "https://github.com/Bubka/2FAuth"
          }
       },
@@ -3116,7 +3119,14 @@
       {
          "category": "networking",
          "id": "adguardhome",
+         "image": {
+            "homepage": "https://adguard.com/en/adguard-home/overview.html",
+            "source": "https://github.com/AdguardTeam/AdGuardHome",
+            "title": "AdGuard Home"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -3213,7 +3223,6 @@
          ],
          "summary": "An AdGuard Home server (a self-hosted, network-wide DNS ad- and tracker-blocker with a friendly web UI, an alternative to Pi-hole) on the official image; its configuration and runtime data live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. The config and work directory both live under /opt/adguardhome, so a single volume persists everything; it binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI (setup wizard) serves on :3000.",
          "upstream": {
-            "homepage": "https://adguard.com/en/adguard-home/overview.html",
             "repo": "https://github.com/AdguardTeam/AdGuardHome"
          }
       },
@@ -3315,11 +3324,16 @@
       {
          "category": "application",
          "id": "airsonic-advanced",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-airsonic-advanced/packages",
+            "source": "https://github.com/linuxserver/docker-airsonic-advanced",
+            "title": "Airsonic-advanced"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Airsonic-advanced",
          "requires": { },
          "stages": [
             {
@@ -3427,15 +3441,14 @@
                }
             }
          ],
-         "summary": "An Airsonic-Advanced server — a free, self-hosted music streaming server, an actively-maintained fork of Airsonic. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4040.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-airsonic-advanced/packages",
-            "repo": "https://github.com/linuxserver/docker-airsonic-advanced"
-         }
+         "summary": "An Airsonic-Advanced server — a free, self-hosted music streaming server, an actively-maintained fork of Airsonic. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4040."
       },
       {
          "category": "observability",
          "id": "alertmanager",
+         "image": {
+            "source": "https://github.com/prometheus/alertmanager"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -3643,6 +3656,9 @@
       {
          "category": "application",
          "id": "answer",
+         "image": {
+            "source": "https://github.com/apache/answer"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -3934,11 +3950,17 @@
       {
          "category": "application",
          "id": "audiobookshelf",
+         "image": {
+            "homepage": "https://github.com/advplyr/audiobookshelf",
+            "source": "https://github.com/advplyr/audiobookshelf",
+            "title": "audiobookshelf"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "audiobookshelf",
          "requires": { },
          "stages": [
             {
@@ -4026,18 +4048,22 @@
          ],
          "summary": "An Audiobookshelf server (a self-hosted audiobook and podcast server) on the official image. A plain composable http workload that keeps its config, metadata, and library on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/advplyr/audiobookshelf",
             "repo": "https://github.com/advplyr/audiobookshelf"
          }
       },
       {
          "category": "identity",
          "id": "authelia",
+         "image": {
+            "homepage": "https://github.com/authelia/authelia/pkgs/container/authelia",
+            "source": "https://github.com/authelia/authelia/tree/86f0463547329ebe778c82a168c41614a71bb0f6",
+            "title": "authelia"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "authelia",
          "requires": { },
          "stages": [
             {
@@ -4159,13 +4185,16 @@
          ],
          "summary": "An Authelia server (a self-hosted authentication and authorization gateway adding SSO and 2FA in front of your apps via a reverse proxy forward-auth) on the official image. Its behaviour is its configuration.yml, mounted as a ConfigMap and passed verbatim; with the default SQLite storage its database lives on a PersistentVolume. The default config is a minimal skeleton that MUST be completed. kurly authors no Secret; the session/storage/JWT secrets come from a provided Secret via envFrom (as AUTHELIA_* env). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091.",
          "upstream": {
-            "homepage": "https://github.com/authelia/authelia/pkgs/container/authelia",
             "repo": "https://github.com/authelia/authelia/tree/86f0463547329ebe778c82a168c41614a71bb0f6"
          }
       },
       {
          "category": "identity",
          "id": "authentik",
+         "image": {
+            "homepage": "https://goauthentik.io",
+            "source": "https://github.com/goauthentik/authentik"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -4412,7 +4441,6 @@
          ],
          "summary": "An authentik server (a self-hosted identity provider and SSO: OAuth2, SAML, LDAP, forward-auth) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web/API server (HTTP :9000) and a background worker (migrations, scheduled tasks, outposts). kurly authors no Secret; the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Pairs with a cnpg-cluster named authentik-db and a Redis. Stateless.",
          "upstream": {
-            "homepage": "https://goauthentik.io",
             "repo": "https://github.com/goauthentik/authentik"
          }
       },
@@ -4675,11 +4703,16 @@
       {
          "category": "application",
          "id": "baikal",
+         "image": {
+            "homepage": "https://hub.docker.com/r/ckulka/baikal",
+            "source": "https://github.com/ckulka/baikal-docker",
+            "title": "Baikal"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Baikal",
          "requires": {
             "database": "optional"
          },
@@ -4771,19 +4804,18 @@
                }
             }
          ],
-         "summary": "A Baikal server (a lightweight CalDAV + CardDAV server on sabre/dav) on the maintained ckulka image. A plain composable http workload that keeps its configuration and SQLite database on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://hub.docker.com/r/ckulka/baikal",
-            "repo": "https://github.com/ckulka/baikal-docker"
-         }
+         "summary": "A Baikal server (a lightweight CalDAV + CardDAV server on sabre/dav) on the maintained ckulka image. A plain composable http workload that keeps its configuration and SQLite database on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "application",
          "id": "baserow",
+         "image": {
+            "source": "https://github.com/baserow/baserow",
+            "title": "baserow"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "baserow",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -4914,11 +4946,16 @@
       {
          "category": "application",
          "id": "bazarr",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-bazarr/packages",
+            "source": "https://github.com/linuxserver/docker-bazarr",
+            "title": "Bazarr"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Bazarr",
          "requires": { },
          "stages": [
             {
@@ -5026,20 +5063,21 @@
                }
             }
          ],
-         "summary": "A Bazarr server — a companion to Sonarr and Radarr that manages and downloads subtitles. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6767.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-bazarr/packages",
-            "repo": "https://github.com/linuxserver/docker-bazarr"
-         }
+         "summary": "A Bazarr server — a companion to Sonarr and Radarr that manages and downloads subtitles. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6767."
       },
       {
          "category": "observability",
          "id": "beszel",
+         "image": {
+            "homepage": "https://github.com/henrygd/beszel",
+            "source": "https://github.com/henrygd/beszel",
+            "title": "beszel"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "beszel",
          "requires": { },
          "stages": [
             {
@@ -5128,7 +5166,6 @@
          ],
          "summary": "A Beszel hub (a lightweight server-monitoring dashboard) on the official image. A plain composable http workload that keeps its data in SQLite on a PersistentVolume — no external database. Beszel agents run on the monitored machines and report to this hub. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090.",
          "upstream": {
-            "homepage": "https://github.com/henrygd/beszel",
             "repo": "https://github.com/henrygd/beszel"
          }
       },
@@ -5553,11 +5590,17 @@
       {
          "category": "application",
          "id": "blinko",
+         "image": {
+            "homepage": "https://github.com/blinkospace/blinko",
+            "source": "https://github.com/blinkospace/blinko",
+            "title": "blinko"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "blinko",
          "requires": {
             "database": "required"
          },
@@ -5671,18 +5714,22 @@
          ],
          "summary": "A Blinko server (a self-hosted, AI-powered note-taking app for quickly capturing ideas) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named blinko-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1111.",
          "upstream": {
-            "homepage": "https://github.com/blinkospace/blinko",
             "repo": "https://github.com/blinkospace/blinko"
          }
       },
       {
          "category": "application",
          "id": "bookstack",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-bookstack/packages",
+            "source": "https://github.com/linuxserver/docker-bookstack",
+            "title": "Bookstack"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Bookstack",
          "requires": {
             "database": "required"
          },
@@ -5816,15 +5863,14 @@
                }
             }
          ],
-         "summary": "A BookStack server (a simple, self-hosted platform for organising and storing documentation) on the maintained LinuxServer image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and uploads on a PersistentVolume. The LinuxServer s6 image runs as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASS and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-bookstack/packages",
-            "repo": "https://github.com/linuxserver/docker-bookstack"
-         }
+         "summary": "A BookStack server (a simple, self-hosted platform for organising and storing documentation) on the maintained LinuxServer image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and uploads on a PersistentVolume. The LinuxServer s6 image runs as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASS and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "tool",
          "id": "browserless",
+         "image": {
+            "source": "https://github.com/browserless/browserless"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -6053,6 +6099,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Cal.com",
          "requires": {
             "database": "required"
          },
@@ -6162,11 +6209,16 @@
       {
          "category": "application",
          "id": "calibre",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-calibre/packages",
+            "source": "https://github.com/linuxserver/docker-calibre",
+            "title": "Calibre"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Calibre",
          "requires": { },
          "stages": [
             {
@@ -6274,20 +6326,21 @@
                }
             }
          ],
-         "summary": "A Calibre server (the full Calibre e-book management desktop app, served in the browser over a remote-desktop session) on the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-calibre/packages",
-            "repo": "https://github.com/linuxserver/docker-calibre"
-         }
+         "summary": "A Calibre server (the full Calibre e-book management desktop app, served in the browser over a remote-desktop session) on the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
          "category": "application",
          "id": "calibre-web",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-calibre-web/packages",
+            "source": "https://github.com/linuxserver/docker-calibre-web",
+            "title": "Calibre-web"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Calibre-web",
          "requires": { },
          "stages": [
             {
@@ -6395,11 +6448,7 @@
                }
             }
          ],
-         "summary": "A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-calibre-web/packages",
-            "repo": "https://github.com/linuxserver/docker-calibre-web"
-         }
+         "summary": "A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083."
       },
       {
          "category": "application",
@@ -6611,7 +6660,13 @@
       {
          "category": "application",
          "id": "changedetection",
+         "image": {
+            "homepage": "https://changedetection.io",
+            "source": "https://github.com/dgtlmoon/changedetection.io",
+            "title": "changedetection.io"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -6711,7 +6766,6 @@
          ],
          "summary": "A changedetection.io server (self-hosted website change detection: watch pages and get notified when they change) on the official image; its datastore (SQLite plus page snapshots) lives on a PersistentVolume. Fetching JavaScript pages needs a companion Playwright/Chrome service (PLAYWRIGHT_DRIVER_URL); the plain HTTP fetcher works without it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.",
          "upstream": {
-            "homepage": "https://changedetection.io",
             "repo": "https://github.com/dgtlmoon/changedetection.io"
          }
       },
@@ -6809,6 +6863,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ClickHouse",
          "requires": { },
          "stages": [
             {
@@ -7490,11 +7545,17 @@
       {
          "category": "tool",
          "id": "convertx",
+         "image": {
+            "homepage": "https://github.com/C4illin/ConvertX",
+            "source": "https://github.com/C4illin/ConvertX",
+            "title": "ConvertX"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "ConvertX",
          "requires": { },
          "stages": [
             {
@@ -7583,7 +7644,6 @@
          ],
          "summary": "A ConvertX server (a self-hosted online file converter supporting 1000+ formats) on the official image; its SQLite database and in-flight files live on a PersistentVolume. kurly authors no Secret; JWT_SECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/C4illin/ConvertX",
             "repo": "https://github.com/C4illin/ConvertX"
          }
       },
@@ -7806,11 +7866,16 @@
       {
          "category": "tool",
          "id": "cyberchef",
+         "image": {
+            "homepage": "https://github.com/gchq/CyberChef",
+            "source": "https://github.com/gchq/CyberChef",
+            "title": "CyberChef"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "CyberChef",
          "requires": { },
          "stages": [
             {
@@ -7893,18 +7958,22 @@
          ],
          "summary": "A CyberChef server (GCHQ's \"cyber Swiss-army knife\" for encoding, encryption, compression and data analysis, all in the browser) on the official image. Stateless: a plain rolling Deployment. Serves on :8000.",
          "upstream": {
-            "homepage": "https://github.com/gchq/CyberChef",
             "repo": "https://github.com/gchq/CyberChef"
          }
       },
       {
          "category": "application",
          "id": "dashy",
+         "image": {
+            "homepage": "https://dashy.to",
+            "source": "https://github.com/lissy93/dashy",
+            "title": "Dashy"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Dashy",
          "requires": { },
          "stages": [
             {
@@ -7994,18 +8063,22 @@
          ],
          "summary": "A Dashy server (a highly customizable, self-hosted dashboard for your services) on the official image. A plain composable http workload — its configuration lives on a PersistentVolume, no external database. The image rebuilds assets on a config change and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
          "upstream": {
-            "homepage": "https://dashy.to",
             "repo": "https://github.com/lissy93/dashy"
          }
       },
       {
          "category": "application",
          "id": "davis",
+         "image": {
+            "homepage": "https://github.com/tchapi/davis",
+            "source": "https://github.com/tchapi/davis",
+            "title": "davis"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "davis",
          "requires": {
             "database": "optional"
          },
@@ -8107,18 +8180,22 @@
          ],
          "summary": "A Davis server (a self-hosted CalDAV and CardDAV server with a simple admin UI, built on sabre/dav) on the official image, backed by an external database (MySQL/MariaDB, PostgreSQL, or SQLite). A plain composable http workload. kurly authors no Secret; DATABASE_URL, APP_SECRET and the admin login come from a provided Secret via envFrom. Pair it with a database you run separately. Stateless: calendars and contacts live in the database, so a plain rolling Deployment. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/tchapi/davis",
             "repo": "https://github.com/tchapi/davis"
          }
       },
       {
          "category": "application",
          "id": "davos",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-davos/packages",
+            "source": "https://github.com/linuxserver/docker-davos",
+            "title": "Davos"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Davos",
          "requires": { },
          "stages": [
             {
@@ -8226,20 +8303,21 @@
                }
             }
          ],
-         "summary": "A davos server — a self-hosted FTP automation tool that watches remote directories and downloads on a schedule. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-davos/packages",
-            "repo": "https://github.com/linuxserver/docker-davos"
-         }
+         "summary": "A davos server — a self-hosted FTP automation tool that watches remote directories and downloads on a schedule. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
          "category": "application",
          "id": "deluge",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-deluge/packages",
+            "source": "https://github.com/linuxserver/docker-deluge",
+            "title": "Deluge"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Deluge",
          "requires": { },
          "stages": [
             {
@@ -8347,20 +8425,21 @@
                }
             }
          ],
-         "summary": "A Deluge server — a lightweight, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8112.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-deluge/packages",
-            "repo": "https://github.com/linuxserver/docker-deluge"
-         }
+         "summary": "A Deluge server — a lightweight, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8112."
       },
       {
          "category": "identity",
          "id": "dex",
+         "image": {
+            "homepage": "https://github.com/dexidp/dex",
+            "source": "https://github.com/dexidp/dex",
+            "title": "dex"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "dex",
          "requires": {
             "database": "optional"
          },
@@ -8459,18 +8538,21 @@
          ],
          "summary": "A Dex server (an OpenID Connect / OAuth 2.0 identity provider that federates to upstream connectors — LDAP, SAML, GitHub, Google, …) on the official image. A plain composable http workload; with the SQLite storage backend its state lives on a PersistentVolume, no external database. Driven entirely by a config.yaml (issuer, storage, connectors, staticClients) mounted from a Secret — kurly authors none. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves OIDC on :5556.",
          "upstream": {
-            "homepage": "https://github.com/dexidp/dex",
             "repo": "https://github.com/dexidp/dex"
          }
       },
       {
          "category": "application",
          "id": "directus",
-         "license": "NOASSERTION",
+         "image": {
+            "homepage": "https://github.com/directus/directus",
+            "source": "https://github.com/directus/directus",
+            "title": "directus"
+         },
+         "licenseNotAsserted": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "directus",
          "requires": {
             "database": "required"
          },
@@ -8608,7 +8690,6 @@
          ],
          "summary": "A Directus server (an open-source headless CMS and data platform over your SQL database) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named directus-db. kurly authors no Secret; DB_PASSWORD, KEY, SECRET, and the admin password come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8055.",
          "upstream": {
-            "homepage": "https://github.com/directus/directus",
             "repo": "https://github.com/directus/directus"
          }
       },
@@ -8720,6 +8801,9 @@
       {
          "category": "application",
          "id": "docmost",
+         "image": {
+            "source": "https://github.com/docmost/docmost"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -9165,11 +9249,16 @@
       {
          "category": "cache",
          "id": "dragonfly",
-         "license": "NOASSERTION",
+         "image": {
+            "homepage": "https://github.com/dragonflydb/dragonfly",
+            "source": "https://github.com/dragonflydb/dragonfly",
+            "title": "Dragonfly Production Image"
+         },
+         "licenseNotAsserted": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Dragonfly Production Image",
+         "name": "Dragonfly",
          "requires": { },
          "stages": [
             {
@@ -9246,7 +9335,6 @@
          ],
          "summary": "A RESP-speaking in-memory store with a per-pod PVC and a headless Service. Answers the same protocol as Valkey, but is not a fork of it: it rejects Redis flags, persists through snapshots, and runs one io thread per core it can see — which in a container is the node's, so the thread count is pinned and the memory floor it demands (256MiB per thread) is asserted at render.",
          "upstream": {
-            "homepage": "https://github.com/dragonflydb/dragonfly",
             "repo": "https://github.com/dragonflydb/dragonfly"
          }
       },
@@ -9256,6 +9344,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "draw.io",
          "requires": { },
          "stages": [
             {
@@ -9341,6 +9430,10 @@
       {
          "category": "tool",
          "id": "drawio",
+         "image": {
+            "homepage": "https://www.drawio.com",
+            "source": "https://github.com/jgraph/docker-drawio"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -9424,11 +9517,7 @@
                }
             }
          ],
-         "summary": "A draw.io server — the self-hosted diagrams.net web editor for flowcharts, UML and network diagrams. On the official image; stateless (a plain rolling Deployment). Serves on :8080.",
-         "upstream": {
-            "homepage": "https://www.drawio.com",
-            "repo": "https://github.com/jgraph/docker-drawio"
-         }
+         "summary": "A draw.io server — the self-hosted diagrams.net web editor for flowcharts, UML and network diagrams. On the official image; stateless (a plain rolling Deployment). Serves on :8080."
       },
       {
          "category": "application",
@@ -9566,11 +9655,16 @@
       {
          "category": "application",
          "id": "duplicati",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-duplicati/packages",
+            "source": "https://github.com/linuxserver/docker-duplicati",
+            "title": "Duplicati"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Duplicati",
          "requires": {
             "objectStorage": "optional"
          },
@@ -9698,20 +9792,23 @@
                }
             }
          ],
-         "summary": "A Duplicati server — a self-hosted, encrypted backup client for cloud and remote storage, managed from the browser. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8200.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-duplicati/packages",
-            "repo": "https://github.com/linuxserver/docker-duplicati"
-         }
+         "summary": "A Duplicati server — a self-hosted, encrypted backup client for cloud and remote storage, managed from the browser. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8200."
       },
       {
          "category": "messaging",
          "id": "ejabberd",
+         "image": {
+            "homepage": "https://github.com/processone/docker-ejabberd",
+            "source": "https://github.com/processone/docker-ejabberd",
+            "title": "docker-ejabberd"
+         },
          "license": "GPL-2.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "docker-ejabberd",
+         "name": "ejabberd",
          "requires": { },
          "stages": [
             {
@@ -9796,20 +9893,22 @@
                }
             }
          ],
-         "summary": "An ejabberd server (a robust, scalable XMPP/messaging server) on the official community image. A plain composable http workload that keeps its Mnesia database and uploads on a PersistentVolume — no external database by default. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves XMPP client :5222, s2s :5269, and admin/HTTP :5280; mount ejabberd.yml at /home/ejabberd/conf.",
-         "upstream": {
-            "homepage": "https://github.com/processone/docker-ejabberd",
-            "repo": "https://github.com/processone/docker-ejabberd"
-         }
+         "summary": "An ejabberd server (a robust, scalable XMPP/messaging server) on the official community image. A plain composable http workload that keeps its Mnesia database and uploads on a PersistentVolume — no external database by default. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves XMPP client :5222, s2s :5269, and admin/HTTP :5280; mount ejabberd.yml at /home/ejabberd/conf."
       },
       {
          "category": "application",
          "id": "element-web",
+         "image": {
+            "homepage": "https://github.com/element-hq/element-web",
+            "source": "https://github.com/element-hq/element-web",
+            "title": "element-web"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "element-web",
          "requires": { },
          "stages": [
             {
@@ -9915,18 +10014,22 @@
          ],
          "summary": "An Element Web server (the popular self-hosted web client for the Matrix network) on the official image. It serves a static app configured by a single config.json, mounted into the web root via a subPath ConfigMap mount beside the app assets, so it is stateless. Element is a client only; point it at a Matrix homeserver (e.g. matrix-conduit). Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/element-hq/element-web",
             "repo": "https://github.com/element-hq/element-web"
          }
       },
       {
          "category": "application",
          "id": "emby",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-emby/packages",
+            "source": "https://github.com/linuxserver/docker-emby",
+            "title": "Emby"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Emby",
          "requires": { },
          "stages": [
             {
@@ -10034,20 +10137,22 @@
                }
             }
          ],
-         "summary": "An Emby server (a self-hosted media server for streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Mount your media libraries and add them in the UI. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-emby/packages",
-            "repo": "https://github.com/linuxserver/docker-emby"
-         }
+         "summary": "An Emby server (a self-hosted media server for streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Mount your media libraries and add them in the UI. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096."
       },
       {
          "category": "messaging",
          "id": "emqx",
-         "license": "BSL-1.1",
+         "image": {
+            "homepage": "https://emqx.com/en/products/emqx",
+            "source": "https://github.com/emqx/emqx",
+            "title": "emqx-enterprise"
+         },
+         "license": "BUSL-1.1",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "emqx-enterprise",
+         "name": "EMQX Enterprise",
          "requires": { },
          "stages": [
             {
@@ -10133,9 +10238,8 @@
                }
             }
          ],
-         "summary": "An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.",
+         "summary": "An EMQX server (a highly-scalable, self-hosted MQTT broker for IoT with a web dashboard, rules engine and clustering) on the official image; EMQX speaks MQTT on :1883 with data on a PersistentVolume. NOT open source: the pinned 6.x image is the Enterprise edition under the Business Source License (BUSL-1.1) — EMQX relicensed after 5.8, whose images were Apache-2.0. Single node (not a cluster). Expose :1883 to devices; the dashboard (:18083) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.",
          "upstream": {
-            "homepage": "https://emqx.com/en/products/emqx",
             "repo": "https://github.com/emqx/emqx"
          }
       },
@@ -10471,11 +10575,14 @@
       {
          "category": "application",
          "id": "esphome",
-         "license": "ESPHome",
+         "image": {
+            "homepage": "https://esphome.io/",
+            "source": "https://github.com/esphome/esphome",
+            "title": "ESPHome"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "ESPHome",
          "requires": { },
          "stages": [
             {
@@ -10563,18 +10670,22 @@
          ],
          "summary": "An ESPHome dashboard server — the web dashboard and compiler for ESP8266/ESP32 smart-home firmware; runs as root, configs on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6052.",
          "upstream": {
-            "homepage": "https://esphome.io/",
             "repo": "https://github.com/esphome/esphome"
          }
       },
       {
          "category": "application",
          "id": "etherpad",
+         "image": {
+            "homepage": "https://github.com/ether/etherpad",
+            "source": "https://github.com/ether/etherpad",
+            "title": "etherpad"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "etherpad",
          "requires": {
             "database": "required"
          },
@@ -10695,7 +10806,6 @@
          ],
          "summary": "An Etherpad server (a real-time collaborative document editor) on the official image, backed by an external PostgreSQL. Its documents live in the database, so it is stateless and can run several replicas. Pairs with a cnpg-cluster named etherpad-db. kurly authors no Secret; DB_PASS, ADMIN_PASSWORD, and APIKEY come from a provided Secret via envFrom. Serves on :9001.",
          "upstream": {
-            "homepage": "https://github.com/ether/etherpad",
             "repo": "https://github.com/ether/etherpad"
          }
       },
@@ -10882,10 +10992,14 @@
       {
          "category": "database",
          "id": "ferretdb",
+         "image": {
+            "homepage": "https://www.ferretdb.com/",
+            "source": "https://github.com/FerretDB/FerretDB",
+            "title": "FerretDB"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "FerretDB",
          "requires": {
             "database": "required"
          },
@@ -10982,7 +11096,6 @@
          ],
          "summary": "A FerretDB server (an open-source, MongoDB-compatible database) — the Apache-2.0 alternative to MongoDB Community (SSPL) for a platform that monetizes hosting. A stateless proxy that speaks the MongoDB wire protocol and stores everything in a PostgreSQL backend (with the DocumentDB extension), so it needs no volume and can run several replicas. kurly authors no Secret; FERRETDB_POSTGRESQL_URL comes from a provided Secret via envFrom. Serves MongoDB wire on :27017.",
          "upstream": {
-            "homepage": "https://www.ferretdb.com/",
             "repo": "https://github.com/FerretDB/FerretDB"
          }
       },
@@ -11127,6 +11240,9 @@
       {
          "category": "application",
          "id": "filebrowser",
+         "image": {
+            "source": "https://github.com/filebrowser/filebrowser"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -11320,7 +11436,13 @@
       {
          "category": "application",
          "id": "firefly-iii",
+         "image": {
+            "homepage": "https://github.com/firefly-iii/docker",
+            "source": "https://dev.azure.com/Firefly-III/_git/MainImage",
+            "title": "Firefly III"
+         },
          "license": "AGPL-3.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -11456,7 +11578,6 @@
          ],
          "summary": "A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
          "upstream": {
-            "homepage": "https://github.com/firefly-iii/docker",
             "repo": "https://dev.azure.com/Firefly-III/_git/MainImage"
          }
       },
@@ -11556,11 +11677,16 @@
       {
          "category": "tool",
          "id": "flaresolverr",
+         "image": {
+            "homepage": "https://github.com/FlareSolverr/FlareSolverr",
+            "source": "https://github.com/FlareSolverr/FlareSolverr",
+            "title": "FlareSolverr"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "FlareSolverr",
          "requires": { },
          "stages": [
             {
@@ -11652,7 +11778,6 @@
          ],
          "summary": "A FlareSolverr server (a proxy that solves Cloudflare and DDoS-GUARD browser challenges by driving a headless browser, so scrapers and the *arr indexers can reach protected sites) on the official image. Stateless: a plain rolling Deployment. An internal helper — other workloads point their FlareSolverr URL at http://flaresolverr:8191, so it usually needs no exposure. Serves on :8191.",
          "upstream": {
-            "homepage": "https://github.com/FlareSolverr/FlareSolverr",
             "repo": "https://github.com/FlareSolverr/FlareSolverr"
          }
       },
@@ -11869,11 +11994,16 @@
       {
          "category": "application",
          "id": "foldingathome",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-foldingathome/packages",
+            "source": "https://github.com/linuxserver/docker-foldingathome",
+            "title": "Foldingathome"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Foldingathome",
          "requires": { },
          "stages": [
             {
@@ -11981,20 +12111,22 @@
                }
             }
          ],
-         "summary": "A Folding@home client — the distributed-computing client for disease research, with its web control panel. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7396.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-foldingathome/packages",
-            "repo": "https://github.com/linuxserver/docker-foldingathome"
-         }
+         "summary": "A Folding@home client — the distributed-computing client for disease research, with its web control panel. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7396."
       },
       {
          "category": "application",
          "id": "forgejo",
+         "image": {
+            "homepage": "https://forgejo.org",
+            "source": "https://codeberg.org/forgejo/forgejo",
+            "title": "Forgejo. Beyond coding. We forge."
+         },
          "license": "GPL-3.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Forgejo. Beyond coding. We forge.",
+         "name": "Forgejo",
          "requires": {
             "cache": "optional",
             "database": "required"
@@ -12116,18 +12248,21 @@
          ],
          "summary": "A Forgejo Git forge (a maintained Gitea fork): repository hosting, issues, pull requests, and a package registry. A plain composable http workload on the rootless image, with its data on a PersistentVolume and its database external — pairs with the cnpg-cluster workload. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI/git-over-HTTP on :3000 and git-over-SSH on :2222.",
          "upstream": {
-            "homepage": "https://forgejo.org",
             "repo": "https://codeberg.org/forgejo/forgejo"
          }
       },
       {
          "category": "application",
          "id": "formbricks",
-         "license": "NOASSERTION",
+         "image": {
+            "homepage": "https://github.com/formbricks/formbricks",
+            "source": "https://github.com/formbricks/formbricks",
+            "title": "formbricks"
+         },
+         "licenseNotAsserted": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "formbricks",
          "requires": {
             "database": "required"
          },
@@ -12241,14 +12376,20 @@
          ],
          "summary": "A Formbricks server (a self-hosted, open-source experience-management and survey platform) on the official image, backed by an external PostgreSQL. kurly authors no Secret; DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named formbricks-db. Stateless: a plain rolling Deployment. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/formbricks/formbricks",
             "repo": "https://github.com/formbricks/formbricks"
          }
       },
       {
          "category": "application",
          "id": "freshrss",
+         "image": {
+            "homepage": "https://freshrss.org/",
+            "source": "https://github.com/FreshRSS/FreshRSS",
+            "title": "FreshRSS"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -12349,7 +12490,6 @@
          ],
          "summary": "A FreshRSS server (a free, self-hosted RSS and Atom feed aggregator) on the official image. A plain composable http workload that keeps its feeds and articles in SQLite on a PersistentVolume by default — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
          "upstream": {
-            "homepage": "https://freshrss.org/",
             "repo": "https://github.com/FreshRSS/FreshRSS"
          }
       },
@@ -12486,11 +12626,16 @@
       {
          "category": "observability",
          "id": "gatus",
+         "image": {
+            "homepage": "https://github.com/TwiN/gatus",
+            "source": "https://github.com/TwiN/gatus",
+            "title": "gatus"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "gatus",
          "requires": { },
          "stages": [
             {
@@ -12584,7 +12729,6 @@
          ],
          "summary": "A Gatus server (a self-hosted, developer-oriented health dashboard and status page: it probes endpoints on a schedule, evaluates conditions and alerts) on the official image. Its whole behaviour is its config (endpoints, conditions, alerting, storage), mounted as a ConfigMap and passed verbatim; its history database lives on a PersistentVolume. The default watches one sample endpoint and persists history to SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
          "upstream": {
-            "homepage": "https://github.com/TwiN/gatus",
             "repo": "https://github.com/TwiN/gatus"
          }
       },
@@ -13453,10 +13597,13 @@
       {
          "category": "tool",
          "id": "gotenberg",
+         "image": {
+            "source": "https://github.com/gotenberg/gotenberg",
+            "title": "Gotenberg"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Gotenberg",
          "requires": { },
          "stages": [
             {
@@ -13549,6 +13696,9 @@
       {
          "category": "application",
          "id": "gotify",
+         "image": {
+            "source": "https://github.com/gotify/server"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -13648,11 +13798,16 @@
       {
          "category": "application",
          "id": "gotosocial",
+         "image": {
+            "homepage": "https://docs.gotosocial.org",
+            "source": "https://codeberg.org/superseriousbusiness/gotosocial",
+            "title": "GoToSocial"
+         },
          "license": "AGPL-3.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "GoToSocial",
          "requires": {
             "database": "optional"
          },
@@ -13749,13 +13904,15 @@
          ],
          "summary": "A GoToSocial server (a lightweight, self-hosted ActivityPub/Fediverse social server, an alternative to Mastodon that federates with it) on the official image; with the default SQLite backend its database and stored media live on a PersistentVolume. The host (part of every @handle) is fixed at first run and cannot be changed later. Point it at an external PostgreSQL (GTS_DB_TYPE=postgres + GTS_DB_*) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
          "upstream": {
-            "homepage": "https://docs.gotosocial.org",
             "repo": "https://codeberg.org/superseriousbusiness/gotosocial"
          }
       },
       {
          "category": "observability",
          "id": "grafana",
+         "image": {
+            "source": "https://github.com/grafana/grafana"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -13857,11 +14014,16 @@
       {
          "category": "application",
          "id": "grav",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-grav/packages",
+            "source": "https://github.com/linuxserver/docker-grav",
+            "title": "Grav"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Grav",
          "requires": { },
          "stages": [
             {
@@ -13969,11 +14131,7 @@
                }
             }
          ],
-         "summary": "A Grav server (a modern, flat-file CMS: fast, database-free content management with a Markdown-driven admin) on the LinuxServer.io image; because Grav is flat-file, its whole site (content, config, plugins, cache) lives on a PersistentVolume — no external database. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-grav/packages",
-            "repo": "https://github.com/linuxserver/docker-grav"
-         }
+         "summary": "A Grav server (a modern, flat-file CMS: fast, database-free content management with a Markdown-driven admin) on the LinuxServer.io image; because Grav is flat-file, its whole site (content, config, plugins, cache) lives on a PersistentVolume — no external database. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "application",
@@ -14188,11 +14346,16 @@
       {
          "category": "application",
          "id": "grocy",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-grocy/packages",
+            "source": "https://github.com/linuxserver/docker-grocy",
+            "title": "Grocy"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Grocy",
          "requires": { },
          "stages": [
             {
@@ -14300,11 +14463,7 @@
                }
             }
          ],
-         "summary": "A Grocy server — a self-hosted groceries and household management tool: stock, shopping lists, chores and recipes. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-grocy/packages",
-            "repo": "https://github.com/linuxserver/docker-grocy"
-         }
+         "summary": "A Grocy server — a self-hosted groceries and household management tool: stock, shopping lists, chores and recipes. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "application",
@@ -14433,11 +14592,16 @@
       {
          "category": "observability",
          "id": "healthchecks",
+         "image": {
+            "homepage": "https://github.com/healthchecks/healthchecks",
+            "source": "https://github.com/healthchecks/healthchecks",
+            "title": "healthchecks"
+         },
          "license": "BSD-3-Clause",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "healthchecks",
          "requires": {
             "database": "optional"
          },
@@ -14554,18 +14718,24 @@
          ],
          "summary": "A Healthchecks server (a self-hosted cron-job and background-task monitoring service: jobs ping a URL when they finish, and it alerts when a ping is late or missing) on the official image; with the default SQLite backend its database lives on a PersistentVolume. kurly authors no Secret; SECRET_KEY comes from a provided Secret via envFrom. Point it at an external PostgreSQL (DB=postgres + DB_*) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.",
          "upstream": {
-            "homepage": "https://github.com/healthchecks/healthchecks",
             "repo": "https://github.com/healthchecks/healthchecks"
          }
       },
       {
          "category": "application",
          "id": "hedgedoc",
+         "image": {
+            "homepage": "https://hedgedoc.org",
+            "source": "https://github.com/hedgedoc/container",
+            "title": "HedgeDoc production image(debian)"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "HedgeDoc production image(debian)",
+         "name": "HedgeDoc",
          "requires": {
             "database": "required"
          },
@@ -14678,18 +14848,22 @@
          ],
          "summary": "A HedgeDoc server (real-time, collaborative markdown notes) on the official image, backed by an external PostgreSQL, with uploaded files on a PersistentVolume. Pairs with a cnpg-cluster named hedgedoc-db. kurly authors no Secret; CMD_DB_URL and CMD_SESSION_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
          "upstream": {
-            "homepage": "https://hedgedoc.org",
             "repo": "https://github.com/hedgedoc/container"
          }
       },
       {
          "category": "application",
          "id": "heimdall",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-heimdall/packages",
+            "source": "https://github.com/linuxserver/docker-heimdall",
+            "title": "Heimdall"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Heimdall",
          "requires": { },
          "stages": [
             {
@@ -14797,11 +14971,7 @@
                }
             }
          ],
-         "summary": "A Heimdall server — an elegant dashboard and application launcher for your self-hosted services. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-heimdall/packages",
-            "repo": "https://github.com/linuxserver/docker-heimdall"
-         }
+         "summary": "A Heimdall server — an elegant dashboard and application launcher for your self-hosted services. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "application",
@@ -14894,11 +15064,16 @@
       {
          "category": "application",
          "id": "homarr",
+         "image": {
+            "homepage": "https://github.com/homarr-labs/homarr",
+            "source": "https://github.com/homarr-labs/homarr",
+            "title": "homarr"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "homarr",
          "requires": { },
          "stages": [
             {
@@ -15000,14 +15175,19 @@
          ],
          "summary": "A Homarr server (a sleek, self-hosted dashboard for your homelab) on the official image; its SQLite database and config live on a PersistentVolume, so it needs no external database. kurly authors no Secret; SECRET_ENCRYPTION_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7575.",
          "upstream": {
-            "homepage": "https://github.com/homarr-labs/homarr",
             "repo": "https://github.com/homarr-labs/homarr"
          }
       },
       {
          "category": "application",
          "id": "home-assistant",
+         "image": {
+            "homepage": "https://www.home-assistant.io/",
+            "source": "https://github.com/home-assistant/core",
+            "title": "Home Assistant"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -15101,18 +15281,23 @@
          ],
          "summary": "A Home Assistant server (Home Assistant Core: the leading self-hosted home-automation platform) on the official image; its configuration and state database live on a PersistentVolume. It runs as root with a writable root filesystem. Local-network discovery (mDNS/SSDP) does not work through a ClusterIP; devices reachable by IP/MQTT/cloud work, and USB radios need a network coordinator. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8123.",
          "upstream": {
-            "homepage": "https://www.home-assistant.io/",
             "repo": "https://github.com/home-assistant/core"
          }
       },
       {
          "category": "application",
          "id": "homebox",
+         "image": {
+            "homepage": "https://github.com/sysadminsmedia/homebox",
+            "source": "https://github.com/sysadminsmedia/homebox",
+            "title": "homebox"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "homebox",
          "requires": { },
          "stages": [
             {
@@ -15213,18 +15398,23 @@
          ],
          "summary": "A Homebox server (a simple home/household inventory and asset manager). A plain composable http workload on the rootless image that keeps its inventory in SQLite and attachments on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :7745.",
          "upstream": {
-            "homepage": "https://github.com/sysadminsmedia/homebox",
             "repo": "https://github.com/sysadminsmedia/homebox"
          }
       },
       {
          "category": "application",
          "id": "homepage",
+         "image": {
+            "homepage": "https://github.com/gethomepage/homepage",
+            "source": "https://github.com/gethomepage/homepage",
+            "title": "homepage"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "homepage",
          "requires": { },
          "stages": [
             {
@@ -15319,7 +15509,6 @@
          ],
          "summary": "A Homepage server (a modern, fully static, highly-configurable application dashboard with service/bookmark widgets and live status) on the official image; its YAML configuration lives on a PersistentVolume, so it needs no external database. Recent releases refuse requests whose Host header is not in HOMEPAGE_ALLOWED_HOSTS. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/gethomepage/homepage",
             "repo": "https://github.com/gethomepage/homepage"
          }
       },
@@ -15420,11 +15609,17 @@
       {
          "category": "application",
          "id": "immich",
+         "image": {
+            "homepage": "https://github.com/immich-app/immich",
+            "source": "https://github.com/immich-app/immich",
+            "title": "immich"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "immich",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -15650,7 +15845,6 @@
          ],
          "summary": "Immich — a self-hosted photo and video backup. The server keeps the media library on a PersistentVolume and reaches a PostgreSQL with the VectorChord extension plus a Redis; the machine-learning stage serves inference (smart search, faces) from a model cache. Compose both with a cnpg-cluster on a VectorChord image and a valkey.",
          "upstream": {
-            "homepage": "https://github.com/immich-app/immich",
             "repo": "https://github.com/immich-app/immich"
          }
       },
@@ -16113,11 +16307,16 @@
       {
          "category": "application",
          "id": "jackett",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-jackett/packages",
+            "source": "https://github.com/linuxserver/docker-jackett",
+            "title": "Jackett"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Jackett",
          "requires": { },
          "stages": [
             {
@@ -16225,20 +16424,21 @@
                }
             }
          ],
-         "summary": "A Jackett server — a proxy server that exposes many tracker indexers through one API. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9117.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-jackett/packages",
-            "repo": "https://github.com/linuxserver/docker-jackett"
-         }
+         "summary": "A Jackett server — a proxy server that exposes many tracker indexers through one API. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9117."
       },
       {
          "category": "application",
          "id": "jellyfin",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-jellyfin/packages",
+            "source": "https://github.com/linuxserver/docker-jellyfin",
+            "title": "Jellyfin"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Jellyfin",
          "requires": { },
          "stages": [
             {
@@ -16346,11 +16546,7 @@
                }
             }
          ],
-         "summary": "A Jellyfin server — a free, self-hosted media server for streaming your movies, shows and music. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-jellyfin/packages",
-            "repo": "https://github.com/linuxserver/docker-jellyfin"
-         }
+         "summary": "A Jellyfin server — a free, self-hosted media server for streaming your movies, shows and music. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096."
       },
       {
          "category": "application",
@@ -16449,11 +16645,17 @@
       {
          "category": "application",
          "id": "jenkins",
+         "image": {
+            "homepage": "https://www.jenkins.io/",
+            "source": "https://github.com/jenkinsci/docker",
+            "title": "Official Jenkins Docker image"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Official Jenkins Docker image",
+         "name": "Jenkins",
          "requires": { },
          "stages": [
             {
@@ -16545,7 +16747,6 @@
          ],
          "summary": "A Jenkins controller (the self-hosted automation server for building, testing and deploying software) on the official LTS image. A plain composable http workload that keeps JENKINS_HOME (jobs, plugins, config, build history) on a PersistentVolume. Single controller over a ReadWriteOnce volume: one replica, recreated. Inbound agents connect over the same HTTP port (websocket). Serves on :8080.",
          "upstream": {
-            "homepage": "https://www.jenkins.io/",
             "repo": "https://github.com/jenkinsci/docker"
          }
       },
@@ -16941,6 +17142,9 @@
       {
          "category": "application",
          "id": "karakeep",
+         "image": {
+            "source": "https://github.com/karakeep-app/karakeep"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -17176,6 +17380,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Keycloak",
          "requires": {
             "database": "required"
          },
@@ -17376,10 +17581,14 @@
       {
          "category": "application",
          "id": "komga",
+         "image": {
+            "source": "https://github.com/gotson/komga",
+            "title": "ubuntu"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "ubuntu",
+         "name": "Komga",
          "requires": { },
          "stages": [
             {
@@ -17738,7 +17947,12 @@
       {
          "category": "application",
          "id": "lemmy",
+         "image": {
+            "homepage": "https://github.com/LemmyNet/lemmy",
+            "source": "https://github.com/LemmyNet/lemmy"
+         },
          "license": "AGPL-3.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -18013,18 +18227,22 @@
          ],
          "summary": "Lemmy (a self-hosted, open-source link aggregator and forum for the Fediverse, a Reddit alternative) as three workloads backed by an external PostgreSQL: a backend (API + federation on :8536), a ui (web frontend on :1234), and pictrs (image storage on :8080). The backend reads its config (PostgreSQL connection and pict-rs API key) from /config/config.hjson, mounted from an existing Secret you provide; kurly never mints key material. pictrs stores images on a PersistentVolume. Pairs with a cnpg-cluster named lemmy-db.",
          "upstream": {
-            "homepage": "https://github.com/LemmyNet/lemmy",
             "repo": "https://github.com/LemmyNet/lemmy"
          }
       },
       {
          "category": "application",
          "id": "librespeed",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-librespeed/packages",
+            "source": "https://github.com/linuxserver/docker-librespeed",
+            "title": "Librespeed"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Librespeed",
          "requires": { },
          "stages": [
             {
@@ -18132,20 +18350,21 @@
                }
             }
          ],
-         "summary": "A LibreSpeed server — a lightweight, self-hosted network speed test you run in the browser. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-librespeed/packages",
-            "repo": "https://github.com/linuxserver/docker-librespeed"
-         }
+         "summary": "A LibreSpeed server — a lightweight, self-hosted network speed test you run in the browser. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "application",
          "id": "lidarr",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-lidarr/packages",
+            "source": "https://github.com/linuxserver/docker-lidarr",
+            "title": "Lidarr"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Lidarr",
          "requires": { },
          "stages": [
             {
@@ -18253,15 +18472,14 @@
                }
             }
          ],
-         "summary": "A Lidarr server — a music collection manager for Usenet and BitTorrent users. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8686.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-lidarr/packages",
-            "repo": "https://github.com/linuxserver/docker-lidarr"
-         }
+         "summary": "A Lidarr server — a music collection manager for Usenet and BitTorrent users. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8686."
       },
       {
          "category": "application",
          "id": "linkding",
+         "image": {
+            "source": "https://github.com/sissbruecker/linkding"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -18454,11 +18672,17 @@
       {
          "category": "application",
          "id": "linkwarden",
+         "image": {
+            "homepage": "https://github.com/linkwarden/linkwarden",
+            "source": "https://github.com/linkwarden/linkwarden",
+            "title": "linkwarden"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "linkwarden",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -18573,7 +18797,6 @@
          ],
          "summary": "A Linkwarden server (a self-hosted bookmark manager that archives a copy of every page) on the official image, backed by an external PostgreSQL, with archived pages on a PersistentVolume. Pairs with a cnpg-cluster named linkwarden-db. kurly authors no Secret; DATABASE_URL and NEXTAUTH_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/linkwarden/linkwarden",
             "repo": "https://github.com/linkwarden/linkwarden"
          }
       },
@@ -18720,11 +18943,17 @@
       {
          "category": "identity",
          "id": "lldap",
+         "image": {
+            "homepage": "https://github.com/lldap/lldap",
+            "source": "https://github.com/lldap/lldap",
+            "title": "lldap"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "lldap",
          "requires": {
             "database": "optional"
          },
@@ -18840,7 +19069,6 @@
          ],
          "summary": "An LLDAP server (a light LDAP implementation for authentication: a simple user/group directory with a friendly web UI, a lightweight stand-in for OpenLDAP) on the official image; with the default SQLite backend its directory lives on a PersistentVolume. Apps bind over LDAP on :3890, a separate port to add a Service for. kurly authors no Secret; LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL (LLDAP_DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :17170.",
          "upstream": {
-            "homepage": "https://github.com/lldap/lldap",
             "repo": "https://github.com/lldap/lldap"
          }
       },
@@ -18850,6 +19078,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "LobeChat",
          "requires": { },
          "stages": [
             {
@@ -19018,11 +19247,16 @@
       {
          "category": "application",
          "id": "lychee",
+         "image": {
+            "homepage": "https://github.com/LycheeOrg/Lychee",
+            "source": "https://github.com/LycheeOrg/Lychee",
+            "title": "Lychee"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
-         "name": "Lychee",
          "requires": {
             "database": "optional"
          },
@@ -19132,7 +19366,6 @@
          ],
          "summary": "A Lychee server (a self-hosted photo-management and gallery system) on the official image. A plain composable http workload — with the SQLite backend its config, database, and photos live on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; APP_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/LycheeOrg/Lychee",
             "repo": "https://github.com/LycheeOrg/Lychee"
          }
       },
@@ -20144,11 +20377,18 @@
       {
          "category": "database",
          "id": "mariadb",
+         "image": {
+            "homepage": "https://github.com/MariaDB/mariadb-docker",
+            "source": "https://github.com/MariaDB/mariadb-docker",
+            "title": "MariaDB Database"
+         },
          "license": "GPL-2.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "MariaDB Database",
+         "name": "MariaDB",
          "requires": { },
          "stages": [
             {
@@ -20264,20 +20504,22 @@
                }
             }
          ],
-         "summary": "A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.",
-         "upstream": {
-            "homepage": "https://github.com/MariaDB/mariadb-docker",
-            "repo": "https://github.com/MariaDB/mariadb-docker"
-         }
+         "summary": "A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306."
       },
       {
          "category": "application",
          "id": "mastodon",
+         "image": {
+            "homepage": "https://github.com/mastodon/mastodon",
+            "source": "https://github.com/mastodon/mastodon",
+            "title": "mastodon"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "mastodon",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -20768,7 +21010,6 @@
          ],
          "summary": "Mastodon (the leading self-hosted ActivityPub/Fediverse microblogging platform) as three workloads backed by an external PostgreSQL and Redis, with media in S3-compatible object storage: a web/API server (:3000), a streaming server for real-time timelines (:4000), and a sidekiq background worker. LOCAL_DOMAIN is baked into every @handle and cannot be changed. kurly authors no Secret; the PostgreSQL/Redis connection, SECRET_KEY_BASE, OTP_SECRET, the VAPID keys and the S3 settings come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named mastodon-db, a Redis and an S3 bucket (e.g. seaweedfs).",
          "upstream": {
-            "homepage": "https://github.com/mastodon/mastodon",
             "repo": "https://github.com/mastodon/mastodon"
          }
       },
@@ -21265,11 +21506,17 @@
       {
          "category": "application",
          "id": "maybe",
+         "image": {
+            "homepage": "https://github.com/maybe-finance/maybe",
+            "source": "https://github.com/maybe-finance/maybe",
+            "title": "maybe"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "maybe",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -21404,7 +21651,6 @@
          ],
          "summary": "A Maybe server (a self-hosted personal finance and net-worth manager) backed by an external PostgreSQL and Redis, with Active Storage uploads on a PersistentVolume. Pairs with a cnpg-cluster named maybe-db and a valkey named maybe-cache. The Rails app writes under /rails, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; POSTGRES_PASSWORD and SECRET_KEY_BASE come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/maybe-finance/maybe",
             "repo": "https://github.com/maybe-finance/maybe"
          }
       },
@@ -21499,11 +21745,17 @@
       {
          "category": "application",
          "id": "mealie",
+         "image": {
+            "homepage": "https://github.com/mealie-recipes/mealie",
+            "source": "https://github.com/mealie-recipes/mealie",
+            "title": "mealie"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "mealie",
          "requires": {
             "database": "optional"
          },
@@ -21600,7 +21852,6 @@
          ],
          "summary": "A Mealie server (a self-hosted recipe manager and meal planner with a recipe scraper, shopping lists and a REST API) on the official image; with the default SQLite backend its database and uploaded assets live on a PersistentVolume. Point it at an external PostgreSQL (DB_ENGINE=postgres + POSTGRES_*) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.",
          "upstream": {
-            "homepage": "https://github.com/mealie-recipes/mealie",
             "repo": "https://github.com/mealie-recipes/mealie"
          }
       },
@@ -21705,11 +21956,16 @@
       {
          "category": "search",
          "id": "meilisearch",
-         "license": "NOASSERTION",
+         "image": {
+            "homepage": "https://github.com/meilisearch/meilisearch",
+            "source": "https://github.com/meilisearch/meilisearch",
+            "title": "meilisearch"
+         },
+         "licenseNotAsserted": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "meilisearch",
+         "name": "Meilisearch",
          "requires": { },
          "stages": [
             {
@@ -21810,7 +22066,6 @@
          ],
          "summary": "A Meilisearch server (a fast, typo-tolerant, self-hosted search engine with a simple REST API) on the official image; its indexes live on a PersistentVolume. The search companion several apps expect (e.g. karakeep). kurly authors no Secret; MEILI_MASTER_KEY comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7700.",
          "upstream": {
-            "homepage": "https://github.com/meilisearch/meilisearch",
             "repo": "https://github.com/meilisearch/meilisearch"
          }
       },
@@ -22396,11 +22651,16 @@
       {
          "category": "application",
          "id": "microbin",
+         "image": {
+            "homepage": "https://github.com/szabodanika/microbin",
+            "source": "https://github.com/szabodanika/microbin",
+            "title": "microbin"
+         },
          "license": "BSD-3-Clause",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "microbin",
          "requires": { },
          "stages": [
             {
@@ -22487,18 +22747,22 @@
          ],
          "summary": "A MicroBin server (a tiny, self-contained pastebin and file-sharing service). A plain composable http workload that keeps its pastes and uploaded files on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :8080.",
          "upstream": {
-            "homepage": "https://github.com/szabodanika/microbin",
             "repo": "https://github.com/szabodanika/microbin"
          }
       },
       {
          "category": "application",
          "id": "miniflux",
+         "image": {
+            "homepage": "https://miniflux.app",
+            "source": "https://github.com/miniflux/v2",
+            "title": "Miniflux"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Miniflux",
          "requires": {
             "database": "required"
          },
@@ -22608,7 +22872,6 @@
          ],
          "summary": "A Miniflux server (a minimalist, opinionated RSS/Atom feed reader) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and the admin password come from a provided Secret via envFrom. Pairs with a cnpg-cluster named miniflux-db. Serves on :8080.",
          "upstream": {
-            "homepage": "https://miniflux.app",
             "repo": "https://github.com/miniflux/v2"
          }
       },
@@ -22618,6 +22881,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MinIO",
          "requires": { },
          "stages": [
             {
@@ -22727,11 +22991,17 @@
       {
          "category": "application",
          "id": "misskey",
+         "image": {
+            "homepage": "https://github.com/misskey-dev/misskey",
+            "source": "https://github.com/misskey-dev/misskey",
+            "title": "misskey"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "misskey",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -22830,7 +23100,6 @@
          ],
          "summary": "A Misskey server (a self-hosted, feature-rich ActivityPub/Fediverse social platform) on the official image, backed by an external PostgreSQL and Redis, with uploaded files on a PersistentVolume. Misskey reads its whole config (including DB/Redis credentials) from /misskey/.config/default.yml; because that holds secrets, kurly mounts it from an existing Secret you provide (kurly never mints key material). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/misskey-dev/misskey",
             "repo": "https://github.com/misskey-dev/misskey"
          }
       },
@@ -22951,6 +23220,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "mongo-express",
          "requires": {
             "database": "required"
          },
@@ -23145,10 +23415,15 @@
       {
          "category": "application",
          "id": "monica",
+         "image": {
+            "homepage": "https://monicahq.com",
+            "source": "https://github.com/monicahq/docker",
+            "title": "MonicaHQ, the Personal Relationship Manager"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "MonicaHQ, the Personal Relationship Manager",
+         "name": "Monica",
          "requires": {
             "database": "required"
          },
@@ -23286,18 +23561,22 @@
          ],
          "summary": "A Monica server (a self-hosted personal relationship manager) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
          "upstream": {
-            "homepage": "https://monicahq.com",
             "repo": "https://github.com/monicahq/docker"
          }
       },
       {
          "category": "messaging",
          "id": "mosquitto",
+         "image": {
+            "homepage": "https://mosquitto.org/",
+            "source": "https://github.com/eclipse-mosquitto/mosquitto",
+            "title": "eclipse-mosquitto"
+         },
          "license": "EPL-2.0 OR BSD-3-Clause",
          "maturity": {
             "tier": "e2e"
          },
-         "name": "eclipse-mosquitto",
+         "name": "Eclipse Mosquitto",
          "requires": { },
          "stages": [
             {
@@ -23394,7 +23673,6 @@
          ],
          "summary": "An Eclipse Mosquitto server (a lightweight, self-hosted MQTT message broker for IoT and home automation). Mosquitto speaks MQTT, not HTTP: it listens on :1883, its mosquitto.conf is mounted as a ConfigMap and passed verbatim, and its persistence database lives on a PersistentVolume. The default allows anonymous clients; a real broker sets up authentication. WebSockets (:9001) need a listener in the config and a second Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.",
          "upstream": {
-            "homepage": "https://mosquitto.org/",
             "repo": "https://github.com/eclipse-mosquitto/mosquitto"
          }
       },
@@ -23509,11 +23787,16 @@
       {
          "category": "application",
          "id": "mylar3",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-mylar3/packages",
+            "source": "https://github.com/linuxserver/docker-mylar3",
+            "title": "Mylar3"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Mylar3",
          "requires": { },
          "stages": [
             {
@@ -23621,11 +23904,7 @@
                }
             }
          ],
-         "summary": "A Mylar3 server — a self-hosted comic-book (CBR/CBZ) downloader and library manager. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-mylar3/packages",
-            "repo": "https://github.com/linuxserver/docker-mylar3"
-         }
+         "summary": "A Mylar3 server — a self-hosted comic-book (CBR/CBZ) downloader and library manager. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090."
       },
       {
          "category": "database",
@@ -23633,6 +23912,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MySQL",
          "requires": { },
          "stages": [
             {
@@ -23847,10 +24127,14 @@
       {
          "category": "application",
          "id": "n8n",
+         "image": {
+            "homepage": "https://n8n.io",
+            "source": "https://github.com/n8n-io/n8n",
+            "title": "n8n"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "n8n",
          "requires": {
             "database": "optional"
          },
@@ -23946,18 +24230,23 @@
          ],
          "summary": "An n8n server (a fair-code workflow-automation tool with a visual editor) on the official image. A plain composable http workload that keeps its workflows, credentials, and encryption key in SQLite on a PersistentVolume by default — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the editor, API, and webhooks on :5678.",
          "upstream": {
-            "homepage": "https://n8n.io",
             "repo": "https://github.com/n8n-io/n8n"
          }
       },
       {
          "category": "messaging",
          "id": "nats",
+         "image": {
+            "homepage": "https://nats.io",
+            "source": "https://github.com/nats-io/nats-docker",
+            "title": "NATS Server"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "NATS Server",
+         "name": "NATS",
          "requires": { },
          "stages": [
             {
@@ -24046,20 +24335,22 @@
                }
             }
          ],
-         "summary": "A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222.",
-         "upstream": {
-            "homepage": "https://nats.io",
-            "repo": "https://github.com/nats-io/nats-docker"
-         }
+         "summary": "A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222."
       },
       {
          "category": "application",
          "id": "navidrome",
+         "image": {
+            "homepage": "https://github.com/navidrome/navidrome",
+            "source": "https://github.com/navidrome/navidrome",
+            "title": "navidrome"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "navidrome",
          "requires": { },
          "stages": [
             {
@@ -24150,7 +24441,6 @@
          ],
          "summary": "A Navidrome server (a modern music server and streamer, compatible with Subsonic/Airsonic clients) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and reads a music library from /music on the same volume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4533.",
          "upstream": {
-            "homepage": "https://github.com/navidrome/navidrome",
             "repo": "https://github.com/navidrome/navidrome"
          }
       },
@@ -24264,11 +24554,16 @@
       {
          "category": "application",
          "id": "netbootxyz",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-netbootxyz/packages",
+            "source": "https://github.com/linuxserver/docker-netbootxyz",
+            "title": "Netbootxyz"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Netbootxyz",
          "requires": { },
          "stages": [
             {
@@ -24376,20 +24671,22 @@
                }
             }
          ],
-         "summary": "A netboot.xyz server — a self-hosted network-boot menu and asset server for PXE-booting installers and tools. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-netbootxyz/packages",
-            "repo": "https://github.com/linuxserver/docker-netbootxyz"
-         }
+         "summary": "A netboot.xyz server — a self-hosted network-boot menu and asset server for PXE-booting installers and tools. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000."
       },
       {
          "category": "application",
          "id": "netbox",
+         "image": {
+            "homepage": "https://github.com/netbox-community/netbox-docker",
+            "source": "https://github.com/netbox-community/netbox-docker",
+            "title": "NetBox Docker"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "NetBox Docker",
+         "name": "NetBox",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -24673,11 +24970,7 @@
                }
             }
          ],
-         "summary": "A NetBox server (the IPAM/DCIM source of truth: IP address management, data-center infrastructure modelling, and a full REST/GraphQL API). Two composable stages on the community image — server (the web front end) and worker (the RQ background task worker) — with PostgreSQL and Redis external. Pairs with the cnpg-cluster and valkey workloads. Single writer over a ReadWriteOnce media volume: the server is one replica, recreated; the worker scales horizontally.",
-         "upstream": {
-            "homepage": "https://github.com/netbox-community/netbox-docker",
-            "repo": "https://github.com/netbox-community/netbox-docker"
-         }
+         "summary": "A NetBox server (the IPAM/DCIM source of truth: IP address management, data-center infrastructure modelling, and a full REST/GraphQL API). Two composable stages on the community image — server (the web front end) and worker (the RQ background task worker) — with PostgreSQL and Redis external. Pairs with the cnpg-cluster and valkey workloads. Single writer over a ReadWriteOnce media volume: the server is one replica, recreated; the worker scales horizontally."
       },
       {
          "category": "application",
@@ -24685,6 +24978,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Nextcloud",
          "requires": {
             "database": "optional",
             "objectStorage": "optional"
@@ -25162,6 +25456,9 @@
       {
          "category": "application",
          "id": "node-red",
+         "image": {
+            "source": "https://github.com/node-red/node-red-docker"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -25251,18 +25548,19 @@
                }
             }
          ],
-         "summary": "A Node-RED server — a flow-based, low-code programming tool for wiring together APIs, devices and online services; flows and settings on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1880.",
-         "upstream": {
-            "repo": "https://github.com/node-red/node-red-docker"
-         }
+         "summary": "A Node-RED server — a flow-based, low-code programming tool for wiring together APIs, devices and online services; flows and settings on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1880."
       },
       {
          "category": "tool",
          "id": "ntfy",
+         "image": {
+            "homepage": "https://ntfy.sh/",
+            "source": "https://github.com/binwiederhier/ntfy",
+            "title": "ntfy"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "ntfy",
          "requires": { },
          "stages": [
             {
@@ -25357,18 +25655,22 @@
          ],
          "summary": "An ntfy server (send push notifications to your phone or desktop over simple HTTP). A plain composable http workload that keeps its message cache and user database in SQLite on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and pub/sub API on :80.",
          "upstream": {
-            "homepage": "https://ntfy.sh/",
             "repo": "https://github.com/binwiederhier/ntfy"
          }
       },
       {
          "category": "application",
          "id": "nzbget",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-nzbget/packages",
+            "source": "https://github.com/linuxserver/docker-nzbget",
+            "title": "Nzbget"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Nzbget",
          "requires": { },
          "stages": [
             {
@@ -25476,20 +25778,21 @@
                }
             }
          ],
-         "summary": "An NZBGet server — an efficient, self-hosted Usenet downloader written in C++. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6789.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-nzbget/packages",
-            "repo": "https://github.com/linuxserver/docker-nzbget"
-         }
+         "summary": "An NZBGet server — an efficient, self-hosted Usenet downloader written in C++. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6789."
       },
       {
          "category": "application",
          "id": "nzbhydra2",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-nzbhydra2/packages",
+            "source": "https://github.com/linuxserver/docker-nzbhydra2",
+            "title": "Nzbhydra2"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Nzbhydra2",
          "requires": { },
          "stages": [
             {
@@ -25597,11 +25900,7 @@
                }
             }
          ],
-         "summary": "An NZBHydra2 server — a meta-search server that aggregates Usenet indexers behind one search API for the *arr apps. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5076.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-nzbhydra2/packages",
-            "repo": "https://github.com/linuxserver/docker-nzbhydra2"
-         }
+         "summary": "An NZBHydra2 server — a meta-search server that aggregates Usenet indexers behind one search API for the *arr apps. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5076."
       },
       {
          "category": "identity",
@@ -25961,11 +26260,16 @@
       {
          "category": "application",
          "id": "ombi",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-ombi/packages",
+            "source": "https://github.com/linuxserver/docker-ombi",
+            "title": "Ombi"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Ombi",
          "requires": { },
          "stages": [
             {
@@ -26073,11 +26377,7 @@
                }
             }
          ],
-         "summary": "An Ombi server — a request-management portal for Plex, Emby and Jellyfin. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3579.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-ombi/packages",
-            "repo": "https://github.com/linuxserver/docker-ombi"
-         }
+         "summary": "An Ombi server — a request-management portal for Plex, Emby and Jellyfin. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3579."
       },
       {
          "category": "application",
@@ -26191,11 +26491,16 @@
       {
          "category": "application",
          "id": "open-webui",
+         "image": {
+            "homepage": "https://github.com/open-webui/open-webui",
+            "source": "https://github.com/open-webui/open-webui",
+            "title": "open-webui"
+         },
          "license": "BSD-3-Clause",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "open-webui",
          "requires": {
             "database": "optional"
          },
@@ -26305,18 +26610,23 @@
          ],
          "summary": "An Open WebUI server (a feature-rich, self-hosted web interface for chatting with local and remote LLMs — Ollama and any OpenAI-compatible API) on the official image; with the default SQLite backend its database and uploads live on a PersistentVolume. kurly authors no Secret; WEBUI_SECRET_KEY comes from a provided Secret via envFrom. Point it at an external PostgreSQL (DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
          "upstream": {
-            "homepage": "https://github.com/open-webui/open-webui",
             "repo": "https://github.com/open-webui/open-webui"
          }
       },
       {
          "category": "observability",
          "id": "opencost",
+         "image": {
+            "homepage": "https://opencost.io",
+            "source": "https://github.com/opencost/opencost",
+            "title": "kubecost-cost-model"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
-         "name": "kubecost-cost-model",
+         "name": "OpenCost",
          "requires": { },
          "stages": [
             {
@@ -26409,18 +26719,22 @@
          ],
          "summary": "OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source.",
          "upstream": {
-            "homepage": "https://opencost.io",
             "repo": "https://github.com/opencost/opencost"
          }
       },
       {
          "category": "application",
          "id": "openhab",
+         "image": {
+            "homepage": "https://www.openhab.org/",
+            "source": "https://github.com/openhab/openhab-docker",
+            "title": "openHAB"
+         },
          "license": "EPL-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "openHAB",
          "requires": { },
          "stages": [
             {
@@ -26521,11 +26835,7 @@
                }
             }
          ],
-         "summary": "An openHAB server (a vendor-neutral, self-hosted home-automation platform integrating a huge range of devices behind one engine, UI and rule system) on the official image; its three persistent directories — config (/openhab/conf), runtime userdata (/openhab/userdata) and installed add-ons (/openhab/addons) — each get their own PersistentVolume (kurly.store composed three times). USB/serial radios are hardware and not modelled. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8080.",
-         "upstream": {
-            "homepage": "https://www.openhab.org/",
-            "repo": "https://github.com/openhab/openhab-docker"
-         }
+         "summary": "An openHAB server (a vendor-neutral, self-hosted home-automation platform integrating a huge range of devices behind one engine, UI and rule system) on the official image; its three persistent directories — config (/openhab/conf), runtime userdata (/openhab/userdata) and installed add-ons (/openhab/addons) — each get their own PersistentVolume (kurly.store composed three times). USB/serial radios are hardware and not modelled. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8080."
       },
       {
          "category": "observability",
@@ -26641,11 +26951,17 @@
       {
          "category": "application",
          "id": "openproject",
+         "image": {
+            "homepage": "https://github.com/opf/openproject",
+            "source": "https://github.com/opf/openproject",
+            "title": "openproject"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "openproject",
          "requires": {
             "cache": "optional",
             "database": "required"
@@ -26761,7 +27077,6 @@
          ],
          "summary": "An OpenProject server (a self-hosted, open-source project-management and collaboration suite: work packages, Gantt charts, agile boards, wikis, time tracking) on the official image, backed by an external PostgreSQL, with uploaded assets on a PersistentVolume. kurly authors no Secret; DATABASE_URL, SECRET_KEY_BASE and host settings come from a provided Secret via envFrom. Pairs with a cnpg-cluster named openproject-db (a production deployment also wants memcached). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/opf/openproject",
             "repo": "https://github.com/opf/openproject"
          }
       },
@@ -26953,7 +27268,11 @@
       {
          "category": "observability",
          "id": "otel-collector",
+         "image": {
+            "source": "https://github.com/open-telemetry/opentelemetry-collector-releases"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -27023,11 +27342,15 @@
       {
          "category": "application",
          "id": "outline",
-         "license": "NOASSERTION",
+         "image": {
+            "homepage": "https://github.com/outline/outline",
+            "source": "https://github.com/outline/outline",
+            "title": "outline"
+         },
+         "licenseNotAsserted": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "outline",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -27147,7 +27470,6 @@
          ],
          "summary": "An Outline server (a fast, collaborative, self-hosted team knowledge base and wiki with real-time editing) on the official image, backed by an external PostgreSQL, Redis and S3-compatible object storage. kurly authors no Secret; DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider come from a provided Secret via envFrom. Pairs with a cnpg-cluster named outline-db, a Redis and an S3 bucket (e.g. seaweedfs). Stateless. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/outline/outline",
             "repo": "https://github.com/outline/outline"
          }
       },
@@ -27567,11 +27889,17 @@
       {
          "category": "tool",
          "id": "pairdrop",
+         "image": {
+            "homepage": "https://github.com/schlagmichdoch/PairDrop",
+            "source": "https://github.com/schlagmichdoch/PairDrop",
+            "title": "PairDrop"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "PairDrop",
          "requires": { },
          "stages": [
             {
@@ -27649,18 +27977,23 @@
          ],
          "summary": "A PairDrop server (a self-hosted, AirDrop-style local file-sharing app: transfer files and messages between devices peer-to-peer via WebRTC) on the official image. The server only brokers peer connections and keeps no state. One replica: peers pair through in-memory rooms held by a single server instance. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/schlagmichdoch/PairDrop",
             "repo": "https://github.com/schlagmichdoch/PairDrop"
          }
       },
       {
          "category": "application",
          "id": "paisa",
+         "image": {
+            "homepage": "https://github.com/ananthakumaran/paisa",
+            "source": "https://github.com/ananthakumaran/paisa",
+            "title": "paisa"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "paisa",
          "requires": { },
          "stages": [
             {
@@ -27747,18 +28080,24 @@
          ],
          "summary": "A Paisa server (a plain-text, double-entry personal finance manager built on ledger/beancount journals). A plain composable http workload that reads its configuration and journal from a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :7500.",
          "upstream": {
-            "homepage": "https://github.com/ananthakumaran/paisa",
             "repo": "https://github.com/ananthakumaran/paisa"
          }
       },
       {
          "category": "application",
          "id": "paperless-ngx",
+         "image": {
+            "homepage": "https://github.com/paperless-ngx/paperless-ngx",
+            "source": "https://github.com/paperless-ngx/paperless-ngx",
+            "title": "paperless-ngx"
+         },
          "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "paperless-ngx",
+         "name": "Paperless-ngx",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -27910,18 +28249,22 @@
          ],
          "summary": "A Paperless-ngx server (scan, index, and archive documents with OCR and full-text search) backed by an external PostgreSQL and Redis, with its data/media/consume/export trees on a PersistentVolume. The image runs the web server and Celery workers together. Pairs with a cnpg-cluster named paperless-db and a valkey named paperless-cache. The entrypoint writes to the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. kurly authors no Secret; secrets come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.",
          "upstream": {
-            "homepage": "https://github.com/paperless-ngx/paperless-ngx",
             "repo": "https://github.com/paperless-ngx/paperless-ngx"
          }
       },
       {
          "category": "application",
          "id": "passwordpusher",
+         "image": {
+            "homepage": "https://github.com/pglombardo/PasswordPusher",
+            "source": "https://github.com/pglombardo/PasswordPusher",
+            "title": "PasswordPusher"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "PasswordPusher",
          "requires": {
             "database": "required"
          },
@@ -28023,7 +28366,6 @@
          ],
          "summary": "A Password Pusher server (share passwords and secrets over self-destructing, expiring links) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL and SECRET_KEY_BASE come from a provided Secret via envFrom. Pairs with a cnpg-cluster named passwordpusher-db. Serves on :5100.",
          "upstream": {
-            "homepage": "https://github.com/pglombardo/PasswordPusher",
             "repo": "https://github.com/pglombardo/PasswordPusher"
          }
       },
@@ -28186,11 +28528,16 @@
       {
          "category": "application",
          "id": "penpot",
+         "image": {
+            "homepage": "https://github.com/penpot/penpot",
+            "source": "https://github.com/penpot/penpot",
+            "title": "penpot"
+         },
          "license": "MPL-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "penpot",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -28495,7 +28842,6 @@
          ],
          "summary": "Penpot (a self-hosted, open-source design and prototyping platform, an alternative to Figma) as three workloads on the official images, backed by an external PostgreSQL and Redis: a backend (API + data, assets on a PersistentVolume), a frontend (the nginx-served web app on :80 that proxies to the others), and an exporter (headless-browser rendering, :6061). kurly authors no Secret; the PostgreSQL/Redis connection and PENPOT_SECRET_KEY come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named penpot-db and a Redis.",
          "upstream": {
-            "homepage": "https://github.com/penpot/penpot",
             "repo": "https://github.com/penpot/penpot"
          }
       },
@@ -28505,6 +28851,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "pgAdmin",
          "requires": {
             "database": "optional"
          },
@@ -28616,10 +28963,14 @@
       {
          "category": "application",
          "id": "photoprism",
+         "image": {
+            "source": "https://github.com/photoprism/photoprism",
+            "title": "PhotoPrism® Plus (Ubuntu 26.04 LTS)"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "PhotoPrism® Plus (Ubuntu 26.04 LTS)",
+         "name": "PhotoPrism",
          "requires": {
             "database": "optional"
          },
@@ -28742,11 +29093,17 @@
       {
          "category": "application",
          "id": "photoview",
+         "image": {
+            "homepage": "https://github.com/photoview/photoview",
+            "source": "https://github.com/photoview/photoview",
+            "title": "photoview"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "photoview",
          "requires": {
             "database": "required"
          },
@@ -28861,18 +29218,23 @@
          ],
          "summary": "A Photoview server (a self-hosted photo gallery for photographers that scans a media library, builds albums and serves them with face recognition and RAW support) on the official image, backed by an external MySQL/MariaDB or PostgreSQL, with TWO PersistentVolumes — the media library at /photos and a thumbnail cache at /app/cache (kurly.store composed twice). kurly authors no Secret; the database driver and connection come from a provided Secret via envFrom. Pairs with a mysql-cluster named photoview-db. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/photoview/photoview",
             "repo": "https://github.com/photoview/photoview"
          }
       },
       {
          "category": "admin",
          "id": "phpmyadmin",
+         "image": {
+            "homepage": "https://github.com/phpmyadmin/docker#readme",
+            "source": "https://github.com/phpmyadmin/docker",
+            "title": "Official phpMyAdmin Docker image"
+         },
          "license": "GPL-2.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Official phpMyAdmin Docker image",
+         "name": "phpMyAdmin",
          "requires": {
             "database": "required"
          },
@@ -28968,18 +29330,22 @@
          ],
          "summary": "A phpMyAdmin server (the classic web UI for administering MySQL and MariaDB) on the official image. Stateless: a plain rolling Deployment that connects to the MySQL host you point it at. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/phpmyadmin/docker#readme",
             "repo": "https://github.com/phpmyadmin/docker"
          }
       },
       {
          "category": "networking",
          "id": "pihole",
-         "license": "NOASSERTION",
+         "image": {
+            "homepage": "https://github.com/pi-hole/docker-pi-hole",
+            "source": "https://github.com/pi-hole/docker-pi-hole",
+            "title": "docker-pi-hole"
+         },
+         "licenseNotAsserted": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "docker-pi-hole",
+         "name": "Pi-hole",
          "requires": { },
          "stages": [
             {
@@ -29089,20 +29455,22 @@
                }
             }
          ],
-         "summary": "A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80.",
-         "upstream": {
-            "homepage": "https://github.com/pi-hole/docker-pi-hole",
-            "repo": "https://github.com/pi-hole/docker-pi-hole"
-         }
+         "summary": "A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80."
       },
       {
          "category": "application",
          "id": "pilos",
+         "image": {
+            "homepage": "https://github.com/THM-Health/PILOS",
+            "source": "https://github.com/THM-Health/PILOS",
+            "title": "PILOS"
+         },
          "license": "LGPL-2.1",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "PILOS",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -29206,7 +29574,6 @@
          ],
          "summary": "A PILOS server (an open-source, Laravel-based front-end for BigBlueButton from TH Mittelhessen: room and meeting management with LDAP/OIDC support) on the official all-in-one image (nginx + php-fpm), backed by an external PostgreSQL and Redis, with uploaded assets on a PersistentVolume. It reaches an existing BigBlueButton server over the network; kurly does not run BBB itself. Pairs with a cnpg-cluster named pilos-db and a Redis. kurly authors no Secret; the database/Redis/APP_KEY/BBB settings come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated; the bundled nginx master needs root and a writable rootfs. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/THM-Health/PILOS",
             "repo": "https://github.com/THM-Health/PILOS"
          }
       },
@@ -29306,11 +29673,16 @@
       {
          "category": "application",
          "id": "piwigo",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-piwigo/packages",
+            "source": "https://github.com/linuxserver/docker-piwigo",
+            "title": "Piwigo"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Piwigo",
          "requires": {
             "database": "optional"
          },
@@ -29420,19 +29792,19 @@
                }
             }
          ],
-         "summary": "A Piwigo server — a self-hosted photo gallery with albums, tagging and user management (backed by MySQL/MariaDB). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-piwigo/packages",
-            "repo": "https://github.com/linuxserver/docker-piwigo"
-         }
+         "summary": "A Piwigo server — a self-hosted photo gallery with albums, tagging and user management (backed by MySQL/MariaDB). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "application",
          "id": "planka",
+         "image": {
+            "homepage": "https://planka.app",
+            "source": "https://github.com/plankanban/planka",
+            "title": "planka"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "planka",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -29548,18 +29920,22 @@
          ],
          "summary": "A Planka server (a self-hosted, real-time kanban board for teams, an open alternative to Trello) on the official image, backed by an external PostgreSQL, with uploads in S3-compatible object storage so it stays stateless (pair with the seaweedfs workload or any S3 bucket). kurly authors no Secret; DATABASE_URL, SECRET_KEY, the S3_* settings and the admin credentials come from a provided Secret via envFrom. Pairs with a cnpg-cluster named planka-db. For local-disk uploads instead, compose ReadWriteMany volumes onto the three upload paths and drop the S3 settings. Serves on :1337.",
          "upstream": {
-            "homepage": "https://planka.app",
             "repo": "https://github.com/plankanban/planka"
          }
       },
       {
          "category": "application",
          "id": "plex",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-plex/packages",
+            "source": "https://github.com/linuxserver/docker-plex",
+            "title": "Plex"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Plex",
          "requires": { },
          "stages": [
             {
@@ -29667,20 +30043,21 @@
                }
             }
          ],
-         "summary": "A Plex Media Server (a self-hosted media server for organising and streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Set PLEX_CLAIM on first run and mount your media libraries. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :32400.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-plex/packages",
-            "repo": "https://github.com/linuxserver/docker-plex"
-         }
+         "summary": "A Plex Media Server (a self-hosted media server for organising and streaming movies, shows, music and photos) on the LinuxServer.io image; its config lives on a PersistentVolume. Set PLEX_CLAIM on first run and mount your media libraries. The s6-overlay init runs as root and drops to the PUID/PGID user. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :32400."
       },
       {
          "category": "identity",
          "id": "pocket-id",
+         "image": {
+            "homepage": "https://github.com/pocket-id/pocket-id",
+            "source": "https://github.com/pocket-id/pocket-id",
+            "title": "pocket-id"
+         },
          "license": "BSD-2-Clause",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "pocket-id",
          "requires": { },
          "stages": [
             {
@@ -29775,7 +30152,6 @@
          ],
          "summary": "A Pocket ID server (a simple, self-hosted OIDC provider for passkey logins, no passwords) on the official image; with the default SQLite backend its database and keys live on a PersistentVolume. appUrl is the public HTTPS URL passkeys bind to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :1411.",
          "upstream": {
-            "homepage": "https://github.com/pocket-id/pocket-id",
             "repo": "https://github.com/pocket-id/pocket-id"
          }
       },
@@ -29875,6 +30251,10 @@
       {
          "category": "application",
          "id": "portainer",
+         "image": {
+            "homepage": "https://www.portainer.io",
+            "title": "Portainer CE"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -29970,10 +30350,7 @@
                }
             }
          ],
-         "summary": "A Portainer CE server (a self-hosted management UI for Docker and Kubernetes) on the official image. A plain composable http workload that keeps its database and settings on a PersistentVolume. Single instance over a ReadWriteOnce volume: one replica, recreated. To administer the cluster it runs in, Portainer needs a ServiceAccount bound to a ClusterRole (cluster-admin for full control); kurly authors no RBAC — create the ServiceAccount and binding yourself and pass serviceAccountName. Serves the HTTP UI on :9000.",
-         "upstream": {
-            "homepage": "https://www.portainer.io"
-         }
+         "summary": "A Portainer CE server (a self-hosted management UI for Docker and Kubernetes) on the official image. A plain composable http workload that keeps its database and settings on a PersistentVolume. Single instance over a ReadWriteOnce volume: one replica, recreated. To administer the cluster it runs in, Portainer needs a ServiceAccount bound to a ClusterRole (cluster-admin for full control); kurly authors no RBAC — create the ServiceAccount and binding yourself and pass serviceAccountName. Serves the HTTP UI on :9000."
       },
       {
          "category": "database",
@@ -30233,7 +30610,11 @@
       {
          "category": "application",
          "id": "privatebin",
+         "image": {
+            "source": "https://github.com/PrivateBin/docker-nginx-fpm-alpine"
+         },
          "license": "zlib-acknowledgement",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -30326,19 +30707,21 @@
                }
             }
          ],
-         "summary": "A PrivateBin server (a minimalist, zero-knowledge pastebin: the server stores only encrypted blobs, encrypted and decrypted in the browser) on the official nginx+php-fpm image; with the default filesystem backend its encrypted pastes live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
-         "upstream": {
-            "repo": "https://github.com/PrivateBin/docker-nginx-fpm-alpine"
-         }
+         "summary": "A PrivateBin server (a minimalist, zero-knowledge pastebin: the server stores only encrypted blobs, encrypted and decrypted in the browser) on the official nginx+php-fpm image; with the default filesystem backend its encrypted pastes live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
          "category": "application",
          "id": "projectsend",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-projectsend/packages",
+            "source": "https://github.com/linuxserver/docker-projectsend",
+            "title": "Projectsend"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Projectsend",
          "requires": {
             "database": "required"
          },
@@ -30449,19 +30832,19 @@
                }
             }
          ],
-         "summary": "A ProjectSend server — a self-hosted, private file-sharing app that assigns uploads to specific clients (backed by MySQL/MariaDB). On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-projectsend/packages",
-            "repo": "https://github.com/linuxserver/docker-projectsend"
-         }
+         "summary": "A ProjectSend server — a self-hosted, private file-sharing app that assigns uploads to specific clients (backed by MySQL/MariaDB). On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "observability",
          "id": "prometheus",
+         "image": {
+            "homepage": "https://github.com/prometheus/prometheus",
+            "source": "https://github.com/prometheus/prometheus",
+            "title": "Prometheus"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Prometheus",
          "requires": { },
          "stages": [
             {
@@ -30603,18 +30986,22 @@
          ],
          "summary": "A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace.",
          "upstream": {
-            "homepage": "https://github.com/prometheus/prometheus",
             "repo": "https://github.com/prometheus/prometheus"
          }
       },
       {
          "category": "application",
          "id": "prowlarr",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-prowlarr/packages",
+            "source": "https://github.com/linuxserver/docker-prowlarr",
+            "title": "Prowlarr"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Prowlarr",
          "requires": { },
          "stages": [
             {
@@ -30722,20 +31109,21 @@
                }
             }
          ],
-         "summary": "A Prowlarr server — an indexer manager and proxy that syncs indexers across the *arr suite. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9696.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-prowlarr/packages",
-            "repo": "https://github.com/linuxserver/docker-prowlarr"
-         }
+         "summary": "A Prowlarr server — an indexer manager and proxy that syncs indexers across the *arr suite. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9696."
       },
       {
          "category": "application",
          "id": "pyload-ng",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-pyload-ng/packages",
+            "source": "https://github.com/linuxserver/docker-pyload-ng",
+            "title": "Pyload-ng"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Pyload-ng",
          "requires": { },
          "stages": [
             {
@@ -30843,20 +31231,21 @@
                }
             }
          ],
-         "summary": "A pyLoad server — a free and open-source download manager for one-click hosters and more. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-pyload-ng/packages",
-            "repo": "https://github.com/linuxserver/docker-pyload-ng"
-         }
+         "summary": "A pyLoad server — a free and open-source download manager for one-click hosters and more. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000."
       },
       {
          "category": "application",
          "id": "qbittorrent",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-qbittorrent/packages",
+            "source": "https://github.com/linuxserver/docker-qbittorrent",
+            "title": "Qbittorrent"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Qbittorrent",
          "requires": { },
          "stages": [
             {
@@ -30964,19 +31353,19 @@
                }
             }
          ],
-         "summary": "A qBittorrent server — a feature-rich, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-qbittorrent/packages",
-            "repo": "https://github.com/linuxserver/docker-qbittorrent"
-         }
+         "summary": "A qBittorrent server — a feature-rich, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
          "category": "search",
          "id": "qdrant",
+         "image": {
+            "homepage": "https://qdrant.com/",
+            "source": "https://github.com/qdrant/qdrant",
+            "title": "Qdrant"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Qdrant",
          "requires": { },
          "stages": [
             {
@@ -31064,7 +31453,6 @@
          ],
          "summary": "A Qdrant server (a self-hosted vector database and similarity-search engine for embeddings, used for AI/semantic-search and RAG) on the official image; its collections live on a PersistentVolume. It also serves gRPC on :6334, a separate port to add a Service for. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the REST API on :6333.",
          "upstream": {
-            "homepage": "https://qdrant.com/",
             "repo": "https://github.com/qdrant/qdrant"
          }
       },
@@ -31074,6 +31462,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "RabbitMQ",
          "requires": { },
          "stages": [
             {
@@ -31186,11 +31575,16 @@
       {
          "category": "application",
          "id": "radarr",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-radarr/packages",
+            "source": "https://github.com/linuxserver/docker-radarr",
+            "title": "Radarr"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Radarr",
          "requires": { },
          "stages": [
             {
@@ -31298,11 +31692,7 @@
                }
             }
          ],
-         "summary": "A Radarr server — a movie collection manager for Usenet and BitTorrent users. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7878.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-radarr/packages",
-            "repo": "https://github.com/linuxserver/docker-radarr"
-         }
+         "summary": "A Radarr server — a movie collection manager for Usenet and BitTorrent users. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7878."
       },
       {
          "category": "application",
@@ -31401,11 +31791,17 @@
       {
          "category": "application",
          "id": "rallly",
+         "image": {
+            "homepage": "https://github.com/lukevella/rallly",
+            "source": "https://github.com/lukevella/rallly",
+            "title": "rallly"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "rallly",
          "requires": {
             "database": "required"
          },
@@ -31512,18 +31908,22 @@
          ],
          "summary": "A Rallly server (a self-hosted scheduling and group-poll tool for finding the best date to meet) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; DATABASE_URL, SECRET_PASSWORD, and SMTP creds come from a provided Secret via envFrom. Pairs with a cnpg-cluster named rallly-db. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/lukevella/rallly",
             "repo": "https://github.com/lukevella/rallly"
          }
       },
       {
          "category": "application",
          "id": "readarr",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-readarr/packages",
+            "source": "https://github.com/linuxserver/docker-readarr",
+            "title": "Readarr"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Readarr",
          "requires": { },
          "stages": [
             {
@@ -31628,11 +32028,7 @@
                }
             }
          ],
-         "summary": "A Readarr server (an ebook and audiobook collection manager for Usenet and BitTorrent users) on the LinuxServer.io image. A plain composable http workload that keeps its application config (SQLite) on a PersistentVolume under /config. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8787.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-readarr/packages",
-            "repo": "https://github.com/linuxserver/docker-readarr"
-         }
+         "summary": "A Readarr server (an ebook and audiobook collection manager for Usenet and BitTorrent users) on the LinuxServer.io image. A plain composable http workload that keeps its application config (SQLite) on a PersistentVolume under /config. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8787."
       },
       {
          "category": "application",
@@ -32175,11 +32571,16 @@
       {
          "category": "application",
          "id": "resilio-sync",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-resilio-sync/packages",
+            "source": "https://github.com/linuxserver/docker-resilio-sync",
+            "title": "Resilio-sync"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Resilio-sync",
          "requires": { },
          "stages": [
             {
@@ -32287,18 +32688,18 @@
                }
             }
          ],
-         "summary": "A Resilio Sync server — a fast, peer-to-peer file-synchronization tool with a web UI. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-resilio-sync/packages",
-            "repo": "https://github.com/linuxserver/docker-resilio-sync"
-         }
+         "summary": "A Resilio Sync server — a fast, peer-to-peer file-synchronization tool with a web UI. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888."
       },
       {
          "category": "application",
          "id": "rocketchat",
+         "image": {
+            "source": "https://github.com/RocketChat/Rocket.Chat"
+         },
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Rocket.Chat",
          "requires": {
             "database": "required"
          },
@@ -32414,6 +32815,9 @@
       {
          "category": "application",
          "id": "roundcube",
+         "image": {
+            "source": "https://github.com/roundcube/roundcubemail-docker"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -32516,19 +32920,21 @@
                }
             }
          ],
-         "summary": "A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
-         "upstream": {
-            "repo": "https://github.com/roundcube/roundcubemail-docker"
-         }
+         "summary": "A Roundcube server (a browser-based IMAP webmail client) on the official image. A plain composable http workload that connects to an external IMAP/SMTP mail server (e.g. the mailu workload) and keeps its own state in SQLite on a PersistentVolume — no external database. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80."
       },
       {
          "category": "application",
          "id": "rss-bridge",
+         "image": {
+            "homepage": "https://github.com/RSS-Bridge/rss-bridge",
+            "source": "https://github.com/RSS-Bridge/rss-bridge",
+            "title": "rss-bridge"
+         },
          "license": "Unlicense",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "rss-bridge",
          "requires": { },
          "stages": [
             {
@@ -32613,7 +33019,6 @@
          ],
          "summary": "An RSS-Bridge server (generates RSS/Atom feeds for sites that do not publish their own, from a large library of community bridges) on the official image. It holds no persistent state — feeds are produced on request — so it is a plain stateless Deployment. The Apache master runs as root then serves as www-data. Serves on :80.",
          "upstream": {
-            "homepage": "https://github.com/RSS-Bridge/rss-bridge",
             "repo": "https://github.com/RSS-Bridge/rss-bridge"
          }
       },
@@ -32734,11 +33139,16 @@
       {
          "category": "application",
          "id": "sabnzbd",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-sabnzbd/packages",
+            "source": "https://github.com/linuxserver/docker-sabnzbd",
+            "title": "Sabnzbd"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Sabnzbd",
          "requires": { },
          "stages": [
             {
@@ -32846,16 +33256,18 @@
                }
             }
          ],
-         "summary": "A SABnzbd server — a self-hosted, web-based binary newsreader (Usenet downloader). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-sabnzbd/packages",
-            "repo": "https://github.com/linuxserver/docker-sabnzbd"
-         }
+         "summary": "A SABnzbd server — a self-hosted, web-based binary newsreader (Usenet downloader). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080."
       },
       {
          "category": "tool",
          "id": "searxng",
+         "image": {
+            "homepage": "https://searxng.org",
+            "source": "https://github.com/searxng/searxng",
+            "title": "SearXNG"
+         },
          "license": "AGPL-3.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -32964,13 +33376,16 @@
          ],
          "summary": "A SearXNG server (a privacy-respecting, self-hosted metasearch engine that aggregates results from many search services without tracking you) on the official image. Its behaviour is its settings.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state of its own. kurly authors no Secret; SEARXNG_SECRET (overriding server.secret_key) comes from a provided Secret via envFrom. A busy instance also wants a Valkey/Redis for the limiter. Stateless: scale freely. Serves on :8080.",
          "upstream": {
-            "homepage": "https://searxng.org",
             "repo": "https://github.com/searxng/searxng"
          }
       },
       {
          "category": "application",
          "id": "seatsurfing",
+         "image": {
+            "homepage": "https://seatsurfing.io",
+            "source": "https://github.com/seatsurfing/seatsurfing"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -33079,18 +33494,23 @@
          ],
          "summary": "A Seatsurfing server (desk and meeting-room booking / hot-desking) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. kurly authors no Secret; POSTGRES_URL and JWT_SIGNING_KEY come from a provided Secret via envFrom. Pairs with a cnpg-cluster named seatsurfing-db. Serves on :8080.",
          "upstream": {
-            "homepage": "https://seatsurfing.io",
             "repo": "https://github.com/seatsurfing/seatsurfing"
          }
       },
       {
          "category": "storage",
          "id": "seaweedfs",
+         "image": {
+            "homepage": "https://github.com/seaweedfs/seaweedfs",
+            "source": "https://github.com/seaweedfs/seaweedfs",
+            "title": "seaweedfs"
+         },
          "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "seaweedfs",
+         "name": "SeaweedFS",
          "requires": { },
          "stages": [
             {
@@ -33357,7 +33777,6 @@
          ],
          "summary": "SeaweedFS as an all-in-one object store: a StatefulSet with a per-pod PVC and a headless Service running `weed server -s3`, so one process is master, volume, filer, and an S3 gateway. It gives a cluster an S3 API on 8333 backed by a PersistentVolume — an in-cluster target for anything that speaks S3, such as a cnpg-cluster's backups.",
          "upstream": {
-            "homepage": "https://github.com/seaweedfs/seaweedfs",
             "repo": "https://github.com/seaweedfs/seaweedfs"
          }
       },
@@ -33458,6 +33877,9 @@
       {
          "category": "application",
          "id": "shiori",
+         "image": {
+            "source": "https://github.com/go-shiori/shiori"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -33557,11 +33979,16 @@
       {
          "category": "application",
          "id": "shlink",
+         "image": {
+            "homepage": "https://github.com/shlinkio/shlink",
+            "source": "https://github.com/shlinkio/shlink",
+            "title": "shlink"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
-         "name": "shlink",
          "requires": {
             "database": "required"
          },
@@ -33687,18 +34114,22 @@
          ],
          "summary": "A Shlink server (a self-hosted URL shortener with a REST API and rich analytics) on the official image, backed by an external PostgreSQL. Stateless — its state lives in the database, so it can run several replicas. Pairs with a cnpg-cluster named shlink-db. kurly authors no Secret; DB_PASSWORD (and optionally the GeoLite key) come from a provided Secret via envFrom. Serves on :8080.",
          "upstream": {
-            "homepage": "https://github.com/shlinkio/shlink",
             "repo": "https://github.com/shlinkio/shlink"
          }
       },
       {
          "category": "application",
          "id": "silverbullet",
+         "image": {
+            "homepage": "https://github.com/silverbulletmd/silverbullet",
+            "source": "https://github.com/silverbulletmd/silverbullet",
+            "title": "silverbullet"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "silverbullet",
          "requires": { },
          "stages": [
             {
@@ -33800,7 +34231,6 @@
          ],
          "summary": "A SilverBullet server (an extensible, self-hosted markdown notebook / personal knowledge base) on the official image. A plain composable http workload — your notes are plain markdown files on a PersistentVolume, no external database. kurly authors no Secret; SB_USER comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.",
          "upstream": {
-            "homepage": "https://github.com/silverbulletmd/silverbullet",
             "repo": "https://github.com/silverbulletmd/silverbullet"
          }
       },
@@ -33999,11 +34429,14 @@
       {
          "category": "application",
          "id": "snappymail",
-         "license": "AGPLv3",
+         "image": {
+            "homepage": "https://github.com/the-djmaze/snappymail",
+            "source": "https://github.com/the-djmaze/snappymail",
+            "title": "snappymail"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "snappymail",
          "requires": { },
          "stages": [
             {
@@ -34092,7 +34525,6 @@
          ],
          "summary": "A SnappyMail server (a fast, modern, self-hosted webmail client that connects to your existing IMAP/SMTP servers) on the official image (pinned by digest; Renovate maintains it); config and per-account data on a PersistentVolume. SnappyMail is a client and does not run a mail server itself. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8888.",
          "upstream": {
-            "homepage": "https://github.com/the-djmaze/snappymail",
             "repo": "https://github.com/the-djmaze/snappymail"
          }
       },
@@ -34363,11 +34795,16 @@
       {
          "category": "application",
          "id": "sonarr",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-sonarr/packages",
+            "source": "https://github.com/linuxserver/docker-sonarr",
+            "title": "Sonarr"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Sonarr",
          "requires": { },
          "stages": [
             {
@@ -34475,20 +34912,21 @@
                }
             }
          ],
-         "summary": "A Sonarr server — a PVR for Usenet and BitTorrent users to monitor, download and organise TV series. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8989.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-sonarr/packages",
-            "repo": "https://github.com/linuxserver/docker-sonarr"
-         }
+         "summary": "A Sonarr server — a PVR for Usenet and BitTorrent users to monitor, download and organise TV series. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8989."
       },
       {
          "category": "networking",
          "id": "spegel",
+         "image": {
+            "homepage": "https://github.com/spegel-org/spegel",
+            "source": "https://github.com/spegel-org/spegel",
+            "title": "spegel"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
-         "name": "spegel",
          "requires": { },
          "stages": [
             {
@@ -34688,7 +35126,6 @@
          ],
          "summary": "Spegel — a stateless, cluster-local OCI registry mirror (spegel.dev). A DaemonSet that serves image layers already present in each node's containerd content store to its peers over a peer-to-peer router, so a pull satisfied by any node never leaves the cluster; an init container writes containerd's registry-mirror config to pull through the local mirror first. Genuinely node-level infrastructure, so it authors its manifests directly (DaemonSet + init container + hostPath containerd socket/content, a NodePort the kubelet reaches the mirror on, and a headless Service peers bootstrap against via DNS) rather than composing a base kind. namespace is load-bearing: the bootstrap DNS name embeds it, so it must match where you deploy. Runs as root with hostPath mounts (the socket is root-owned); the posture is hardened as far as that allows. kurly features do not apply.",
          "upstream": {
-            "homepage": "https://github.com/spegel-org/spegel",
             "repo": "https://github.com/spegel-org/spegel"
          }
       },
@@ -34773,6 +35210,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Stirling PDF",
          "requires": { },
          "stages": [
             {
@@ -34974,11 +35412,16 @@
       {
          "category": "application",
          "id": "syncthing",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-syncthing/packages",
+            "source": "https://github.com/linuxserver/docker-syncthing",
+            "title": "Syncthing"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Syncthing",
          "requires": { },
          "stages": [
             {
@@ -35086,20 +35529,22 @@
                }
             }
          ],
-         "summary": "A Syncthing server — a continuous, self-hosted file-synchronization tool that syncs folders between devices peer-to-peer (sync on :22000). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8384.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-syncthing/packages",
-            "repo": "https://github.com/linuxserver/docker-syncthing"
-         }
+         "summary": "A Syncthing server — a continuous, self-hosted file-synchronization tool that syncs folders between devices peer-to-peer (sync on :22000). On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8384."
       },
       {
          "category": "application",
          "id": "tachidesk",
+         "image": {
+            "homepage": "https://github.com/suwayomi/docker-tachidesk/pkgs/container/tachidesk",
+            "source": "https://github.com/suwayomi/docker-tachidesk",
+            "title": "Suwayomi Docker"
+         },
          "license": "MPL-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Suwayomi Docker",
+         "name": "Suwayomi",
          "requires": { },
          "stages": [
             {
@@ -35189,11 +35634,7 @@
                }
             }
          ],
-         "summary": "A Suwayomi-Server (formerly Tachidesk): a self-hosted manga reader and library server, on the official image; its library, downloads and settings live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4567.",
-         "upstream": {
-            "homepage": "https://github.com/suwayomi/docker-tachidesk/pkgs/container/tachidesk",
-            "repo": "https://github.com/suwayomi/docker-tachidesk"
-         }
+         "summary": "A Suwayomi-Server (formerly Tachidesk): a self-hosted manga reader and library server, on the official image; its library, downloads and settings live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4567."
       },
       {
          "category": "application",
@@ -35336,11 +35777,16 @@
       {
          "category": "application",
          "id": "tautulli",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-tautulli/packages",
+            "source": "https://github.com/linuxserver/docker-tautulli",
+            "title": "Tautulli"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Tautulli",
          "requires": { },
          "stages": [
             {
@@ -35448,11 +35894,7 @@
                }
             }
          ],
-         "summary": "A Tautulli server — a monitoring and tracking tool for Plex Media Server: history, statistics and notifications. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8181.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-tautulli/packages",
-            "repo": "https://github.com/linuxserver/docker-tautulli"
-         }
+         "summary": "A Tautulli server — a monitoring and tracking tool for Plex Media Server: history, statistics and notifications. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8181."
       },
       {
          "category": "application",
@@ -35575,6 +36017,11 @@
       {
          "category": "networking",
          "id": "technitium",
+         "image": {
+            "homepage": "https://technitium.com/dns/",
+            "source": "https://github.com/TechnitiumSoftware/DnsServer",
+            "title": "Technitium DNS Server"
+         },
          "maturity": {
             "tier": "e2e"
          },
@@ -35680,7 +36127,6 @@
          ],
          "summary": "A Technitium DNS Server (a self-hosted, privacy-focused DNS server with ad-blocking, DNS-over-HTTPS/TLS and a full web console) on the official image; its configuration and zones live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; DNS_SERVER_ADMIN_PASSWORD comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The web console serves on :5380.",
          "upstream": {
-            "homepage": "https://technitium.com/dns/",
             "repo": "https://github.com/TechnitiumSoftware/DnsServer"
          }
       },
@@ -36363,11 +36809,17 @@
       {
          "category": "application",
          "id": "thelounge",
+         "image": {
+            "homepage": "https://github.com/thelounge/thelounge-docker",
+            "source": "https://github.com/thelounge/thelounge-docker",
+            "title": "Official The Lounge image"
+         },
          "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Official The Lounge image",
+         "name": "The Lounge",
          "requires": { },
          "stages": [
             {
@@ -36455,20 +36907,21 @@
                }
             }
          ],
-         "summary": "A The Lounge server (a modern, self-hosted web IRC client: always-connected, multi-user, accessible from any browser) on the official image; its configuration and per-user data live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.",
-         "upstream": {
-            "homepage": "https://github.com/thelounge/thelounge-docker",
-            "repo": "https://github.com/thelounge/thelounge-docker"
-         }
+         "summary": "A The Lounge server (a modern, self-hosted web IRC client: always-connected, multi-user, accessible from any browser) on the official image; its configuration and per-user data live on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000."
       },
       {
          "category": "application",
          "id": "tik",
+         "image": {
+            "homepage": "https://github.com/metio/tik",
+            "source": "https://github.com/metio/tik",
+            "title": "tik"
+         },
          "license": "0BSD",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "tik",
          "requires": { },
          "stages": [
             {
@@ -36526,17 +36979,19 @@
          ],
          "summary": "A lightweight ticket board and release supervisor. One process serves a read-only board and runs the store's writers over a shared append-only event store.",
          "upstream": {
-            "homepage": "https://github.com/metio/tik",
             "repo": "https://github.com/metio/tik"
          }
       },
       {
          "category": "tool",
          "id": "tika",
+         "image": {
+            "title": "ubuntu"
+         },
          "maturity": {
             "tier": "e2e"
          },
-         "name": "ubuntu",
+         "name": "Apache Tika",
          "requires": { },
          "stages": [
             {
@@ -36724,11 +37179,16 @@
       {
          "category": "application",
          "id": "transmission",
+         "image": {
+            "homepage": "https://github.com/linuxserver/docker-transmission/packages",
+            "source": "https://github.com/linuxserver/docker-transmission",
+            "title": "Transmission"
+         },
          "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Transmission",
          "requires": { },
          "stages": [
             {
@@ -36836,20 +37296,22 @@
                }
             }
          ],
-         "summary": "A Transmission server — a fast, lightweight, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091.",
-         "upstream": {
-            "homepage": "https://github.com/linuxserver/docker-transmission/packages",
-            "repo": "https://github.com/linuxserver/docker-transmission"
-         }
+         "summary": "A Transmission server — a fast, lightweight, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091."
       },
       {
          "category": "application",
          "id": "trilium",
+         "image": {
+            "homepage": "https://github.com/TriliumNext/Trilium",
+            "source": "https://github.com/TriliumNext/Trilium",
+            "title": "Trilium"
+         },
          "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
-         "name": "Trilium",
          "requires": { },
          "stages": [
             {
@@ -36938,7 +37400,6 @@
          ],
          "summary": "A TriliumNext Notes server (a hierarchical note-taking application for building personal knowledge bases) on the official image. A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :8080.",
          "upstream": {
-            "homepage": "https://github.com/TriliumNext/Trilium",
             "repo": "https://github.com/TriliumNext/Trilium"
          }
       },
@@ -37281,6 +37742,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Typesense",
          "requires": { },
          "stages": [
             {
@@ -37494,6 +37956,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Uptime Kuma",
          "requires": { },
          "stages": [
             {
@@ -37588,6 +38051,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Valkey",
          "requires": { },
          "stages": [
             {
@@ -37722,6 +38186,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Vaultwarden",
          "requires": {
             "database": "optional"
          },
@@ -38882,6 +39347,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "WordPress",
          "requires": {
             "database": "required"
          },
