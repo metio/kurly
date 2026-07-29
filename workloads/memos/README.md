@@ -21,7 +21,7 @@ kurly.list(memos())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `memos` | |
-| `image` | `docker.io/neosmemo/memos:0.29.1` | |
+| `image` | `docker.io/neosmemo/memos:0.30.0` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the SQLite data volume (`/var/opt/memos`) |
 | `env` | `{}` | extra `MEMOS_*` settings |
 | `resources` / `labels` / `annotations` | | |
