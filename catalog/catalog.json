@@ -2766,6 +2766,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "2FAuth",
          "requires": { },
          "stages": [
             {
@@ -2883,6 +2884,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Activepieces",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -3031,6 +3033,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Actual Budget",
          "requires": { },
          "stages": [
             {
@@ -3238,6 +3241,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Adminer",
          "requires": {
             "database": "optional"
          },
@@ -3343,6 +3347,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Airsonic-Advanced",
          "requires": { },
          "stages": [
             {
@@ -3464,6 +3469,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Alertmanager",
          "requires": { },
          "stages": [
             {
@@ -3575,6 +3581,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "AList",
          "requires": {
             "objectStorage": "optional"
          },
@@ -3677,6 +3684,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Apache Answer",
          "requires": {
             "database": "optional"
          },
@@ -3775,6 +3783,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "AnythingLLM",
          "requires": { },
          "stages": [
             {
@@ -3874,6 +3883,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Apprise",
          "requires": { },
          "stages": [
             {
@@ -3982,6 +3992,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Audiobookshelf",
          "requires": { },
          "stages": [
             {
@@ -4085,6 +4096,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Authelia",
          "requires": { },
          "stages": [
             {
@@ -4219,6 +4231,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "authentik",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -4471,6 +4484,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Automatisch",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -4737,6 +4751,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Baikal",
          "requires": {
             "database": "optional"
          },
@@ -4843,6 +4858,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Baserow",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -4983,6 +4999,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Bazarr",
          "requires": { },
          "stages": [
             {
@@ -5108,6 +5125,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Beszel",
          "requires": { },
          "stages": [
             {
@@ -5205,6 +5223,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Bigcapital",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -5536,6 +5555,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Blackbox exporter",
          "requires": { },
          "stages": [
             {
@@ -5637,6 +5657,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Blinko",
          "requires": {
             "database": "required"
          },
@@ -5766,6 +5787,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "BookStack",
          "requires": {
             "database": "required"
          },
@@ -5913,6 +5935,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Browserless",
          "requires": { },
          "stages": [
             {
@@ -6018,6 +6041,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Bugsink",
          "requires": {
             "database": "required"
          },
@@ -6264,6 +6288,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Calibre",
          "requires": { },
          "stages": [
             {
@@ -6389,6 +6414,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Calibre-Web",
          "requires": { },
          "stages": [
             {
@@ -6507,6 +6533,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Calibre-Web Automated",
          "requires": { },
          "stages": [
             {
@@ -6628,6 +6655,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Apache Cassandra",
          "requires": { },
          "stages": [
             {
@@ -6832,6 +6860,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Chatpad AI",
          "requires": { },
          "stages": [
             {
@@ -7035,6 +7064,7 @@
          "maturity": {
             "tier": "tested"
          },
+         "name": "CloudNativePG",
          "requires": { },
          "stages": [
             {
@@ -7217,6 +7247,7 @@
          "maturity": {
             "tier": "tested"
          },
+         "name": "CloudNativePG",
          "requires": { },
          "stages": [
             {
@@ -7322,6 +7353,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "cobalt",
          "requires": { },
          "stages": [
             {
@@ -7418,6 +7450,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "code-server",
          "requires": { },
          "stages": [
             {
@@ -7528,6 +7561,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "CommaFeed",
          "requires": {
             "database": "required"
          },
@@ -7634,6 +7668,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ConvertX",
          "requires": { },
          "stages": [
             {
@@ -7731,6 +7766,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Apache CouchDB",
          "requires": { },
          "stages": [
             {
@@ -7845,6 +7881,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "CryptPad",
          "requires": { },
          "stages": [
             {
@@ -7960,6 +7997,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "CyberChef",
          "requires": { },
          "stages": [
             {
@@ -8058,6 +8096,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Dashy",
          "requires": { },
          "stages": [
             {
@@ -8163,6 +8202,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Davis",
          "requires": {
             "database": "optional"
          },
@@ -8280,6 +8320,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "davos",
          "requires": { },
          "stages": [
             {
@@ -8405,6 +8446,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Deluge",
          "requires": { },
          "stages": [
             {
@@ -8530,6 +8572,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Dex",
          "requires": {
             "database": "optional"
          },
@@ -8643,6 +8686,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Directus",
          "requires": {
             "database": "required"
          },
@@ -8789,6 +8833,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Docker Registry UI",
          "requires": { },
          "stages": [
             {
@@ -8900,6 +8945,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Docmost",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -9028,6 +9074,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Documenso",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -9158,6 +9205,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "DocuSeal",
          "requires": {
             "database": "optional"
          },
@@ -9257,6 +9305,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "DokuWiki",
          "requires": { },
          "stages": [
             {
@@ -9542,6 +9591,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "draw.io",
          "requires": { },
          "stages": [
             {
@@ -9633,6 +9683,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Drupal",
          "requires": {
             "database": "required"
          },
@@ -9776,6 +9827,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Duplicati",
          "requires": {
             "objectStorage": "optional"
          },
@@ -10026,6 +10078,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Element Web",
          "requires": { },
          "stages": [
             {
@@ -10147,6 +10200,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Emby",
          "requires": { },
          "stages": [
             {
@@ -10366,6 +10420,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Endurain",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -10519,6 +10574,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Ente",
          "requires": {
             "database": "required",
             "objectStorage": "required"
@@ -10706,6 +10762,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ESPHome",
          "requires": { },
          "stages": [
             {
@@ -10809,6 +10866,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Etherpad",
          "requires": {
             "database": "required"
          },
@@ -10938,6 +10996,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Excalidraw",
          "requires": { },
          "stages": [
             {
@@ -11029,6 +11088,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ExpenseOwl",
          "requires": { },
          "stages": [
             {
@@ -11129,6 +11189,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "FerretDB",
          "requires": {
             "database": "required"
          },
@@ -11234,6 +11295,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Fider",
          "requires": {
             "database": "required"
          },
@@ -11378,6 +11440,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "File Browser",
          "requires": { },
          "stages": [
             {
@@ -11476,6 +11539,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Filestash",
          "requires": {
             "objectStorage": "optional"
          },
@@ -11722,6 +11786,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Flame",
          "requires": { },
          "stages": [
             {
@@ -11825,6 +11890,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "FlareSolverr",
          "requires": { },
          "stages": [
             {
@@ -11925,6 +11991,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "flatnotes",
          "requires": { },
          "stages": [
             {
@@ -12045,6 +12112,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Focalboard",
          "requires": { },
          "stages": [
             {
@@ -12148,6 +12216,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Folding@home",
          "requires": { },
          "stages": [
             {
@@ -12410,6 +12479,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Formbricks",
          "requires": {
             "database": "required"
          },
@@ -12646,6 +12716,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Frigate",
          "requires": { },
          "stages": [
             {
@@ -12786,6 +12857,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Gatus",
          "requires": { },
          "stages": [
             {
@@ -12888,6 +12960,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Ghost",
          "requires": {
             "database": "required"
          },
@@ -13023,6 +13096,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Ghostfolio",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -13156,6 +13230,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Gitea",
          "requires": {
             "database": "optional"
          },
@@ -13275,6 +13350,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Glance",
          "requires": { },
          "stages": [
             {
@@ -13366,6 +13442,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "GlitchTip",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -13574,6 +13651,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Gogs",
          "requires": { },
          "stages": [
             {
@@ -13673,6 +13751,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Gokapi",
          "requires": {
             "objectStorage": "optional"
          },
@@ -13775,6 +13854,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Gotenberg",
          "requires": { },
          "stages": [
             {
@@ -13873,6 +13953,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Gotify",
          "requires": { },
          "stages": [
             {
@@ -13963,6 +14044,7 @@
          ],
          "summary": "A Gotify server (a simple server for sending and receiving push notifications). A plain composable http workload that keeps its messages, apps, and clients in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and API on :80.",
          "upstream": {
+            "homepage": "https://gotify.net",
             "repo": "https://github.com/gotify/server"
          }
       },
@@ -13979,6 +14061,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "GoToSocial",
          "requires": {
             "database": "optional"
          },
@@ -14087,6 +14170,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Grafana",
          "requires": { },
          "stages": [
             {
@@ -14195,6 +14279,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Grav",
          "requires": { },
          "stages": [
             {
@@ -14313,6 +14398,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Greenlight",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -14432,6 +14518,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Grist",
          "requires": { },
          "stages": [
             {
@@ -14536,6 +14623,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Grocy",
          "requires": { },
          "stages": [
             {
@@ -14654,6 +14742,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Apache Guacamole",
          "requires": {
             "database": "required"
          },
@@ -14788,6 +14877,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Healthchecks",
          "requires": {
             "database": "optional"
          },
@@ -15050,6 +15140,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Heimdall",
          "requires": { },
          "stages": [
             {
@@ -15168,6 +15259,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Hollama",
          "requires": { },
          "stages": [
             {
@@ -15266,6 +15358,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Homarr",
          "requires": { },
          "stages": [
             {
@@ -15490,6 +15583,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Homebox",
          "requires": { },
          "stages": [
             {
@@ -15607,6 +15701,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Homepage",
          "requires": { },
          "stages": [
             {
@@ -15710,6 +15805,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Homer",
          "requires": { },
          "stages": [
             {
@@ -15815,6 +15911,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Immich",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -16049,6 +16146,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "InfluxDB",
          "requires": {
             "objectStorage": "optional"
          },
@@ -16180,6 +16278,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "InspIRCd",
          "requires": { },
          "stages": [
             {
@@ -16276,6 +16375,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Invoice Ninja",
          "requires": {
             "database": "required"
          },
@@ -16425,6 +16525,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "IT-Tools",
          "requires": { },
          "stages": [
             {
@@ -16524,6 +16625,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Jackett",
          "requires": { },
          "stages": [
             {
@@ -16649,6 +16751,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Jellyfin",
          "requires": { },
          "stages": [
             {
@@ -16767,6 +16870,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Jellyseerr",
          "requires": { },
          "stages": [
             {
@@ -16972,6 +17076,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Joomla",
          "requires": {
             "database": "required"
          },
@@ -17133,6 +17238,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Joplin Server",
          "requires": {
             "database": "required"
          },
@@ -17270,6 +17376,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Kanboard",
          "requires": {
             "database": "optional"
          },
@@ -17373,6 +17480,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Karakeep",
          "requires": { },
          "stages": [
             {
@@ -17510,6 +17618,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Kavita",
          "requires": { },
          "stages": [
             {
@@ -17708,6 +17817,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Kimai",
          "requires": {
             "database": "required"
          },
@@ -17819,6 +17929,8 @@
             "source": "https://github.com/gotson/komga",
             "title": "ubuntu"
          },
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -17912,6 +18024,7 @@
          ],
          "summary": "A Komga server (a media server for comics, manga, and digital books) on the official image. A plain composable http workload that keeps its database on a PersistentVolume and serves a library from /books on the same volume — no external database. The Java app writes temp files to the rootfs, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :25600.",
          "upstream": {
+            "homepage": "https://komga.org",
             "repo": "https://github.com/gotson/komga"
          }
       },
@@ -17921,6 +18034,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Kutt",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -18075,6 +18189,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Leantime",
          "requires": {
             "database": "required"
          },
@@ -18196,6 +18311,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Lemmy",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -18483,6 +18599,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "LibreSpeed",
          "requires": { },
          "stages": [
             {
@@ -18608,6 +18725,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Lidarr",
          "requires": { },
          "stages": [
             {
@@ -18729,6 +18847,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "linkding",
          "requires": {
             "database": "optional"
          },
@@ -18829,6 +18948,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "LinkStack",
          "requires": { },
          "stages": [
             {
@@ -18932,6 +19052,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Linkwarden",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -19055,6 +19176,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "listmonk",
          "requires": {
             "database": "required"
          },
@@ -19206,6 +19328,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "LLDAP",
          "requires": {
             "database": "optional"
          },
@@ -19422,6 +19545,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Grafana Loki",
          "requires": {
             "objectStorage": "required"
          },
@@ -19515,6 +19639,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Lychee",
          "requires": {
             "database": "optional"
          },
@@ -19633,6 +19758,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MailHog",
          "requires": { },
          "stages": [
             {
@@ -19723,6 +19849,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mailpit",
          "requires": { },
          "stages": [
             {
@@ -19822,6 +19949,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Mailu",
          "requires": {
             "cache": "required"
          },
@@ -20553,6 +20681,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Maloja",
          "requires": { },
          "stages": [
             {
@@ -20793,6 +20922,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mastodon",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -21292,6 +21422,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Matomo",
          "requires": {
             "database": "required"
          },
@@ -21426,6 +21557,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Conduit",
          "requires": { },
          "stages": [
             {
@@ -21535,6 +21667,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mattermost",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -21652,6 +21785,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mautic",
          "requires": {
             "database": "required"
          },
@@ -21802,6 +21936,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Maybe",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -21945,6 +22080,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MAZANOKE",
          "requires": { },
          "stages": [
             {
@@ -22044,6 +22180,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mealie",
          "requires": {
             "database": "optional"
          },
@@ -22149,6 +22286,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MediaWiki",
          "requires": {
             "database": "required"
          },
@@ -22366,6 +22504,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Memcached",
          "requires": { },
          "stages": [
             {
@@ -22445,6 +22584,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Memos",
          "requires": {
             "database": "optional"
          },
@@ -22544,6 +22684,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mermaid Live Editor",
          "requires": { },
          "stages": [
             {
@@ -22635,6 +22776,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Metabase",
          "requires": {
             "database": "required"
          },
@@ -22760,6 +22902,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Kubernetes Metrics Server",
          "requires": { },
          "stages": [
             {
@@ -22866,6 +23009,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MeTube",
          "requires": { },
          "stages": [
             {
@@ -22970,6 +23114,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MicroBin",
          "requires": { },
          "stages": [
             {
@@ -23072,6 +23217,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Miniflux",
          "requires": {
             "database": "required"
          },
@@ -23314,6 +23460,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Misskey",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -23421,6 +23568,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "MongoDB",
          "requires": { },
          "stages": [
             {
@@ -23653,6 +23801,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MongoDB",
          "requires": { },
          "stages": [
             {
@@ -24003,6 +24152,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mumble",
          "requires": { },
          "stages": [
             {
@@ -24121,6 +24271,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Mylar3",
          "requires": { },
          "stages": [
             {
@@ -24364,6 +24515,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "MySQL",
          "requires": { },
          "stages": [
             {
@@ -24468,6 +24620,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "n8n",
          "requires": {
             "database": "optional"
          },
@@ -24687,6 +24840,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Navidrome",
          "requires": { },
          "stages": [
             {
@@ -24786,6 +24940,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Neo4j",
          "requires": { },
          "stages": [
             {
@@ -24903,6 +25058,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "netboot.xyz",
          "requires": { },
          "stages": [
             {
@@ -25453,6 +25609,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Nginx Proxy Manager",
          "requires": { },
          "stages": [
             {
@@ -25557,6 +25714,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "NocoBase",
          "requires": {
             "database": "required"
          },
@@ -25698,6 +25856,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "NocoDB",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -25819,6 +25978,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Node-RED",
          "requires": { },
          "stages": [
             {
@@ -25921,6 +26081,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ntfy",
          "requires": { },
          "stages": [
             {
@@ -26031,6 +26192,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "NZBGet",
          "requires": { },
          "stages": [
             {
@@ -26156,6 +26318,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "NZBHydra2",
          "requires": { },
          "stages": [
             {
@@ -26274,6 +26437,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "OAuth2 Proxy",
          "requires": {
             "cache": "optional"
          },
@@ -26413,6 +26577,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Odoo",
          "requires": {
             "database": "required"
          },
@@ -26541,6 +26706,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Ollama",
          "requires": { },
          "stages": [
             {
@@ -26645,6 +26811,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Ombi",
          "requires": { },
          "stages": [
             {
@@ -26763,6 +26930,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ONLYOFFICE Docs",
          "requires": {
             "database": "required"
          },
@@ -26882,6 +27050,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Open WebUI",
          "requires": {
             "database": "optional"
          },
@@ -27116,6 +27285,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "openHAB",
          "requires": { },
          "stages": [
             {
@@ -27227,6 +27397,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "OpenObserve",
          "requires": { },
          "stages": [
             {
@@ -27349,6 +27520,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "OpenProject",
          "requires": {
             "cache": "optional",
             "database": "required"
@@ -27473,6 +27645,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "OpenSearch",
          "requires": { },
          "stages": [
             {
@@ -27567,6 +27740,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Organizr",
          "requires": { },
          "stages": [
             {
@@ -27669,6 +27843,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "OpenTelemetry Collector",
          "requires": { },
          "stages": [
             {
@@ -27744,6 +27919,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Outline",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -27872,6 +28048,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Overleaf",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -28001,6 +28178,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Overseerr",
          "requires": { },
          "stages": [
             {
@@ -28099,6 +28277,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Owncast",
          "requires": { },
          "stages": [
             {
@@ -28198,6 +28377,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "OwnTracks Recorder",
          "requires": { },
          "stages": [
             {
@@ -28305,6 +28485,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "PairDrop",
          "requires": { },
          "stages": [
             {
@@ -28399,6 +28580,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Paisa",
          "requires": { },
          "stages": [
             {
@@ -28670,6 +28852,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Password Pusher",
          "requires": {
             "database": "required"
          },
@@ -28780,6 +28963,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "PeerTube",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -28946,6 +29130,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Penpot",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -29515,6 +29700,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Photoview",
          "requires": {
             "database": "required"
          },
@@ -29885,6 +30071,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "PILOS",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -29997,6 +30184,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Pingvin Share",
          "requires": { },
          "stages": [
             {
@@ -30100,6 +30288,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Piwigo",
          "requires": {
             "database": "optional"
          },
@@ -30225,6 +30414,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Planka",
          "requires": {
             "database": "required",
             "objectStorage": "optional"
@@ -30356,6 +30546,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Plex Media Server",
          "requires": { },
          "stages": [
             {
@@ -30478,6 +30669,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Pocket ID",
          "requires": { },
          "stages": [
             {
@@ -30581,6 +30773,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "PocketBase",
          "requires": { },
          "stages": [
             {
@@ -30784,6 +30977,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "PostgreSQL",
          "requires": { },
          "stages": [
             {
@@ -30908,6 +31102,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "PrestaShop",
          "requires": {
             "database": "required"
          },
@@ -31050,6 +31245,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "PrivateBin",
          "requires": { },
          "stages": [
             {
@@ -31157,6 +31353,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ProjectSend",
          "requires": {
             "database": "required"
          },
@@ -31283,6 +31480,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Prometheus",
          "requires": { },
          "stages": [
             {
@@ -31440,6 +31638,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Prowlarr",
          "requires": { },
          "stages": [
             {
@@ -31565,6 +31764,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "pyLoad",
          "requires": { },
          "stages": [
             {
@@ -31690,6 +31890,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "qBittorrent",
          "requires": { },
          "stages": [
             {
@@ -31813,6 +32014,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Qdrant",
          "requires": { },
          "stages": [
             {
@@ -32035,6 +32237,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Radarr",
          "requires": { },
          "stages": [
             {
@@ -32153,6 +32356,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Radicale",
          "requires": { },
          "stages": [
             {
@@ -32258,6 +32462,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Rallly",
          "requires": {
             "database": "required"
          },
@@ -32380,6 +32585,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Readarr",
          "requires": { },
          "stages": [
             {
@@ -32495,6 +32701,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Readeck",
          "requires": { },
          "stages": [
             {
@@ -32591,6 +32798,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Redis",
          "requires": { },
          "stages": [
             {
@@ -32710,6 +32918,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Redis Commander",
          "requires": {
             "cache": "required"
          },
@@ -32809,6 +33018,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Redmine",
          "requires": {
             "database": "required"
          },
@@ -32946,6 +33156,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Distribution",
          "requires": {
             "objectStorage": "optional"
          },
@@ -33055,6 +33266,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Resilio Sync",
          "requires": { },
          "stages": [
             {
@@ -33295,6 +33507,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Roundcube",
          "requires": { },
          "stages": [
             {
@@ -33412,6 +33625,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "RSS-Bridge",
          "requires": { },
          "stages": [
             {
@@ -33505,6 +33719,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Rundeck",
          "requires": {
             "database": "required"
          },
@@ -33629,6 +33844,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "SABnzbd",
          "requires": { },
          "stages": [
             {
@@ -33872,6 +34088,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Seatsurfing",
          "requires": {
             "database": "required"
          },
@@ -34269,6 +34486,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Shaarli",
          "requires": { },
          "stages": [
             {
@@ -34369,6 +34587,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Shiori",
          "requires": {
             "database": "optional"
          },
@@ -34475,6 +34694,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Shlink",
          "requires": {
             "database": "required"
          },
@@ -34616,6 +34836,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "SilverBullet",
          "requires": { },
          "stages": [
             {
@@ -34726,6 +34947,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "SiYuan",
          "requires": { },
          "stages": [
             {
@@ -34825,6 +35047,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "smtp4dev",
          "requires": { },
          "stages": [
             {
@@ -34929,6 +35152,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "SnappyMail",
          "requires": { },
          "stages": [
             {
@@ -35026,6 +35250,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Snipe-IT",
          "requires": {
             "database": "required"
          },
@@ -35167,6 +35392,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "SonarQube",
          "requires": {
             "database": "required"
          },
@@ -35303,6 +35529,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Sonarr",
          "requires": { },
          "stages": [
             {
@@ -35428,6 +35655,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Spegel",
          "requires": { },
          "stages": [
             {
@@ -35636,6 +35864,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "http-echo",
          "requires": { },
          "stages": [
             {
@@ -35812,6 +36041,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Synapse",
          "requires": {
             "database": "optional"
          },
@@ -35932,6 +36162,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Syncthing",
          "requires": { },
          "stages": [
             {
@@ -36158,6 +36389,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Tandoor Recipes",
          "requires": {
             "database": "required"
          },
@@ -36306,6 +36538,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Tautulli",
          "requires": { },
          "stages": [
             {
@@ -36424,6 +36657,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Teable",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -36661,6 +36895,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Grafana Tempo",
          "requires": {
             "objectStorage": "required"
          },
@@ -36733,6 +36968,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Thanos",
          "requires": {
             "cache": "optional",
             "objectStorage": "required"
@@ -37456,6 +37692,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "tik",
          "requires": { },
          "stages": [
             {
@@ -37619,6 +37856,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Traccar",
          "requires": {
             "database": "required"
          },
@@ -37729,6 +37967,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Transmission",
          "requires": { },
          "stages": [
             {
@@ -37855,6 +38094,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "TriliumNext Notes",
          "requires": { },
          "stages": [
             {
@@ -37952,6 +38192,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Tvheadend",
          "requires": { },
          "stages": [
             {
@@ -38069,6 +38310,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Twenty",
          "requires": {
             "cache": "required",
             "database": "required",
@@ -38401,6 +38643,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Umami",
          "requires": {
             "database": "required"
          },
@@ -38859,6 +39102,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "VictoriaMetrics",
          "requires": { },
          "stages": [
             {
@@ -38964,6 +39208,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Vikunja",
          "requires": {
             "database": "optional"
          },
@@ -39085,6 +39330,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "wallabag",
          "requires": {
             "database": "required"
          },
@@ -39227,6 +39473,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Wallos",
          "requires": { },
          "stages": [
             {
@@ -39325,6 +39572,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "webtrees",
          "requires": {
             "database": "required"
          },
@@ -39469,6 +39717,7 @@
          "maturity": {
             "tier": "rendered"
          },
+         "name": "Wekan",
          "requires": {
             "database": "required"
          },
@@ -39574,6 +39823,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "wger",
          "requires": {
             "cache": "required",
             "database": "required"
@@ -39721,6 +39971,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Whoogle Search",
          "requires": { },
          "stages": [
             {
@@ -39814,6 +40065,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "Wiki.js",
          "requires": {
             "database": "required"
          },
@@ -40074,6 +40326,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "XWiki",
          "requires": {
             "database": "required"
          },
@@ -40185,6 +40438,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "YOURLS",
          "requires": {
             "database": "required"
          },
@@ -40313,6 +40567,7 @@
          "maturity": {
             "tier": "e2e"
          },
+         "name": "ZNC",
          "requires": { },
          "stages": [
             {

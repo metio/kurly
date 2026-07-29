@@ -17,3 +17,21 @@
     name: 'activepieces',
     homepage: 'https://www.activepieces.com',
   },
+  'actualbudget': {
+    license: 'MIT',
+    name: 'actual',
+    homepage: 'https://actualbudget.org',
+  },
+  'adguardhome': {
+    license: 'GPL-3.0',
+    name: 'AdGuardHome',
+    homepage: 'https://adguard.com/adguard-home/overview.html',
+  },
+  'adminer': {
+    name: 'adminer',
+    homepage: 'https://www.adminer.org/',
+  },
+  'airsonic-advanced': {
+    license: 'GPL-3.0',
+    name: 'airsonic-advanced',
+  },
