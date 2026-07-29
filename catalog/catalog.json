@@ -4218,7 +4218,7 @@
          ],
          "summary": "An Authelia server (a self-hosted authentication and authorization gateway adding SSO and 2FA in front of your apps via a reverse proxy forward-auth) on the official image. Its behaviour is its configuration.yml, mounted as a ConfigMap and passed verbatim; with the default SQLite storage its database lives on a PersistentVolume. The default config is a minimal skeleton that MUST be completed. kurly authors no Secret; the session/storage/JWT secrets come from a provided Secret via envFrom (as AUTHELIA_* env). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091.",
          "upstream": {
-            "repo": "https://github.com/authelia/authelia/tree/86f0463547329ebe778c82a168c41614a71bb0f6"
+            "repo": "https://github.com/authelia/authelia"
          }
       },
       {
@@ -11777,7 +11777,7 @@
          ],
          "summary": "A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
          "upstream": {
-            "repo": "https://dev.azure.com/Firefly-III/_git/MainImage"
+            "repo": "https://github.com/firefly-iii/firefly-iii"
          }
       },
       {

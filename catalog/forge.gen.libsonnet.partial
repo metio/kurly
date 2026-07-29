@@ -344,3 +344,132 @@
     license: 'MIT',
     name: 'FlareSolverr',
   },
+  'flatnotes': {
+    license: 'MIT',
+    name: 'flatnotes',
+  },
+  'focalboard': {
+    name: 'focalboard',
+    homepage: 'https://www.focalboard.com',
+  },
+  'foldingathome': {
+    license: 'GPL-3.0',
+    name: 'fah-client-bastet',
+  },
+  'formbricks': {
+    name: 'formbricks',
+    homepage: 'https://formbricks.com',
+  },
+  'freshrss': {
+    license: 'AGPL-3.0',
+    name: 'FreshRSS',
+    homepage: 'https://freshrss.org',
+  },
+  'frigate': {
+    license: 'MIT',
+    name: 'frigate',
+    homepage: 'https://frigate.video',
+  },
+  'gatus': {
+    license: 'Apache-2.0',
+    name: 'gatus',
+    homepage: 'https://gatus.io',
+  },
+  'ghost': {
+    license: 'MIT',
+    name: 'Ghost',
+    homepage: 'https://ghost.org',
+  },
+  'ghostfolio': {
+    license: 'AGPL-3.0',
+    name: 'ghostfolio',
+    homepage: 'https://Ghostfol.io',
+  },
+  'gitea': {
+    license: 'MIT',
+    name: 'gitea',
+    homepage: 'https://gitea.com',
+  },
+  'glance': {
+    license: 'AGPL-3.0',
+    name: 'glance',
+  },
+  'glitchtip': {
+    license: 'mit',
+    name: 'GlitchTip Backend',
+  },
+  'gogs': {
+    license: 'MIT',
+    name: 'gogs',
+    homepage: 'https://gogs.io',
+  },
+  'gokapi': {
+    license: 'AGPL-3.0',
+    name: 'Gokapi',
+  },
+  'gotenberg': {
+    license: 'MIT',
+    name: 'gotenberg',
+    homepage: 'https://gotenberg.dev',
+  },
+  'gotify': {
+    name: 'server',
+    homepage: 'https://gotify.net',
+  },
+  'grafana': {
+    license: 'AGPL-3.0',
+    name: 'grafana',
+    homepage: 'https://grafana.com',
+  },
+  'grav': {
+    license: 'MIT',
+    name: 'grav',
+    homepage: 'https://getgrav.org',
+  },
+  'greenlight': {
+    license: 'LGPL-3.0',
+    name: 'greenlight',
+  },
+  'grist': {
+    license: 'Apache-2.0',
+    name: 'grist-core',
+    homepage: 'https://www.getgrist.com',
+  },
+  'grocy': {
+    license: 'MIT',
+    name: 'grocy',
+    homepage: 'https://grocy.info',
+  },
+  'guacamole': {
+    license: 'Apache-2.0',
+    name: 'guacamole-server',
+    homepage: 'https://guacamole.apache.org/',
+  },
+  'healthchecks': {
+    license: 'BSD-3-Clause',
+    name: 'healthchecks',
+    homepage: 'https://healthchecks.io',
+  },
+  'hedgedoc': {
+    name: 'container',
+    homepage: 'https://docs.hedgedoc.org/setup/docker/',
+  },
+  'heimdall': {
+    license: 'MIT',
+    name: 'Heimdall',
+  },
+  'hollama': {
+    license: 'MIT',
+    name: 'hollama',
+    homepage: 'https://hollama.fernando.is',
+  },
+  'homarr': {
+    license: 'Apache-2.0',
+    name: 'homarr',
+    homepage: 'https://homarr.dev',
+  },
+  'home-assistant': {
+    license: 'Apache-2.0',
+    name: 'core',
+    homepage: 'https://www.home-assistant.io',
+  },

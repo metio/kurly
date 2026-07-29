@@ -117,10 +117,11 @@ ask() {
       fi
       ;;
     *)
-      # Codeberg, self-hosted Gitea/Forgejo and the rest: their API does not
-      # report a licence, so there is nothing to ask. Left for an annotation
-      # rather than filled with a guess.
-      echo '{}'
+      # Codeberg, self-hosted Gitea/Forgejo and the rest: their API serves the
+      # LICENSE file but does not say which licence it is, and classifying the
+      # text would be a guess wearing a derivation's clothes. Reported as not
+      # asked, which is not the same as asked and unanswered.
+      echo '{"unasked": true}'
       ;;
   esac
 }
@@ -144,6 +145,7 @@ total=0
 answered=0
 kept=""
 unanswered=""
+unasked=""
 while IFS=$'\t' read -r id url; do
   [ -n "$id" ] || continue
   total=$((total + 1))
@@ -171,6 +173,14 @@ while IFS=$'\t' read -r id url; do
 
   [ "$total" = 1 ] || [ "$pause" = 0 ] || sleep "$pause"
   reply="$(ask "$url")"
+
+  if jq --exit-status '.unasked // false' >/dev/null 2>&1 <<<"$reply"; then
+    printf '%3d/%-3d %-28s not asked: %s reports no licence\n' "$total" "$count" "$id" \
+      "$(sed -E 's|https://([^/]+)/.*|\1|' <<<"$url")" >&2
+    unasked="${unasked}${id} "
+    keep
+    continue
+  fi
 
   if [ "$reply" = '{}' ]; then
     printf '%3d/%-3d %-28s no answer\n' "$total" "$count" "$id" >&2
@@ -211,5 +221,6 @@ mv "$tmp" "$out"
 
 echo "wrote ${out}: ${answered}/${total} upstream repositories answered"
 [ -n "$unanswered" ] && echo "::error::upstream repository does not exist (correct it in catalog/annotations.libsonnet): ${unanswered}"
+[ -n "$unasked" ] && echo "forge does not report licences, so these carry only what an annotation states: ${unasked}"
 [ -n "$kept" ] && echo "::error::forge unreachable, kept the previous answer for: ${kept}"
 exit 0

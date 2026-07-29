@@ -5721,6 +5721,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'firefly-iii': {
+      upstream: { repo: 'https://github.com/firefly-iii/firefly-iii' },
       name: 'Firefly III',
       summary: 'A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',

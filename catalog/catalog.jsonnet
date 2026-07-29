@@ -550,7 +550,7 @@ local licenseFacts(workload, value, attested) =
   // (`EPL-2.0 OR BSD-3-Clause`). Every identifier in it must be one SPDX knows;
   // the operators are not identifiers, and a trailing `+` is part of the
   // spelling rather than of the name.
-  local identifiers = [
+  local rawIdentifiers = [
     std.rstripChars(std.stripChars(token, '()'), '+')
     for token in std.split(value, ' ')
     if !std.member(['AND', 'OR', 'WITH'], token) && std.stripChars(token, '()') != ''
@@ -560,6 +560,17 @@ local licenseFacts(workload, value, attested) =
   // fact worth publishing — a platform that pays the projects it hosts needs to
   // tell "closed, deliberately" from "nobody has looked yet", which is what an
   // absent licence means.
+  // A forge may report the identifier in its own casing — GitLab answers `mit`
+  // where SPDX writes `MIT`. The register's identifiers are unique ignoring
+  // case, so the spelling is recovered rather than treated as unknown.
+  local canonicalOf = {
+    [std.asciiLower(id)]: id
+    for id in std.objectFields(spdx)
+  };
+  local canonical(id) =
+    if std.startsWith(id, 'LicenseRef-') then id
+    else std.get(canonicalOf, std.asciiLower(id), id);
+  local identifiers = [canonical(id) for id in rawIdentifiers];
   local known = [
     id
     for id in identifiers
@@ -572,7 +583,10 @@ local licenseFacts(workload, value, attested) =
     assert std.length(known) == std.length(identifiers) :
            'workloads: %s is annotated with the licence %s, which SPDX does not know' % [workload, value];
     {
-      license: value,
+      license: std.join(' ', [
+        if std.member(['AND', 'OR', 'WITH'], token) then token else canonical(std.stripChars(token, '()'))
+        for token in std.split(value, ' ')
+      ]),
     }
     // Only a single identifier answers "is this open source" on its own. An
     // expression needs reading — an OR of a permissive and a proprietary
@@ -598,7 +612,20 @@ local packagingRepo(url) =
   std.startsWith(url, 'https://github.com/linuxserver/')
   || std.startsWith(url, 'https://hub.docker.com/')
   || std.startsWith(repo, 'docker-')
-  || std.endsWith(repo, '-docker');
+  || std.endsWith(repo, '-docker')
+  // A repository that exists to build the image, named for that job. Firefly
+  // III keeps one on Azure DevOps called MainImage; it is the packaging
+  // repository by another name, on another forge.
+  || std.endsWith(repo, 'Image')
+  || std.endsWith(repo, '-image');
+
+// A label often points into the repository rather than at it — at a tree, a
+// blob, or a commit that was current when the image was built. The project is
+// the repository, and a link that pins a year-old commit reads as though that
+// is where the project lives.
+local repoRoot(url) =
+  local cut(u, marker) = if std.length(std.findSubstr(marker, u)) > 0 then std.split(u, marker)[0] else u;
+  cut(cut(cut(url, '/tree/'), '/blob/'), '/-/');
 
 // What the catalogue says about the software, and separately about the image
 // that packages it. The two are different facts and the labels only sometimes
@@ -634,7 +661,7 @@ local softwareFacts(workload) =
     attested=std.objectHas(ann_, 'license'),
   )
   + (
-    local labelled = std.get(derived, 'source', null);
+    local labelled = local raw = std.get(derived, 'source', null); if raw == null then null else repoRoot(raw);
     local repo = std.get(
       std.get(ann_, 'upstream', {}),
       'repo',
