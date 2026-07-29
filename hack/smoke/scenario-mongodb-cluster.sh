@@ -12,7 +12,7 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 # renovate: datasource=github-releases depName=mongodb/mongodb-kubernetes-operator
-MONGODB_CLUSTER_VERSION="0.12.0"
+MONGODB_CLUSTER_VERSION="0.13.0"
 
 kurly::validate_cr kurly-mongodb-cluster workloads/mongodb-cluster/cluster.libsonnet \
   "https://raw.githubusercontent.com/mongodb/mongodb-kubernetes-operator/v${MONGODB_CLUSTER_VERSION}/config/crd/bases/mongodbcommunity.mongodb.com_mongodbcommunity.yaml"
