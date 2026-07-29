@@ -8,13 +8,1373 @@
 // repository, the name the repository carries, and whether it is archived. A
 // workload's annotation overrides anything here; see catalog/annotations.libsonnet.
 {
+  '2fauth': {
+    homepage: 'https://docs.2fauth.app/',
+    license: 'AGPL-3.0',
+    name: '2FAuth',
+  },
+  activepieces: {
+    homepage: 'https://www.activepieces.com',
+    name: 'activepieces',
+  },
+  actualbudget: {
+    homepage: 'https://actualbudget.org',
+    license: 'MIT',
+    name: 'actual',
+  },
+  adguardhome: {
+    homepage: 'https://adguard.com/adguard-home/overview.html',
+    license: 'GPL-3.0',
+    name: 'AdGuardHome',
+  },
+  adminer: {
+    homepage: 'https://www.adminer.org/',
+    name: 'adminer',
+  },
+  'airsonic-advanced': {
+    license: 'GPL-3.0',
+    name: 'airsonic-advanced',
+  },
+  alertmanager: {
+    homepage: 'https://prometheus.io',
+    license: 'Apache-2.0',
+    name: 'alertmanager',
+  },
+  alist: {
+    homepage: 'https://alistgo.com',
+    license: 'AGPL-3.0',
+    name: 'alist',
+  },
+  answer: {
+    homepage: 'https://answer.apache.org',
+    license: 'Apache-2.0',
+    name: 'answer',
+  },
+  anythingllm: {
+    homepage: 'https://anythingllm.com',
+    license: 'MIT',
+    name: 'anything-llm',
+  },
+  apprise: {
+    homepage: 'https://hub.docker.com/r/caronc/apprise',
+    license: 'BSD-2-Clause',
+    name: 'apprise',
+  },
+  audiobookshelf: {
+    homepage: 'https://audiobookshelf.org',
+    license: 'GPL-3.0',
+    name: 'audiobookshelf',
+  },
+  authelia: {
+    homepage: 'https://www.authelia.com',
+    license: 'Apache-2.0',
+    name: 'authelia',
+  },
+  authentik: {
+    homepage: 'https://goauthentik.io',
+    name: 'authentik',
+  },
+  automatisch: {
+    homepage: 'https://automatisch.io',
+    name: 'automatisch',
+  },
+  baikal: {
+    homepage: 'https://sabre.io/baikal/',
+    license: 'GPL-3.0',
+    name: 'Baikal',
+  },
+  baserow: {
+    homepage: 'https://baserow.io',
+    name: 'baserow',
+  },
+  bazarr: {
+    homepage: 'https://www.bazarr.media',
+    license: 'GPL-3.0',
+    name: 'bazarr',
+  },
+  beszel: {
+    homepage: 'https://beszel.dev',
+    license: 'MIT',
+    name: 'beszel',
+  },
+  bigcapital: {
+    homepage: 'https://bigcapital.app',
+    license: 'AGPL-3.0',
+    name: 'bigcapital',
+  },
+  'blackbox-exporter': {
+    homepage: 'https://prometheus.io',
+    license: 'Apache-2.0',
+    name: 'blackbox_exporter',
+  },
+  blinko: {
+    homepage: 'https://blinko.space',
+    license: 'GPL-3.0',
+    name: 'blinko',
+  },
+  bookstack: {
+    homepage: 'https://codeberg.org/bookstack/bookstack',
+    license: 'MIT',
+    name: 'BookStack',
+  },
+  browserless: {
+    homepage: 'https://browserless.io',
+    name: 'browserless',
+  },
+  bugsink: {
+    homepage: 'https://www.bugsink.com/',
+    name: 'bugsink',
+  },
+  'cal-com': {
+    homepage: 'https://cal.diy',
+    license: 'MIT',
+    name: 'cal.diy',
+  },
+  calibre: {
+    homepage: 'https://calibre-ebook.com',
+    license: 'GPL-3.0',
+    name: 'calibre',
+  },
+  'calibre-web': {
+    license: 'GPL-3.0',
+    name: 'calibre-web',
+  },
+  'calibre-web-automated': {
+    homepage: 'https://github.com/crocodilestick/Calibre-Web-Automated',
+    license: 'GPL-3.0',
+    name: 'Calibre-Web-Automated',
+  },
+  'cassandra-cluster': {
+    homepage: 'https://docs.datastax.com/en/cass-operator/doc/cass-operator/cassOperatorGettingStarted.html',
+    license: 'Apache-2.0',
+    name: 'cass-operator',
+  },
+  changedetection: {
+    homepage: 'https://changedetection.io',
+    license: 'Apache-2.0',
+    name: 'changedetection.io',
+  },
+  chatpad: {
+    homepage: 'https://chatpad.ai',
+    license: 'AGPL-3.0',
+    name: 'chatpad',
+  },
+  clickhouse: {
+    homepage: 'https://clickhouse.com',
+    license: 'Apache-2.0',
+    name: 'ClickHouse',
+  },
+  'cnpg-cluster': {
+    homepage: 'https://cloudnative-pg.io',
+    license: 'Apache-2.0',
+    name: 'cloudnative-pg',
+  },
+  'cnpg-image-catalog': {
+    homepage: 'https://cloudnative-pg.io',
+    license: 'Apache-2.0',
+    name: 'cloudnative-pg',
+  },
+  cobalt: {
+    homepage: 'https://cobalt.tools',
+    license: 'AGPL-3.0',
+    name: 'cobalt',
+  },
+  'code-server': {
+    homepage: 'https://coder.com',
+    license: 'MIT',
+    name: 'code-server',
+  },
+  commafeed: {
+    homepage: 'https://www.commafeed.com',
+    license: 'Apache-2.0',
+    name: 'commafeed',
+  },
+  convertx: {
+    license: 'AGPL-3.0',
+    name: 'ConvertX',
+  },
+  couchdb: {
+    homepage: 'https://couchdb.apache.org/',
+    license: 'Apache-2.0',
+    name: 'couchdb',
+  },
+  cryptpad: {
+    homepage: 'https://cryptpad.org',
+    license: 'AGPL-3.0',
+    name: 'cryptpad',
+  },
+  cyberchef: {
+    homepage: 'https://gchq.github.io/CyberChef',
+    license: 'Apache-2.0',
+    name: 'CyberChef',
+  },
+  dashy: {
+    homepage: 'https://dashy.to',
+    license: 'MIT',
+    name: 'dashy',
+  },
+  davis: {
+    homepage: 'https://github.com/users/tchapi/projects/1/views/1',
+    license: 'MIT',
+    name: 'davis',
+  },
+  davos: {
+    license: 'MIT',
+    name: 'davos',
+  },
+  deluge: {
+    homepage: 'https://www.deluge-torrent.org',
+    name: 'deluge',
+  },
+  dex: {
+    homepage: 'https://dexidp.io',
+    license: 'Apache-2.0',
+    name: 'dex',
+  },
+  directus: {
+    homepage: 'https://directus.com',
+    name: 'directus',
+  },
+  'docker-registry-ui': {
+    homepage: 'https://joxit.dev/docker-registry-ui/',
+    license: 'AGPL-3.0',
+    name: 'docker-registry-ui',
+  },
+  docmost: {
+    homepage: 'https://docmost.com',
+    license: 'AGPL-3.0',
+    name: 'docmost',
+  },
+  documenso: {
+    homepage: 'https://documenso.com',
+    license: 'AGPL-3.0',
+    name: 'documenso',
+  },
+  docuseal: {
+    homepage: 'https://www.docuseal.com',
+    license: 'AGPL-3.0',
+    name: 'docuseal',
+  },
+  dokuwiki: {
+    homepage: 'http://www.dokuwiki.org',
+    license: 'GPL-2.0',
+    name: 'dokuwiki',
+  },
+  dragonfly: {
+    homepage: 'https://www.dragonflydb.io/',
+    name: 'dragonfly',
+  },
+  'draw-io': {
+    homepage: 'https://www.drawio.com',
+    license: 'Apache-2.0',
+    name: 'drawio',
+  },
+  drawio: {
+    homepage: 'https://www.drawio.com',
+    license: 'Apache-2.0',
+    name: 'drawio',
+  },
+  drupal: {
+    homepage: 'https://drupal.org/project/drupal',
+    name: 'drupal',
+  },
+  duplicati: {
+    name: 'duplicati',
+  },
+  ejabberd: {
+    homepage: 'https://www.process-one.net/ejabberd/',
+    name: 'ejabberd',
+  },
+  'element-web': {
+    homepage: 'https://element.io',
+    license: 'AGPL-3.0',
+    name: 'element-web',
+  },
+  emqx: {
+    homepage: 'https://www.emqx.com',
+    name: 'emqx',
+  },
+  endurain: {
+    homepage: 'https://endurain.com',
+    license: 'AGPL-3.0',
+    name: 'endurain',
+  },
+  ente: {
+    homepage: 'https://ente.com',
+    license: 'AGPL-3.0',
+    name: 'ente',
+  },
+  esphome: {
+    homepage: 'https://esphome.io/',
+    name: 'esphome',
+  },
+  etherpad: {
+    homepage: 'https://etherpad.org',
+    license: 'Apache-2.0',
+    name: 'etherpad',
+  },
+  excalidraw: {
+    homepage: 'https://excalidraw.com',
+    license: 'MIT',
+    name: 'excalidraw',
+  },
+  expenseowl: {
+    license: 'MIT',
+    name: 'ExpenseOwl',
+  },
+  ferretdb: {
+    homepage: 'https://www.ferretdb.com',
+    license: 'Apache-2.0',
+    name: 'FerretDB',
+  },
+  fider: {
+    homepage: 'https://fider.io',
+    license: 'AGPL-3.0',
+    name: 'fider',
+  },
+  filebrowser: {
+    license: 'Apache-2.0',
+    name: 'filebrowser',
+  },
+  filestash: {
+    homepage: 'https://www.filestash.app/',
+    license: 'AGPL-3.0',
+    name: 'filestash',
+  },
+  'firefly-iii': {
+    homepage: 'https://firefly-iii.org/',
+    license: 'AGPL-3.0',
+    name: 'firefly-iii',
+  },
+  flame: {
+    license: 'MIT',
+    name: 'flame',
+  },
+  flaresolverr: {
+    license: 'MIT',
+    name: 'FlareSolverr',
+  },
+  flatnotes: {
+    license: 'MIT',
+    name: 'flatnotes',
+  },
+  focalboard: {
+    homepage: 'https://www.focalboard.com',
+    name: 'focalboard',
+  },
+  foldingathome: {
+    license: 'GPL-3.0',
+    name: 'fah-client-bastet',
+  },
+  formbricks: {
+    homepage: 'https://formbricks.com',
+    name: 'formbricks',
+  },
+  freshrss: {
+    homepage: 'https://freshrss.org',
+    license: 'AGPL-3.0',
+    name: 'FreshRSS',
+  },
+  frigate: {
+    homepage: 'https://frigate.video',
+    license: 'MIT',
+    name: 'frigate',
+  },
+  gatus: {
+    homepage: 'https://gatus.io',
+    license: 'Apache-2.0',
+    name: 'gatus',
+  },
+  ghost: {
+    homepage: 'https://ghost.org',
+    license: 'MIT',
+    name: 'Ghost',
+  },
+  ghostfolio: {
+    homepage: 'https://Ghostfol.io',
+    license: 'AGPL-3.0',
+    name: 'ghostfolio',
+  },
+  gitea: {
+    homepage: 'https://gitea.com',
+    license: 'MIT',
+    name: 'gitea',
+  },
+  glance: {
+    license: 'AGPL-3.0',
+    name: 'glance',
+  },
+  glitchtip: {
+    license: 'mit',
+    name: 'GlitchTip Backend',
+  },
+  gogs: {
+    homepage: 'https://gogs.io',
+    license: 'MIT',
+    name: 'gogs',
+  },
+  gokapi: {
+    license: 'AGPL-3.0',
+    name: 'Gokapi',
+  },
+  gotenberg: {
+    homepage: 'https://gotenberg.dev',
+    license: 'MIT',
+    name: 'gotenberg',
+  },
   gotify: {
-    name: 'server',
     homepage: 'https://gotify.net',
+    name: 'server',
+  },
+  grafana: {
+    homepage: 'https://grafana.com',
+    license: 'AGPL-3.0',
+    name: 'grafana',
+  },
+  grav: {
+    homepage: 'https://getgrav.org',
+    license: 'MIT',
+    name: 'grav',
+  },
+  greenlight: {
+    license: 'LGPL-3.0',
+    name: 'greenlight',
+  },
+  grist: {
+    homepage: 'https://www.getgrist.com',
+    license: 'Apache-2.0',
+    name: 'grist-core',
+  },
+  grocy: {
+    homepage: 'https://grocy.info',
+    license: 'MIT',
+    name: 'grocy',
+  },
+  guacamole: {
+    homepage: 'https://guacamole.apache.org/',
+    license: 'Apache-2.0',
+    name: 'guacamole-server',
+  },
+  healthchecks: {
+    homepage: 'https://healthchecks.io',
+    license: 'BSD-3-Clause',
+    name: 'healthchecks',
+  },
+  hedgedoc: {
+    license: 'AGPL-3.0',
+    name: 'hedgedoc',
+    homepage: 'https://hedgedoc.org',
+  },
+  heimdall: {
+    license: 'MIT',
+    name: 'Heimdall',
+  },
+  hollama: {
+    homepage: 'https://hollama.fernando.is',
+    license: 'MIT',
+    name: 'hollama',
+  },
+  homarr: {
+    homepage: 'https://homarr.dev',
+    license: 'Apache-2.0',
+    name: 'homarr',
+  },
+  'home-assistant': {
+    homepage: 'https://www.home-assistant.io',
+    license: 'Apache-2.0',
+    name: 'core',
+  },
+  homebox: {
+    homepage: 'https://homebox.software',
+    license: 'AGPL-3.0',
+    name: 'homebox',
+  },
+  homepage: {
+    homepage: 'https://gethomepage.dev',
+    license: 'GPL-3.0',
+    name: 'homepage',
+  },
+  homer: {
+    homepage: 'https://homer-demo.netlify.app/',
+    license: 'Apache-2.0',
+    name: 'homer',
+  },
+  immich: {
+    homepage: 'https://immich.app',
+    license: 'AGPL-3.0',
+    name: 'immich',
+  },
+  influxdb: {
+    homepage: 'https://influxdata.com',
+    license: 'Apache-2.0',
+    name: 'influxdb',
+  },
+  inspircd: {
+    homepage: 'https://www.inspircd.org',
+    name: 'inspircd',
+  },
+  invoiceninja: {
+    homepage: 'https://invoiceninja.com',
+    name: 'invoiceninja',
+  },
+  'it-tools': {
+    homepage: 'https://it-tools.tech',
+    license: 'GPL-3.0',
+    name: 'it-tools',
+  },
+  jackett: {
+    license: 'GPL-2.0',
+    name: 'Jackett',
+  },
+  jellyfin: {
+    homepage: 'https://jellyfin.org',
+    license: 'GPL-2.0',
+    name: 'jellyfin',
+  },
+  jellyseerr: {
+    homepage: 'https://docs.seerr.dev',
+    license: 'MIT',
+    name: 'seerr',
+  },
+  jenkins: {
+    license: 'MIT',
+    name: 'jenkins',
+    homepage: 'https://www.jenkins.io',
+  },
+  joomla: {
+    homepage: 'https://www.joomla.org',
+    license: 'GPL-2.0',
+    name: 'joomla-cms',
+  },
+  joplin: {
+    homepage: 'https://joplinapp.org',
+    name: 'joplin',
+  },
+  kanboard: {
+    homepage: 'https://kanboard.org',
+    license: 'MIT',
+    name: 'kanboard',
+  },
+  karakeep: {
+    homepage: 'https://karakeep.app',
+    license: 'AGPL-3.0',
+    name: 'karakeep',
+  },
+  kavita: {
+    homepage: 'http://www.kavitareader.com',
+    license: 'GPL-3.0',
+    name: 'Kavita',
+  },
+  keycloak: {
+    homepage: 'https://www.keycloak.org',
+    license: 'Apache-2.0',
+    name: 'keycloak',
+  },
+  kimai: {
+    homepage: 'https://www.kimai.org',
+    license: 'AGPL-3.0',
+    name: 'kimai',
   },
   komga: {
+    homepage: 'https://komga.org',
     license: 'MIT',
     name: 'komga',
-    homepage: 'https://komga.org',
+  },
+  kutt: {
+    homepage: 'https://kutt.to',
+    license: 'MIT',
+    name: 'kutt',
+  },
+  leantime: {
+    homepage: 'https://leantime.io',
+    license: 'AGPL-3.0',
+    name: 'leantime',
+  },
+  lemmy: {
+    homepage: 'https://join-lemmy.org',
+    license: 'AGPL-3.0',
+    name: 'lemmy',
+  },
+  librespeed: {
+    homepage: 'https://librespeed.org',
+    license: 'LGPL-3.0',
+    name: 'speedtest',
+  },
+  lidarr: {
+    homepage: 'http://lidarr.audio/',
+    license: 'GPL-3.0',
+    name: 'Lidarr',
+  },
+  linkding: {
+    homepage: 'https://linkding.link/',
+    license: 'MIT',
+    name: 'linkding',
+  },
+  linkstack: {
+    homepage: 'https://linkstack.org',
+    license: 'AGPL-3.0',
+    name: 'LinkStack',
+  },
+  linkwarden: {
+    homepage: 'https://linkwarden.app',
+    license: 'AGPL-3.0',
+    name: 'linkwarden',
+  },
+  listmonk: {
+    homepage: 'https://listmonk.app',
+    license: 'AGPL-3.0',
+    name: 'listmonk',
+  },
+  lldap: {
+    license: 'GPL-3.0',
+    name: 'lldap',
+  },
+  'lobe-chat': {
+    homepage: 'https://lobehub.com',
+    name: 'lobehub',
+  },
+  loki: {
+    homepage: 'https://grafana.com/oss/loki',
+    license: 'AGPL-3.0',
+    name: 'loki',
+  },
+  lychee: {
+    homepage: 'https://lycheeorg.dev',
+    license: 'MIT',
+    name: 'Lychee',
+  },
+  mailhog: {
+    license: 'MIT',
+    name: 'MailHog',
+  },
+  mailpit: {
+    homepage: 'https://mailpit.axllent.org',
+    license: 'MIT',
+    name: 'mailpit',
+  },
+  mailu: {
+    homepage: 'https://mailu.io',
+    name: 'Mailu',
+  },
+  maloja: {
+    homepage: 'https://maloja.krateng.ch',
+    license: 'GPL-3.0',
+    name: 'maloja',
+  },
+  mariadb: {
+    homepage: 'https://mariadb.org',
+    license: 'GPL-2.0',
+    name: 'server',
+  },
+  mastodon: {
+    homepage: 'https://joinmastodon.org',
+    license: 'AGPL-3.0',
+    name: 'mastodon',
+  },
+  matomo: {
+    homepage: 'https://matomo.org/',
+    license: 'GPL-3.0',
+    name: 'matomo',
+  },
+  'matrix-conduit': {
+    license: 'apache-2.0',
+    name: 'Conduit',
+  },
+  mattermost: {
+    homepage: 'https://mattermost.com',
+    name: 'mattermost',
+  },
+  mautic: {
+    homepage: 'https://www.mautic.org',
+    name: 'mautic',
+  },
+  maybe: {
+    archived: true,
+    license: 'AGPL-3.0',
+    name: 'maybe',
+  },
+  mazanoke: {
+    homepage: 'https://MAZANOKE.com',
+    license: 'GPL-3.0',
+    name: 'mazanoke',
+  },
+  mealie: {
+    homepage: 'https://docs.mealie.io',
+    license: 'AGPL-3.0',
+    name: 'mealie',
+  },
+  mediawiki: {
+    homepage: 'https://www.mediawiki.org',
+    name: 'mediawiki',
+  },
+  meilisearch: {
+    homepage: 'https://www.meilisearch.com',
+    name: 'meilisearch',
+  },
+  memcached: {
+    homepage: 'https://memcached.org',
+    license: 'BSD-3-Clause',
+    name: 'memcached',
+  },
+  memos: {
+    homepage: 'https://usememos.com',
+    license: 'MIT',
+    name: 'memos',
+  },
+  'mermaid-live-editor': {
+    homepage: 'https://mermaid.live',
+    license: 'MIT',
+    name: 'mermaid-live-editor',
+  },
+  metabase: {
+    homepage: 'https://metabase.com',
+    name: 'metabase',
+  },
+  'metrics-server': {
+    homepage: 'https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/',
+    license: 'Apache-2.0',
+    name: 'metrics-server',
+  },
+  metube: {
+    license: 'AGPL-3.0',
+    name: 'metube',
+  },
+  microbin: {
+    homepage: 'https://microbin.eu',
+    license: 'BSD-3-Clause',
+    name: 'microbin',
+  },
+  miniflux: {
+    homepage: 'https://miniflux.app',
+    license: 'Apache-2.0',
+    name: 'v2',
+  },
+  minio: {
+    archived: true,
+    license: 'AGPL-3.0',
+    name: 'minio',
+  },
+  misskey: {
+    homepage: 'https://misskey-hub.net/',
+    license: 'AGPL-3.0',
+    name: 'misskey',
+  },
+  mongo: {
+    homepage: 'https://www.mongodb.com/',
+    name: 'mongo',
+  },
+  'mongo-express': {
+    license: 'MIT',
+    name: 'mongo-express',
+  },
+  'mongodb-cluster': {
+    archived: true,
+    name: 'mongodb-kubernetes-operator',
+  },
+  monica: {
+    license: 'AGPL-3.0',
+    name: 'monica',
+    homepage: 'https://beta.monicahq.com',
+  },
+  mosquitto: {
+    homepage: 'https://mosquitto.org',
+    name: 'mosquitto',
+  },
+  mumble: {
+    homepage: 'https://www.mumble.info',
+    name: 'mumble',
+  },
+  mylar3: {
+    license: 'GPL-3.0',
+    name: 'mylar3',
+  },
+  mysql: {
+    homepage: 'http://www.mysql.com/',
+    name: 'mysql-server',
+  },
+  'mysql-cluster': {
+    name: 'mysql-operator',
+  },
+  n8n: {
+    homepage: 'https://n8n.io',
+    name: 'n8n',
+  },
+  nats: {
+    homepage: 'https://nats.io',
+    license: 'Apache-2.0',
+    name: 'nats-server',
+  },
+  navidrome: {
+    homepage: 'https://www.navidrome.org',
+    license: 'GPL-3.0',
+    name: 'navidrome',
+  },
+  neo4j: {
+    homepage: 'http://neo4j.com',
+    license: 'GPL-3.0',
+    name: 'neo4j',
+  },
+  netbootxyz: {
+    homepage: 'https://netboot.xyz',
+    license: 'Apache-2.0',
+    name: 'netboot.xyz',
+  },
+  netbox: {
+    homepage: 'https://netboxlabs.com/products/netbox/',
+    license: 'Apache-2.0',
+    name: 'netbox',
+  },
+  nextcloud: {
+    homepage: 'https://nextcloud.com',
+    license: 'AGPL-3.0',
+    name: 'server',
+  },
+  'nginx-proxy-manager': {
+    homepage: 'https://nginxproxymanager.com',
+    license: 'MIT',
+    name: 'nginx-proxy-manager',
+  },
+  nocobase: {
+    homepage: 'https://www.nocobase.com',
+    name: 'nocobase',
+  },
+  nocodb: {
+    homepage: 'https://nocodb.com',
+    name: 'nocodb',
+  },
+  'node-red': {
+    homepage: 'http://nodered.org',
+    license: 'Apache-2.0',
+    name: 'node-red',
+  },
+  ntfy: {
+    homepage: 'https://ntfy.sh',
+    license: 'Apache-2.0',
+    name: 'ntfy',
+  },
+  nzbget: {
+    homepage: 'https://nzbget.com',
+    license: 'GPL-2.0',
+    name: 'nzbget',
+  },
+  nzbhydra2: {
+    license: 'GPL-3.0',
+    name: 'nzbhydra2',
+  },
+  'oauth2-proxy': {
+    homepage: 'https://oauth2-proxy.github.io/oauth2-proxy',
+    license: 'MIT',
+    name: 'oauth2-proxy',
+  },
+  odoo: {
+    homepage: 'https://www.odoo.com',
+    name: 'odoo',
+  },
+  ollama: {
+    homepage: 'https://ollama.com',
+    license: 'MIT',
+    name: 'ollama',
+  },
+  ombi: {
+    homepage: 'http://ombi.io',
+    license: 'GPL-2.0',
+    name: 'Ombi',
+  },
+  onlyoffice: {
+    homepage: 'https://www.onlyoffice.com/see-it-in-action',
+    license: 'AGPL-3.0',
+    name: 'DocumentServer',
+  },
+  'open-webui': {
+    homepage: 'https://openwebui.com',
+    name: 'open-webui',
+  },
+  opencost: {
+    homepage: 'http://opencost.io',
+    license: 'Apache-2.0',
+    name: 'opencost',
+  },
+  openhab: {
+    homepage: 'https://www.openhab.org/',
+    license: 'EPL-2.0',
+    name: 'openhab-core',
+  },
+  openobserve: {
+    homepage: 'https://openobserve.ai',
+    license: 'AGPL-3.0',
+    name: 'openobserve',
+  },
+  openproject: {
+    homepage: 'https://www.openproject.org',
+    license: 'GPL-3.0',
+    name: 'openproject',
+  },
+  'opensearch-cluster': {
+    license: 'Apache-2.0',
+    name: 'opensearch-k8s-operator',
+  },
+  organizr: {
+    license: 'GPL-3.0',
+    name: 'Organizr',
+  },
+  'otel-collector': {
+    homepage: 'https://opentelemetry.io',
+    license: 'Apache-2.0',
+    name: 'opentelemetry-collector-releases',
+  },
+  outline: {
+    homepage: 'https://www.getoutline.com',
+    name: 'outline',
+  },
+  overleaf: {
+    license: 'AGPL-3.0',
+    name: 'overleaf',
+  },
+  overseerr: {
+    archived: true,
+    homepage: 'https://overseerr.dev',
+    license: 'MIT',
+    name: 'overseerr',
+  },
+  owncast: {
+    homepage: 'https://owncast.online',
+    license: 'MIT',
+    name: 'owncast',
+  },
+  'owntracks-recorder': {
+    name: 'recorder',
+  },
+  pairdrop: {
+    homepage: 'https://pairdrop.net',
+    license: 'GPL-3.0',
+    name: 'PairDrop',
+  },
+  paisa: {
+    homepage: 'https://paisa.fyi',
+    license: 'AGPL-3.0',
+    name: 'paisa',
+  },
+  'paperless-ngx': {
+    homepage: 'http://docs.paperless-ngx.com/',
+    license: 'GPL-3.0',
+    name: 'paperless-ngx',
+  },
+  passwordpusher: {
+    homepage: 'https://docs.pwpush.com',
+    license: 'Apache-2.0',
+    name: 'PasswordPusher',
+  },
+  peertube: {
+    homepage: 'https://joinpeertube.org/',
+    license: 'AGPL-3.0',
+    name: 'PeerTube',
+  },
+  penpot: {
+    homepage: 'https://penpot.app',
+    license: 'MPL-2.0',
+    name: 'penpot',
+  },
+  pgadmin: {
+    homepage: 'https://www.pgadmin.org',
+    name: 'pgadmin4',
+  },
+  photoprism: {
+    homepage: 'https://www.photoprism.app',
+    name: 'photoprism',
+  },
+  photoview: {
+    homepage: 'https://photoview.github.io/',
+    license: 'AGPL-3.0',
+    name: 'photoview',
+  },
+  phpmyadmin: {
+    license: 'GPL-2.0',
+    name: 'phpmyadmin',
+    homepage: 'https://www.phpmyadmin.net/',
+  },
+  pihole: {
+    homepage: 'https://pi-hole.net',
+    name: 'pi-hole',
+  },
+  pilos: {
+    homepage: 'https://thm-health.github.io/PILOS/',
+    license: 'LGPL-2.1',
+    name: 'PILOS',
+  },
+  'pingvin-share': {
+    archived: true,
+    homepage: 'https://stonith404.github.io/pingvin-share/',
+    license: 'BSD-2-Clause',
+    name: 'pingvin-share',
+  },
+  piwigo: {
+    homepage: 'https://piwigo.org',
+    license: 'GPL-2.0',
+    name: 'Piwigo',
+  },
+  planka: {
+    homepage: 'https://planka.app',
+    name: 'planka',
+  },
+  'pocket-id': {
+    homepage: 'https://pocket-id.org',
+    license: 'BSD-2-Clause',
+    name: 'pocket-id',
+  },
+  pocketbase: {
+    homepage: 'https://pocketbase.io',
+    license: 'MIT',
+    name: 'pocketbase',
+  },
+  portainer: {
+    homepage: 'https://www.portainer.io',
+    license: 'Zlib',
+    name: 'portainer',
+  },
+  postgres: {
+    homepage: 'https://www.postgresql.org/',
+    name: 'postgres',
+  },
+  prestashop: {
+    homepage: 'https://www.prestashop-project.org/',
+    name: 'PrestaShop',
+  },
+  privatebin: {
+    homepage: 'https://privatebin.info/',
+    name: 'PrivateBin',
+  },
+  projectsend: {
+    homepage: 'https://www.projectsend.org/',
+    license: 'GPL-2.0',
+    name: 'projectsend',
+  },
+  prometheus: {
+    homepage: 'https://prometheus.io/',
+    license: 'Apache-2.0',
+    name: 'prometheus',
+  },
+  prowlarr: {
+    homepage: 'https://prowlarr.com',
+    license: 'GPL-3.0',
+    name: 'Prowlarr',
+  },
+  'pyload-ng': {
+    homepage: 'https://pyload.net',
+    name: 'pyload',
+  },
+  qbittorrent: {
+    homepage: 'https://www.qbittorrent.org',
+    name: 'qBittorrent',
+  },
+  qdrant: {
+    homepage: 'https://qdrant.tech',
+    license: 'Apache-2.0',
+    name: 'qdrant',
+  },
+  rabbitmq: {
+    homepage: 'https://www.rabbitmq.com/',
+    name: 'rabbitmq-server',
+  },
+  radarr: {
+    homepage: 'https://radarr.video',
+    license: 'GPL-3.0',
+    name: 'Radarr',
+  },
+  radicale: {
+    homepage: 'https://radicale.org',
+    license: 'GPL-3.0',
+    name: 'Radicale',
+  },
+  rallly: {
+    homepage: 'https://rallly.co',
+    license: 'AGPL-3.0',
+    name: 'rallly',
+  },
+  readarr: {
+    archived: true,
+    homepage: 'http://readarr.com',
+    license: 'GPL-3.0',
+    name: 'Readarr',
+  },
+  redis: {
+    homepage: 'http://redis.io',
+    name: 'redis',
+  },
+  'redis-commander': {
+    homepage: 'http://joeferner.github.io/redis-commander/',
+    license: 'MIT',
+    name: 'redis-commander',
+  },
+  redmine: {
+    homepage: 'https://www.redmine.org',
+    name: 'redmine',
+  },
+  registry: {
+    homepage: 'https://distribution.github.io/distribution',
+    license: 'Apache-2.0',
+    name: 'distribution',
+  },
+  rocketchat: {
+    homepage: 'https://rocket.chat/',
+    name: 'Rocket.Chat',
+  },
+  roundcube: {
+    homepage: 'https://roundcube.net',
+    name: 'roundcubemail',
+  },
+  'rss-bridge': {
+    homepage: 'https://rss-bridge.org/bridge01/',
+    license: 'Unlicense',
+    name: 'rss-bridge',
+  },
+  rundeck: {
+    homepage: 'http://rundeck.org',
+    license: 'Apache-2.0',
+    name: 'rundeck',
+  },
+  sabnzbd: {
+    homepage: 'https://sabnzbd.org',
+    name: 'sabnzbd',
+  },
+  searxng: {
+    homepage: 'https://docs.searxng.org',
+    license: 'AGPL-3.0',
+    name: 'searxng',
+  },
+  seatsurfing: {
+    homepage: 'https://seatsurfing.io',
+    license: 'GPL-3.0',
+    name: 'seatsurfing',
+  },
+  seaweedfs: {
+    homepage: 'https://seaweedfs.com',
+    license: 'Apache-2.0',
+    name: 'seaweedfs',
+  },
+  shaarli: {
+    homepage: 'https://shaarli.readthedocs.io/',
+    name: 'Shaarli',
+  },
+  shiori: {
+    license: 'MIT',
+    name: 'shiori',
+  },
+  shlink: {
+    homepage: 'https://shlink.io',
+    license: 'MIT',
+    name: 'shlink',
+  },
+  silverbullet: {
+    homepage: 'https://silverbullet.md',
+    license: 'MIT',
+    name: 'silverbullet',
+  },
+  siyuan: {
+    homepage: 'https://b3log.org/siyuan',
+    license: 'AGPL-3.0',
+    name: 'siyuan',
+  },
+  smtp4dev: {
+    license: 'BSD-3-Clause',
+    name: 'smtp4dev',
+  },
+  snappymail: {
+    homepage: 'https://snappymail.eu',
+    license: 'AGPL-3.0',
+    name: 'snappymail',
+  },
+  'snipe-it': {
+    homepage: 'https://snipeitapp.com',
+    license: 'AGPL-3.0',
+    name: 'snipe-it',
+  },
+  sonarqube: {
+    homepage: 'http://www.sonarqube.org',
+    license: 'LGPL-3.0',
+    name: 'sonarqube',
+  },
+  sonarr: {
+    homepage: 'https://sonarr.tv',
+    license: 'GPL-3.0',
+    name: 'Sonarr',
+  },
+  spegel: {
+    homepage: 'https://spegel.dev',
+    license: 'MIT',
+    name: 'spegel',
+  },
+  'status-responder': {
+    license: 'MPL-2.0',
+    name: 'http-echo',
+  },
+  'stirling-pdf': {
+    homepage: 'https://stirling.com',
+    name: 'Stirling-PDF',
+  },
+  synapse: {
+    homepage: 'https://element-hq.github.io/synapse',
+    license: 'AGPL-3.0',
+    name: 'synapse',
+  },
+  syncthing: {
+    homepage: 'https://syncthing.net/',
+    license: 'MPL-2.0',
+    name: 'syncthing',
+  },
+  tachidesk: {
+    license: 'MPL-2.0',
+    name: 'Suwayomi-Server',
+  },
+  tandoor: {
+    homepage: 'https://docs.tandoor.dev',
+    name: 'recipes',
+  },
+  tautulli: {
+    homepage: 'https://tautulli.com',
+    license: 'GPL-3.0',
+    name: 'Tautulli',
+  },
+  teable: {
+    homepage: 'https://teable.ai',
+    name: 'teable',
+  },
+  technitium: {
+    homepage: 'https://technitium.com/dns/',
+    license: 'GPL-3.0',
+    name: 'DnsServer',
+  },
+  tempo: {
+    homepage: 'https://grafana.com/oss/tempo/',
+    license: 'AGPL-3.0',
+    name: 'tempo',
+  },
+  thanos: {
+    homepage: 'https://thanos.io',
+    license: 'Apache-2.0',
+    name: 'thanos',
+  },
+  thelounge: {
+    homepage: 'https://thelounge.chat',
+    license: 'MIT',
+    name: 'thelounge',
+  },
+  tik: {
+    name: 'tik',
+  },
+  tika: {
+    homepage: 'https://tika.apache.org/',
+    license: 'Apache-2.0',
+    name: 'tika',
+  },
+  traccar: {
+    homepage: 'https://www.traccar.org',
+    license: 'Apache-2.0',
+    name: 'traccar',
+  },
+  transmission: {
+    homepage: 'https://transmissionbt.com',
+    name: 'transmission',
+  },
+  trilium: {
+    homepage: 'https://triliumnotes.org',
+    license: 'AGPL-3.0',
+    name: 'Trilium',
+  },
+  tvheadend: {
+    homepage: 'https://tvheadend.org',
+    license: 'GPL-3.0',
+    name: 'tvheadend',
+  },
+  twenty: {
+    homepage: 'https://twenty.com',
+    name: 'twenty',
+  },
+  typesense: {
+    homepage: 'https://typesense.org',
+    license: 'GPL-3.0',
+    name: 'typesense',
+  },
+  umami: {
+    homepage: 'https://umami.is',
+    license: 'MIT',
+    name: 'umami',
+  },
+  'uptime-kuma': {
+    homepage: 'https://uptime.kuma.pet',
+    license: 'MIT',
+    name: 'uptime-kuma',
+  },
+  valkey: {
+    homepage: 'https://valkey.io',
+    license: 'BSD-3-Clause',
+    name: 'valkey',
+  },
+  vaultwarden: {
+    license: 'AGPL-3.0',
+    name: 'vaultwarden',
+  },
+  victoriametrics: {
+    homepage: 'https://victoriametrics.com/',
+    license: 'Apache-2.0',
+    name: 'VictoriaMetrics',
+  },
+  vikunja: {
+    homepage: 'https://vikunja.io',
+    license: 'AGPL-3.0',
+    name: 'vikunja',
+  },
+  wallabag: {
+    homepage: 'https://wallabag.org',
+    license: 'MIT',
+    name: 'wallabag',
+  },
+  wallos: {
+    homepage: 'https://wallosapp.com',
+    license: 'GPL-3.0',
+    name: 'Wallos',
+  },
+  webtrees: {
+    homepage: 'https://webtrees.net',
+    license: 'GPL-3.0',
+    name: 'webtrees',
+  },
+  wekan: {
+    homepage: 'https://wekan.fi',
+    license: 'MIT',
+    name: 'wekan',
+  },
+  wger: {
+    homepage: 'https://wger.de',
+    license: 'AGPL-3.0',
+    name: 'wger',
+  },
+  whoogle: {
+    homepage: 'https://pypi.org/project/whoogle-search/',
+    license: 'MIT',
+    name: 'whoogle-search',
+  },
+  wikijs: {
+    homepage: 'https://js.wiki',
+    license: 'AGPL-3.0',
+    name: 'wiki',
+  },
+  wordpress: {
+    homepage: 'https://wordpress.org',
+    name: 'WordPress',
+  },
+  xwiki: {
+    homepage: 'http://platform.xwiki.org/',
+    license: 'LGPL-2.1',
+    name: 'xwiki-platform',
+  },
+  yourls: {
+    homepage: 'https://yourls.org',
+    license: 'MIT',
+    name: 'YOURLS',
+  },
+  znc: {
+    homepage: 'https://znc.in/',
+    license: 'Apache-2.0',
+    name: 'znc',
   },
 }

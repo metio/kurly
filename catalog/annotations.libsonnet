@@ -501,6 +501,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     hedgedoc: {
+      upstream: { repo: 'https://github.com/hedgedoc/hedgedoc' },
       name: 'HedgeDoc',
       summary: 'A HedgeDoc server (real-time, collaborative markdown notes) on the official image, backed by an external PostgreSQL, with uploaded files on a PersistentVolume. Pairs with a cnpg-cluster named hedgedoc-db. kurly authors no Secret; CMD_DB_URL and CMD_SESSION_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       category: 'application',
@@ -804,6 +805,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     jenkins: {
+      upstream: { repo: 'https://github.com/jenkinsci/jenkins' },
       name: 'Jenkins',
       summary: 'A Jenkins controller (the self-hosted automation server for building, testing and deploying software) on the official LTS image. A plain composable http workload that keeps JENKINS_HOME (jobs, plugins, config, build history) on a PersistentVolume. Single controller over a ReadWriteOnce volume: one replica, recreated. Inbound agents connect over the same HTTP port (websocket). Serves on :8080.',
       category: 'application',
@@ -3413,6 +3415,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     phpmyadmin: {
+      upstream: { repo: 'https://github.com/phpmyadmin/phpmyadmin' },
       name: 'phpMyAdmin',
       summary: 'A phpMyAdmin server (the classic web UI for administering MySQL and MariaDB) on the official image. Stateless: a plain rolling Deployment that connects to the MySQL host you point it at. Serves on :80.',
       category: 'admin',
@@ -5678,6 +5681,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     monica: {
+      upstream: { repo: 'https://github.com/monicahq/monica' },
       name: 'Monica',
       summary: 'A Monica server (a self-hosted personal relationship manager) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',

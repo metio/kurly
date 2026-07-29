@@ -686,7 +686,13 @@ local packagingRepo(url) =
   // III keeps one on Azure DevOps called MainImage; it is the packaging
   // repository by another name, on another forge.
   || std.endsWith(repo, 'Image')
-  || std.endsWith(repo, '-image');
+  || std.endsWith(repo, '-image')
+  // A project that keeps its packaging beside itself names the repository for
+  // the job rather than for the software: hedgedoc/container, jenkinsci/docker,
+  // monicahq/docker, phpmyadmin/docker. Same org, still not the application.
+  || repo == 'docker'
+  || repo == 'container'
+  || repo == 'containers';
 
 // A label often points into the repository rather than at it — at a tree, a
 // blob, or a commit that was current when the image was built. The project is
