@@ -862,22 +862,29 @@ kurly::publish_images() {
   _push() {
     local ref="$1" i
     for i in $(seq 1 12); do
-      docker push "$ref" && return 0
+      docker push --quiet "$ref" >/dev/null 2>&1 && return 0
       echo "push $ref failed (attempt $i) — retrying"
       sleep 5
     done
     echo "push $ref never succeeded" >&2
     return 1
   }
-  echo "== build and push the kurly library image =="
-  push="${KURLY_REGISTRY_PUSH}/kurly:${KURLY_IMAGE_TAG}"
-  docker build --file Containerfile --tag "$push" .
-  _push "$push"
+  # The library is identical for the whole walk, so it is built and pushed once.
+  # Rebuilding it per workload emitted twenty-five lines of cached build output
+  # three hundred times, which is how a failure ends up buried a hundred lines
+  # above the end of a log nobody can read to the middle of.
+  if [ -z "${KURLY_LIBRARY_PUBLISHED:-}" ]; then
+    echo "== build and push the kurly library image =="
+    push="${KURLY_REGISTRY_PUSH}/kurly:${KURLY_IMAGE_TAG}"
+    docker build --quiet --file Containerfile --tag "$push" . >/dev/null
+    _push "$push"
+    export KURLY_LIBRARY_PUBLISHED=1
+  fi
   local wl
   for wl in "$@"; do
     echo "== build and push the ${wl} workload image =="
     push="${KURLY_REGISTRY_PUSH}/kurly-${wl}:${KURLY_IMAGE_TAG}"
-    docker build --file workload.Containerfile --build-arg "WORKLOAD=${wl}" --tag "$push" .
+    docker build --quiet --file workload.Containerfile --build-arg "WORKLOAD=${wl}" --tag "$push" . >/dev/null
     _push "$push"
   done
 }
