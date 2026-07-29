@@ -183,6 +183,20 @@
               ${builtins.readFile ./scripts/gen-spdx.sh}
             '';
           };
+          # Asks each workload's upstream forge for the project's licence and
+          # name, into catalog/forge.gen.libsonnet. Network-bound and rate
+          # limited without a GITHUB_TOKEN, so it runs on demand / on a schedule.
+          gen-forge = pkgs.writeShellApplication {
+            name = "gen-forge";
+            runtimeInputs = with pkgs; [
+              curl
+              jq
+              go-jsonnet
+              gnugrep
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-forge.sh;
+          };
           # Reads each workload's image labels from the registry into
           # catalog/upstream.gen.libsonnet (license, source repository, title).
           # Hits the network, so it is run on demand / on a schedule.
@@ -342,6 +356,7 @@
             gen-maturity
             gen-spdx
             gen-architectures
+            gen-forge
             gen-upstream
             gen-bsi
             gen-readme

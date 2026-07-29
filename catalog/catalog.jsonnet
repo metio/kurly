@@ -21,6 +21,7 @@ local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
 local bsiViolations = import './bsi.gen.libsonnet';
+local forge = import './forge.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
 local spdx = import './spdx.gen.libsonnet';
 local upstream = import './upstream.gen.libsonnet';
@@ -554,7 +555,16 @@ local licenseFacts(workload, value, attested) =
     for token in std.split(value, ' ')
     if !std.member(['AND', 'OR', 'WITH'], token) && std.stripChars(token, '()') != ''
   ];
-  local known = [id for id in identifiers if std.objectHas(spdx, id)];
+  // SPDX's own escape for a licence its register does not carry. Software that
+  // is simply proprietary has no identifier and never will, and saying so is a
+  // fact worth publishing — a platform that pays the projects it hosts needs to
+  // tell "closed, deliberately" from "nobody has looked yet", which is what an
+  // absent licence means.
+  local known = [
+    id
+    for id in identifiers
+    if std.objectHas(spdx, id) || std.startsWith(id, 'LicenseRef-')
+  ];
   if value == null then {}
   else if value == 'NOASSERTION' then { licenseNotAsserted: true }
   else if std.length(known) != std.length(identifiers) && !attested then {}
@@ -568,8 +578,12 @@ local licenseFacts(workload, value, attested) =
     // expression needs reading — an OR of a permissive and a proprietary
     // licence is a choice, an AND is a conjunction — so the flag is left off
     // rather than resolved to a side.
-    + (if std.length(identifiers) == 1 then { licenseOsiApproved: spdx[identifiers[0]].osiApproved } else {})
-    + (if std.any([spdx[id].deprecated for id in identifiers]) then { licenseDeprecated: true } else {});
+    + (
+      if std.length(identifiers) == 1 then
+        { licenseOsiApproved: if std.objectHas(spdx, identifiers[0]) then spdx[identifiers[0]].osiApproved else false }
+      else {}
+    )
+    + (if std.any([std.objectHas(spdx, id) && spdx[id].deprecated for id in identifiers]) then { licenseDeprecated: true } else {});
 
 // A repository that packages software for a registry, rather than the software's
 // own home. `github.com/linuxserver/docker-jellyfin` builds a Jellyfin image; it
@@ -602,6 +616,8 @@ local packagingRepo(url) =
 local softwareFacts(workload) =
   local ann_ = ann.workloads[workload];
   local derived = std.get(upstream, workload, {});
+  // What the upstream repository itself said when it was last asked (gen-forge).
+  local repoSays = std.get(forge, workload, {});
   local imageEntries =
     (local t = std.get(derived, 'title', null); if t == null then {} else { title: t })
     + (local s = std.get(derived, 'source', null); if s == null then {} else { source: s })
@@ -610,7 +626,11 @@ local softwareFacts(workload) =
   + (local n = std.get(ann_, 'name', null); if n == null then {} else { name: n })
   + licenseFacts(
     workload,
-    std.get(ann_, 'license', std.get(derived, 'license', null)),
+    // The forge beats the image: it resolved the project's own LICENSE file,
+    // where the label repeats whatever the build pipeline was told. An
+    // annotation beats both, for the cases neither can get right — software
+    // that publishes no licence at all, or an identifier the label misspells.
+    std.get(ann_, 'license', std.get(repoSays, 'license', std.get(derived, 'license', null))),
     attested=std.objectHas(ann_, 'license'),
   )
   + (
@@ -620,9 +640,14 @@ local softwareFacts(workload) =
       'repo',
       if labelled != null && !packagingRepo(labelled) then labelled else null
     );
-    local homepage = std.get(std.get(ann_, 'upstream', {}), 'homepage', null);
+    local homepage = std.get(std.get(ann_, 'upstream', {}), 'homepage', std.get(repoSays, 'homepage', null));
     local entries = (if repo == null then {} else { repo: repo })
-                    + (if homepage == null then {} else { homepage: homepage });
+                    + (if homepage == null then {} else { homepage: homepage })
+                    // A repository the forge reports as archived says the
+                    // project has stopped, which is the kind of thing somebody
+                    // deciding whether to run it for years wants told rather
+                    // than discovered.
+                    + (if std.get(repoSays, 'archived', false) then { archived: true } else {});
     if entries == {} then {} else { upstream: entries }
   )
   + (
@@ -673,6 +698,8 @@ local workloadEntries =
   // workload leaves no stale licence or upstream behind.
   assert std.all([std.objectHas(ann.workloads, key) for key in std.objectFields(upstream)]) :
          'upstream.gen.libsonnet names a workload that does not exist — rerun gen-upstream';
+  assert std.all([std.objectHas(ann.workloads, key) for key in std.objectFields(forge)]) :
+         'forge.gen.libsonnet names a workload that does not exist — rerun gen-forge';
   assert std.all([std.member(stageKeys, key) for key in std.objectFields(bsiViolations)]) :
          'bsi.gen.libsonnet names a stage that does not exist — rerun gen-bsi';
   assert std.all([
