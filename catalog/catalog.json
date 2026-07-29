@@ -2894,6 +2894,8 @@
       {
          "category": "application",
          "id": "activepieces",
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -3268,6 +3270,8 @@
       {
          "category": "admin",
          "id": "adminer",
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -4314,6 +4318,8 @@
             "homepage": "https://goauthentik.io",
             "source": "https://github.com/goauthentik/authentik"
          },
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -4576,6 +4582,9 @@
       {
          "category": "application",
          "id": "automatisch",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -4965,6 +4974,8 @@
             "source": "https://github.com/baserow/baserow",
             "title": "baserow"
          },
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -6090,6 +6101,7 @@
          "image": {
             "source": "https://github.com/browserless/browserless"
          },
+         "license": "SSPL-1.0 OR LicenseRef-Browserless-Commercial",
          "maturity": {
             "tier": "e2e"
          },
@@ -6201,6 +6213,8 @@
       {
          "category": "observability",
          "id": "bugsink",
+         "license": "LicenseRef-PolyForm-Shield-1.0.0",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -7281,6 +7295,8 @@
       {
          "category": "database",
          "id": "cnpg-cluster",
+         "license": "PostgreSQL",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "tested"
          },
@@ -7466,6 +7482,8 @@
       {
          "category": "database",
          "id": "cnpg-image-catalog",
+         "license": "PostgreSQL",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "tested"
          },
@@ -10045,6 +10063,9 @@
       {
          "category": "application",
          "id": "drupal",
+         "license": "GPL-2.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -11173,6 +11194,8 @@
             "source": "https://github.com/esphome/esphome",
             "title": "ESPHome"
          },
+         "license": "MIT AND GPL-3.0",
+         "licenseDeprecated": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -12598,6 +12621,8 @@
       {
          "category": "application",
          "id": "focalboard",
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -14537,6 +14562,8 @@
          "image": {
             "source": "https://github.com/gotify/server"
          },
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -16976,6 +17003,9 @@
       {
          "category": "messaging",
          "id": "inspircd",
+         "license": "GPL-2.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -17078,6 +17108,8 @@
       {
          "category": "application",
          "id": "invoiceninja",
+         "license": "Elastic-2.0",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -17988,6 +18020,9 @@
       {
          "category": "application",
          "id": "joplin",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -18131,6 +18166,8 @@
       {
          "category": "storage",
          "id": "k8up",
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
@@ -20581,6 +20618,8 @@
       {
          "category": "application",
          "id": "lobe-chat",
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -21105,6 +21144,8 @@
       {
          "category": "application",
          "id": "mailu",
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
@@ -22888,6 +22929,8 @@
       {
          "category": "application",
          "id": "mattermost",
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -23011,6 +23054,9 @@
       {
          "category": "application",
          "id": "mautic",
+         "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -23535,6 +23581,8 @@
       {
          "category": "application",
          "id": "mediawiki",
+         "license": "GPL-2.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -24056,6 +24104,9 @@
       {
          "category": "application",
          "id": "metabase",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -24891,6 +24942,8 @@
       {
          "category": "database",
          "id": "mongo",
+         "license": "SSPL-1.0",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "rendered"
          },
@@ -25135,6 +25188,8 @@
       {
          "category": "database",
          "id": "mongodb-cluster",
+         "license": "SSPL-1.0",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -25503,6 +25558,8 @@
       {
          "category": "application",
          "id": "mumble",
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -25751,6 +25808,9 @@
       {
          "category": "database",
          "id": "mysql",
+         "license": "GPL-2.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -25881,6 +25941,9 @@
       {
          "category": "database",
          "id": "mysql-cluster",
+         "license": "GPL-2.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -25990,6 +26053,8 @@
             "source": "https://github.com/n8n-io/n8n",
             "title": "n8n"
          },
+         "license": "LicenseRef-n8n-Sustainable-Use",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -27136,6 +27201,8 @@
       {
          "category": "application",
          "id": "nocobase",
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -27283,6 +27350,8 @@
       {
          "category": "application",
          "id": "nocodb",
+         "license": "LicenseRef-NocoDB-Sustainable-Use",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -28041,6 +28110,9 @@
       {
          "category": "application",
          "id": "odoo",
+         "license": "LGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -29940,6 +30012,8 @@
       {
          "category": "application",
          "id": "owntracks-recorder",
+         "license": "GPL-2.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -31053,6 +31127,8 @@
       {
          "category": "admin",
          "id": "pgadmin",
+         "license": "PostgreSQL",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -31180,6 +31256,9 @@
             "source": "https://github.com/photoprism/photoprism",
             "title": "PhotoPrism® Plus (Ubuntu 26.04 LTS)"
          },
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -32068,6 +32147,8 @@
             "source": "https://github.com/plankanban/planka",
             "title": "planka"
          },
+         "license": "LicenseRef-PLANKA-Community",
+         "licenseOsiApproved": false,
          "maturity": {
             "tier": "e2e"
          },
@@ -32659,6 +32740,8 @@
       {
          "category": "database",
          "id": "postgres",
+         "license": "PostgreSQL",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -32789,6 +32872,8 @@
       {
          "category": "application",
          "id": "prestashop",
+         "license": "OSL-3.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
@@ -33844,6 +33929,8 @@
       {
          "category": "messaging",
          "id": "rabbitmq",
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -34467,6 +34554,9 @@
       {
          "category": "application",
          "id": "readeck",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -34568,6 +34658,9 @@
       {
          "category": "cache",
          "id": "redis",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -34800,6 +34893,8 @@
       {
          "category": "application",
          "id": "redmine",
+         "license": "GPL-2.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -35183,6 +35278,8 @@
          "image": {
             "source": "https://github.com/RocketChat/Rocket.Chat"
          },
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
@@ -35310,6 +35407,8 @@
          "image": {
             "source": "https://github.com/roundcube/roundcubemail-docker"
          },
+         "license": "GPL-3.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -36343,6 +36442,9 @@
       {
          "category": "application",
          "id": "shaarli",
+         "license": "GPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -37878,6 +37980,8 @@
       {
          "category": "tool",
          "id": "stirling-pdf",
+         "license": "MIT",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -38346,6 +38450,9 @@
       {
          "category": "application",
          "id": "tandoor",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -38625,6 +38732,9 @@
       {
          "category": "application",
          "id": "teable",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -40364,6 +40474,9 @@
       {
          "category": "application",
          "id": "twenty",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -41453,6 +41566,9 @@
       {
          "category": "storage",
          "id": "volsync",
+         "license": "AGPL-3.0",
+         "licenseDeprecated": true,
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "rendered"
          },
@@ -42658,6 +42774,8 @@
       {
          "category": "application",
          "id": "wordpress",
+         "license": "GPL-2.0-or-later",
+         "licenseOsiApproved": true,
          "maturity": {
             "tier": "e2e"
          },
