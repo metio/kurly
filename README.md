@@ -21,6 +21,47 @@ kurly.list(
 )
 ```
 
+## Ready-made workloads
+
+Around three hundred applications already have a recipe under
+[`workloads/`](workloads/) — Immich, Mastodon, Keycloak, PostgreSQL, Grafana and
+the rest. Each stage is a `function(params)` returning a composable app, so it is
+a starting point rather than a fixed deployment: import it, adapt it with the
+same `+` features, and render it.
+
+```jsonnet
+local kurly = import 'github.com/metio/kurly/main.libsonnet';
+local immich = import 'github.com/metio/kurly/workloads/immich/server.libsonnet';
+
+kurly.list(
+  immich(dbHost='immich-db-rw')
+  + kurly.replicas(2)
+  + kurly.expose.gateway('photos.example.com', 'shared-gateway')
+)
+```
+
+Each workload states how far it has been proven. **`e2e` means the recipe was
+deployed to a live cluster and observed becoming ready** — not that a test exists
+for it; the record of those runs lives in
+[`catalog/e2e-verified.libsonnet`](catalog/e2e-verified.libsonnet).
+
+## The catalog
+
+[`catalog/catalog.json`](catalog/catalog.json) describes every workload, kind,
+feature and exposure recipe in machine-readable form, and is published as its own
+image — `ghcr.io/metio/kurly/catalog`, `FROM scratch` with the file at the root,
+so a consumer pins it by digest and copies it out without a Jsonnet toolchain.
+
+Most of what it carries is derived from the recipes themselves and recomputed on
+every build, so it cannot drift from what they render: the volumes a stage claims,
+its security posture, whether it is a cluster add-on rather than something a
+tenant runs, which [bollwerk](bollwerk/) policies it breaks and the BSI
+requirements those implement, and the values behind the named resource sizes. The
+rest is stated deliberately — what kind of software a workload is, the external
+infrastructure it needs, the Secret keys it reads, and its licence and upstream
+where those have been established. A fact nobody has checked is left absent
+rather than guessed.
+
 ## Private registries
 
 A cluster that pulls from a private registry needs two things: the images pointed
