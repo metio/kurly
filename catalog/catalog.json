@@ -17884,6 +17884,266 @@
          }
       },
       {
+         "category": "storage",
+         "id": "k8up",
+         "maturity": {
+            "tier": "rendered"
+         },
+         "name": "K8up",
+         "requires": { },
+         "stages": [
+            {
+               "architectures": null,
+               "args": [
+                  {
+                     "default": "restore",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "data",
+                     "name": "claim",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "bucket": "backups",
+                        "endpoint": "http://seaweedfs:8333"
+                     },
+                     "name": "s3",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": "k8up-repository",
+                     "name": "repoPasswordSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "password",
+                     "name": "repoPasswordKey",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "snapshot",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "restoreTo",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": true,
+                     "name": "runnable",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "podSecurityContext",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "backend",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "restoreMethod",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "help": "A Restore: the half that proves the other half. Runs once when applied — into a claim (recovery) or to object storage as a tarball (inspection). runnable=false stages it, so the manifest lands and a person starts it deliberately.",
+               "id": "restore",
+               "importPath": "github.com/metio/kurly/workloads/k8up/restore.libsonnet",
+               "kind": "k8up",
+               "posture": null,
+               "runs": { },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "username",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "password",
+                     "length": 32
+                  }
+               ],
+               "storage": {
+                  "pvcs": 0
+               }
+            },
+            {
+               "architectures": null,
+               "args": [
+                  {
+                     "default": "backup",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "bucket": "backups",
+                        "endpoint": "http://seaweedfs:8333"
+                     },
+                     "name": "s3",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": "k8up-repository",
+                     "name": "repoPasswordSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "password",
+                     "name": "repoPasswordKey",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "0 2 * * *",
+                     "name": "backupSchedule",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "0 3 * * 0",
+                     "name": "pruneSchedule",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "0 4 * * 0",
+                     "name": "checkSchedule",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "archiveSchedule",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 7,
+                     "name": "keepDaily",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 4,
+                     "name": "keepWeekly",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 6,
+                     "name": "keepMonthly",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "retention",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": 3,
+                     "name": "failedJobsHistoryLimit",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1,
+                     "name": "successfulJobsHistoryLimit",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "podSecurityContext",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "backend",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "help": "A Schedule: the nightly backup, plus the prune that makes the retention policy real and the check that notices a repository has rotted before a restore does. Backends kurly does not model pass through verbatim via `backend`, which is merged last.",
+               "id": "schedule",
+               "importPath": "github.com/metio/kurly/workloads/k8up/schedule.libsonnet",
+               "kind": "k8up",
+               "posture": null,
+               "runs": { },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "username",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "password",
+                     "length": 32
+                  }
+               ],
+               "storage": {
+                  "pvcs": 0
+               }
+            }
+         ],
+         "summary": "Backs up every PersistentVolume in a namespace on a schedule, as K8up Schedule and Restore custom resources — restic underneath, one resource per namespace rather than per claim, so a volume is protected the moment it appears rather than when somebody remembers to declare it (a claim annotated k8up.io/backup: \"false\" is left out). Requires the K8up operator. Authors the CRs directly like cnpg-cluster; composed by parameter, not by + feature. kurly authors no Secret: the repository password and the object-storage credentials come from a provided one.",
+         "upstream": {
+            "repo": "https://github.com/k8up-io/k8up"
+         }
+      },
+      {
          "category": "application",
          "id": "kanboard",
          "maturity": {
@@ -40600,6 +40860,299 @@
          "summary": "A Vikunja server (a self-hosted to-do and project-management app) on the official all-in-one image. A plain composable http workload that keeps its data in SQLite and file attachments on a PersistentVolume by default — no external database. kurly authors no Secret; VIKUNJA_SERVICE_JWTSECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3456.",
          "upstream": {
             "repo": "https://github.com/go-vikunja/vikunja"
+         }
+      },
+      {
+         "category": "storage",
+         "id": "volsync",
+         "maturity": {
+            "tier": "rendered"
+         },
+         "name": "VolSync",
+         "requires": { },
+         "stages": [
+            {
+               "architectures": null,
+               "args": [
+                  {
+                     "default": "backup",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "data",
+                     "name": "sourcePVC",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "restic-repository",
+                     "name": "repository",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "0 2 * * *",
+                     "name": "schedule",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "manual",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "Snapshot",
+                     "name": "copyMethod",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "daily": 7,
+                        "monthly": 6,
+                        "weekly": 4
+                     },
+                     "name": "retain",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": 14,
+                     "name": "pruneIntervalDays",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "cacheCapacity",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "cacheStorageClassName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "storageClassName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "volumeSnapshotClassName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "accessModes",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "moverSecurityContext",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "restic",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "help": "A ReplicationSource: what to copy, where to, how often, and how much to keep. Restic fields kurly does not model pass through verbatim via `restic`, which is merged last.",
+               "id": "backup",
+               "importPath": "github.com/metio/kurly/workloads/volsync/backup.libsonnet",
+               "kind": "volsync",
+               "posture": null,
+               "runs": { },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "RESTIC_REPOSITORY",
+                     "value": "s3:http://seaweedfs:8333/backups/nextcloud"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "RESTIC_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "AWS_ACCESS_KEY_ID",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "AWS_SECRET_ACCESS_KEY",
+                     "length": 32
+                  }
+               ],
+               "storage": {
+                  "pvcs": 0
+               }
+            },
+            {
+               "architectures": null,
+               "args": [
+                  {
+                     "default": "restore",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "restic-repository",
+                     "name": "repository",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "capacity",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "restore-once",
+                     "name": "manual",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "schedule",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "Snapshot",
+                     "name": "copyMethod",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "destinationPVC",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": [
+                        "ReadWriteOnce"
+                     ],
+                     "name": "accessModes",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "storageClassName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "volumeSnapshotClassName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "cacheCapacity",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "example": "2026-07-01T00:00:00Z",
+                     "name": "restoreAsOf",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "previous",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": true,
+                     "name": "cleanupCachePVC",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "default": true,
+                     "name": "cleanupTempPVC",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "moverSecurityContext",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "restic",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "help": "A ReplicationDestination: the half that proves the other half. Restores the latest snapshot once, into a volume VolSync provisions (capacity) or one that already exists (destinationPVC); restoreAsOf and previous walk back past a corruption that was itself backed up.",
+               "id": "restore",
+               "importPath": "github.com/metio/kurly/workloads/volsync/restore.libsonnet",
+               "kind": "volsync",
+               "posture": null,
+               "runs": { },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "RESTIC_REPOSITORY",
+                     "value": "s3:http://seaweedfs:8333/backups/nextcloud"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "RESTIC_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "literal",
+                     "key": "AWS_ACCESS_KEY_ID",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "AWS_SECRET_ACCESS_KEY",
+                     "length": 32
+                  }
+               ],
+               "storage": {
+                  "pvcs": 0
+               }
+            }
+         ],
+         "summary": "Copies a PersistentVolume's contents off the cluster and back, as VolSync ReplicationSource and ReplicationDestination custom resources — restic underneath, one resource per claim, so a volume states its own backup policy next to itself. Requires the VolSync operator, and a CSI driver with a VolumeSnapshotClass for the default Snapshot copy method (Direct copies the live volume, which is only safe for a volume nobody writes during the window). Authors the CRs directly like cnpg-cluster; composed by parameter, not by + feature. kurly authors no Secret: the restic repository URL, its password and the object-storage credentials come from a provided one.",
+         "upstream": {
+            "repo": "https://github.com/backube/volsync"
          }
       },
       {
