@@ -4162,6 +4162,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mariadb: {
+      license: 'GPL-2.0-only',
       upstream: { repo: 'https://github.com/MariaDB/server' },
       name: 'MariaDB',
       summary: 'A MariaDB server — a self-hosted relational database, the community fork of MySQL. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
@@ -4181,7 +4182,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mysql: {
-      license: 'GPL-2.0',
+      license: 'GPL-2.0-only',
       upstream: { repo: 'https://github.com/mysql/mysql-server' },
       name: 'MySQL',
       summary: 'A MySQL server — the popular open-source relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :3306; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :3306.',
@@ -6209,7 +6210,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'mysql-cluster': {
-      license: 'GPL-2.0',
+      license: 'GPL-2.0-only',
       name: 'MySQL',
       upstream: { repo: 'https://github.com/mysql/mysql-server' },
       summary: 'A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none).',
@@ -6636,6 +6637,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     grafana: {
+      license: 'AGPL-3.0-only',
       name: 'Grafana',
       summary: 'A Grafana instance as a grafana-operator `Grafana` custom resource, with a Prometheus `GrafanaDatasource` wired in by default — the o11y pairing with the prometheus workload. Authors the CRs (like cnpg-cluster) for the operator to reconcile into a Deployment, Service, and ServiceAccount. Requires the grafana-operator installed.',
       category: 'observability',
@@ -6658,6 +6660,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     loki: {
+      license: 'AGPL-3.0-only',
       name: 'Grafana Loki',
       upstream: { repo: 'https://github.com/grafana/loki' },
       summary: 'Grafana Loki in microservices mode as a loki-operator `LokiStack` custom resource: one CR reconciles the whole distributed topology (distributor, ingester, querier, query-frontend, compactor, index-gateway, gateway), with `size` scaling the replicas. Authors the CR (like cnpg-cluster) for the operator to own the components, config, and ring. Requires the loki-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3.',
@@ -6681,6 +6684,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     tempo: {
+      license: 'AGPL-3.0-only',
       name: 'Grafana Tempo',
       upstream: { repo: 'https://github.com/grafana/tempo' },
       summary: 'Grafana Tempo as a tempo-operator `TempoStack` custom resource: one CR reconciles the whole distributed tracing backend (distributor, ingester, querier, query-frontend, compactor) over object storage. Authors the CR (the same shape as loki) for the operator to own the components, config, and Services. Requires the tempo-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3 and the otel-collector workload for span ingestion.',

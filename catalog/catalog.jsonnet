@@ -667,7 +667,20 @@ local licenseFacts(workload, value, attested) =
   local canonical(id) =
     if std.startsWith(id, 'LicenseRef-') then id
     else std.get(canonicalOf, std.asciiLower(id), id);
-  local identifiers = [canonical(id) for id in rawIdentifiers];
+  // A deprecated GPL-family identifier does not say whether the project chose
+  // "version N only" or "version N or, at your option, any later version" — the
+  // reason SPDX deprecated the bare spelling. The great majority of projects use
+  // the FSF's own boilerplate, which is the or-later one, so the published value
+  // assumes it where nothing states otherwise, and SAYS it assumed
+  // (`licenseVariantAssumed`). An annotation always wins, and the projects known
+  // to have chosen only — Grafana, Loki and Tempo since their 2021 relicensing,
+  // MariaDB and MySQL — carry one, so the assumption never overrides a reading.
+  local resolveVariant(id) =
+    if std.objectHas(spdx, id) && spdx[id].deprecated && std.objectHas(spdx, id + '-or-later')
+    then id + '-or-later'
+    else id;
+  local identifiers = [resolveVariant(canonical(id)) for id in rawIdentifiers];
+  local assumed = [canonical(id) for id in rawIdentifiers] != identifiers;
   local known = [
     id
     for id in identifiers
@@ -681,7 +694,8 @@ local licenseFacts(workload, value, attested) =
            'workloads: %s is annotated with the licence %s, which SPDX does not know' % [workload, value];
     {
       license: std.join(' ', [
-        if std.member(['AND', 'OR', 'WITH'], token) then token else canonical(std.stripChars(token, '()'))
+        if std.member(['AND', 'OR', 'WITH'], token) then token
+        else resolveVariant(canonical(std.stripChars(token, '()')))
         for token in std.split(value, ' ')
       ]),
     }
@@ -721,7 +735,8 @@ local licenseFacts(workload, value, attested) =
       else
         { licenseOsiApproved: std.all([approvedOperand(id) for id in withOperands]) }
     )
-    + (if std.any([std.objectHas(spdx, id) && spdx[id].deprecated for id in identifiers]) then { licenseDeprecated: true } else {});
+    + (if std.any([std.objectHas(spdx, id) && spdx[id].deprecated for id in identifiers]) then { licenseDeprecated: true } else {})
+    + (if assumed then { licenseVariantAssumed: true } else {});
 
 // A repository that packages software for a registry, rather than the software's
 // own home. `github.com/linuxserver/docker-jellyfin` builds a Jellyfin image; it
