@@ -573,6 +573,19 @@ metadata: { name: ${snip}, namespace: ${ns} }
 spec:
   serviceAccountName: default
   entryFile: main.jsonnet
+  # Without these the snippet has nothing to import FROM: JaaS mounts the
+  # libraries a snippet names, and an absolute github.com/... import resolves
+  # through their vendor trees. Omitting them fails every render with
+  # EvaluationFailed, identically for every workload — which reads like a broken
+  # library rather than a snippet that asked for none.
+  #
+  # No importPath: both images key their files by full vendor path already, so
+  # the alias (defaulting to the library's name) only matters for bare-name
+  # imports. Same shape as the hand-written deep scenarios.
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly }
+    - { kind: JsonnetLibrary, name: kurly-${id} }
+    - { kind: JsonnetLibrary, name: k8s-libsonnet }
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
