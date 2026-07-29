@@ -15,6 +15,13 @@
   "separateMultipleMajor": false,
   "packageRules": [
     {
+      "description": "Pin every image by digest. A tag says which version; only a digest says which bits, so a rebuilt base image carrying a patched library is otherwise indistinguishable from no change at all. It also makes a moved tag a pull failure rather than a silent substitution.",
+      "matchCategories": [
+        "docker"
+      ],
+      "pinDigests": true
+    },
+    {
       "description": "Zero-manual-work policy: every workload tracks the latest published version, majors included. The e2e smoke suite is the safety net \u2014 a break becomes a new test, never a pinned-back version. Renovate opens and auto-merges the bump once CI is green.",
       "matchDatasources": [
         "docker"
@@ -122,7 +129,7 @@
         "/^catalog/catalog\\.json$/"
       ],
       "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/cassandra-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/cassandra-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
       ]
     },
     {
@@ -135,7 +142,7 @@
         "/^catalog/catalog\\.json$/"
       ],
       "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/mongodb-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/mongodb-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
       ]
     },
     {
@@ -148,7 +155,7 @@
         "/^catalog/catalog\\.json$/"
       ],
       "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/mysql-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/mysql-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
       ]
     },
     {
@@ -161,7 +168,7 @@
         "/^catalog/catalog\\.json$/"
       ],
       "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/opensearch-cluster/cluster\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/opensearch-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
       ]
     },
     {
@@ -174,7 +181,7 @@
         "/^catalog/catalog\\.json$/"
       ],
       "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/grafana/server\\.libsonnet\",[\\s\\S]{0,2000}?\"version\": \"(?<currentValue>[^\"]+)\""
+        "\"importPath\": \"github\\.com/metio/kurly/workloads/grafana/server\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
       ]
     },
     {
@@ -199,8 +206,5 @@
         "\"image\": \"(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):[^\"@]+@sha256:[a-f0-9]{64}\",\\s*\"tag\": \"(?<currentValue>[^\"]+)\""
       ]
     }
-  ],
-  "docker": {
-    "pinDigests": true
-  }
+  ]
 }

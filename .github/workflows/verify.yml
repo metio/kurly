@@ -123,6 +123,20 @@ jobs:
       # The devShell carries shellcheck alongside actionlint, so run: blocks
       # are shell-linted too — without it actionlint silently skips them.
       - run: nix develop --command actionlint
+  renovate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      # Renovate stops opening pull requests entirely when its config is
+      # invalid, and says so only in an issue — so a bad regex silently ends
+      # dependency updates for the whole repository until somebody notices. It
+      # is the one config here whose failure mode is silence, which is exactly
+      # what a gate is for. Its regexes run under RE2, where a bounded
+      # repetition may not exceed 1000 and lookaround does not exist, so a
+      # pattern that a local test accepts can still be rejected there.
+      - run: nix develop --command renovate-config-validator
   markdown:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -162,7 +176,7 @@ jobs:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.
     name: Verify
-    needs: [fmt, catalog, test, assembler, examples, readme-examples, coverage, security, reuse, yaml, github-actions, markdown, typos, policy, dco]
+    needs: [fmt, catalog, test, assembler, examples, readme-examples, coverage, security, reuse, yaml, github-actions, renovate, markdown, typos, policy, dco]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 15

@@ -68,6 +68,11 @@
           # small, fast, no-config tools that earn their cost: pluto (removed /
           # deprecated API detection) and kubesec (a security risk score).
           # kubeconform (schema) rides in kurlyTools via check-examples.
+          # Renovate is in the shell only for its config validator: an invalid
+          # renovate.json stops every dependency update and announces it in an
+          # issue rather than in CI, so it is checked like any other config.
+          renovateTools = [ pkgs.renovate ];
+
           securityTools = with pkgs; [
             conftest
             pluto
@@ -387,7 +392,7 @@
         {
           default = devshell.lib.mkDevShell {
             inherit pkgs;
-            packages = kurlyTools ++ securityTools ++ smokeTools ++ docsTools ++ commands;
+            packages = kurlyTools ++ securityTools ++ smokeTools ++ docsTools ++ renovateTools ++ commands;
             # The devShell pins every tool and inherited the LOCALE from whoever
             # started it, which is not a detail: collation decides how a glob
             # expands and how sort orders, so a generated file came out with
