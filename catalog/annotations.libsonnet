@@ -3656,7 +3656,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mumble: {
-      license: 'MIT',
+      license: 'BSD-3-Clause',
       name: 'Mumble',
       upstream: { repo: 'https://github.com/mumble-voip/mumble' },
       summary: 'A Mumble server (Murmur: a self-hosted, low-latency voice-chat server for gaming and communities). Modelled as an HTTP workload for its Deployment/Service plumbing, but Mumble speaks its own voice protocol on :64738 (TCP control, UDP voice), with its SQLite database on a PersistentVolume. The Service publishes the TCP port; UDP voice needs a second Service (usually a LoadBalancer). kurly authors no Secret; MUMBLE_SUPERUSER_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated.',
@@ -4297,7 +4297,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     rabbitmq: {
-      license: 'Apache-2.0',
+      license: 'MPL-2.0',
       upstream: { repo: 'https://github.com/rabbitmq/rabbitmq-server' },
       name: 'RabbitMQ',
       summary: 'A RabbitMQ server (a widely-used, self-hosted message broker implementing AMQP) on the official management image; the broker speaks AMQP on :5672 with data on a PersistentVolume. Single node (not a cluster). The management UI (:15672) needs a separate Service. kurly authors no Secret; RABBITMQ_DEFAULT_USER/PASS come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves AMQP on :5672.',
@@ -5325,7 +5325,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mattermost: {
-      license: 'MIT',
+      license: 'AGPL-3.0',
       name: 'Mattermost',
       upstream: { repo: 'https://github.com/mattermost/mattermost' },
       summary: 'A Mattermost server (a self-hosted, open-source team messaging platform à la Slack) on the Team Edition image, backed by an external PostgreSQL, with file uploads on a PersistentVolume. Pairs with a cnpg-cluster named mattermost-db. kurly authors no Secret; MM_SQLSETTINGS_DATASOURCE comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated (point the file store at S3 to scale out). Serves on :8065.',

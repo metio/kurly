@@ -49,9 +49,14 @@ cleanup() {
 }
 trap cleanup EXIT
 
+# jb install CLEANS the vendor tree it manages, so the repo symlink has to be
+# made after it and not before: created first, jb deletes it, every stage then
+# fails to import its own workload, and the sweep reports the whole catalogue as
+# unjudged — which reads like 300 missing CRDs rather than like a broken
+# checkout.
+[ -f vendor/.kurly-vendored ] || { jb install >/dev/null && touch vendor/.kurly-vendored; }
 mkdir -p vendor/github.com/metio
 ln -sfn ../../.. vendor/github.com/metio/kurly
-[ -f vendor/.kurly-vendored ] || { jb install >/dev/null && touch vendor/.kurly-vendored; }
 
 kubectl create namespace "$ns" --dry-run=client --output=yaml | kubectl apply --filename=- >/dev/null
 
@@ -127,6 +132,10 @@ done
 printf '}\n' >> "${work}/out.libsonnet"
 mv "${work}/out.libsonnet" "$out"
 
+if [ "$judged" = 0 ]; then
+  echo "::error::no stage could be judged at all — that is a broken run (an unusable vendor tree or an API server that never answered), not a catalogue with nothing to report" >&2
+  exit 1
+fi
 echo "wrote ${out}: ${judged} stages judged against $(jq 'length' "${work}/names.json") policies"
 [ -n "$unevaluated" ] && {
   echo "not judged (no CRD here, or no default render): $(printf '%s\n' "$unevaluated" | tr ' ' '\n' | grep -v '^$' | sort | paste -sd' ' -)"
