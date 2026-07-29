@@ -92,6 +92,7 @@ sleep 10
 echo "== asking the API server about every stage =="
 judged=0
 unevaluated=""
+: > "${work}/entries"
 {
   printf '// %s: The kurly Authors\n' 'SPDX-FileCopyrightText'
   printf '// %s: 0BSD\n\n' 'SPDX-License-Identifier'
@@ -124,19 +125,27 @@ for dir in workloads/*/; do
       continue
     fi
     names="$(grep -oP "ValidatingAdmissionPolicy '\K[^']+" <<<"$warnings" | sort -u | paste -sd' ' - || true)"
-    printf "  '%s/%s': [" "$id" "$stage" >> "${work}/out.libsonnet"
+    printf "  '%s/%s': [" "$id" "$stage" >> "${work}/entries"
     first=true
     for policy in $names; do
-      $first || printf ', ' >> "${work}/out.libsonnet"
-      printf "'%s'" "$policy" >> "${work}/out.libsonnet"
+      $first || printf ', ' >> "${work}/entries"
+      printf "'%s'" "$policy" >> "${work}/entries"
       first=false
     done
-    printf '],\n' >> "${work}/out.libsonnet"
+    printf '],\n' >> "${work}/entries"
     judged=$((judged + 1))
   done
 done
+# Sorted here rather than left in the order the glob happened to produce: a
+# locale that ignores punctuation walks `calibre-web` and `calibre` the other way
+# round, and the file would differ between a contributor's machine and CI while
+# saying exactly the same thing. Sorting the ENTRIES, not the directories, is
+# what makes the two agree — `thanos/query` and `thanos/query-frontend` order one
+# way as paths and the other way as keys.
+LC_ALL=C sort "${work}/entries" >> "${work}/out.libsonnet"
 printf '}\n' >> "${work}/out.libsonnet"
 mv "${work}/out.libsonnet" "$out"
+jsonnetfmt --in-place "$out"
 
 if [ "$judged" = 0 ]; then
   echo "::error::no stage could be judged at all — that is a broken run (an unusable vendor tree or an API server that never answered), not a catalogue with nothing to report" >&2

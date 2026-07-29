@@ -372,6 +372,18 @@
           default = devshell.lib.mkDevShell {
             inherit pkgs;
             packages = kurlyTools ++ securityTools ++ smokeTools ++ docsTools ++ commands;
+            # The devShell pins every tool and inherited the LOCALE from whoever
+            # started it, which is not a detail: collation decides how a glob
+            # expands and how sort orders, so a generated file came out with
+            # `calibre-web` before `calibre` on a machine whose locale ignores
+            # punctuation and after it on one that does not. Both were correct
+            # and the drift checks failed on the difference — a gate red for no
+            # reason other than which computer ran it.
+            #
+            # LC_COLLATE rather than LC_ALL, so ordering is byte-wise everywhere
+            # while text stays UTF-8: these sources are full of em dashes, and a
+            # C locale would have tools treat them as bytes.
+            env.LC_COLLATE = "C";
             menu = ''
               echo "kurly commands (also: nix develop --command <name>):"
               echo "  check-fmt        jsonnetfmt --test across all sources"
