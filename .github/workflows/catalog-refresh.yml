@@ -1,0 +1,91 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Re-asks the facts the catalogue derives from somewhere other than this
+# repository, and opens a pull request when an answer has changed.
+#
+# The per-PR gate can only check the facts it can recompute offline. A licence,
+# an image's architectures and its labels live in other people's systems: a
+# project relicenses, an image starts publishing arm64, a maintainer moves the
+# repository. None of that produces a commit here, so without a scheduled ask
+# the catalogue keeps publishing last year's answer with no sign that it is old
+# — which is the failure that matters, because the answer still looks confident.
+#
+# So they are asked again every week and the diff becomes a pull request. Nobody
+# has to remember to run anything, and a change to what the world says arrives
+# as something to review rather than as a discovery months later.
+#
+# gen-forge is fast here and slow locally for the same reason: GitHub answers
+# sixty requests an hour unauthenticated and five thousand with a token, and CI
+# has a token of its own. gen-upstream is the exception — it asks three hundred
+# registries that rate-limit far harder, takes hours, and is left to a manual
+# dispatch.
+name: Catalog refresh
+on:
+  schedule:
+    # Saturdays, well clear of the Monday release run.
+    - cron: 23 5 * * SAT
+  workflow_dispatch:
+    inputs:
+      images:
+        description: 'Also re-read every image label (slow; hours against rate-limiting registries).'
+        required: false
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: catalog-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    name: Re-ask the derived facts
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Ask every upstream forge for its licence
+        env:
+          # The run's own token, which only lifts the rate limit — the API calls
+          # read public repositories and need no permission beyond that.
+          GITHUB_TOKEN: ${{ github.token }}
+        run: nix develop --command gen-forge
+      - name: Ask every registry which architectures its image publishes
+        run: nix develop --command gen-architectures
+      - name: Re-read every image label
+        if: inputs.images
+        run: nix develop --command gen-upstream
+      - name: Rebuild the catalog from the new answers
+        run: |
+          set -euo pipefail
+          nix develop --command jb install
+          mkdir -p vendor/github.com/metio
+          ln -sfn ../../.. vendor/github.com/metio/kurly
+          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json
+      # A pull request rather than a push to the default branch: publishing the
+      # catalogue is a release, and a licence that changed is exactly the kind of
+      # thing somebody should read before it ships.
+      - name: Open a pull request for whatever changed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- catalog/; then
+            echo "nothing changed — every derived fact still matches what its source says"
+            exit 0
+          fi
+          git --no-pager diff --stat -- catalog/
+          branch="catalog-refresh/$(date +%Y-%m-%d)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch --create "$branch"
+          git add catalog/
+          git commit --message 'chore(catalog): re-ask the facts derived from elsewhere' \
+            --message 'Licences come from each upstream repository, architectures from each image manifest. This is what those sources say today.'
+          git push --set-upstream origin "$branch"
+          gh pr create --fill --base "${GITHUB_REF_NAME}" \
+            --title 'chore(catalog): refresh the facts derived from elsewhere'

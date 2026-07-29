@@ -336,3 +336,11 @@
     name: 'filestash',
     homepage: 'https://www.filestash.app/',
   },
+  'flame': {
+    license: 'MIT',
+    name: 'flame',
+  },
+  'flaresolverr': {
+    license: 'MIT',
+    name: 'FlareSolverr',
+  },
