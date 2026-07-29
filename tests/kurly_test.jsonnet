@@ -180,6 +180,51 @@ local podOf(app) = app.deployment.spec.template.spec;
     [{ name: 'shop' }]
   ),
 
+  // --- several hostnames on one exposure -------------------------------------------
+  // A platform-allocated name and a tenant's own domain answer at once: the
+  // allocated one is how a tenant still reaches their application when their own
+  // DNS breaks, so adding a domain must never replace it.
+  multi_host_route: std.assertEqual(
+    (shop + kurly.expose.gateway(['shop.example.com', 'www.shop.test'], 'shared')).httproute.spec.hostnames,
+    ['shop.example.com', 'www.shop.test']
+  ),
+  // An Ingress rule carries one host, so several names are several rules over
+  // the same backend.
+  multi_host_ingress_rules: std.assertEqual(
+    [r.host for r in (shop + kurly.expose.ingress(['shop.example.com', 'www.shop.test'])).ingress.spec.rules],
+    ['shop.example.com', 'www.shop.test']
+  ),
+  multi_host_ingress_same_backend: std.assertEqual(
+    std.set([std.toString(r.http.paths[0].backend) for r in (shop + kurly.expose.ingress(['a.example.com', 'b.example.com'])).ingress.spec.rules]),
+    [std.toString({ service: { name: 'shop', port: { name: 'http' } } })]
+  ),
+  // One certificate has to cover every name, or the extra ones are served under
+  // a certificate that does not name them.
+  multi_host_ingress_tls: std.assertEqual(
+    (shop + kurly.expose.ingress(['shop.example.com', 'www.shop.test'], tls='shop-tls')).ingress.spec.tls,
+    [{ hosts: ['shop.example.com', 'www.shop.test'], secretName: 'shop-tls' }]
+  ),
+  // A listener publishes one hostname, so several names are several listeners.
+  // The first keeps the name it has always had — a route's sectionName selects a
+  // listener by name, and adding a hostname must not rename the one it points at.
+  multi_host_listeners: std.assertEqual(
+    [{ name: l.name, hostname: l.hostname } for l in (shop + kurly.expose.ownGateway(['shop.example.com', 'www.shop.test'], 'cilium')).gateway.spec.listeners],
+    [
+      { name: 'http', hostname: 'shop.example.com' },
+      { name: 'http-2', hostname: 'www.shop.test' },
+    ]
+  ),
+  multi_host_listeners_tls: std.assertEqual(
+    [l.name for l in (shop + kurly.expose.ownListenerSet(['a.example.com', 'b.example.com', 'c.example.com'], 'shared', tls='shop-tls')).listenerset.spec.listeners],
+    ['https', 'https-2', 'https-3']
+  ),
+  // production() mints the certificate, so it covers every name too.
+  multi_host_production_certificate: std.assertEqual(
+    local parts = kurly.production(shop, host=['shop.example.com', 'www.shop.test'], gateway='shared', tls='shop-tls', issuer='letsencrypt');
+    parts[1].spec.dnsNames,
+    ['shop.example.com', 'www.shop.test']
+  ),
+
   // --- expose.ownListenerSet -------------------------------------------------------
   own_listenerset_api: std.assertEqual(
     local ls = (shop + kurly.expose.ownListenerSet('shop.example.com', 'shared-gateway')).listenerset;

@@ -284,32 +284,32 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   // join the `exposure` exclusion group (one exposure per workload) and require
   // a Service.
   expose: {
-    ingress: d.fn('Routes the host to the workload through the Ingress API.', [
-      d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
+    ingress: d.fn('Routes the host to the workload through the Ingress API. `host` takes one name or a list of them; an Ingress rule carries one host, so several names become several rules over the same backend.', [
+      d.arg('host', d.T.hostname, required=true, example='storefront.example.com', repeatable=true),
       d.arg('ingressClass', d.T.string, example='nginx'),
       d.arg('annotations', d.T.object, default={}, example={ 'cert-manager.io/cluster-issuer': 'letsencrypt' }),
       d.arg('tls', d.T.string, example='storefront-tls'),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
-    gateway: d.fn('Attaches an HTTPRoute to an existing shared Gateway (the usual platform-team setup).', [
-      d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
+    gateway: d.fn('Attaches an HTTPRoute to an existing shared Gateway (the usual platform-team setup). `host` takes one name or a list of them.', [
+      d.arg('host', d.T.hostname, required=true, example='storefront.example.com', repeatable=true),
       d.arg('gateway', d.T.string, required=true, example='shared'),
       d.arg('gatewayNamespace', d.T.string),
       d.arg('sectionName', d.T.string),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
-    listenerSet: d.fn('Attaches an HTTPRoute to an existing ListenerSet (per-tenant listener ownership).', [
-      d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
+    listenerSet: d.fn('Attaches an HTTPRoute to an existing ListenerSet (per-tenant listener ownership). `host` takes one name or a list of them.', [
+      d.arg('host', d.T.hostname, required=true, example='storefront.example.com', repeatable=true),
       d.arg('listenerSet', d.T.string, required=true, example='tenant-a'),
       d.arg('listenerSetNamespace', d.T.string),
       d.arg('sectionName', d.T.string),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
-    ownGateway: d.fn('Generates a dedicated Gateway plus the HTTPRoute — for clusters with no shared Gateway to attach to.', [
-      d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
+    ownGateway: d.fn('Generates a dedicated Gateway plus the HTTPRoute — for clusters with no shared Gateway to attach to. `host` takes one name or a list of them; a listener publishes one hostname, so several names become several listeners, the first keeping the name that an existing sectionName already selects.', [
+      d.arg('host', d.T.hostname, required=true, example='storefront.example.com', repeatable=true),
       d.arg('gatewayClass', d.T.string, required=true, example='istio'),
       d.arg('annotations', d.T.object, default={}, example={ 'service.beta.kubernetes.io/aws-load-balancer-type': 'nlb' }),
       d.arg('tls', d.T.string, example='storefront-tls'),
     ]) + { kinds: ['http'], exclusiveGroup: 'exposure', requiresService: true },
-    ownListenerSet: d.fn("Generates a ListenerSet that adds the workload's own listener to a shared Gateway, plus the HTTPRoute. The Gateway must opt in via spec.allowedListeners.", [
-      d.arg('host', d.T.hostname, required=true, example='storefront.example.com'),
+    ownListenerSet: d.fn("Generates a ListenerSet that adds the workload's own listener to a shared Gateway, plus the HTTPRoute. The Gateway must opt in via spec.allowedListeners. `host` takes one name or a list of them, one listener each.", [
+      d.arg('host', d.T.hostname, required=true, example='storefront.example.com', repeatable=true),
       d.arg('gateway', d.T.string, required=true, example='shared'),
       d.arg('gatewayNamespace', d.T.string),
       d.arg('tls', d.T.string, example='storefront-tls'),

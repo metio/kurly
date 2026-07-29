@@ -17,10 +17,27 @@
 // and two recipes would emit conflicting or same-named objects. (An
 // Ingress→Gateway migration runs the two as separate apps instead.)
 //
+// Every recipe's `host` takes a string or a LIST of names, so one workload can
+// answer on several — a platform-allocated name alongside a tenant's own domain,
+// both at once.
+//
 // The Gateway API objects are written as plain manifests rather than through
 // gateway-api-libsonnet, keeping the render-time dependency closure at
 // k8s-libsonnet alone.
 local k = import './k.libsonnet';
+
+// A workload may answer on more than one name, so every recipe's `host` takes a
+// string or a list of them. The reason is recovery rather than convenience: a
+// platform allocates a name under its own zone AND lets a tenant point their own
+// domain at it, and if the second replaces the first, then the day the tenant's
+// DNS breaks they have no way in at all — and the outage looks like the
+// platform's. Old bookmarks and links stop working on the same day, for the same
+// reason.
+//
+// Gateway API is built for this: `hostnames` is a list and matching is per name.
+// The Ingress API is not — a rule carries one host — so there the names become
+// one rule each.
+local hostList(host) = if std.isArray(host) then host else [host];
 
 // Every exposure recipe needs a Service to route to — composing onto
 // kurly.worker or kurly.cron is a mistake worth failing loudly on — and claims
@@ -45,7 +62,7 @@ local httpRoute(app, host, parent) =
               + (if dnsAnnotations == {} then {} else { annotations: dnsAnnotations }),
     spec: {
       parentRefs: [parent],
-      hostnames: [host],
+      hostnames: hostList(host),
       rules:
         std.get(app.config, 'guards', [])
         + [{
@@ -69,14 +86,20 @@ local listenerSetParent(name, namespace=null, sectionName=null) = std.prune({
 // TLS is a workload that cannot serve HTTPS at all — the certificate is the
 // cluster's (cert-manager writes the Secret, or a platform team mints it), so
 // kurly cannot supply one, but it must let one be named.
-local listener(host, tls) =
+// A listener publishes ONE hostname, so a workload answering on several needs
+// one listener each. Their names must be unique within the parent and are what a
+// route's sectionName points at, so the first keeps the plain name it has always
+// had and the rest are numbered after it — an added name never renames the
+// listener a route already selects.
+local listener(host, tls, index=0) =
+  local suffix = if index == 0 then '' else '-' + (index + 1);
   if tls == null then {
-    name: 'http',
+    name: 'http' + suffix,
     protocol: 'HTTP',
     port: 80,
     hostname: host,
   } else {
-    name: 'https',
+    name: 'https' + suffix,
     protocol: 'HTTPS',
     port: 443,
     hostname: host,
@@ -85,6 +108,11 @@ local listener(host, tls) =
       certificateRefs: [{ kind: 'Secret', name: tls }],
     },
   };
+
+local listenersFor(host, tls) = [
+  listener(hostList(host)[i], tls, i)
+  for i in std.range(0, std.length(hostList(host)) - 1)
+];
 
 {
   // ingress routes the host to the workload through the Ingress API.
@@ -119,23 +147,29 @@ local listener(host, tls) =
       + (
         if tls == null
         then {}
-        else k.networking.v1.ingress.spec.withTls([{ hosts: [host], secretName: tls }])
+        else k.networking.v1.ingress.spec.withTls([{ hosts: hostList(host), secretName: tls }])
       )
-      + k.networking.v1.ingress.spec.withRules([{
-        host: host,
-        http: {
-          paths: [{
-            path: '/',
-            pathType: 'Prefix',
-            backend: {
-              service: {
-                name: app.config.name,
-                port: { name: 'http' },
+      // An Ingress rule carries exactly one host, so several names are several
+      // rules over the same backend — the Ingress API's way of saying what one
+      // HTTPRoute says with a list.
+      + k.networking.v1.ingress.spec.withRules([
+        {
+          host: name,
+          http: {
+            paths: [{
+              path: '/',
+              pathType: 'Prefix',
+              backend: {
+                service: {
+                  name: app.config.name,
+                  port: { name: 'http' },
+                },
               },
-            },
-          }],
-        },
-      }]),
+            }],
+          },
+        }
+        for name in hostList(host)
+      ]),
   },
 
   // gateway routes the host through an existing Gateway — the usual setup,
@@ -176,7 +210,7 @@ local listener(host, tls) =
                 + (if annotations == {} then {} else { annotations: annotations }),
       spec: {
         gatewayClassName: gatewayClass,
-        listeners: [listener(host, tls) + { allowedRoutes: { namespaces: { from: 'Same' } } }],
+        listeners: [l { allowedRoutes: { namespaces: { from: 'Same' } } } for l in listenersFor(host, tls)],
       },
     },
 
@@ -203,7 +237,7 @@ local listener(host, tls) =
           name: gateway,
           namespace: gatewayNamespace,
         }),
-        listeners: [listener(host, tls)],
+        listeners: listenersFor(host, tls),
       },
     },
 

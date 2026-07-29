@@ -178,6 +178,7 @@
             {
                "example": "storefront.example.com",
                "name": "host",
+               "repeatable": true,
                "required": true,
                "type": "hostname"
             },
@@ -199,7 +200,7 @@
             }
          ],
          "exclusiveGroup": "exposure",
-         "help": "Attaches an HTTPRoute to an existing shared Gateway (the usual platform-team setup).",
+         "help": "Attaches an HTTPRoute to an existing shared Gateway (the usual platform-team setup). `host` takes one name or a list of them.",
          "id": "gateway",
          "kinds": [
             "http"
@@ -248,6 +249,7 @@
             {
                "example": "storefront.example.com",
                "name": "host",
+               "repeatable": true,
                "required": true,
                "type": "hostname"
             },
@@ -273,7 +275,7 @@
             }
          ],
          "exclusiveGroup": "exposure",
-         "help": "Routes the host to the workload through the Ingress API.",
+         "help": "Routes the host to the workload through the Ingress API. `host` takes one name or a list of them; an Ingress rule carries one host, so several names become several rules over the same backend.",
          "id": "ingress",
          "kinds": [
             "http"
@@ -285,6 +287,7 @@
             {
                "example": "storefront.example.com",
                "name": "host",
+               "repeatable": true,
                "required": true,
                "type": "hostname"
             },
@@ -306,7 +309,7 @@
             }
          ],
          "exclusiveGroup": "exposure",
-         "help": "Attaches an HTTPRoute to an existing ListenerSet (per-tenant listener ownership).",
+         "help": "Attaches an HTTPRoute to an existing ListenerSet (per-tenant listener ownership). `host` takes one name or a list of them.",
          "id": "listenerSet",
          "kinds": [
             "http"
@@ -318,6 +321,7 @@
             {
                "example": "storefront.example.com",
                "name": "host",
+               "repeatable": true,
                "required": true,
                "type": "hostname"
             },
@@ -343,7 +347,7 @@
             }
          ],
          "exclusiveGroup": "exposure",
-         "help": "Generates a dedicated Gateway plus the HTTPRoute — for clusters with no shared Gateway to attach to.",
+         "help": "Generates a dedicated Gateway plus the HTTPRoute — for clusters with no shared Gateway to attach to. `host` takes one name or a list of them; a listener publishes one hostname, so several names become several listeners, the first keeping the name that an existing sectionName already selects.",
          "id": "ownGateway",
          "kinds": [
             "http"
@@ -355,6 +359,7 @@
             {
                "example": "storefront.example.com",
                "name": "host",
+               "repeatable": true,
                "required": true,
                "type": "hostname"
             },
@@ -377,7 +382,7 @@
             }
          ],
          "exclusiveGroup": "exposure",
-         "help": "Generates a ListenerSet that adds the workload's own listener to a shared Gateway, plus the HTTPRoute. The Gateway must opt in via spec.allowedListeners.",
+         "help": "Generates a ListenerSet that adds the workload's own listener to a shared Gateway, plus the HTTPRoute. The Gateway must opt in via spec.allowedListeners. `host` takes one name or a list of them, one listener each.",
          "id": "ownListenerSet",
          "kinds": [
             "http"

@@ -300,7 +300,10 @@ local itemsOf(value) =
   //
   //   kurly.list(kurly.production(
   //     server(),
-  //     host='tenant1.example.com', gateway='shared',
+  //     // A string, or a list when a tenant brings a domain of their own: the
+  //     // allocated name has to keep working, or the day their DNS breaks they
+  //     // have no way in and it looks like the platform's fault.
+  //     host=['tenant1.example.com', 'www.tenant1.com'], gateway='shared',
   //     tls='tenant1-tls', issuer='letsencrypt-prod',
   //     resourceTier='small', replicas=2, priorityClassName='standard',
   //     allowFrom=[{ pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress' }],
@@ -342,7 +345,14 @@ local itemsOf(value) =
       + (if replicas == null then {} else $.replicas(replicas))
       + (if priorityClassName == null then {} else $.priorityClassName(priorityClassName));
     [composed]
-    + (if issuer != null && tls != null then [$.certificate(tls, [host], issuer, issuerKind=issuerKind)] else []),
+    // The certificate covers every name the workload answers on: `host` takes a
+    // string or a list, and a certificate naming only the first would leave the
+    // rest served by a name the certificate does not cover.
+    + (
+      if issuer != null && tls != null
+      then [$.certificate(tls, (if std.isArray(host) then host else [host]), issuer, issuerKind=issuerKind)]
+      else []
+    ),
 
   // A workload's stages are the ORDERED, GATED phases of installing ONE
   // application — apply a phase, wait for it to go healthy, then the next — not

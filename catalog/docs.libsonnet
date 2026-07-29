@@ -28,12 +28,17 @@
   // optional one carries its default (which may legitimately be null, e.g. an
   // unset storageClass — then the key is simply absent and the UI treats it as
   // optional-unset). `example` seeds the input control's placeholder.
-  arg(name, type, required=false, default=null, example=null):: std.prune({
+  // `repeatable` marks a parameter that takes EITHER one value of its type or a
+  // list of them. It is a property of the parameter rather than a second type,
+  // because every existing call site passing one value stays correct — which is
+  // the point of widening rather than moving.
+  arg(name, type, required=false, default=null, example=null, repeatable=false):: std.prune({
     name: name,
     type: type,
     required: required,
     default: if required then null else default,
     example: example,
+    repeatable: if repeatable then true else null,
   }),
 
   // A callable's documentation: prose help and its ordered parameter list.
