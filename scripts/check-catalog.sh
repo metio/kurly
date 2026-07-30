@@ -99,6 +99,25 @@ else
   param_stages=(workloads/*/*.libsonnet)
 fi
 fail=0
+
+# The import map in catalog.jsonnet names each stage twice — once as the key the
+# rest of the catalog looks it up by, once as the literal path jsonnet imports.
+# jsonnet cannot compare them, because an import evaluates to the imported object
+# and the path it came from is gone by the time anything could look. A key that
+# named a different stage's file would render one stage's facts under another
+# stage's name, and every derived value beside it would be quietly about the wrong
+# workload. So the two halves of each line are compared here, where they are still
+# text.
+while IFS= read -r line; do
+  key="$(sed -E "s/^ *'?([^':]+)'?: import .*/\1/" <<<"$line")"
+  path="$(sed -E "s/.*import 'github\.com\/metio\/kurly\/workloads\/(.+)\.libsonnet'.*/\1/" <<<"$line")"
+  if [ "$key" != "$path" ]; then
+    echo "::error::catalog.jsonnet: stage '${key}' imports workloads/${path}.libsonnet — the key and the path name different stages" >&2
+    fail=1
+  fi
+done < <(grep -E "^  '?[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+'?: import 'github\.com/metio/kurly/workloads/" catalog/catalog.jsonnet)
+[ "$fail" -eq 0 ] && echo "every stage import is keyed by the file it imports"
+
 for stage in "${param_stages[@]}"; do
   workload="$(basename "$(dirname "$stage")")"
   id="$(basename "$stage" .libsonnet)"

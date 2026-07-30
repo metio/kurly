@@ -913,6 +913,12 @@ local workloadEntries =
       stages: [
         { id: stage }
         + ann.workloads[workload].stages[stage]
+        // COMPUTED, never annotated. The path a consumer imports a stage by is
+        // fully determined by the two ids naming it, so stating it again by hand
+        // is a copy that can only ever be right by agreement — and one that
+        // disagreed would send a consumer to a different stage's file while every
+        // fact published beside it came from this one.
+        + { importPath: 'github.com/metio/kurly/workloads/%s/%s.libsonnet' % [workload, stage] }
         + { storage: { pvcs: pvcCount(stageImports[workload + '/' + stage]) } }
         + { runs: runs(stageImports[workload + '/' + stage]) }
         + { posture: posture(stageImports[workload + '/' + stage]) }
