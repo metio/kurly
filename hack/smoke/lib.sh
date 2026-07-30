@@ -600,7 +600,14 @@ EOF
     # make the same call.
     version="$(jq -r '.metadata.labels["app.kubernetes.io/version"] // ""' <<<"$ctrl")"
     versionBlock=""
-    if [[ "$version" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+    # ANCHORED at both ends, and this matters: an unanchored prefix test accepts
+    # everything that merely STARTS like a semver, and a four-component version is
+    # the common shape that does — 3.3.1.0, v2.3.0.4_stable_2026-07-09-ls301. Those
+    # are not semver, stageset rejects them, and the stage fails InvalidVersion
+    # before anything is applied. Seven of the catalogue's 320 tags are that shape.
+    # A leading v is fine (stageset strips it); a pre-release or build suffix is
+    # part of the grammar and allowed.
+    if [[ "$version" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
       versionBlock=$'\n  version:\n    fromObject: { stage: '"${st}"', apiVersion: '"${apiv}"', kind: '"${kind}"', name: '"${name}"' }'
     else
       echo "== deep: ${id}/${st} is pinned to '${version:-<none>}', which is not a semver — the StageSet declares no spec.version =="
