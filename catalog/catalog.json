@@ -18294,6 +18294,128 @@
                "architectures": null,
                "args": [
                   {
+                     "default": "backup",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": {
+                        "bucket": "backups",
+                        "endpoint": "http://seaweedfs:8333"
+                     },
+                     "name": "s3",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": "k8up-repository",
+                     "name": "repoPasswordSecret",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "password",
+                     "name": "repoPasswordKey",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "tags",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "activeDeadlineSeconds",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 3,
+                     "name": "failedJobsHistoryLimit",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1,
+                     "name": "successfulJobsHistoryLimit",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "promURL",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "statsURL",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "podSecurityContext",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "podConfigRef",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "volumes",
+                     "required": false,
+                     "type": "array"
+                  },
+                  {
+                     "name": "backend",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "help": "A one-off Backup: one snapshot of every volume in the namespace, taken now rather than on a cron. Runs on apply and finishes, so a caller can gate on the outcome — it signals completion with status.finished and a Completed condition, never readiness. Tag it, or the snapshot can only be found again by timestamp.",
+               "id": "backup",
+               "importPath": "github.com/metio/kurly/workloads/k8up/backup.libsonnet",
+               "kind": "k8up",
+               "posture": null,
+               "runs": { },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "username",
+                     "value": "kurly"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "password",
+                     "length": 32
+                  }
+               ],
+               "storage": {
+                  "pvcs": 0
+               }
+            },
+            {
+               "architectures": null,
+               "args": [
+                  {
                      "default": "restore",
                      "name": "name",
                      "required": false,
@@ -18337,12 +18459,6 @@
                      "type": "object"
                   },
                   {
-                     "default": true,
-                     "name": "runnable",
-                     "required": false,
-                     "type": "bool"
-                  },
-                  {
                      "name": "resources",
                      "required": false,
                      "type": "object"
@@ -18375,7 +18491,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
-               "help": "A Restore: the half that proves the other half. Runs once when applied — into a claim (recovery) or to object storage as a tarball (inspection). runnable=false stages it, so the manifest lands and a person starts it deliberately.",
+               "help": "A Restore: the half that proves the other half. Runs once when applied — into a claim (recovery) or to object storage as a tarball (inspection). K8up cannot stage one, so applying it is starting it.",
                "id": "restore",
                "importPath": "github.com/metio/kurly/workloads/k8up/restore.libsonnet",
                "kind": "k8up",

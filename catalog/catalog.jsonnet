@@ -332,6 +332,7 @@ local stageImports = {
   'volsync/backup': import 'github.com/metio/kurly/workloads/volsync/backup.libsonnet',
   'volsync/restore': import 'github.com/metio/kurly/workloads/volsync/restore.libsonnet',
   'k8up/schedule': import 'github.com/metio/kurly/workloads/k8up/schedule.libsonnet',
+  'k8up/backup': import 'github.com/metio/kurly/workloads/k8up/backup.libsonnet',
   'k8up/restore': import 'github.com/metio/kurly/workloads/k8up/restore.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',

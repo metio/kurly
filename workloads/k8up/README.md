@@ -5,11 +5,12 @@ SPDX-License-Identifier: 0BSD
 
 # k8up
 
-Backs up every PersistentVolume in a namespace on a schedule, authored as
-[K8up](https://k8up.io/) `Schedule` and `Restore` custom resources. restic
-underneath, one resource per namespace — so a volume is protected the moment it
-appears rather than when somebody remembers to declare it. A claim annotated
-`k8up.io/backup: "false"` is left out.
+Backs up every PersistentVolume in a namespace — on a schedule, or once on
+demand — and writes it back, authored as [K8up](https://k8up.io/) `Schedule`,
+`Backup` and `Restore` custom resources. restic underneath, one resource per
+namespace, so a volume is protected the moment it appears rather than when
+somebody remembers to declare it. A claim annotated `k8up.io/backup: "false"` is
+left out.
 
 **Prerequisite:** the K8up operator must be installed in the cluster.
 
@@ -19,7 +20,7 @@ names them.
 
 ## Compose
 
-Both stages are a `function(params)` returning the CR; adapt and render with
+Every stage is a `function(params)` returning the CR; adapt and render with
 `kurly.list`:
 
 ```jsonnet
@@ -49,6 +50,38 @@ Any backend K8up accepts that kurly does not model — Azure, GCS, B2, Swift, re
 schedule(backend={ azure: { container: 'backups', accountNameSecretRef: { name: 'azure', key: 'account' } } })
 ```
 
+## Backing up once, now
+
+A `Schedule` protects a namespace over time. A `Backup` captures one moment —
+which is what a snapshot taken immediately before an update is, and a cron that
+fires at three in the morning is not:
+
+```jsonnet
+local backup = import 'github.com/metio/kurly/workloads/k8up/backup.libsonnet';
+
+kurly.list(backup(
+  name='pre-update',
+  tags=['pre-update', 'v2.3.1'],
+  activeDeadlineSeconds=1800,
+  s3={ endpoint: 'https://s3.example.com', bucket: 'tenant-backups' },
+))
+```
+
+It runs on apply and finishes, so something that applies it can gate on the
+result. Two things decide whether that gate works:
+
+**Wait for completion, not readiness.** A Backup never reports Ready. It ends
+with `status.finished: true` and a `Completed` condition whose reason is
+`Succeeded` or `Failed` — `kubectl get backup` surfaces that reason in its
+`Completion` column. Anything waiting for a Ready condition waits forever.
+
+**Give it a deadline.** A backup that fails releases whatever is waiting on it; a
+backup that *hangs* does not. `activeDeadlineSeconds` is what turns the second
+case into the first.
+
+Tag it. restic selects snapshots by tag, so an untagged one can be picked out
+only by timestamp — guesswork at the moment somebody needs it most.
+
 ## Restoring
 
 The restore is a workload of its own, because a backup nobody has restored is a
@@ -67,8 +100,10 @@ kurly.list(restore(
 Restoring into a claim puts the data back where the application expects it.
 Passing `restoreTo` instead writes a tarball to object storage, which is what to
 do when the question is what a backup contains rather than putting it back.
-`runnable=false` stages the recovery: the manifest lands, a person reads it, and
-flipping the flag is the deliberate act that starts it.
+
+K8up offers no way to stage a Restore — the CR has no field that holds one back,
+so it begins as soon as it reaches the cluster. Rendering one **is** starting it;
+a recovery somebody wants to read first is one that stays out of the applied set.
 
 ## Choosing between this and volsync
 
@@ -120,6 +155,21 @@ spec: { sourceRef: { kind: OCIRepository, name: kurly-k8up } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
+metadata: { name: k8up-backup, namespace: k8up }
+spec:
+  serviceAccountName: k8up-renderer
+  files:
+    main.jsonnet: |
+      local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      local backup = import 'github.com/metio/kurly/workloads/k8up/backup.libsonnet';
+      // Compose your exposure and any + features here, then render.
+      kurly.list(backup())
+  libraries:
+    - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
+    - { kind: JsonnetLibrary, name: kurly-k8up, importPath: github.com/metio/kurly/workloads/k8up }
+---
+apiVersion: jaas.metio.wtf/v1
+kind: JsonnetSnippet
 metadata: { name: k8up-restore, namespace: k8up }
 spec:
   serviceAccountName: k8up-renderer
@@ -160,6 +210,11 @@ spec:
   serviceAccountName: k8up-deployer
   rollbackOnFailure: true
   stages:
+    - name: backup
+      sourceRef:
+        apiVersion: jaas.metio.wtf/v1
+        kind: JsonnetSnippet
+        name: k8up-backup
     - name: restore
       sourceRef:
         apiVersion: jaas.metio.wtf/v1

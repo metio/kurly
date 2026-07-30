@@ -14,10 +14,15 @@
 // repository Secret must exist in this namespace — the same Secret the schedule
 // reads.
 //
-// A Restore runs ONCE, when it is applied. Restoring into a claim ('folder')
-// puts the data back where the application expects it; restoring to S3 puts a
-// tarball somewhere a person can inspect it, which is what to do when the
-// question is what the backup contains rather than putting it back.
+// A Restore runs ONCE, the moment it is applied, and K8up offers no way to stage
+// one — `Restore.spec` has no field that holds it back. The only way to keep a
+// recovery from starting is not to apply the manifest, so treat rendering one as
+// the act of starting it.
+//
+// Restoring into a claim ('folder') puts the data back where the application
+// expects it; restoring to S3 puts a tarball somewhere a person can inspect it,
+// which is what to do when the question is what the backup contains rather than
+// putting it back.
 local version = std.rstripChars(importstr './version.txt', '\n');
 
 local labelsFor(name) = {
@@ -34,7 +39,6 @@ function(
   repoPasswordKey='password',
   snapshot=null,
   restoreTo=null,
-  runnable=true,
   resources=null,
   podSecurityContext=null,
   backend={},
@@ -80,10 +84,6 @@ function(
           folder: (if claim == null then null else { claimName: claim }),
           s3: restoreTo,
         }) + restoreMethod,
-        // A Restore starts the moment it is applied. Rendering it as not
-        // runnable stages the recovery — the manifest lands, a person reads it,
-        // and flipping this to true is the deliberate act that begins it.
-        runnable: (if runnable then null else false),
         resources: resources,
         podSecurityContext: podSecurityContext,
       }),
