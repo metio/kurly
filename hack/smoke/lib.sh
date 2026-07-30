@@ -639,6 +639,13 @@ kind: StageSet
 metadata: { name: ${snip}, namespace: ${ns} }
 spec:
   interval: 1m
+  # stageset's own per-stage timeout, which defaults to 5 MINUTES and is the
+  # binding constraint on everything below it: once it expires the stage is
+  # StageFailed and no amount of waiting here changes the verdict. Five minutes is
+  # not enough for an app that migrates a database before it serves — automatisch
+  # was failed at verify while its Deployment went on to become healthy — so it is
+  # raised to sit above the startup budget the workloads themselves allow.
+  timeout: 10m
   serviceAccountName: stageset-deployer${versionBlock}
   stages:
     - name: ${st}
@@ -655,7 +662,11 @@ EOF
     # than the fast tier, and workloads that run migrations before serving
     # (authentik, and it will not be alone) were failing at 4m32s while Running
     # with zero restarts: healthy, just not finished starting.
-    kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-200}" \
+    # Longer than the StageSet's own 10m timeout above, on purpose: this wait must
+    # outlast stageset's so the run reads its verdict rather than pre-empting it
+    # with a timeout of its own, which would report "never became Ready" for a
+    # stage that was still deciding.
+    kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-260}" \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: stageset/${snip} never became Ready"; return 1; }
     kubectl --namespace="$ns" rollout status "${kind,,}/${name}" --timeout=300s \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }

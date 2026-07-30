@@ -25,11 +25,18 @@
 // have no controller to roll out and cannot reach this tier at all.
 {
   '2fauth': '2026-07-30',
+  activepieces: '2026-07-30',
   actualbudget: '2026-07-30',
   adguardhome: '2026-07-30',
   adminer: '2026-07-30',
   'airsonic-advanced': '2026-07-30',
+  alist: '2026-07-30',
   answer: '2026-07-30',
+  anythingllm: '2026-07-30',
+  apprise: '2026-07-30',
+  audiobookshelf: '2026-07-30',
+  authelia: '2026-07-30',
+  baikal: '2026-07-30',
   gatus: '2026-07-30',
   'it-tools': '2026-07-30',
   linkding: '2026-07-30',
