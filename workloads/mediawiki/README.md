@@ -21,7 +21,7 @@ kurly.list(mediawiki())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `mediawiki` | |
-| `image` | `docker.io/library/mediawiki:1.45.4` | |
+| `image` | `docker.io/library/mediawiki:1.46.0` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | uploaded files (`/var/www/html/images`) |
 | `env` / `resources` / `labels` / `annotations` | | |
 
