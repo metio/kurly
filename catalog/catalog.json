@@ -2786,7 +2786,7 @@
                ],
                "args": [
                   {
-                     "default": "2fauth",
+                     "default": "twofauth",
                      "name": "name",
                      "required": false,
                      "type": "string"
@@ -2814,7 +2814,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "2fauth",
+                     "default": "twofauth",
                      "name": "secretName",
                      "required": false,
                      "type": "string"
@@ -6400,7 +6400,7 @@
                      "type": "string"
                   },
                   {
-                     "default": 2,
+                     "default": 1,
                      "name": "replicas",
                      "required": false,
                      "type": "int"
@@ -6919,7 +6919,7 @@
                      "type": "int"
                   },
                   {
-                     "default": "4.1.7",
+                     "default": "5.0.8",
                      "name": "serverVersion",
                      "required": false,
                      "type": "string"
@@ -25501,7 +25501,7 @@
                      "type": "int"
                   },
                   {
-                     "default": "8.0.4",
+                     "default": "8.3.7",
                      "name": "mongodbVersion",
                      "required": false,
                      "type": "string"
@@ -26264,7 +26264,7 @@
                      "type": "int"
                   },
                   {
-                     "default": "8.4.4",
+                     "default": "9.7.1",
                      "name": "serverVersion",
                      "required": false,
                      "type": "string"
@@ -26836,7 +26836,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "2Gi",
+                     "default": "5Gi",
                      "name": "storageSize",
                      "required": false,
                      "type": "quantity"
@@ -29575,7 +29575,7 @@
                      "type": "int"
                   },
                   {
-                     "default": "2.19.1",
+                     "default": "3.7.0",
                      "name": "opensearchVersion",
                      "required": false,
                      "type": "string"

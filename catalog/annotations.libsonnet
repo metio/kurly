@@ -875,7 +875,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         server: d.fn('The Cal.com server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='cal-com'),
           d.arg('image', d.T.string),
-          d.arg('replicas', d.T.int, default=2),
+          d.arg('replicas', d.T.int, default=1),
           d.arg('webappUrl', d.T.string),
           d.arg('secretName', d.T.string, default='cal-com'),
           d.arg('env', d.T.object, default={}),
@@ -3146,7 +3146,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         server: d.fn('The A netboot.xyz server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='netbootxyz'),
           d.arg('image', d.T.string),
-          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('puid', d.T.int, default=1000),
           d.arg('pgid', d.T.int, default=1000),
@@ -3916,12 +3916,12 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       category: 'application',
       stages: {
         server: d.fn('The 2FAuth server. appUrl is the public URL; secretName holds APP_KEY (envFrom). Data at /2fauth. Compose an exposure onto the HTTP port.', [
-          d.arg('name', d.T.string, default='2fauth'),
+          d.arg('name', d.T.string, default='twofauth'),
           d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='1Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('appUrl', d.T.string, example='https://2fa.example.com'),
-          d.arg('secretName', d.T.string, default='2fauth'),
+          d.arg('secretName', d.T.string, default='twofauth'),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
@@ -6178,7 +6178,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('name', d.T.string, default='cassandra'),
           d.arg('clusterName', d.T.string),
           d.arg('size', d.T.int, default=3),
-          d.arg('serverVersion', d.T.string, default='4.1.7'),
+          d.arg('serverVersion', d.T.string, default='5.0.8'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('resources', d.T.object, default={ requests: { cpu: '1', memory: '2Gi' }, limits: { memory: '4Gi' } }),
@@ -6201,7 +6201,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         cluster: d.fn('The MongoDBCommunity CR (a SCRAM-authenticated ReplicaSet). members are replica-set members (odd count for quorum). secretName is a Secret you provide with the admin password (key `password`); adminUser is created on bootstrap. Storage is set via the operator StatefulSet override. Render with kurly.list.', [
           d.arg('name', d.T.string, default='mongodb'),
           d.arg('members', d.T.int, default=3),
-          d.arg('mongodbVersion', d.T.string, default='8.0.4'),
+          d.arg('mongodbVersion', d.T.string, default='8.3.7'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('logsSize', d.T.quantity, default='2Gi'),
@@ -6224,7 +6224,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         cluster: d.fn('The OpenSearchCluster CR. replicas is the default node pool size (each node is cluster_manager+data+ingest; split into dedicated pools via the raw + hatch for large clusters). dashboards runs OpenSearch Dashboards alongside. Render with kurly.list.', [
           d.arg('name', d.T.string, default='opensearch'),
           d.arg('replicas', d.T.int, default=3),
-          d.arg('opensearchVersion', d.T.string, default='2.19.1'),
+          d.arg('opensearchVersion', d.T.string, default='3.7.0'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '4Gi' } }),
@@ -6249,7 +6249,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('name', d.T.string, default='mysql'),
           d.arg('instances', d.T.int, default=3),
           d.arg('routerInstances', d.T.int, default=2),
-          d.arg('serverVersion', d.T.string, default='8.4.4'),
+          d.arg('serverVersion', d.T.string, default='9.7.1'),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string, default='mysql-cluster'),

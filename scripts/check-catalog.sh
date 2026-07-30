@@ -129,5 +129,39 @@ for stage in "${param_stages[@]}"; do
   else
     echo "every parameter annotated, in order: $stage"
   fi
+
+  # And that each annotated DEFAULT is the one the function actually declares.
+  # The catalog cannot derive this — jsonnet gives no way to read a function's
+  # parameter defaults — so the annotation states them by hand, which makes it a
+  # transcription of a fact that lives somewhere else. Left ungated it drifts
+  # silently and stays confident: the published default for cassandra-cluster was
+  # a whole major behind what the stage deploys, and a consumer prefilling a form
+  # from the catalog would have offered it.
+  #
+  # Only simple literals are compared — a quoted string, a number, a boolean. A
+  # computed default has no single value to state and the annotation does not
+  # claim one.
+  while IFS= read -r decl; do
+    [ -n "$decl" ] || continue
+    pname="${decl%%=*}"
+    pval="${decl#*=}"
+    pval="${pval%,}"
+    case "$pval" in
+      "'"*"'") pval="${pval#\'}"; pval="${pval%\'}" ;;
+      [0-9]* | true | false) : ;;
+      *) continue ;;
+    esac
+    annotated="$(jq -r --arg w "$workload" --arg s "$id" --arg n "$pname" \
+      '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?
+       | select(.name == $n) | if has("default") then (.default | tostring) else empty end' \
+      catalog/catalog.json)"
+    # No annotated default is a fair statement about a parameter; a WRONG one is not.
+    [ -n "$annotated" ] || continue
+    if [ "$annotated" != "$pval" ]; then
+      echo "::error::${stage}: ${pname} defaults to '${pval}' but the catalog publishes '${annotated}' — fix catalog/annotations.libsonnet" >&2
+      fail=1
+    fi
+  done < <(sed -n '/^function(/,/^)/p' "$stage" \
+    | grep -oE "^  [a-zA-Z][a-zA-Z0-9]*=('[^']*'|[0-9][0-9.]*|true|false)," | sed 's/^  //')
 done
 [ "$fail" -eq 0 ] || exit 1
