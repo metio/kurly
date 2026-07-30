@@ -17289,7 +17289,7 @@
                      "type": "string"
                   },
                   {
-                     "default": "docker.io/library/nginx:1.29.4-alpine",
+                     "default": "docker.io/library/nginx:1.31.3-alpine",
                      "name": "nginxImage",
                      "required": false,
                      "type": "string"
@@ -17349,7 +17349,7 @@
                },
                "runs": {
                   "alsoRuns": [
-                     "docker.io/library/nginx:1.29.4-alpine"
+                     "docker.io/library/nginx:1.31.3-alpine"
                   ],
                   "digest": "sha256:d1eec88a8134481b19a0d78107abc6a72bf29987e310cc82f3b81dfcb02decf1",
                   "image": "docker.io/invoiceninja/invoiceninja:5.13.26@sha256:d1eec88a8134481b19a0d78107abc6a72bf29987e310cc82f3b81dfcb02decf1",

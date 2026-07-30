@@ -41,7 +41,7 @@ function(
   secretName='invoiceninja',
   // The web server in front of php-fpm. The application image ships FastCGI only,
   // so nginx serves the document root beside it in the same pod.
-  nginxImage='docker.io/library/nginx:1.29.4-alpine',
+  nginxImage='docker.io/library/nginx:1.31.3-alpine',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},
