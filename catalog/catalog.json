@@ -40275,8 +40275,8 @@
                },
                "runs": {
                   "digest": "sha256:7829cc2cb3393ac65c21078d7b0b1221049e0ad2588c8c723f09975220ebc501",
-                  "image": "ghcr.io/metio/tik:2026.7.18213457@sha256:7829cc2cb3393ac65c21078d7b0b1221049e0ad2588c8c723f09975220ebc501",
-                  "tag": "2026.7.18213457"
+                  "image": "ghcr.io/metio/tik:2026.7.29222201@sha256:7829cc2cb3393ac65c21078d7b0b1221049e0ad2588c8c723f09975220ebc501",
+                  "tag": "2026.7.29222201"
                },
                "storage": {
                   "pvcs": 1
