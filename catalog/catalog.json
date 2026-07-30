@@ -14212,8 +14212,8 @@
                },
                "runs": {
                   "digest": "sha256:db857de5ac398e274d36f521b1cff0c76d714925b865e45b64fe0bd2f4499ec8",
-                  "image": "docker.io/glitchtip/glitchtip:v6.0.3@sha256:db857de5ac398e274d36f521b1cff0c76d714925b865e45b64fe0bd2f4499ec8",
-                  "tag": "v6.0.3"
+                  "image": "docker.io/glitchtip/glitchtip:6.2.2@sha256:db857de5ac398e274d36f521b1cff0c76d714925b865e45b64fe0bd2f4499ec8",
+                  "tag": "6.2.2"
                },
                "secretKeys": [
                   {
@@ -14315,8 +14315,8 @@
                },
                "runs": {
                   "digest": "sha256:db857de5ac398e274d36f521b1cff0c76d714925b865e45b64fe0bd2f4499ec8",
-                  "image": "docker.io/glitchtip/glitchtip:v6.0.3@sha256:db857de5ac398e274d36f521b1cff0c76d714925b865e45b64fe0bd2f4499ec8",
-                  "tag": "v6.0.3"
+                  "image": "docker.io/glitchtip/glitchtip:6.2.2@sha256:db857de5ac398e274d36f521b1cff0c76d714925b865e45b64fe0bd2f4499ec8",
+                  "tag": "6.2.2"
                },
                "storage": {
                   "pvcs": 0
