@@ -2901,6 +2901,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Activepieces",
@@ -3655,6 +3658,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "AList",
@@ -3876,6 +3882,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "AnythingLLM",
@@ -3984,6 +3993,9 @@
          "license": "BSD-2-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Apprise",
@@ -4099,6 +4111,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Audiobookshelf",
@@ -4209,6 +4224,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Authelia",
@@ -4619,6 +4637,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Automatisch",
@@ -4897,6 +4918,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Baikal",
@@ -5160,6 +5184,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Bazarr",
@@ -5292,6 +5319,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Beszel",
@@ -5748,6 +5778,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Blackbox exporter",
@@ -5856,6 +5889,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Blinko",
@@ -42810,7 +42846,8 @@
                   "writableRootFilesystem": true
                },
                "runs": {
-                  "image": "docker.io/wekan/wekan:v10.03",
+                  "digest": "sha256:28b8e8bf7a1d8a178f9d9dbcb2a25613707aa15db9efef277e58dc1ea2d9f1f6",
+                  "image": "ghcr.io/wekan/wekan:v10.03@sha256:28b8e8bf7a1d8a178f9d9dbcb2a25613707aa15db9efef277e58dc1ea2d9f1f6",
                   "tag": "v10.03"
                },
                "storage": {

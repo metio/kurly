@@ -21,7 +21,7 @@ kurly.list(wekan(rootUrl='https://boards.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `wekan` | |
-| `image` | `docker.io/wekan/wekan:v10.03` | |
+| `image` | `ghcr.io/wekan/wekan:v10.03` | |
 | `replicas` | `2` | stateless — scale freely |
 | `rootUrl` | inferred | the public URL |
 | `secretName` | `wekan-secrets` | Secret with `MONGO_URL` (envFrom) |
