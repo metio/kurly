@@ -21,7 +21,7 @@ kurly.list(pwpush())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `passwordpusher` | |
-| `image` | `docker.io/pglombardo/pwpush:v2.9.3` | |
+| `image` | `docker.io/pglombardo/pwpush:2.9.4` | |
 | `secretName` | `passwordpusher-secrets` | Secret with `DATABASE_URL` and `SECRET_KEY_BASE` (envFrom) |
 | `replicas` | `1` | stateless — scale out freely |
 | `env` / `resources` / `labels` / `annotations` | | |
