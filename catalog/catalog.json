@@ -2772,6 +2772,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "2FAuth",
@@ -3030,7 +3033,7 @@
                   {
                      "generate": "hex",
                      "key": "AP_ENCRYPTION_KEY",
-                     "length": 64
+                     "length": 32
                   },
                   {
                      "generate": "hex",
@@ -3055,6 +3058,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Actual Budget",
@@ -3167,6 +3173,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "AdGuard Home",
@@ -3277,6 +3286,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Adminer",
@@ -3390,6 +3402,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Airsonic-Advanced",
@@ -3751,6 +3766,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Apache Answer",

@@ -5432,7 +5432,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', secretKeys: [{ key: 'AP_POSTGRES_PASSWORD', generate: 'password', length: 32 }, { key: 'AP_ENCRYPTION_KEY', generate: 'hex', length: 64 }, { key: 'AP_JWT_SECRET', generate: 'hex', length: 64 }] },
+        ]) + { kind: 'http', secretKeys: [{ key: 'AP_POSTGRES_PASSWORD', generate: 'password', length: 32 }, { key: 'AP_ENCRYPTION_KEY', generate: 'hex', length: 32 }, { key: 'AP_JWT_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     automatisch: {

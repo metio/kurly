@@ -536,7 +536,7 @@ kurly::provision_deps() {
 # loop. A custom-resource workload has no controller of its own, so it is
 # fast-check only and this is a no-op.
 kurly::deep() {
-  local id="$1" ns="kurly-deep-${id}" st f snip ctrl kind name apiv
+  local id="$1" ns="kurly-deep-${id}" st f snip ctrl kind name apiv version versionBlock
   # Skip workloads whose stages render only a custom resource (no controller).
   if ! kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>/dev/null \
       | jq -e '.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")' >/dev/null 2>&1; then
@@ -580,6 +580,24 @@ EOF
     ctrl="$(kurly::render "$f" "+ k.hostUsers()" | jq -c '[.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")][0]')"
     [ "$ctrl" != null ] && [ -n "$ctrl" ] || { echo "== deep: ${st} has no controller, skipping stage =="; continue; }
     kind="$(jq -r '.kind' <<<"$ctrl")"; name="$(jq -r '.metadata.name' <<<"$ctrl")"; apiv="$(jq -r '.apiVersion' <<<"$ctrl")"
+    # spec.version is OPTIONAL, and only meaningful when the deployed version can
+    # be ordered: stageset parses it as semver so a migration ladder knows which
+    # way it is moving. kurly stamps app.kubernetes.io/version from the image tag,
+    # and a fifth of the catalogue is pinned to something that is not a semver —
+    # `latest`, a major-only `10`, a `version-5.7.0`. Declaring the field anyway
+    # fails the whole stage with InvalidVersion before anything is applied, which
+    # says nothing about whether the workload can be delivered.
+    #
+    # So it is declared only when the label the StageSet would read actually is a
+    # semver. A consumer building a StageSet for a `latest`-tagged workload has to
+    # make the same call.
+    version="$(jq -r '.metadata.labels["app.kubernetes.io/version"] // ""' <<<"$ctrl")"
+    versionBlock=""
+    if [[ "$version" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+      versionBlock=$'\n  version:\n    fromObject: { stage: '"${st}"', apiVersion: '"${apiv}"', kind: '"${kind}"', name: '"${name}"' }'
+    else
+      echo "== deep: ${id}/${st} is pinned to '${version:-<none>}', which is not a semver — the StageSet declares no spec.version =="
+    fi
     kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
@@ -621,9 +639,7 @@ kind: StageSet
 metadata: { name: ${snip}, namespace: ${ns} }
 spec:
   interval: 1m
-  serviceAccountName: stageset-deployer
-  version:
-    fromObject: { stage: ${st}, apiVersion: ${apiv}, kind: ${kind}, name: ${name} }
+  serviceAccountName: stageset-deployer${versionBlock}
   stages:
     - name: ${st}
       sourceRef: { name: ${snip} }
