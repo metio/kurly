@@ -133,6 +133,40 @@ for id in "${targets[@]}"; do
       | grep -q Unauthorized && stale=true
   fi
   if [ "$stale" = true ]; then
+    # Capture what distinguishes the causes BEFORE restarting anything, because a
+    # restart destroys the evidence. The three errors are not interchangeable:
+    #
+    #   403 Forbidden — a RoleBinding that has not taken effect. Both controllers
+    #                   classify it as RBACDenied and say so; it cannot read as
+    #                   Unauthorized.
+    #   404 Not Found — the ServiceAccount does not exist yet, so the TokenRequest
+    #                   against it fails outright ("minting token for <ns>/<sa>").
+    #                   It never reaches an apply.
+    #   401 Unauthorized — the apiserver could not validate a token it had already
+    #                   ISSUED: the ServiceAccount is gone, or its UID no longer
+    #                   matches the one in the token.
+    #
+    # So a 401 means a credential outliving its ServiceAccount, and the question is
+    # only whether this namespace is genuinely new. A creationTimestamp older than
+    # this attempt says it is not — the walk has been here before and failed, which
+    # leaves no trace in the ledger, since that records successes only.
+    echo "::group::${id}: Unauthorized — evidence before any restart"
+    kubectl --namespace="kurly-deep-${id}" get serviceaccount stageset-deployer default \
+      -o custom-columns=NAME:.metadata.name,UID:.metadata.uid,CREATED:.metadata.creationTimestamp 2>&1 || true
+    kubectl --namespace="kurly-deep-${id}" get stageset,jsonnetsnippet \
+      -o jsonpath='{range .items[*]}{.kind}{" "}{.metadata.name}{" "}{.status.conditions[*].message}{"\n"}{end}' 2>&1 || true
+    echo "--- stageset-controller, lines mentioning Unauthorized ---"
+    kubectl --namespace=stageset-system logs deploy/stageset-controller --tail=100 2>/dev/null | grep -i unauthor || echo "(none)"
+    echo "--- jaas, lines mentioning Unauthorized ---"
+    kubectl --namespace=jaas-system logs deploy/jaas --tail=100 2>/dev/null | grep -i unauthor || echo "(none)"
+    echo "::endgroup::"
+    # Everything below is a WORKAROUND for a bug fixed on
+    # fix/tenant-credential-401-eviction in both controllers, where a 401 evicts the
+    # cached credential, re-mints and retries once. Once the cluster runs images
+    # built from those branches this block is dead code and should be deleted,
+    # keeping the evidence dump above and a loud error when a message still says
+    # Unauthorized — because with the fix in, one that survives the re-mint is a
+    # genuinely new cause and worth reporting rather than restarting past.
     echo "== ${id}: a stale impersonation credential — restarting both controllers and retrying =="
     kubectl --namespace=jaas-system rollout restart deploy/jaas >/dev/null 2>&1 || true
     kubectl --namespace=stageset-system rollout restart deploy >/dev/null 2>&1 || true
