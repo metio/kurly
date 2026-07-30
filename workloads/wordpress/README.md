@@ -22,7 +22,7 @@ kurly.list(wordpress())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `wordpress` | |
-| `image` | `docker.io/library/wordpress:6.9.4-php8.3-apache` | |
+| `image` | `docker.io/library/wordpress:7.0.2-php8.3-apache` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | content (`/var/www/html`) |
 | `dbHost` / `dbName` / `dbUser` | `wordpress-db` / `wordpress` / `wordpress` | the MySQL/MariaDB database |
 | `secretName` | `wordpress-secrets` | Secret with `WORDPRESS_DB_PASSWORD` (envFrom) |
