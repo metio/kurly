@@ -23,7 +23,7 @@ kurly.list(baserow(publicUrl='https://baserow.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `baserow` | |
-| `image` | `docker.io/baserow/baserow:2.3.2` | the all-in-one image |
+| `image` | `docker.io/baserow/baserow:2.3.3` | the all-in-one image |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | everything (`/baserow/data`) |
 | `publicUrl` | inferred | the public URL |
 | `secretName` | `baserow-secrets` | Secret with `BASEROW_SECRET_KEY`, `BASEROW_JWT_SIGNING_KEY` (envFrom) |
