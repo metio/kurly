@@ -536,7 +536,7 @@ kurly::provision_deps() {
 # loop. A custom-resource workload has no controller of its own, so it is
 # fast-check only and this is a no-op.
 kurly::deep() {
-  local id="$1" ns="kurly-deep-${id}" st f snip ctrl kind name apiv version versionBlock
+  local id="$1" ns="kurly-deep-${id}" st f snip ctrl kind name apiv version versionBlock ex
   # Skip workloads whose stages render only a custom resource (no controller).
   if ! kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>/dev/null \
       | jq -e '.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")' >/dev/null 2>&1; then
@@ -580,6 +580,13 @@ EOF
     ctrl="$(kurly::render "$f" "+ k.hostUsers()" | jq -c '[.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")][0]')"
     [ "$ctrl" != null ] && [ -n "$ctrl" ] || { echo "== deep: ${st} has no controller, skipping stage =="; continue; }
     kind="$(jq -r '.kind' <<<"$ctrl")"; name="$(jq -r '.metadata.name' <<<"$ctrl")"; apiv="$(jq -r '.apiVersion' <<<"$ctrl")"
+    # The same deployment-specific values the fast scenarios compose, from
+    # hack/smoke/extra.json. An app that cannot start without knowing its own
+    # public URL is given one here rather than the workload carrying a default
+    # that would be wrong everywhere it is really deployed — and without it the
+    # deep check fails 18 workloads for a value the fast one supplies. cobalt is
+    # the plain case: "API_URL env variable is missing, cobalt api can't start".
+    ex="$(jq -r --arg k "${id}/${st}" --arg id "$id" '.[$k] // .[$id] // ""' hack/smoke/extra.json)"
     # spec.version is OPTIONAL, and only meaningful when the deployed version can
     # be ordered: stageset parses it as semver so a migration ladder knows which
     # way it is moving. kurly stamps app.kubernetes.io/version from the image tag,
@@ -621,8 +628,11 @@ spec:
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
+      // The extra fragments in hack/smoke/extra.json are written against \`k\`,
+      // the alias the fast scenarios use; bind it so they compose verbatim here.
+      local k = kurly;
       local stage = import 'github.com/metio/kurly/${f}';
-      local rendered = kurly.list(stage() + kurly.hostUsers());
+      local rendered = kurly.list(stage() + kurly.hostUsers()${ex});
       rendered { items: [ item { metadata+: { namespace: '${ns}' } } for item in rendered.items ] }
 EOF
     # The FIRST snippet of a run pays for a cold cluster: JaaS pulls three OCI
