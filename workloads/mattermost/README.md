@@ -26,7 +26,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `mattermost` | |
-| `image` | `docker.io/mattermost/mattermost-team-edition:11.8.4` | |
+| `image` | `docker.io/mattermost/mattermost-team-edition:11.9.0` | |
 | `storageSize` / `storageClass` | `20Gi` / cluster default | uploads (`/mattermost/data`) |
 | `siteUrl` | inferred | the public URL |
 | `secretName` | `mattermost-secrets` | Secret with `MM_SQLSETTINGS_DATASOURCE` (envFrom) |
