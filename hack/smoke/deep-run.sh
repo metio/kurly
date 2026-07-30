@@ -96,20 +96,38 @@ for id in "${targets[@]}"; do
   kubectl wait --for=delete "namespace/kurly-deep-${id}" --timeout=180s >/dev/null 2>&1 || true
   ok=true
   kurly::deep "$id" || ok=false
-  # JaaS keys its impersonation credential for the tenant ServiceAccount by
-  # namespace, and a walk deletes and recreates kurly-deep-<id> every time it runs
-  # a workload. A credential minted for the previous incarnation is rejected 401
-  # against the new one, and the operator does not re-mint on its own — every
-  # snippet in that namespace then fails SourceFetchFailed "Unauthorized" no matter
-  # how sound the workload is. Restarting the operator drops the stale credential,
-  # so the walk does that once and gives the workload a second chance rather than
-  # recording a library-level flake as a failed delivery.
-  if [ "$ok" = false ] \
-    && kubectl --namespace="kurly-deep-${id}" get jsonnetsnippet -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null \
-      | grep -q Unauthorized; then
-    echo "== ${id}: JaaS holds a stale impersonation credential — restarting it and retrying =="
-    kubectl --namespace=jaas-system rollout restart deploy/jaas >/dev/null 2>&1 || true
-    kubectl --namespace=jaas-system rollout status deploy/jaas --timeout=180s >/dev/null 2>&1 || true
+  # BOTH controllers act by impersonating a ServiceAccount in the workload's
+  # namespace — JaaS as the tenant SA to render, stageset as stageset-deployer to
+  # apply — and both key that credential by namespace and hold on to it. A walk
+  # deletes and recreates kurly-deep-<id> whenever it revisits a workload, and a
+  # credential minted for the previous incarnation is rejected 401 against the new
+  # one. Neither re-mints on its own, so everything in that namespace fails
+  # Unauthorized no matter how sound the workload is: JaaS reports
+  # SourceFetchFailed on the snippet, stageset reports StageFailed on a dry-run
+  # apply. Restarting the controller that is holding the stale credential drops it.
+  #
+  # Both are checked, because a run that only knew about one spent its retry
+  # restarting an operator that was working and failed again on the one that was
+  # not.
+  if [ "$ok" = false ]; then
+    stale_jaas=false stale_stageset=false
+    kubectl --namespace="kurly-deep-${id}" get jsonnetsnippet -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null \
+      | grep -q Unauthorized && stale_jaas=true
+    kubectl --namespace="kurly-deep-${id}" get stageset -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null \
+      | grep -q Unauthorized && stale_stageset=true
+  else
+    stale_jaas=false stale_stageset=false
+  fi
+  if [ "$stale_jaas" = true ] || [ "$stale_stageset" = true ]; then
+    echo "== ${id}: a stale impersonation credential (jaas=${stale_jaas} stageset=${stale_stageset}) — restarting and retrying =="
+    if [ "$stale_jaas" = true ]; then
+      kubectl --namespace=jaas-system rollout restart deploy/jaas >/dev/null 2>&1 || true
+      kubectl --namespace=jaas-system rollout status deploy/jaas --timeout=180s >/dev/null 2>&1 || true
+    fi
+    if [ "$stale_stageset" = true ]; then
+      kubectl --namespace=stageset-system rollout restart deploy >/dev/null 2>&1 || true
+      kubectl --namespace=stageset-system rollout status deploy --timeout=180s >/dev/null 2>&1 || true
+    fi
     ok=true
     kurly::deep "$id" || ok=false
   fi
