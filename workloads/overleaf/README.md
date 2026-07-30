@@ -26,7 +26,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `overleaf` | |
-| `image` | `docker.io/sharelatex/sharelatex:6.2.1` | |
+| `image` | `docker.io/sharelatex/sharelatex:6.2.2` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | projects and compiles (`/var/lib/overleaf`) |
 | `redisHost` | `overleaf-cache` | the Redis/valkey Service |
 | `siteUrl` | inferred | the public URL |
