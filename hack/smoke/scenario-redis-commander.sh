@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-redis-commander
 kurly::namespace "$ns"
 
-kurly::cache "$ns" redis-commander-cache-headless
+kurly::cache "$ns" redis-commander-cache-headless ""
 
 kurly::secret "$ns" redis-commander workloads/redis-commander/server.libsonnet
 kurly::boot workloads/redis-commander/server.libsonnet "$ns"

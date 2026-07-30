@@ -15,7 +15,7 @@ ns=kurly-overleaf
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" overleaf-db-rw overleaf overleaf
-kurly::cache "$ns" overleaf-cache
+kurly::cache "$ns" overleaf-cache ""
 
 kurly::secret "$ns" overleaf workloads/overleaf/server.libsonnet
 kurly::boot workloads/overleaf/server.libsonnet "$ns"

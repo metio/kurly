@@ -505,7 +505,21 @@ kurly::provision_deps() {
   fi
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.cache then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     redisHost="$(kurly::_param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
-    kurly::cache "$ns" "$redisHost"
+    # Provision the cache the way the workload actually connects to it. Most take a
+    # host and no credential, which is how a cache in the workload's OWN namespace
+    # is normally run — it is reachable only from that namespace, and a
+    # NetworkPolicy is the thing keeping it that way rather than a password. A few
+    # read a full connection URL from their Secret, and the catalog's redisUrl
+    # generator puts a password in it, so those need a server that expects one.
+    #
+    # Getting this backwards fails in both directions: an app with no credential
+    # meets NOAUTH, and an app sending one meets "Client sent AUTH, but no password
+    # is set". So it is read from the catalog per workload rather than defaulted.
+    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]|select(.generate=="redisUrl")' catalog/catalog.json >/dev/null 2>&1; then
+      kurly::cache "$ns" "$redisHost"
+    else
+      kurly::cache "$ns" "$redisHost" ""
+    fi
   fi
   for st in $(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[].id' catalog/catalog.json); do
     f="workloads/${id}/${st}.libsonnet"

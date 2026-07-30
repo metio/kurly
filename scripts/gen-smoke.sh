@@ -145,7 +145,19 @@ while IFS=$'\t' read -r id stages db cache; do
   fi
   if [ "$cache" = "1" ]; then
     redisHost="$(param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
-    prov+="kurly::cache \"\$ns\" ${redisHost}"$'\n'
+    # Provision the cache the way the workload connects to it. Most take a host and
+    # no credential — which is how a cache in the workload's OWN namespace is
+    # normally run, reachable only from that namespace and kept that way by a
+    # NetworkPolicy rather than a password. A few read a whole connection URL from
+    # their Secret, and the catalog's redisUrl generator writes a password into it,
+    # so those need a server that expects one. Guessing either way fails: an app
+    # with no credential meets NOAUTH, an app sending one meets "Client sent AUTH,
+    # but no password is set".
+    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]|select(.generate=="redisUrl")' "$catalog" >/dev/null 2>&1; then
+      prov+="kurly::cache \"\$ns\" ${redisHost}"$'\n'
+    else
+      prov+="kurly::cache \"\$ns\" ${redisHost} \"\""$'\n'
+    fi
   fi
 
   boot_lines=""

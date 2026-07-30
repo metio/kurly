@@ -15,7 +15,7 @@ ns=kurly-openproject
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" openproject-db-rw openproject openproject
-kurly::cache "$ns" openproject-cache-headless
+kurly::cache "$ns" openproject-cache-headless ""
 
 kurly::secret "$ns" openproject workloads/openproject/server.libsonnet
 kurly::boot workloads/openproject/server.libsonnet "$ns"

@@ -15,7 +15,7 @@ ns=kurly-penpot
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" penpot-db-rw penpot penpot
-kurly::cache "$ns" penpot-cache-headless
+kurly::cache "$ns" penpot-cache-headless ""
 
 kurly::secret "$ns" penpot workloads/penpot/backend.libsonnet
 kurly::boot workloads/penpot/backend.libsonnet "$ns"

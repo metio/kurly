@@ -15,7 +15,7 @@ ns=kurly-peertube
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" peertube-db-rw peertube peertube
-kurly::cache "$ns" peertube-cache
+kurly::cache "$ns" peertube-cache ""
 
 kurly::secret "$ns" peertube workloads/peertube/server.libsonnet
 kurly::boot workloads/peertube/server.libsonnet "$ns" "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })"

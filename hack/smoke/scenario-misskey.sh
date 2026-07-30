@@ -15,7 +15,7 @@ ns=kurly-misskey
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" misskey-db-rw misskey misskey
-kurly::cache "$ns" misskey-cache-headless
+kurly::cache "$ns" misskey-cache-headless ""
 
 config="$(mktemp)"
 trap 'rm -f "$config"' EXIT

@@ -15,7 +15,7 @@ ns=kurly-wger
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" wger-db-rw wger wger
-kurly::cache "$ns" wger-cache
+kurly::cache "$ns" wger-cache ""
 
 kurly::secret "$ns" wger workloads/wger/server.libsonnet
 kurly::boot workloads/wger/server.libsonnet "$ns"

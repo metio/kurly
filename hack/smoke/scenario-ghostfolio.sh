@@ -15,7 +15,7 @@ ns=kurly-ghostfolio
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" ghostfolio-db-rw ghostfolio ghostfolio
-kurly::cache "$ns" ghostfolio-cache-headless
+kurly::cache "$ns" ghostfolio-cache-headless ""
 
 kurly::secret "$ns" ghostfolio workloads/ghostfolio/server.libsonnet
 kurly::boot workloads/ghostfolio/server.libsonnet "$ns"

@@ -15,7 +15,7 @@ ns=kurly-maybe
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" maybe-db-rw maybe maybe
-kurly::cache "$ns" maybe-cache
+kurly::cache "$ns" maybe-cache ""
 
 kurly::secret "$ns" maybe workloads/maybe/server.libsonnet
 kurly::boot workloads/maybe/server.libsonnet "$ns"

@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-oauth2-proxy
 kurly::namespace "$ns"
 
-kurly::cache "$ns" oauth2-proxy-cache-headless
+kurly::cache "$ns" oauth2-proxy-cache-headless ""
 
 kurly::secret "$ns" oauth2-proxy workloads/oauth2-proxy/server.libsonnet
 kurly::boot workloads/oauth2-proxy/server.libsonnet "$ns"

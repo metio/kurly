@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-searxng
 kurly::namespace "$ns"
 
-kurly::cache "$ns" searxng-cache-headless
+kurly::cache "$ns" searxng-cache-headless ""
 
 kurly::secret "$ns" searxng workloads/searxng/server.libsonnet
 kurly::boot workloads/searxng/server.libsonnet "$ns"

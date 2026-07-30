@@ -15,7 +15,7 @@ ns=kurly-glitchtip
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" glitchtip-db-rw glitchtip glitchtip
-kurly::cache "$ns" glitchtip-cache
+kurly::cache "$ns" glitchtip-cache ""
 
 kurly::secret "$ns" glitchtip workloads/glitchtip/server.libsonnet
 kurly::boot workloads/glitchtip/server.libsonnet "$ns"

@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-thanos
 kurly::namespace "$ns"
 
-kurly::cache "$ns" thanos-cache-headless
+kurly::cache "$ns" thanos-cache-headless ""
 kurly::objectstorage "$ns" thanos
 
 objstore="$(mktemp)"
