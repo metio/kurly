@@ -106,28 +106,24 @@ for id in "${targets[@]}"; do
   # SourceFetchFailed on the snippet, stageset reports StageFailed on a dry-run
   # apply. Restarting the controller that is holding the stale credential drops it.
   #
-  # Both are checked, because a run that only knew about one spent its retry
-  # restarting an operator that was working and failed again on the one that was
-  # not.
+  # BOTH are restarted whenever EITHER reports it, because the namespace being
+  # recreated staled both caches at the same instant — but the two failures can
+  # only surface one at a time. JaaS renders first, so its 401 is what a run sees;
+  # restart only JaaS and the render succeeds, the apply then meets stageset's own
+  # stale credential, and the single retry has already been spent. Restarting the
+  # pair costs one rollout and turns two serial discoveries into none.
+  stale=false
   if [ "$ok" = false ]; then
-    stale_jaas=false stale_stageset=false
-    kubectl --namespace="kurly-deep-${id}" get jsonnetsnippet -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null \
-      | grep -q Unauthorized && stale_jaas=true
-    kubectl --namespace="kurly-deep-${id}" get stageset -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null \
-      | grep -q Unauthorized && stale_stageset=true
-  else
-    stale_jaas=false stale_stageset=false
+    kubectl --namespace="kurly-deep-${id}" get jsonnetsnippet,stageset \
+      -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null \
+      | grep -q Unauthorized && stale=true
   fi
-  if [ "$stale_jaas" = true ] || [ "$stale_stageset" = true ]; then
-    echo "== ${id}: a stale impersonation credential (jaas=${stale_jaas} stageset=${stale_stageset}) — restarting and retrying =="
-    if [ "$stale_jaas" = true ]; then
-      kubectl --namespace=jaas-system rollout restart deploy/jaas >/dev/null 2>&1 || true
-      kubectl --namespace=jaas-system rollout status deploy/jaas --timeout=180s >/dev/null 2>&1 || true
-    fi
-    if [ "$stale_stageset" = true ]; then
-      kubectl --namespace=stageset-system rollout restart deploy >/dev/null 2>&1 || true
-      kubectl --namespace=stageset-system rollout status deploy --timeout=180s >/dev/null 2>&1 || true
-    fi
+  if [ "$stale" = true ]; then
+    echo "== ${id}: a stale impersonation credential — restarting both controllers and retrying =="
+    kubectl --namespace=jaas-system rollout restart deploy/jaas >/dev/null 2>&1 || true
+    kubectl --namespace=stageset-system rollout restart deploy >/dev/null 2>&1 || true
+    kubectl --namespace=jaas-system rollout status deploy/jaas --timeout=180s >/dev/null 2>&1 || true
+    kubectl --namespace=stageset-system rollout status deploy --timeout=180s >/dev/null 2>&1 || true
     ok=true
     kurly::deep "$id" || ok=false
   fi
