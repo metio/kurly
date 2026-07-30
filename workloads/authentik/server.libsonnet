@@ -59,9 +59,16 @@ function(
   + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/-/health/ready/', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/-/health/live/', port: 'http' } })
-  // The server applies database migrations on first boot before it serves; a
-  // startup probe holds liveness until it is up (~5min grace).
-  + kurly.startupProbe({ httpGet: { path: '/-/health/live/', port: 'http' }, failureThreshold: 60, periodSeconds: 5 })
+  // The server applies database migrations AND imports its blueprints on first
+  // boot before it serves, against a database that is itself usually starting for
+  // the first time. A startup probe holds liveness off until that finishes.
+  //
+  // 10 minutes, not 5: at a 5-minute grace the container is killed mid-migration
+  // and restarted, which begins the work again and never converges — a first
+  // deploy crash-loops forever rather than being slow. The cost of the longer
+  // grace is only that a genuinely dead container takes longer to be noticed;
+  // the cost of the shorter one is a workload that never starts at all.
+  + kurly.startupProbe({ httpGet: { path: '/-/health/live/', port: 'http' }, failureThreshold: 120, periodSeconds: 5 })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),
