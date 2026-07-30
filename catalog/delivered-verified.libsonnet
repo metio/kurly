@@ -24,6 +24,12 @@
 // more than the run proves. Workloads whose stages render only a custom resource
 // have no controller to roll out and cannot reach this tier at all.
 {
+  '2fauth': '2026-07-30',
+  actualbudget: '2026-07-30',
+  adguardhome: '2026-07-30',
+  adminer: '2026-07-30',
+  'airsonic-advanced': '2026-07-30',
+  answer: '2026-07-30',
   gatus: '2026-07-30',
   'it-tools': '2026-07-30',
   linkding: '2026-07-30',
