@@ -6028,6 +6028,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "BookStack",
@@ -6184,6 +6187,9 @@
          "license": "SSPL-1.0 OR LicenseRef-Browserless-Commercial",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Browserless",
@@ -6298,6 +6304,9 @@
          "license": "LicenseRef-PolyForm-Shield-1.0.0",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Bugsink",
