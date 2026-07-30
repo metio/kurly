@@ -647,7 +647,15 @@ spec:
         checks:
           - { apiVersion: ${apiv}, kind: ${kind}, name: ${name}, namespace: ${ns} }
 EOF
-    kurly::wait_ready "$ns" stageset "$snip" 90 \
+    # The StageSet goes Ready only once its readyChecks see the controller healthy,
+    # so this budget is the APP's startup budget, not the controller's. It has to
+    # be at least as generous as the fast tier's (KURLY_ROLLOUT_TIMEOUT, 300s) —
+    # the deep path does strictly more before the app even starts, since it pulls
+    # three OCI artifacts, renders, and applies. At 90 polls it was 270s, tighter
+    # than the fast tier, and workloads that run migrations before serving
+    # (authentik, and it will not be alone) were failing at 4m32s while Running
+    # with zero restarts: healthy, just not finished starting.
+    kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-200}" \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: stageset/${snip} never became Ready"; return 1; }
     kubectl --namespace="$ns" rollout status "${kind,,}/${name}" --timeout=300s \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }
