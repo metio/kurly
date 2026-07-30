@@ -9,6 +9,8 @@
 //   tested   — plus workload-specific assertions in the test suite.
 //   e2e      — plus a smoke scenario that deploys it to a live cluster and waits
 //              for it to become ready.
+//   delivered— plus a deep scenario that delivers it through the real production
+//              path (Flux -> JaaS -> stageset-controller) and sees it roll out.
 //
 // The tier is derived from the repository's own signals (maturity.gen.libsonnet,
 // regenerated and drift-checked by check-catalog), so it cannot claim more than
@@ -21,7 +23,8 @@ local production = import './production.libsonnet';
 // The highest derived tier a workload has reached. A top-level local, so the
 // `of` method below can call it without `self` rebinding to its object literal.
 local tierOf(name) =
-  if std.member(derived.e2e, name) then 'e2e'
+  if std.member(derived.delivered, name) then 'delivered'
+  else if std.member(derived.e2e, name) then 'e2e'
   else if std.member(derived.tested, name) then 'tested'
   else 'rendered';
 

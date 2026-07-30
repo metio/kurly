@@ -22,7 +22,7 @@ Serves on `:80`.
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**delivered** — this workload is delivered end to end on a live cluster through the real production path — its source image pulled by Flux, rendered by JaaS, applied by stageset-controller — and observed rolling out, on top of its smoke coverage.
 
 ## Deploy with JaaS
 

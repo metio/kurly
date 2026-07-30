@@ -13482,7 +13482,7 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "Gatus",
          "requires": { },
@@ -17382,7 +17382,7 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "IT-Tools",
          "requires": { },
@@ -20108,7 +20108,7 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "linkding",
          "requires": {
@@ -24051,7 +24051,7 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "Memos",
          "requires": {
@@ -41228,7 +41228,7 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "Uptime Kuma",
          "requires": { },
@@ -41334,7 +41334,7 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "Valkey",
          "requires": { },
@@ -41488,7 +41488,7 @@
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "Vaultwarden",
          "requires": {
@@ -42831,7 +42831,7 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "delivered"
          },
          "name": "Whoogle Search",
          "requires": { },

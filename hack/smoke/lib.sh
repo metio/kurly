@@ -598,7 +598,7 @@ EOF
     # at all, while later snippets reuse them. One timeout for both makes a slow
     # first render look exactly like a broken one — and only ever on whichever
     # workload happens to sort first, which is how a day gets lost to a flake.
-    kurly::wait_ready jsonnetsnippet "$snip" "$snippetTries" \
+    kurly::wait_ready "$ns" jsonnetsnippet "$snip" "$snippetTries" \
       || { kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: jsonnetsnippet/${snip} never rendered"; return 1; }
     snippetTries=60
     kubectl apply --namespace="$ns" --filename=- <<EOF
@@ -617,7 +617,7 @@ spec:
         checks:
           - { apiVersion: ${apiv}, kind: ${kind}, name: ${name}, namespace: ${ns} }
 EOF
-    kurly::wait_ready stageset "$snip" 90 \
+    kurly::wait_ready "$ns" stageset "$snip" 90 \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: stageset/${snip} never became Ready"; return 1; }
     kubectl --namespace="$ns" rollout status "${kind,,}/${name}" --timeout=300s \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }
@@ -625,11 +625,15 @@ EOF
   echo "ok: ${id} delivered end-to-end through Flux -> JaaS -> stageset"
 }
 
-# Blocks until a resource's Ready condition is true (or times out loudly).
+# Blocks until a resource's Ready condition is true (or times out loudly). The
+# namespace is explicit: every object this waits on lives in the scenario's own
+# namespace, never the context's, so a lookup without it reports a rendered
+# snippet as one that never appeared.
+#   kurly::wait_ready <namespace> <resource> <name> [tries]
 kurly::wait_ready() {
-  local res="$1" name="$2" tries="${3:-60}" i
+  local ns="$1" res="$2" name="$3" tries="${4:-60}" i
   for i in $(seq 1 "$tries"); do
-    [ "$(kubectl get "$res" "$name" -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}' 2>/dev/null || true)" = True ] \
+    [ "$(kubectl --namespace="$ns" get "$res" "$name" -o jsonpath='{.status.conditions[?(@.type=="Ready")].status}' 2>/dev/null || true)" = True ] \
       && return 0
     sleep 3
   done
@@ -859,14 +863,23 @@ EOF
 # the pod becoming Ready.
 kurly::publish_images() {
   local push
+  # The registry speaks plain HTTP. Docker treats a localhost registry as insecure
+  # and pushes anyway; Podman pings it over HTTPS and fails unless told otherwise,
+  # while Docker does not know the flag at all. The client is identified by whether
+  # it offers the flag — Podman invoked through a `docker` symlink reports itself as
+  # "docker version 5.x", so the version string cannot tell them apart.
+  local push_flags=()
+  if docker push --help 2>/dev/null | grep -q -- --tls-verify; then push_flags+=(--tls-verify=false); fi
   _push() {
-    local ref="$1" i
+    local ref="$1" i out
     for i in $(seq 1 12); do
-      docker push --quiet "$ref" >/dev/null 2>&1 && return 0
+      out="$(docker push --quiet "${push_flags[@]}" "$ref" 2>&1)" && return 0
       echo "push $ref failed (attempt $i) — retrying"
       sleep 5
     done
-    echo "push $ref never succeeded" >&2
+    # The last attempt's output, not just the count: a push that fails twelve times
+    # for one reason otherwise reports only that it kept failing.
+    echo "push $ref never succeeded: $out" >&2
     return 1
   }
   # The library is identical for the whole walk, so it is built and pushed once.
