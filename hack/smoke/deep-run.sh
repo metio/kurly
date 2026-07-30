@@ -6,8 +6,8 @@
 # does — build its source image, let Flux pull it, JaaS render it, and
 # stageset-controller apply it — and wait for its controllers to roll out. Every
 # workload that comes up green is recorded, with the date, in
-# catalog/delivered-verified.libsonnet, which is what lifts it to the `delivered`
-# maturity tier.
+# catalog/delivered-verified.libsonnet — the evidence behind the catalog's
+# `maturity.delivered`, an axis of its own rather than a rung on the tier ladder.
 #
 # The walk is RESUMABLE and the ledger is written after each workload, not at the
 # end: a run killed halfway keeps everything it proved. Re-running skips what is
@@ -123,7 +123,7 @@ for id in "${targets[@]}"; do
       delivered=$((delivered + 1))
       echo "recorded ${id} as delivered (${today})"
     else
-      echo "::notice::${id} renders no controller — not eligible for the delivered tier"
+      echo "::notice::${id} renders no controller — nothing to deliver, so no record"
     fi
   else
     failed+=("$id")

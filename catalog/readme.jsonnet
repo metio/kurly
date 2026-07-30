@@ -28,21 +28,26 @@ local tierBlurb = {
   rendered: 'renders and validates against the Kubernetes schemas with its defaults.',
   tested: 'has workload-specific assertions in the test suite, on top of rendering cleanly.',
   e2e: 'is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.',
-  delivered: 'is delivered end to end on a live cluster through the real production path — its source image pulled by Flux, rendered by JaaS, applied by stageset-controller — and observed rolling out, on top of its smoke coverage.',
 };
 
-// The maturity section: the derived tier, plus the operator-attested production
-// record when there is one.
+// The maturity section: the derived tier, plus each axis that has something to
+// say — production use, and delivery through the real pipeline. Both are
+// sentences of their own rather than a stronger word for the tier, because
+// neither is a rung on that ladder.
 local maturitySection(w) =
   local m = w.maturity;
   local prod =
     if std.objectHas(m, 'production')
     then ' In production since %s on the %s cluster.' % [m.production.since, m.production.cluster]
     else '';
+  local delivered =
+    if std.objectHas(m, 'delivered')
+    then ' Delivered end to end through Flux, JaaS and stageset-controller on %s, and observed rolling out.' % m.delivered.since
+    else '';
   std.join('\n', [
     '## Maturity',
     '',
-    '**%s** — this workload %s%s' % [m.tier, tierBlurb[m.tier], prod],
+    '**%s** — this workload %s%s%s' % [m.tier, tierBlurb[m.tier], prod, delivered],
   ]);
 
 // For a workload with one stage the resources take the workload's own name; with

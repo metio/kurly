@@ -21,8 +21,9 @@ built and pushed, Flux pulls it (`OCIRepository`), JaaS renders it
 controller rolls out. That walk is generic — `kurly::deep` in `hack/smoke/lib.sh`
 drives it from the catalog for any workload — so it needs no per-workload file.
 `hack/smoke/deep-run.sh` walks the whole fleet with it and records each green
-workload, with the date, in `catalog/delivered-verified.libsonnet`, which is what
-lifts it to the `delivered` maturity tier:
+workload, with the date, in `catalog/delivered-verified.libsonnet` — the evidence
+behind the catalog's `maturity.delivered`, an axis of its own rather than a rung
+on the tier ladder:
 
 ```shell
 nix develop --command bash hack/smoke/deep-run.sh            # the whole fleet

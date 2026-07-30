@@ -19,7 +19,7 @@ Configure through `WHOOGLE_CONFIG_*` env vars. Serves on `:5000`.
 
 ## Maturity
 
-**delivered** — this workload is delivered end to end on a live cluster through the real production path — its source image pulled by Flux, rendered by JaaS, applied by stageset-controller — and observed rolling out, on top of its smoke coverage.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage. Delivered end to end through Flux, JaaS and stageset-controller on 2026-07-30, and observed rolling out.
 
 ## Deploy with JaaS
 

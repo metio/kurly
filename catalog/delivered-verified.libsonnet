@@ -4,14 +4,20 @@
 // The workloads observed being DELIVERED end to end on a live cluster — built as a
 // source image, pulled by Flux (OCIRepository), rendered by JaaS (JsonnetSnippet),
 // and applied by stageset-controller (StageSet) until every controller rolled out
-// — and the date it last happened. This is the evidence behind the `delivered`
-// maturity tier, the rung above `e2e`.
+// — and the date it last happened. This is the evidence behind `maturity.delivered`.
 //
-// `e2e` proves the manifest runs when kubectl applies it. `delivered` proves the
-// whole production path a consumer actually uses: the image packaging, the vendor
-// tree layout, the imports resolving inside JaaS, and the stage going Ready. A
-// workload can boot fine and still fail here — a stage whose import path is wrong
-// renders identically from the checkout and not at all from its image.
+// It is an AXIS, not a rung on the tier ladder, for the same reason production use
+// is one: it answers a different question. The tier says how far the workload has
+// been proven; this says the delivery path itself was walked — the image packaging,
+// the vendor tree layout, the imports resolving inside JaaS, and the stage going
+// Ready. A workload can boot fine under kubectl and still fail here, since a stage
+// whose import path is wrong renders identically from the checkout and not at all
+// from its image.
+//
+// Keeping it off the ladder is what lets a consumer that has never heard of it
+// carry on reading `tier` correctly. Folding it in would make every such consumer
+// treat the unfamiliar value as the weakest rung, and report the best-proven
+// workloads in the catalogue as never having been booted.
 //
 // A workload is added when `hack/smoke/deep-run.sh` (or the e2e pipeline) observes
 // its deep check green. Remove it if that starts failing; the tier must never claim

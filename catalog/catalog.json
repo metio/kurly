@@ -13482,7 +13482,10 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "Gatus",
          "requires": { },
@@ -17382,7 +17385,10 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "IT-Tools",
          "requires": { },
@@ -20224,7 +20230,10 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "linkding",
          "requires": {
@@ -24167,7 +24176,10 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "Memos",
          "requires": {
@@ -41344,7 +41356,10 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "Uptime Kuma",
          "requires": { },
@@ -41450,7 +41465,10 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "Valkey",
          "requires": { },
@@ -41604,7 +41622,10 @@
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "Vaultwarden",
          "requires": {
@@ -42947,7 +42968,10 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "delivered"
+            "delivered": {
+               "since": "2026-07-30"
+            },
+            "tier": "e2e"
          },
          "name": "Whoogle Search",
          "requires": { },
