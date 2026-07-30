@@ -90,9 +90,23 @@ for id in "${targets[@]}"; do
     continue
   fi
   echo "::group::deep ${id}"
-  # A previous walk that was killed mid-cleanup leaves the namespace Terminating,
-  # and kurly::deep would apply every object into it and be refused. Wait it out
-  # before starting rather than reporting the refusals as a delivery failure.
+  # Start every workload from an empty namespace, by DELETING it rather than
+  # waiting for a deletion nobody asked for. A walk that is killed mid-workload
+  # leaves the namespace Active and full of that attempt's objects; a wait then
+  # returns at once, kurly::deep applies over the top, and the run reads a verdict
+  # computed against a previous attempt's failed Deployment — baserow was
+  # diagnosed with pods 55 minutes older than the run looking at them.
+  #
+  # Finalizers are stripped first: the StageSet and JsonnetSnippet hold them, and
+  # a namespace deleted while a controller cannot authenticate to release them
+  # never finishes terminating.
+  if kubectl get namespace "kurly-deep-${id}" >/dev/null 2>&1; then
+    echo "== ${id}: a namespace from an earlier attempt is still here — clearing it =="
+    kubectl --namespace="kurly-deep-${id}" get stageset,jsonnetsnippet -o name 2>/dev/null \
+      | xargs -r -I{} kubectl --namespace="kurly-deep-${id}" patch {} --type=merge \
+        -p '{"metadata":{"finalizers":[]}}' >/dev/null 2>&1 || true
+    kubectl delete namespace "kurly-deep-${id}" --interactive=false --timeout=240s >/dev/null 2>&1 || true
+  fi
   kubectl wait --for=delete "namespace/kurly-deep-${id}" --timeout=180s >/dev/null 2>&1 || true
   ok=true
   kurly::deep "$id" || ok=false
