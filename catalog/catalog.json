@@ -24061,8 +24061,8 @@
                },
                "runs": {
                   "digest": "sha256:9694a59df43ee3f54b3fda9c5de381a3ee9852678e3e31cadf37d6bddea7fc1b",
-                  "image": "docker.io/getmeili/meilisearch:v1.50.0@sha256:9694a59df43ee3f54b3fda9c5de381a3ee9852678e3e31cadf37d6bddea7fc1b",
-                  "tag": "v1.50.0"
+                  "image": "docker.io/getmeili/meilisearch:v1.51.0@sha256:9694a59df43ee3f54b3fda9c5de381a3ee9852678e3e31cadf37d6bddea7fc1b",
+                  "tag": "v1.51.0"
                },
                "secretKeys": [
                   {
