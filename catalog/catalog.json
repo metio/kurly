@@ -12186,8 +12186,8 @@
                   "writableRootFilesystem": true
                },
                "runs": {
-                  "digest": "sha256:ad675eb3e8fd420b0462bc4ee8109a76ce564a47b1374451cf292f7969e44ff4",
-                  "image": "docker.io/machines/filestash:latest@sha256:ad675eb3e8fd420b0462bc4ee8109a76ce564a47b1374451cf292f7969e44ff4",
+                  "digest": "sha256:12cddfca10c85861ddac79c1c6442ecdaa5b093f5e4064c23d375999ba05693d",
+                  "image": "docker.io/machines/filestash:latest@sha256:12cddfca10c85861ddac79c1c6442ecdaa5b093f5e4064c23d375999ba05693d",
                   "tag": "latest"
                },
                "storage": {
