@@ -669,15 +669,20 @@ local licenseFacts(workload, value, attested) =
     else std.get(canonicalOf, std.asciiLower(id), id);
   // A deprecated GPL-family identifier does not say whether the project chose
   // "version N only" or "version N or, at your option, any later version" — the
-  // reason SPDX deprecated the bare spelling. The great majority of projects use
-  // the FSF's own boilerplate, which is the or-later one, so the published value
-  // assumes it where nothing states otherwise, and SAYS it assumed
-  // (`licenseVariantAssumed`). An annotation always wins, and the projects known
-  // to have chosen only — Grafana, Loki and Tempo since their 2021 relicensing,
-  // MariaDB and MySQL — carry one, so the assumption never overrides a reading.
+  // reason SPDX deprecated the bare spelling.
+  //
+  // Where a project does not say, the resolved value is -only, because the later
+  // -version permission is something a licence GRANTS: absent the grant, only the
+  // stated version applies, and reading a broader permission into silence is the
+  // one direction of error that lets somebody combine code in ways the licence
+  // does not allow. It is also what SPDX advises for a notice without the
+  // or-later wording. Every workload that DOES say — thirty of them, from a
+  // REUSE licence filename, a package manifest, a python classifier, an SPDX
+  // header or the boilerplate in a source file — carries an annotation stating
+  // which, and an annotation always wins.
   local resolveVariant(id) =
-    if std.objectHas(spdx, id) && spdx[id].deprecated && std.objectHas(spdx, id + '-or-later')
-    then id + '-or-later'
+    if std.objectHas(spdx, id) && spdx[id].deprecated && std.objectHas(spdx, id + '-only')
+    then id + '-only'
     else id;
   local identifiers = [resolveVariant(canonical(id)) for id in rawIdentifiers];
   local assumed = [canonical(id) for id in rawIdentifiers] != identifiers;

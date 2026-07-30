@@ -2768,7 +2768,7 @@
             "source": "https://github.com/Bubka/2FAuth",
             "title": "2fauth"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -3163,7 +3163,7 @@
             "source": "https://github.com/AdguardTeam/AdGuardHome",
             "title": "AdGuard Home"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -3386,7 +3386,7 @@
             "source": "https://github.com/linuxserver/docker-airsonic-advanced",
             "title": "Airsonic-advanced"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -3636,7 +3636,7 @@
       {
          "category": "application",
          "id": "alist",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -4077,7 +4077,7 @@
             "source": "https://github.com/advplyr/audiobookshelf",
             "title": "audiobookshelf"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -4597,7 +4597,7 @@
       {
          "category": "application",
          "id": "automatisch",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -4876,9 +4876,8 @@
             "source": "https://github.com/ckulka/baikal-docker",
             "title": "Baikal"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -5139,7 +5138,7 @@
             "source": "https://github.com/linuxserver/docker-bazarr",
             "title": "Bazarr"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -5378,7 +5377,7 @@
       {
          "category": "application",
          "id": "bigcapital",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -5835,7 +5834,7 @@
             "source": "https://github.com/blinkospace/blinko",
             "title": "blinko"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -6503,9 +6502,8 @@
             "source": "https://github.com/linuxserver/docker-calibre",
             "title": "Calibre"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -6638,7 +6636,6 @@
          },
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -6763,9 +6760,8 @@
       {
          "category": "application",
          "id": "calibre-web-automated",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -7111,7 +7107,7 @@
       {
          "category": "application",
          "id": "chatpad",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -7636,7 +7632,7 @@
       {
          "category": "tool",
          "id": "cobalt",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -7973,7 +7969,7 @@
             "source": "https://github.com/C4illin/ConvertX",
             "title": "ConvertX"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -8204,7 +8200,6 @@
          "id": "cryptpad",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -9206,7 +9201,7 @@
       {
          "category": "admin",
          "id": "docker-registry-ui",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -9327,7 +9322,7 @@
          "image": {
             "source": "https://github.com/docmost/docmost"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -9465,7 +9460,7 @@
       {
          "category": "application",
          "id": "documenso",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -9605,7 +9600,7 @@
       {
          "category": "application",
          "id": "docuseal",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -9714,7 +9709,7 @@
       {
          "category": "application",
          "id": "dokuwiki",
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -10126,7 +10121,6 @@
          "id": "drupal",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -10426,7 +10420,7 @@
             "source": "https://github.com/processone/docker-ejabberd",
             "title": "docker-ejabberd"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -10538,7 +10532,6 @@
          },
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -10898,7 +10891,7 @@
       {
          "category": "application",
          "id": "endurain",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -11062,7 +11055,7 @@
       {
          "category": "application",
          "id": "ente",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -11264,7 +11257,7 @@
             "source": "https://github.com/esphome/esphome",
             "title": "ESPHome"
          },
-         "license": "MIT AND GPL-3.0-or-later",
+         "license": "MIT AND GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -11836,7 +11829,7 @@
       {
          "category": "application",
          "id": "fider",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -12096,7 +12089,7 @@
       {
          "category": "application",
          "id": "filestash",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -12211,7 +12204,6 @@
          },
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -12816,7 +12808,6 @@
          },
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -13089,7 +13080,7 @@
             "source": "https://github.com/formbricks/formbricks",
             "title": "formbricks"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -13226,7 +13217,7 @@
             "source": "https://github.com/FreshRSS/FreshRSS",
             "title": "FreshRSS"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -13743,7 +13734,7 @@
       {
          "category": "application",
          "id": "ghostfolio",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -14014,7 +14005,7 @@
       {
          "category": "application",
          "id": "glance",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -14445,7 +14436,7 @@
       {
          "category": "tool",
          "id": "gokapi",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -15132,7 +15123,7 @@
       {
          "category": "application",
          "id": "greenlight",
-         "license": "LGPL-3.0-or-later",
+         "license": "LGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -15781,9 +15772,8 @@
             "source": "https://github.com/hedgedoc/container",
             "title": "HedgeDoc production image(debian)"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -16384,7 +16374,7 @@
             "source": "https://github.com/sysadminsmedia/homebox",
             "title": "homebox"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -16508,7 +16498,7 @@
             "source": "https://github.com/gethomepage/homepage",
             "title": "homepage"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -16732,7 +16722,7 @@
             "source": "https://github.com/immich-app/immich",
             "title": "immich"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -17121,7 +17111,7 @@
       {
          "category": "messaging",
          "id": "inspircd",
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -17388,7 +17378,7 @@
       {
          "category": "tool",
          "id": "it-tools",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -17495,7 +17485,7 @@
             "source": "https://github.com/linuxserver/docker-jackett",
             "title": "Jackett"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -17627,7 +17617,7 @@
             "source": "https://github.com/linuxserver/docker-jellyfin",
             "title": "Jellyfin"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -17977,7 +17967,6 @@
          "id": "joomla",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -18146,7 +18135,7 @@
       {
          "category": "application",
          "id": "joplin",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -18667,7 +18656,7 @@
          "image": {
             "source": "https://github.com/karakeep-app/karakeep"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -18815,7 +18804,7 @@
       {
          "category": "application",
          "id": "kavita",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -19029,7 +19018,6 @@
          "id": "kimai",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -19421,9 +19409,8 @@
       {
          "category": "application",
          "id": "leantime",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -19550,7 +19537,7 @@
             "homepage": "https://github.com/LemmyNet/lemmy",
             "source": "https://github.com/LemmyNet/lemmy"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -19857,7 +19844,6 @@
          },
          "license": "LGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -19988,7 +19974,7 @@
             "source": "https://github.com/linuxserver/docker-lidarr",
             "title": "Lidarr"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -20228,9 +20214,8 @@
       {
          "category": "application",
          "id": "linkstack",
-         "license": "AGPL-3.0-or-later",
+         "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -20338,7 +20323,7 @@
             "source": "https://github.com/linkwarden/linkwarden",
             "title": "linkwarden"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -20471,7 +20456,7 @@
       {
          "category": "application",
          "id": "listmonk",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -20629,9 +20614,8 @@
             "source": "https://github.com/lldap/lldap",
             "title": "lldap"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -22056,9 +22040,8 @@
       {
          "category": "application",
          "id": "maloja",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -22310,7 +22293,6 @@
          },
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -22827,7 +22809,7 @@
       {
          "category": "application",
          "id": "matomo",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -23088,7 +23070,7 @@
       {
          "category": "application",
          "id": "mattermost",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -23215,7 +23197,7 @@
       {
          "category": "application",
          "id": "mautic",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -23372,7 +23354,7 @@
             "source": "https://github.com/maybe-finance/maybe",
             "title": "maybe"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -23525,7 +23507,7 @@
       {
          "category": "tool",
          "id": "mazanoke",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -23631,9 +23613,8 @@
             "source": "https://github.com/mealie-recipes/mealie",
             "title": "mealie"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -24275,7 +24256,7 @@
       {
          "category": "application",
          "id": "metabase",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -24525,7 +24506,7 @@
       {
          "category": "application",
          "id": "metube",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -24873,7 +24854,7 @@
       {
          "category": "storage",
          "id": "minio",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -25003,7 +24984,7 @@
             "source": "https://github.com/misskey-dev/misskey",
             "title": "misskey"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -25468,7 +25449,6 @@
          },
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -25866,7 +25846,7 @@
             "source": "https://github.com/linuxserver/docker-mylar3",
             "title": "Mylar3"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -26468,7 +26448,7 @@
             "source": "https://github.com/navidrome/navidrome",
             "title": "navidrome"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -26577,7 +26557,7 @@
       {
          "category": "database",
          "id": "neo4j",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -27144,7 +27124,6 @@
          "id": "nextcloud",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -27902,7 +27881,7 @@
             "source": "https://github.com/linuxserver/docker-nzbget",
             "title": "Nzbget"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -28035,7 +28014,7 @@
             "source": "https://github.com/linuxserver/docker-nzbhydra2",
             "title": "Nzbhydra2"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -28310,7 +28289,7 @@
       {
          "category": "application",
          "id": "odoo",
-         "license": "LGPL-3.0-or-later",
+         "license": "LGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -28559,7 +28538,7 @@
             "source": "https://github.com/linuxserver/docker-ombi",
             "title": "Ombi"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -28687,7 +28666,7 @@
       {
          "category": "application",
          "id": "onlyoffice",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -29181,7 +29160,7 @@
       {
          "category": "observability",
          "id": "openobserve",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -29310,7 +29289,7 @@
             "source": "https://github.com/opf/openproject",
             "title": "openproject"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -29545,7 +29524,7 @@
       {
          "category": "application",
          "id": "organizr",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -29874,7 +29853,7 @@
       {
          "category": "application",
          "id": "overleaf",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -30340,7 +30319,7 @@
             "source": "https://github.com/schlagmichdoch/PairDrop",
             "title": "PairDrop"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -30441,7 +30420,7 @@
             "source": "https://github.com/ananthakumaran/paisa",
             "title": "paisa"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -30552,7 +30531,7 @@
             "source": "https://github.com/paperless-ngx/paperless-ngx",
             "title": "paperless-ngx"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -30846,7 +30825,7 @@
       {
          "category": "application",
          "id": "peertube",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -31482,7 +31461,7 @@
             "source": "https://github.com/photoprism/photoprism",
             "title": "PhotoPrism® Plus (Ubuntu 26.04 LTS)"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -31622,7 +31601,7 @@
             "source": "https://github.com/photoview/photoview",
             "title": "photoview"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -31760,9 +31739,8 @@
             "source": "https://github.com/phpmyadmin/docker",
             "title": "Official phpMyAdmin Docker image"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -32013,7 +31991,7 @@
             "source": "https://github.com/THM-Health/PILOS",
             "title": "PILOS"
          },
-         "license": "LGPL-2.1-or-later",
+         "license": "LGPL-2.1-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -32246,7 +32224,7 @@
             "source": "https://github.com/linuxserver/docker-piwigo",
             "title": "Piwigo"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -33375,9 +33353,8 @@
             "source": "https://github.com/linuxserver/docker-projectsend",
             "title": "Projectsend"
          },
-         "license": "GPL-2.0-or-later",
+         "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -33675,7 +33652,7 @@
             "source": "https://github.com/linuxserver/docker-prowlarr",
             "title": "Prowlarr"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -34309,7 +34286,7 @@
             "source": "https://github.com/linuxserver/docker-radarr",
             "title": "Radarr"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -34437,7 +34414,7 @@
       {
          "category": "application",
          "id": "radicale",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -34549,7 +34526,7 @@
             "source": "https://github.com/lukevella/rallly",
             "title": "rallly"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -34680,7 +34657,7 @@
             "source": "https://github.com/linuxserver/docker-readarr",
             "title": "Readarr"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -34807,7 +34784,7 @@
       {
          "category": "application",
          "id": "readeck",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -34912,7 +34889,7 @@
       {
          "category": "cache",
          "id": "redis",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -36156,7 +36133,7 @@
             "source": "https://github.com/searxng/searxng",
             "title": "SearXNG"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -36283,7 +36260,7 @@
             "homepage": "https://seatsurfing.io",
             "source": "https://github.com/seatsurfing/seatsurfing"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -36712,7 +36689,7 @@
       {
          "category": "application",
          "id": "shaarli",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -37201,7 +37178,7 @@
       {
          "category": "application",
          "id": "siyuan",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -37422,7 +37399,7 @@
             "source": "https://github.com/the-djmaze/snappymail",
             "title": "snappymail"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -37533,7 +37510,6 @@
          "id": "snipe-it",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -37682,7 +37658,7 @@
       {
          "category": "application",
          "id": "sonarqube",
-         "license": "LGPL-3.0-or-later",
+         "license": "LGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -37826,7 +37802,7 @@
             "source": "https://github.com/linuxserver/docker-sonarr",
             "title": "Sonarr"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -38370,7 +38346,6 @@
          "id": "synapse",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -38736,7 +38711,7 @@
       {
          "category": "application",
          "id": "tandoor",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -38892,7 +38867,7 @@
             "source": "https://github.com/linuxserver/docker-tautulli",
             "title": "Tautulli"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -39020,7 +38995,7 @@
       {
          "category": "application",
          "id": "teable",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -39156,7 +39131,7 @@
             "source": "https://github.com/TechnitiumSoftware/DnsServer",
             "title": "Technitium DNS Server"
          },
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -40542,9 +40517,8 @@
             "source": "https://github.com/TriliumNext/Trilium",
             "title": "Trilium"
          },
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -40649,7 +40623,7 @@
       {
          "category": "application",
          "id": "tvheadend",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -40776,7 +40750,7 @@
       {
          "category": "application",
          "id": "twenty",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -41013,7 +40987,7 @@
       {
          "category": "search",
          "id": "typesense",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -41511,9 +41485,8 @@
       {
          "category": "application",
          "id": "vaultwarden",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -41745,7 +41718,7 @@
       {
          "category": "application",
          "id": "vikunja",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -41878,7 +41851,7 @@
       {
          "category": "storage",
          "id": "volsync",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -42325,7 +42298,7 @@
       {
          "category": "application",
          "id": "wallos",
-         "license": "GPL-3.0-or-later",
+         "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -42435,7 +42408,6 @@
          "id": "webtrees",
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -42702,7 +42674,6 @@
          "id": "wger",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },
@@ -42959,7 +42930,7 @@
       {
          "category": "application",
          "id": "wikijs",
-         "license": "AGPL-3.0-or-later",
+         "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
@@ -43239,7 +43210,6 @@
          "id": "xwiki",
          "license": "LGPL-2.1-or-later",
          "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
          "maturity": {
             "tier": "e2e"
          },

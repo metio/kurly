@@ -433,6 +433,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     vaultwarden: {
+      license: 'AGPL-3.0-only',
       upstream: { repo: 'https://github.com/dani-garcia/vaultwarden' },
       name: 'Vaultwarden',
       summary: 'A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080.',
@@ -502,6 +503,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     hedgedoc: {
+      license: 'AGPL-3.0-only',
       upstream: { repo: 'https://github.com/hedgedoc/hedgedoc' },
       name: 'HedgeDoc',
       summary: 'A HedgeDoc server (real-time, collaborative markdown notes) on the official image, backed by an external PostgreSQL, with uploaded files on a PersistentVolume. Pairs with a cnpg-cluster named hedgedoc-db. kurly authors no Secret; CMD_DB_URL and CMD_SESSION_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
@@ -683,6 +685,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     trilium: {
+      license: 'AGPL-3.0-only',
       name: 'TriliumNext Notes',
       summary: 'A TriliumNext Notes server (a hierarchical note-taking application for building personal knowledge bases) on the official image. A plain composable http workload that keeps its notes in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :8080.',
       category: 'application',
@@ -979,6 +982,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'calibre-web-automated': {
+      license: 'GPL-3.0-only',
       name: 'Calibre-Web Automated',
       upstream: { repo: 'https://github.com/crocodilestick/Calibre-Web-Automated' },
       summary: 'A Calibre-Web Automated server (a self-hosted web reader and library manager for a Calibre ebook library, adding automatic ingest and format conversion on top of Calibre-Web) on the LinuxServer.io-based image. A plain composable http workload that keeps its application config on one PersistentVolume under /config and the Calibre library on another under /calibre-library. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8083.',
@@ -1239,6 +1243,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     leantime: {
+      license: 'AGPL-3.0-only',
       name: 'Leantime',
       upstream: { repo: 'https://github.com/Leantime/leantime' },
       summary: 'A Leantime server (a self-hosted, open-source project-management system for non-project-managers: goals, ideas, tasks, time tracking) on the official image, backed by an external MySQL/MariaDB; uploaded files on a PersistentVolume under /var/www/html/userfiles. A plain composable http workload. kurly authors no Secret; LEAN_DB_* and LEAN_SESSION_PASSWORD come from a provided Secret via envFrom. Pair it with a MySQL/MariaDB you run separately. Single writer over a ReadWriteOnce uploads volume: one replica, recreated. Serves on :8080.',
@@ -1259,6 +1264,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     maloja: {
+      license: 'GPL-3.0-only',
       name: 'Maloja',
       upstream: { repo: 'https://github.com/krateng/maloja' },
       summary: 'A Maloja server (a self-hosted music scrobble database and listening-statistics server, an alternative to Last.fm) on the official image. A plain composable http workload that keeps its database (SQLite) and configuration on a PersistentVolume under /mljdata. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :42010.',
@@ -1833,6 +1839,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     wger: {
+      license: 'AGPL-3.0-or-later',
       name: 'wger',
       upstream: { repo: 'https://github.com/wger-project/wger' },
       summary: 'A wger server (a self-hosted workout, nutrition, and body-weight manager) on the official all-in-one image, backed by an external PostgreSQL and Redis, with uploaded media on a PersistentVolume. Pairs with a cnpg-cluster named wger-db and a valkey named wger-cache. The image runs nginx + uWSGI + Celery and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DJANGO_DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -1956,6 +1963,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     baikal: {
+      license: 'GPL-3.0-only',
       name: 'Baikal',
       upstream: { repo: 'https://github.com/sabre-io/Baikal' },
       summary: 'A Baikal server (a lightweight CalDAV + CardDAV server on sabre/dav) on the maintained ckulka image. A plain composable http workload that keeps its configuration and SQLite database on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -1975,6 +1983,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     cryptpad: {
+      license: 'AGPL-3.0-or-later',
       name: 'CryptPad',
       upstream: { repo: 'https://github.com/cryptpad/cryptpad' },
       summary: 'A CryptPad server (end-to-end encrypted, collaborative documents and spreadsheets) on the official image. A plain composable http workload that keeps its encrypted blocks, blobs, and datastore on a PersistentVolume — no external database. The Node app writes under /cryptpad, so it relaxes read-only-rootfs while keeping non-root and dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000; needs a config.js with a main and a separate sandbox origin.',
@@ -2499,6 +2508,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     librespeed: {
+      license: 'LGPL-3.0-or-later',
       name: 'LibreSpeed',
       upstream: { repo: 'https://github.com/librespeed/speedtest' },
       summary: 'A LibreSpeed server — a lightweight, self-hosted network speed test you run in the browser. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -2629,6 +2639,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mealie: {
+      license: 'AGPL-3.0-only',
       name: 'Mealie',
       summary: 'A Mealie server (a self-hosted recipe manager and meal planner with a recipe scraper, shopping lists and a REST API) on the official image; with the default SQLite backend its database and uploaded assets live on a PersistentVolume. Point it at an external PostgreSQL (DB_ENGINE=postgres + POSTGRES_*) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9000.',
       category: 'application',
@@ -2858,6 +2869,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     lldap: {
+      license: 'GPL-3.0-only',
       name: 'LLDAP',
       summary: 'An LLDAP server (a light LDAP implementation for authentication: a simple user/group directory with a friendly web UI, a lightweight stand-in for OpenLDAP) on the official image; with the default SQLite backend its directory lives on a PersistentVolume. Apps bind over LDAP on :3890, a separate port to add a Service for. kurly authors no Secret; LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL (LLDAP_DATABASE_URL) to scale past SQLite. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :17170.',
       category: 'identity',
@@ -3025,6 +3037,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     calibre: {
+      license: 'GPL-3.0-only',
       name: 'Calibre',
       upstream: { repo: 'https://github.com/kovidgoyal/calibre' },
       summary: 'A Calibre server (the full Calibre e-book management desktop app, served in the browser over a remote-desktop session) on the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
@@ -3396,6 +3409,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     kimai: {
+      license: 'AGPL-3.0-or-later',
       name: 'Kimai',
       upstream: { repo: 'https://github.com/kimai/kimai' },
       summary: 'A Kimai server (a self-hosted, professional time-tracking application for freelancers and teams) on the official Apache image, backed by an external MySQL/MariaDB. kurly authors no Secret; DATABASE_URL and APP_SECRET come from a provided Secret via envFrom. Pairs with a mysql-cluster named kimai-db. Stateless (timesheets live in MySQL): a plain rolling Deployment. Serves on :8001.',
@@ -3434,6 +3448,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     phpmyadmin: {
+      license: 'GPL-2.0-only',
       upstream: { repo: 'https://github.com/phpmyadmin/phpmyadmin' },
       name: 'phpMyAdmin',
       summary: 'A phpMyAdmin server (the classic web UI for administering MySQL and MariaDB) on the official image. Stateless: a plain rolling Deployment that connects to the MySQL host you point it at. Serves on :80.',
@@ -3560,6 +3575,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     foldingathome: {
+      license: 'GPL-3.0-or-later',
       name: 'Folding@home',
       upstream: { repo: 'https://github.com/FoldingAtHome/fah-client-bastet' },
       summary: 'A Folding@home client — the distributed-computing client for disease research, with its web control panel. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :7396.',
@@ -3581,6 +3597,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     projectsend: {
+      license: 'GPL-3.0-or-later',
       name: 'ProjectSend',
       upstream: { repo: 'https://github.com/projectsend/projectsend' },
       summary: 'A ProjectSend server — a self-hosted, private file-sharing app that assigns uploads to specific clients (backed by MySQL/MariaDB). On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -3969,6 +3986,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     nextcloud: {
+      license: 'AGPL-3.0-or-later',
       upstream: { repo: 'https://github.com/nextcloud/server' },
       name: 'Nextcloud',
       summary: 'A Nextcloud server (a self-hosted content-collaboration platform: file sync and share, calendars, contacts, office documents) on the official Apache image; with the default SQLite backend the whole installation lives on a PersistentVolume. kurly authors no Secret; NEXTCLOUD_ADMIN_* come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL and S3 primary storage to scale out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -4141,6 +4159,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     webtrees: {
+      license: 'GPL-3.0-or-later',
       name: 'webtrees',
       upstream: { repo: 'https://github.com/fisharebest/webtrees' },
       summary: 'A webtrees server (a self-hosted, collaborative online genealogy application) on the community image, backed by an external MySQL/MariaDB, with its data on a PersistentVolume. kurly authors no Secret; the DB_* credentials come from a provided Secret via envFrom. Pairs with a mysql-cluster named webtrees-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -4437,6 +4456,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'element-web': {
+      license: 'AGPL-3.0-or-later',
       name: 'Element Web',
       summary: 'An Element Web server (the popular self-hosted web client for the Matrix network) on the official image. It serves a static app configured by a single config.json, mounted into the web root via a subPath ConfigMap mount beside the app assets, so it is stateless. Element is a client only; point it at a Matrix homeserver (e.g. matrix-conduit). Serves on :80.',
       category: 'application',
@@ -4555,6 +4575,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     joomla: {
+      license: 'GPL-2.0-or-later',
       name: 'Joomla',
       upstream: { repo: 'https://github.com/joomla/joomla-cms' },
       summary: 'A Joomla server — a popular self-hosted CMS for building websites and online applications (backed by MySQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -4579,7 +4600,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     drupal: {
-      license: 'GPL-2.0',
+      license: 'GPL-2.0-or-later',
       name: 'Drupal',
       upstream: { repo: 'https://github.com/drupal/drupal' },
       summary: 'A Drupal server — a powerful, self-hosted open-source CMS and content framework (backed by MySQL/PostgreSQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -4646,6 +4667,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     synapse: {
+      license: 'AGPL-3.0-or-later',
       name: 'Synapse',
       upstream: { repo: 'https://github.com/element-hq/synapse' },
       summary: 'A Synapse server (the reference Matrix homeserver from the Matrix.org Foundation) on the official image; its configuration, signing keys and (with the default SQLite backend) database live on a PersistentVolume, generated on first start from SYNAPSE_SERVER_NAME. The server name is baked into every id and cannot be changed. Beyond a small instance, edit the generated homeserver.yaml to point at an external PostgreSQL. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8008.',
@@ -4706,6 +4728,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     xwiki: {
+      license: 'LGPL-2.1-or-later',
       name: 'XWiki',
       upstream: { repo: 'https://github.com/xwiki/xwiki-platform' },
       summary: 'An XWiki server (a powerful, self-hosted enterprise wiki and application-development platform: structured pages, macros, apps, fine-grained rights) on the official PostgreSQL/Tomcat image, backed by an external PostgreSQL, with its permanent directory on a PersistentVolume. kurly authors no Secret; the DB_* connection comes from a provided Secret via envFrom. Pairs with a cnpg-cluster named xwiki-db. The bundled Tomcat runs as root. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
@@ -4745,6 +4768,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     linkstack: {
+      license: 'GPL-3.0-or-later',
       name: 'LinkStack',
       upstream: { repo: 'https://github.com/LinkStackOrg/LinkStack' },
       summary: 'A LinkStack server (a self-hosted, customizable "link in bio" page, a private alternative to Linktree) on the official image (pinned by digest; Renovate maintains it); with the default SQLite backend its data lives on a PersistentVolume. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -5060,6 +5084,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     mastodon: {
+      license: 'AGPL-3.0-or-later',
       name: 'Mastodon',
       summary: 'Mastodon (the leading self-hosted ActivityPub/Fediverse microblogging platform) as three workloads backed by an external PostgreSQL and Redis, with media in S3-compatible object storage: a web/API server (:3000), a streaming server for real-time timelines (:4000), and a sidekiq background worker. LOCAL_DOMAIN is baked into every @handle and cannot be changed. kurly authors no Secret; the PostgreSQL/Redis connection, SECRET_KEY_BASE, OTP_SECRET, the VAPID keys and the S3 settings come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named mastodon-db, a Redis and an S3 bucket (e.g. seaweedfs).',
       category: 'application',
@@ -5215,6 +5240,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'calibre-web': {
+      license: 'GPL-3.0-or-later',
       name: 'Calibre-Web',
       upstream: { repo: 'https://github.com/janeczku/calibre-web' },
       summary: 'A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083.',
@@ -5725,6 +5751,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     monica: {
+      license: 'AGPL-3.0-or-later',
       upstream: { repo: 'https://github.com/monicahq/monica' },
       name: 'Monica',
       summary: 'A Monica server (a self-hosted personal relationship manager) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
@@ -5769,6 +5796,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'firefly-iii': {
+      license: 'AGPL-3.0-or-later',
       upstream: { repo: 'https://github.com/firefly-iii/firefly-iii' },
       name: 'Firefly III',
       summary: 'A Firefly III server (a free, self-hosted personal-finance manager) on the official image, backed by an external PostgreSQL, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named firefly-iii-db. The Apache + PHP image starts as root and binds :8080, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
@@ -5918,6 +5946,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       },
     },
     'snipe-it': {
+      license: 'AGPL-3.0-or-later',
       name: 'Snipe-IT',
       upstream: { repo: 'https://github.com/grokability/snipe-it' },
       summary: 'A Snipe-IT server (a free IT asset and license management system) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploads on a PersistentVolume. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASSWORD and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
