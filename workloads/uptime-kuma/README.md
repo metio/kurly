@@ -22,7 +22,7 @@ kurly.list(uptimeKuma())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `uptime-kuma` | |
-| `image` | `docker.io/louislam/uptime-kuma:1.23.17` | |
+| `image` | `docker.io/louislam/uptime-kuma:2.4.0` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the SQLite data volume |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
