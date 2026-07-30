@@ -36,6 +36,13 @@
       "automergeStrategy": "squash"
     },
     {
+      "description": "Every copy of one image reference moves in ONE branch. A workload's reference is written twice \u2014 in workloads/<name>/<stage>.image, which the stage reads with importstr, and in catalog.json, which publishes the same string under runs.image plus its halves under runs.tag and runs.digest. While the copies agree they are a single update and Renovate edits them together; the moment they disagree they become different updates (a tag bump for one, a digest bump for the other), land in separate branches, and each branch repairs only its own copy \u2014 so they re-converge only by luck. Grouping by dependency puts every such update in one branch, where the digest is resolved once and written everywhere. This narrows the window rather than closing it: the reference is a DERIVED fact and a regex can copy a string but cannot recompute a resolution, so check-catalog stays the backstop that refuses an inconsistent catalog.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "groupName": "{{depName}}"
+    },
+    {
       "description": "Placeholder images in illustrative code (ghcr.io/example/*, ghcr.io/acme/*) carry no real tags \u2014 never look them up.",
       "matchDatasources": [
         "docker"
