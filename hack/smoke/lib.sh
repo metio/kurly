@@ -500,7 +500,24 @@ kurly::provision_deps() {
       kurly::mysql "$ns" "$dbHost" "$dbName" "$dbUser"
     else
       dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
-      kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser"
+      # A workload that needs a PostgreSQL EXTENSION needs a server that ships it:
+      # the stock image fails the app's first CREATE EXTENSION, and immich does not
+      # merely warn — it crash-loops with DB_VECTOR_EXTENSION=vectorchord against a
+      # server that has never heard of it. VectorChord additionally has to be
+      # preloaded, so it is a shared_preload_libraries argument rather than only an
+      # image swap.
+      #
+      # The same rule is emitted by gen-smoke for the fast scenarios; this is the
+      # deep path, which had no equivalent and so provisioned a stock server for
+      # the one workload in the catalogue that cannot use one.
+      case "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.requires.databaseExtensions // [] | join(",")' catalog/catalog.json)" in
+        *vchord*)
+          kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" \
+            ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 \
+            '"-c", "shared_preload_libraries=vchord.so"'
+          ;;
+        *) kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" ;;
+      esac
     fi
   fi
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.cache then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
