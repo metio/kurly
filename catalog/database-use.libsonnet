@@ -36,4 +36,6 @@
   photoview: { tables: 14, engine: 'postgres', on: '2026-07-31' },
   rallly: { tables: 31, engine: 'postgres', on: '2026-07-31' },
   redmine: { tables: 60, engine: 'mysql', on: '2026-07-31' },
+  synapse: { tables: 0, engine: 'postgres', on: '2026-07-31' },
+  tandoor: { tables: 10, engine: 'postgres', on: '2026-07-31' },
 }

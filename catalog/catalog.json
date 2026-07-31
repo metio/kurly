@@ -2862,6 +2862,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The 2FAuth server. appUrl is the public URL; secretName holds APP_KEY (envFrom). Data at /2fauth. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/2fauth/server.libsonnet",
@@ -3012,6 +3016,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Activepieces server. frontendUrl is the public URL (webhook URLs derive from it). Connection settings are env from dbHost/database/dbUser/redisHost; secretName holds AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/activepieces/server.libsonnet",
@@ -3138,6 +3146,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "256Mi"
+               },
                "help": "The Actual Budget server. Keeps everything in SQLite at /data on the volume (ACTUAL_DATA_DIR), so it needs nothing external. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/actualbudget/server.libsonnet",
@@ -3257,6 +3269,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The AdGuard Home server. Config and data under /opt/adguardhome; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/adguardhome/server.libsonnet",
@@ -3367,6 +3383,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Adminer server. Stateless; connects to whatever database you point it at. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/adminer/server.libsonnet",
@@ -3503,6 +3523,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The An Airsonic-Advanced server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/airsonic-advanced/server.libsonnet",
@@ -3630,6 +3654,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The Alertmanager. alertmanagerConfigSelector (verbatim operator schema) decides which AlertmanagerConfig objects supply routing/receivers; {} selects everything, none runs the operator default. Wire a Prometheus to it through that workload's spec escape (alerting.alertmanagers -> alertmanager-operated:web). Reach it at alertmanager-operated.<namespace>.svc:9093.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/alertmanager/server.libsonnet",
@@ -3737,6 +3762,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The AList server. Database and config at /opt/alist/data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/alist/server.libsonnet",
@@ -3850,6 +3879,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Apache Answer server. Data and uploads at /data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/answer/server.libsonnet",
@@ -3961,6 +3994,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "1Gi"
+               },
                "help": "The AnythingLLM server. Storage at /app/server/storage on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/anythingllm/server.libsonnet",
@@ -4073,6 +4110,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "256Mi"
+               },
                "help": "The Apprise server. Named configs at /config on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/apprise/server.libsonnet",
@@ -4187,6 +4228,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Audiobookshelf server. Config at /config, metadata at /metadata, library at /audiobooks, all on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/audiobookshelf/server.libsonnet",
@@ -4317,6 +4362,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Authelia server. config is Authelia's own configuration.yml (complete the skeleton); secretName holds the AUTHELIA_* secrets (envFrom). Data at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/authelia/server.libsonnet",
@@ -4472,6 +4521,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The authentik web/API server. secretName holds the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/authentik/server.libsonnet",
@@ -4604,6 +4657,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The authentik background worker (migrations, scheduled tasks, outposts). Shares the server's Secret via envFrom. No Service.",
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/authentik/worker.libsonnet",
@@ -4743,6 +4800,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Automatisch web server. secretName holds the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/automatisch/server.libsonnet",
@@ -4881,6 +4942,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Automatisch background worker (runs the flow executions the server enqueues onto Redis). Shares the server's Secret via envFrom. No Service.",
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/automatisch/worker.libsonnet",
@@ -5000,6 +5065,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Baikal server. Keeps its SQLite database at /var/www/baikal/Specific and its generated config at /var/www/baikal/config (both on the volume). Point it at external MySQL/PostgreSQL through the setup wizard to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/baikal/server.libsonnet",
@@ -5129,6 +5198,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+               },
                "help": "The Baserow all-in-one server. Everything (embedded DB, Redis, uploads) at /baserow/data on the volume. publicUrl is the public URL. secretName holds BASEROW_SECRET_KEY and BASEROW_JWT_SIGNING_KEY (envFrom). Point DATABASE_*/REDIS_* at external services via env to scale out. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/baserow/server.libsonnet",
@@ -5285,6 +5358,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Bazarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bazarr/server.libsonnet",
@@ -5399,6 +5476,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The Beszel hub. Keeps its SQLite data at /beszel_data on the volume. Compose an exposure onto the HTTP port; agents on monitored hosts report to it.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/beszel/server.libsonnet",
@@ -5502,6 +5583,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Bigcapital nginx entry on :80 — the stage you expose. Routes the browser to the webapp and /api to the server, which it reaches by Service names derived from namePrefix. Compose an exposure onto it.",
                "id": "gateway",
                "importPath": "github.com/metio/kurly/workloads/bigcapital/gateway.libsonnet",
@@ -5635,6 +5720,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bigcapital/server.libsonnet",
@@ -5749,6 +5838,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Bigcapital front end (single-page web app) on :80. Stateless — scales via replicas. The gateway proxies to it.",
                "id": "webapp",
                "importPath": "github.com/metio/kurly/workloads/bigcapital/webapp.libsonnet",
@@ -5854,6 +5947,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The exporter. modules is rendered as its config.yml; the default covers http_2xx (dual-stack) plus IPv4/IPv6-pinned variants and tcp_connect. Reach it at blackbox-exporter:9115 (the kurly.expose.probe default prober). An ICMP module needs CAP_NET_RAW, so relax the dropped capabilities for it.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/blackbox-exporter/server.libsonnet",
@@ -5983,6 +6080,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Blinko server. nextauthUrl is the public URL. secretName holds DATABASE_URL (with the DB password) and NEXTAUTH_SECRET (envFrom). Uploads at /app/.blinko. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/blinko/server.libsonnet",
@@ -6143,6 +6244,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The BookStack server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASS and APP_KEY (envFrom). Config/uploads at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bookstack/server.libsonnet",
@@ -6268,6 +6373,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Browserless server. secretName holds TOKEN (envFrom). Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/browserless/server.libsonnet",
@@ -6399,6 +6508,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Bugsink server. baseUrl is the public URL (validated Host header); behindHttps toggles secure-cookie/HTTPS handling. secretName holds DATABASE_URL and SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/bugsink/server.libsonnet",
@@ -6525,6 +6638,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Cal.com server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cal-com/server.libsonnet",
@@ -6672,6 +6789,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Calibre server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/calibre/server.libsonnet",
@@ -6807,6 +6928,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Calibre-Web server. puid/pgid own the mounted files; timezone sets TZ. Config at /config; point it at an existing Calibre library on first run. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/calibre-web/server.libsonnet",
@@ -6939,6 +7064,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Calibre-Web Automated server. Config at /config, library at /calibre-library. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/calibre-web-automated/server.libsonnet",
@@ -7045,6 +7174,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The CassandraDatacenter CR. name is the datacenter name; clusterName defaults to it. size is the node count. config is extra cassandra.yaml/JVM tuning (cass-operator schema, verbatim). Render with kurly.list.",
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/cassandra-cluster/cluster.libsonnet",
@@ -7159,6 +7289,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The changedetection.io server. baseUrl is the public URL (notification links derive from it). Datastore at /datastore. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/changedetection/server.libsonnet",
@@ -7263,6 +7397,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The Chatpad server. Stateless; compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/chatpad/server.libsonnet",
@@ -7379,6 +7517,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The ClickHouse server. secretName holds CLICKHOUSE_USER/PASSWORD/DB (envFrom). Data at /var/lib/clickhouse; native protocol (:9000) needs an extra Service. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/clickhouse/server.libsonnet",
@@ -7582,6 +7724,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind). Point it at a cnpg-image-catalog with catalog/major to keep the image choice in one place, or pin imageName directly; the two are mutually exclusive.",
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet",
@@ -7648,6 +7791,7 @@
                "clusterScopedBecause": [
                   "clusterScopedObjects"
                ],
+               "declaredRequests": null,
                "help": "A cluster-scoped ClusterImageCatalog, serving every namespace from one object. Identical spec to the namespaced stage; a cnpg-cluster points at it with catalogScope=cluster.",
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet",
@@ -7696,6 +7840,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "A namespaced ImageCatalog, owned by the team that owns the databases. Keys of `images` are PostgreSQL major versions; a cnpg-cluster pins one with catalog/major and the catalog owns the patch.",
                "id": "namespaced",
                "importPath": "github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet",
@@ -7799,6 +7944,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The cobalt API server. Set apiUrl to its public URL. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cobalt/server.libsonnet",
@@ -7914,6 +8063,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The code-server editor. Workspace, extensions, and settings at /home/coder on the volume. secretName holds PASSWORD (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/code-server/server.libsonnet",
@@ -8031,6 +8184,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The CommaFeed server (H2 variant). Keeps its embedded database at /commafeed/data on the volume. Switch to the -postgresql image and point CF_APP_DATABASE at a cnpg-cluster to scale out. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/commafeed/server.libsonnet",
@@ -8146,6 +8303,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The ConvertX server. Set JWT_SECRET via env/envFromSecret. Data at /app/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/convertx/server.libsonnet",
@@ -8259,6 +8420,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The CouchDB server. secretName holds COUCHDB_USER and COUCHDB_PASSWORD (envFrom). Data at /opt/couchdb/data. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/couchdb/server.libsonnet",
@@ -8392,6 +8557,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The CryptPad server. Keeps the encrypted datastore at /cryptpad/data on the volume. Mount a config.js (kurly.config) setting httpUnsafeOrigin (main URL) and httpSafeOrigin (a SEPARATE sandbox domain, required for security). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cryptpad/server.libsonnet",
@@ -8500,6 +8669,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The CyberChef server. Stateless. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/cyberchef/server.libsonnet",
@@ -8614,6 +8787,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Dashy server. Configuration lives at /app/user-data/conf.yml on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/dashy/server.libsonnet",
@@ -8731,6 +8908,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Davis server. Provide the Secret. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/davis/server.libsonnet",
@@ -8877,6 +9058,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The A davos server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/davos/server.libsonnet",
@@ -9011,6 +9196,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Deluge server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/deluge/server.libsonnet",
@@ -9135,6 +9324,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The Dex server (runs `dex serve /etc/dex/config.yaml`). SQLite state at /var/dex on the volume. configSecret is the Secret holding config.yaml (mounted at /etc/dex; it carries client and connector secrets). Point storage at PostgreSQL in the config, or the kubernetes backend with kurly.rbac, to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/dex/server.libsonnet",
@@ -9286,6 +9479,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Directus server. dbHost/dbName/dbUser default to a cnpg-cluster named directus-db. publicUrl is the public URL; adminEmail the first-run admin. secretName holds DB_PASSWORD, KEY, SECRET, ADMIN_PASSWORD (envFrom). Uploads at /directus/uploads. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/directus/server.libsonnet",
@@ -9419,6 +9616,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Docker Registry UI server. registryUrl points at the registry (NGINX_PROXY_PASS_URL); registryTitle sets the page title. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet",
@@ -9548,6 +9749,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Docmost server. appUrl is the public URL. secretName holds DATABASE_URL, REDIS_URL and APP_SECRET (envFrom). Attachments at /app/data/storage; point STORAGE_DRIVER at S3 to scale past the single writer. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/docmost/server.libsonnet",
@@ -9681,6 +9886,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Documenso server. Point webappUrl at its public URL and provide the Secret. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/documenso/server.libsonnet",
@@ -9818,6 +10027,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The DocuSeal server. Data at /data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/docuseal/server.libsonnet",
@@ -9928,6 +10141,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The DokuWiki server. All content lives at /storage on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/dokuwiki/server.libsonnet",
@@ -10030,6 +10247,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "2",
+                  "memory": "640Mi"
+               },
                "help": "The Dragonfly server. threads pins --proactor_threads and sizes the CPU (Dragonfly runs a thread per core); maxMemoryMB must be at least 256 per thread or Dragonfly exits at startup, so the render fails first. Name it for its role and a consumer never learns which RESP store it got.",
                "id": "instance",
                "importPath": "github.com/metio/kurly/workloads/dragonfly/instance.libsonnet",
@@ -10133,6 +10354,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "256Mi"
+               },
                "help": "The draw.io server. Stateless; compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/draw-io/server.libsonnet",
@@ -10240,6 +10465,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A draw.io server. Stateless. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/drawio/server.libsonnet",
@@ -10361,6 +10590,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Drupal server. secretName holds the DB credentials (envFrom). Data at /var/www/html/sites. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/drupal/server.libsonnet",
@@ -10531,6 +10764,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Duplicati server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/duplicati/server.libsonnet",
@@ -10655,6 +10892,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The ejabberd server. Keeps its Mnesia database at /home/ejabberd/database on the volume; mount ejabberd.yml at /home/ejabberd/conf (kurly.config; credentials from a Secret). Route the XMPP ports as TCP and expose :5280 for admin.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ejabberd/server.libsonnet",
@@ -10786,6 +11027,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Element Web server. homeserverUrl/serverName populate config.json default_server_config; brand sets the title; config overrides/extends Element's config.json verbatim. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/element-web/server.libsonnet",
@@ -10921,6 +11166,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Emby server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/emby/server.libsonnet",
@@ -11030,6 +11279,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The EMQX broker on :1883. Data at /opt/emqx/data; the dashboard (:18083) needs an extra Service. Expose to devices (often a LoadBalancer).",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/emqx/server.libsonnet",
@@ -11180,6 +11433,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Endurain server. dbHost/dbName/dbUser default to a cnpg-cluster named endurain-db; redisHost to a valkey named endurain-cache. endurainHost is the public URL. secretName holds DB_PASSWORD and SECRET_KEY (envFrom). Uploads at /app/backend/app on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/endurain/server.libsonnet",
@@ -11309,6 +11566,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Ente museum API on :8080, stateless (metadata in PostgreSQL, blobs in S3). Reads its base config from the image and merges the operator-supplied credentials file (`credentialsSecret`, a Secret with a credentials.yaml key carrying the DB DSN, the S3 endpoint/bucket/keys, and the app secrets); ENTE_CREDENTIALS_FILE points at it. Any value is also overridable by an ENTE_-prefixed env var.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ente/server.libsonnet",
@@ -11397,6 +11658,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Ente web front end — one image bundling every web app (Photos on :3000, Albums :3002, Cast :3004, Share :3005, Embed :3006). Stateless; it talks to the museum from the browser, so apiOrigin/albumsOrigin are the PUBLIC URLs the browser reaches, not in-cluster Services. Expose :3000 for the main UI; route the extra ports for the public-album/cast/share apps.",
                "id": "web",
                "importPath": "github.com/metio/kurly/workloads/ente/web.libsonnet",
@@ -11511,6 +11776,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The An ESPHome dashboard server. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/esphome/server.libsonnet",
@@ -11645,6 +11914,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Etherpad server. dbHost/dbName/dbUser default to a cnpg-cluster named etherpad-db. secretName holds DB_PASS, ADMIN_PASSWORD, and APIKEY (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/etherpad/server.libsonnet",
@@ -11760,6 +12033,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The Excalidraw static server on :80 (stateless — scale via replicas). The image tag is an immutable sha (Excalidraw ships no semver tags). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/excalidraw/server.libsonnet",
@@ -11868,6 +12145,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The ExpenseOwl server. Keeps its expenses at /app/data on the volume, so it needs nothing external. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/expenseowl/server.libsonnet",
@@ -11983,6 +12264,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The FerretDB proxy. secretName holds FERRETDB_POSTGRESQL_URL (with the backend password, envFrom). The backend is a PostgreSQL with the DocumentDB extension — run one with cnpg-cluster pinned to imageName=ghcr.io/ferretdb/postgres-documentdb. Scales horizontally via replicas. Route :27017 as TCP for MongoDB clients.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ferretdb/server.libsonnet",
@@ -12107,6 +12392,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Fider server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), JWT_SECRET, and EMAIL_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/fider/server.libsonnet",
@@ -12256,6 +12545,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The File Browser server. Database at /database; compose the volume to serve onto /srv. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/filebrowser/server.libsonnet",
@@ -12366,6 +12659,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Filestash server. Add storage backends in the admin console. Config at /app/data/state. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/filestash/server.libsonnet",
@@ -12511,6 +12808,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Firefly III server. dbHost/dbName/dbUser default to a cnpg-cluster named firefly-iii-db. appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (a 32-char key, envFrom). Uploads at /var/www/html/storage. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/firefly-iii/server.libsonnet",
@@ -12631,6 +12932,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Flame server. Set PASSWORD via env/envFromSecret. Data at /app/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/flame/server.libsonnet",
@@ -12747,6 +13052,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The FlareSolverr server. logLevel sets LOG_LEVEL. Stateless; usually needs no exposure. Compose an exposure onto the HTTP port only if reached from outside the cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/flaresolverr/server.libsonnet",
@@ -12861,6 +13170,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The flatnotes server. Notes live at /data on the volume. secretName holds FLATNOTES_USERNAME, FLATNOTES_PASSWORD, and FLATNOTES_SECRET_KEY (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/flatnotes/server.libsonnet",
@@ -12985,6 +13298,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Focalboard server. Data on the config volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/focalboard/server.libsonnet",
@@ -13120,6 +13437,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Folding@home client. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/foldingathome/server.libsonnet",
@@ -13266,6 +13587,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The Forgejo server. dbHost/dbName/dbUser/dbSecret default to a cnpg-cluster named forgejo-db (its -rw Service and the -app Secret CNPG mints, key password read via a file). rootUrl is the public base URL for links/clone URLs. env carries extra FORGEJO__section__KEY settings — provide SECRET_KEY/JWT_SECRET there (from a Secret) so sessions survive restarts. kurly authors no Secret. Compose an exposure onto the HTTP port; route TCP :2222 for SSH.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/forgejo/server.libsonnet",
@@ -13389,6 +13714,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Formbricks server. webappUrl is the public URL; secretName holds DATABASE_URL, NEXTAUTH_SECRET and ENCRYPTION_KEY (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/formbricks/server.libsonnet",
@@ -13528,6 +13857,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The FreshRSS server. Keeps its SQLite database at /var/www/FreshRSS/data on the volume; baseUrl is the public URL. Point it at external PostgreSQL/MySQL via the setup wizard to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/freshrss/server.libsonnet",
@@ -13666,6 +13999,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "512Mi"
+               },
                "help": "The Frigate NVR: authenticated UI/API on :8971 (plain UI on 5000, RTSP restream on 8554, WebRTC on 8555 TCP/UDP), config + database on /config and recordings on /media (two ReadWriteOnce volumes, one replica, recreated). config.yml mounts read-only over /config; FRIGATE_RTSP_PASSWORD comes from `secretName`.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/frigate/server.libsonnet",
@@ -13792,6 +14129,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Gatus server. config is Gatus's own settings (endpoints/conditions/alerting/storage), rendered to the mounted config.yaml. History at /data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gatus/server.libsonnet",
@@ -13932,6 +14273,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Ghost server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). url is the public URL. secretName holds the DB password (envFrom). Content at /var/lib/ghost/content. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ghost/server.libsonnet",
@@ -14061,6 +14406,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Ghostfolio server. Provide the Secret. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ghostfolio/server.libsonnet",
@@ -14213,6 +14562,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Gitea server. rootUrl is the public URL; uid/gid own the mounted files. Data at /data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gitea/server.libsonnet",
@@ -14317,6 +14670,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Glance server. config is Glance's own glance.yml (pages/columns/widgets), rendered to the mounted glance.yml. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/glance/server.libsonnet",
@@ -14440,6 +14797,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The GlitchTip web/ingest API on :8080. redisHost defaults to a valkey named glitchtip-cache; domain is the public URL. secretName holds DATABASE_URL (with the DB password) and SECRET_KEY (envFrom). Run a worker alongside. Scales via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/glitchtip/server.libsonnet",
@@ -14543,6 +14904,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The GlitchTip Celery worker (with beat scheduler), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs ./bin/run-celery-with-beat.sh. Scales horizontally via replicas. A GlitchTip deployment needs at least one.",
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/glitchtip/worker.libsonnet",
@@ -14653,6 +15018,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Gogs server. Data at /data. Git-over-SSH (:22) needs an extra Service. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gogs/server.libsonnet",
@@ -14764,6 +15133,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Gokapi server. Data at /app/data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gokapi/server.libsonnet",
@@ -14874,6 +15247,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Gotenberg server. Stateless; usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gotenberg/server.libsonnet",
@@ -14988,6 +15365,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The Gotify server. Keeps everything in SQLite at /app/data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gotify/server.libsonnet",
@@ -15110,6 +15491,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The GoToSocial server. host is the permanent instance domain. Data at /gotosocial/storage. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/gotosocial/server.libsonnet",
@@ -15227,6 +15612,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The Grafana instance. config is grafana.ini (operator sections of string values), merged over defaults that silence phone-home traffic. prometheusUrl points the default datasource at the prometheus workload's prometheus-operated Service; prometheusDatasource=false authors none. The operator mints a random admin password into <name>-admin-credentials.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grafana/server.libsonnet",
@@ -15355,6 +15741,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Grav server. puid/pgid own the mounted files; timezone sets TZ. Site at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grav/server.libsonnet",
@@ -15467,6 +15857,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Greenlight server. secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY_BASE and the BIGBLUEBUTTON_ENDPOINT/BIGBLUEBUTTON_SECRET (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/greenlight/server.libsonnet",
@@ -15595,6 +15989,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Grist server. Documents at /persist on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grist/server.libsonnet",
@@ -15730,6 +16128,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The A Grocy server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/grocy/server.libsonnet",
@@ -15847,6 +16249,7 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": { },
                "help": "The Guacamole server plus its guacd sidecar. guacdImage sets the sidecar image; secretName holds the database connection (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/guacamole/server.libsonnet",
@@ -16007,6 +16410,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Healthchecks server. siteRoot is the public URL; allowedHosts sets ALLOWED_HOSTS; secretName holds SECRET_KEY (envFrom). Data at /data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/healthchecks/server.libsonnet",
@@ -16141,6 +16548,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The HedgeDoc server. domain is the public domain. secretName holds CMD_DB_URL (with the DB password) and CMD_SESSION_SECRET (envFrom). Uploads at /hedgedoc/public/uploads. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/hedgedoc/server.libsonnet",
@@ -16287,6 +16698,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The A Heimdall server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/heimdall/server.libsonnet",
@@ -16389,6 +16804,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Hollama server. Stateless; compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/hollama/server.libsonnet",
@@ -16509,6 +16928,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Homarr server. secretName holds SECRET_ENCRYPTION_KEY (a 64-character hex string, envFrom). Data at /appdata. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homarr/server.libsonnet",
@@ -16631,6 +17054,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Home Assistant server. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/home-assistant/server.libsonnet",
@@ -16751,6 +17178,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Homebox server. Keeps inventory and attachments at /data on the volume (HBOX_STORAGE_*), so it needs nothing external. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homebox/server.libsonnet",
@@ -16879,6 +17310,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Homepage server. allowedHosts sets HOMEPAGE_ALLOWED_HOSTS (comma-separated) — required by recent releases. Config at /app/config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homepage/server.libsonnet",
@@ -16988,6 +17423,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The Homer server. Configuration and custom assets live at /www/assets on the volume (edit config.yml there; the image seeds defaults via INIT_ASSETS). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/homer/server.libsonnet",
@@ -17109,6 +17548,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+               },
                "help": "Immich's inference service on :3003, model cache on a ReadWriteOnce volume at /cache (one replica, recreated). The server reaches it through its Service at http://<name>:3003.",
                "id": "machine-learning",
                "importPath": "github.com/metio/kurly/workloads/immich/machine-learning.libsonnet",
@@ -17233,6 +17676,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Immich API and web app on :2283, media library on a ReadWriteOnce volume at /data (one replica, recreated). Reaches PostgreSQL/VectorChord and Redis by the given hosts; the password comes from `secretName` as DB_PASSWORD (an Immich-shaped Secret the operator supplies, e.g. via kurly.externalSecret from the CNPG cluster Secret).",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/immich/server.libsonnet",
@@ -17361,6 +17808,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The InfluxDB server. secretName holds the DOCKER_INFLUXDB_INIT_* setup values (envFrom). Data at /var/lib/influxdb2. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/influxdb/server.libsonnet",
@@ -17497,6 +17948,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The InspIRCd server. Keeps runtime data at /inspircd/data on the volume; mount its configuration at /inspircd/conf (kurly.config, or a Secret for oper/link credentials). Route the port as TCP.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/inspircd/server.libsonnet",
@@ -17646,6 +18101,7 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": { },
                "help": "The Invoice Ninja server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide (DB_CONNECTION=mysql). appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (envFrom). Uploads/PDFs at /var/www/html/storage. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/invoiceninja/server.libsonnet",
@@ -17766,6 +18222,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The An IT-Tools server. Stateless. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/it-tools/server.libsonnet",
@@ -17902,6 +18362,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Jackett server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jackett/server.libsonnet",
@@ -18037,6 +18501,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Jellyfin server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jellyfin/server.libsonnet",
@@ -18146,6 +18614,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Jellyseerr server. Config at /app/config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jellyseerr/server.libsonnet",
@@ -18263,6 +18735,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+               },
                "help": "The Jenkins controller. JENKINS_HOME at /var/jenkins_home on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/jenkins/server.libsonnet",
@@ -18409,6 +18885,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Joomla server. secretName holds the DB credentials (envFrom). Data at /var/www/html. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/joomla/server.libsonnet",
@@ -18579,6 +19059,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Joplin Server. appBaseUrl is the public URL; secretName holds the POSTGRES_* connection (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/joplin/server.libsonnet",
@@ -18723,6 +19207,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "A one-off Backup: one snapshot of every volume in the namespace, taken now rather than on a cron. Runs on apply and finishes, so a caller can gate on the outcome — it signals completion with status.finished and a Completed condition, never readiness. Tag it, or the snapshot can only be found again by timestamp.",
                "id": "backup",
                "importPath": "github.com/metio/kurly/workloads/k8up/backup.libsonnet",
@@ -18824,6 +19309,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "A Restore: the half that proves the other half. Runs once when applied — into a claim (recovery) or to object storage as a tarball (inspection). K8up cannot stage one, so applying it is starting it.",
                "id": "restore",
                "importPath": "github.com/metio/kurly/workloads/k8up/restore.libsonnet",
@@ -18962,6 +19448,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "A Schedule: the nightly backup, plus the prune that makes the retention policy real and the check that notices a repository has rotted before a restore does. Backends kurly does not model pass through verbatim via `backend`, which is merged last.",
                "id": "schedule",
                "importPath": "github.com/metio/kurly/workloads/k8up/schedule.libsonnet",
@@ -19076,6 +19563,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Kanboard server. Keeps board data and uploads at /var/www/app/data on the volume. Point DATABASE_URL (env) at external PostgreSQL to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kanboard/server.libsonnet",
@@ -19214,6 +19705,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Karakeep server. nextauthUrl is the public URL. meiliAddr/browserWebUrl point at the Meilisearch and headless-Chrome companions. secretName holds NEXTAUTH_SECRET, MEILI_MASTER_KEY and AI provider keys (envFrom). Database and assets at /data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/karakeep/server.libsonnet",
@@ -19341,6 +19836,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Kavita server. Database and settings at /kavita/config, library at /library, both on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kavita/server.libsonnet",
@@ -19454,6 +19953,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The Keycloak server. It needs a PostgreSQL database: dbHost/dbName/dbSecret default to a cnpg-cluster named keycloak-db (its -rw Service and the -app Secret CNPG mints, keys username/password). hostname is the public URL for production; tlsSecret names the cert Keycloak terminates, or plain HTTP (httpEnabled) behind a TLS-terminating proxy. The operator chooses the Keycloak image unless image pins one. kurly authors no Secret — the database and TLS Secrets are the consumer's.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/keycloak/server.libsonnet",
@@ -19556,6 +20056,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Kimai server. secretName holds DATABASE_URL and APP_SECRET (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kimai/server.libsonnet",
@@ -19681,6 +20185,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Komga server. Database at /config, library at /books, both on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/komga/server.libsonnet",
@@ -19830,6 +20338,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Kutt server. secretName holds the PostgreSQL/Redis connection, JWT_SECRET and DEFAULT_DOMAIN (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/kutt/server.libsonnet",
@@ -19962,6 +20474,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Leantime server. Uploads at /var/www/html/userfiles; provide the Secret. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/leantime/server.libsonnet",
@@ -20091,6 +20607,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Lemmy backend (API + federation) on :8536. configSecret is an existing Secret holding config.hjson, mounted at /config. Reached in-cluster by the ui.",
                "id": "backend",
                "importPath": "github.com/metio/kurly/workloads/lemmy/backend.libsonnet",
@@ -20186,6 +20706,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The pict-rs image server on :8080. secretName holds PICTRS__SERVER__API_KEY (envFrom). Images at /mnt. Reached in-cluster by the backend.",
                "id": "pictrs",
                "importPath": "github.com/metio/kurly/workloads/lemmy/pictrs.libsonnet",
@@ -20281,6 +20805,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Lemmy web frontend (user-facing) on :1234. internalHost reaches the backend by Service name; externalHost is the public domain. Compose an exposure onto the HTTP port.",
                "id": "ui",
                "importPath": "github.com/metio/kurly/workloads/lemmy/ui.libsonnet",
@@ -20416,6 +20944,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The A LibreSpeed server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/librespeed/server.libsonnet",
@@ -20552,6 +21084,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Lidarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lidarr/server.libsonnet",
@@ -20667,6 +21203,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The linkding server. Keeps bookmarks in SQLite at /etc/linkding/data on the volume. Point LD_DB_ENGINE at external PostgreSQL through env to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/linkding/server.libsonnet",
@@ -20774,6 +21314,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The LinkStack server. Data at /htdocs. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/linkstack/server.libsonnet",
@@ -20904,6 +21448,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Linkwarden server. nextauthUrl is the public URL. secretName holds DATABASE_URL (with the DB password) and NEXTAUTH_SECRET (envFrom). Archived pages at /data/data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/linkwarden/server.libsonnet",
@@ -21059,6 +21607,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The listmonk server. dbHost/dbName/dbUser default to a cnpg-cluster named listmonk-db; adminUser is the admin. secretName holds LISTMONK_db__password and LISTMONK_app__admin_password (envFrom). Uploads at /listmonk/uploads. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/listmonk/server.libsonnet",
@@ -21200,6 +21752,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The LLDAP server. baseDn sets LLDAP_LDAP_BASE_DN; secretName holds LLDAP_JWT_SECRET and LLDAP_LDAP_USER_PASS (envFrom). Directory at /data; LDAP (:3890) needs an extra Service. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lldap/server.libsonnet",
@@ -21314,6 +21870,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The LobeChat server. Stateless; compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lobe-chat/server.libsonnet",
@@ -21414,6 +21974,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The LokiStack. size is the operator's t-shirt scaling (1x.demo is the smallest, for a test cluster; production wants 1x.extra-small+). storageSecret names the object-storage Secret you create (keys bucketnames/endpoint/access_key_id/access_key_secret/region) — point it at the seaweedfs workload's S3. The operator chooses the Loki image, so there is none to pin. Reach it at the gateway Service lokistack-gateway-http.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/loki/server.libsonnet",
@@ -21530,6 +22091,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Lychee server. Photos at /uploads, config at /conf, symlinks at /sym, all on the volume. appUrl is the public URL. secretName holds APP_KEY (envFrom). Point DB_CONNECTION at external MySQL/PostgreSQL to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/lychee/server.libsonnet",
@@ -21639,6 +22204,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The MailHog server. SMTP on :1025 needs an extra Service. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mailhog/server.libsonnet",
@@ -21749,6 +22318,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Mailpit server. Store at /data on the volume; SMTP on port 1025, web on 8025. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mailpit/server.libsonnet",
@@ -21892,6 +22465,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Mailu administration service: web admin UI, the internal API the other services query, and the SQLite database and DKIM keys behind them (on the shared volume at /data and /dkim). front proxies /admin to it.",
                "id": "admin",
                "importPath": "github.com/metio/kurly/workloads/mailu/admin.libsonnet",
@@ -22022,6 +22599,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Mailu filter (Rspamd): screens mail on :11332, serves its web UI on :11334, and signs outbound mail with the DKIM keys admin generates. Learned state lives at /var/lib/rspamd on the shared volume.",
                "id": "antispam",
                "importPath": "github.com/metio/kurly/workloads/mailu/antispam.libsonnet",
@@ -22151,6 +22732,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Mailu edge (nginx): terminates SMTP/IMAP/POP3/ManageSieve and the web UI and proxies to the other services. The one stage you expose. domain/hostnames identify the mail server; secretName carries SECRET_KEY (envFrom, kurly mints none); storageClaim is the shared RWM volume; redisAddress points at a valkey. Publishes 25/465/587/110/995/143/993/4190/80/443.",
                "id": "front",
                "importPath": "github.com/metio/kurly/workloads/mailu/front.libsonnet",
@@ -22274,6 +22859,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Mailu mail store (Dovecot): holds the maildirs at /mail on the shared volume and serves IMAP/POP3 to front and LMTP delivery to postfix.",
                "id": "imap",
                "importPath": "github.com/metio/kurly/workloads/mailu/imap.libsonnet",
@@ -22397,6 +22986,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Mailu MTA (Postfix): relays mail between the edge, the filter, and the store. The queue is transient; only user overrides live on the shared volume.",
                "id": "smtp",
                "importPath": "github.com/metio/kurly/workloads/mailu/smtp.libsonnet",
@@ -22514,6 +23107,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Mailu webmail client (Roundcube): front proxies /webmail to it. Optional — drop it if you only want IMAP/SMTP clients. Keeps its settings at /data on the shared volume.",
                "id": "webmail",
                "importPath": "github.com/metio/kurly/workloads/mailu/webmail.libsonnet",
@@ -22623,6 +23220,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Maloja server. Data at /mljdata on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/maloja/server.libsonnet",
@@ -22744,6 +23345,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A MariaDB server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mariadb/server.libsonnet",
@@ -22923,6 +23528,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "768Mi"
+               },
                "help": "The Mastodon sidekiq background worker (federation, media, scheduled jobs). Shares the web stage's Secret via envFrom. No Service.",
                "id": "sidekiq",
                "importPath": "github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet",
@@ -23085,6 +23694,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Mastodon streaming server (real-time timelines over WebSockets) on :4000. Shares the web stage's Secret via envFrom; route /api/v1/streaming to it.",
                "id": "streaming",
                "importPath": "github.com/metio/kurly/workloads/mastodon/streaming.libsonnet",
@@ -23255,6 +23868,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "768Mi"
+               },
                "help": "The Mastodon web/API server on :3000. localDomain is the permanent instance domain (@handle); secretName holds the shared connection and secrets (envFrom). Compose an exposure onto the HTTP port.",
                "id": "web",
                "importPath": "github.com/metio/kurly/workloads/mastodon/web.libsonnet",
@@ -23432,6 +24049,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Matomo server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). secretName holds MATOMO_DATABASE_PASSWORD (envFrom). Config/plugins at /var/www/html. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/matomo/server.libsonnet",
@@ -23560,6 +24181,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Conduit Matrix homeserver. serverName is permanent (baked into ids); allowRegistration toggles open sign-up. Data at /var/lib/matrix-conduit. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/matrix-conduit/server.libsonnet",
@@ -23683,6 +24308,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Mattermost server. siteUrl is the public URL. secretName holds MM_SQLSETTINGS_DATASOURCE (envFrom). Uploads at /mattermost/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mattermost/server.libsonnet",
@@ -23837,6 +24466,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Mautic server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide. siteUrl is the public URL; runCronJobs runs Mautic background jobs in-container. secretName holds MAUTIC_DB_PASSWORD (envFrom). Config at /var/www/html/config, media on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mautic/server.libsonnet",
@@ -23993,6 +24626,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The Maybe server. dbHost/dbName/dbUser default to a cnpg-cluster named maybe-db; redisHost to a valkey named maybe-cache. secretName holds POSTGRES_PASSWORD and SECRET_KEY_BASE (envFrom). Uploads at /rails/storage. A separate Sidekiq worker can be added. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/maybe/server.libsonnet",
@@ -24109,6 +24746,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The MAZANOKE server. Stateless; compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mazanoke/server.libsonnet",
@@ -24231,6 +24872,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Mealie server. baseUrl is the public URL. Data at /app/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mealie/server.libsonnet",
@@ -24344,6 +24989,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The MediaWiki server. Uploaded files at /var/www/html/images on the volume. Mount a LocalSettings.php at /var/www/html/LocalSettings.php from a Secret (DB creds + secret key). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mediawiki/server.libsonnet",
@@ -24463,6 +25112,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Meilisearch server. secretName holds MEILI_MASTER_KEY (envFrom). Indexes at /meili_data. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/meilisearch/server.libsonnet",
@@ -24561,6 +25214,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "112Mi"
+               },
                "help": "The memcached shards: a StatefulSet (for stable DNS names, not storage) and the headless Service that names them. Clients consistent-hash keys over memcached-0..N-1; scaling reshuffles that ring, so treat replicas as part of the client configuration. The container memory limit is derived from memoryMB, since -m caps only the item cache.",
                "id": "cache",
                "importPath": "github.com/metio/kurly/workloads/memcached/cache.libsonnet",
@@ -24672,6 +25329,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The Memos server. Keeps notes in SQLite at /var/opt/memos on the volume. Point MEMOS_DRIVER at external PostgreSQL through env to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/memos/server.libsonnet",
@@ -24775,6 +25436,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The Mermaid Live Editor server. Stateless; compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mermaid-live-editor/server.libsonnet",
@@ -24906,6 +25571,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "300m",
+                  "memory": "1Gi"
+               },
                "help": "The Metabase server. dbHost/dbName/dbUser default to a cnpg-cluster named metabase-db (its application database). secretName holds MB_DB_PASS (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/metabase/server.libsonnet",
@@ -25031,6 +25700,10 @@
                   "clusterRbac",
                   "apiService"
                ],
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "200Mi"
+               },
                "help": "The metrics server. namespace MUST match where you deploy — the APIService and cluster RBAC name the ServiceAccount by namespace, which cluster-scoped objects cannot inherit later; kube-system is conventional. kubeletInsecureTLS=true skips verifying the kubelet serving cert (needed on kind and many on-prem clusters, or every scrape fails the TLS handshake).",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/metrics-server/server.libsonnet",
@@ -25141,6 +25814,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The MeTube server. Downloads at /downloads. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/metube/server.libsonnet",
@@ -25253,6 +25930,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The MicroBin server. Keeps pastes and files at /app/microbin_data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/microbin/server.libsonnet",
@@ -25377,6 +26058,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The Miniflux server. secretName holds DATABASE_URL (with the DB password) and ADMIN_PASSWORD (envFrom); adminUser is the first-run admin. Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/miniflux/server.libsonnet",
@@ -25504,6 +26189,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The MinIO server. secretName holds MINIO_ROOT_USER/PASSWORD (envFrom). Objects at /data; the console (:9001) needs an extra Service. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/minio/server.libsonnet",
@@ -25641,6 +26330,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Misskey server. configSecret is an existing Secret holding default.yml (the config, with DB/Redis creds), mounted at /misskey/.config. Files at /misskey/files. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/misskey/server.libsonnet",
@@ -25752,6 +26445,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A MongoDB server. secretName holds the credentials (envFrom). Data at /data/db. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mongo/server.libsonnet",
@@ -25873,6 +26570,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The mongo-express server. secretName holds ME_CONFIG_MONGODB_URL and the basic-auth credentials (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mongo-express/server.libsonnet",
@@ -25989,6 +26690,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The MongoDBCommunity CR (a SCRAM-authenticated ReplicaSet). members are replica-set members (odd count for quorum). secretName is a Secret you provide with the admin password (key `password`); adminUser is created on bootstrap. Storage is set via the operator StatefulSet override. Render with kurly.list.",
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/mongodb-cluster/cluster.libsonnet",
@@ -26133,6 +26835,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Monica server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (envFrom). Uploads at /var/www/html/storage. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/monica/server.libsonnet",
@@ -26267,6 +26973,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Mosquitto broker on :1883. config is mosquitto.conf, mounted verbatim. Data at /mosquitto/data. Expose to devices (often a LoadBalancer), not an HTTP ingress.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mosquitto/server.libsonnet",
@@ -26383,6 +27093,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Mumble/Murmur server on :64738 (TCP control + UDP voice). secretName holds MUMBLE_SUPERUSER_PASSWORD (envFrom). Data at /data. Expose to clients (often a LoadBalancer); add a second Service for UDP.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mumble/server.libsonnet",
@@ -26526,6 +27240,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Mylar3 server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mylar3/server.libsonnet",
@@ -26639,6 +27357,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A MySQL server. secretName holds the credentials (envFrom). Data at /var/lib/mysql. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/mysql/server.libsonnet",
@@ -26774,6 +27496,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The MySQL InnoDBCluster CR. Adapt with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource). secretName is a Secret you provide with rootUser/rootHost/rootPassword. instances are Group Replication members (odd count for quorum); routerInstances the routing tier.",
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet",
@@ -26888,6 +27611,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The n8n server. Keeps everything (SQLite + auto-generated encryption key) at /home/node/.n8n on the volume. host is the public hostname (webhooks need it). Point DB_TYPE at external PostgreSQL and set N8N_ENCRYPTION_KEY via env to scale out. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/n8n/server.libsonnet",
@@ -27004,6 +27731,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The NATS server on :4222 (JetStream enabled). Store at /data; monitoring (:8222) needs an extra Service. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nats/server.libsonnet",
@@ -27121,6 +27852,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Navidrome server. Database at /data, music library at /music (read-only), both on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/navidrome/server.libsonnet",
@@ -27237,6 +27972,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "1Gi"
+               },
                "help": "The Neo4j server. Graph at /data on the volume. secretName holds NEO4J_AUTH (neo4j/<password>, envFrom). Compose an exposure onto the HTTP port; route Bolt (:7687) as TCP. Clustering/HA needs Neo4j Enterprise, beyond this recipe.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/neo4j/server.libsonnet",
@@ -27379,6 +28118,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A netboot.xyz server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/netbootxyz/server.libsonnet",
@@ -27549,6 +28292,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "300m",
+                  "memory": "512Mi"
+               },
                "help": "The NetBox web front end, serving the UI and API on :8080. dbHost/dbName/dbUser default to a cnpg-cluster named netbox-db; redisHost to a valkey named netbox-cache (queue on Redis DB 0, cache on DB 1). secretName is the Secret the image reads at /run/secrets — secret_key (Django SECRET_KEY, keep it stable), db_password, and superuser_password on first boot. allowedHosts is Django ALLOWED_HOSTS. kurly authors no Secret. Compose an exposure onto the HTTP port; run a worker alongside.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/netbox/server.libsonnet",
@@ -27695,6 +28442,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The NetBox RQ background worker, draining the high/default/low queues (webhooks, report/script runs, housekeeping). Same image and Secret as the server, no Service. dbHost/dbName/dbUser/redisHost/secretName match the server. Scales horizontally via replicas — workers coordinate through the shared Redis queue. A NetBox deployment needs at least one.",
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/netbox/worker.libsonnet",
@@ -27824,6 +28575,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Nextcloud server. trustedDomains sets NEXTCLOUD_TRUSTED_DOMAINS; secretName holds NEXTCLOUD_ADMIN_* (envFrom). Installation at /var/www/html. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nextcloud/server.libsonnet",
@@ -27952,6 +28707,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Nginx Proxy Manager server. Data at /data; the proxy (:80/:443) needs an extra Service. Compose an exposure onto the admin HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nginx-proxy-manager/server.libsonnet",
@@ -28093,6 +28852,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The NocoBase server. secretName holds the DB_* connection and APP_KEY (envFrom). Storage at /app/nocobase/storage. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nocobase/server.libsonnet",
@@ -28228,6 +28991,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The NocoDB server. secretName holds NC_DB (a connection string with the DB password, point it at a cnpg-cluster) and NC_AUTH_JWT_SECRET (envFrom). publicUrl is the public URL. Attachments at /usr/app/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nocodb/server.libsonnet",
@@ -28347,6 +29114,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Node-RED server. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/node-red/server.libsonnet",
@@ -28467,6 +29238,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "32Mi"
+               },
                "help": "The ntfy server (runs `serve`). Keeps its cache, auth db, and attachments at /var/lib/ntfy on the volume. baseUrl is the public URL (needed for the web app, attachments, iOS). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ntfy/server.libsonnet",
@@ -28603,6 +29378,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The An NZBGet server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nzbget/server.libsonnet",
@@ -28739,6 +29518,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The An NZBHydra2 server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/nzbhydra2/server.libsonnet",
@@ -28852,6 +29635,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The OAuth2 Proxy server. secretName holds the OAUTH2_PROXY_* provider settings and secrets (envFrom). Front an app (OAUTH2_PROXY_UPSTREAMS) or use as forward-auth at /oauth2/auth.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/oauth2-proxy/server.libsonnet",
@@ -29008,6 +29795,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Odoo server. secretName holds the PostgreSQL connection (HOST/USER/PASSWORD, envFrom). Filestore at /var/lib/odoo. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/odoo/server.libsonnet",
@@ -29139,6 +29930,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "2Gi"
+               },
                "help": "The Ollama server. Models at /models. Usually reached in-cluster (e.g. from open-webui). Compose an exposure onto the HTTP port only if reached from outside.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ollama/server.libsonnet",
@@ -29275,6 +30070,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The An Ombi server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/ombi/server.libsonnet",
@@ -29393,6 +30192,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "1Gi"
+               },
                "help": "The ONLYOFFICE Document Server. secretName holds JWT_SECRET (envFrom). Data at /var/www/onlyoffice/Data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/onlyoffice/server.libsonnet",
@@ -29528,6 +30331,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Open WebUI server. ollamaBaseUrl points at an Ollama backend; secretName holds WEBUI_SECRET_KEY (envFrom). Data at /app/backend/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/open-webui/server.libsonnet",
@@ -29650,6 +30457,10 @@
                "clusterScopedBecause": [
                   "clusterRbac"
                ],
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The OpenCost cost model. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. prometheusEndpoint points at the prometheus workload (or a Thanos Query); env carries extra pricing/cloud settings. The web UI is a separate image (opencost-ui); this is the model, scraped at :9003.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/opencost/server.libsonnet",
@@ -29778,6 +30589,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The openHAB server. confSize/userdataSize/addonsSize size the three PVCs. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/openhab/server.libsonnet",
@@ -29893,6 +30708,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The OpenObserve server. secretName holds ZO_ROOT_USER_EMAIL and ZO_ROOT_USER_PASSWORD (envFrom). Data at /data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/openobserve/server.libsonnet",
@@ -30036,6 +30855,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+               },
                "help": "The OpenProject server. hostName sets OPENPROJECT_HOST__NAME; secretName holds DATABASE_URL and SECRET_KEY_BASE (envFrom). Assets at /var/openproject/assets. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/openproject/server.libsonnet",
@@ -30155,6 +30978,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The OpenSearchCluster CR. replicas is the default node pool size (each node is cluster_manager+data+ingest; split into dedicated pools via the raw + hatch for large clusters). dashboards runs OpenSearch Dashboards alongside. Render with kurly.list.",
                "id": "cluster",
                "importPath": "github.com/metio/kurly/workloads/opensearch-cluster/cluster.libsonnet",
@@ -30258,6 +31082,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Organizr server. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/organizr/server.libsonnet",
@@ -30341,6 +31169,10 @@
                "clusterScopedBecause": [
                   "daemonSet"
                ],
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The per-node collector. config is the collector's own document, rendered straight into the mounted config file; the default receives OTLP on 4317/4318, guards memory, batches, and exports to the debug logger, with a health_check extension on 13133 backing the probes. Replace config for real pipelines, and move the probes if it drops health_check.",
                "id": "agent",
                "importPath": "github.com/metio/kurly/workloads/otel-collector/agent.libsonnet",
@@ -30466,6 +31298,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Outline server. url is the public URL; secretName holds DATABASE_URL, REDIS_URL, SECRET_KEY, UTILS_SECRET, the S3 settings and an auth provider (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/outline/server.libsonnet",
@@ -30618,6 +31454,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+               },
                "help": "The Overleaf server. redisHost defaults to a valkey named overleaf-cache; siteUrl is the public URL; appName the instance name. secretName holds OVERLEAF_MONGO_URL, pointing at a MongoDB replica set you provide (envFrom). Projects and compiles at /var/lib/overleaf. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/overleaf/server.libsonnet",
@@ -30734,6 +31574,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The An Overseerr server. Config at /app/config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/overseerr/server.libsonnet",
@@ -30846,6 +31690,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "256Mi"
+               },
                "help": "The Owncast server. Data at /app/data. RTMP ingest (:1935) needs an extra Service composed on. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/owncast/server.libsonnet",
@@ -30954,6 +31802,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The OwnTracks Recorder server. Store at /store on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/owntracks-recorder/server.libsonnet",
@@ -31057,6 +31909,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The PairDrop server. Stateless signaling; runs as one replica. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pairdrop/server.libsonnet",
@@ -31171,6 +32027,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Paisa server, run from /data on the volume where it finds paisa.yaml and the referenced journal (provide them before first use). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/paisa/server.libsonnet",
@@ -31332,6 +32192,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Paperless-ngx server. dbHost/dbName/dbUser default to a cnpg-cluster named paperless-db; redisHost to a valkey named paperless-cache. url is the public URL; adminUser the first-run admin. secretName holds PAPERLESS_DBPASS, PAPERLESS_SECRET_KEY, and PAPERLESS_ADMIN_PASSWORD (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet",
@@ -31465,6 +32329,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Password Pusher server. secretName is the Secret holding DATABASE_URL (with the embedded DB password) and SECRET_KEY_BASE, pulled in via envFrom; kurly mints none. Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/passwordpusher/server.libsonnet",
@@ -31626,6 +32494,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+               },
                "help": "The PeerTube server. dbHost/dbName/dbUser default to a cnpg-cluster named peertube-db; redisHost to a valkey named peertube-cache. webserverHost is the public hostname (required for federation). secretName holds PEERTUBE_DB_PASSWORD, PEERTUBE_SECRET, PT_INITIAL_ROOT_PASSWORD (envFrom). Videos/uploads at /data, config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/peertube/server.libsonnet",
@@ -31778,6 +32650,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Penpot backend (API + data) on :6060. publicUri sets PENPOT_PUBLIC_URI; secretName holds the PostgreSQL/Redis connection and PENPOT_SECRET_KEY (envFrom). Assets at /opt/data (put on S3 to scale out).",
                "id": "backend",
                "importPath": "github.com/metio/kurly/workloads/penpot/backend.libsonnet",
@@ -31894,6 +32770,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Penpot exporter (headless-browser rendering) on :6061. secretName holds PENPOT_PUBLIC_URI and PENPOT_REDIS_URI (envFrom).",
                "id": "exporter",
                "importPath": "github.com/metio/kurly/workloads/penpot/exporter.libsonnet",
@@ -31988,6 +32868,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Penpot frontend (the user-facing nginx web app) on :80. backendUri/exporterUri point at the other stages by Service name. Compose an exposure onto the HTTP port.",
                "id": "frontend",
                "importPath": "github.com/metio/kurly/workloads/penpot/frontend.libsonnet",
@@ -32105,6 +32989,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The pgAdmin server. secretName holds PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD (envFrom). Config at /var/lib/pgadmin. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pgadmin/server.libsonnet",
@@ -32252,6 +33140,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "1Gi"
+               },
                "help": "The PhotoPrism server. Storage at /photoprism/storage, originals at /photoprism/originals, both on the volume. siteUrl is the public URL (keep the trailing /). secretName holds PHOTOPRISM_ADMIN_PASSWORD (envFrom). Point PHOTOPRISM_DATABASE_DRIVER at external MariaDB (mysql-cluster) to scale out. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/photoprism/server.libsonnet",
@@ -32392,6 +33284,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "256Mi"
+               },
                "help": "The Photoview server. mediaSize/cacheSize size the two PVCs (/photos and /app/cache); secretName holds PHOTOVIEW_DATABASE_DRIVER and the connection URL (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/photoview/server.libsonnet",
@@ -32524,6 +33420,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The phpMyAdmin server. dbHost sets PMA_HOST (the MySQL/MariaDB host). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/phpmyadmin/server.libsonnet",
@@ -32654,6 +33554,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Pi-hole server. timezone sets TZ; secretName holds FTLCONF_webserver_api_password (envFrom). Config at /etc/pihole; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pihole/server.libsonnet",
@@ -32784,6 +33688,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The PILOS server. secretName holds the database/Redis/APP_KEY/BBB settings (envFrom). Uploaded assets at /var/www/html/storage/app. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pilos/server.libsonnet",
@@ -32899,6 +33807,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Pingvin Share server. Data at /opt/app/backend/data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pingvin-share/server.libsonnet",
@@ -33038,6 +33950,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Piwigo server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/piwigo/server.libsonnet",
@@ -33163,6 +34079,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Planka server. baseUrl is the public URL; secretName holds DATABASE_URL, SECRET_KEY, the S3_* settings and admin credentials (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/planka/server.libsonnet",
@@ -33314,6 +34234,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Plex server. puid/pgid own the mounted files; timezone sets TZ; set PLEX_CLAIM via env to bind to your account. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/plex/server.libsonnet",
@@ -33430,6 +34354,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Pocket ID server. appUrl is the public HTTPS URL (issuer/callback origin). Data at /app/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pocket-id/server.libsonnet",
@@ -33538,6 +34466,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The PocketBase server. Data at /pb_data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pocketbase/server.libsonnet",
@@ -33656,6 +34588,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Portainer server. Database at /data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/portainer/server.libsonnet",
@@ -33775,6 +34711,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A PostgreSQL server. secretName holds the credentials (envFrom). Data at /var/lib/postgresql/data. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/postgres/server.libsonnet",
@@ -33906,6 +34846,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A PrestaShop server. secretName holds the DB credentials (envFrom). Data at /var/www/html. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/prestashop/server.libsonnet",
@@ -34053,6 +34997,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The PrivateBin server. Pastes at /srv/data. Point at an external database (conf.php) to scale out. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/privatebin/server.libsonnet",
@@ -34188,6 +35136,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A ProjectSend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/projectsend/server.libsonnet",
@@ -34357,6 +35309,7 @@
                "clusterScopedBecause": [
                   "clusterRbac"
                ],
+               "declaredRequests": null,
                "help": "The Prometheus server. namespace MUST match where you deploy — it names the ServiceAccount in the cluster RoleBinding, which a cluster-scoped object cannot inherit later. The selectors (verbatim operator schema) default to selecting everything; scope them to narrow what it scrapes. Query it at prometheus-operated.<namespace>.svc:9090.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/prometheus/server.libsonnet",
@@ -34488,6 +35441,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Prowlarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/prowlarr/server.libsonnet",
@@ -34623,6 +35580,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A pyLoad server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/pyload-ng/server.libsonnet",
@@ -34758,6 +35719,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A qBittorrent server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/qbittorrent/server.libsonnet",
@@ -34871,6 +35836,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Qdrant server. Collections at /qdrant/storage; gRPC (:6334) needs an extra Service. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/qdrant/server.libsonnet",
@@ -34989,6 +35958,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The RabbitMQ server. secretName holds RABBITMQ_DEFAULT_USER/PASS (envFrom). Data at /var/lib/rabbitmq; the management UI (:15672) needs an extra Service. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rabbitmq/server.libsonnet",
@@ -35137,6 +36110,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Radarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/radarr/server.libsonnet",
@@ -35247,6 +36224,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The Radicale server. Keeps collections at /data on the volume. Default config allows anonymous access — mount a Radicale config and htpasswd (kurly.config / kurly.secretMount) for htpasswd auth. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/radicale/server.libsonnet",
@@ -35373,6 +36354,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Rallly server. baseUrl is the public URL. secretName holds DATABASE_URL (with the DB password), SECRET_PASSWORD, and SMTP_* (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rallly/server.libsonnet",
@@ -35518,6 +36503,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Readarr server. Config at /config on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/readarr/server.libsonnet",
@@ -35628,6 +36617,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The Readeck server. Keeps its SQLite database and saved pages at /readeck on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/readeck/server.libsonnet",
@@ -35747,6 +36740,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Redis server. secretName holds the credentials (envFrom). Data at /data. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/redis/server.libsonnet",
@@ -35870,6 +36867,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "64Mi"
+               },
                "help": "The Redis Commander server. redisHosts sets REDIS_HOSTS (e.g. local:redis:6379). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/redis-commander/server.libsonnet",
@@ -35995,6 +36996,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Redmine server. secretName holds the database connection (REDMINE_DB_* / DATABASE_URL) and REDMINE_SECRET_KEY_BASE (envFrom). Files at /usr/src/redmine/files. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/redmine/server.libsonnet",
@@ -36136,6 +37141,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Docker Registry server. Images at /var/lib/registry. Usually reached in-cluster. Compose an exposure onto the HTTP port only if reached from outside (with TLS/auth in front).",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/registry/server.libsonnet",
@@ -36271,6 +37280,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Resilio Sync server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/resilio-sync/server.libsonnet",
@@ -36385,6 +37398,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Rocket.Chat server. rootUrl is the public URL. secretName holds MONGO_URL and MONGO_OPLOG_URL (envFrom); MongoDB MUST be a replica set. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rocketchat/server.libsonnet",
@@ -36522,6 +37539,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Roundcube server. imapHost/smtpHost point at the mail server (e.g. ssl://mail.example.com:993). Keeps contacts/preferences in SQLite at /var/roundcube/db. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/roundcube/server.libsonnet",
@@ -36632,6 +37653,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The RSS-Bridge server. Stateless; mount a whitelist.txt over /app/whitelist.txt to restrict enabled bridges. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rss-bridge/server.libsonnet",
@@ -36751,6 +37776,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "1Gi"
+               },
                "help": "The Rundeck server. grailsUrl is the public URL (RUNDECK_GRAILS_URL); secretName holds the admin credentials (envFrom). Data at /home/rundeck/server/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/rundeck/server.libsonnet",
@@ -36893,6 +37922,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A SABnzbd server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/sabnzbd/server.libsonnet",
@@ -37017,6 +38050,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The SearXNG server. baseUrl is the public URL; settings is SearXNG's own settings.yml, mounted verbatim; secretName holds SEARXNG_SECRET (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/searxng/server.libsonnet",
@@ -37137,6 +38174,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Seatsurfing server. secretName is the Secret holding POSTGRES_URL (with the embedded DB password) and JWT_SIGNING_KEY, pulled in via envFrom. env carries non-sensitive settings (PUBLIC_URL, FRONTEND_URL). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/seatsurfing/server.libsonnet",
@@ -37248,6 +38289,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The access tier of a SPLIT SeaweedFS: `weed filer` puts a filesystem and (s3=true) an S3 gateway on 8333 over the volume servers, keeping its own metadata. Point it at the master with masterEndpoint.",
                "id": "filer",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/filer.libsonnet",
@@ -37314,6 +38359,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The coordinator of a SPLIT SeaweedFS: `weed master` holds the topology, assigns file IDs, and directs clients to volume servers. defaultReplication is the cluster-wide policy it owns ('000' keeps one copy). Deploy it, then point the volume and filer stages at it.",
                "id": "master",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/master.libsonnet",
@@ -37374,6 +38423,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The all-in-one server. Serves S3 on 8333 over the data volume at /data; the master/volume/filer ports serve the cluster itself. The default allows anonymous access, fine inside a trusted namespace. Splitting the roles into dedicated tiers is a different topology, not more replicas, so it would be its own stage.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/server.libsonnet",
@@ -37457,6 +38510,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The data tier of a SPLIT SeaweedFS: `weed volume` stores file content and registers with the master, advertising its pod IP so reads reach it. Scale by replicas for capacity, each a pod with its own PVC. Point it at the master with masterEndpoint.",
                "id": "volume",
                "importPath": "github.com/metio/kurly/workloads/seaweedfs/volume.libsonnet",
@@ -37564,6 +38621,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Shaarli server. Data at /var/www/shaarli/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/shaarli/server.libsonnet",
@@ -37675,6 +38736,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The Shiori server (runs `shiori serve`). Keeps its SQLite database and archives at /shiori on the volume. Point SHIORI_DATABASE_URL at external PostgreSQL/MySQL through env to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/shiori/server.libsonnet",
@@ -37811,6 +38876,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Shlink server. dbHost/dbName/dbUser default to a cnpg-cluster named shlink-db. defaultDomain is the short-URL domain. secretName holds DB_PASSWORD (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/shlink/server.libsonnet",
@@ -37939,6 +39008,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The SilverBullet server. Your markdown space lives at /space on the volume. secretName holds SB_USER (user:password, envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/silverbullet/server.libsonnet",
@@ -38055,6 +39128,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The SiYuan server. Set SIYUAN_ACCESS_AUTH_CODE via env/envFromSecret to gate web access. Workspace at /siyuan/workspace. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/siyuan/server.libsonnet",
@@ -38163,6 +39240,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The smtp4dev server. Database at /smtp4dev on the volume; SMTP on port 25, web on 80. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/smtp4dev/server.libsonnet",
@@ -38276,6 +39357,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The SnappyMail server. Configure IMAP/SMTP in the admin panel. Data at /var/lib/snappymail. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/snappymail/server.libsonnet",
@@ -38414,6 +39499,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Snipe-IT server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASSWORD and APP_KEY (envFrom). Uploads at /var/lib/snipeit. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/snipe-it/server.libsonnet",
@@ -38558,6 +39647,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "500m",
+                  "memory": "2Gi"
+               },
                "help": "The SonarQube server. dbHost/dbName/dbUser default to a cnpg-cluster named sonarqube-db (SONAR_JDBC_URL is built from them). secretName holds SONAR_JDBC_PASSWORD (envFrom). Data at /opt/sonarqube/data, extensions and logs on the volume. Requires node vm.max_map_count >= 262144. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/sonarqube/server.libsonnet",
@@ -38698,6 +39791,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Sonarr server server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/sonarr/server.libsonnet",
@@ -38920,6 +40017,10 @@
                   "daemonSet",
                   "hostPath"
                ],
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Spegel DaemonSet and its Services. namespace MUST match the deploy namespace (the peer-bootstrap DNS name embeds it). containerdSock/containerdContentPath/containerdRegistryConfigPath point at the node's containerd; the kubelet reaches the local mirror at both registryHostPort (straight to the local pod) and registryNodePort (through kube-proxy), so set registryHostPort=null where host ports are forbidden. dataDir persists routing state (null to disable).",
                "id": "mirror",
                "importPath": "github.com/metio/kurly/workloads/spegel/mirror.libsonnet",
@@ -39002,6 +40103,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "10m",
+                  "memory": "28Mi"
+               },
                "help": "One fixed-status responder (hashicorp/http-echo). Pair with kurly.expose.guard on the protected workload and kurly.expose.referenceGrant here for cross-namespace routing.",
                "id": "responder",
                "importPath": "github.com/metio/kurly/workloads/status-responder/responder.libsonnet",
@@ -39038,6 +40143,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Stirling PDF",
@@ -39112,6 +40220,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Stirling-PDF server. Keeps configuration and custom files at /configs on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/stirling-pdf/server.libsonnet",
@@ -39144,6 +40256,12 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 0,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Synapse",
@@ -39234,6 +40352,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Synapse server. serverName is the permanent Matrix server name; reportStats toggles anonymous stats. Data at /data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/synapse/server.libsonnet",
@@ -39271,6 +40393,9 @@
          "license": "MPL-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Syncthing",
@@ -39366,6 +40491,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Syncthing server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/syncthing/server.libsonnet",
@@ -39403,6 +40532,9 @@
          "license": "MPL-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Suwayomi",
@@ -39480,6 +40612,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Suwayomi/Tachidesk server. Library at /home/suwayomi/.local/share/Tachidesk. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tachidesk/server.libsonnet",
@@ -39512,6 +40648,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 10,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Tandoor Recipes",
@@ -39593,6 +40735,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Tandoor server. Media at /opt/recipes/mediafiles on the volume; provide the Secret. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tandoor/server.libsonnet",
@@ -39668,6 +40814,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Tautulli",
@@ -39763,6 +40912,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The A Tautulli server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tautulli/server.libsonnet",
@@ -39879,6 +41032,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "768Mi"
+               },
                "help": "The Teable server. Point publicOrigin at its public URL and provide the Secret. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/teable/server.libsonnet",
@@ -39932,6 +41089,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Technitium DNS Server",
@@ -40012,6 +41172,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The Technitium DNS server. secretName holds DNS_SERVER_ADMIN_PASSWORD (envFrom). Config at /etc/dns; DNS (:53) needs an extra Service. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/technitium/server.libsonnet",
@@ -40105,6 +41269,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The TempoStack. storageSecret names the object-storage Secret you create (keys bucket/endpoint/access_key_id/access_key_secret) — point it at the seaweedfs workload's S3. storageSize is the per-component PVC. The operator chooses the Tempo image, so there is none to pin. Send spans to tempo-<name>-distributor (OTLP :4317/:4318) and read them from Grafana via tempo-<name>-query-frontend:3200.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tempo/server.libsonnet",
@@ -40229,6 +41394,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Thanos Compactor (a `thanos compact --wait` Deployment): it compacts raw blocks in object storage, builds the 5m/1h downsampled resolutions, and applies retention. A SINGLETON — a second compactor over the same bucket corrupts the data, so replicas is pinned to 1 (asserted) and it rolls with Recreate; shard a large bucket with --selector.relabel-config across separate compactors. Reads the same objstoreSecret as store. retentionRaw/5m/1h bound each resolution (0d = keep forever).",
                "id": "compact",
                "importPath": "github.com/metio/kurly/workloads/thanos/compact.libsonnet",
@@ -40329,6 +41498,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Thanos Querier (a plain `thanos query` Deployment + Service). endpoints are the StoreAPI targets it fans out to over gRPC (dnssrv+ resolves every replica); queryReplicaLabels deduplicate HA replicas. Serves the Prometheus API on :10902 (gRPC StoreAPI on :10901 for federation). Point a Grafana datasource or the query-frontend at it.",
                "id": "query",
                "importPath": "github.com/metio/kurly/workloads/thanos/query.libsonnet",
@@ -40418,6 +41591,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Thanos Query Frontend (a plain `thanos query-frontend` Deployment + Service): an optional layer that splits long-range queries, caches results (in-memory by default), and forwards to a downstream Querier. downstreamUrl defaults to a thanos-query Service on :10902 in the same namespace. For a shared cache, pass --query-range.response-cache-config-file via extraArgs and back it with the memcached or valkey workload.",
                "id": "query-frontend",
                "importPath": "github.com/metio/kurly/workloads/thanos/query-frontend.libsonnet",
@@ -40530,6 +41707,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Thanos Receiver (a `thanos receive` StatefulSet + headless Service): the push-based ingestion path — Prometheus remote-writes to it (:19291) instead of running a sidecar. It holds recent data in a local TSDB, serves it to the Querier over the StoreAPI (:10901), and uploads blocks to object storage. Receivers form a hashring generated from the replica count; replicationFactor copies each series across pods, each tagged with a receive_replica label the Querier deduplicates. Reads the same objstoreSecret as store.",
                "id": "receive",
                "importPath": "github.com/metio/kurly/workloads/thanos/receive.libsonnet",
@@ -40645,6 +41826,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.",
                "id": "ruler",
                "importPath": "github.com/metio/kurly/workloads/thanos/ruler.libsonnet",
@@ -40740,6 +41922,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Thanos Store Gateway (a `thanos store` StatefulSet + headless Service): it serves historical blocks from object storage over the StoreAPI so the Querier reaches data older than the sidecars hold. Stateful — a per-pod PVC caches block index headers. objstoreSecret names a Secret you provide (key objstore.yaml, fillable with kurly.externalSecret) pointing at the bucket; it pairs with the seaweedfs S3 workload. Add it to the Querier with dnssrv+_grpc._tcp.<name>-headless…",
                "id": "store",
                "importPath": "github.com/metio/kurly/workloads/thanos/store.libsonnet",
@@ -40777,6 +41963,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "The Lounge",
@@ -40852,6 +42041,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "128Mi"
+               },
                "help": "The The Lounge server. Data at /var/opt/thelounge. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/thelounge/server.libsonnet",
@@ -40889,6 +42082,9 @@
          "license": "0BSD",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "tik",
@@ -40932,6 +42128,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "320Mi"
+               },
                "help": "The tik backend supervisor: a single-writer http app over a ReadWriteOnce store (one replica, recreated to avoid deadlocking on the volume). Compose an exposure recipe to serve the board.",
                "id": "backend",
                "importPath": "github.com/metio/kurly/workloads/tik/backend.libsonnet",
@@ -41036,6 +42236,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Apache Tika server. Stateless; usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tika/server.libsonnet",
@@ -41148,6 +42352,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Traccar server. configXml is traccar.xml, mounted verbatim; the default uses embedded H2 on the data volume. Device protocol ports (5000-5150) need extra Services. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/traccar/server.libsonnet",
@@ -41280,6 +42488,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The A Transmission server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/transmission/server.libsonnet",
@@ -41391,6 +42603,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The TriliumNext server. Keeps notes in SQLite at /home/node/trilium-data on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/trilium/server.libsonnet",
@@ -41518,6 +42734,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Tvheadend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/tvheadend/server.libsonnet",
@@ -41647,6 +42867,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The Twenty web/API front end on :3000. redisHost defaults to a valkey named twenty-cache; serverUrl is the public URL. secretName holds PG_DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Local uploads at /app/packages/twenty-server/.local-storage. Run a worker alongside. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/twenty/server.libsonnet",
@@ -41755,6 +42979,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Twenty background worker (BullMQ jobs), same image and Secret as the server, no Service. redisHost/secretName match the server. Runs `yarn worker:prod`. Scales horizontally via replicas. A Twenty deployment needs at least one.",
                "id": "worker",
                "importPath": "github.com/metio/kurly/workloads/twenty/worker.libsonnet",
@@ -41867,6 +43095,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "512Mi"
+               },
                "help": "The Typesense server. secretName holds TYPESENSE_API_KEY (envFrom). Data at /data. Usually reached in-cluster.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/typesense/server.libsonnet",
@@ -41982,6 +43214,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Umami server. secretName holds DATABASE_URL (with the DB password) and APP_SECRET (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/umami/server.libsonnet",
@@ -42102,6 +43338,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Uptime Kuma server. Keeps everything in SQLite at /app/data on the volume, so it needs nothing external. env carries extra settings (UPTIME_KUMA_* overrides). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/uptime-kuma/server.libsonnet",
@@ -42188,6 +43428,7 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": { },
                "help": "An in-memory Valkey cache that upgrades its version with zero downtime and no data loss, on the stock image and no orchestrator — the replication hand-off lives entirely in the pod manifests (headless Service, maxSurge, an initContainer that replicates the running peer, and a preStop failover).",
                "id": "cache",
                "importPath": "github.com/metio/kurly/workloads/valkey/cache.libsonnet",
@@ -42259,6 +43500,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The single-instance Valkey server: a StatefulSet with append-only persistence into a volumeClaimTemplate. Compose + features as usual (it is a composable kurly.stateful app). `image` also accepts a Redis build — Valkey is its BSD fork and takes the same configuration — so name the workload for its role rather than its engine, and a consumer holding an endpoint never learns which it got.",
                "id": "instance",
                "importPath": "github.com/metio/kurly/workloads/valkey/instance.libsonnet",
@@ -42382,6 +43627,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Vaultwarden server. domain is the public URL — WebAuthn/passkeys, attachment links, and email all need it. signupsAllowed is off by default (turn on to bootstrap, then off). env carries extra settings (ADMIN_TOKEN, SMTP_*, or DATABASE_URL to move to external Postgres) — the admin token and any DB password should come from a Secret, kurly mints none. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/vaultwarden/server.libsonnet",
@@ -42495,6 +43744,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The VictoriaMetrics server. retentionPeriod is in months. Data at /victoria-metrics-data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/victoriametrics/server.libsonnet",
@@ -42616,6 +43869,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Vikunja server. Database at /db, attachments at /files, both on the volume. publicUrl is the public URL; secretName holds VIKUNJA_SERVICE_JWTSECRET (envFrom, keep it stable). Point VIKUNJA_DATABASE_TYPE at external Postgres/MySQL via env to scale past SQLite. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/vikunja/server.libsonnet",
@@ -42768,6 +44025,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "A ReplicationSource: what to copy, where to, how often, and how much to keep. Restic fields kurly does not model pass through verbatim via `restic`, which is merged last.",
                "id": "backup",
                "importPath": "github.com/metio/kurly/workloads/volsync/backup.libsonnet",
@@ -42912,6 +44170,7 @@
                ],
                "bsi": null,
                "clusterScoped": false,
+               "declaredRequests": null,
                "help": "A ReplicationDestination: the half that proves the other half. Restores the latest snapshot once, into a volume VolSync provisions (capacity) or one that already exists (destinationPVC); restoreAsOf and previous walk back past a corruption that was itself backed up.",
                "id": "restore",
                "importPath": "github.com/metio/kurly/workloads/volsync/restore.libsonnet",
@@ -43063,6 +44322,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The wallabag server. dbHost/dbName/dbUser default to a cnpg-cluster named wallabag-db (SYMFONY__ENV__ prefix). domain is the public URL. secretName holds SYMFONY__ENV__DATABASE_PASSWORD and SYMFONY__ENV__SECRET (envFrom). Saved images on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wallabag/server.libsonnet",
@@ -43183,6 +44446,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The A Wallos server. Data on the config volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wallos/server.libsonnet",
@@ -43304,6 +44571,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The webtrees server. baseUrl is the public URL; secretName holds the DB_* credentials (envFrom). Data at /var/www/webtrees/data. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/webtrees/server.libsonnet",
@@ -43450,6 +44721,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "512Mi"
+               },
                "help": "The Wekan server. rootUrl is the public URL. secretName holds MONGO_URL (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wekan/server.libsonnet",
@@ -43594,6 +44869,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "200m",
+                  "memory": "512Mi"
+               },
                "help": "The wger server. dbHost/dbName/dbUser default to a cnpg-cluster named wger-db; redisHost to a valkey named wger-cache. siteUrl is the public URL. secretName holds DJANGO_DB_PASSWORD and SECRET_KEY (envFrom). Media at /home/wger/media on the volume. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wger/server.libsonnet",
@@ -43711,6 +44990,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The Whoogle server. Stateless; configure via WHOOGLE_CONFIG_* env. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/whoogle/server.libsonnet",
@@ -43838,6 +45121,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The Wiki.js server. dbHost/dbName/dbUser default to a cnpg-cluster named wikijs-db. secretName holds DB_PASS (envFrom). Scales horizontally via replicas. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wikijs/server.libsonnet",
@@ -43982,6 +45269,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "100m",
+                  "memory": "256Mi"
+               },
                "help": "The WordPress server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide. secretName holds WORDPRESS_DB_PASSWORD (envFrom). Content at /var/www/html. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/wordpress/server.libsonnet",
@@ -44102,6 +45393,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "250m",
+                  "memory": "1Gi"
+               },
                "help": "The XWiki server. secretName holds the DB_* connection (envFrom). Data at /usr/local/xwiki. Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/xwiki/server.libsonnet",
@@ -44229,6 +45524,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "50m",
+                  "memory": "128Mi"
+               },
                "help": "The YOURLS server. site sets YOURLS_SITE (the public URL); secretName holds YOURLS_DB_* and the admin credentials (envFrom). Compose an exposure onto the HTTP port.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/yourls/server.libsonnet",
@@ -44352,6 +45651,10 @@
                   ]
                },
                "clusterScoped": false,
+               "declaredRequests": {
+                  "cpu": "25m",
+                  "memory": "64Mi"
+               },
                "help": "The ZNC server. Keeps everything at /znc-data on the volume. Provide a znc.conf at /znc-data/configs/znc.conf (generate with `znc --makeconf` or mount from a Secret — it holds passwords). Route the port as TCP.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/znc/server.libsonnet",

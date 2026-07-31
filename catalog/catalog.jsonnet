@@ -513,6 +513,36 @@ local runs(fn) =
 //   writableRootFilesystem — a container without a read-only root fs
 //   ownUserNamespace     — hostUsers:false, so a breakout lands unprivileged on the host
 //   multiTenantSafe      — none of the above relaxations; the hardened default stands
+// What a stage's DEFAULT render ASKS THE SCHEDULER FOR — the summed `requests` of
+// the containers in its pod templates.
+//
+// Deliberately not called a minimum, because it is not one. A request is hand-set
+// by whoever wrote the stage, and asking is not needing in either direction: most
+// of these would run in less than they ask for, and baserow asked for less than it
+// needed and would not start until it was given 4Gi. The only floor anybody here
+// has established was established by a failure, not by a number in a source file.
+//
+// So a consumer may use this to PRE-SELECT a size — round up to something that
+// covers it — and must not use it to refuse one. Refusing below this would forbid
+// a knowledgeable operator from running a workload in less than its packaging
+// asks for, which is legitimate, while still admitting the one case known to
+// fail. Null where a stage runs no pods of kurly's (an operator's custom resource).
+local declaredRequests(fn) =
+  local tmpls = podTemplates(main.list(fn()).items);
+  if tmpls == [] then null
+  else
+    local containers = std.flattenArrays([std.get(t.spec, 'containers', []) for t in tmpls]);
+    // Stated only for a SINGLE-container pod. A multi-container pod's request is
+    // the sum of its containers', and adding Kubernetes quantities ('250m' + '1',
+    // '768Mi' + '1Gi') means writing a units parser here — a new way to be
+    // confidently wrong about a number somebody sizes an order from. Absent is the
+    // honest answer for those until something needs it enough to do it properly.
+    if std.length(containers) != 1 then {}
+    else
+      local reqs = std.get(std.get(containers[0], 'resources', {}), 'requests', {});
+      (if std.objectHas(reqs, 'cpu') then { cpu: reqs.cpu } else {})
+      + (if std.objectHas(reqs, 'memory') then { memory: reqs.memory } else {});
+
 local posture(fn) =
   local tmpls = podTemplates(main.list(fn()).items);
   if tmpls == [] then null
@@ -922,6 +952,7 @@ local workloadEntries =
         + { storage: { pvcs: pvcCount(stageImports[workload + '/' + stage]) } }
         + { runs: runs(stageImports[workload + '/' + stage]) }
         + { posture: posture(stageImports[workload + '/' + stage]) }
+        + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])
         // Which bollwerk policies the stage breaks, from bsi.gen.libsonnet.
         + { bsi: bsiOf(workload + '/' + stage) }
