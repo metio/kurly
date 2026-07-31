@@ -29,3 +29,4 @@ mongo        MongoDB 8.3.7 refuses to start on Linux 6.19+ (SERVER-121912) and t
 mongo-express  needs a MongoDB server, which cannot run on this host's kernel (see mongo)
 overleaf     needs MongoDB (unverifiable here), and its secretKeys omit OVERLEAF_INVITE_TOKEN_SECRET, which it refuses to start without
 owntracks-recorder  dies dialling an MQTT broker at localhost:1883 while the catalogue declares no dependency; the default render is not the standalone mode its own docs describe
+prestashop   its entrypoint reaches the database now (the engine override fixed that) but exits on "Another setup is currently running" on a FIRST boot in an empty namespace, with replicas already 1 — so it is not the two-replica install race authentik has, and clearing it needs upstream's install flow rather than another guess
