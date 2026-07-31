@@ -525,24 +525,35 @@ kurly::provision_deps() {
     dbUser="$(kurly::_param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
     # Which engine, in order of how much the answer is worth:
     #
+    #   0. a dbEngine stated for this workload in hack/smoke/extra.json. Somebody
+    #      established it, usually the hard way, and nothing below may overrule it.
     #   1. the catalogue's secretKeys generator. postgresUrl/mysqlUrl is somebody
     #      stating what the app connects to, which beats anything inferred —
     #      photoview declares postgresUrl, was handed a MySQL by the rule below,
     #      and died reporting "Utilizing postgres database driver".
     #   2. otherwise the stage source mentioning mysql/mariadb/3306, COMMENTS
-    #      INCLUDED. That reads prose, which is unpleasant, and it is kept anyway:
-    #      28 of the 37 it classifies match only in a comment, yet 21 of those have
-    #      delivered against a MySQL. wordpress, mediawiki and drupal ARE MySQL
-    #      workloads whose stage source says so nowhere but in its header, so
-    #      stripping comments would move 27 workloads onto the wrong engine to
-    #      satisfy a tidier rule.
+    #      INCLUDED and CASE-SENSITIVELY. Both of those look like bugs and only one
+    #      is. Reading prose is unpleasant and kept: 28 of the 37 workloads this
+    #      rule classifies match only in a comment, and 21 of those have delivered
+    #      against a MySQL.
     #
-    # The real fix is an ANNOTATED engine per workload, verified by delivery, which
-    # is what requires-v2 is for. Until then this is inference, and rule 1 is the
-    # only part of it anyone wrote on purpose.
-    local declared
+    #      The case-sensitivity is what sent prestashop a PostgreSQL — its header
+    #      says "MySQL", capitalised, so the match failed and it fell through to
+    #      the default and spent its whole life logging "Waiting for confirmation
+    #      of MySQL service startup". Matching case-insensitively fixes prestashop
+    #      and breaks nine others: gitea, nextcloud, drupal, vikunja, freshrss and
+    #      friends mention MySQL as an ALTERNATIVE they support, run perfectly well
+    #      on PostgreSQL, and have already delivered on one. So the bug stays, and
+    #      the workloads it misclassifies get rule 0 instead.
+    #
+    # This is inference. Rules 0 and 1 are the only parts anyone wrote on purpose,
+    # and the annotated engine of requires-v2 is meant to replace the rest.
+    local declared engineOverride
+    engineOverride="$(jq -r --arg k "${id}/${st:-}" --arg id "$id" '(.[$k] // .[$id] // {}).dbEngine // ""' hack/smoke/extra.json 2>/dev/null || true)"
     declared="$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.stages[]?|.secretKeys//[]|.[]|.generate]|map(select(test("Url$")))|join(",")' catalog/catalog.json)"
-    if [[ "$declared" == *mysqlUrl* ]]; then
+    if [ -n "$engineOverride" ]; then
+      dbEngine="$engineOverride"
+    elif [[ "$declared" == *mysqlUrl* ]]; then
       dbEngine=mysql
     elif [[ "$declared" == *postgresUrl* ]]; then
       dbEngine=postgres
