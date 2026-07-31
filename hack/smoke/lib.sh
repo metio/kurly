@@ -583,7 +583,15 @@ kurly::provision_deps() {
 # loop. A custom-resource workload has no controller of its own, so it is
 # fast-check only and this is a no-op.
 kurly::deep() {
-  local id="$1" ns="kurly-deep-${id}" st f snip ctrl kind name apiv version versionBlock ex
+  local id="$1"
+  # A separate statement, because within ONE `local` the earlier assignment is not
+  # in effect yet. This worked only by accident: deep-run.sh's loop variable is
+  # also called id, so ${id} resolved to that global and happened to hold the same
+  # value. Called from anywhere without such a global it fails on an unbound
+  # variable instead.
+  local ns="kurly-deep-${id}"
+  local st f snip ctrl kind name apiv version versionBlock ex
+  local clusterScoped ctrlNs nsRewrite
   # Skip workloads whose stages render only a custom resource (no controller).
   if ! kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>/dev/null \
       | jq -e '.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")' >/dev/null 2>&1; then
@@ -648,6 +656,23 @@ EOF
     # So it is declared only when the label the StageSet would read actually is a
     # semver. A consumer building a StageSet for a `latest`-tagged workload has to
     # make the same call.
+    # A CLUSTER ADD-ON is not a tenant's workload and must not be relocated. Its
+    # manifests name the namespace they belong in — metrics-server's RBAC reads a
+    # ConfigMap in kube-system through a RoleBinding that lives there — so
+    # rewriting every object into kurly-deep-<id> moves the binding out from under
+    # the ServiceAccount and the add-on panics on the permission it just lost.
+    # The catalogue already derives which stages these are, so ask it rather than
+    # keeping a list here.
+    clusterScoped="$(jq -r --arg i "$id" --arg s "$st" \
+      '.workloads[]|select(.id==$i)|.stages[]|select(.id==$s)|.clusterScoped // false' catalog/catalog.json)"
+    if [ "$clusterScoped" = true ]; then
+      nsRewrite=""
+      ctrlNs="$(jq -r '.metadata.namespace // empty' <<<"$ctrl")"; [ -n "$ctrlNs" ] || ctrlNs="$ns"
+      echo "== deep: ${id}/${st} is a cluster add-on — applied where it names, not in ${ns} =="
+    else
+      nsRewrite=" { items: [ item { metadata+: { namespace: '${ns}' } } for item in rendered.items ] }"
+      ctrlNs="$ns"
+    fi
     version="$(jq -r '.metadata.labels["app.kubernetes.io/version"] // ""' <<<"$ctrl")"
     versionBlock=""
     # ANCHORED at both ends, and this matters: an unanchored prefix test accepts
@@ -690,7 +715,7 @@ spec:
       local k = kurly;
       local stage = import 'github.com/metio/kurly/${f}';
       local rendered = kurly.list(stage() + kurly.hostUsers()${ex});
-      rendered { items: [ item { metadata+: { namespace: '${ns}' } } for item in rendered.items ] }
+      rendered${nsRewrite}
 EOF
     # The FIRST snippet of a run pays for a cold cluster: JaaS pulls three OCI
     # artifacts (k8s-libsonnet, the library, the workload) before it can render
@@ -719,7 +744,7 @@ spec:
       sourceRef: { name: ${snip} }
       readyChecks:
         checks:
-          - { apiVersion: ${apiv}, kind: ${kind}, name: ${name}, namespace: ${ns} }
+          - { apiVersion: ${apiv}, kind: ${kind}, name: ${name}, namespace: ${ctrlNs} }
 EOF
     # The StageSet goes Ready only once its readyChecks see the controller healthy,
     # so this budget is the APP's startup budget, not the controller's. It has to
@@ -735,7 +760,7 @@ EOF
     # stage that was still deciding.
     kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-260}" \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: stageset/${snip} never became Ready"; return 1; }
-    kubectl --namespace="$ns" rollout status "${kind,,}/${name}" --timeout=300s \
+    kubectl --namespace="$ctrlNs" rollout status "${kind,,}/${name}" --timeout=300s \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }
   done
   echo "ok: ${id} delivered end-to-end through Flux -> JaaS -> stageset"
