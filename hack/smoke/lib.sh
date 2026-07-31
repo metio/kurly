@@ -737,8 +737,16 @@ kurly::deep() {
   # is what matters: a failed render and a stage with no controller became the same
   # observation, so a genuinely broken render was indistinguishable from an
   # operator-backed workload. Nothing needs composing to count controllers.
-  local rendered
-  if ! rendered="$(kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "" 2>&1)"; then
+  # Retried once, because the tree can be MOMENTARILY inconsistent underneath a
+  # running walk. A `git rebase` or checkout rewrites tracked files, so a render
+  # issued during that window fails on a file that is fine a second later — and
+  # since a render failure is instant, the walk burns through workloads at a few
+  # seconds each and fails a dozen of them before the window closes. That is
+  # exactly how seaweedfs through status-responder failed, all of them rendering
+  # perfectly a minute afterwards. A genuine breakage fails both attempts.
+  local rendered stage0
+  stage0="workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet"
+  if ! rendered="$(kurly::render "$stage0" "" 2>&1)" && ! rendered="$(kurly::render "$stage0" "" 2>&1)"; then
     echo "::error::${id}: its stage did not render, so nothing can be concluded about it — run inside the devShell (nix develop --command …)"
     printf '%s\n' "$rendered" | tail -3
     return 1
