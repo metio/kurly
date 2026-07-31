@@ -731,13 +731,10 @@ kind: StageSet
 metadata: { name: ${snip}, namespace: ${ns} }
 spec:
   interval: 1m
-  # stageset's own per-stage timeout, which defaults to 5 MINUTES and is the
-  # binding constraint on everything below it: once it expires the stage is
-  # StageFailed and no amount of waiting here changes the verdict. Five minutes is
-  # not enough for an app that migrates a database before it serves — automatisch
-  # was failed at verify while its Deployment went on to become healthy — so it is
-  # raised to sit above the startup budget the workloads themselves allow.
-  timeout: 10m
+  # No timeout here on purpose: stageset's default is 15m since
+  # stageset-controller 2026.7.31092513, which is more than this walk would have
+  # chosen and more than the workloads that migrate before serving need. The
+  # ladder is readyChecks.timeout -> stages[].timeout -> spec.timeout -> 15m.
   serviceAccountName: stageset-deployer${versionBlock}
   stages:
     - name: ${st}
@@ -754,11 +751,13 @@ EOF
     # than the fast tier, and workloads that run migrations before serving
     # (authentik, and it will not be alone) were failing at 4m32s while Running
     # with zero restarts: healthy, just not finished starting.
-    # Longer than the StageSet's own 10m timeout above, on purpose: this wait must
-    # outlast stageset's so the run reads its verdict rather than pre-empting it
-    # with a timeout of its own, which would report "never became Ready" for a
-    # stage that was still deciding.
-    kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-260}" \
+    # Longer than stageset's own timeout, on purpose and by a margin: this wait
+    # must outlast it so the run reads stageset's verdict rather than pre-empting
+    # it with "never became Ready" for a stage that was still deciding. At 3s a
+    # poll, 340 polls is 17 minutes against stageset's 15m default. Raising that
+    # default without raising this would silently reintroduce the misreporting
+    # this number exists to prevent.
+    kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-340}" \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: stageset/${snip} never became Ready"; return 1; }
     kubectl --namespace="$ctrlNs" rollout status "${kind,,}/${name}" --timeout=300s \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }

@@ -24,7 +24,6 @@
   apprise: '2026-07-28',
   audiobookshelf: '2026-07-28',
   authelia: '2026-07-28',
-  authentik: '2026-07-28',
   automatisch: '2026-07-28',
   baikal: '2026-07-28',
   baserow: '2026-07-28',

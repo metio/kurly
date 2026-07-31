@@ -22,7 +22,6 @@
     'apprise',
     'audiobookshelf',
     'authelia',
-    'authentik',
     'automatisch',
     'baikal',
     'baserow',

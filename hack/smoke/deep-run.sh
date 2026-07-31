@@ -90,90 +90,43 @@ for id in "${targets[@]}"; do
     continue
   fi
   echo "::group::deep ${id}"
-  # Start every workload from an empty namespace, by DELETING it rather than
-  # waiting for a deletion nobody asked for. A walk that is killed mid-workload
-  # leaves the namespace Active and full of that attempt's objects; a wait then
-  # returns at once, kurly::deep applies over the top, and the run reads a verdict
-  # computed against a previous attempt's failed Deployment — baserow was
-  # diagnosed with pods 55 minutes older than the run looking at them.
+  # Start every workload from an empty namespace. A walk killed mid-workload leaves
+  # it Active and full of that attempt's objects; a wait alone returns at once and
+  # the run would read a verdict computed against a previous attempt.
   #
-  # Finalizers are stripped first: the StageSet and JsonnetSnippet hold them, and
-  # a namespace deleted while a controller cannot authenticate to release them
-  # never finishes terminating.
+  # No finalizer stripping: both controllers now force-drop a finalizer as soon as
+  # the withdraw or teardown fails for a cause no retry can clear, so a namespace
+  # finishes terminating on its own. If one hangs here, that is a NEW bug worth
+  # reporting with the finalizer and object named — not something to paper over.
   if kubectl get namespace "kurly-deep-${id}" >/dev/null 2>&1; then
     echo "== ${id}: a namespace from an earlier attempt is still here — clearing it =="
-    kubectl --namespace="kurly-deep-${id}" get stageset,jsonnetsnippet -o name 2>/dev/null \
-      | xargs -r -I{} kubectl --namespace="kurly-deep-${id}" patch {} --type=merge \
-        -p '{"metadata":{"finalizers":[]}}' >/dev/null 2>&1 || true
     kubectl delete namespace "kurly-deep-${id}" --interactive=false --timeout=240s >/dev/null 2>&1 || true
   fi
   kubectl wait --for=delete "namespace/kurly-deep-${id}" --timeout=180s >/dev/null 2>&1 || true
   ok=true
   kurly::deep "$id" || ok=false
-  # BOTH controllers act by impersonating a ServiceAccount in the workload's
-  # namespace — JaaS as the tenant SA to render, stageset as stageset-deployer to
-  # apply — and both key that credential by namespace and hold on to it. A walk
-  # deletes and recreates kurly-deep-<id> whenever it revisits a workload, and a
-  # credential minted for the previous incarnation is rejected 401 against the new
-  # one. Neither re-mints on its own, so everything in that namespace fails
-  # Unauthorized no matter how sound the workload is: JaaS reports
-  # SourceFetchFailed on the snippet, stageset reports StageFailed on a dry-run
-  # apply. Restarting the controller that is holding the stale credential drops it.
+  # A 401 is now genuinely interesting. Both controllers evict the cached tenant
+  # credential on one, mint a fresh one and retry the call, so a stale credential
+  # costs a retry rather than a failure and never reaches a status message. One
+  # that DOES reach a message survived a re-mint, which no restart here would fix
+  # and which the runbooks say to read rather than guess at:
+  #   https://stageset.projects.metio.wtf/runbooks/stagefailed/     (the apply)
+  #   https://jaas.projects.metio.wtf/runbooks/sourcefetchfailed/   (the render)
   #
-  # BOTH are restarted whenever EITHER reports it, because the namespace being
-  # recreated staled both caches at the same instant — but the two failures can
-  # only surface one at a time. JaaS renders first, so its 401 is what a run sees;
-  # restart only JaaS and the render succeeds, the apply then meets stageset's own
-  # stale credential, and the single retry has already been spent. Restarting the
-  # pair costs one rollout and turns two serial discoveries into none.
-  stale=false
-  if [ "$ok" = false ]; then
-    kubectl --namespace="kurly-deep-${id}" get jsonnetsnippet,stageset \
-      -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null \
-      | grep -q Unauthorized && stale=true
-  fi
-  if [ "$stale" = true ]; then
-    # Capture what distinguishes the causes BEFORE restarting anything, because a
-    # restart destroys the evidence. The three errors are not interchangeable:
-    #
-    #   403 Forbidden — a RoleBinding that has not taken effect. Both controllers
-    #                   classify it as RBACDenied and say so; it cannot read as
-    #                   Unauthorized.
-    #   404 Not Found — the ServiceAccount does not exist yet, so the TokenRequest
-    #                   against it fails outright ("minting token for <ns>/<sa>").
-    #                   It never reaches an apply.
-    #   401 Unauthorized — the apiserver could not validate a token it had already
-    #                   ISSUED: the ServiceAccount is gone, or its UID no longer
-    #                   matches the one in the token.
-    #
-    # So a 401 means a credential outliving its ServiceAccount, and the question is
-    # only whether this namespace is genuinely new. A creationTimestamp older than
-    # this attempt says it is not — the walk has been here before and failed, which
-    # leaves no trace in the ledger, since that records successes only.
-    echo "::group::${id}: Unauthorized — evidence before any restart"
+  # So this prints evidence and stops, where it used to restart both controllers
+  # and try again. Leaving that workaround in would hide exactly this case.
+  if [ "$ok" = false ] \
+    && kubectl --namespace="kurly-deep-${id}" get jsonnetsnippet,stageset \
+         -o jsonpath='{.items[*].status.conditions[*].message}' 2>/dev/null | grep -q Unauthorized; then
+    echo "::error::${id}: an Unauthorized survived the controllers' own re-mint — this is a new cause, not a stale credential"
+    echo "::group::${id}: Unauthorized evidence"
     kubectl --namespace="kurly-deep-${id}" get serviceaccount stageset-deployer default \
       -o custom-columns=NAME:.metadata.name,UID:.metadata.uid,CREATED:.metadata.creationTimestamp 2>&1 || true
     kubectl --namespace="kurly-deep-${id}" get stageset,jsonnetsnippet \
       -o jsonpath='{range .items[*]}{.kind}{" "}{.metadata.name}{" "}{.status.conditions[*].message}{"\n"}{end}' 2>&1 || true
-    echo "--- stageset-controller, lines mentioning Unauthorized ---"
     kubectl --namespace=stageset-system logs deploy/stageset-controller --tail=100 2>/dev/null | grep -i unauthor || echo "(none)"
-    echo "--- jaas, lines mentioning Unauthorized ---"
     kubectl --namespace=jaas-system logs deploy/jaas --tail=100 2>/dev/null | grep -i unauthor || echo "(none)"
     echo "::endgroup::"
-    # Everything below is a WORKAROUND for a bug fixed on
-    # fix/tenant-credential-401-eviction in both controllers, where a 401 evicts the
-    # cached credential, re-mints and retries once. Once the cluster runs images
-    # built from those branches this block is dead code and should be deleted,
-    # keeping the evidence dump above and a loud error when a message still says
-    # Unauthorized — because with the fix in, one that survives the re-mint is a
-    # genuinely new cause and worth reporting rather than restarting past.
-    echo "== ${id}: a stale impersonation credential — restarting both controllers and retrying =="
-    kubectl --namespace=jaas-system rollout restart deploy/jaas >/dev/null 2>&1 || true
-    kubectl --namespace=stageset-system rollout restart deploy >/dev/null 2>&1 || true
-    kubectl --namespace=jaas-system rollout status deploy/jaas --timeout=180s >/dev/null 2>&1 || true
-    kubectl --namespace=stageset-system rollout status deploy --timeout=180s >/dev/null 2>&1 || true
-    ok=true
-    kurly::deep "$id" || ok=false
   fi
   if [ "$ok" = true ]; then
     # kurly::deep returns 0 both for a delivered workload and for one it skipped
@@ -191,25 +144,10 @@ for id in "${targets[@]}"; do
     failed+=("$id")
     echo "::error::deep check failed for ${id}"
   fi
-  # BEFORE the namespace sweep, not after: the StageSet and the JsonnetSnippet carry
-  # controller finalizers, and both controllers run their cleanup by impersonating
-  # the tenant ServiceAccount. Once the namespace is Terminating its RBAC can be
-  # collected first, and the finalizer then fails Unauthorized forever — the
-  # namespace never finishes deleting, and the next run of this workload has every
-  # object it applies rejected Forbidden. Deleting them while their Role still
-  # exists is what keeps the walk repeatable.
-  kubectl --namespace="kurly-deep-${id}" delete stageset,jsonnetsnippet --all \
-    --interactive=false --ignore-not-found --timeout=120s >/dev/null 2>&1 || true
+  # No finalizer dance before or after: the controllers force-drop on their own
+  # now, so deleting the namespace is enough.
   kurly::cleanup_workload "$id"
-  # Last resort: a finalizer that is already wedged (a run killed mid-cleanup) would
-  # otherwise leave the namespace Terminating for the rest of the session.
-  if kubectl get namespace "kurly-deep-${id}" >/dev/null 2>&1; then
-    echo "== ${id}: namespace still terminating — stripping stuck finalizers =="
-    kubectl --namespace="kurly-deep-${id}" get stageset,jsonnetsnippet -o name 2>/dev/null \
-      | xargs -r -I{} kubectl --namespace="kurly-deep-${id}" patch {} --type=merge \
-        -p '{"metadata":{"finalizers":[]}}' >/dev/null 2>&1 || true
-    kubectl wait --for=delete "namespace/kurly-deep-${id}" --timeout=120s >/dev/null 2>&1 || true
-  fi
+  kubectl delete namespace "kurly-deep-${id}" --interactive=false --ignore-not-found --timeout=240s >/dev/null 2>&1 || true
   echo "::endgroup::"
 done
 

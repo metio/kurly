@@ -4370,7 +4370,7 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
-            "tier": "e2e"
+            "tier": "rendered"
          },
          "name": "authentik",
          "requires": {
@@ -5036,6 +5036,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Baserow",
@@ -6439,6 +6442,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Cal.com",
@@ -6568,6 +6574,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Calibre",
@@ -6700,6 +6709,9 @@
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Calibre-Web",
@@ -6826,6 +6838,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Calibre-Web Automated",
@@ -7060,6 +7075,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "changedetection.io",
@@ -7174,6 +7192,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Chatpad AI",
@@ -7274,6 +7295,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "ClickHouse",
@@ -7699,6 +7723,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "cobalt",
@@ -7804,6 +7831,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "code-server",
@@ -7923,6 +7953,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "CommaFeed",
@@ -8036,6 +8069,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "ConvertX",
@@ -8141,6 +8177,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Apache CouchDB",
@@ -8264,6 +8303,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "CryptPad",
@@ -8387,6 +8429,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "CyberChef",
@@ -8492,6 +8537,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Dashy",
@@ -8603,6 +8651,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Davis",
@@ -8728,6 +8779,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "davos",
@@ -8859,6 +8913,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Deluge",
@@ -8991,6 +9048,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Dex",
@@ -9112,6 +9172,9 @@
          "license": "BUSL-1.1",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Directus",
@@ -9268,6 +9331,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Docker Registry UI",
@@ -9389,6 +9455,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Docmost",
@@ -9527,6 +9596,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Documenso",
@@ -9667,6 +9739,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "DocuSeal",
@@ -9776,6 +9851,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "DokuWiki",
@@ -9887,6 +9965,9 @@
          "license": "BUSL-1.1",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Dragonfly",
@@ -9981,6 +10062,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "draw.io",
@@ -10085,6 +10169,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "draw.io",
@@ -10185,6 +10272,9 @@
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "Drupal",
@@ -10335,6 +10425,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Duplicati",
@@ -10487,6 +10580,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-30"
+            },
             "tier": "e2e"
          },
          "name": "ejabberd",
@@ -10596,6 +10692,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Element Web",
@@ -10724,6 +10823,9 @@
          "license": "LicenseRef-Proprietary",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Emby",
@@ -10852,6 +10954,9 @@
          "license": "BUSL-1.1",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "EMQX Enterprise",
@@ -10958,6 +11063,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Endurain",
@@ -11122,6 +11230,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Ente",
@@ -11324,6 +11435,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "ESPHome",
@@ -11434,6 +11548,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Etherpad",
@@ -11572,6 +11689,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Excalidraw",
@@ -11672,6 +11792,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "ExpenseOwl",
@@ -11781,6 +11904,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "FerretDB",
@@ -11896,6 +12022,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Fider",
@@ -12049,6 +12178,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "File Browser",
@@ -12156,6 +12288,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Filestash",
@@ -12268,6 +12403,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Firefly III",
@@ -12417,6 +12555,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Flame",
@@ -12526,6 +12667,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "FlareSolverr",
@@ -12634,6 +12778,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "flatnotes",
@@ -12762,6 +12909,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Focalboard",
@@ -12872,6 +13022,9 @@
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Folding@home",
@@ -13003,6 +13156,9 @@
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Forgejo",
@@ -13147,6 +13303,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Formbricks",
@@ -13284,6 +13443,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "FreshRSS",
@@ -13398,6 +13560,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Frigate",
@@ -13659,6 +13824,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Ghost",
@@ -13946,6 +14114,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Gitea",
@@ -14075,6 +14246,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Glance",
@@ -14174,6 +14348,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "GlitchTip",
@@ -14397,6 +14574,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Gogs",
@@ -14506,6 +14686,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Gokapi",
@@ -14616,6 +14799,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Gotenberg",
@@ -14723,6 +14909,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Gotify",
@@ -14836,6 +15025,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "GoToSocial",
@@ -15065,6 +15257,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Grav",
@@ -15193,6 +15388,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Greenlight",
@@ -15320,6 +15518,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Grist",
@@ -15431,6 +15632,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Grocy",
@@ -15558,6 +15762,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Apache Guacamole",
@@ -15702,6 +15909,9 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Healthchecks",
@@ -15841,6 +16051,9 @@
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "HedgeDoc",
@@ -15976,6 +16189,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Heimdall",
@@ -16102,6 +16318,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Hollama",
@@ -16207,6 +16426,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Homarr",
@@ -16331,6 +16553,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Home Assistant",
@@ -16444,6 +16669,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Homebox",
@@ -16568,6 +16796,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Homepage",
@@ -16680,6 +16911,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Homer",
@@ -16792,6 +17026,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Immich",
@@ -17040,6 +17277,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "InfluxDB",
@@ -17286,6 +17526,9 @@
          "license": "Elastic-2.0",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Invoice Ninja",
@@ -17558,6 +17801,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Jackett",
@@ -17690,6 +17936,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Jellyfin",
@@ -17817,6 +18066,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Jellyseerr",
@@ -17928,6 +18180,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Jenkins",
@@ -18037,6 +18292,9 @@
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Joomla",
@@ -18208,6 +18466,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Joplin Server",
@@ -18732,6 +18993,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Kanboard",
@@ -18845,6 +19109,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Karakeep",
@@ -18993,6 +19260,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Kavita",
@@ -19204,6 +19474,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Kimai",
@@ -19327,6 +19600,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Komga",
@@ -19434,6 +19710,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Kutt",
@@ -19597,6 +19876,9 @@
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Leantime",
@@ -19726,6 +20008,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Lemmy",
@@ -20030,6 +20315,9 @@
          "license": "LGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "LibreSpeed",
@@ -20163,6 +20451,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Lidarr",
@@ -20405,6 +20696,9 @@
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "LinkStack",
@@ -20515,6 +20809,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Linkwarden",
@@ -20648,6 +20945,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "listmonk",
@@ -20805,6 +21105,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "LLDAP",
@@ -20937,6 +21240,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "LobeChat",
@@ -21260,6 +21566,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MailHog",
@@ -21358,6 +21667,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mailpit",
@@ -22231,6 +22543,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Maloja",
@@ -22342,6 +22657,9 @@
          "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MariaDB",
@@ -22482,6 +22800,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mastodon",
@@ -23001,6 +23322,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Matomo",
@@ -23144,6 +23468,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Conduit",
@@ -23262,6 +23589,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mattermost",
@@ -23389,6 +23719,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mautic",
@@ -23546,6 +23879,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Maybe",
@@ -23699,6 +24035,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MAZANOKE",
@@ -23804,6 +24143,9 @@
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mealie",
@@ -23918,6 +24260,9 @@
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MediaWiki",
@@ -24033,6 +24378,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Meilisearch",
@@ -24151,6 +24499,9 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Memcached",
@@ -24350,6 +24701,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mermaid Live Editor",
@@ -24451,6 +24805,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Metabase",
@@ -24701,6 +25058,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MeTube",
@@ -24811,6 +25171,9 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MicroBin",
@@ -24921,6 +25284,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Miniflux",
@@ -25049,6 +25415,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MinIO",
@@ -25179,6 +25548,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Misskey",
@@ -25641,6 +26013,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Monica",
@@ -25801,6 +26176,9 @@
          "license": "EPL-2.0 OR BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Eclipse Mosquitto",
@@ -25915,6 +26293,9 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mumble",
@@ -26041,6 +26422,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Mylar3",
@@ -26167,6 +26551,9 @@
          "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "MySQL",
@@ -26411,6 +26798,9 @@
          "license": "LicenseRef-n8n-Sustainable-Use",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "n8n",
@@ -26529,6 +26919,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "NATS",
@@ -26643,6 +27036,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Navidrome",
@@ -26752,6 +27148,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Neo4j",
@@ -26876,6 +27275,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "netboot.xyz",
@@ -27008,6 +27410,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "NetBox",
@@ -27316,6 +27721,9 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Nextcloud",
@@ -27454,6 +27862,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Nginx Proxy Manager",
@@ -27567,6 +27978,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "NocoBase",
@@ -27717,6 +28131,9 @@
          "license": "LicenseRef-NocoDB-Sustainable-Use",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "NocoDB",
@@ -27847,6 +28264,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Node-RED",
@@ -27958,6 +28378,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "ntfy",
@@ -28076,6 +28499,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "NZBGet",
@@ -28209,6 +28635,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "NZBHydra2",
@@ -28335,6 +28764,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "OAuth2 Proxy",
@@ -28484,6 +28916,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Odoo",
@@ -28621,6 +29056,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Ollama",
@@ -28733,6 +29171,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Ombi",
@@ -28861,6 +29302,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "ONLYOFFICE Docs",
@@ -28987,6 +29431,9 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Open WebUI",
@@ -29234,6 +29681,9 @@
          "license": "EPL-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "openHAB",
@@ -29355,6 +29805,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "OpenObserve",
@@ -29484,6 +29937,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "OpenProject",
@@ -29719,6 +30175,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Organizr",
@@ -29827,6 +30286,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "OpenTelemetry Collector",
@@ -29910,6 +30372,9 @@
          "license": "BUSL-1.1",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Outline",
@@ -30185,6 +30650,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Overseerr",
@@ -30293,6 +30761,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Owncast",
@@ -30514,6 +30985,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "PairDrop",
