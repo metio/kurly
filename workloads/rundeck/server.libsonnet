@@ -48,6 +48,13 @@ function(
   + kurly.store('/home/rundeck/server/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
+  // Rundeck is a Grails application in a WAR: it unpacks, builds its Ehcache
+  // regions and migrates its database before anything listens on 4440, which takes
+  // several minutes on a first start against an empty database. Without a startup
+  // probe the liveness probe reaches its threshold during that work and restarts
+  // the container, which begins the same slow start again and never finishes it.
+  // 10 minutes of grace, after which liveness takes over at its own cadence.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, failureThreshold: 120, periodSeconds: 5 })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)
   + kurly.annotations(annotations)
