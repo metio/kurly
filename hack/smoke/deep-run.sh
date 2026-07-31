@@ -183,6 +183,9 @@ for id in "${targets[@]}"; do
     # evidence, so the ledger is written from what actually exists in the cluster:
     # a StageSet that went Ready.
     if [ -n "$(kubectl --namespace="kurly-deep-${id}" get stageset -o name 2>/dev/null || true)" ]; then
+      # Ask the database whether the workload actually used it. Warns only: the
+      # record below stands on the rollout, which is what `delivered` claims.
+      kurly::verify_database "kurly-deep-${id}" "$id"
       record "$id"
       delivered=$((delivered + 1))
       echo "recorded ${id} as delivered (${today})"

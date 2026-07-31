@@ -202,6 +202,53 @@ kurly::secret() {
 # default posture without relaxation. Extra "-c name=value" server settings and a
 # custom image (e.g. one carrying an extension) may be passed as $5 / $6.
 #   kurly::postgres <ns> <service> <db> <user> [image] [extraArgs]
+# What provision_deps last stood up, so kurly::verify_database can ask that server
+# whether the workload ever used it. Empty when the workload needs no database.
+KURLY_DB_ENGINE="" KURLY_DB_SVC="" KURLY_DB_NAME="" KURLY_DB_USER=""
+
+# Asks the provisioned database how many tables the workload created in it.
+#
+# This is the check whose absence made `delivered` weaker than it reads. A rollout
+# proves the pipeline; it does not prove the app could use its database, because a
+# readiness probe that never issues a query cannot tell the two apart. Four
+# workloads passed the walk against a database they could not use — bugsink and
+# davis on the wrong engine, piwigo and baikal on a PostgreSQL neither supports.
+# The app's own schema is the evidence: tables exist because the software created
+# them, which is the software doing the thing rather than prose about it.
+#
+# It WARNS and never fails. An empty schema is not proof of a broken workload:
+# wordpress and prestashop create no tables until somebody completes the web
+# installer, so zero is expected there and suspicious everywhere else. Turning that
+# into a verdict needs a per-workload expectation nobody has written yet.
+kurly::verify_database() {
+  local ns="$1" id="$2" tables=""
+  [ -n "$KURLY_DB_ENGINE" ] || return 0
+  case "$KURLY_DB_ENGINE" in
+    postgres)
+      tables="$(kubectl exec --namespace="$ns" "deployment/${KURLY_DB_SVC}" -- \
+        psql -U "$KURLY_DB_USER" -d "$KURLY_DB_NAME" -tAc \
+        "select count(*) from information_schema.tables where table_schema not in ('pg_catalog','information_schema')" \
+        2>/dev/null || true)"
+      ;;
+    mysql)
+      # The image is mariadb, which ships the client as `mariadb`; `mysql` is not
+      # on its PATH at all, so naming it directly reports every workload as
+      # unreadable rather than as unmeasured.
+      tables="$(kubectl exec --namespace="$ns" "deployment/${KURLY_DB_SVC}" -- sh -c \
+        "c=\$(command -v mariadb || command -v mysql) && \"\$c\" -u'${KURLY_DB_USER}' -p'${KURLY_E2E_PASSWORD}' -N -B -e \"select count(*) from information_schema.tables where table_schema='${KURLY_DB_NAME}'\"" \
+        2>/dev/null || true)"
+      ;;
+  esac
+  tables="$(printf '%s' "$tables" | tr -dc '0-9')"
+  if [ -z "$tables" ]; then
+    echo "::warning::${id}: could not read its ${KURLY_DB_ENGINE} schema — database use UNKNOWN"
+  elif [ "$tables" -gt 0 ]; then
+    echo "== ${id}: ${tables} tables in its ${KURLY_DB_ENGINE} — the app used its database =="
+  else
+    echo "::warning::${id}: rolled out, but its ${KURLY_DB_ENGINE} holds NO tables — it either never reached the database or is waiting for an installer"
+  fi
+}
+
 kurly::postgres() {
   local ns="$1" svc="$2" db="$3" user="$4" image="${5:-docker.io/library/postgres:17}" extra="${6:-}"
   echo "== provision postgres ${svc} (db=${db}, user=${user}) =="
@@ -519,6 +566,9 @@ kurly::prereq() {
 
 kurly::provision_deps() {
   local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName dbEngine
+  # Cleared per workload: these are globals so the post-delivery check can read
+  # them, and a workload needing no database must not inherit the last one's.
+  KURLY_DB_ENGINE="" KURLY_DB_SVC="" KURLY_DB_NAME="" KURLY_DB_USER=""
   primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.database then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     dbName="$(kurly::_param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(kurly::_param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
@@ -562,11 +612,14 @@ kurly::provision_deps() {
     else
       dbEngine=postgres
     fi
+    KURLY_DB_ENGINE="$dbEngine" KURLY_DB_NAME="$dbName" KURLY_DB_USER="$dbUser"
     if [ "$dbEngine" = mysql ]; then
       dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
+      KURLY_DB_SVC="$dbHost"
       kurly::mysql "$ns" "$dbHost" "$dbName" "$dbUser"
     else
       dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
+      KURLY_DB_SVC="$dbHost"
       # A workload that needs a PostgreSQL EXTENSION needs a server that ships it:
       # the stock image fails the app's first CREATE EXTENSION, and immich does not
       # merely warn — it crash-loops with DB_VECTOR_EXTENSION=vectorchord against a
