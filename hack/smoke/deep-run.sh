@@ -29,6 +29,7 @@ export KUBERC=/dev/null
 source hack/smoke/lib.sh
 
 ledger=catalog/delivered-verified.libsonnet
+dbledger=catalog/database-use.libsonnet
 today="$(date +%F)"
 
 # The workloads already proven, one per line — the resume set, read from the
@@ -68,6 +69,28 @@ record() {
   mv "$tmp" "$ledger"
 }
 
+# The table-count ledger, same rewrite-the-whole-object discipline as record() so
+# it stays sorted and jsonnetfmt-clean across any number of interruptions.
+record_tables() {
+  local id="$1" n="$2" engine="$3" tmp entries
+  entries="$(grep -oE "^  '?[a-z0-9-]+'?: \{ tables: [0-9]+, engine: '[a-z]+', on: '[0-9-]+' \}," "$dbledger" 2>/dev/null \
+    | sed -E "s/^  '?([a-z0-9-]+)'?: \{ tables: ([0-9]+), engine: '([a-z]+)', on: '([0-9-]+)' \},$/\1 \2 \3 \4/" \
+    | grep -v "^${id} " || true)"
+  entries="$(printf '%s\n%s %s %s %s\n' "$entries" "$id" "$n" "$engine" "$today" | grep -v '^$' | LC_ALL=C sort)"
+  tmp="$(mktemp)"
+  sed -n '1,/^{$/p' "$dbledger" >"$tmp"
+  while read -r name cnt eng date; do
+    case "$name" in
+      [A-Za-z_]*[!A-Za-z0-9_]*|[!A-Za-z_]*)
+        printf "  '%s': { tables: %s, engine: '%s', on: '%s' },\n" "$name" "$cnt" "$eng" "$date" >>"$tmp" ;;
+      *)
+        printf "  %s: { tables: %s, engine: '%s', on: '%s' },\n" "$name" "$cnt" "$eng" "$date" >>"$tmp" ;;
+    esac
+  done <<<"$entries"
+  printf '}\n' >>"$tmp"
+  mv "$tmp" "$dbledger"
+}
+
 if [ "$#" -gt 0 ]; then
   targets=("$@")
 else
@@ -104,7 +127,7 @@ kurly::install_registry
 kurly::publish_images
 
 delivered=0 skipped=0 knownskipped=0
-failed=()
+failed=() dbregressed=()
 
 # The namespace of the workload being walked right now, so an interrupted run does
 # not leave it behind. The loop already clears a stale namespace before RE-running
@@ -185,7 +208,13 @@ for id in "${targets[@]}"; do
     if [ -n "$(kubectl --namespace="kurly-deep-${id}" get stageset -o name 2>/dev/null || true)" ]; then
       # Ask the database whether the workload actually used it. Warns only: the
       # record below stands on the rollout, which is what `delivered` claims.
-      kurly::verify_database "kurly-deep-${id}" "$id"
+      if ! kurly::verify_database "kurly-deep-${id}" "$id"; then
+        dbregressed+=("$id")
+      fi
+      # Recorded whatever the database said: `delivered` claims the pipeline ran,
+      # and it did. What the workload then did with its database is the other
+      # ledger's business, which is the whole point of keeping them apart.
+      [ -n "$KURLY_DB_TABLES" ] && record_tables "$id" "$KURLY_DB_TABLES" "$KURLY_DB_ENGINE"
       record "$id"
       delivered=$((delivered + 1))
       echo "recorded ${id} as delivered (${today})"
@@ -204,6 +233,9 @@ for id in "${targets[@]}"; do
   echo "::endgroup::"
 done
 
+if [ "${#dbregressed[@]}" -gt 0 ]; then
+  echo "::error::${#dbregressed[@]} workloads stopped writing to their database: ${dbregressed[*]}"
+fi
 echo "deep-run: ${delivered} newly delivered, ${skipped} already recorded, ${knownskipped} skipped with a known cause, ${#failed[@]} failed"
 if [ "$knownskipped" -gt 0 ]; then
   echo "::warning::${knownskipped} workloads were skipped with a known cause and are NOT proven — see ${knownfile}"

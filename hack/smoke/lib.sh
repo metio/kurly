@@ -205,6 +205,9 @@ kurly::secret() {
 # What provision_deps last stood up, so kurly::verify_database can ask that server
 # whether the workload ever used it. Empty when the workload needs no database.
 KURLY_DB_ENGINE="" KURLY_DB_SVC="" KURLY_DB_NAME="" KURLY_DB_USER=""
+# The count verify_database read, for the caller to write to the ledger.
+# shellcheck disable=SC2034  # consumed by hack/smoke/deep-run.sh
+KURLY_DB_TABLES=""
 
 # Asks the provisioned database how many tables the workload created in it.
 #
@@ -216,12 +219,21 @@ KURLY_DB_ENGINE="" KURLY_DB_SVC="" KURLY_DB_NAME="" KURLY_DB_USER=""
 # The app's own schema is the evidence: tables exist because the software created
 # them, which is the software doing the thing rather than prose about it.
 #
-# It WARNS and never fails. An empty schema is not proof of a broken workload:
-# wordpress and prestashop create no tables until somebody completes the web
-# installer, so zero is expected there and suspicious everywhere else. Turning that
-# into a verdict needs a per-workload expectation nobody has written yet.
+# An empty schema is not proof of a broken workload: wordpress and prestashop
+# create no tables until somebody completes the web installer, so zero is correct
+# for them and damning almost everywhere else. No absolute threshold separates
+# those, but the workload's OWN LAST READING does — a count that was positive and
+# is now zero is a regression whatever the app's installer does. So this compares
+# against catalog/database-use.libsonnet and reports:
+#
+#   was positive, now zero  -> an error, and the caller says so
+#   zero then, zero now     -> quiet, and nobody had to know about the installer
+#   no previous reading     -> a warning, until the walk gives it one
+#
+# The count is left in KURLY_DB_TABLES for the caller to record.
 kurly::verify_database() {
-  local ns="$1" id="$2" tables=""
+  local ns="$1" id="$2" tables="" prior=""
+  KURLY_DB_TABLES=""
   [ -n "$KURLY_DB_ENGINE" ] || return 0
   case "$KURLY_DB_ENGINE" in
     postgres)
@@ -242,11 +254,21 @@ kurly::verify_database() {
   tables="$(printf '%s' "$tables" | tr -dc '0-9')"
   if [ -z "$tables" ]; then
     echo "::warning::${id}: could not read its ${KURLY_DB_ENGINE} schema — database use UNKNOWN"
-  elif [ "$tables" -gt 0 ]; then
-    echo "== ${id}: ${tables} tables in its ${KURLY_DB_ENGINE} — the app used its database =="
-  else
-    echo "::warning::${id}: rolled out, but its ${KURLY_DB_ENGINE} holds NO tables — it either never reached the database or is waiting for an installer"
+    return 0
   fi
+  # shellcheck disable=SC2034  # consumed by hack/smoke/deep-run.sh
+  KURLY_DB_TABLES="$tables"
+  prior="$(grep -oE "^  '?${id}'?: \{ tables: [0-9]+" catalog/database-use.libsonnet 2>/dev/null \
+    | grep -oE '[0-9]+$' || true)"
+  if [ "$tables" -gt 0 ]; then
+    echo "== ${id}: ${tables} tables in its ${KURLY_DB_ENGINE} — the app used its database =="
+  elif [ -z "$prior" ]; then
+    echo "::warning::${id}: rolled out, but its ${KURLY_DB_ENGINE} holds NO tables and there is no earlier reading to compare — it either never reached the database or waits for an installer"
+  elif [ "$prior" -gt 0 ]; then
+    echo "::error::${id}: wrote ${prior} tables to its ${KURLY_DB_ENGINE} on the last walk and none on this one — a regression, whatever its installer does"
+    return 1
+  fi
+  return 0
 }
 
 kurly::postgres() {
