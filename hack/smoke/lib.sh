@@ -705,7 +705,21 @@ kurly::deep() {
   local st f snip ctrl kind name apiv version versionBlock ex
   local clusterScoped ctrlNs nsRewrite params
   # Skip workloads whose stages render only a custom resource (no controller).
-  if ! kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>/dev/null \
+  #
+  # The render is run and JUDGED SEPARATELY from the search for a controller,
+  # because the two failures look identical when they are folded together and mean
+  # opposite things. Piping a failed render into jq yields no match, which reads as
+  # "this workload is operator-backed" — a notice, not an error, and the walk moves
+  # on. Started outside the devShell, where jsonnet is not on PATH, that misreports
+  # EVERY remaining workload as CR-only: 79 of them in one run, in about eight
+  # seconds each, recording nothing and reporting no failure.
+  local rendered
+  if ! rendered="$(kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>&1)"; then
+    echo "::error::${id}: its stage did not render, so nothing can be concluded about it — run inside the devShell (nix develop --command …)"
+    printf '%s\n' "$rendered" | tail -3
+    return 1
+  fi
+  if ! printf '%s' "$rendered" \
       | jq -e '.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")' >/dev/null 2>&1; then
     echo "== deep: ${id} renders no standard controller (operator/CR) — fast check only =="
     return 0

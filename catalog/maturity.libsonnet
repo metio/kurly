@@ -30,6 +30,14 @@
 // the ladder would also make every consumer that switches on `tier` treat the
 // unfamiliar value as the WEAKEST rung — turning the strongest evidence there is
 // into "never booted", which is the opposite of what it says.
+// A delivery that created tables in its database and one that never touched it
+// are not equally strong evidence, and the difference lands on the failure class
+// that matters most for an upgrade: a version that booted AND RAN ITS MIGRATIONS
+// under the walk is a materially stronger claim than one that merely booted. So
+// where the walk read a schema, the count travels with the delivery that produced
+// it. Absent means nobody read one — never that the workload wrote nothing, which
+// is `databaseTables: 0`.
+local databaseUse = import './database-use.libsonnet';
 local delivered = import './delivered-verified.libsonnet';
 local derived = import './maturity.gen.libsonnet';
 local production = import './production.libsonnet';
@@ -51,10 +59,26 @@ local tierOf(name) =
   of(name)::
     { tier: tierOf(name) }
     + (if std.objectHas(production, name) then { production: production[name] } else {})
-    + (if std.objectHas(delivered, name) then { delivered: { since: delivered[name] } } else {}),
+    + (
+      if std.objectHas(delivered, name)
+      then {
+        delivered: { since: delivered[name] }
+                   + (
+                     if std.objectHas(databaseUse, name)
+                     then {
+                       databaseTables: databaseUse[name].tables,
+                       databaseEngine: databaseUse[name].engine,
+                       databaseReadOn: databaseUse[name].on,
+                     }
+                     else {}
+                   ),
+      }
+      else {}
+    ),
 
   // Every name either axis claims must be a real workload; catch a typo or a
   // renamed workload here rather than shipping a dangling claim.
   productionNames:: std.objectFields(production),
   deliveredNames:: std.objectFields(delivered),
+  databaseUseNames:: std.objectFields(databaseUse),
 }

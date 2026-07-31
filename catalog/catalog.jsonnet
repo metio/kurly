@@ -962,6 +962,13 @@ local workloadEntries =
   // would otherwise publish a claim about nothing.
   assert std.all([std.objectHas(ann.workloads, name) for name in maturity.deliveredNames]) :
          'maturity: delivered-verified.libsonnet names a workload that does not exist',
+  // And for the schema readings. These attach to a delivery, so a count for a
+  // workload that has none is silently dropped rather than published — catch that
+  // here instead, where it reads as the bug it is.
+  assert std.all([std.objectHas(ann.workloads, name) for name in maturity.databaseUseNames]) :
+         'maturity: database-use.libsonnet names a workload that does not exist',
+  assert std.all([std.member(maturity.deliveredNames, name) for name in maturity.databaseUseNames]) :
+         'maturity: database-use.libsonnet names a workload with no delivery to attach the reading to',
   assert std.all([std.objectHasAll(main, helper) for helper in std.objectFields(ann.helpers)]) :
          'helpers: main.libsonnet must expose every annotated helper',
 

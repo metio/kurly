@@ -17421,6 +17421,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "InspIRCd",
@@ -24942,6 +24945,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Kubernetes Metrics Server",
@@ -31089,6 +31095,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Paisa",
@@ -31200,6 +31209,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Paperless-ngx",
@@ -31374,6 +31386,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Password Pusher",
@@ -31494,6 +31509,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "PeerTube",
@@ -31667,6 +31685,9 @@
          "license": "MPL-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Penpot",
@@ -31999,6 +32020,9 @@
          "license": "PostgreSQL",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "pgAdmin",
@@ -32130,6 +32154,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "PhotoPrism",
@@ -32407,6 +32434,9 @@
          "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "phpMyAdmin",
@@ -32525,6 +32555,9 @@
          "license": "EUPL-1.2",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Pi-hole",
@@ -32660,6 +32693,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "PILOS",
@@ -32781,6 +32817,9 @@
          "license": "BSD-2-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Pingvin Share",
@@ -32893,6 +32932,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Piwigo",
@@ -33027,6 +33069,9 @@
          "license": "LicenseRef-PLANKA-Community",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Planka",
@@ -33165,6 +33210,9 @@
          "license": "LicenseRef-Proprietary",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Plex Media Server",
@@ -33293,6 +33341,9 @@
          "license": "BSD-2-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Pocket ID",
@@ -33405,6 +33456,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "PocketBase",
@@ -33514,6 +33568,9 @@
          "license": "Zlib",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Portainer CE",
@@ -33625,6 +33682,9 @@
          "license": "PostgreSQL",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "PostgreSQL",
@@ -33907,6 +33967,9 @@
          "license": "zlib-acknowledgement",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "PrivateBin",
@@ -34321,6 +34384,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Prowlarr",
@@ -34453,6 +34519,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "pyLoad",
@@ -34585,6 +34654,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "qBittorrent",
@@ -34717,6 +34789,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Qdrant",
@@ -34822,6 +34897,9 @@
          "license": "MPL-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "RabbitMQ",
