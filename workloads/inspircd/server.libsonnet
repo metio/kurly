@@ -55,8 +55,18 @@ function(
   // Scratch rather than a relaxed root filesystem: only these two paths need to
   // be writable, and a self-signed key regenerated per start is the right
   // lifetime for one the container makes itself.
+  // Three paths, found one at a time because each is only reached once the
+  // previous one works: /tmp for the certificate template, /inspircd/conf for the
+  // key and the generated configuration, and /inspircd/logs because that generated
+  // configuration then points a file logger at it.
+  //
+  // The logs are ephemeral on purpose. A container writing its own log file is not
+  // what you want in Kubernetes, but the configuration the image generates does
+  // it, and the alternative — a persistent volume for logs nobody reads — is
+  // worse than losing them with the pod.
   + kurly.scratch('/tmp', '16Mi')
   + kurly.scratch('/inspircd/conf', '16Mi')
+  + kurly.scratch('/inspircd/logs', '64Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
