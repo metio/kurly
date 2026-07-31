@@ -644,15 +644,12 @@ EOF
     # that would be wrong everywhere it is really deployed — and without it the
     # deep check fails 18 workloads for a value the fast one supplies. cobalt is
     # the plain case: "API_URL env variable is missing, cobalt api can't start".
-    ex="$(jq -r --arg k "${id}/${st}" --arg id "$id" '.[$k] // .[$id] // ""' hack/smoke/extra.json)"
-    # Some stages need PARAMETERS, not just composed env — a kubelet whose
-    # certificate kind self-signs, a server name, a storage class. extra.json
-    # cannot express them: its fragments compose onto an already-built app with
-    # `+`, and a parameter is consumed when the stage function is CALLED. Without
-    # this the deep check renders every stage with its defaults, and a workload
-    # whose fast scenario passes an argument fails here for want of it —
-    # metrics-server cannot scrape a kind kubelet without kubeletInsecureTLS.
-    params="$(jq -r --arg k "${id}/${st}" --arg id "$id" '.[$k] // .[$id] // ""' hack/smoke/params.json)"
+    ex="$(jq -r --arg k "${id}/${st}" --arg id "$id" '(.[$k] // .[$id] // {}).compose // ""' hack/smoke/extra.json)"
+    # The same file's other facet. `compose` is added to an already-built app with
+    # `+`; `params` is passed when the stage function is CALLED, which is the only
+    # way to reach an argument — metrics-server cannot scrape a kind kubelet
+    # without kubeletInsecureTLS, and no amount of composing reaches that.
+    params="$(jq -r --arg k "${id}/${st}" --arg id "$id" '(.[$k] // .[$id] // {}).params // ""' hack/smoke/extra.json)"
     # spec.version is OPTIONAL, and only meaningful when the deployed version can
     # be ordered: stageset parses it as semver so a migration ladder knows which
     # way it is moving. kurly stamps app.kubernetes.io/version from the image tag,

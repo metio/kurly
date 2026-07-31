@@ -74,6 +74,27 @@ else
   mapfile -t targets < <(jq -r '.workloads[].id' catalog/catalog.json | LC_ALL=C sort)
 fi
 
+# Workloads with a diagnosis already made, and why — hack/smoke/known-failures.txt.
+# The walk remembers successes and nothing else, so without this each of them is
+# re-attempted every pass at roughly fifteen minutes a time. A skip is NOT a pass:
+# every one is named at the start and the end, and the run exits non-zero while any
+# remain. RETRY=1 attempts them anyway, and naming a workload explicitly always
+# runs it — an entry must never be able to silence a deliberate request.
+knownfile=hack/smoke/known-failures.txt
+declare -A known_reason=()
+if [ -f "$knownfile" ] && [ -z "${RETRY:-}" ] && [ "$#" -eq 0 ]; then
+  while read -r kid kreason; do
+    case "$kid" in ''|\#*) continue ;; esac
+    known_reason["$kid"]="$kreason"
+  done < <(sed 's/#.*//' "$knownfile")
+fi
+if [ "${#known_reason[@]}" -gt 0 ]; then
+  echo "== skipping ${#known_reason[@]} workloads whose cause is already known (RETRY=1 to attempt them) =="
+  for kid in $(printf '%s\n' "${!known_reason[@]}" | LC_ALL=C sort); do
+    printf '   %-20s %s\n' "$kid" "${known_reason[$kid]}"
+  done
+fi
+
 skip="$(recorded)"
 kurly::vendor
 kurly::install_flux
@@ -82,11 +103,16 @@ kurly::install_stageset
 kurly::install_registry
 kurly::publish_images
 
-delivered=0 skipped=0
+delivered=0 skipped=0 knownskipped=0
 failed=()
 for id in "${targets[@]}"; do
   if [ -z "${FORCE:-}" ] && grep -qx "$id" <<<"$skip"; then
     skipped=$((skipped + 1))
+    continue
+  fi
+  if [ -n "${known_reason[$id]:-}" ]; then
+    echo "== skip ${id}: ${known_reason[$id]} =="
+    knownskipped=$((knownskipped + 1))
     continue
   fi
   echo "::group::deep ${id}"
@@ -151,7 +177,18 @@ for id in "${targets[@]}"; do
   echo "::endgroup::"
 done
 
-echo "deep-run: ${delivered} newly delivered, ${skipped} already recorded, ${#failed[@]} failed"
+echo "deep-run: ${delivered} newly delivered, ${skipped} already recorded, ${knownskipped} skipped with a known cause, ${#failed[@]} failed"
+if [ "$knownskipped" -gt 0 ]; then
+  echo "::warning::${knownskipped} workloads were skipped with a known cause and are NOT proven — see ${knownfile}"
+  for kid in $(printf '%s\n' "${!known_reason[@]}" | LC_ALL=C sort); do echo "  skipped: ${kid}"; done
+fi
+# A workload that is listed AND delivered means the list is stale, which would
+# hide a workload that now passes. Say so loudly rather than leaving it to rot.
+for kid in "${!known_reason[@]}"; do
+  if grep -qE "^  '?${kid}'?:" "$ledger"; then
+    echo "::warning::${kid} is in ${knownfile} but the ledger says it delivered — remove the entry"
+  fi
+done
 if [ "${#failed[@]}" -gt 0 ]; then
   echo "::error::deep check failed for: ${failed[*]}"
   exit 1

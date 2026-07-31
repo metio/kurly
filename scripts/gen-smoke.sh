@@ -45,7 +45,7 @@ param() { grep -oE "^[[:space:]]*$2='[^']*'" "$1" 2>/dev/null | head -1 | sed -E
 # to "<id>" for every stage of a workload.
 extra=hack/smoke/extra.json
 extra_for() {
-  jq -r --arg k "$1" --arg id "${1%%/*}" '.[$k] // .[$id] // ""' "$extra"
+  jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).compose // ""' "$extra"
 }
 
 # A generated scenario is regenerated in place; a hand-written one is left alone.

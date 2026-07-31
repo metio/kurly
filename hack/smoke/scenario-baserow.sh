@@ -18,4 +18,4 @@ kurly::postgres "$ns" baserow-db-rw baserow baserow
 kurly::cache "$ns" baserow-cache-headless
 
 kurly::secret "$ns" baserow workloads/baserow/server.libsonnet
-kurly::boot workloads/baserow/server.libsonnet "$ns"
+kurly::boot workloads/baserow/server.libsonnet "$ns" "+ k.env({ BASEROW_PUBLIC_URL: 'http://baserow:80' })"

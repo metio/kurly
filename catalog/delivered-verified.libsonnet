@@ -169,6 +169,7 @@
   memos: '2026-07-30',
   'mermaid-live-editor': '2026-07-31',
   metabase: '2026-07-31',
+  'metrics-server': '2026-07-31',
   metube: '2026-07-31',
   microbin: '2026-07-31',
   miniflux: '2026-07-31',

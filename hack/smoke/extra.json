@@ -1,21 +1,71 @@
 {
-  "baserow": "+ k.env({ BASEROW_PUBLIC_URL: 'http://baserow:80' })",
-  "cobalt": "+ k.env({ API_URL: 'http://cobalt:9000/' })",
-  "docmost": "+ k.env({ APP_URL: 'http://docmost:3000' })",
-  "documenso": "+ k.env({ NEXTAUTH_URL: 'http://documenso:3000', NEXT_PUBLIC_WEBAPP_URL: 'http://documenso:3000' })",
-  "endurain": "+ k.env({ ENDURAIN_HOST: 'http://endurain:8080' })",
-  "fider": "+ k.env({ BASE_URL: 'http://fider:3000' })",
-  "gotosocial": "+ k.env({ GTS_HOST: 'social.example.com' })",
-  "lychee": "+ k.env({ APP_URL: 'http://lychee:80', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2', FRANKENPHP_WORKER: '0' })",
-  "matrix-conduit": "+ k.env({ CONDUIT_SERVER_NAME: 'matrix.example.com' })",
-  "ntfy": "+ k.env({ NTFY_BASE_URL: 'http://ntfy:80' })",
-  "outline": "+ k.env({ URL: 'http://outline:3000', COLLABORATION_URL: 'ws://outline:3000' })",
-  "peertube": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })",
-  "planka": "+ k.env({ BASE_URL: 'http://planka:1337' })",
-  "prestashop": "+ k.env({ PS_INSTALL_AUTO: '1', PS_DOMAIN: 'prestashop', PS_HANDLE_DYNAMIC_DOMAIN: '0', PS_ERASE_DB: '0' })",
-  "shlink": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })",
-  "teable": "+ k.env({ PUBLIC_ORIGIN: 'http://teable:3000' })",
-  "twenty": "+ k.env({ SERVER_URL: 'http://twenty:3000' })",
-  "vikunja": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })",
-  "yourls": "+ k.env({ YOURLS_SITE: 'http://yourls' })"
+  "baserow": {
+    "compose": "+ k.env({ BASEROW_PUBLIC_URL: 'http://baserow:80' })"
+  },
+  "cobalt": {
+    "compose": "+ k.env({ API_URL: 'http://cobalt:9000/' })"
+  },
+  "docmost": {
+    "compose": "+ k.env({ APP_URL: 'http://docmost:3000' })"
+  },
+  "documenso": {
+    "compose": "+ k.env({ NEXTAUTH_URL: 'http://documenso:3000', NEXT_PUBLIC_WEBAPP_URL: 'http://documenso:3000' })"
+  },
+  "endurain": {
+    "compose": "+ k.env({ ENDURAIN_HOST: 'http://endurain:8080' })"
+  },
+  "fider": {
+    "compose": "+ k.env({ BASE_URL: 'http://fider:3000' })"
+  },
+  "gotosocial": {
+    "compose": "+ k.env({ GTS_HOST: 'social.example.com' })"
+  },
+  "loki/server": {
+    "params": "storageSecret='loki-storage', storageClass='standard'"
+  },
+  "lychee": {
+    "compose": "+ k.env({ APP_URL: 'http://lychee:80', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2', FRANKENPHP_WORKER: '0' })"
+  },
+  "matrix-conduit": {
+    "compose": "+ k.env({ CONDUIT_SERVER_NAME: 'matrix.example.com' })"
+  },
+  "metrics-server/server": {
+    "params": "kubeletInsecureTLS=true"
+  },
+  "ntfy": {
+    "compose": "+ k.env({ NTFY_BASE_URL: 'http://ntfy:80' })"
+  },
+  "opencost/server": {
+    "params": "prometheusEndpoint='http://prometheus:9090'"
+  },
+  "outline": {
+    "compose": "+ k.env({ URL: 'http://outline:3000', COLLABORATION_URL: 'ws://outline:3000' })"
+  },
+  "peertube": {
+    "compose": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })"
+  },
+  "planka": {
+    "compose": "+ k.env({ BASE_URL: 'http://planka:1337' })"
+  },
+  "prestashop": {
+    "compose": "+ k.env({ PS_INSTALL_AUTO: '1', PS_DOMAIN: 'prestashop', PS_HANDLE_DYNAMIC_DOMAIN: '0', PS_ERASE_DB: '0' })"
+  },
+  "shlink": {
+    "compose": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })"
+  },
+  "synapse/server": {
+    "params": "serverName='synapse.example.com'"
+  },
+  "teable": {
+    "compose": "+ k.env({ PUBLIC_ORIGIN: 'http://teable:3000' })"
+  },
+  "twenty": {
+    "compose": "+ k.env({ SERVER_URL: 'http://twenty:3000' })"
+  },
+  "vikunja": {
+    "compose": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"
+  },
+  "yourls": {
+    "compose": "+ k.env({ YOURLS_SITE: 'http://yourls' })"
+  }
 }

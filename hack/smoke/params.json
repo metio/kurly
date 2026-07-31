@@ -1,6 +1,0 @@
-{
-  "loki/server": "storageSecret='loki-storage', storageClass='standard'",
-  "metrics-server/server": "kubeletInsecureTLS=true",
-  "opencost/server": "prometheusEndpoint='http://prometheus:9090'",
-  "synapse/server": "serverName='synapse.example.com'"
-}
