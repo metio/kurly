@@ -48,6 +48,12 @@ function(
   + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
+  // Teable runs its Prisma migrations and builds its asset cache before it listens
+  // on 3000, which on a first start against an empty database takes minutes. The
+  // liveness probe otherwise reaches its threshold during that work and restarts
+  // the container, which starts the same slow work again and never completes it.
+  // 10 minutes of grace, after which liveness resumes at its own cadence.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, failureThreshold: 120, periodSeconds: 5 })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)
   + kurly.annotations(annotations)
