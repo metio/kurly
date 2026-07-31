@@ -19,14 +19,7 @@ kurly::namespace "$ns"
 kurly::cache "$ns" mailu-cache ""
 
 # The shared claim every stage mounts.
-kubectl --namespace="$ns" apply --filename=- <<'EOF'
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata: { name: mailu-storage }
-spec:
-  accessModes: [ReadWriteOnce]
-  resources: { requests: { storage: 2Gi } }
-EOF
+kurly::prereq mailu "$ns"
 
 kurly::secret "$ns" mailu workloads/mailu/admin.libsonnet
 kurly::boot workloads/mailu/admin.libsonnet "$ns"

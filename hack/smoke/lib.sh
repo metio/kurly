@@ -487,6 +487,36 @@ kurly::changed_workloads() {
 # Provisions a workload's declared dependencies + Secret into <ns>, reading the
 # catalog and the stage's default connection params at runtime — the same wiring
 # the generated fast scenario bakes in, reusable by the deep check.
+# Sets up whatever a workload needs BEYOND a database, a cache and a Secret minted
+# from the catalogue's secretKeys — a configuration Secret the operator authors, a
+# volume several stages share, an operator that must exist first.
+#
+# It lives in one file per workload, hack/smoke/prereq/<id>.sh, run with $ns set,
+# because BOTH tiers need it and they were drifting: the fast scenarios carried
+# this setup inline, the deep check had no equivalent, and every workload with a
+# prerequisite failed the deep check for want of scaffolding rather than for
+# anything wrong with it. A workload with no prerequisites has no file and this is
+# a no-op.
+#
+#   kurly::prereq dex kurly-deep-dex
+kurly::prereq() {
+  local id="$1" ns="$2"
+  # A separate statement: within ONE `local`, $id is not yet assigned when $f is
+  # evaluated, and under `set -u` that is fatal rather than merely empty.
+  local f="hack/smoke/prereq/${id}.sh"
+  [ -f "$f" ] || return 0
+  echo "== prerequisites for ${id} in ${ns} =="
+  # A subshell so a prerequisite cannot leak variables into the caller, and
+  # sourced rather than executed so it can use the helpers in this file.
+  (
+    set -euo pipefail
+    # $ns is a local of this function and the subshell inherits it, which is how
+    # the sourced file addresses the namespace.
+    # shellcheck source=/dev/null
+    source "$f"
+  )
+}
+
 kurly::provision_deps() {
   local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName
   primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
@@ -569,6 +599,9 @@ kurly::deep() {
   kubectl create clusterrolebinding "stageset-deployer-${ns}" --clusterrole=cluster-admin \
     --serviceaccount="${ns}:stageset-deployer" --dry-run=client --output=yaml | kubectl apply --filename=-
   kurly::provision_deps "$id" "$ns"
+  # And whatever else the workload needs before its own manifests can run — the
+  # same file the fast scenario uses, so the two tiers cannot drift again.
+  kurly::prereq "$id" "$ns"
   kurly::publish_images "$id"
   kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: source.toolkit.fluxcd.io/v1

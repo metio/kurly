@@ -18,32 +18,6 @@ kurly::namespace "$ns"
 
 kurly::postgres "$ns" dex-db-rw dex dex
 
-config="$(mktemp)"
-trap 'rm -f "$config"' EXIT
-cat >"$config" <<YAML
-issuer: http://dex:5556
-storage:
-  type: postgres
-  config:
-    host: dex-db-rw
-    port: 5432
-    database: dex
-    user: dex
-    password: ${KURLY_E2E_PASSWORD}
-    ssl:
-      mode: disable
-web:
-  http: 0.0.0.0:5556
-staticClients:
-  - id: smoke
-    name: smoke
-    secret: smoke-client-secret
-    redirectURIs:
-      - http://localhost/callback
-enablePasswordDB: true
-YAML
-
-kubectl --namespace="$ns" create secret generic dex \
-  --from-file=config.yaml="$config" --dry-run=client --output=yaml | kubectl apply --filename=-
+kurly::prereq dex "$ns"
 
 kurly::boot workloads/dex/server.libsonnet "$ns"

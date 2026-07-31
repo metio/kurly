@@ -17,26 +17,7 @@ kurly::namespace "$ns"
 
 kurly::postgres "$ns" ente-db-rw ente ente
 
-credentials="$(mktemp)"
-trap 'rm -f "$credentials"' EXIT
-cat >"$credentials" <<YAML
-db:
-  host: ente-db-rw
-  port: 5432
-  name: ente
-  user: ente
-  password: ${KURLY_E2E_PASSWORD}
-# museum decodes the two key material values as standard base64 and the JWT
-# secret as the url-safe alphabet, so they are generated differently.
-key:
-  encryption: $(head -c 32 /dev/urandom | base64 | tr -d '\n')
-  hash: $(head -c 64 /dev/urandom | base64 | tr -d '\n')
-jwt:
-  secret: $(head -c 32 /dev/urandom | base64 | tr '+/' '-_' | tr -d '\n')
-YAML
-
-kubectl --namespace="$ns" create secret generic ente \
-  --from-file=credentials.yaml="$credentials" --dry-run=client --output=yaml | kubectl apply --filename=-
+kurly::prereq ente "$ns"
 
 kurly::boot workloads/ente/server.libsonnet "$ns"
 kurly::boot workloads/ente/web.libsonnet "$ns"
