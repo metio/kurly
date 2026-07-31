@@ -36795,6 +36795,9 @@
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "SABnzbd",
@@ -36928,6 +36931,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "SearXNG",
