@@ -260,6 +260,12 @@ metadata: { name: mailu, namespace: mailu }
 spec:
   serviceAccountName: mailu-deployer
   rollbackOnFailure: true
+  # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
+  # than a first deploy takes for anything that migrates a database before it
+  # serves. Paired with rollbackOnFailure that is not merely a failed check: the
+  # stage is rolled back mid-migration, the retry starts over, and it never
+  # converges. Raise it past the startup budget the workload itself allows.
+  timeout: 15m
   stages:
     - name: admin
       sourceRef:

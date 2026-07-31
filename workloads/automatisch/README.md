@@ -34,7 +34,7 @@ Service. Flow state lives in PostgreSQL and Redis, so both stages are **stateles
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage. Delivered end to end through Flux, JaaS and stageset-controller on 2026-07-30, and observed rolling out.
 
 ## Deploy with JaaS
 
@@ -112,6 +112,12 @@ metadata: { name: automatisch, namespace: automatisch }
 spec:
   serviceAccountName: automatisch-deployer
   rollbackOnFailure: true
+  # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
+  # than a first deploy takes for anything that migrates a database before it
+  # serves. Paired with rollbackOnFailure that is not merely a failed check: the
+  # stage is rolled back mid-migration, the retry starts over, and it never
+  # converges. Raise it past the startup budget the workload itself allows.
+  timeout: 15m
   stages:
     - name: server
       sourceRef:
