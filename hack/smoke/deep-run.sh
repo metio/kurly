@@ -174,7 +174,25 @@ for id in "${targets[@]}"; do
     echo "== ${id}: a namespace from an earlier attempt is still here — clearing it =="
     kubectl delete namespace "kurly-deep-${id}" --interactive=false --timeout=240s >/dev/null 2>&1 || true
   fi
-  kubectl wait --for=delete "namespace/kurly-deep-${id}" --timeout=180s >/dev/null 2>&1 || true
+  # The wait's verdict is USED. It used to be discarded with `|| true`, which meant
+  # a namespace still Terminating here was walked into anyway — and every create
+  # then fails with "unable to create new content in namespace ... because it is
+  # being terminated", tens of them, before the workload is finally recorded as a
+  # failure it had no part in. opencost failed exactly that way.
+  #
+  # It became reachable when the interrupt trap started deleting the in-flight
+  # namespace with --wait=false: the walk can now be restarted while a namespace is
+  # still going, which is the right behaviour for the trap and a thing this loop
+  # has to expect.
+  if ! kubectl wait --for=delete "namespace/kurly-deep-${id}" --timeout=300s >/dev/null 2>&1 \
+     && kubectl get namespace "kurly-deep-${id}" >/dev/null 2>&1; then
+    echo "::error::${id}: its namespace is still Terminating after 5 minutes — skipped, because every object this walk creates in it would be rejected"
+    kubectl get namespace "kurly-deep-${id}" -o jsonpath='{.status.conditions[*].message}{"\n"}' 2>&1 || true
+    failed+=("$id")
+    inflight=""
+    echo "::endgroup::"
+    continue
+  fi
   ok=true
   kurly::deep "$id" || ok=false
   # A 401 is now genuinely interesting. Both controllers evict the cached tenant
