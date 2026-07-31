@@ -126,6 +126,7 @@
   homer: '2026-07-31',
   immich: '2026-07-31',
   influxdb: '2026-07-31',
+  inspircd: '2026-07-31',
   invoiceninja: '2026-07-31',
   'it-tools': '2026-07-30',
   jackett: '2026-07-31',

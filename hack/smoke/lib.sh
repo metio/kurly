@@ -591,7 +591,7 @@ kurly::deep() {
   # variable instead.
   local ns="kurly-deep-${id}"
   local st f snip ctrl kind name apiv version versionBlock ex
-  local clusterScoped ctrlNs nsRewrite
+  local clusterScoped ctrlNs nsRewrite params
   # Skip workloads whose stages render only a custom resource (no controller).
   if ! kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>/dev/null \
       | jq -e '.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")' >/dev/null 2>&1; then
@@ -645,6 +645,14 @@ EOF
     # deep check fails 18 workloads for a value the fast one supplies. cobalt is
     # the plain case: "API_URL env variable is missing, cobalt api can't start".
     ex="$(jq -r --arg k "${id}/${st}" --arg id "$id" '.[$k] // .[$id] // ""' hack/smoke/extra.json)"
+    # Some stages need PARAMETERS, not just composed env — a kubelet whose
+    # certificate kind self-signs, a server name, a storage class. extra.json
+    # cannot express them: its fragments compose onto an already-built app with
+    # `+`, and a parameter is consumed when the stage function is CALLED. Without
+    # this the deep check renders every stage with its defaults, and a workload
+    # whose fast scenario passes an argument fails here for want of it —
+    # metrics-server cannot scrape a kind kubelet without kubeletInsecureTLS.
+    params="$(jq -r --arg k "${id}/${st}" --arg id "$id" '.[$k] // .[$id] // ""' hack/smoke/params.json)"
     # spec.version is OPTIONAL, and only meaningful when the deployed version can
     # be ordered: stageset parses it as semver so a migration ladder knows which
     # way it is moving. kurly stamps app.kubernetes.io/version from the image tag,
@@ -714,7 +722,7 @@ spec:
       // the alias the fast scenarios use; bind it so they compose verbatim here.
       local k = kurly;
       local stage = import 'github.com/metio/kurly/${f}';
-      local rendered = kurly.list(stage() + kurly.hostUsers()${ex});
+      local rendered = kurly.list(stage(${params}) + kurly.hostUsers()${ex});
       rendered${nsRewrite}
 EOF
     # The FIRST snippet of a run pays for a cold cluster: JaaS pulls three OCI
