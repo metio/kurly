@@ -587,12 +587,28 @@ kurly::prereq() {
 }
 
 kurly::provision_deps() {
-  local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName dbEngine
+  local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName dbEngine wantsSql
   # Cleared per workload: these are globals so the post-delivery check can read
   # them, and a workload needing no database must not inherit the last one's.
   KURLY_DB_ENGINE="" KURLY_DB_SVC="" KURLY_DB_NAME="" KURLY_DB_USER=""
   primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.database then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+    wantsSql=true
+    # A workload whose Secret is keyed MONGO_URL does not want a SQL server at all.
+    # The catalogue records only `database: required` — it has no engine field yet —
+    # so the classifier below, which knows two engines, was standing up a PostgreSQL
+    # for it. rocketchat then failed in its Mongo driver, having been given a
+    # database it never asked for, and the schema probe would have read the untouched
+    # PostgreSQL as zero tables and called it a workload that ignored its database.
+    #
+    # MongoDB does not run on this host at all (SERVER-121912 against this kernel),
+    # so there is nothing to provision instead. Saying so beats provisioning the
+    # wrong thing silently: the workload still fails, but for a reason that is true.
+    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|[.stages[]?.secretKeys//[]|.[]|.key]|any(test("MONGO"))' catalog/catalog.json >/dev/null 2>&1; then
+      echo "::warning::${id}: its Secret is keyed MONGO_*, so it wants MongoDB — provisioning no SQL server, and MongoDB cannot run on this host"
+      wantsSql=false
+    fi
+    if [ "$wantsSql" = true ]; then
     dbName="$(kurly::_param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(kurly::_param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
     dbUser="$(kurly::_param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
     # Which engine, in order of how much the answer is worth:
@@ -660,6 +676,7 @@ kurly::provision_deps() {
           ;;
         *) kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" ;;
       esac
+    fi
     fi
   fi
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.cache then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
