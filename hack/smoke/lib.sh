@@ -713,8 +713,15 @@ kurly::deep() {
   # on. Started outside the devShell, where jsonnet is not on PATH, that misreports
   # EVERY remaining workload as CR-only: 79 of them in one run, in about eight
   # seconds each, recording nothing and reporting no failure.
+  # Rendered with NOTHING composed onto it. A custom-resource stage refuses a kurly
+  # feature by design — "kurly features do not apply to a custom resource" — so
+  # composing one here made the render fail for exactly the workloads this is meant
+  # to identify. That produced the right outcome by the wrong route, and the route
+  # is what matters: a failed render and a stage with no controller became the same
+  # observation, so a genuinely broken render was indistinguishable from an
+  # operator-backed workload. Nothing needs composing to count controllers.
   local rendered
-  if ! rendered="$(kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "+ k.hostUsers()" 2>&1)"; then
+  if ! rendered="$(kurly::render "workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet" "" 2>&1)"; then
     echo "::error::${id}: its stage did not render, so nothing can be concluded about it — run inside the devShell (nix develop --command …)"
     printf '%s\n' "$rendered" | tail -3
     return 1
