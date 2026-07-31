@@ -33,4 +33,7 @@
 // it against a database they could not use. Two facts, two files.
 
 {
+  photoview: { tables: 14, engine: 'postgres', on: '2026-07-31' },
+  rallly: { tables: 31, engine: 'postgres', on: '2026-07-31' },
+  redmine: { tables: 60, engine: 'mysql', on: '2026-07-31' },
 }

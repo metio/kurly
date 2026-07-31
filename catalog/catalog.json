@@ -32297,6 +32297,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 14,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Photoview",
@@ -35033,6 +35039,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Radarr",
@@ -35161,6 +35170,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Radicale",
@@ -35273,6 +35285,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 31,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Rallly",
@@ -35404,6 +35422,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Readarr",
@@ -35531,6 +35552,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Readeck",
@@ -35636,6 +35660,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Redis",
@@ -35764,6 +35791,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Redis Commander",
@@ -35872,6 +35902,12 @@
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "mysql",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 60,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Redmine",
@@ -36018,6 +36054,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Distribution",
@@ -36134,6 +36173,9 @@
          "license": "LicenseRef-Proprietary",
          "licenseOsiApproved": false,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Resilio Sync",
@@ -36390,6 +36432,9 @@
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Roundcube",
@@ -36514,6 +36559,9 @@
          "license": "Unlicense",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "RSS-Bridge",
