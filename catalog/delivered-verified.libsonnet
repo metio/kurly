@@ -123,6 +123,7 @@
   homepage: '2026-07-31',
   homer: '2026-07-31',
   influxdb: '2026-07-31',
+  invoiceninja: '2026-07-31',
   'it-tools': '2026-07-30',
   linkding: '2026-07-30',
   memos: '2026-07-30',

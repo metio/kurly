@@ -40,8 +40,23 @@ function(
   + kurly.port(6697)
   + kurly.servicePort(6697)
   + (if env == {} then {} else kurly.env(env))
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // The image insists on uid 10000 and says so itself when it is not: "Can't
+  // write to volume! Please change owner to uid 10000". At any other uid the
+  // entrypoint cannot write the volume and the server never starts.
+  + kurly.runAs(10000, gid=10000, fsGroup=10000)
   + kurly.store('/inspircd/data', storageSize, storageClass=storageClass)
+  // The entrypoint generates a TLS key and a default configuration on first boot,
+  // and writes both beside the installation rather than into the data volume:
+  // /tmp/cert.template, then /inspircd/conf/key.pem. Against the read-only root
+  // filesystem kurly ships by default it fails on each in turn and exits with
+  // "Cannot open config file: /inspircd/conf/inspircd.conf" — which reads like a
+  // missing config and is really a filesystem it could not write one to.
+  //
+  // Scratch rather than a relaxed root filesystem: only these two paths need to
+  // be writable, and a self-signed key regenerated per start is the right
+  // lifetime for one the container makes itself.
+  + kurly.scratch('/tmp', '16Mi')
+  + kurly.scratch('/inspircd/conf', '16Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
