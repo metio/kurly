@@ -900,14 +900,32 @@ EOF
     # than the fast tier, and workloads that run migrations before serving
     # (authentik, and it will not be alone) were failing at 4m32s while Running
     # with zero restarts: healthy, just not finished starting.
-    # Longer than stageset's own timeout, on purpose and by a margin: this wait
-    # must outlast it so the run reads stageset's verdict rather than pre-empting
-    # it with "never became Ready" for a stage that was still deciding. At 3s a
-    # poll, 340 polls is 17 minutes against stageset's 15m default. Raising that
-    # default without raising this would silently reintroduce the misreporting
-    # this number exists to prevent.
+    # This number is the WALK'S OWN ANSWER to "how long am I willing to wait for an
+    # application to start". It used to be a safety margin over stageset's 15m
+    # timeout, so the run would read stageset's verdict rather than pre-empt it —
+    # but a stage whose verify runs out of time no longer produces a verdict to
+    # outlast. It reports StageProgressing and HOLDS: the objects stay applied, the
+    # stage re-verifies each reconcile, and it goes Ready when the workload does.
+    # So at 3s a poll, 340 polls means the walk gives up at 17 minutes on a
+    # StageSet that might have converged at 18, and nothing else bounds it.
+    #
+    # A genuinely broken workload still fails in seconds — the verify aborts as
+    # soon as an object reaches a terminal state (unpullable image, crash-looping
+    # past its threshold). This budget only separates "slow" from "too slow".
     kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-340}" \
-      || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: stageset/${snip} never became Ready"; return 1; }
+      || {
+        kurly::diagnose "$ns"
+        kurly::diagnose_pipeline "$ns"
+        # WHICH of the two happened, because they want opposite follow-ups and
+        # both used to print as "never became Ready": StageProgressing means the
+        # app was still starting and the budget was too small — the workload is
+        # fine and the harness was impatient — while StageFailed means the stage
+        # broke and the workload wants diagnosing.
+        kubectl --namespace="$ns" get stageset -o custom-columns=\
+'NAME:.metadata.name,REASON:.status.conditions[?(@.type=="Ready")].reason,MSG:.status.conditions[?(@.type=="Ready")].message' 2>&1 || true
+        echo "::error::deep ${id}: stageset/${snip} never became Ready"
+        return 1
+      }
     kubectl --namespace="$ctrlNs" rollout status "${kind,,}/${name}" --timeout=300s \
       || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }
   done
