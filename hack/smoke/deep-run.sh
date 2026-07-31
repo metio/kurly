@@ -105,6 +105,28 @@ kurly::publish_images
 
 delivered=0 skipped=0 knownskipped=0
 failed=()
+
+# The namespace of the workload being walked right now, so an interrupted run does
+# not leave it behind. The loop already clears a stale namespace before RE-running
+# a workload, which keeps the verdict honest; this is about the resources, and it
+# only self-heals for a workload that is attempted again. One that lands on the
+# skip list never is — mongo-express sat Active for an hour and a half, two pods
+# in CrashLoopBackOff and a database beside them, because the walk was killed
+# during it and then skipped ever after.
+inflight=""
+kurly::drop_inflight() {
+  local rc=$?
+  if [ -n "$inflight" ]; then
+    echo "== interrupted during ${inflight}: removing its namespace =="
+    # --wait=false: a signal wants a prompt exit, and the terminating namespace
+    # finishes on its own.
+    kubectl delete namespace "kurly-deep-${inflight}" \
+      --interactive=false --ignore-not-found --wait=false >/dev/null 2>&1 || true
+  fi
+  exit "$rc"
+}
+trap kurly::drop_inflight INT TERM
+
 for id in "${targets[@]}"; do
   if [ -z "${FORCE:-}" ] && grep -qx "$id" <<<"$skip"; then
     skipped=$((skipped + 1))
@@ -116,6 +138,7 @@ for id in "${targets[@]}"; do
     continue
   fi
   echo "::group::deep ${id}"
+  inflight="$id"
   # Start every workload from an empty namespace. A walk killed mid-workload leaves
   # it Active and full of that attempt's objects; a wait alone returns at once and
   # the run would read a verdict computed against a previous attempt.
@@ -172,6 +195,7 @@ for id in "${targets[@]}"; do
   fi
   # No finalizer dance before or after: the controllers force-drop on their own
   # now, so deleting the namespace is enough.
+  inflight=""
   kurly::cleanup_workload "$id"
   kubectl delete namespace "kurly-deep-${id}" --interactive=false --ignore-not-found --timeout=240s >/dev/null 2>&1 || true
   echo "::endgroup::"
