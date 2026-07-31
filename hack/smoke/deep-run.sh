@@ -30,6 +30,7 @@ source hack/smoke/lib.sh
 
 ledger=catalog/delivered-verified.libsonnet
 dbledger=catalog/database-use.libsonnet
+oomledger=catalog/resource-floors.libsonnet
 today="$(date +%F)"
 
 # The workloads already proven, one per line — the resume set, read from the
@@ -67,6 +68,27 @@ record() {
   done <<<"$entries"
   printf '}\n' >>"$tmp"
   mv "$tmp" "$ledger"
+}
+
+# The proven-too-small ledger. Same rewrite-the-whole-object discipline.
+record_oom() {
+  local id="$1" at="$2" tmp entries
+  entries="$(grep -oE "^  '?[a-z0-9-]+'?: \{ oomKilledAt: '[^']+', on: '[0-9-]+' \}," "$oomledger" 2>/dev/null \
+    | sed -E "s/^  '?([a-z0-9-]+)'?: \{ oomKilledAt: '([^']+)', on: '([0-9-]+)' \},$/\1 \2 \3/" \
+    | grep -v "^${id} " || true)"
+  entries="$(printf '%s\n%s %s %s\n' "$entries" "$id" "$at" "$today" | grep -v '^$' | LC_ALL=C sort)"
+  tmp="$(mktemp)"
+  sed -n '1,/^{$/p' "$oomledger" >"$tmp"
+  while read -r name at2 date; do
+    case "$name" in
+      [A-Za-z_]*[!A-Za-z0-9_]*|[!A-Za-z_]*)
+        printf "  '%s': { oomKilledAt: '%s', on: '%s' },\n" "$name" "$at2" "$date" >>"$tmp" ;;
+      *)
+        printf "  %s: { oomKilledAt: '%s', on: '%s' },\n" "$name" "$at2" "$date" >>"$tmp" ;;
+    esac
+  done <<<"$entries"
+  printf '}\n' >>"$tmp"
+  mv "$tmp" "$oomledger"
 }
 
 # The table-count ledger, same rewrite-the-whole-object discipline as record() so
@@ -241,6 +263,11 @@ for id in "${targets[@]}"; do
     fi
   else
     failed+=("$id")
+    # Read BEFORE cleanup deletes the namespace. A workload that failed usually
+    # failed for a reason that has nothing to do with memory, so this records
+    # something only in the rare case the kernel says otherwise.
+    kurly::detect_oom "kurly-deep-${id}" "$id"
+    if [ -n "$KURLY_OOM_AT" ]; then record_oom "$id" "$KURLY_OOM_AT"; fi
     echo "::error::deep check failed for ${id}"
   fi
   # No finalizer dance before or after: the controllers force-drop on their own

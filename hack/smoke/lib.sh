@@ -271,6 +271,45 @@ kurly::verify_database() {
   return 0
 }
 
+# Was anything in this namespace killed for exceeding its memory limit, and at what
+# limit? Sets KURLY_OOM_AT to that limit when so, empty otherwise.
+#
+# Only an OOMKill counts. A workload that merely failed says nothing about
+# resources — the walk has failed workloads for being handed the wrong database, for
+# an installer lock, inside an init script, and because a git rebase moved the tree
+# underneath them — and recording those as evidence of a memory floor would invent
+# exactly the sort of number this repository keeps deleting. The kernel killing a
+# container for exceeding its limit is a resource fact; a failure is not.
+#
+# Both states are read: `state` catches the container sitting dead right now,
+# `lastState` the one that was killed and restarted, which is the usual shape by the
+# time a crash-looping pod is looked at.
+kurly::detect_oom() {
+  local ns="$1" id="$2" pods p limit=""
+  KURLY_OOM_AT=""
+  pods="$(kubectl --namespace="$ns" get pods -o name 2>/dev/null || true)"
+  [ -n "$pods" ] || return 0
+  for p in $pods; do
+    # The workload's own pods only: a provisioned database OOMing is a fact about
+    # the harness's throwaway server, not about the workload under test.
+    case "${p#pod/}" in
+      "${id}"-db*|"${id}"-cache*) continue ;;
+      "${id}"*) : ;;
+      *) continue ;;
+    esac
+    if kubectl --namespace="$ns" get "$p" \
+         -o jsonpath='{.status.containerStatuses[*].state.terminated.reason}{" "}{.status.containerStatuses[*].lastState.terminated.reason}' 2>/dev/null \
+         | grep -q OOMKilled; then
+      limit="$(kubectl --namespace="$ns" get "$p" \
+        -o jsonpath='{.spec.containers[0].resources.limits.memory}' 2>/dev/null || true)"
+      KURLY_OOM_AT="${limit:-unset}"
+      echo "::warning::${id}: OOMKilled at a memory limit of ${KURLY_OOM_AT} — it needs more than that, which is a floor with evidence behind it"
+      return 0
+    fi
+  done
+  return 0
+}
+
 kurly::postgres() {
   local ns="$1" svc="$2" db="$3" user="$4" image="${5:-docker.io/library/postgres:17}" extra="${6:-}"
   echo "== provision postgres ${svc} (db=${db}, user=${user}) =="
