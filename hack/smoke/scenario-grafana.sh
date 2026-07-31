@@ -20,7 +20,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 
 # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-PROMETHEUS_OPERATOR_VERSION="v0.92.1"
+PROMETHEUS_OPERATOR_VERSION="v0.93.0"
 # renovate: datasource=github-releases depName=grafana/grafana-operator
 GRAFANA_OPERATOR_VERSION="v5.24.0"
 
