@@ -38,4 +38,6 @@
   redmine: { tables: 60, engine: 'mysql', on: '2026-07-31' },
   synapse: { tables: 0, engine: 'postgres', on: '2026-07-31' },
   tandoor: { tables: 10, engine: 'postgres', on: '2026-07-31' },
+  traccar: { tables: 0, engine: 'postgres', on: '2026-07-31' },
+  twenty: { tables: 69, engine: 'postgres', on: '2026-07-31' },
 }

@@ -513,8 +513,7 @@ local runs(fn) =
 //   writableRootFilesystem — a container without a read-only root fs
 //   ownUserNamespace     — hostUsers:false, so a breakout lands unprivileged on the host
 //   multiTenantSafe      — none of the above relaxations; the hardened default stands
-// What a stage's DEFAULT render ASKS THE SCHEDULER FOR — the summed `requests` of
-// the containers in its pod templates.
+// What a stage's DEFAULT render ASKS THE SCHEDULER FOR, container by container.
 //
 // Deliberately not called a minimum, because it is not one. A request is hand-set
 // by whoever wrote the stage, and asking is not needing in either direction: most
@@ -526,22 +525,41 @@ local runs(fn) =
 // covers it — and must not use it to refuse one. Refusing below this would forbid
 // a knowledgeable operator from running a workload in less than its packaging
 // asks for, which is legitimate, while still admitting the one case known to
-// fail. Null where a stage runs no pods of kurly's (an operator's custom resource).
+// fail. A limit that has actually been PROVEN too small is a different fact and
+// lives in resource-floors.libsonnet. Null where a stage runs no pods of kurly's
+// (an operator's custom resource).
 local declaredRequests(fn) =
   local tmpls = podTemplates(main.list(fn()).items);
   if tmpls == [] then null
   else
-    local containers = std.flattenArrays([std.get(t.spec, 'containers', []) for t in tmpls]);
-    // Stated only for a SINGLE-container pod. A multi-container pod's request is
-    // the sum of its containers', and adding Kubernetes quantities ('250m' + '1',
-    // '768Mi' + '1Gi') means writing a units parser here — a new way to be
-    // confidently wrong about a number somebody sizes an order from. Absent is the
-    // honest answer for those until something needs it enough to do it properly.
-    if std.length(containers) != 1 then {}
-    else
-      local reqs = std.get(std.get(containers[0], 'resources', {}), 'requests', {});
-      (if std.objectHas(reqs, 'cpu') then { cpu: reqs.cpu } else {})
-      + (if std.objectHas(reqs, 'memory') then { memory: reqs.memory } else {});
+    // PER CONTAINER, with which kind each one is, rather than one number for the
+    // pod. A pod's effective request is not the sum of its containers':
+    //
+    //     max( sum(regular containers), max(init containers) )
+    //
+    // because init containers run to completion before the others start, so their
+    // requests overlap rather than add, while a sidecar (a restartable init
+    // container) runs alongside and counts in the sum. Plain addition over a pod
+    // with a heavy init container overstates it, sometimes badly.
+    //
+    // That rule is a DERIVATION, and deriving it here would also mean parsing and
+    // adding Kubernetes quantities ('250m' + '1', '768Mi' + '1Gi') — two ways to be
+    // confidently wrong about a number somebody sizes an order from. So the parts
+    // are published and the arithmetic belongs to whoever needs the total.
+    local kindOf(t, c) =
+      if std.member([i.name for i in std.get(t.spec, 'initContainers', [])], c.name) then
+        (if std.get(c, 'restartPolicy', '') == 'Always' then 'sidecar' else 'init')
+      else 'regular';
+    local entries(t) = [
+      { name: c.name, kind: kindOf(t, c) }
+      + (
+        local reqs = std.get(std.get(c, 'resources', {}), 'requests', {});
+        (if std.objectHas(reqs, 'cpu') then { cpu: reqs.cpu } else {})
+        + (if std.objectHas(reqs, 'memory') then { memory: reqs.memory } else {})
+      )
+      for c in std.get(t.spec, 'containers', []) + std.get(t.spec, 'initContainers', [])
+    ];
+    std.flattenArrays([entries(t) for t in tmpls]);
 
 local posture(fn) =
   local tmpls = podTemplates(main.list(fn()).items);

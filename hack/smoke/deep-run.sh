@@ -149,7 +149,8 @@ kurly::install_registry
 kurly::publish_images
 
 delivered=0 skipped=0 knownskipped=0
-failed=() dbregressed=()
+failed=() dbregressed=() voided=()
+rev_before="" rev_after=""
 
 # The namespace of the workload being walked right now, so an interrupted run does
 # not leave it behind. The loop already clears a stale namespace before RE-running
@@ -215,8 +216,25 @@ for id in "${targets[@]}"; do
     echo "::endgroup::"
     continue
   fi
+  # The tree's revision, so a run whose INPUTS changed underneath it can say so.
+  # Committing while the walk runs is normal here, and a rebase rewrites tracked
+  # files: a render issued in that window fails on a file that is fine a second
+  # later. Thirteen workloads failed that way in about a minute and it took reading
+  # all thirteen to tell them from real failures. A revision that moved mid-workload
+  # makes that mechanical.
+  rev_before="$(git rev-parse HEAD 2>/dev/null || echo unknown)"
   ok=true
   kurly::deep "$id" || ok=false
+  rev_after="$(git rev-parse HEAD 2>/dev/null || echo unknown)"
+  if [ "$ok" = false ] && [ "$rev_before" != "$rev_after" ]; then
+    echo "::warning::${id}: the tree moved from ${rev_before:0:8} to ${rev_after:0:8} while this ran — its failure is VOID, not a finding, and it is left unrecorded for a later pass"
+    voided+=("$id")
+    inflight=""
+    kurly::cleanup_workload "$id"
+    kubectl delete namespace "kurly-deep-${id}" --interactive=false --ignore-not-found --timeout=240s >/dev/null 2>&1 || true
+    echo "::endgroup::"
+    continue
+  fi
   # A 401 is now genuinely interesting. Both controllers evict the cached tenant
   # credential on one, mint a fresh one and retry the call, so a stale credential
   # costs a retry rather than a failure and never reaches a status message. One
@@ -278,6 +296,9 @@ for id in "${targets[@]}"; do
   echo "::endgroup::"
 done
 
+if [ "${#voided[@]}" -gt 0 ]; then
+  echo "::warning::${#voided[@]} workloads ran while the tree was changing and are VOID rather than failed: ${voided[*]}"
+fi
 if [ "${#dbregressed[@]}" -gt 0 ]; then
   echo "::error::${#dbregressed[@]} workloads stopped writing to their database: ${dbregressed[*]}"
 fi
