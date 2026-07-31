@@ -518,14 +518,40 @@ kurly::prereq() {
 }
 
 kurly::provision_deps() {
-  local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName
+  local id="$1" ns="$2" primary st f dbHost dbName dbUser redisHost secretName dbEngine
   primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.database then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     dbName="$(kurly::_param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(kurly::_param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
     dbUser="$(kurly::_param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
-    # MySQL/MariaDB apps read port 3306 (postgres apps 5432); provision the engine
-    # the app actually connects to, at the host it defaults to.
-    if grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
+    # Which engine, in order of how much the answer is worth:
+    #
+    #   1. the catalogue's secretKeys generator. postgresUrl/mysqlUrl is somebody
+    #      stating what the app connects to, which beats anything inferred —
+    #      photoview declares postgresUrl, was handed a MySQL by the rule below,
+    #      and died reporting "Utilizing postgres database driver".
+    #   2. otherwise the stage source mentioning mysql/mariadb/3306, COMMENTS
+    #      INCLUDED. That reads prose, which is unpleasant, and it is kept anyway:
+    #      28 of the 37 it classifies match only in a comment, yet 21 of those have
+    #      delivered against a MySQL. wordpress, mediawiki and drupal ARE MySQL
+    #      workloads whose stage source says so nowhere but in its header, so
+    #      stripping comments would move 27 workloads onto the wrong engine to
+    #      satisfy a tidier rule.
+    #
+    # The real fix is an ANNOTATED engine per workload, verified by delivery, which
+    # is what requires-v2 is for. Until then this is inference, and rule 1 is the
+    # only part of it anyone wrote on purpose.
+    local declared
+    declared="$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.stages[]?|.secretKeys//[]|.[]|.generate]|map(select(test("Url$")))|join(",")' catalog/catalog.json)"
+    if [[ "$declared" == *mysqlUrl* ]]; then
+      dbEngine=mysql
+    elif [[ "$declared" == *postgresUrl* ]]; then
+      dbEngine=postgres
+    elif grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
+      dbEngine=mysql
+    else
+      dbEngine=postgres
+    fi
+    if [ "$dbEngine" = mysql ]; then
       dbHost="$(kurly::_param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
       kurly::mysql "$ns" "$dbHost" "$dbName" "$dbUser"
     else
