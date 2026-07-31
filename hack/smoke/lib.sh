@@ -674,6 +674,17 @@ EOF
       nsRewrite=""
       ctrlNs="$(jq -r '.metadata.namespace // empty' <<<"$ctrl")"; [ -n "$ctrlNs" ] || ctrlNs="$ns"
       echo "== deep: ${id}/${st} is a cluster add-on — applied where it names, not in ${ns} =="
+      # And the namespaces it names have to EXIST. A tenant's workload lands in a
+      # namespace the walk created; an add-on brings its own, and stageset applies
+      # rather than creates it — metrics-server got away with kube-system because
+      # that is always there, opencost failed on "namespaces \"opencost\" not
+      # found". Create every namespace the render mentions, not just the
+      # controller's, since the RBAC and ServiceAccount may name others.
+      local addonNs
+      for addonNs in $(kurly::render "$f" "+ k.hostUsers()" 2>/dev/null \
+        | jq -r '[.items[].metadata.namespace // empty] | unique | .[]'); do
+        kurly::namespace "$addonNs" >/dev/null
+      done
     else
       nsRewrite=" { items: [ item { metadata+: { namespace: '${ns}' } } for item in rendered.items ] }"
       ctrlNs="$ns"

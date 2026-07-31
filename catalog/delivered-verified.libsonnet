@@ -209,6 +209,7 @@
   overseerr: '2026-07-31',
   owncast: '2026-07-31',
   pairdrop: '2026-07-31',
+  paisa: '2026-07-31',
   'uptime-kuma': '2026-07-30',
   valkey: '2026-07-30',
   vaultwarden: '2026-07-30',
