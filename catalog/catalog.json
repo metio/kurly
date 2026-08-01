@@ -7499,7 +7499,7 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-31"
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },
@@ -7564,7 +7564,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -8422,7 +8421,7 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },
@@ -8493,7 +8492,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -8922,7 +8920,7 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },
@@ -8993,7 +8991,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
