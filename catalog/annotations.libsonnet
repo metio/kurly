@@ -118,6 +118,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     resourcePreset: d.fn('A named resource size (nano/micro/small/medium/large) — a memory request equal to its limit and a CPU request with no limit. Replaces resources wholesale.', [
       d.arg('preset', d.T.string, required=true, example='small'),
     ]) + { kinds: allKinds, group: 'container' },
+    reserve: d.fn('An arbitrary resource reservation — the given CPU and memory as requests, with the memory limit equal to its request and no CPU limit, the same policy the named presets use. For a consumer whose sizes are chosen rather than picked from a menu, where no preset name fits. Replaces resources wholesale; a stage with more than one container has no defined answer.', [
+      d.arg('cpu', d.T.string, required=true, example='500m'),
+      d.arg('memory', d.T.string, required=true, example='512Mi'),
+    ]) + { kinds: allKinds, group: 'container' },
     servicePort: d.fn('The port the Service publishes — the contract with clients, which the container port need not match.', [
       d.arg('port', d.T.int, required=true, example=443),
     ]) + { kinds: ['http'], group: 'container' },

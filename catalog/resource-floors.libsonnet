@@ -30,4 +30,5 @@
 // the expected state. Every entry in it is true, which is the trade.
 
 {
+  shlink: { oomKilledAt: '512Mi', on: '2026-08-01' },
 }

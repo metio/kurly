@@ -1420,6 +1420,33 @@
       {
          "args": [
             {
+               "example": "500m",
+               "name": "cpu",
+               "required": true,
+               "type": "string"
+            },
+            {
+               "example": "512Mi",
+               "name": "memory",
+               "required": true,
+               "type": "string"
+            }
+         ],
+         "group": "container",
+         "help": "An arbitrary resource reservation — the given CPU and memory as requests, with the memory limit equal to its request and no CPU limit, the same policy the named presets use. For a consumer whose sizes are chosen rather than picked from a menu, where no preset name fits. Replaces resources wholesale; a stage with more than one container has no defined answer.",
+         "id": "reserve",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": "small",
                "name": "preset",
                "required": true,
@@ -38735,6 +38762,12 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 0,
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Rundeck",
@@ -39156,6 +39189,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 25,
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Seatsurfing",
@@ -39293,6 +39332,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "SeaweedFS",
@@ -40027,6 +40069,9 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "SilverBullet",
@@ -40155,6 +40200,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "SiYuan",
@@ -40271,6 +40319,9 @@
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "smtp4dev",
@@ -40392,6 +40443,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "SnappyMail",
@@ -40508,6 +40562,12 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "mysql",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 56,
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Snipe-IT",
@@ -40667,6 +40727,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 126,
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "SonarQube",
@@ -40819,6 +40885,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Sonarr",
@@ -41188,6 +41257,9 @@
          "license": "MPL-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "http-echo",
@@ -42116,6 +42188,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 118,
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Teable",
@@ -42468,6 +42546,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Thanos",
