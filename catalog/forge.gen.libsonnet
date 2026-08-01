@@ -88,11 +88,6 @@
     license: 'MIT',
     name: 'beszel',
   },
-  bigcapital: {
-    homepage: 'https://bigcapital.app',
-    license: 'AGPL-3.0',
-    name: 'bigcapital',
-  },
   'blackbox-exporter': {
     homepage: 'https://prometheus.io',
     license: 'Apache-2.0',

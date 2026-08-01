@@ -4610,6 +4610,23 @@
                   "image": "ghcr.io/goauthentik/server:2024.10.5@sha256:c4aa2113d0c2379faa9e8a28f4ab13816b4e6f2847b272e37d68e518fdf76880",
                   "tag": "2024.10.5"
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "AUTHENTIK_POSTGRESQL__PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "AUTHENTIK_REDIS__PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "AUTHENTIK_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -4913,6 +4930,28 @@
                   "image": "ghcr.io/automatisch/automatisch:0.15.0@sha256:3bace7a12d5fb3f5b1305a6a52232270e0e0abd8465a8b78baacb07f6ea89594",
                   "tag": "0.15.0"
                },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "POSTGRES_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "APP_SECRET_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "ENCRYPTION_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "WEBHOOK_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
                "storage": {
                   "pvcs": 0
                }
@@ -5318,395 +5357,6 @@
          "upstream": {
             "homepage": "https://beszel.dev",
             "repo": "https://github.com/henrygd/beszel"
-         }
-      },
-      {
-         "category": "application",
-         "id": "bigcapital",
-         "license": "AGPL-3.0-only",
-         "licenseOsiApproved": true,
-         "licenseVariantAssumed": true,
-         "maturity": {
-            "tier": "rendered"
-         },
-         "name": "Bigcapital",
-         "requires": [
-            {
-               "engine": "mysql",
-               "kind": "database",
-               "required": true
-            },
-            {
-               "engine": "mongodb",
-               "kind": "database",
-               "required": true
-            },
-            {
-               "kind": "cache",
-               "required": true
-            },
-            {
-               "kind": "objectStorage",
-               "required": true
-            }
-         ],
-         "stages": [
-            {
-               "architectures": [
-                  "amd64"
-               ],
-               "args": [
-                  {
-                     "default": "bigcapital",
-                     "name": "namePrefix",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "name",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "image",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "env",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "default": {
-                        "limits": {
-                           "memory": "128Mi"
-                        },
-                        "requests": {
-                           "cpu": "50m",
-                           "memory": "64Mi"
-                        }
-                     },
-                     "name": "resources",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "labels",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "annotations",
-                     "required": false,
-                     "type": "object"
-                  }
-               ],
-               "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
-                  ]
-               },
-               "clusterScoped": false,
-               "declaredRequests": [
-                  {
-                     "cpu": "50m",
-                     "kind": "regular",
-                     "memory": "64Mi",
-                     "name": "bigcapital-gateway"
-                  }
-               ],
-               "help": "The Bigcapital nginx entry on :80 — the stage you expose. Routes the browser to the webapp and /api to the server, which it reaches by Service names derived from namePrefix. Compose an exposure onto it.",
-               "id": "gateway",
-               "importPath": "github.com/metio/kurly/workloads/bigcapital/gateway.libsonnet",
-               "kind": "http",
-               "posture": {
-                  "multiTenantSafe": false,
-                  "ownUserNamespace": true,
-                  "runsAsRoot": true,
-                  "writableRootFilesystem": true
-               },
-               "runs": {
-                  "image": "docker.io/bigcapitalhq/gateway:v0.25.23",
-                  "tag": "v0.25.23"
-               },
-               "storage": {
-                  "pvcs": 0
-               }
-            },
-            {
-               "architectures": [
-                  "amd64",
-                  "arm64"
-               ],
-               "args": [
-                  {
-                     "default": "bigcapital",
-                     "name": "namePrefix",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "name",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "image",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "bigcapital-mariadb",
-                     "name": "dbHost",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "bigcapital",
-                     "name": "dbUser",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "bigcapital-mongo",
-                     "name": "mongoHost",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "bigcapital-cache",
-                     "name": "redisHost",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "example": "https://accounting.example.com",
-                     "name": "baseUrl",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "s3Endpoint",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "bigcapital",
-                     "name": "s3Bucket",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "us-east-1",
-                     "name": "s3Region",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "bigcapital",
-                     "name": "secretName",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "env",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "default": {
-                        "limits": {
-                           "memory": "1Gi"
-                        },
-                        "requests": {
-                           "cpu": "200m",
-                           "memory": "512Mi"
-                        }
-                     },
-                     "name": "resources",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "labels",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "annotations",
-                     "required": false,
-                     "type": "object"
-                  }
-               ],
-               "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
-               },
-               "clusterScoped": false,
-               "declaredRequests": [
-                  {
-                     "cpu": "200m",
-                     "kind": "regular",
-                     "memory": "512Mi",
-                     "name": "bigcapital-server"
-                  }
-               ],
-               "help": "The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.",
-               "id": "server",
-               "importPath": "github.com/metio/kurly/workloads/bigcapital/server.libsonnet",
-               "kind": "http",
-               "posture": {
-                  "multiTenantSafe": true,
-                  "ownUserNamespace": true,
-                  "runsAsRoot": false,
-                  "writableRootFilesystem": false
-               },
-               "runs": {
-                  "digest": "sha256:65e484788ff0acd917db2fa32e3ed07e6692b77a737a1af82899cc6db7008b66",
-                  "image": "docker.io/bigcapitalhq/server:v0.25.23@sha256:65e484788ff0acd917db2fa32e3ed07e6692b77a737a1af82899cc6db7008b66",
-                  "tag": "v0.25.23"
-               },
-               "secretKeys": [
-                  {
-                     "generate": "literal",
-                     "key": "S3_ACCESS_KEY_ID",
-                     "value": "bigcapital"
-                  },
-                  {
-                     "generate": "password",
-                     "key": "S3_SECRET_ACCESS_KEY",
-                     "length": 32
-                  },
-                  {
-                     "generate": "hex",
-                     "key": "JWT_SECRET",
-                     "length": 64
-                  },
-                  {
-                     "generate": "password",
-                     "key": "SYSTEM_DB_PASSWORD",
-                     "length": 32
-                  },
-                  {
-                     "generate": "password",
-                     "key": "TENANT_DB_PASSWORD",
-                     "length": 32
-                  }
-               ],
-               "storage": {
-                  "pvcs": 0
-               }
-            },
-            {
-               "architectures": [
-                  "amd64",
-                  "arm64"
-               ],
-               "args": [
-                  {
-                     "default": "bigcapital",
-                     "name": "namePrefix",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "name",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "image",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": 1,
-                     "name": "replicas",
-                     "required": false,
-                     "type": "int"
-                  },
-                  {
-                     "name": "env",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "default": {
-                        "limits": {
-                           "memory": "256Mi"
-                        },
-                        "requests": {
-                           "cpu": "50m",
-                           "memory": "128Mi"
-                        }
-                     },
-                     "name": "resources",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "labels",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "annotations",
-                     "required": false,
-                     "type": "object"
-                  }
-               ],
-               "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
-                  ]
-               },
-               "clusterScoped": false,
-               "declaredRequests": [
-                  {
-                     "cpu": "50m",
-                     "kind": "regular",
-                     "memory": "128Mi",
-                     "name": "bigcapital-webapp"
-                  }
-               ],
-               "help": "The Bigcapital front end (single-page web app) on :80. Stateless — scales via replicas. The gateway proxies to it.",
-               "id": "webapp",
-               "importPath": "github.com/metio/kurly/workloads/bigcapital/webapp.libsonnet",
-               "kind": "http",
-               "posture": {
-                  "multiTenantSafe": false,
-                  "ownUserNamespace": true,
-                  "runsAsRoot": true,
-                  "writableRootFilesystem": true
-               },
-               "runs": {
-                  "digest": "sha256:b77dcc9bf96b5f615c98a5145f4fd0098959da3377e538d809391f2458d7d549",
-                  "image": "docker.io/bigcapitalhq/webapp:v0.25.23@sha256:b77dcc9bf96b5f615c98a5145f4fd0098959da3377e538d809391f2458d7d549",
-                  "tag": "v0.25.23"
-               },
-               "storage": {
-                  "pvcs": 0
-               }
-            }
-         ],
-         "summary": "A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom.",
-         "upstream": {
-            "homepage": "https://bigcapital.app",
-            "repo": "https://github.com/bigcapitalhq/bigcapital"
          }
       },
       {

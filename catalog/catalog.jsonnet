@@ -61,9 +61,6 @@ local stageImports = {
   'paperless-ngx/server': import 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet',
   'mautic/server': import 'github.com/metio/kurly/workloads/mautic/server.libsonnet',
   'peertube/server': import 'github.com/metio/kurly/workloads/peertube/server.libsonnet',
-  'bigcapital/server': import 'github.com/metio/kurly/workloads/bigcapital/server.libsonnet',
-  'bigcapital/webapp': import 'github.com/metio/kurly/workloads/bigcapital/webapp.libsonnet',
-  'bigcapital/gateway': import 'github.com/metio/kurly/workloads/bigcapital/gateway.libsonnet',
   'overleaf/server': import 'github.com/metio/kurly/workloads/overleaf/server.libsonnet',
   'memos/server': import 'github.com/metio/kurly/workloads/memos/server.libsonnet',
   'gotify/server': import 'github.com/metio/kurly/workloads/gotify/server.libsonnet',
@@ -1026,6 +1023,27 @@ local workloadEntries =
   assert reconcile('helpers', std.objectFields(ann.helpers), ['certificate', 'externalSecret', 'join', 'limitRange', 'list', 'mirror', 'priorityClass', 'production', 'resourceQuota']),
   // Every operator-attested production workload must be a real, annotated one —
   // a dangling claim (a typo or a renamed workload) fails here.
+  // Every image is pinned by DIGEST. renovate.json has said so since the pins were
+  // introduced — a tag says which version, only a digest says which bits, so a
+  // rebuilt base image carrying a patched library is otherwise indistinguishable
+  // from no change at all — and nothing checked it, so three stages were not.
+  //
+  // It also catches an image that is GONE: Renovate cannot resolve a digest for
+  // something the registry does not have, so the pin quietly stays a bare tag.
+  // bigcapital's gateway sat that way, naming an image that has never existed.
+  assert std.all([
+    std.length(std.findSubstr('@sha256:', std.get(std.get(st, 'runs', {}), 'image', '@sha256:'))) > 0
+    for w in workloadEntries
+    for st in w.stages
+  ]) :
+         'catalog: a stage image is not pinned by digest — %s. A tag alone cannot say which bits, and an image that cannot be pinned is often one that is gone' % [
+    std.join(', ', [
+      st.importPath
+      for w in workloadEntries
+      for st in w.stages
+      if std.length(std.findSubstr('@sha256:', std.get(std.get(st, 'runs', {}), 'image', '@sha256:'))) == 0
+    ]),
+  ],
   // An upstream the forge reports as ARCHIVED is a project that has stopped, and
   // this catalogue does not carry those: every future vulnerability in it stays
   // open, and an operator who deployed it from here has nowhere to take it. The

@@ -21,7 +21,6 @@
 # would now pass. The walk says so if a skipped workload is run and delivers.
 
 authentik    two replicas race the first-boot migration on a lock, so the second overruns its startup probe; needs ordered start, not a longer timeout, and authentik exposes no standalone migration command
-bigcapital   docker.io/bigcapitalhq/gateway does not exist (siblings server/webapp do); needs upstream's intent, not a guessed name
 ghostfolio   never becomes ready, zero restarts, no container output at all; needs live inspection of /api/v1/health like baserow had
 lychee       FrankenPHP workers fail to initialise; the FRANKENPHP_* settings that used to work no longer do, so it wants upstream's current compose rather than another guess
 mailu        the admin container refuses to start without a DNSSEC-validating resolver, which the catalogue does not ship; upstream runs unbound alongside

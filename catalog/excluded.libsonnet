@@ -117,4 +117,8 @@
   overseerr: 'upstream archived on 2026-02-15 — https://github.com/sct/overseerr',
   'pingvin-share': 'upstream archived on 2026-05-18 — https://github.com/stonith404/pingvin-share',
   readarr: 'upstream archived on 2025-06-27 — https://github.com/Readarr/Readarr',
+
+  // Undeployable as packaged: an image it needs does not exist. Not a licence or a
+  // maintenance judgement — the thing simply cannot start.
+  bigcapital: 'docker.io/bigcapitalhq/gateway does not exist (siblings server and webapp do); the workload cannot run without its gateway',
 }

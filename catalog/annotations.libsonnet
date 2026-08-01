@@ -1404,63 +1404,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'OVERLEAF_MONGO_URL', generate: 'literal', value: 'mongodb://overleaf-mongo:27017/sharelatex' }] },
       },
     },
-    bigcapital: {
-      name: 'Bigcapital',
-      upstream: { repo: 'https://github.com/bigcapitalhq/bigcapital' },
-      summary: 'A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom.',
-      category: 'application',
-      // Stated as a LIST rather than derived, because it needs TWO databases and a
-      // kind-keyed object can only name one — so anything provisioning from it
-      // stands up a single server and this never starts. Both engines are
-      // established from what the stage configures rather than from its prose:
-      // SYSTEM_DB_PORT and TENANT_DB_PORT are 3306, and it sets
-      // MONGODB_DATABASE_URL.
-      requires: [
-        { kind: 'database', engine: 'mysql', required: true },
-        { kind: 'database', engine: 'mongodb', required: true },
-        { kind: 'cache', required: true },
-        { kind: 'objectStorage', required: true },
-      ],
-      stages: {
-        server: d.fn('The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.', [
-          d.arg('namePrefix', d.T.string, default='bigcapital'),
-          d.arg('name', d.T.string),
-          d.arg('image', d.T.string),
-          d.arg('dbHost', d.T.string, default='bigcapital-mariadb'),
-          d.arg('dbUser', d.T.string, default='bigcapital'),
-          d.arg('mongoHost', d.T.string, default='bigcapital-mongo'),
-          d.arg('redisHost', d.T.string, default='bigcapital-cache'),
-          d.arg('baseUrl', d.T.string, example='https://accounting.example.com'),
-          d.arg('s3Endpoint', d.T.string),
-          d.arg('s3Bucket', d.T.string, default='bigcapital'),
-          d.arg('s3Region', d.T.string, default='us-east-1'),
-          d.arg('secretName', d.T.string, default='bigcapital'),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', secretKeys: [{ key: 'S3_ACCESS_KEY_ID', generate: 'literal', value: 'bigcapital' }, { key: 'S3_SECRET_ACCESS_KEY', generate: 'password', length: 32 }, { key: 'JWT_SECRET', generate: 'hex', length: 64 }, { key: 'SYSTEM_DB_PASSWORD', generate: 'password', length: 32 }, { key: 'TENANT_DB_PASSWORD', generate: 'password', length: 32 }] },
-        webapp: d.fn('The Bigcapital front end (single-page web app) on :80. Stateless — scales via replicas. The gateway proxies to it.', [
-          d.arg('namePrefix', d.T.string, default='bigcapital'),
-          d.arg('name', d.T.string),
-          d.arg('image', d.T.string),
-          d.arg('replicas', d.T.int, default=1),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
-        gateway: d.fn('The Bigcapital nginx entry on :80 — the stage you expose. Routes the browser to the webapp and /api to the server, which it reaches by Service names derived from namePrefix. Compose an exposure onto it.', [
-          d.arg('namePrefix', d.T.string, default='bigcapital'),
-          d.arg('name', d.T.string),
-          d.arg('image', d.T.string),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
-      },
-    },
     peertube: {
       name: 'PeerTube',
       upstream: { repo: 'https://github.com/Chocobozzz/PeerTube' },
@@ -4200,7 +4143,17 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'worker' },
+        ]) + {
+          kind: 'worker',
+          // The worker reads the SAME Secret as the server — same default name,
+          // same keys — so it states them rather than leaving a consumer to infer
+          // it from a shared default.
+          secretKeys: [
+            { key: 'AUTHENTIK_POSTGRESQL__PASSWORD', generate: 'password', length: 32 },
+            { key: 'AUTHENTIK_REDIS__PASSWORD', generate: 'password', length: 32 },
+            { key: 'AUTHENTIK_SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+        },
       },
     },
     misskey: {
@@ -4609,7 +4562,17 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'worker' },
+        ]) + {
+          kind: 'worker',
+          // The worker reads the SAME Secret as the server, so the keys it needs
+          // are the server's.
+          secretKeys: [
+            { key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 },
+            { key: 'APP_SECRET_KEY', generate: 'hex', length: 64 },
+            { key: 'ENCRYPTION_KEY', generate: 'hex', length: 64 },
+            { key: 'WEBHOOK_SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+        },
       },
     },
     spegel: {
