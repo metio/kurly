@@ -30,7 +30,6 @@ function(
   + kurly.servicePort(80)
   + kurly.env(env)
   + kurly.runAs(101, gid=101, fsGroup=101)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '32Mi')
   + kurly.scratch('/var/cache/nginx', '32Mi')
   + kurly.scratch('/var/run', '8Mi')

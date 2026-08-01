@@ -41,7 +41,9 @@ function(
   + kurly.servicePort(8080)
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Its data lives on the store; /tmp is the only other path it writes, so a
+  // scratch covers it and the root filesystem stays read-only.
+  + kurly.scratch('/tmp', '64Mi')
   + kurly.store('/app/user-data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
