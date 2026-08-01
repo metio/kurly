@@ -13,7 +13,7 @@ cat >"$objstore" <<YAML
 type: S3
 config:
   bucket: thanos
-  endpoint: seaweedfs-0.seaweedfs-headless.${ns}.svc:8333
+  endpoint: seaweedfs.${ns}.svc:8333
   insecure: true
   access_key: thanos
   secret_key: ${KURLY_E2E_PASSWORD}

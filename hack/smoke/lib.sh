@@ -729,6 +729,17 @@ kurly::provision_deps() {
     fi
     fi
   fi
+  # An S3-compatible store where the catalogue says one is REQUIRED. kurly::objectstorage
+  # has existed all along and nothing called it, so every workload that cannot run
+  # without object storage was being asked to run without it — thanos-store crash-looped
+  # against a bucket endpoint that resolved to nothing at all.
+  #
+  # `required` only. Twenty-one further workloads call it OPTIONAL, and standing up a
+  # seaweedfs for each would add a StatefulSet and a rollout wait to a walk that already
+  # takes a day, to exercise a path those workloads are explicitly able to skip.
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.objectStorage == "required" then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+    kurly::objectstorage "$ns" "$id"
+  fi
   if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.cache then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     redisHost="$(kurly::_param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
     # Provision the cache the way the workload actually connects to it. Most take a
