@@ -69,9 +69,22 @@ jobs:
       # A pull request rather than a push to the default branch: publishing the
       # catalogue is a release, and a licence that changed is exactly the kind of
       # thing somebody should read before it ships.
+      #
+      # Opened with CATALOG_REFRESH_TOKEN rather than the run's own token, because
+      # GitHub does not trigger workflows from events created with GITHUB_TOKEN —
+      # the guard against a workflow triggering itself for ever. A pull request
+      # opened that way fires no `pull_request` event, so Verify never runs, its
+      # required checks never report, and the pull request cannot be merged by
+      # anyone. It needs an identity of its own: a fine-grained PAT or a GitHub App
+      # installation token with `contents: write` and `pull-requests: write`.
+      #
+      # Falls back to the run's token when that secret is absent, so a repository
+      # without it still gets the pull request — it just has to be merged by hand,
+      # which is the behaviour this replaced.
       - name: Open a pull request for whatever changed
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.CATALOG_REFRESH_TOKEN || github.token }}
+          CATALOG_REFRESH_TOKEN: ${{ secrets.CATALOG_REFRESH_TOKEN }}
         run: |
           set -euo pipefail
           if git diff --quiet -- catalog/; then
@@ -89,3 +102,14 @@ jobs:
           git push --set-upstream origin "$branch"
           gh pr create --fill --base "${GITHUB_REF_NAME}" \
             --title 'chore(catalog): refresh the facts derived from elsewhere'
+          # Queued rather than merged: auto-merge waits for the required checks, so
+          # the catalogue still only ships once the gate has agreed with it. With no
+          # CATALOG_REFRESH_TOKEN there are no checks to wait for and this is a
+          # no-op that leaves the pull request for a human, which is the honest
+          # outcome — never a merge nothing verified.
+          if [ -n "${CATALOG_REFRESH_TOKEN:-}" ]; then
+            gh pr merge --auto --squash "$branch" || \
+              echo "::warning::could not enable auto-merge — check that 'Allow auto-merge' is on for this repository"
+          else
+            echo "::warning::CATALOG_REFRESH_TOKEN is not set, so no CI ran on this pull request and it will not auto-merge; merge it by hand or add the secret"
+          fi
