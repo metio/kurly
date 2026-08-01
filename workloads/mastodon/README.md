@@ -36,7 +36,7 @@ connection, `SECRET_KEY_BASE`, `OTP_SECRET`, the VAPID keys and the S3 settings 
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage. Delivered end to end through Flux, JaaS and stageset-controller on 2026-07-31, and observed rolling out.
 
 ## Deploy with JaaS
 

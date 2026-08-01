@@ -48,7 +48,7 @@ replica, recreated**.
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage. Delivered end to end through Flux, JaaS and stageset-controller on 2026-08-01, and observed rolling out.
 
 ## Deploy with JaaS
 
