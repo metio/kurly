@@ -38,11 +38,14 @@ function(
   // The bundled headless browser writes to /tmp and needs a larger shared-memory mount
   // than the default 64Mi to render pages without crashing.
   + kurly.scratch('/tmp', '256Mi')
-  // Chrome creates its profile under the account's home on first start, which is
-  // /app here — "Error starting Chrome: [Errno 30] Read-only file system:
-  // '/app/.local'". The image ships no /app/.local, so a scratch there hides
-  // nothing and the root filesystem stays read-only.
+  // Chrome creates its profile under the account's home, which is /app here, so
+  // that part takes a scratch — the image ships no /app/.local.
   + kurly.scratch('/app/.local', '128Mi')
+  // Kept: it then PATCHES /app/chromedriver, an existing 22MB executable shipped in
+  // the image. A scratch cannot stand in for a single file — an emptyDir mounts as
+  // a directory — and a read-only file cannot be rewritten, so this one needs a
+  // writable root however many other paths are covered.
+  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

@@ -2881,7 +2881,10 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 77,
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },
@@ -4745,7 +4748,10 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 22,
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },
@@ -13479,10 +13485,10 @@
                "importPath": "github.com/metio/kurly/workloads/flaresolverr/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": false
+                  "writableRootFilesystem": true
                },
                "runs": {
                   "digest": "sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47",
@@ -26342,7 +26348,7 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-31"
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },
@@ -35365,7 +35371,10 @@
          "licenseOsiApproved": false,
          "maturity": {
             "delivered": {
-               "since": "2026-07-31"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 34,
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },
@@ -42775,10 +42784,10 @@
                "importPath": "github.com/metio/kurly/workloads/teable/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": true,
+                  "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": false
+                  "writableRootFilesystem": true
                },
                "runs": {
                   "digest": "sha256:5c4d8c9db3dfbd40d93a89804964e833839c60ec4e5ffbbff85492f8595c697e",

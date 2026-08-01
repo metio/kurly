@@ -45,10 +45,14 @@ function(
   // The image's own nodejs account owns the asset cache it writes on start.
   + kurly.runAs(1001, gid=1001, fsGroup=1001)
   + kurly.scratch('/tmp', '128Mi')
-  // It opens a cache database under .assets, relative to its workdir /app —
-  // "EROFS: read-only file system, open '.assets/.cache.db'". The image ships that
-  // directory empty, so a scratch there hides nothing.
+  // Its cache database under .assets takes a scratch — the image ships that
+  // directory empty.
   + kurly.scratch('/app/.assets', '128Mi')
+  // Kept: it then GENERATES openapi.json into its own built backend at
+  // /app/enterprise/backend-ee/dist, a directory holding 29 entries of build
+  // output. A scratch there would hide the build, and a scratch cannot cover a
+  // single file — so a writable root is what this needs.
+  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   // Teable runs its Prisma migrations and builds its asset cache before it listens

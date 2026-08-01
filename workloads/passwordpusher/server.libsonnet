@@ -44,12 +44,15 @@ function(
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.scratch('/tmp', '64Mi')
-  // Rails creates its cache under the app's own tmp/ on boot. Scratching that whole
-  // directory would hide local_secret.txt, the secret the image generated at build —
-  // and a password-sharing app that mints a new secret on every restart cannot read
-  // back anything it encrypted. So only the subdirectory it creates is a scratch,
-  // and the image ships nothing at that path.
+  // Rails creates its working directories under the app's own tmp/ on boot — cache,
+  // then pids, and sockets if it ever listens on one. Scratching the whole tmp/
+  // would hide local_secret.txt, the secret the image generated at build, and a
+  // password-sharing app that mints a new secret on every restart cannot read back
+  // anything it encrypted. So each subdirectory is its own scratch; the image ships
+  // none of them, and they are listed together rather than found one boot at a time.
   + kurly.scratch('/opt/PasswordPusher/tmp/cache', '64Mi')
+  + kurly.scratch('/opt/PasswordPusher/tmp/pids', '8Mi')
+  + kurly.scratch('/opt/PasswordPusher/tmp/sockets', '8Mi')
   // Rails migrates and warms its caches before it listens.
   // Rails compiles its bootsnap cache and runs its queue inside the app directory.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })

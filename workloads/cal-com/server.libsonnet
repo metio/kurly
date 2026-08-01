@@ -50,6 +50,11 @@ function(
   // into while the app boots.
   + kurly.rootUser()
   + kurly.scratch('/tmp', '128Mi')
+  // turbo caches under .turbo on start. Unlike .yarn beside it, the image ships no
+  // such directory, so this one takes a scratch rather than a redirect — the two
+  // sit next to each other and want opposite treatments for the same reason: what
+  // the image already has there.
+  + kurly.scratch('/calcom/.turbo', '256Mi')
   // The first start migrates the schema and seeds the app catalogue before the
   // server binds, which takes minutes.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 60 })

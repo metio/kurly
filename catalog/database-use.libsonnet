@@ -33,6 +33,8 @@
 // it against a database they could not use. Two facts, two files.
 
 {
+  activepieces: { tables: 77, engine: 'postgres', on: '2026-08-01' },
+  automatisch: { tables: 22, engine: 'postgres', on: '2026-08-01' },
   bugsink: { tables: 38, engine: 'postgres', on: '2026-08-01' },
   documenso: { tables: 52, engine: 'postgres', on: '2026-08-01' },
   ferretdb: { tables: 0, engine: 'postgres', on: '2026-08-01' },
@@ -43,6 +45,7 @@
   outline: { tables: 45, engine: 'postgres', on: '2026-08-01' },
   penpot: { tables: 60, engine: 'postgres', on: '2026-08-01' },
   photoview: { tables: 14, engine: 'postgres', on: '2026-08-01' },
+  planka: { tables: 34, engine: 'postgres', on: '2026-08-01' },
   rallly: { tables: 31, engine: 'postgres', on: '2026-07-31' },
   redmine: { tables: 60, engine: 'mysql', on: '2026-08-01' },
   rundeck: { tables: 0, engine: 'postgres', on: '2026-08-01' },
