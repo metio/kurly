@@ -42,8 +42,13 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({ REDIS_HOST: redisHost, REDIS_PORT: std.toString(redisPort) } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
+  // Kept as UNVERIFIABLE rather than needed: ghostfolio never becomes ready on this
+  // host, with zero restarts and no container output at all, so a read-only root
+  // filesystem here would be a claim nothing tested. Its boot produced no read-only
+  // error, so this may well come off — but only once the workload can be booted to
+  // show it.
+  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/api/v1/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

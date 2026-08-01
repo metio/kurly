@@ -63,11 +63,17 @@ function(
   + kurly.env(env)
   // The image installs and runs as root and owns its whole installation tree.
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   + kurly.store('/opt/traccar/data', storageSize, storageClass=storageClass)
   // The server writes its log beside its installation, relative to the working
   // directory the image sets.
   + kurly.scratch('/opt/traccar/logs', '128Mi')
+  // Kept, and unlike the others here the path is unidentified. With the root read
+  // only it gets as far as "Database is up to date, no changesets to execute" and
+  // then exits without ever listening on 8082 — printing no read-only error to say
+  // what it wanted. Its logs and data already have somewhere to go, so whatever
+  // else it writes is somewhere this has not found. Worth another look with strace
+  // or a shell in the pod rather than another guess.
+  + kurly.writableRootFilesystem()
   // The JVM applies its database changesets before the web server binds.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

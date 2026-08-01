@@ -30,7 +30,6 @@ function(
   + kurly.servicePort(8080)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/usr/local/tomcat/temp', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

@@ -63,7 +63,6 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.runAs(991, gid=991, fsGroup=991)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/mastodon/tmp', '256Mi')
   // Mastodon needs its schema in place before the server (or a worker) can load
   // the application; db:prepare creates it on an empty database and migrates an

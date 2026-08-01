@@ -57,7 +57,6 @@ function(
     REDIS_HOST: redisHost,
   } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
   // The app writes logs to its working directory, which uid 1000 cannot create
   // in the read-only image tree; give it a writable scratch there.

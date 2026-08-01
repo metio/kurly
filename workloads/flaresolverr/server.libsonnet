@@ -35,10 +35,14 @@ function(
   + kurly.servicePort(8191)
   + kurly.env({ LOG_LEVEL: logLevel } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   // The bundled headless browser writes to /tmp and needs a larger shared-memory mount
   // than the default 64Mi to render pages without crashing.
   + kurly.scratch('/tmp', '256Mi')
+  // Chrome creates its profile under the account's home on first start, which is
+  // /app here — "Error starting Chrome: [Errno 30] Read-only file system:
+  // '/app/.local'". The image ships no /app/.local, so a scratch there hides
+  // nothing and the root filesystem stays read-only.
+  + kurly.scratch('/app/.local', '128Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

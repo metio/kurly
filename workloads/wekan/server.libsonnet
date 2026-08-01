@@ -46,8 +46,12 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
+  // Kept as UNVERIFIABLE rather than needed: wekan reads MONGO_URL and MongoDB does
+  // not start on this host's kernel, so nothing here can boot it to show a
+  // read-only root filesystem works. Its attempt produced no read-only error, so
+  // this likely comes off — on a host that can run MongoDB.
+  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

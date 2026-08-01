@@ -46,9 +46,14 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '32Mi')
+  // Kept: it rewrites client/dist/index.html on start to inject its runtime config,
+  // and that directory is its BUILT FRONTEND — assets, icons, the app itself. A
+  // scratch there would hide what it is editing, and the path is not configurable.
+  // Same shape as endurain: a single-page app that configures itself by editing its
+  // own built index.html cannot have a read-only root filesystem.
+  + kurly.writableRootFilesystem()
   // The app rewrites the served index.html with its runtime configuration on
   // start, so the root filesystem cannot stay read-only.
-  + kurly.writableRootFilesystem()
   // The app reads PORT from the environment, which the Service-link variables
   // would overwrite with a tcp:// URL.
   + kurly.disableServiceLinks()

@@ -39,9 +39,15 @@ function(
   + kurly.rootUser()
   // nginx and php-fpm prepare their runtime directories and socket as root.
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
   // php-fpm binds its socket under /run/php.
   + kurly.scratch('/run/php', '8Mi')
+  // Kept: two writes, and only one of them is scratchable. nginx wants
+  // /var/lib/nginx/body (empty in the image, so that part would be fine), and
+  // php-fpm fails with "Unable to create lock file" — a path it is not told from
+  // here, in directories that DO ship content (/var/run has 9 entries, /var/lock
+  // holds subsys). Mounting over those to find out which would risk hiding image
+  // content for a guess.
+  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

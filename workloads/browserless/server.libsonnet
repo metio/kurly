@@ -38,7 +38,6 @@ function(
   // The image's own blessuser account — Node looks its uid up in /etc/passwd on
   // start and aborts when it is not there.
   + kurly.runAs(999, gid=999, fsGroup=999)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '512Mi')
   // /docs is served without the access TOKEN, so it is a usable health path (/ is
   // token-gated). Chrome is slow to start, so a startup probe holds liveness.

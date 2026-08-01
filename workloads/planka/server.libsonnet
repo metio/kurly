@@ -43,8 +43,12 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
+  // It creates its log directory in its own install tree on boot. The image ships
+  // no /app/logs — the 25 entries beside it stay visible — so a scratch covers it.
+  // Node reports the failure as ENOENT rather than EROFS, which reads like a
+  // missing parent and is not: /app is right there.
+  + kurly.scratch('/app/logs', '64Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

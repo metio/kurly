@@ -34,7 +34,6 @@ function(
   + kurly.servicePort(3210)
   + kurly.env(env)
   + kurly.runAs(1001, gid=1001, fsGroup=1001)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

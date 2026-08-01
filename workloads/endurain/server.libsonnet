@@ -77,12 +77,17 @@ function(
   + kurly.rootUser()
   // The entrypoint writes the frontend's runtime configuration into the built
   // bundle it serves, so the root filesystem cannot stay read-only.
-  + kurly.writableRootFilesystem()
   + kurly.allowPrivilegeEscalation()
   + kurly.keepCapabilities()
   // Uploaded activity files and user images live under the backend's data dir.
   + kurly.store('/app/backend/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')
+  // Kept: the entrypoint writes the runtime config into its own BUILT FRONTEND —
+  //   echo "window.env = { ENDURAIN_HOST: ... }" > /app/frontend/dist/env.js
+  // and that directory holds the built assets, index.html and the service worker.
+  // A scratch there would hide the frontend it is configuring, and the path is
+  // hardcoded in the entrypoint, so there is nothing to redirect either.
+  + kurly.writableRootFilesystem()
   // The backend logs to a file next to its code rather than to stdout.
   + kurly.scratch('/app/backend/logs', '128Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

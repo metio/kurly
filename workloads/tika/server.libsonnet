@@ -31,7 +31,6 @@ function(
   + kurly.servicePort(9998)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '256Mi')
   + kurly.readinessProbe({ httpGet: { path: '/tika', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

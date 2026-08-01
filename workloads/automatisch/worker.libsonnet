@@ -35,7 +35,10 @@ function(
   kurly.worker(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.command(['yarn', 'start:worker'])
+  // No command override: the image's entrypoint does `cd packages/backend` and then
+  // branches on WORKER, which this stage sets. Overriding it with `yarn
+  // start:worker` skips that cd and runs from /automatisch, where there is no
+  // package.json — "Couldn't find a package.json file in /automatisch", every time.
   + kurly.envFromSecret(secretName)
   + kurly.env({
     APP_ENV: 'production',
@@ -47,7 +50,6 @@ function(
     REDIS_HOST: redisHost,
   } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
   // The app writes logs to its working directory, which uid 1000 cannot create
   // in the read-only image tree; give it a writable scratch there.

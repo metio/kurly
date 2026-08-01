@@ -40,11 +40,15 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
-  + kurly.env(baseEnv + env)
+  // yarn rewrites its install state on start, inside the image's own .yarn
+  // directory. That directory cannot be a scratch — it also holds `patches`,
+  // `releases` and `versions`, 3.5MB the build needs, and an emptyDir would hide
+  // all of it — so the one file that moves is pointed at the scratch instead, and
+  // the root filesystem stays read-only.
+  + kurly.env({ YARN_INSTALL_STATE_PATH: '/tmp/install-state.gz' } + baseEnv + env)
   // The image runs as root and owns its build tree, which yarn and Prisma write
   // into while the app boots.
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
   // The first start migrates the schema and seeds the app catalogue before the
   // server binds, which takes minutes.

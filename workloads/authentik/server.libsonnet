@@ -54,8 +54,13 @@ function(
     AUTHENTIK_POSTGRESQL__USER: dbUser,
     AUTHENTIK_REDIS__HOST: redisHost,
   } + env)
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // Kept: authentik cannot boot on this host at all — two replicas race its
+  // first-boot migration on a lock and the second overruns its startup probe —
+  // so a read-only root filesystem here would be an untested claim. Remove it
+  // when the migration ordering is solved and the workload can be booted to
+  // prove it.
   + kurly.writableRootFilesystem()
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/-/health/ready/', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/-/health/live/', port: 'http' } })

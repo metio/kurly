@@ -71,7 +71,6 @@ function(
   + kurly.rootUser()
   // The init hands its shared-memory log directories to the app user.
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.store('/media', mediaSize, storageClass=storageClass)
   // config.yml rides read-only over the /config volume as a single file, leaving
@@ -80,6 +79,12 @@ function(
   // Decoded frames land in /dev/shm; recording segments stage in /tmp/cache.
   // Both are emptyDir scratch — size /dev/shm for the camera count, or the
   // decoder aborts with a bus error.
+  // Kept, and it needs more than one path: s6 clears /run on start, then the
+  // entrypoint rewrites its nginx config IN PLACE under /usr/local/nginx/conf with
+  // sed and creates /etc/letsencrypt. A /run scratch clears the first error and the
+  // config rewrite cannot be scratched — an emptyDir there would hide the config it
+  // is editing — so this one genuinely wants a writable root.
+  + kurly.writableRootFilesystem()
   + kurly.scratch('/dev/shm', shmSize)
   + kurly.scratch('/tmp/cache', cacheSize)
   // FRIGATE_RTSP_PASSWORD (and any other secret) comes from an operator-supplied

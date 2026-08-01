@@ -83,10 +83,14 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   // php-fpm drops its worker pool from root, and the nginx sidecar hands its cache
   // directories to the nginx user before dropping to it.
   + kurly.keepCapabilities()
+  // Kept: the entrypoint DELETES files from its own image tree — rm on every
+  // .gitignore under /var/www/app/docker-backup-storage — and nginx creates its
+  // cache under /var/cache/nginx. Removing image content is not something a
+  // scratch can provide: an emptyDir would hide the tree it is pruning.
+  + kurly.writableRootFilesystem()
   + kurly.store('/var/www/app/storage', storageSize, storageClass=storageClass)
   // The document root is shared with the nginx sidecar: nginx serves the static
   // files itself and hands every PHP request to php-fpm on localhost, so both

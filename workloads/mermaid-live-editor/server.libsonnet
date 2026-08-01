@@ -32,9 +32,15 @@ function(
   // nginx starts as root, prepares its cache directories, then drops to the nginx
   // user for the workers.
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   + kurly.keepCapabilities()
   + kurly.scratch('/tmp', '32Mi')
+  // nginx creates its temp directories under /var/cache/nginx on start and writes
+  // its pid under /var/run. The image ships an empty cache directory, so a scratch
+  // there hides nothing — the same trio that lets chatpad serve from a read-only
+  // root. (The entrypoint's "can not modify default.conf" line is informational;
+  // the cache mkdir is what stops it.)
+  + kurly.scratch('/var/cache/nginx', '32Mi')
+  + kurly.scratch('/var/run', '8Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

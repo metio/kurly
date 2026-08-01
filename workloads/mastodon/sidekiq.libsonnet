@@ -48,7 +48,6 @@ function(
     REDIS_PORT: std.toString(redisPort),
   } + env)
   + kurly.runAs(991, gid=991, fsGroup=991)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/mastodon/tmp', '256Mi')
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)

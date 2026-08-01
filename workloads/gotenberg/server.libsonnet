@@ -31,7 +31,6 @@ function(
   + kurly.servicePort(3000)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '512Mi')
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/health', port: 'http' } })

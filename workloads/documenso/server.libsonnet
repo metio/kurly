@@ -40,7 +40,6 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.runAs(1001, gid=1001, fsGroup=1001)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

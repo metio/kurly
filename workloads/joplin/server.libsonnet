@@ -54,11 +54,14 @@ function(
   + kurly.env(baseEnv + env)
   // The image's own joplin account owns everything the server writes.
   + kurly.runAs(1001, gid=1001, fsGroup=1001)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '64Mi')
   // The process manager keeps its own logs and runtime state under /opt/pm2, which
   // the image owns as root.
   + kurly.scratch('/opt/pm2', '64Mi')
+  // It creates its log directory inside its own install tree on start — mkdir
+  // '/home/joplin/packages/server/logs' — and the image ships no such directory,
+  // so a scratch there hides nothing of the 18 entries beside it.
+  + kurly.scratch('/home/joplin/packages/server/logs', '64Mi')
   // The server answers only requests whose origin matches APP_BASE_URL, and the
   // kubelet probes by pod IP — so readiness is a connection check.
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

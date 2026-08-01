@@ -67,8 +67,12 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '256Mi')
+  // It runs under pm2, which keeps its state in the node account's home and creates
+  // it on start — so a read-only root filesystem stops it at
+  // "EROFS: read-only file system, mkdir '/home/node/.pm2'". A scratch there costs
+  // less than making the whole filesystem writable for one directory.
+  + kurly.scratch('/home/node', '64Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

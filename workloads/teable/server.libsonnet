@@ -44,8 +44,11 @@ function(
   + kurly.env({ HOME: '/tmp' } + baseEnv + env)
   // The image's own nodejs account owns the asset cache it writes on start.
   + kurly.runAs(1001, gid=1001, fsGroup=1001)
-  + kurly.writableRootFilesystem()
   + kurly.scratch('/tmp', '128Mi')
+  // It opens a cache database under .assets, relative to its workdir /app —
+  // "EROFS: read-only file system, open '.assets/.cache.db'". The image ships that
+  // directory empty, so a scratch there hides nothing.
+  + kurly.scratch('/app/.assets', '128Mi')
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   // Teable runs its Prisma migrations and builds its asset cache before it listens
