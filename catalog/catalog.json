@@ -20185,6 +20185,7 @@
          ],
          "summary": "Backs up every PersistentVolume in a namespace on a schedule, as K8up Schedule and Restore custom resources — restic underneath, one resource per namespace rather than per claim, so a volume is protected the moment it appears rather than when somebody remembers to declare it (a claim annotated k8up.io/backup: \"false\" is left out). Requires the K8up operator. Authors the CRs directly like cnpg-cluster; composed by parameter, not by + feature. kurly authors no Secret: the repository password and the object-storage credentials come from a provided one.",
          "upstream": {
+            "homepage": "https://k8up.io",
             "repo": "https://github.com/k8up-io/k8up"
          }
       },
@@ -46134,6 +46135,7 @@
          ],
          "summary": "Copies a PersistentVolume's contents off the cluster and back, as VolSync ReplicationSource and ReplicationDestination custom resources — restic underneath, one resource per claim, so a volume states its own backup policy next to itself. Requires the VolSync operator, and a CSI driver with a VolumeSnapshotClass for the default Snapshot copy method (Direct copies the live volume, which is only safe for a volume nobody writes during the window). Authors the CRs directly like cnpg-cluster; composed by parameter, not by + feature. kurly authors no Secret: the restic repository URL, its password and the object-storage credentials come from a provided one.",
          "upstream": {
+            "homepage": "https://volsync.readthedocs.io",
             "repo": "https://github.com/backube/volsync"
          }
       },
