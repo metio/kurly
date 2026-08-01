@@ -33,7 +33,11 @@ function(
   secretName='shlink',
   replicas=1,
   env={},
-  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
+  // RoadRunner's WEB_WORKER_NUM defaults to 0, meaning one PHP worker per visible
+  // CPU, so the http plugin's footprint scales with the node rather than with the
+  // load. At a 512Mi limit the walk recorded an OOMKill on a 16-core node — which
+  // is why rpc and jobs started and the http plugin alone never did.
+  resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},
   annotations={},
 )
