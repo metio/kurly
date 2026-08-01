@@ -30,6 +30,31 @@ kurly::render() {
     "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')() ${extra})"
 }
 
+# Whether composed features apply to a stage, as `yes` or `no` on stdout.
+#
+# The deep walk composes hostUsers() onto everything, because kind cannot nest
+# user namespaces. A workload that authors PLAIN MANIFESTS rather than a
+# composable base rejects every feature with an assert of its own — and for one
+# of those the override is not merely impossible but unnecessary, since a
+# workload that composes nothing never asked for a user namespace to begin with.
+#
+# Returns non-zero when the stage does not render AT ALL, which must not read as
+# `no`: a broken stage and a plain-manifest one both fail the composed render,
+# and treating them alike reported spegel — whose DaemonSet renders perfectly —
+# as a workload with no controller to deliver.
+kurly::composes_features() {
+  local stage="$1"
+  if kurly::render "$stage" "+ k.hostUsers()" >/dev/null 2>&1; then
+    echo yes
+    return 0
+  fi
+  if kurly::render "$stage" >/dev/null 2>&1; then
+    echo no
+    return 0
+  fi
+  return 1
+}
+
 # Creates a namespace idempotently.
 kurly::namespace() {
   kubectl create namespace "$1" --dry-run=client --output=yaml | kubectl apply --filename=-
@@ -859,6 +884,10 @@ EOF
   #
   # A workload that needs a different order states one in extra.json; everything
   # else keeps the catalogue's, which is right whenever the stages are independent.
+  # Stages that actually reached the cluster. A workload whose every stage is a
+  # custom resource skips them all, and announcing a delivery for that run said
+  # the pipeline had proven something it never touched.
+  local deliveredStages=0
   local stageOrder
   stageOrder="$(jq -r --arg id "$id" '(.[$id] // {}).stageOrder // ""' hack/smoke/extra.json 2>/dev/null || true)"
   [ -n "$stageOrder" ] || stageOrder="$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[].id' catalog/catalog.json)"
@@ -867,8 +896,21 @@ EOF
     snip="${id}-${st}"
     # Discover the stage's primary controller so the StageSet's readyChecks and
     # version source name a real object.
-    ctrl="$(kurly::render "$f" "+ k.hostUsers()" | jq -c '[.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")][0]')"
+    local composes hostUsers snippetHostUsers
+    composes="$(kurly::composes_features "$f")" || {
+      echo "::error::deep ${id}: ${st} does not render — a stage that cannot be rendered is a failure, not a stage without a controller"
+      kurly::render "$f" 2>&1 | tail -5
+      return 1
+    }
+    hostUsers=""
+    snippetHostUsers=""
+    if [ "$composes" = yes ]; then
+      hostUsers="+ k.hostUsers()"
+      snippetHostUsers=" + kurly.hostUsers()"
+    fi
+    ctrl="$(kurly::render "$f" "$hostUsers" | jq -c '[.items[] | select(.kind=="Deployment" or .kind=="StatefulSet" or .kind=="DaemonSet")][0]')"
     [ "$ctrl" != null ] && [ -n "$ctrl" ] || { echo "== deep: ${st} has no controller, skipping stage =="; continue; }
+    deliveredStages=$((deliveredStages + 1))
     kind="$(jq -r '.kind' <<<"$ctrl")"; name="$(jq -r '.metadata.name' <<<"$ctrl")"; apiv="$(jq -r '.apiVersion' <<<"$ctrl")"
     # The same deployment-specific values the fast scenarios compose, from
     # hack/smoke/extra.json. An app that cannot start without knowing its own
@@ -913,7 +955,7 @@ EOF
       # found". Create every namespace the render mentions, not just the
       # controller's, since the RBAC and ServiceAccount may name others.
       local addonNs
-      for addonNs in $(kurly::render "$f" "+ k.hostUsers()" 2>/dev/null \
+      for addonNs in $(kurly::render "$f" "$hostUsers" 2>/dev/null \
         | jq -r '[.items[].metadata.namespace // empty] | unique | .[]'); do
         kurly::namespace "$addonNs" >/dev/null
       done
@@ -962,7 +1004,7 @@ spec:
       // the alias the fast scenarios use; bind it so they compose verbatim here.
       local k = kurly;
       local stage = import 'github.com/metio/kurly/${f}';
-      local rendered = kurly.list(stage(${params}) + kurly.hostUsers()${ex});
+      local rendered = kurly.list(stage(${params})${snippetHostUsers}${ex});
       rendered${nsRewrite}
 EOF
     # The FIRST snippet of a run pays for a cold cluster: JaaS pulls three OCI
@@ -1041,6 +1083,10 @@ EOF
         return 1
       }
   done
+  if [ "$deliveredStages" -eq 0 ]; then
+    echo "== deep: ${id} has no stage with a controller — nothing was delivered =="
+    return 0
+  fi
   echo "ok: ${id} delivered end-to-end through Flux -> JaaS -> stageset"
 }
 
