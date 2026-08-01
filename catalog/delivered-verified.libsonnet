@@ -211,7 +211,7 @@
   pairdrop: '2026-07-31',
   paisa: '2026-07-31',
   'paperless-ngx': '2026-07-31',
-  passwordpusher: '2026-07-31',
+  passwordpusher: '2026-08-01',
   peertube: '2026-07-31',
   penpot: '2026-08-01',
   pgadmin: '2026-07-31',

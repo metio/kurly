@@ -33534,7 +33534,10 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-31"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 23,
+               "since": "2026-08-01"
             },
             "tier": "e2e"
          },

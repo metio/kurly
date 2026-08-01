@@ -55,6 +55,14 @@ function(
   // could not read back anything it had encrypted — so this is a fact about the
   // stage's configuration, not a general licence to scratch a Rails tmp/.
   + kurly.scratch('/opt/PasswordPusher/tmp', '128Mi')
+  // ActiveStorage writes here — the first-run boot code, and any file a user pushes.
+  // A scratch changes NOTHING about durability: this stage claims no PersistentVolume,
+  // so with a writable root those writes went to the container's own layer and were
+  // lost on every restart just the same. It buys the read-only root for free.
+  //
+  // Worth knowing separately: that means pushed FILES do not survive a restart, and
+  // the fix for that is a volume rather than a security knob.
+  + kurly.scratch('/opt/PasswordPusher/storage', '256Mi')
   // Rails migrates and warms its caches before it listens.
   // Rails compiles its bootsnap cache and runs its queue inside the app directory.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })

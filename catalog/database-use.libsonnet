@@ -44,6 +44,7 @@
   kutt: { tables: 8, engine: 'postgres', on: '2026-08-01' },
   mastodon: { tables: 99, engine: 'postgres', on: '2026-08-01' },
   outline: { tables: 45, engine: 'postgres', on: '2026-08-01' },
+  passwordpusher: { tables: 23, engine: 'postgres', on: '2026-08-01' },
   penpot: { tables: 60, engine: 'postgres', on: '2026-08-01' },
   photoview: { tables: 14, engine: 'postgres', on: '2026-08-01' },
   planka: { tables: 34, engine: 'postgres', on: '2026-08-01' },
