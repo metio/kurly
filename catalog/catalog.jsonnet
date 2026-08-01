@@ -23,6 +23,7 @@ local bsiViolations = import './bsi.gen.libsonnet';
 local excluded = import './excluded.libsonnet';
 local forge = import './forge.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
+local signatures = import './signatures.gen.libsonnet';
 local spdx = import './spdx.gen.libsonnet';
 local upstream = import './upstream.gen.libsonnet';
 
@@ -849,6 +850,56 @@ local repoRoot(url) =
   local positions = std.sort([p for p in [at('/-/'), at('/tree/'), at('/blob/')] if p != null]);
   if positions == [] then url else url[0:positions[0]];
 
+// The repository the SOFTWARE lives in: an annotation where a maintainer stated
+// one, otherwise the image's own source label — unless that label points at a
+// packaging repository, which credits the wrong people and is dropped instead of
+// guessed. null where nothing establishes it.
+//
+// Shared, because two things need the same answer: the `upstream` a consumer
+// reads, and the signature check asking whether the signer is this project. Two
+// derivations of the same repository could disagree, and the one that disagreed
+// would decide whether a supply chain marker is shown.
+local upstreamRepo(workload) =
+  local labelled =
+    local raw = std.get(std.get(upstream, workload, {}), 'source', null);
+    if raw == null then null else repoRoot(raw);
+  std.get(
+    std.get(ann.workloads[workload], 'upstream', {}),
+    'repo',
+    if labelled != null && !packagingRepo(labelled) then labelled else null
+  );
+
+// Whether the stage's image carries a verifiable sigstore signature, and whether
+// the thing that signed it is the project itself.
+//
+// The claim is published only while the measured digest is still the stage's
+// pin. A signature covers specific bytes; carried forward onto an image Renovate
+// bumped afterwards it would be a supply chain assurance about bits nobody
+// checked — so the claim goes null and the sweep is what brings it back.
+//
+// `signedByUpstream` is the one worth a marker in a user interface. `signed`
+// alone says a signature verified, which any publisher of any image can arrange
+// for their own; only the comparison against the repository the software lives
+// in says the project released this. Where either side is unknown the field is
+// ABSENT, because "we could not tell" and "signed by somebody else" are opposite
+// answers and a consumer must not read one as the other.
+local signatureOf(workload, stage, pinnedDigest) =
+  local entry = std.get(signatures, workload + '/' + stage, null);
+  local normalize(url) = std.asciiLower(std.stripChars(std.stripChars(url, '/'), '.git'));
+  if entry == null || pinnedDigest == null || std.get(entry, 'digest', null) != pinnedDigest then null
+  else if !entry.signed then { signed: false }
+  else
+    local signer = std.get(entry, 'sourceRepository', null);
+    local ours = upstreamRepo(workload);
+    { signed: true }
+    + (local v = std.get(entry, 'identity', null); if v == null then {} else { identity: v })
+    + (local v = std.get(entry, 'issuer', null); if v == null then {} else { issuer: v })
+    + (if signer == null then {} else { sourceRepository: signer })
+    + (
+      if signer == null || ours == null then {}
+      else { signedByUpstream: normalize(signer) == normalize(ours) }
+    );
+
 // What the catalogue says about the software, and separately about the image
 // that packages it. The two are different facts and the labels only sometimes
 // agree with the one wanted: `org.opencontainers.image.title` documents the
@@ -883,12 +934,7 @@ local softwareFacts(workload) =
     attested=std.objectHas(ann_, 'license'),
   )
   + (
-    local labelled = local raw = std.get(derived, 'source', null); if raw == null then null else repoRoot(raw);
-    local repo = std.get(
-      std.get(ann_, 'upstream', {}),
-      'repo',
-      if labelled != null && !packagingRepo(labelled) then labelled else null
-    );
+    local repo = upstreamRepo(workload);
     local homepage = std.get(std.get(ann_, 'upstream', {}), 'homepage', std.get(repoSays, 'homepage', null));
     local entries = (if repo == null then {} else { repo: repo })
                     + (if homepage == null then {} else { homepage: homepage })
@@ -951,6 +997,12 @@ local workloadEntries =
          'forge.gen.libsonnet names a workload that does not exist — rerun gen-forge';
   assert std.all([std.member(stageKeys, key) for key in std.objectFields(bsiViolations)]) :
          'bsi.gen.libsonnet names a stage that does not exist — rerun gen-bsi';
+  // Signature entries are checked for staleness but never for completeness: an
+  // image bump invalidates the CLAIM (the digest no longer matches) while
+  // leaving the key in place, so a full set of keys would prove nothing about
+  // freshness. What keeps the claims true is the digest comparison, not a count.
+  assert std.all([std.member(stageKeys, key) for key in std.objectFields(signatures)]) :
+         'signatures.gen.libsonnet names a stage that does not exist — rerun gen-signatures';
   assert std.all([
     std.objectHas(bsiPolicies, name)
     for key in std.objectFields(bsiViolations)
@@ -986,7 +1038,10 @@ local workloadEntries =
         // fact published beside it came from this one.
         + { importPath: 'github.com/metio/kurly/workloads/%s/%s.libsonnet' % [workload, stage] }
         + { storage: { pvcs: pvcCount(stageImports[workload + '/' + stage]) } }
-        + { runs: runs(stageImports[workload + '/' + stage]) }
+        + (
+          local ran = runs(stageImports[workload + '/' + stage]);
+          { runs: ran, signature: signatureOf(workload, stage, std.get(ran, 'digest', null)) }
+        )
         + { posture: posture(stageImports[workload + '/' + stage]) }
         + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])

@@ -5,9 +5,11 @@
 # repository, and opens a pull request when an answer has changed.
 #
 # The per-PR gate can only check the facts it can recompute offline. A licence,
-# an image's architectures and its labels live in other people's systems: a
-# project relicenses, an image starts publishing arm64, a maintainer moves the
-# repository. None of that produces a commit here, so without a scheduled ask
+# an image's architectures, its labels and its signature live in other people's
+# systems: a project relicenses, an image starts publishing arm64, a publisher
+# starts signing its releases, a maintainer moves the
+# repository, and so does whether a publisher signs what it ships. None of that
+# produces a commit here, so without a scheduled ask
 # the catalogue keeps publishing last year's answer with no sign that it is old
 # — which is the failure that matters, because the answer still looks confident.
 #
@@ -56,6 +58,11 @@ jobs:
         run: nix develop --command gen-forge
       - name: Ask every registry which architectures its image publishes
         run: nix develop --command gen-architectures
+      - name: Ask every image whether it is signed, and by whom
+        # A signature is about specific bytes, so this answer expires whenever
+        # Renovate bumps an image — the catalogue drops the claim by itself and
+        # this run is what earns it back.
+        run: nix develop --command gen-signatures
       - name: Re-read every image label
         if: inputs.images
         run: nix develop --command gen-upstream

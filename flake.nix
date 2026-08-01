@@ -156,6 +156,27 @@
             ];
             text = builtins.readFile ./scripts/gen-architectures.sh;
           };
+          # Derives whether each stage's image carries a verifiable sigstore
+          # signature, and who signed it, into catalog/signatures.gen.libsonnet.
+          # Hits the network twice per stage, so it is run on demand / on a
+          # schedule, not in the per-PR gate.
+          gen-signatures = pkgs.writeShellApplication {
+            name = "gen-signatures";
+            # inspect_one and its helpers run under xargs, where shellcheck
+            # cannot see the call.
+            excludeShellChecks = [ "SC2329" ];
+            runtimeInputs = with pkgs; [
+              cosign
+              openssl
+              jq
+              git
+              gnugrep
+              gnused
+              go-jsonnet
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-signatures.sh;
+          };
           # Asks a kind cluster's API server which bollwerk policies each stage
           # violates, into catalog/bsi.gen.libsonnet. Needs a cluster (only an API
           # server evaluates the policies' CEL faithfully), so it runs in the e2e
@@ -391,6 +412,7 @@
             gen-spdx
             stamp-catalog
             gen-architectures
+            gen-signatures
             gen-forge
             gen-upstream
             gen-bsi
@@ -430,6 +452,7 @@
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
               echo "  gen-spdx         write the SPDX licence register (checked by check-catalog)"
               echo "  gen-architectures  derive each image's CPU architectures from the registry"
+              echo "  gen-signatures   derive whether each image is signed, and by whom"
               echo "  gen-readme       splice the deploy walkthrough into every workload README"
               echo "  gen-workload-metadata  one workload's catalogue entry, as its own document"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
