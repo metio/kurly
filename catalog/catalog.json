@@ -39625,6 +39625,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Shaarli",
@@ -39742,6 +39745,12 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-01",
+               "databaseTables": 0,
+               "since": "2026-08-01"
+            },
             "tier": "e2e"
          },
          "name": "Shiori",
@@ -44388,6 +44397,12 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 10,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Umami",
@@ -44945,6 +44960,9 @@
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "VictoriaMetrics",
@@ -45068,6 +45086,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 0,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Vikunja",
@@ -45506,6 +45530,12 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 0,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "wallabag",
@@ -45666,6 +45696,9 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Wallos",
@@ -45781,6 +45814,12 @@
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "mysql",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 0,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "webtrees",
@@ -46064,6 +46103,12 @@
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 100,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "wger",
@@ -46342,6 +46387,12 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 30,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "Wiki.js",
@@ -46483,6 +46534,12 @@
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "mysql",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 0,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "WordPress",
@@ -46635,6 +46692,12 @@
          "license": "LGPL-2.1-or-later",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 0,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "XWiki",
@@ -46763,6 +46826,12 @@
          "license": "MIT",
          "licenseOsiApproved": true,
          "maturity": {
+            "delivered": {
+               "databaseEngine": "mysql",
+               "databaseReadOn": "2026-07-31",
+               "databaseTables": 0,
+               "since": "2026-07-31"
+            },
             "tier": "e2e"
          },
          "name": "YOURLS",

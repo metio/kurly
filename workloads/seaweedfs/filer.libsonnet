@@ -51,7 +51,12 @@ function(
   + kurly.scratch('/tmp', '64Mi')
   + advertisePodIP
   + kurly.args(
-    ['filer', '-master=' + masterEndpoint, '-ip=$(POD_IP)', '-ip.bind=0.0.0.0']
+    // -defaultStoreDir: with no filer.toml the filer creates an embedded store,
+    // and its default location is relative to the working directory — which is on
+    // the read-only root filesystem, so it logs "skipping default store dir in
+    // ./filerldb2" and exits before anything listens on 8333. Point it at the
+    // volume the stage already mounts, which is also where that data belongs.
+    ['filer', '-master=' + masterEndpoint, '-ip=$(POD_IP)', '-ip.bind=0.0.0.0', '-defaultStoreDir=/data']
     + (if s3 then ['-s3', '-s3.port=8333'] else [])
   )
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
