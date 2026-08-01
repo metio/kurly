@@ -8,7 +8,7 @@
 //   local catalog = import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet';
 //   kurly.list(catalog(name='postgres', images={
 //     '16': 'ghcr.io/cloudnative-pg/postgresql:16.6',
-//     '17': 'ghcr.io/cloudnative-pg/postgresql:17.2',
+//     '17': 'ghcr.io/cloudnative-pg/postgresql:17.2@sha256:61d2b391e3e324d05edc6c65c555989a7c544ddb72ef271b3abd4a35b57942b1',
 //   }))
 //
 // CNPG gives ImageCatalog and ClusterImageCatalog an identical spec, so this is
@@ -26,7 +26,7 @@ local namespaced = import './namespaced.libsonnet';
 
 function(
   name='postgres',
-  images={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' },
+  images={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2@sha256:61d2b391e3e324d05edc6c65c555989a7c544ddb72ef271b3abd4a35b57942b1' },
   componentImages={},
   labels={},
   annotations={},

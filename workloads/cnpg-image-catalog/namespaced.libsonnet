@@ -11,7 +11,7 @@
 //   local catalog = import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet';
 //   kurly.list(catalog(name='postgres', images={
 //     '16': 'ghcr.io/cloudnative-pg/postgresql:16.6',
-//     '17': 'ghcr.io/cloudnative-pg/postgresql:17.2',
+//     '17': 'ghcr.io/cloudnative-pg/postgresql:17.2@sha256:61d2b391e3e324d05edc6c65c555989a7c544ddb72ef271b3abd4a35b57942b1',
 //   }))
 //
 // This catalog is owned by the team that owns the databases and needs no
@@ -36,7 +36,7 @@ local labelsFor(name) = {
 
 function(
   name='postgres',
-  images={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2' },
+  images={ '17': 'ghcr.io/cloudnative-pg/postgresql:17.2@sha256:61d2b391e3e324d05edc6c65c555989a7c544ddb72ef271b3abd4a35b57942b1' },
   componentImages={},
   labels={},
   annotations={},
