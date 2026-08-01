@@ -13,8 +13,14 @@
 # artifact, that state cannot be represented.
 #
 # The document is DERIVED from catalog.json, which is itself derived by rendering
-# the stages, so nothing here is transcribed. It carries its own schemaVersion
-# because independently published documents version independently.
+# the stages, so nothing here is transcribed.
+#
+# TWO VERSIONS, because there are two things to version and they move apart.
+# `envelopeVersion` is this wrapper's; `schemaVersion` is the ENTRY's, and keeps
+# exactly the meaning it has in catalog.json — so an entry pulled from a referrer
+# and the same entry read from the central file carry the same version under the
+# same key. One number could not say which shape it promised, and the two are about
+# to diverge: the envelope is at 1 while `requires` inside moves to v2.
 #
 #   gen-workload-metadata <workload> [outfile]      (outfile defaults to stdout)
 # Run from the repository root, like every other script here: wrapped by nix,
@@ -30,6 +36,7 @@ out="${2:-}"
 doc="$(jq -e --arg w "$workload" '
   (.workloads[] | select(.id == $w)) as $wl
   | {
+      envelopeVersion: 1,
       schemaVersion: .schemaVersion,
       workload: $wl,
     }

@@ -456,8 +456,15 @@ jobs:
           nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
           nix develop --command oras attach \
             --artifact-type application/vnd.metio.kurly.workload.v1+json \
+            --format json \
             "ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}" \
-            metadata.json:application/json
+            metadata.json:application/json > attached.json
+          # Signed like the image it describes, rather than left as the one
+          # published thing here nobody can verify. A consumer pinning the
+          # referrer by digest already has integrity; a signature is what says
+          # this repository published it.
+          ref="$(jq -r '.reference' attached.json)"
+          nix develop --command cosign sign --yes "$ref"
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
