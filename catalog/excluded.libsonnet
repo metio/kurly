@@ -58,4 +58,32 @@
   nocodb: 'NocoDB Sustainable Use Licence; forbids offering the software as a service',
   outline: 'BUSL-1.1; forbids offering the software as a service for the licence term',
   planka: 'PLANKA Community licence; forbids offering the software as a service',
+
+  // Software whose OWN authors sell hosting for it. A portal charging to host these
+  // competes with the project it depends on, and takes the money that funds it —
+  // which is the opposite of helping. Each entry names the offering and where it
+  // was read, because "upstream sells hosting" is a claim about somebody else's
+  // business and goes stale.
+  //
+  // A THIRD PARTY hosting it is not this: elest.io and a dozen VPS shops sell most
+  // of the catalogue, and that takes nothing from the authors. What is excluded is
+  // the project's own paid service.
+  'cal-com': 'upstream sells hosting (cal.com paid plans) — https://cal.com/pricing',
+  clickhouse: 'upstream sells hosting (ClickHouse Cloud) — https://clickhouse.com/cloud',
+  ghost: 'upstream sells hosting (Ghost Pro) — https://ghost.org/pricing/',
+  gitea: 'upstream sells hosting (Gitea Cloud) — https://about.gitea.com/pricing',
+  glitchtip: 'upstream sells hosting (app.glitchtip.com) — https://glitchtip.com/pricing',
+  grafana: 'upstream sells hosting (Grafana Cloud) — https://grafana.com/products/cloud/',
+  healthchecks: 'upstream sells hosting (healthchecks.io, by the project authors) — https://healthchecks.io/pricing/',
+  influxdb: 'upstream sells hosting (InfluxDB Cloud) — https://www.influxdata.com/products/influxdb-cloud/',
+  matomo: 'upstream sells hosting (Matomo Cloud) — https://matomo.org/pricing/',
+  meilisearch: 'upstream sells hosting (Meilisearch Cloud) — https://www.meilisearch.com/pricing',
+  metabase: 'upstream sells hosting (Metabase Cloud) — https://www.metabase.com/pricing/',
+  miniflux: 'upstream sells hosting (miniflux.app, $15/year) — https://miniflux.app/hosting.html',
+  mattermost: 'upstream sells hosting (Mattermost Cloud) — https://mattermost.com/pricing/',
+  odoo: 'upstream sells hosting (Odoo Online / Odoo.sh) — https://www.odoo.com/pricing',
+  openproject: 'upstream sells hosting (OpenProject cloud) — https://www.openproject.org/pricing/',
+  sonarqube: 'upstream sells hosting (SonarQube Cloud) — https://www.sonarsource.com/products/sonarcloud/',
+  typesense: 'upstream sells hosting (Typesense Cloud) — https://cloud.typesense.org/',
+  umami: 'upstream sells hosting (Umami Cloud) — https://umami.is/pricing',
 }

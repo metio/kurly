@@ -240,9 +240,6 @@
     source: 'https://codeberg.org/superseriousbusiness/gotosocial',
     homepage: 'https://docs.gotosocial.org',
   },
-  grafana: {
-    source: 'https://github.com/grafana/grafana',
-  },
   grav: {
     license: 'GPL-3.0-only',
     title: 'Grav',
@@ -254,12 +251,6 @@
     title: 'Grocy',
     source: 'https://github.com/linuxserver/docker-grocy',
     homepage: 'https://github.com/linuxserver/docker-grocy/packages',
-  },
-  healthchecks: {
-    license: 'BSD-3-Clause',
-    title: 'healthchecks',
-    source: 'https://github.com/healthchecks/healthchecks',
-    homepage: 'https://github.com/healthchecks/healthchecks',
   },
   hedgedoc: {
     license: 'AGPL-3.0',
@@ -390,23 +381,11 @@
     source: 'https://github.com/mealie-recipes/mealie',
     homepage: 'https://github.com/mealie-recipes/mealie',
   },
-  meilisearch: {
-    license: 'NOASSERTION',
-    title: 'meilisearch',
-    source: 'https://github.com/meilisearch/meilisearch',
-    homepage: 'https://github.com/meilisearch/meilisearch',
-  },
   microbin: {
     license: 'BSD-3-Clause',
     title: 'microbin',
     source: 'https://github.com/szabodanika/microbin',
     homepage: 'https://github.com/szabodanika/microbin',
-  },
-  miniflux: {
-    license: 'Apache-2.0',
-    title: 'Miniflux',
-    source: 'https://github.com/miniflux/v2',
-    homepage: 'https://miniflux.app',
   },
   misskey: {
     license: 'AGPL-3.0',
@@ -492,12 +471,6 @@
     title: 'openHAB',
     source: 'https://github.com/openhab/openhab-docker',
     homepage: 'https://www.openhab.org/',
-  },
-  openproject: {
-    license: 'GPL-3.0',
-    title: 'openproject',
-    source: 'https://github.com/opf/openproject',
-    homepage: 'https://github.com/opf/openproject',
   },
   'open-webui': {
     license: 'BSD-3-Clause',

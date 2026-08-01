@@ -117,11 +117,6 @@
     license: 'MIT',
     name: 'BookStack',
   },
-  'cal-com': {
-    homepage: 'https://cal.diy',
-    license: 'MIT',
-    name: 'cal.diy',
-  },
   calibre: {
     homepage: 'https://calibre-ebook.com',
     license: 'GPL-3.0',
@@ -150,11 +145,6 @@
     homepage: 'https://chatpad.ai',
     license: 'AGPL-3.0',
     name: 'chatpad',
-  },
-  clickhouse: {
-    homepage: 'https://clickhouse.com',
-    license: 'Apache-2.0',
-    name: 'ClickHouse',
   },
   'cnpg-cluster': {
     homepage: 'https://www.postgresql.org/',
@@ -363,28 +353,14 @@
     license: 'Apache-2.0',
     name: 'gatus',
   },
-  ghost: {
-    homepage: 'https://ghost.org',
-    license: 'MIT',
-    name: 'Ghost',
-  },
   ghostfolio: {
     homepage: 'https://Ghostfol.io',
     license: 'AGPL-3.0',
     name: 'ghostfolio',
   },
-  gitea: {
-    homepage: 'https://gitea.com',
-    license: 'MIT',
-    name: 'gitea',
-  },
   glance: {
     license: 'AGPL-3.0',
     name: 'glance',
-  },
-  glitchtip: {
-    license: 'mit',
-    name: 'GlitchTip Backend',
   },
   gogs: {
     homepage: 'https://gogs.io',
@@ -403,11 +379,6 @@
   gotify: {
     homepage: 'https://gotify.net',
     name: 'server',
-  },
-  grafana: {
-    homepage: 'https://grafana.com',
-    license: 'AGPL-3.0',
-    name: 'grafana',
   },
   grav: {
     homepage: 'https://getgrav.org',
@@ -432,11 +403,6 @@
     homepage: 'https://guacamole.apache.org/',
     license: 'Apache-2.0',
     name: 'guacamole-server',
-  },
-  healthchecks: {
-    homepage: 'https://healthchecks.io',
-    license: 'BSD-3-Clause',
-    name: 'healthchecks',
   },
   hedgedoc: {
     homepage: 'https://hedgedoc.org',
@@ -481,11 +447,6 @@
     homepage: 'https://immich.app',
     license: 'AGPL-3.0',
     name: 'immich',
-  },
-  influxdb: {
-    homepage: 'https://influxdata.com',
-    license: 'Apache-2.0',
-    name: 'influxdb',
   },
   inspircd: {
     homepage: 'https://www.inspircd.org',
@@ -645,18 +606,9 @@
     license: 'AGPL-3.0',
     name: 'mastodon',
   },
-  matomo: {
-    homepage: 'https://matomo.org/',
-    license: 'GPL-3.0',
-    name: 'matomo',
-  },
   'matrix-conduit': {
     license: 'apache-2.0',
     name: 'Conduit',
-  },
-  mattermost: {
-    homepage: 'https://mattermost.com',
-    name: 'mattermost',
   },
   mautic: {
     homepage: 'https://www.mautic.org',
@@ -681,10 +633,6 @@
     homepage: 'https://www.mediawiki.org',
     name: 'mediawiki',
   },
-  meilisearch: {
-    homepage: 'https://www.meilisearch.com',
-    name: 'meilisearch',
-  },
   memcached: {
     homepage: 'https://memcached.org',
     license: 'BSD-3-Clause',
@@ -700,10 +648,6 @@
     license: 'MIT',
     name: 'mermaid-live-editor',
   },
-  metabase: {
-    homepage: 'https://metabase.com',
-    name: 'metabase',
-  },
   'metrics-server': {
     homepage: 'https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/',
     license: 'Apache-2.0',
@@ -717,11 +661,6 @@
     homepage: 'https://microbin.eu',
     license: 'BSD-3-Clause',
     name: 'microbin',
-  },
-  miniflux: {
-    homepage: 'https://miniflux.app',
-    license: 'Apache-2.0',
-    name: 'v2',
   },
   minio: {
     archived: true,
@@ -825,10 +764,6 @@
     license: 'MIT',
     name: 'oauth2-proxy',
   },
-  odoo: {
-    homepage: 'https://www.odoo.com',
-    name: 'odoo',
-  },
   ollama: {
     homepage: 'https://ollama.com',
     license: 'MIT',
@@ -862,11 +797,6 @@
     homepage: 'https://openobserve.ai',
     license: 'AGPL-3.0',
     name: 'openobserve',
-  },
-  openproject: {
-    homepage: 'https://www.openproject.org',
-    license: 'GPL-3.0',
-    name: 'openproject',
   },
   'opensearch-cluster': {
     homepage: 'https://opensearch.org/docs/latest/opensearch/index/',
@@ -1140,11 +1070,6 @@
     license: 'AGPL-3.0',
     name: 'snipe-it',
   },
-  sonarqube: {
-    homepage: 'http://www.sonarqube.org',
-    license: 'LGPL-3.0',
-    name: 'sonarqube',
-  },
   sonarr: {
     homepage: 'https://sonarr.tv',
     license: 'GPL-3.0',
@@ -1240,16 +1165,6 @@
   twenty: {
     homepage: 'https://twenty.com',
     name: 'twenty',
-  },
-  typesense: {
-    homepage: 'https://typesense.org',
-    license: 'GPL-3.0',
-    name: 'typesense',
-  },
-  umami: {
-    homepage: 'https://umami.is',
-    license: 'MIT',
-    name: 'umami',
   },
   'uptime-kuma': {
     homepage: 'https://uptime.kuma.pet',
