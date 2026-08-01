@@ -902,7 +902,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Reads a Secret, and needs nothing from it by default: the provider credentials (OPENAI_API_KEY, ACCESS_CODE, …) depend entirely on which LLM providers a deployment uses.
+          secretKeys: [],
+          kind: 'http',
+        },
       },
     },
     hollama: {
@@ -1010,7 +1014,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Reads a Secret, and needs nothing from it by default: the tokens are per-deployment API credentials for the services a consumer chooses to enable. Empty means nothing is REQUIRED, which is not the same as nobody having looked.
+          secretKeys: [],
+          kind: 'http',
+        },
       },
     },
     chatpad: {
@@ -1859,7 +1867,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Mailu is a coordinated set of services that share ONE SECRET_KEY, as this workload's own header states — every stage reads the same Secret, so every stage states the same key.
+          secretKeys: [
+            { key: 'SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+          kind: 'http',
+        },
         admin: d.fn('The Mailu administration service: web admin UI, the internal API the other services query, and the SQLite database and DKIM keys behind them (on the shared volume at /data and /dkim). front proxies /admin to it.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
@@ -1889,7 +1903,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Mailu is a coordinated set of services that share ONE SECRET_KEY, as this workload's own header states — every stage reads the same Secret, so every stage states the same key.
+          secretKeys: [
+            { key: 'SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+          kind: 'http',
+        },
         smtp: d.fn('The Mailu MTA (Postfix): relays mail between the edge, the filter, and the store. The queue is transient; only user overrides live on the shared volume.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
@@ -1904,7 +1924,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Mailu is a coordinated set of services that share ONE SECRET_KEY, as this workload's own header states — every stage reads the same Secret, so every stage states the same key.
+          secretKeys: [
+            { key: 'SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+          kind: 'http',
+        },
         antispam: d.fn('The Mailu filter (Rspamd): screens mail on :11332, serves its web UI on :11334, and signs outbound mail with the DKIM keys admin generates. Learned state lives at /var/lib/rspamd on the shared volume.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
@@ -1919,7 +1945,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Mailu is a coordinated set of services that share ONE SECRET_KEY, as this workload's own header states — every stage reads the same Secret, so every stage states the same key.
+          secretKeys: [
+            { key: 'SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+          kind: 'http',
+        },
         webmail: d.fn('The Mailu webmail client (Roundcube): front proxies /webmail to it. Optional — drop it if you only want IMAP/SMTP clients. Keeps its settings at /data on the shared volume.', [
           d.arg('namePrefix', d.T.string, default='mailu'),
           d.arg('name', d.T.string),
@@ -1933,7 +1965,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Mailu is a coordinated set of services that share ONE SECRET_KEY, as this workload's own header states — every stage reads the same Secret, so every stage states the same key.
+          secretKeys: [
+            { key: 'SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+          kind: 'http',
+        },
       },
     },
     forgejo: {
@@ -2234,7 +2272,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // The access code that gates the workspace; without it the instance is open to anyone who reaches it.
+          secretKeys: [
+            { key: 'SIYUAN_ACCESS_AUTH_CODE', generate: 'password', length: 32 },
+          ],
+          kind: 'http',
+        },
       },
     },
     gogs: {
@@ -2272,7 +2316,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Reads a Secret, and needs nothing from it by default: the POSTGRES_* connection is how a consumer moves off SQLite.
+          secretKeys: [],
+          kind: 'http',
+        },
       },
     },
     tautulli: {
@@ -2369,7 +2417,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Reads a Secret, and needs nothing from it by default: DATABASE_URL is how a consumer moves off the bundled SQLite, not something the default render needs.
+          secretKeys: [],
+          kind: 'http',
+        },
       },
     },
     shaarli: {
@@ -2673,7 +2725,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Reads a Secret, and needs nothing from it by default: the GTS_DB_* connection is how a consumer moves off SQLite, and the default render sets GTS_DB_ADDRESS to a file on its volume.
+          secretKeys: [],
+          kind: 'http',
+        },
       },
     },
     flame: {
@@ -2691,7 +2747,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // The admin password, read from the environment; there is no default account.
+          secretKeys: [
+            { key: 'PASSWORD', generate: 'password', length: 32 },
+          ],
+          kind: 'http',
+        },
       },
     },
     'airsonic-advanced': {
@@ -2882,7 +2944,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Session signing. The app mints no default and will not start without it.
+          secretKeys: [
+            { key: 'JWT_SECRET', generate: 'hex', length: 64 },
+          ],
+          kind: 'http',
+        },
       },
     },
     cyberchef: {
@@ -4212,7 +4280,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // The API key pict-rs authenticates the backend with — the SAME value the backend's config references, so one Secret serves both.
+          secretKeys: [
+            { key: 'PICTRS__SERVER__API_KEY', generate: 'hex', length: 32 },
+          ],
+          kind: 'http',
+        },
       },
     },
     mastodon: {
@@ -4499,7 +4573,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + {
+          // Wekan reads its whole database connection from MONGO_URL, so the Secret carries a URL rather than parts.
+          secretKeys: [
+            { key: 'MONGO_URL', generate: 'literal' },
+          ],
+          kind: 'http',
+        },
       },
     },
     activepieces: {

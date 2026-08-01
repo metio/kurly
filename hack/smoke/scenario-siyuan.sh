@@ -10,4 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
+kurly::namespace kurly-siyuan
+kurly::secret kurly-siyuan siyuan workloads/siyuan/server.libsonnet
 kurly::boot workloads/siyuan/server.libsonnet kurly-siyuan
