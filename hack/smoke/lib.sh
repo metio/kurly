@@ -990,6 +990,13 @@ EOF
     kurly::wait_ready "$ns" stageset "$snip" "${KURLY_STAGESET_POLLS:-340}" \
       || {
         kurly::diagnose "$ns"
+        # A cluster add-on applies where it NAMES, not in the walk's namespace, so
+        # the pods that failed are somewhere else entirely. Diagnosing only $ns
+        # printed sources and events for a namespace containing none of the
+        # workload — opencost failed twice with "Deployment/opencost/opencost
+        # status: Failed" and no pod, log or event to say why, and cleanup then
+        # destroyed the evidence.
+        if [ "$ctrlNs" != "$ns" ]; then kurly::diagnose "$ctrlNs"; fi
         kurly::diagnose_pipeline "$ns"
         # WHICH of the two happened, because they want opposite follow-ups and
         # both used to print as "never became Ready": StageProgressing means the
@@ -1002,7 +1009,13 @@ EOF
         return 1
       }
     kubectl --namespace="$ctrlNs" rollout status "${kind,,}/${name}" --timeout=300s \
-      || { kurly::diagnose "$ns"; kurly::diagnose_pipeline "$ns"; echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"; return 1; }
+      || {
+        kurly::diagnose "$ns"
+        if [ "$ctrlNs" != "$ns" ]; then kurly::diagnose "$ctrlNs"; fi
+        kurly::diagnose_pipeline "$ns"
+        echo "::error::deep ${id}: ${kind}/${name} never rolled out via stageset"
+        return 1
+      }
   done
   echo "ok: ${id} delivered end-to-end through Flux -> JaaS -> stageset"
 }
