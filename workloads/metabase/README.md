@@ -25,7 +25,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `metabase` | |
-| `image` | `docker.io/metabase/metabase:v0.63.1` | |
+| `image` | `docker.io/metabase/metabase:v0.63.2` | |
 | `dbHost` / `dbName` / `dbUser` | `metabase-db-rw` / `metabase` / `metabase` | the application database |
 | `secretName` | `metabase-secrets` | Secret with `MB_DB_PASS` (envFrom) |
 | `replicas` | `1` | stateless — scale out freely |
