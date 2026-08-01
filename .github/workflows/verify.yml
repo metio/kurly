@@ -19,14 +19,39 @@ jobs:
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - run: nix develop --command check-fmt
   catalog:
-    # Regenerates catalog/catalog.json from the library annotations and fails if
-    # the committed copy is stale — which also runs the drift asserts that fail
-    # when a feature and its annotation fall out of step.
+    # Regenerates catalog/catalog.json from the library annotations, commits it if
+    # it moved, and only then fails on drift — which also runs the drift asserts
+    # that fail when a feature and its annotation fall out of step.
+    #
+    # It commits because catalog.json is DERIVED. Renovate used to edit it through
+    # eight custom managers so the committed copy tracked the image references it
+    # copies, and a regex can copy a string but cannot recompute a resolution: a
+    # meilisearch bump put the new TAG in catalog.json and left the OLD DIGEST
+    # beside it, because several managers extracted the same dependency from the
+    # same file and only one anchor was repaired. Every such bump then failed this
+    # gate and waited for somebody to regenerate by hand.
+    #
+    # So the reference is written once, in workloads/<name>/<stage>.image, and the
+    # derived file is regenerated here rather than transcribed by pattern.
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.head_ref }}
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Regenerate the derived catalog, and commit it if it moved
+        run: |
+          nix develop --command bash -c 'jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json'
+          if ! git diff --quiet -- catalog/catalog.json; then
+            git config user.name 'github-actions[bot]'
+            git config user.email 'github-actions[bot]@users.noreply.github.com'
+            git add catalog/catalog.json
+            git commit -m 'chore(catalog): regenerate from the workload sources'
+            git push
+          fi
       - run: nix develop --command check-catalog
   test:
     runs-on: ubuntu-latest

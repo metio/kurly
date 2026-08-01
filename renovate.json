@@ -36,7 +36,7 @@
       "automergeStrategy": "squash"
     },
     {
-      "description": "Every copy of one image reference moves in ONE branch. A workload's reference is written twice \u2014 in workloads/<name>/<stage>.image, which the stage reads with importstr, and in catalog.json, which publishes the same string under runs.image plus its halves under runs.tag and runs.digest. While the copies agree they are a single update and Renovate edits them together; the moment they disagree they become different updates (a tag bump for one, a digest bump for the other), land in separate branches, and each branch repairs only its own copy \u2014 so they re-converge only by luck. Grouping by dependency puts every such update in one branch, where the digest is resolved once and written everywhere. This narrows the window rather than closing it: the reference is a DERIVED fact and a regex can copy a string but cannot recompute a resolution, so check-catalog stays the backstop that refuses an inconsistent catalog.",
+      "description": "A workload's image reference is written ONCE, in workloads/<name>/<stage>.image, and catalog.json is REGENERATED from it by CI. Grouping by dependency still keeps a bump to the same image across a stage file and its README example in one branch.",
       "matchDatasources": [
         "docker"
       ],
@@ -73,8 +73,7 @@
       "managerFilePatterns": [
         "/^workloads/.+\\.image$/",
         "/^workloads/.+\\.libsonnet$/",
-        "/^workloads/.+\\.md$/",
-        "/^catalog/catalog\\.json$/"
+        "/^workloads/.+\\.md$/"
       ],
       "matchStrings": [
         "(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9._-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
@@ -124,93 +123,6 @@
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\s+[A-Z0-9_]+_VERSION=\"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "description": "cassandra-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/library/cassandra",
-      "versioningTemplate": "docker",
-      "managerFilePatterns": [
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/cassandra-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "description": "mongodb-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/library/mongo",
-      "versioningTemplate": "docker",
-      "managerFilePatterns": [
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/mongodb-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "description": "mysql-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/library/mysql",
-      "versioningTemplate": "docker",
-      "managerFilePatterns": [
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/mysql-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "description": "opensearch-cluster's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/opensearchproject/opensearch",
-      "versioningTemplate": "docker",
-      "managerFilePatterns": [
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/opensearch-cluster/cluster\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "description": "grafana's catalog entry states the version its operator resolves to an image; the pin itself lives in the workload's own file, tracked above. Anchored on the stage's importPath, which is what names the workload in the rendered JSON.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "depNameTemplate": "docker.io/grafana/grafana",
-      "versioningTemplate": "docker",
-      "managerFilePatterns": [
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "\"importPath\": \"github\\.com/metio/kurly/workloads/grafana/server\\.libsonnet\",[\\s\\S]{0,400}?\"version\": \"(?<currentValue>[^\"]+)\""
-      ]
-    },
-    {
-      "description": "catalog.json publishes each reference's digest beside it, so a consumer never parses one. Anchored on the image line that follows it, which is what names the dependency.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "managerFilePatterns": [
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "\"digest\": \"(?<currentDigest>sha256:[a-f0-9]{64})\",\\s*\"image\": \"(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[^\"@]+)@"
-      ]
-    },
-    {
-      "description": "The same for the published tag, anchored on the image line that precedes it.",
-      "customType": "regex",
-      "datasourceTemplate": "docker",
-      "managerFilePatterns": [
-        "/^catalog/catalog\\.json$/"
-      ],
-      "matchStrings": [
-        "\"image\": \"(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):[^\"@]+@sha256:[a-f0-9]{64}\",\\s*\"tag\": \"(?<currentValue>[^\"]+)\""
       ]
     }
   ]
