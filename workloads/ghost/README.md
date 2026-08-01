@@ -22,7 +22,7 @@ kurly.list(ghost(url='https://blog.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `ghost` | |
-| `image` | `docker.io/library/ghost:6.54.0-alpine` | |
+| `image` | `docker.io/library/ghost:6.54.1-alpine` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | content (`/var/lib/ghost/content`) |
 | `dbHost` / `dbName` / `dbUser` | `ghost-db` / `ghost` / `ghost` | the MySQL/MariaDB database |
 | `url` | inferred | the public URL |
