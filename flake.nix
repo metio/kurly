@@ -335,6 +335,17 @@
             runtimeInputs = [ gen-readme ];
             text = builtins.readFile ./scripts/check-readme.sh;
           };
+          # Projects one workload's catalogue entry into a standalone document,
+          # published beside that workload's own artifact so the description and
+          # the thing it describes cannot disagree.
+          gen-workload-metadata = pkgs.writeShellApplication {
+            name = "gen-workload-metadata";
+            runtimeInputs = with pkgs; [
+              jq
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-workload-metadata.sh;
+          };
           # Stages the generated data the docs site reads into docs/data/
           # (gitignored) — currently the assembler catalog. Run before `hugo`;
           # the docs workflow runs it too, so the published site is always built
@@ -384,6 +395,7 @@
             gen-upstream
             gen-bsi
             gen-readme
+            gen-workload-metadata
             gen-smoke
             gen-docs-data
             verify
@@ -419,6 +431,7 @@
               echo "  gen-spdx         write the SPDX licence register (checked by check-catalog)"
               echo "  gen-architectures  derive each image's CPU architectures from the registry"
               echo "  gen-readme       splice the deploy walkthrough into every workload README"
+              echo "  gen-workload-metadata  one workload's catalogue entry, as its own document"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
               echo "  verify           run every gate locally (what CI runs)"
             '';

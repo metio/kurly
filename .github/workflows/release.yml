@@ -431,6 +431,33 @@ jobs:
           version: ${{ needs.discover.outputs.version }}
           file: ./workload.Containerfile
           build-args: WORKLOAD=${{ matrix.workload }}
+      - name: Publish the workload's metadata beside the image it describes
+        # The catalogue and the artifacts it describes are published separately
+        # today, so they can disagree: catalog.json can say version N while a
+        # workload image is already N+1, for as long as the two publications take
+        # to converge. Attached to the image, that state cannot be represented.
+        #
+        # It is also 1.7MB describing 301 workloads, which a consumer downloads in
+        # full to read one of them. This document is ~1.6KB.
+        #
+        # Published as an OCI REFERRER — a small artifact whose manifest names the
+        # image as its `subject` — so it is fetched from a manifest request with no
+        # layer pull, and can be signed independently. ghcr.io does NOT serve the
+        # Referrers API (asked for a manifest it had just served, by the digest it
+        # reported itself, it answers MANIFEST_UNKNOWN), so oras falls back to the
+        # spec's tag scheme and pushes it under `sha256-<hex>` of the subject.
+        # Nothing here depends on which of the two a registry supports.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          nix develop --command gen-workload-metadata "$WORKLOAD" metadata.json
+          nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
+          nix develop --command oras attach \
+            --artifact-type application/vnd.metio.kurly.workload.v1+json \
+            "ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}" \
+            metadata.json:application/json
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"

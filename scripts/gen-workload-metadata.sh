@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Emits ONE workload's catalogue entry as a standalone document, for publishing
+# beside that workload's own artifact.
+#
+# WHY PER WORKLOAD: catalog.json is 1.7MB and describes 301 workloads. A consumer
+# that wants one of them downloads all of it, and — the reason this exists — the
+# description and the thing it describes are two separately published objects, so
+# they can disagree. catalog.json can say version N while the workload artifact is
+# N+1, for as long as the two publications take to converge. Attached to the
+# artifact, that state cannot be represented.
+#
+# The document is DERIVED from catalog.json, which is itself derived by rendering
+# the stages, so nothing here is transcribed. It carries its own schemaVersion
+# because independently published documents version independently.
+#
+#   gen-workload-metadata <workload> [outfile]      (outfile defaults to stdout)
+# Run from the repository root, like every other script here: wrapped by nix,
+# "$0" is a store path and its parent is not this repository.
+set -euo pipefail
+
+workload="${1:?usage: gen-workload-metadata <workload> [outfile]}"
+out="${2:-}"
+
+# -e makes jq exit non-zero when the selection produces null, so a workload that
+# does not exist fails here rather than publishing an empty document beside a real
+# image.
+doc="$(jq -e --arg w "$workload" '
+  (.workloads[] | select(.id == $w)) as $wl
+  | {
+      schemaVersion: .schemaVersion,
+      workload: $wl,
+    }
+' catalog/catalog.json)" || {
+  echo "::error::no workload '${workload}' in catalog/catalog.json" >&2
+  exit 1
+}
+
+if [ -n "$out" ]; then
+  printf '%s\n' "$doc" >"$out"
+  echo "wrote $(wc -c <"$out") bytes to ${out}"
+else
+  printf '%s\n' "$doc"
+fi
