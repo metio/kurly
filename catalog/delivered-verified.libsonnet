@@ -134,7 +134,7 @@
   jellyseerr: '2026-07-31',
   jenkins: '2026-07-31',
   joomla: '2026-07-31',
-  joplin: '2026-07-31',
+  joplin: '2026-08-01',
   kanboard: '2026-07-31',
   karakeep: '2026-07-31',
   kavita: '2026-07-31',

@@ -44,15 +44,17 @@ function(
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.scratch('/tmp', '64Mi')
-  // Rails creates its working directories under the app's own tmp/ on boot — cache,
-  // then pids, and sockets if it ever listens on one. Scratching the whole tmp/
-  // would hide local_secret.txt, the secret the image generated at build, and a
-  // password-sharing app that mints a new secret on every restart cannot read back
-  // anything it encrypted. So each subdirectory is its own scratch; the image ships
-  // none of them, and they are listed together rather than found one boot at a time.
-  + kurly.scratch('/opt/PasswordPusher/tmp/cache', '64Mi')
-  + kurly.scratch('/opt/PasswordPusher/tmp/pids', '8Mi')
-  + kurly.scratch('/opt/PasswordPusher/tmp/sockets', '8Mi')
+  // Rails creates working directories under the app's own tmp/ as it boots — cache,
+  // pids, sockets, rack_attack_cache — and naming them one at a time takes a boot
+  // each to discover the next. The whole directory is the scratch instead.
+  //
+  // The one thing tmp/ ships is local_secret.txt, the secret Rails generates when
+  // it has none. Hiding it is safe HERE because it is not the source of truth: this
+  // stage reads SECRET_KEY_BASE from its Secret, which the catalogue declares. Were
+  // that not so, a password-sharing app minting a fresh secret on every restart
+  // could not read back anything it had encrypted — so this is a fact about the
+  // stage's configuration, not a general licence to scratch a Rails tmp/.
+  + kurly.scratch('/opt/PasswordPusher/tmp', '128Mi')
   // Rails migrates and warms its caches before it listens.
   // Rails compiles its bootsnap cache and runs its queue inside the app directory.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 45 })

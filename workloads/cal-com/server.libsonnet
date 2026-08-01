@@ -40,21 +40,18 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.envFromSecret(secretName)
-  // yarn rewrites its install state on start, inside the image's own .yarn
-  // directory. That directory cannot be a scratch — it also holds `patches`,
-  // `releases` and `versions`, 3.5MB the build needs, and an emptyDir would hide
-  // all of it — so the one file that moves is pointed at the scratch instead, and
-  // the root filesystem stays read-only.
-  + kurly.env({ YARN_INSTALL_STATE_PATH: '/tmp/install-state.gz' } + baseEnv + env)
+  + kurly.env(baseEnv + env)
   // The image runs as root and owns its build tree, which yarn and Prisma write
   // into while the app boots.
   + kurly.rootUser()
   + kurly.scratch('/tmp', '128Mi')
-  // turbo caches under .turbo on start. Unlike .yarn beside it, the image ships no
-  // such directory, so this one takes a scratch rather than a redirect — the two
-  // sit next to each other and want opposite treatments for the same reason: what
-  // the image already has there.
-  + kurly.scratch('/calcom/.turbo', '256Mi')
+  // Kept: yarn rewrites install-state.gz inside the image's own .yarn directory,
+  // which also holds patches, releases and versions — 3.5MB the build needs — so it
+  // cannot be a scratch. YARN_INSTALL_STATE_PATH looked like the way out and is not:
+  // the nested `@calcom/web:start` yarn writes it regardless, and the local test
+  // that appeared to prove the redirect never reached that step, failing earlier on
+  // missing database config.
+  + kurly.writableRootFilesystem()
   // The first start migrates the schema and seeds the app catalogue before the
   // server binds, which takes minutes.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 15, failureThreshold: 60 })

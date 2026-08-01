@@ -40,6 +40,7 @@
   ferretdb: { tables: 0, engine: 'postgres', on: '2026-08-01' },
   formbricks: { tables: 27, engine: 'postgres', on: '2026-08-01' },
   immich: { tables: 51, engine: 'postgres', on: '2026-08-01' },
+  joplin: { tables: 26, engine: 'postgres', on: '2026-08-01' },
   kutt: { tables: 8, engine: 'postgres', on: '2026-08-01' },
   mastodon: { tables: 99, engine: 'postgres', on: '2026-08-01' },
   outline: { tables: 45, engine: 'postgres', on: '2026-08-01' },
