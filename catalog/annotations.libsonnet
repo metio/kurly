@@ -1622,10 +1622,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       summary: 'A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom.',
       category: 'application',
       // Stated as a LIST rather than derived, because it needs TWO databases and a
-      // kind-keyed object can only name one — which is how a consumer came to bill
-      // it for a single database. Both engines are established from what the stage
-      // configures, not from its prose: SYSTEM_DB_PORT and TENANT_DB_PORT are 3306,
-      // and it sets MONGODB_DATABASE_URL.
+      // kind-keyed object can only name one — so anything provisioning from it
+      // stands up a single server and this never starts. Both engines are
+      // established from what the stage configures rather than from its prose:
+      // SYSTEM_DB_PORT and TENANT_DB_PORT are 3306, and it sets
+      // MONGODB_DATABASE_URL.
       requires: [
         { kind: 'database', engine: 'mysql', required: true },
         { kind: 'database', engine: 'mongodb', required: true },

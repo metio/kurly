@@ -405,9 +405,9 @@ local pvcCount(fn) =
 
 // The pod templates a stage renders — where its security context lives.
 // The dependency kinds a workload may declare. A CLOSED list: a consumer that
-// prices or provisions from these has to fail loudly on a term it does not know
-// rather than carry it unpriced, so the vocabulary is published rather than
-// implied by whatever happens to appear.
+// PROVISIONS from these has to fail loudly on a term it does not know rather than
+// skip it silently, since a dependency nobody stood up is a workload that does not
+// run. Published rather than implied by whatever happens to appear.
 local requiresKinds = ['database', 'cache', 'objectStorage', 'broker'];
 
 local podTemplates(items) = [
@@ -463,14 +463,14 @@ local databaseEngine(workload, stageFns) =
   else null;
 
 // v1's `requires` object becomes a LIST, because a workload can need two of the
-// same kind and an object cannot say so: bigcapital needs a MySQL and a MongoDB and
-// was described as needing one database, which a consumer priced as one database.
+// same kind and an object cannot say so: bigcapital needs a MySQL AND a MongoDB,
+// and an object keyed by kind can only name one — so a consumer provisioning from
+// it stands up one server and the workload never starts.
 local requiresV2(workload, stageFns) =
   local declared = std.get(ann.workloads[workload], 'requires', {});
   // A workload may state the list outright, for what derivation cannot reach: two
   // dependencies of the SAME kind. bigcapital needs a MySQL and a MongoDB, and an
-  // object keyed by kind can only say "a database" — which is exactly how it came
-  // to be billed for one.
+  // object keyed by kind can only say "a database".
   if std.isArray(declared) then declared else
     local v1 = declared;
     local engine = databaseEngine(workload, stageFns);
