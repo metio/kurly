@@ -356,12 +356,6 @@ local podOf(app) = app.deployment.spec.template.spec;
     [v.name for v in pod.volumes if std.startsWith(v.name, 'etc-')],
     ['etc-app-server-users-d']
   ),
-  // The catalog publishes the preset values, so a consumer reads them instead of
-  // keeping a copy; this pins the two to each other.
-  resource_preset_matches_the_published_value: std.assertEqual(
-    containerOf(kurly.worker('w', 'img:1') + kurly.resourcePreset('small')).resources,
-    (import 'github.com/metio/kurly/lib/resource-presets.libsonnet').small
-  ),
   // kurly.addCapabilities grants named privileges back on top of the dropped-ALL
   // default, so the manifest states exactly which ones the app holds.
   added_capabilities_compose_with_the_drop: std.assertEqual(
@@ -387,9 +381,10 @@ local podOf(app) = app.deployment.spec.template.spec;
     [std.objectHas(podOf(shop), f) for f in ['nodeSelector', 'tolerations', 'topologySpreadConstraints', 'affinity']],
     [false, false, false, false]
   ),
-  // resourcePreset replaces the container resources with the named size.
-  resource_preset: std.assertEqual(
-    (shop + kurly.resourcePreset('small')).deployment.spec.template.spec.containers[0].resources,
+  // reserve replaces the container resources with the given quantities, and sets
+  // the memory limit equal to its request while leaving CPU unlimited.
+  reserve: std.assertEqual(
+    (shop + kurly.reserve('250m', '256Mi')).deployment.spec.template.spec.containers[0].resources,
     { requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '256Mi' } }
   ),
   // The placement features land on the pod template verbatim.
@@ -884,7 +879,8 @@ local podOf(app) = app.deployment.spec.template.spec;
       gateway='shared',
       tls='h-tls',
       issuer='letsencrypt-prod',
-      resourceTier='small',
+      cpu='250m',
+      memory='256Mi',
       allowTo=[{ cidr: '10.0.0.0/8' }],
     )).items]),
     ['Certificate', 'Deployment', 'HTTPRoute', 'NetworkPolicy', 'Service', 'ServiceAccount']
@@ -892,7 +888,7 @@ local podOf(app) = app.deployment.spec.template.spec;
   // A worker has no host, so production skips exposure and mints no certificate.
   production_worker_skips_exposure: std.assertEqual(
     std.set([m.kind for m in kurly.list(kurly.production(
-      kurly.worker('w', 'ghcr.io/example/w:1.0.0'), resourceTier='nano', replicas=1,
+      kurly.worker('w', 'ghcr.io/example/w:1.0.0'), cpu='50m', memory='64Mi', replicas=1,
     )).items]),
     ['Deployment', 'ServiceAccount']
   ),

@@ -305,7 +305,7 @@ local itemsOf(value) =
   //     // have no way in and it looks like the platform's fault.
   //     host=['tenant1.example.com', 'www.tenant1.com'], gateway='shared',
   //     tls='tenant1-tls', issuer='letsencrypt-prod',
-  //     resourceTier='small', replicas=2, priorityClassName='standard',
+  //     cpu='250m', memory='256Mi', replicas=2, priorityClassName='standard',
   //     allowFrom=[{ pods: { 'app.kubernetes.io/name': 'gateway' }, namespace: 'ingress' }],
   //   ))
   //
@@ -327,7 +327,8 @@ local itemsOf(value) =
     tls=null,
     issuer=null,
     issuerKind='ClusterIssuer',
-    resourceTier=null,
+    cpu=null,
+    memory=null,
     allowFrom=[],
     allowTo=[],
     networkVariant='kubernetes',
@@ -340,7 +341,7 @@ local itemsOf(value) =
       else app + $.expose.gateway(host, gateway, gatewayNamespace=gatewayNamespace, sectionName=sectionName);
     local composed =
       exposed
-      + (if resourceTier == null then {} else $.resourcePreset(resourceTier))
+      + (if cpu == null || memory == null then {} else $.reserve(cpu, memory))
       + (if allowFrom == [] && allowTo == [] then {} else $.network[networkVariant](allowFrom=allowFrom, allowTo=allowTo))
       + (if replicas == null then {} else $.replicas(replicas))
       + (if priorityClassName == null then {} else $.priorityClassName(priorityClassName));

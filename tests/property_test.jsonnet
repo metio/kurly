@@ -17,20 +17,26 @@ local subsetOf(sub, whole) = std.all([std.objectHas(whole, k) && whole[k] == sub
 {
   // --- parameterized: every branch of the functions with logic ---------------
 
-  // resourcePreset renders the documented memory request for every named size.
-  resource_preset_sizes: std.assertEqual(
+  // reserve renders exactly the quantities it is given, whatever they are — the
+  // point of it, since a size somebody chose is rarely one a name could express.
+  reserve_quantities: std.assertEqual(
     [
-      containerOf(httpBase + kurly.resourcePreset(p)).resources.requests.memory
-      for p in ['nano', 'micro', 'small', 'medium', 'large']
+      containerOf(httpBase + kurly.reserve(s[0], s[1])).resources.requests
+      for s in [['50m', '64Mi'], ['370m', '608Mi'], ['1', '1Gi']]
     ],
-    ['64Mi', '128Mi', '256Mi', '512Mi', '1Gi']
+    [
+      { cpu: '50m', memory: '64Mi' },
+      { cpu: '370m', memory: '608Mi' },
+      { cpu: '1', memory: '1Gi' },
+    ]
   ),
-  // …and each keeps the documented shape: memory limit == request, no CPU limit.
-  resource_preset_shape: std.assertEqual(
+  // …and every one keeps the limit policy: memory limit == request (Guaranteed for
+  // memory, so an OOM kill is a statement about this workload), and no CPU limit.
+  reserve_shape: std.assertEqual(
     std.all([
-      local r = containerOf(httpBase + kurly.resourcePreset(p)).resources;
+      local r = containerOf(httpBase + kurly.reserve(s[0], s[1])).resources;
       r.limits.memory == r.requests.memory && !std.objectHas(r.limits, 'cpu')
-      for p in ['nano', 'micro', 'small', 'medium', 'large']
+      for s in [['50m', '64Mi'], ['370m', '608Mi'], ['1', '1Gi']]
     ]),
     true
   ),

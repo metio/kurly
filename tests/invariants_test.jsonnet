@@ -12,7 +12,7 @@ local apps = [
   kurly.http('web', 'ghcr.io/example/web:1.2.3'),
   kurly.http('web2', 'ghcr.io/example/web:1.2.3') + kurly.expose.ingress('web.example.com') + kurly.labels({ team: 'edge' }),
   kurly.http('web3', 'ghcr.io/example/web:1.2.3') + kurly.expose.gateway('web.example.com', 'shared'),
-  kurly.worker('queue', 'ghcr.io/example/queue:1.0.0') + kurly.replicas(2) + kurly.resourcePreset('small'),
+  kurly.worker('queue', 'ghcr.io/example/queue:1.0.0') + kurly.replicas(2) + kurly.reserve('250m', '256Mi'),
   kurly.cron('nightly', 'ghcr.io/example/nightly:1.0.0', '0 2 * * *'),
   kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0') + kurly.nodeSelector({ role: 'edge' }),
   kurly.http('stateful-http', 'ghcr.io/example/stateful:1.0.0') + kurly.store('/data', '1Gi') + kurly.recreate() + kurly.config({ 'a.conf': 'x' }),

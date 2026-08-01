@@ -13,11 +13,6 @@
 //   + kurly.config({ 'pipelines.edn': edn })
 //   + kurly.runAs(12345)
 //   + kurly.recreate()
-// The named resource sizes resourcePreset picks from live in their own file: the
-// catalog publishes their values, so a consumer reads the numbers rather than
-// transcribing them.
-local resourcePresets = import './resource-presets.libsonnet';
-
 {
   // Container basics.
   image(image):: { config+:: { image: image } },
@@ -82,15 +77,12 @@ local resourcePresets = import './resource-presets.libsonnet';
         + (if limits == null then {} else { limits: limits }),
     },
   },
-  // resourcePreset picks a named size (nano/micro/small/medium/large) instead of
-  // spelling out requests and limits; it replaces the resources wholesale, so
-  // compose it before any single-knob resources() tweak.
-  resourcePreset(preset):: { config+:: { resources: resourcePresets[preset] } },
-  // reserve sets an ARBITRARY reservation, where resourcePreset picks one of five
-  // named ones. It exists because a consumer whose customers choose CPU and memory
+  // reserve sets a reservation from given quantities. It replaced five named sizes
+  // (nano/micro/small/medium/large), which were removed once their only consumer
+  // stopped pricing from them: a consumer whose customers choose CPU and memory
   // directly produces pairs no name can express — 370m and 608Mi — and rounding
-  // such an order to the nearest preset would run a tenant on a reservation they
-  // did not buy while billing them for the one they did.
+  // such an order to the nearest name would run a tenant on a reservation they did
+  // not buy while billing them for the one they did.
   //
   // It applies the SAME limit policy as the presets, deliberately: the memory limit
   // equals the memory request, and there is no CPU limit. Equal memory request and
@@ -99,8 +91,8 @@ local resourcePresets = import './resource-presets.libsonnet';
   // workload rather than about whatever else shared its node. No CPU limit because
   // throttling is usually worse than letting a pod burst.
   //
-  // Replaces the resources wholesale, like resourcePreset, so compose it BEFORE any
-  // single-knob resources() tweak. Applies to the workload's container; a stage
+  // Replaces the resources wholesale, so compose it BEFORE any single-knob
+  // resources() tweak. Applies to the workload's container; a stage
   // running more than one has no defined answer here, and splitting a total between
   // containers is a question for whoever knows how the work divides.
   reserve(cpu, memory):: {

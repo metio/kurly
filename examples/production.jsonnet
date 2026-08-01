@@ -17,7 +17,8 @@ kurly.list(kurly.production(
   sectionName='https',
   tls='storefront-tenant1-tls',
   issuer='letsencrypt-prod',
-  resourceTier='small',
+  cpu='250m',
+  memory='256Mi',
   replicas=2,
   priorityClassName='standard',
   // Only the shared gateway's pods may reach the workload; it may reach its

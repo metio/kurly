@@ -115,9 +115,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('requests', d.T.object, example={ cpu: '100m', memory: '128Mi' }),
       d.arg('limits', d.T.object, example={ memory: '256Mi' }),
     ]) + { kinds: allKinds, group: 'container' },
-    resourcePreset: d.fn('A named resource size (nano/micro/small/medium/large) — a memory request equal to its limit and a CPU request with no limit. Replaces resources wholesale.', [
-      d.arg('preset', d.T.string, required=true, example='small'),
-    ]) + { kinds: allKinds, group: 'container' },
     reserve: d.fn('An arbitrary resource reservation — the given CPU and memory as requests, with the memory limit equal to its request and no CPU limit, the same policy the named presets use. For a consumer whose sizes are chosen rather than picked from a menu, where no preset name fits. Replaces resources wholesale; a stage with more than one container has no defined answer.', [
       d.arg('cpu', d.T.string, required=true, example='500m'),
       d.arg('memory', d.T.string, required=true, example='512Mi'),
@@ -7034,7 +7031,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('tls', d.T.string, example='tenant1-tls'),
       d.arg('issuer', d.T.string, example='letsencrypt-prod'),
       d.arg('issuerKind', d.T.string, default='ClusterIssuer'),
-      d.arg('resourceTier', d.T.string, example='small'),
+      d.arg('cpu', d.T.string, example='250m'),
+      d.arg('memory', d.T.string, example='256Mi'),
       d.arg('allowFrom', d.T.array, default=[]),
       d.arg('allowTo', d.T.array, default=[]),
       d.arg('networkVariant', d.T.string, default='kubernetes'),

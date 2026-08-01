@@ -15,7 +15,6 @@ local expose = import '../lib/expose.libsonnet';
 local features = import '../lib/features.libsonnet';
 local migrations = import '../lib/migrations.libsonnet';
 local network = import '../lib/network.libsonnet';
-local resourcePresets = import '../lib/resource-presets.libsonnet';
 local security = import '../lib/security.libsonnet';
 local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
@@ -1022,9 +1021,6 @@ local workloadEntries =
          'helpers: main.libsonnet must expose every annotated helper',
 
   schemaVersion: 1,
-  // The values behind kurly.resourcePreset's names, so a consumer sizing (or
-  // costing) a deployment reads them instead of keeping its own copy.
-  resourcePresets: resourcePresets,
   // The policy set every stage's `bsi` field refers to, with the BSI requirement
   // each one implements.
   bsiPolicies: bsiPolicies,
