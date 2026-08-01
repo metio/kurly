@@ -33,12 +33,15 @@
 // it against a database they could not use. Two facts, two files.
 
 {
-  photoview: { tables: 14, engine: 'postgres', on: '2026-07-31' },
+  ferretdb: { tables: 0, engine: 'postgres', on: '2026-08-01' },
+  immich: { tables: 51, engine: 'postgres', on: '2026-08-01' },
+  photoview: { tables: 14, engine: 'postgres', on: '2026-08-01' },
   rallly: { tables: 31, engine: 'postgres', on: '2026-07-31' },
-  redmine: { tables: 60, engine: 'mysql', on: '2026-07-31' },
+  redmine: { tables: 60, engine: 'mysql', on: '2026-08-01' },
   rundeck: { tables: 0, engine: 'postgres', on: '2026-08-01' },
   seatsurfing: { tables: 25, engine: 'postgres', on: '2026-08-01' },
   shiori: { tables: 0, engine: 'postgres', on: '2026-08-01' },
+  shlink: { tables: 15, engine: 'postgres', on: '2026-08-01' },
   'snipe-it': { tables: 56, engine: 'mysql', on: '2026-08-01' },
   sonarqube: { tables: 126, engine: 'postgres', on: '2026-08-01' },
   synapse: { tables: 0, engine: 'postgres', on: '2026-07-31' },
