@@ -104,4 +104,13 @@
   teable: 'upstream sells hosting (Teable Pro/Business) — https://teable.ai/pricing',
   twenty: 'upstream sells hosting (Twenty cloud, $9/user/mo) — https://twenty.com/pricing',
   victoriametrics: 'upstream sells hosting (VictoriaMetrics Cloud) — https://victoriametrics.com/products/cloud/',
+
+  // Upstream is no longer maintained. A catalogue that keeps offering an archived
+  // project is selling something nobody will fix — every future CVE in it stays
+  // open, and the operator who deployed it from here has no upstream to go to.
+  //
+  // This is checkable rather than remembered: gen-forge already asks each GitHub
+  // repository about itself, and `archived` is one field further. Worth deriving
+  // so the next one is caught rather than noticed.
+  minio: 'upstream archived on 2026-04-24 — https://github.com/minio/minio (repository is read-only)',
 }

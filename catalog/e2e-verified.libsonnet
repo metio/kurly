@@ -139,7 +139,6 @@
   'metrics-server': '2026-07-28',
   metube: '2026-07-28',
   microbin: '2026-07-28',
-  minio: '2026-07-28',
   misskey: '2026-07-28',
   monica: '2026-07-28',
   mosquitto: '2026-07-28',

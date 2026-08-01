@@ -629,11 +629,6 @@
     license: 'BSD-3-Clause',
     name: 'microbin',
   },
-  minio: {
-    archived: true,
-    license: 'AGPL-3.0',
-    name: 'minio',
-  },
   misskey: {
     homepage: 'https://misskey-hub.net/',
     license: 'AGPL-3.0',

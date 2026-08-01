@@ -149,7 +149,6 @@
   'metrics-server/server': { architectures: ['amd64', 'arm', 'arm64', 'ppc64le', 's390x'] },
   'metube/server': { architectures: ['amd64', 'arm64'] },
   'microbin/server': { architectures: ['amd64', 'arm64'] },
-  'minio/server': { architectures: ['amd64', 'arm64', 'ppc64le'] },
   'misskey/server': { architectures: ['amd64', 'arm64'] },
   'mongo-express/server': { architectures: ['amd64', 'arm64'] },
   'monica/server': { architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },

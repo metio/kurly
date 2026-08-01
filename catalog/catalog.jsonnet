@@ -241,7 +241,6 @@ local stageImports = {
   'webtrees/server': import 'github.com/metio/kurly/workloads/webtrees/server.libsonnet',
   'postgres/server': import 'github.com/metio/kurly/workloads/postgres/server.libsonnet',
   'nginx-proxy-manager/server': import 'github.com/metio/kurly/workloads/nginx-proxy-manager/server.libsonnet',
-  'minio/server': import 'github.com/metio/kurly/workloads/minio/server.libsonnet',
   'rabbitmq/server': import 'github.com/metio/kurly/workloads/rabbitmq/server.libsonnet',
   'ollama/server': import 'github.com/metio/kurly/workloads/ollama/server.libsonnet',
   'technitium/server': import 'github.com/metio/kurly/workloads/technitium/server.libsonnet',

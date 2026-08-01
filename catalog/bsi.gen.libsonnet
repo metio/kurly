@@ -151,7 +151,6 @@
   'metrics-server/server': [],
   'metube/server': ['require-non-root-groups', 'require-ro-rootfs', 'require-run-as-non-root-user'],
   'microbin/server': ['require-non-root-groups', 'require-run-as-non-root-user'],
-  'minio/server': ['require-non-root-groups', 'require-run-as-non-root-user'],
   'misskey/server': ['require-non-root-groups', 'require-ro-rootfs', 'require-run-as-non-root-user'],
   'mongo-express/server': ['require-non-root-groups', 'require-ro-rootfs', 'require-run-as-non-root-user'],
   'monica/server': ['disallow-unwanted-capabilities', 'require-ro-rootfs', 'require-run-as-nonroot'],

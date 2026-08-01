@@ -137,7 +137,6 @@
     'metrics-server',
     'metube',
     'microbin',
-    'minio',
     'misskey',
     'monica',
     'mosquitto',

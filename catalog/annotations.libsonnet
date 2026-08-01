@@ -3741,25 +3741,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
-    minio: {
-      upstream: { repo: 'https://github.com/minio/minio' },
-      name: 'MinIO',
-      summary: 'A MinIO server (a high-performance, self-hosted, S3-compatible object storage server) on the official image; its objects live on a PersistentVolume. Single-node MinIO (a real object store runs distributed across nodes/disks). The web console (:9001) needs a separate Service. kurly authors no Secret; MINIO_ROOT_USER/PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the S3 API on :9000.',
-      category: 'storage',
-      stages: {
-        server: d.fn('The MinIO server. secretName holds MINIO_ROOT_USER/PASSWORD (envFrom). Objects at /data; the console (:9001) needs an extra Service. Usually reached in-cluster.', [
-          d.arg('name', d.T.string, default='minio'),
-          d.arg('image', d.T.string),
-          d.arg('storageSize', d.T.quantity, default='50Gi'),
-          d.arg('storageClass', d.T.string),
-          d.arg('secretName', d.T.string, default='minio'),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', secretKeys: [{ key: 'MINIO_ROOT_USER', generate: 'literal', value: 'kurlyadmin' }, { key: 'MINIO_ROOT_PASSWORD', generate: 'password', length: 32 }] },
-      },
-    },
     rabbitmq: {
       license: 'MPL-2.0',
       upstream: { repo: 'https://github.com/rabbitmq/rabbitmq-server' },
