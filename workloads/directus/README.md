@@ -26,7 +26,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `directus` | |
-| `image` | `docker.io/directus/directus:12.1.1` | |
+| `image` | `docker.io/directus/directus:12.2.0` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | uploads (`/directus/uploads`) |
 | `dbHost` / `dbName` / `dbUser` | `directus-db-rw` / `directus` / `directus` | the PostgreSQL database |
 | `publicUrl` | inferred | the public URL |
