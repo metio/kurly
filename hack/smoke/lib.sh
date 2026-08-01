@@ -849,7 +849,18 @@ EOF
 
   # 360s for the first render, 180s once the artifacts are warm.
   local snippetTries=120
-  for st in $(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[].id' catalog/catalog.json); do
+  # Stage order matters for a workload whose components depend on each other, and
+  # the catalogue's order is alphabetical rather than causal. seaweedfs deploys
+  # filer, master, server, volume that way — and the filer talks to the master, so
+  # it starts first, finds nothing at -master=, and exits without printing why. The
+  # walk then failed a workload whose only problem was the order it was started in.
+  #
+  # A workload that needs a different order states one in extra.json; everything
+  # else keeps the catalogue's, which is right whenever the stages are independent.
+  local stageOrder
+  stageOrder="$(jq -r --arg id "$id" '(.[$id] // {}).stageOrder // ""' hack/smoke/extra.json 2>/dev/null || true)"
+  [ -n "$stageOrder" ] || stageOrder="$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[].id' catalog/catalog.json)"
+  for st in $stageOrder; do
     f="workloads/${id}/${st}.libsonnet"
     snip="${id}-${st}"
     # Discover the stage's primary controller so the StageSet's readyChecks and
