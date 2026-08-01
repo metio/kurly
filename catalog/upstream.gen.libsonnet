@@ -347,12 +347,6 @@
     source: 'https://github.com/mastodon/mastodon',
     homepage: 'https://github.com/mastodon/mastodon',
   },
-  maybe: {
-    license: 'AGPL-3.0',
-    title: 'maybe',
-    source: 'https://github.com/maybe-finance/maybe',
-    homepage: 'https://github.com/maybe-finance/maybe',
-  },
   mealie: {
     license: 'AGPL-3.0',
     title: 'mealie',
@@ -567,12 +561,6 @@
     title: 'rallly',
     source: 'https://github.com/lukevella/rallly',
     homepage: 'https://github.com/lukevella/rallly',
-  },
-  readarr: {
-    license: 'GPL-3.0-only',
-    title: 'Readarr',
-    source: 'https://github.com/linuxserver/docker-readarr',
-    homepage: 'https://github.com/linuxserver/docker-readarr/packages',
   },
   rocketchat: {
     source: 'https://github.com/RocketChat/Rocket.Chat',

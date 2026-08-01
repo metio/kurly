@@ -113,4 +113,8 @@
   // repository about itself, and `archived` is one field further. Worth deriving
   // so the next one is caught rather than noticed.
   minio: 'upstream archived on 2026-04-24 — https://github.com/minio/minio (repository is read-only)',
+  maybe: 'upstream archived on 2025-07-24 — https://github.com/maybe-finance/maybe',
+  overseerr: 'upstream archived on 2026-02-15 — https://github.com/sct/overseerr',
+  'pingvin-share': 'upstream archived on 2026-05-18 — https://github.com/stonith404/pingvin-share',
+  readarr: 'upstream archived on 2025-06-27 — https://github.com/Readarr/Readarr',
 }

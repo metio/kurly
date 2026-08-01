@@ -581,11 +581,6 @@
     homepage: 'https://www.mautic.org',
     name: 'mautic',
   },
-  maybe: {
-    archived: true,
-    license: 'AGPL-3.0',
-    name: 'maybe',
-  },
   mazanoke: {
     homepage: 'https://MAZANOKE.com',
     license: 'GPL-3.0',
@@ -764,12 +759,6 @@
     license: 'AGPL-3.0',
     name: 'overleaf',
   },
-  overseerr: {
-    archived: true,
-    homepage: 'https://overseerr.dev',
-    license: 'MIT',
-    name: 'overseerr',
-  },
   owncast: {
     homepage: 'https://owncast.online',
     license: 'MIT',
@@ -829,12 +818,6 @@
     homepage: 'https://thm-health.github.io/PILOS/',
     license: 'LGPL-2.1',
     name: 'PILOS',
-  },
-  'pingvin-share': {
-    archived: true,
-    homepage: 'https://stonith404.github.io/pingvin-share/',
-    license: 'BSD-2-Clause',
-    name: 'pingvin-share',
   },
   piwigo: {
     homepage: 'https://piwigo.org',
@@ -909,12 +892,6 @@
     homepage: 'https://rallly.co',
     license: 'AGPL-3.0',
     name: 'rallly',
-  },
-  readarr: {
-    archived: true,
-    homepage: 'http://readarr.com',
-    license: 'GPL-3.0',
-    name: 'Readarr',
   },
   'redis-commander': {
     homepage: 'http://joeferner.github.io/redis-commander/',

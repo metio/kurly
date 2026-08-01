@@ -60,7 +60,6 @@ local stageImports = {
   'wger/server': import 'github.com/metio/kurly/workloads/wger/server.libsonnet',
   'paperless-ngx/server': import 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet',
   'mautic/server': import 'github.com/metio/kurly/workloads/mautic/server.libsonnet',
-  'maybe/server': import 'github.com/metio/kurly/workloads/maybe/server.libsonnet',
   'peertube/server': import 'github.com/metio/kurly/workloads/peertube/server.libsonnet',
   'bigcapital/server': import 'github.com/metio/kurly/workloads/bigcapital/server.libsonnet',
   'bigcapital/webapp': import 'github.com/metio/kurly/workloads/bigcapital/webapp.libsonnet',
@@ -81,7 +80,6 @@ local stageImports = {
   'jenkins/server': import 'github.com/metio/kurly/workloads/jenkins/server.libsonnet',
   'alist/server': import 'github.com/metio/kurly/workloads/alist/server.libsonnet',
   'calibre-web-automated/server': import 'github.com/metio/kurly/workloads/calibre-web-automated/server.libsonnet',
-  'readarr/server': import 'github.com/metio/kurly/workloads/readarr/server.libsonnet',
   'apprise/server': import 'github.com/metio/kurly/workloads/apprise/server.libsonnet',
   'chatpad/server': import 'github.com/metio/kurly/workloads/chatpad/server.libsonnet',
   'cobalt/server': import 'github.com/metio/kurly/workloads/cobalt/server.libsonnet',
@@ -97,7 +95,6 @@ local stageImports = {
   'mazanoke/server': import 'github.com/metio/kurly/workloads/mazanoke/server.libsonnet',
   'owntracks-recorder/server': import 'github.com/metio/kurly/workloads/owntracks-recorder/server.libsonnet',
   'gokapi/server': import 'github.com/metio/kurly/workloads/gokapi/server.libsonnet',
-  'pingvin-share/server': import 'github.com/metio/kurly/workloads/pingvin-share/server.libsonnet',
   'pocketbase/server': import 'github.com/metio/kurly/workloads/pocketbase/server.libsonnet',
   'tandoor/server': import 'github.com/metio/kurly/workloads/tandoor/server.libsonnet',
   'smtp4dev/server': import 'github.com/metio/kurly/workloads/smtp4dev/server.libsonnet',
@@ -175,7 +172,6 @@ local stageImports = {
   'mealie/server': import 'github.com/metio/kurly/workloads/mealie/server.libsonnet',
   'tautulli/server': import 'github.com/metio/kurly/workloads/tautulli/server.libsonnet',
   'ombi/server': import 'github.com/metio/kurly/workloads/ombi/server.libsonnet',
-  'overseerr/server': import 'github.com/metio/kurly/workloads/overseerr/server.libsonnet',
   'jellyseerr/server': import 'github.com/metio/kurly/workloads/jellyseerr/server.libsonnet',
   'metube/server': import 'github.com/metio/kurly/workloads/metube/server.libsonnet',
   'docuseal/server': import 'github.com/metio/kurly/workloads/docuseal/server.libsonnet',
@@ -1030,6 +1026,29 @@ local workloadEntries =
   assert reconcile('helpers', std.objectFields(ann.helpers), ['certificate', 'externalSecret', 'join', 'limitRange', 'list', 'mirror', 'priorityClass', 'production', 'resourceQuota']),
   // Every operator-attested production workload must be a real, annotated one —
   // a dangling claim (a typo or a renamed workload) fails here.
+  // An upstream the forge reports as ARCHIVED is a project that has stopped, and
+  // this catalogue does not carry those: every future vulnerability in it stays
+  // open, and an operator who deployed it from here has nowhere to take it. The
+  // fact was already asked for and published — what was missing is anything acting
+  // on it, which is how minio stayed in the catalogue for months after its
+  // repository went read-only.
+  //
+  // It fails the build rather than warning, because the weekly refresh re-asks each
+  // forge and opens a pull request when an answer changes: an archival now arrives
+  // as a red pull request naming the workload, which is the moment to decide about
+  // it. Removing it means an entry in excluded.libsonnet; keeping it deliberately
+  // means saying so there too.
+  assert std.all([
+    !std.get(std.get(w, 'upstream', {}), 'archived', false)
+    for w in workloadEntries
+  ]) :
+         'catalog: a carried workload has an ARCHIVED upstream — %s. Remove it, and record why in catalog/excluded.libsonnet' % [
+    std.join(', ', [
+      w.id
+      for w in workloadEntries
+      if std.get(std.get(w, 'upstream', {}), 'archived', false)
+    ]),
+  ],
   // Software this catalogue has decided not to carry cannot come back by someone
   // adding an annotation for it. The reason is in excluded.libsonnet beside the id;
   // deleting a directory would have left nothing to read and nothing to stop it.
