@@ -411,9 +411,11 @@ EOF
 #   kurly::mongodb <ns> <service>
 # A throwaway S3-compatible object store for an app's e2e: kurly's own seaweedfs
 # workload, which serves its S3 gateway on :8333 with anonymous access, plus the
-# bucket the app expects. The endpoint is
-# http://seaweedfs.<ns>.svc:8333 — an app that also wants credentials is given
-# dummy ones, which seaweedfs ignores in this mode.
+# bucket the app expects. The Service it creates is HEADLESS, so the endpoint is
+# http://seaweedfs-headless.<ns>.svc:8333 — there is no `seaweedfs` Service, and
+# this comment said there was until a consumer was pointed at it and got nothing.
+# An app that also wants credentials is given dummy ones, which seaweedfs ignores
+# in this mode.
 #   kurly::objectstorage <ns> <bucket>
 kurly::objectstorage() {
   local ns="$1" bucket="$2"
