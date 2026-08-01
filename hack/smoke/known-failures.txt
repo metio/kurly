@@ -25,7 +25,6 @@ bigcapital   docker.io/bigcapitalhq/gateway does not exist (siblings server/weba
 ghostfolio   never becomes ready, zero restarts, no container output at all; needs live inspection of /api/v1/health like baserow had
 lychee       FrankenPHP workers fail to initialise; the FRANKENPHP_* settings that used to work no longer do, so it wants upstream's current compose rather than another guess
 mailu        the admin container refuses to start without a DNSSEC-validating resolver, which the catalogue does not ship; upstream runs unbound alongside
-mongo        MongoDB 8.3.7 refuses to start on Linux 6.19+ (SERVER-121912) and this host runs 7.1.4 — unverifiable here, not broken
 mongo-express  needs a MongoDB server, which cannot run on this host's kernel (see mongo)
 overleaf     needs MongoDB (unverifiable here), and its secretKeys omit OVERLEAF_INVITE_TOKEN_SECRET, which it refuses to start without
 owntracks-recorder  dies dialling an MQTT broker at localhost:1883 while the catalogue declares no dependency; the default render is not the standalone mode its own docs describe

@@ -20,6 +20,7 @@ local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
 local bsiViolations = import './bsi.gen.libsonnet';
+local excluded = import './excluded.libsonnet';
 local forge = import './forge.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
 local spdx = import './spdx.gen.libsonnet';
@@ -58,7 +59,6 @@ local stageImports = {
   'endurain/server': import 'github.com/metio/kurly/workloads/endurain/server.libsonnet',
   'wger/server': import 'github.com/metio/kurly/workloads/wger/server.libsonnet',
   'paperless-ngx/server': import 'github.com/metio/kurly/workloads/paperless-ngx/server.libsonnet',
-  'invoiceninja/server': import 'github.com/metio/kurly/workloads/invoiceninja/server.libsonnet',
   'mautic/server': import 'github.com/metio/kurly/workloads/mautic/server.libsonnet',
   'maybe/server': import 'github.com/metio/kurly/workloads/maybe/server.libsonnet',
   'peertube/server': import 'github.com/metio/kurly/workloads/peertube/server.libsonnet',
@@ -133,19 +133,15 @@ local stageImports = {
   'cnpg-cluster/cluster': import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet',
   'mysql-cluster/cluster': import 'github.com/metio/kurly/workloads/mysql-cluster/cluster.libsonnet',
   'opensearch-cluster/cluster': import 'github.com/metio/kurly/workloads/opensearch-cluster/cluster.libsonnet',
-  'mongodb-cluster/cluster': import 'github.com/metio/kurly/workloads/mongodb-cluster/cluster.libsonnet',
   'cassandra-cluster/cluster': import 'github.com/metio/kurly/workloads/cassandra-cluster/cluster.libsonnet',
   'neo4j/server': import 'github.com/metio/kurly/workloads/neo4j/server.libsonnet',
   'ferretdb/server': import 'github.com/metio/kurly/workloads/ferretdb/server.libsonnet',
-  'directus/server': import 'github.com/metio/kurly/workloads/directus/server.libsonnet',
   'metabase/server': import 'github.com/metio/kurly/workloads/metabase/server.libsonnet',
   'ghost/server': import 'github.com/metio/kurly/workloads/ghost/server.libsonnet',
-  'n8n/server': import 'github.com/metio/kurly/workloads/n8n/server.libsonnet',
   'wikijs/server': import 'github.com/metio/kurly/workloads/wikijs/server.libsonnet',
   'matomo/server': import 'github.com/metio/kurly/workloads/matomo/server.libsonnet',
   'bookstack/server': import 'github.com/metio/kurly/workloads/bookstack/server.libsonnet',
   'snipe-it/server': import 'github.com/metio/kurly/workloads/snipe-it/server.libsonnet',
-  'nocodb/server': import 'github.com/metio/kurly/workloads/nocodb/server.libsonnet',
   'baserow/server': import 'github.com/metio/kurly/workloads/baserow/server.libsonnet',
   'rallly/server': import 'github.com/metio/kurly/workloads/rallly/server.libsonnet',
   'shlink/server': import 'github.com/metio/kurly/workloads/shlink/server.libsonnet',
@@ -162,7 +158,6 @@ local stageImports = {
   'photoprism/server': import 'github.com/metio/kurly/workloads/photoprism/server.libsonnet',
   'answer/server': import 'github.com/metio/kurly/workloads/answer/server.libsonnet',
   'blinko/server': import 'github.com/metio/kurly/workloads/blinko/server.libsonnet',
-  'bugsink/server': import 'github.com/metio/kurly/workloads/bugsink/server.libsonnet',
   'docmost/server': import 'github.com/metio/kurly/workloads/docmost/server.libsonnet',
   'greenlight/server': import 'github.com/metio/kurly/workloads/greenlight/server.libsonnet',
   'pilos/server': import 'github.com/metio/kurly/workloads/pilos/server.libsonnet',
@@ -242,7 +237,6 @@ local stageImports = {
   'redmine/server': import 'github.com/metio/kurly/workloads/redmine/server.libsonnet',
   'nzbhydra2/server': import 'github.com/metio/kurly/workloads/nzbhydra2/server.libsonnet',
   'duplicati/server': import 'github.com/metio/kurly/workloads/duplicati/server.libsonnet',
-  'resilio-sync/server': import 'github.com/metio/kurly/workloads/resilio-sync/server.libsonnet',
   'davos/server': import 'github.com/metio/kurly/workloads/davos/server.libsonnet',
   'foldingathome/server': import 'github.com/metio/kurly/workloads/foldingathome/server.libsonnet',
   'projectsend/server': import 'github.com/metio/kurly/workloads/projectsend/server.libsonnet',
@@ -255,7 +249,6 @@ local stageImports = {
   'meilisearch/server': import 'github.com/metio/kurly/workloads/meilisearch/server.libsonnet',
   'qdrant/server': import 'github.com/metio/kurly/workloads/qdrant/server.libsonnet',
   'typesense/server': import 'github.com/metio/kurly/workloads/typesense/server.libsonnet',
-  'browserless/server': import 'github.com/metio/kurly/workloads/browserless/server.libsonnet',
   'tika/server': import 'github.com/metio/kurly/workloads/tika/server.libsonnet',
   'gotenberg/server': import 'github.com/metio/kurly/workloads/gotenberg/server.libsonnet',
   'open-webui/server': import 'github.com/metio/kurly/workloads/open-webui/server.libsonnet',
@@ -273,24 +266,20 @@ local stageImports = {
   'clickhouse/server': import 'github.com/metio/kurly/workloads/clickhouse/server.libsonnet',
   'matrix-conduit/server': import 'github.com/metio/kurly/workloads/matrix-conduit/server.libsonnet',
   'kutt/server': import 'github.com/metio/kurly/workloads/kutt/server.libsonnet',
-  'emby/server': import 'github.com/metio/kurly/workloads/emby/server.libsonnet',
   'webtrees/server': import 'github.com/metio/kurly/workloads/webtrees/server.libsonnet',
   'mariadb/server': import 'github.com/metio/kurly/workloads/mariadb/server.libsonnet',
   'mysql/server': import 'github.com/metio/kurly/workloads/mysql/server.libsonnet',
   'postgres/server': import 'github.com/metio/kurly/workloads/postgres/server.libsonnet',
   'redis/server': import 'github.com/metio/kurly/workloads/redis/server.libsonnet',
-  'mongo/server': import 'github.com/metio/kurly/workloads/mongo/server.libsonnet',
   'nginx-proxy-manager/server': import 'github.com/metio/kurly/workloads/nginx-proxy-manager/server.libsonnet',
   'minio/server': import 'github.com/metio/kurly/workloads/minio/server.libsonnet',
   'rabbitmq/server': import 'github.com/metio/kurly/workloads/rabbitmq/server.libsonnet',
   'formbricks/server': import 'github.com/metio/kurly/workloads/formbricks/server.libsonnet',
-  'plex/server': import 'github.com/metio/kurly/workloads/plex/server.libsonnet',
   'ollama/server': import 'github.com/metio/kurly/workloads/ollama/server.libsonnet',
   'odoo/server': import 'github.com/metio/kurly/workloads/odoo/server.libsonnet',
   'technitium/server': import 'github.com/metio/kurly/workloads/technitium/server.libsonnet',
   'docker-registry-ui/server': import 'github.com/metio/kurly/workloads/docker-registry-ui/server.libsonnet',
   'element-web/server': import 'github.com/metio/kurly/workloads/element-web/server.libsonnet',
-  'planka/server': import 'github.com/metio/kurly/workloads/planka/server.libsonnet',
   'photoview/server': import 'github.com/metio/kurly/workloads/photoview/server.libsonnet',
   'yourls/server': import 'github.com/metio/kurly/workloads/yourls/server.libsonnet',
   'pocket-id/server': import 'github.com/metio/kurly/workloads/pocket-id/server.libsonnet',
@@ -314,7 +303,6 @@ local stageImports = {
   'guacamole/server': import 'github.com/metio/kurly/workloads/guacamole/server.libsonnet',
   'authentik/server': import 'github.com/metio/kurly/workloads/authentik/server.libsonnet',
   'authentik/worker': import 'github.com/metio/kurly/workloads/authentik/worker.libsonnet',
-  'outline/server': import 'github.com/metio/kurly/workloads/outline/server.libsonnet',
   'penpot/backend': import 'github.com/metio/kurly/workloads/penpot/backend.libsonnet',
   'penpot/frontend': import 'github.com/metio/kurly/workloads/penpot/frontend.libsonnet',
   'penpot/exporter': import 'github.com/metio/kurly/workloads/penpot/exporter.libsonnet',
@@ -326,7 +314,6 @@ local stageImports = {
   'mastodon/streaming': import 'github.com/metio/kurly/workloads/mastodon/streaming.libsonnet',
   'mastodon/sidekiq': import 'github.com/metio/kurly/workloads/mastodon/sidekiq.libsonnet',
   'oauth2-proxy/server': import 'github.com/metio/kurly/workloads/oauth2-proxy/server.libsonnet',
-  'emqx/server': import 'github.com/metio/kurly/workloads/emqx/server.libsonnet',
   'nats/server': import 'github.com/metio/kurly/workloads/nats/server.libsonnet',
   'volsync/backup': import 'github.com/metio/kurly/workloads/volsync/backup.libsonnet',
   'volsync/restore': import 'github.com/metio/kurly/workloads/volsync/restore.libsonnet',
@@ -335,7 +322,6 @@ local stageImports = {
   'k8up/restore': import 'github.com/metio/kurly/workloads/k8up/restore.libsonnet',
   'cnpg-image-catalog/namespaced': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/namespaced.libsonnet',
   'cnpg-image-catalog/cluster': import 'github.com/metio/kurly/workloads/cnpg-image-catalog/cluster.libsonnet',
-  'dragonfly/instance': import 'github.com/metio/kurly/workloads/dragonfly/instance.libsonnet',
   'otel-collector/agent': import 'github.com/metio/kurly/workloads/otel-collector/agent.libsonnet',
   'blackbox-exporter/server': import 'github.com/metio/kurly/workloads/blackbox-exporter/server.libsonnet',
   'alertmanager/server': import 'github.com/metio/kurly/workloads/alertmanager/server.libsonnet',
@@ -1083,6 +1069,11 @@ local workloadEntries =
   assert reconcile('helpers', std.objectFields(ann.helpers), ['certificate', 'externalSecret', 'join', 'limitRange', 'list', 'mirror', 'priorityClass', 'production', 'resourceQuota']),
   // Every operator-attested production workload must be a real, annotated one —
   // a dangling claim (a typo or a renamed workload) fails here.
+  // Software this catalogue has decided not to carry cannot come back by someone
+  // adding an annotation for it. The reason is in excluded.libsonnet beside the id;
+  // deleting a directory would have left nothing to read and nothing to stop it.
+  assert std.all([!std.objectHas(ann.workloads, name) for name in std.objectFields(excluded)]) :
+         'catalog: an excluded workload is annotated again — see catalog/excluded.libsonnet for why it was removed',
   assert std.all([std.objectHas(ann.workloads, name) for name in maturity.productionNames]) :
          'maturity: production.libsonnet names a workload that does not exist',
   // Same for the delivery ledger: a walk that recorded a workload since renamed

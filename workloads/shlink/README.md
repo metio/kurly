@@ -46,7 +46,7 @@ it is stateless and can run several replicas.
 
 ## Maturity
 
-**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults. Delivered end to end through Flux, JaaS and stageset-controller on 2026-08-01, and observed rolling out.
 
 ## Deploy with JaaS
 

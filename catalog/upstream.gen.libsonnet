@@ -80,9 +80,6 @@
     source: 'https://github.com/linuxserver/docker-bookstack',
     homepage: 'https://github.com/linuxserver/docker-bookstack/packages',
   },
-  browserless: {
-    source: 'https://github.com/browserless/browserless',
-  },
   calibre: {
     license: 'GPL-3.0-only',
     title: 'Calibre',
@@ -143,20 +140,8 @@
     source: 'https://github.com/dexidp/dex',
     homepage: 'https://github.com/dexidp/dex',
   },
-  directus: {
-    license: 'NOASSERTION',
-    title: 'directus',
-    source: 'https://github.com/directus/directus',
-    homepage: 'https://github.com/directus/directus',
-  },
   docmost: {
     source: 'https://github.com/docmost/docmost',
-  },
-  dragonfly: {
-    license: 'NOASSERTION',
-    title: 'Dragonfly Production Image',
-    source: 'https://github.com/dragonflydb/dragonfly',
-    homepage: 'https://github.com/dragonflydb/dragonfly',
   },
   drawio: {
     source: 'https://github.com/jgraph/docker-drawio',
@@ -179,18 +164,6 @@
     title: 'element-web',
     source: 'https://github.com/element-hq/element-web',
     homepage: 'https://github.com/element-hq/element-web',
-  },
-  emby: {
-    license: 'GPL-3.0-only',
-    title: 'Emby',
-    source: 'https://github.com/linuxserver/docker-emby',
-    homepage: 'https://github.com/linuxserver/docker-emby/packages',
-  },
-  emqx: {
-    license: 'BSL-1.1',
-    title: 'emqx-enterprise',
-    source: 'https://github.com/emqx/emqx',
-    homepage: 'https://emqx.com/en/products/emqx',
   },
   esphome: {
     license: 'ESPHome',
@@ -458,11 +431,6 @@
     source: 'https://github.com/linuxserver/docker-mylar3',
     homepage: 'https://github.com/linuxserver/docker-mylar3/packages',
   },
-  n8n: {
-    title: 'n8n',
-    source: 'https://github.com/n8n-io/n8n',
-    homepage: 'https://n8n.io',
-  },
   nats: {
     license: 'Apache-2.0',
     title: 'NATS Server',
@@ -541,12 +509,6 @@
     license: 'Apache-2.0',
     source: 'https://github.com/open-telemetry/opentelemetry-collector-releases',
   },
-  outline: {
-    license: 'NOASSERTION',
-    title: 'outline',
-    source: 'https://github.com/outline/outline',
-    homepage: 'https://github.com/outline/outline',
-  },
   pairdrop: {
     license: 'GPL-3.0',
     title: 'PairDrop',
@@ -610,17 +572,6 @@
     title: 'Piwigo',
     source: 'https://github.com/linuxserver/docker-piwigo',
     homepage: 'https://github.com/linuxserver/docker-piwigo/packages',
-  },
-  planka: {
-    title: 'planka',
-    source: 'https://github.com/plankanban/planka',
-    homepage: 'https://planka.app',
-  },
-  plex: {
-    license: 'GPL-3.0-only',
-    title: 'Plex',
-    source: 'https://github.com/linuxserver/docker-plex',
-    homepage: 'https://github.com/linuxserver/docker-plex/packages',
   },
   'pocket-id': {
     license: 'BSD-2-Clause',
@@ -687,12 +638,6 @@
     title: 'Readarr',
     source: 'https://github.com/linuxserver/docker-readarr',
     homepage: 'https://github.com/linuxserver/docker-readarr/packages',
-  },
-  'resilio-sync': {
-    license: 'GPL-3.0-only',
-    title: 'Resilio-sync',
-    source: 'https://github.com/linuxserver/docker-resilio-sync',
-    homepage: 'https://github.com/linuxserver/docker-resilio-sync/packages',
   },
   rocketchat: {
     source: 'https://github.com/RocketChat/Rocket.Chat',

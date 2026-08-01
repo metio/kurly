@@ -44,17 +44,11 @@
   "opencost/server": {
     "params": "prometheusEndpoint='http://prometheus:9090'"
   },
-  "outline": {
-    "compose": "+ k.env({ URL: 'http://outline:3000', COLLABORATION_URL: 'ws://outline:3000' })"
-  },
   "peertube": {
     "compose": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })"
   },
   "piwigo": {
     "dbEngine": "mysql"
-  },
-  "planka": {
-    "compose": "+ k.env({ BASE_URL: 'http://planka:1337' })"
   },
   "prestashop": {
     "compose": "+ k.env({ PS_INSTALL_AUTO: '1', PS_DOMAIN: 'prestashop', PS_HANDLE_DYNAMIC_DOMAIN: '0', PS_ERASE_DB: '0' })",

@@ -117,14 +117,6 @@
     license: 'MIT',
     name: 'BookStack',
   },
-  browserless: {
-    homepage: 'https://browserless.io',
-    name: 'browserless',
-  },
-  bugsink: {
-    homepage: 'https://www.bugsink.com/',
-    name: 'bugsink',
-  },
   'cal-com': {
     homepage: 'https://cal.diy',
     license: 'MIT',
@@ -229,10 +221,6 @@
     license: 'Apache-2.0',
     name: 'dex',
   },
-  directus: {
-    homepage: 'https://directus.com',
-    name: 'directus',
-  },
   'docker-registry-ui': {
     homepage: 'https://joxit.dev/docker-registry-ui/',
     license: 'AGPL-3.0',
@@ -257,10 +245,6 @@
     homepage: 'http://www.dokuwiki.org',
     license: 'GPL-2.0',
     name: 'dokuwiki',
-  },
-  dragonfly: {
-    homepage: 'https://www.dragonflydb.io/',
-    name: 'dragonfly',
   },
   'draw-io': {
     homepage: 'https://www.drawio.com',
@@ -287,10 +271,6 @@
     homepage: 'https://element.io',
     license: 'AGPL-3.0',
     name: 'element-web',
-  },
-  emqx: {
-    homepage: 'https://www.emqx.com',
-    name: 'emqx',
   },
   endurain: {
     homepage: 'https://endurain.com',
@@ -510,10 +490,6 @@
   inspircd: {
     homepage: 'https://www.inspircd.org',
     name: 'inspircd',
-  },
-  invoiceninja: {
-    homepage: 'https://invoiceninja.com',
-    name: 'invoiceninja',
   },
   'it-tools': {
     homepage: 'https://it-tools.tech',
@@ -757,17 +733,9 @@
     license: 'AGPL-3.0',
     name: 'misskey',
   },
-  mongo: {
-    homepage: 'https://www.mongodb.com/',
-    name: 'mongo',
-  },
   'mongo-express': {
     license: 'MIT',
     name: 'mongo-express',
-  },
-  'mongodb-cluster': {
-    homepage: 'https://www.mongodb.com/',
-    name: 'mongo',
   },
   monica: {
     homepage: 'https://beta.monicahq.com',
@@ -793,10 +761,6 @@
   'mysql-cluster': {
     homepage: 'http://www.mysql.com/',
     name: 'mysql-server',
-  },
-  n8n: {
-    homepage: 'https://n8n.io',
-    name: 'n8n',
   },
   nats: {
     homepage: 'https://nats.io',
@@ -836,10 +800,6 @@
   nocobase: {
     homepage: 'https://www.nocobase.com',
     name: 'nocobase',
-  },
-  nocodb: {
-    homepage: 'https://nocodb.com',
-    name: 'nocodb',
   },
   'node-red': {
     homepage: 'http://nodered.org',
@@ -921,10 +881,6 @@
     homepage: 'https://opentelemetry.io',
     license: 'Apache-2.0',
     name: 'opentelemetry-collector-releases',
-  },
-  outline: {
-    homepage: 'https://www.getoutline.com',
-    name: 'outline',
   },
   overleaf: {
     license: 'AGPL-3.0',
@@ -1011,10 +967,6 @@
     homepage: 'https://piwigo.org',
     license: 'GPL-2.0',
     name: 'Piwigo',
-  },
-  planka: {
-    homepage: 'https://planka.app',
-    name: 'planka',
   },
   'pocket-id': {
     homepage: 'https://pocket-id.org',
