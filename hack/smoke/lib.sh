@@ -643,7 +643,18 @@ kurly::provision_deps() {
     # MongoDB does not run on this host at all (SERVER-121912 against this kernel),
     # so there is nothing to provision instead. Saying so beats provisioning the
     # wrong thing silently: the workload still fails, but for a reason that is true.
-    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|[.stages[]?.secretKeys//[]|.[]|.key]|any(test("MONGO"))' catalog/catalog.json >/dev/null 2>&1; then
+    # Read from the catalogue's secretKeys where they exist, and from the stage
+    # otherwise. wekan wants MONGO_URL and declares NO secretKeys at all, so a
+    # catalogue-only check missed it and it was handed a PostgreSQL like rocketchat.
+    #
+    # A DECLARED SQL URL WINS over either, and that is not a tie-break for its own
+    # sake: ferretdb speaks the MongoDB protocol while STORING in PostgreSQL. Its
+    # stage mentions Mongo throughout and its secretKeys say FERRETDB_POSTGRESQL_URL
+    # with a postgresUrl generator, and it has delivered against a PostgreSQL. A
+    # check that read the protocol would take its database away.
+    if [ -z "$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.stages[]?|.secretKeys//[]|.[]|.generate]|map(select(test("(postgres|mysql)Url")))|join(",")' catalog/catalog.json)" ] \
+       && { jq -e --arg id "$id" '.workloads[]|select(.id==$id)|[.stages[]?.secretKeys//[]|.[]|.key]|any(test("MONGO"))' catalog/catalog.json >/dev/null 2>&1 \
+            || grep -qE 'MONGO_URL|MONGODB_URI|mongodb-cluster' "$primary" 2>/dev/null; }; then
       echo "::warning::${id}: its Secret is keyed MONGO_*, so it wants MongoDB — provisioning no SQL server, and MongoDB cannot run on this host"
       wantsSql=false
     fi
