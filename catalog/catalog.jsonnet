@@ -404,11 +404,88 @@ local pvcCount(fn) =
   );
 
 // The pod templates a stage renders — where its security context lives.
+// The dependency kinds a workload may declare. A CLOSED list: a consumer that
+// prices or provisions from these has to fail loudly on a term it does not know
+// rather than carry it unpriced, so the vocabulary is published rather than
+// implied by whatever happens to appear.
+local requiresKinds = ['database', 'cache', 'objectStorage', 'broker'];
+
 local podTemplates(items) = [
   if m.kind == 'CronJob' then m.spec.jobTemplate.spec.template else m.spec.template
   for m in items
   if std.member(['Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob'], m.kind)
 ];
+
+// Which database engine a workload connects to, established rather than guessed.
+// Absent when nothing establishes it — which a consumer must read as unknown, and
+// never as "the usual one".
+//
+// The precedence is the one the delivery harness arrived at by being wrong twice:
+//
+//   1. a DECLARED SQL url in the workload's secretKeys. postgresUrl/mysqlUrl is
+//      somebody stating what the app connects to. It wins outright, and that is
+//      load-bearing rather than tidy: ferretdb speaks the MongoDB PROTOCOL while
+//      storing in PostgreSQL, so its stage and its Secret are full of Mongo and
+//      its generator says postgresUrl. Reading the protocol takes its database
+//      away.
+//   2. otherwise MONGO in a Secret key or an env var NAME the stage sets.
+//      rocketchat and wekan are MongoDB and neither declares a url generator; both
+//      were handed a PostgreSQL until this was read.
+//   3. otherwise POSTGRES/PG or MYSQL/MARIADB in an env var name the stage sets.
+//      An env var is the workload being wired to something; prose in a comment is
+//      a sentence about it, and grepping that misclassified 28 of 37 workloads.
+local envNames(fn) = std.flattenArrays([
+  [std.get(e, 'name', '') for e in std.get(c, 'env', [])]
+  for t in podTemplates(main.list(fn()).items)
+  for c in std.get(t.spec, 'containers', [])
+]);
+local anyContains(names, needle) = std.any([std.length(std.findSubstr(needle, n)) > 0 for n in names]);
+local databaseEngine(workload, stageFns) =
+  local gens = [
+    std.get(k, 'generate', '')
+    for stage in std.objectFields(ann.workloads[workload].stages)
+    for k in std.get(ann.workloads[workload].stages[stage], 'secretKeys', [])
+  ];
+  local keys = [
+    std.get(k, 'key', '')
+    for stage in std.objectFields(ann.workloads[workload].stages)
+    for k in std.get(ann.workloads[workload].stages[stage], 'secretKeys', [])
+  ];
+  local names = std.flattenArrays([envNames(fn) for fn in stageFns]) + keys;
+  if std.member(gens, 'postgresUrl') then 'postgresql'
+  else if std.member(gens, 'mysqlUrl') then 'mysql'
+  // Declaring an extension states the engine: every extension named in this
+  // catalogue is a PostgreSQL one, and immich's vchord is why the field exists.
+  else if std.objectHas(std.get(ann.workloads[workload], 'requires', {}), 'databaseExtensions') then 'postgresql'
+  else if anyContains(names, 'MONGO') then 'mongodb'
+  else if anyContains(names, 'POSTGRES') || anyContains(names, 'PGHOST') then 'postgresql'
+  else if anyContains(names, 'MYSQL') || anyContains(names, 'MARIADB') then 'mysql'
+  else null;
+
+// v1's `requires` object becomes a LIST, because a workload can need two of the
+// same kind and an object cannot say so: bigcapital needs a MySQL and a MongoDB and
+// was described as needing one database, which a consumer priced as one database.
+local requiresV2(workload, stageFns) =
+  local declared = std.get(ann.workloads[workload], 'requires', {});
+  // A workload may state the list outright, for what derivation cannot reach: two
+  // dependencies of the SAME kind. bigcapital needs a MySQL and a MongoDB, and an
+  // object keyed by kind can only say "a database" — which is exactly how it came
+  // to be billed for one.
+  if std.isArray(declared) then declared else
+    local v1 = declared;
+    local engine = databaseEngine(workload, stageFns);
+    [
+      { kind: kind, required: v1[kind] == 'required' }
+      + (
+        if kind == 'database' then
+          (if engine != null then { engine: engine } else {})
+          + (if std.objectHas(v1, 'databaseExtensions') then { extensions: v1.databaseExtensions } else {})
+        else {}
+      )
+      for kind in requiresKinds
+      if std.objectHas(v1, kind)
+    ];
+
 
 // What a stage would actually run, derived by rendering it — so it cannot drift
 // from the pin, and nobody transcribes a version into the catalogue. Two shapes,
@@ -951,12 +1028,14 @@ local workloadEntries =
     }
     + softwareFacts(workload)
     + {
-      // The external infrastructure the workload depends on, hand-annotated —
-      // a database (with any PostgreSQL extensions it needs, like vchord), a
-      // cache/Redis, and whether it needs S3-compatible object storage
-      // (required/optional). Absent when the workload carries none. Backfilled
-      // per workload; the derived per-stage `storage.pvcs` below is automatic.
-      requires: std.get(ann.workloads[workload], 'requires', {}),
+      // The external infrastructure the workload depends on: a LIST of
+      // { kind, required, engine?, extensions? }. Which kinds it needs is
+      // hand-annotated; which database ENGINE is derived, and absent where
+      // nothing establishes it. Empty when the workload depends on nothing.
+      requires: requiresV2(workload, [
+        stageImports[workload + '/' + stage]
+        for stage in std.objectFields(ann.workloads[workload].stages)
+      ]),
       stages: [
         { id: stage }
         + ann.workloads[workload].stages[stage]
@@ -1020,7 +1099,14 @@ local workloadEntries =
   assert std.all([std.objectHasAll(main, helper) for helper in std.objectFields(ann.helpers)]) :
          'helpers: main.libsonnet must expose every annotated helper',
 
-  schemaVersion: 1,
+  // 2: `requires` became a list of { kind, required, engine?, extensions? }. A
+  // workload can need two dependencies of the same kind, which the v1 object keyed
+  // by kind could not express — and a consumer priced the difference.
+  schemaVersion: 2,
+  // The closed set of dependency kinds `requires[].kind` may take. Published so a
+  // consumer validates against it and fails loudly on a term it does not know,
+  // rather than carrying an unpriced dependency it silently ignored.
+  requiresKinds: requiresKinds,
   // The policy set every stage's `bsi` field refers to, with the BSI requirement
   // each one implements.
   bsiPolicies: bsiPolicies,

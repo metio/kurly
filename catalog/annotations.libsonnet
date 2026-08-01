@@ -1301,6 +1301,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     'owntracks-recorder': {
       license: 'GPL-2.0-or-later',
       name: 'OwnTracks Recorder',
+      // The walk established this: the default render dies dialling an MQTT broker
+      // at localhost:1883, while the catalogue declared no dependency at all — so a
+      // consumer provisioning from it would have stood up everything the workload
+      // needs except the one thing without which it exits.
+      requires: [
+        { kind: 'broker', engine: 'mqtt', required: true },
+      ],
       upstream: { repo: 'https://github.com/owntracks/recorder' },
       summary: 'An OwnTracks Recorder server (a self-hosted store and web UI for the location data OwnTracks phone apps publish) on the official image. A plain composable http workload that keeps its location store on a PersistentVolume under /store. Phone apps can publish over HTTP directly or via an MQTT broker the Recorder subscribes to. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083.',
       category: 'application',
@@ -1614,7 +1621,17 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       upstream: { repo: 'https://github.com/bigcapitalhq/bigcapital' },
       summary: 'A Bigcapital deployment (self-hosted accounting and financial management) as three coordinated stages on the official images — server (the API), webapp (the front end), and gateway (the nginx entry). Backed by external MySQL/MariaDB, MongoDB, and Redis (kurly ships no MySQL/MongoDB recipe; bring your own). Run all three pointed at the same namePrefix and secretName; expose only the gateway. kurly authors no Secret; passwords and the JWT secret come from a provided Secret via envFrom.',
       category: 'application',
-      requires: { database: 'required', cache: 'required', objectStorage: 'required' },
+      // Stated as a LIST rather than derived, because it needs TWO databases and a
+      // kind-keyed object can only name one — which is how a consumer came to bill
+      // it for a single database. Both engines are established from what the stage
+      // configures, not from its prose: SYSTEM_DB_PORT and TENANT_DB_PORT are 3306,
+      // and it sets MONGODB_DATABASE_URL.
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+        { kind: 'database', engine: 'mongodb', required: true },
+        { kind: 'cache', required: true },
+        { kind: 'objectStorage', required: true },
+      ],
       stages: {
         server: d.fn('The Bigcapital API on :4000. dbHost points at a MySQL/MariaDB (system and tenant data), mongoHost at MongoDB, redisHost at Redis/valkey. baseUrl is the public URL. secretName holds SYSTEM_DB_PASSWORD, TENANT_DB_PASSWORD, and JWT_SECRET (envFrom). The gateway proxies to it.', [
           d.arg('namePrefix', d.T.string, default='bigcapital'),

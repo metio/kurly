@@ -633,7 +633,7 @@ kurly::provision_deps() {
   # them, and a workload needing no database must not inherit the last one's.
   KURLY_DB_ENGINE="" KURLY_DB_SVC="" KURLY_DB_NAME="" KURLY_DB_USER=""
   primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
-  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.database then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="database"))|length)>0 then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     wantsSql=true
     # A workload whose Secret is keyed MONGO_URL does not want a SQL server at all.
     # The catalogue records only `database: required` — it has no engine field yet —
@@ -720,7 +720,7 @@ kurly::provision_deps() {
       # The same rule is emitted by gen-smoke for the fast scenarios; this is the
       # deep path, which had no equivalent and so provisioned a stock server for
       # the one workload in the catalogue that cannot use one.
-      case "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.requires.databaseExtensions // [] | join(",")' catalog/catalog.json)" in
+      case "$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.requires[]?|select(.kind=="database")|.extensions//[]|.[]]|join(",")' catalog/catalog.json)" in
         *vchord*)
           kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" \
             ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 \
@@ -739,10 +739,10 @@ kurly::provision_deps() {
   # `required` only. Twenty-one further workloads call it OPTIONAL, and standing up a
   # seaweedfs for each would add a StatefulSet and a rollout wait to a walk that already
   # takes a day, to exercise a path those workloads are explicitly able to skip.
-  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.objectStorage == "required" then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="objectStorage" and .required))|length)>0 then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     kurly::objectstorage "$ns" "$id"
   fi
-  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if .requires.cache then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="cache"))|length)>0 then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
     redisHost="$(kurly::_param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
     # Provision the cache the way the workload actually connects to it. Most take a
     # host and no credential, which is how a cache in the workload's OWN namespace

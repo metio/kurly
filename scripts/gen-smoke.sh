@@ -103,7 +103,7 @@ while IFS=$'\t' read -r id stages; do
   generated=$((generated + 1))
 done < <(jq -r '
   .workloads[]
-  | select((.requires // {} | length) == 0)
+  | select((.requires // [] | length) == 0)
   | select([.stages[].architectures] | any(. != null))
   | "\(.id)\t\([.stages[].id] | join(","))"
 ' "$catalog")
@@ -135,7 +135,7 @@ while IFS=$'\t' read -r id stages db cache; do
       # A workload that needs a PostgreSQL extension gets a server image carrying
       # it — the stock image would fail its first CREATE EXTENSION.
       pgimage=""
-      case "$(jq -r --arg id "$id" '.workloads[] | select(.id==$id) | .requires.databaseExtensions // [] | join(",")' "$catalog")" in
+      case "$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.requires[]?|select(.kind=="database")|.extensions//[]|.[]]|join(",")' "$catalog")" in
         # VectorChord only works when the server preloads it, and immich pins the
         # extension version range it supports.
         *vchord*) pgimage=" ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 '\"-c\", \"shared_preload_libraries=vchord.so\"'" ;;
@@ -188,9 +188,9 @@ while IFS=$'\t' read -r id stages db cache; do
   generated_dep=$((generated_dep + 1))
 done < <(jq -r '
   .workloads[]
-  | select((.requires // {} | length) > 0)
+  | select((.requires // [] | length) > 0)
   | select([.stages[].architectures] | any(. != null))
-  | "\(.id)\t\([.stages[].id] | join(","))\t\(if .requires.database then 1 else 0 end)\t\(if .requires.cache then 1 else 0 end)"
+  | "\(.id)\t\([.stages[].id] | join(","))\t\(if ((.requires//[])|map(select(.kind=="database"))|length)>0 then 1 else 0 end)\t\(if ((.requires//[])|map(select(.kind=="cache"))|length)>0 then 1 else 0 end)"
 ' "$catalog")
 
 # A durable coverage ledger, regenerated every run so it never drifts and stays
