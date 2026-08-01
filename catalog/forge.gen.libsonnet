@@ -50,11 +50,6 @@
     license: 'Apache-2.0',
     name: 'answer',
   },
-  anythingllm: {
-    homepage: 'https://anythingllm.com',
-    license: 'MIT',
-    name: 'anything-llm',
-  },
   apprise: {
     homepage: 'https://hub.docker.com/r/caronc/apprise',
     license: 'BSD-2-Clause',
@@ -82,10 +77,6 @@
     homepage: 'https://sabre.io/baikal/',
     license: 'GPL-3.0',
     name: 'Baikal',
-  },
-  baserow: {
-    homepage: 'https://baserow.io',
-    name: 'baserow',
   },
   bazarr: {
     homepage: 'https://www.bazarr.media',
@@ -221,11 +212,6 @@
     license: 'AGPL-3.0',
     name: 'docmost',
   },
-  documenso: {
-    homepage: 'https://documenso.com',
-    license: 'AGPL-3.0',
-    name: 'documenso',
-  },
   docuseal: {
     homepage: 'https://www.docuseal.com',
     license: 'AGPL-3.0',
@@ -334,10 +320,6 @@
     license: 'GPL-3.0',
     name: 'fah-client-bastet',
   },
-  formbricks: {
-    homepage: 'https://formbricks.com',
-    name: 'formbricks',
-  },
   freshrss: {
     homepage: 'https://freshrss.org',
     license: 'AGPL-3.0',
@@ -388,11 +370,6 @@
   greenlight: {
     license: 'LGPL-3.0',
     name: 'greenlight',
-  },
-  grist: {
-    homepage: 'https://www.getgrist.com',
-    license: 'Apache-2.0',
-    name: 'grist-core',
   },
   grocy: {
     homepage: 'https://grocy.info',
@@ -550,11 +527,6 @@
     license: 'AGPL-3.0',
     name: 'LinkStack',
   },
-  linkwarden: {
-    homepage: 'https://linkwarden.app',
-    license: 'AGPL-3.0',
-    name: 'linkwarden',
-  },
   listmonk: {
     homepage: 'https://listmonk.app',
     license: 'AGPL-3.0',
@@ -595,11 +567,6 @@
     homepage: 'https://maloja.krateng.ch',
     license: 'GPL-3.0',
     name: 'maloja',
-  },
-  mariadb: {
-    homepage: 'https://mariadb.org',
-    license: 'GPL-2.0',
-    name: 'server',
   },
   mastodon: {
     homepage: 'https://joinmastodon.org',
@@ -693,10 +660,6 @@
     license: 'GPL-3.0',
     name: 'mylar3',
   },
-  mysql: {
-    homepage: 'http://www.mysql.com/',
-    name: 'mysql-server',
-  },
   'mysql-cluster': {
     homepage: 'http://www.mysql.com/',
     name: 'mysql-server',
@@ -745,11 +708,6 @@
     license: 'Apache-2.0',
     name: 'node-red',
   },
-  ntfy: {
-    homepage: 'https://ntfy.sh',
-    license: 'Apache-2.0',
-    name: 'ntfy',
-  },
   nzbget: {
     homepage: 'https://nzbget.com',
     license: 'GPL-2.0',
@@ -792,11 +750,6 @@
     homepage: 'https://www.openhab.org/',
     license: 'EPL-2.0',
     name: 'openhab-core',
-  },
-  openobserve: {
-    homepage: 'https://openobserve.ai',
-    license: 'AGPL-3.0',
-    name: 'openobserve',
   },
   'opensearch-cluster': {
     homepage: 'https://opensearch.org/docs/latest/opensearch/index/',
@@ -854,11 +807,6 @@
     homepage: 'https://joinpeertube.org/',
     license: 'AGPL-3.0',
     name: 'PeerTube',
-  },
-  penpot: {
-    homepage: 'https://penpot.app',
-    license: 'MPL-2.0',
-    name: 'penpot',
   },
   pgadmin: {
     homepage: 'https://www.pgadmin.org',
@@ -948,11 +896,6 @@
     homepage: 'https://www.qbittorrent.org',
     name: 'qBittorrent',
   },
-  qdrant: {
-    homepage: 'https://qdrant.tech',
-    license: 'Apache-2.0',
-    name: 'qdrant',
-  },
   rabbitmq: {
     homepage: 'https://www.rabbitmq.com/',
     name: 'rabbitmq-server',
@@ -977,10 +920,6 @@
     homepage: 'http://readarr.com',
     license: 'GPL-3.0',
     name: 'Readarr',
-  },
-  redis: {
-    homepage: 'http://redis.io',
-    name: 'redis',
   },
   'redis-commander': {
     homepage: 'http://joeferner.github.io/redis-commander/',
@@ -1111,10 +1050,6 @@
     license: 'GPL-3.0',
     name: 'Tautulli',
   },
-  teable: {
-    homepage: 'https://teable.ai',
-    name: 'teable',
-  },
   technitium: {
     homepage: 'https://technitium.com/dns/',
     license: 'GPL-3.0',
@@ -1162,10 +1097,6 @@
     license: 'GPL-3.0',
     name: 'tvheadend',
   },
-  twenty: {
-    homepage: 'https://twenty.com',
-    name: 'twenty',
-  },
   'uptime-kuma': {
     homepage: 'https://uptime.kuma.pet',
     license: 'MIT',
@@ -1179,11 +1110,6 @@
   vaultwarden: {
     license: 'AGPL-3.0',
     name: 'vaultwarden',
-  },
-  victoriametrics: {
-    homepage: 'https://victoriametrics.com/',
-    license: 'Apache-2.0',
-    name: 'VictoriaMetrics',
   },
   vikunja: {
     homepage: 'https://vikunja.io',

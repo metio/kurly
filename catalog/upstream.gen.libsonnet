@@ -52,10 +52,6 @@
     source: 'https://github.com/ckulka/baikal-docker',
     homepage: 'https://hub.docker.com/r/ckulka/baikal',
   },
-  baserow: {
-    title: 'baserow',
-    source: 'https://github.com/baserow/baserow',
-  },
   bazarr: {
     license: 'GPL-3.0-only',
     title: 'Bazarr',
@@ -209,12 +205,6 @@
     source: 'https://codeberg.org/forgejo/forgejo',
     homepage: 'https://forgejo.org',
   },
-  formbricks: {
-    license: 'NOASSERTION',
-    title: 'formbricks',
-    source: 'https://github.com/formbricks/formbricks',
-    homepage: 'https://github.com/formbricks/formbricks',
-  },
   freshrss: {
     license: 'AGPL-3.0',
     title: 'FreshRSS',
@@ -339,12 +329,6 @@
   linkding: {
     source: 'https://github.com/sissbruecker/linkding',
   },
-  linkwarden: {
-    license: 'AGPL-3.0',
-    title: 'linkwarden',
-    source: 'https://github.com/linkwarden/linkwarden',
-    homepage: 'https://github.com/linkwarden/linkwarden',
-  },
   lldap: {
     license: 'GPL-3.0',
     title: 'lldap',
@@ -356,12 +340,6 @@
     title: 'Lychee',
     source: 'https://github.com/LycheeOrg/Lychee',
     homepage: 'https://github.com/LycheeOrg/Lychee',
-  },
-  mariadb: {
-    license: 'GPL-2.0',
-    title: 'MariaDB Database',
-    source: 'https://github.com/MariaDB/mariadb-docker',
-    homepage: 'https://github.com/MariaDB/mariadb-docker',
   },
   mastodon: {
     license: 'AGPL-3.0',
@@ -437,11 +415,6 @@
   'node-red': {
     source: 'https://github.com/node-red/node-red-docker',
   },
-  ntfy: {
-    title: 'ntfy',
-    source: 'https://github.com/binwiederhier/ntfy',
-    homepage: 'https://ntfy.sh/',
-  },
   nzbget: {
     license: 'GPL-3.0-only',
     title: 'Nzbget',
@@ -505,12 +478,6 @@
     title: 'PasswordPusher',
     source: 'https://github.com/pglombardo/PasswordPusher',
     homepage: 'https://github.com/pglombardo/PasswordPusher',
-  },
-  penpot: {
-    license: 'MPL-2.0',
-    title: 'penpot',
-    source: 'https://github.com/penpot/penpot',
-    homepage: 'https://github.com/penpot/penpot',
   },
   photoprism: {
     title: 'PhotoPrism® Plus (Ubuntu 26.04 LTS)',
@@ -588,11 +555,6 @@
     title: 'Qbittorrent',
     source: 'https://github.com/linuxserver/docker-qbittorrent',
     homepage: 'https://github.com/linuxserver/docker-qbittorrent/packages',
-  },
-  qdrant: {
-    title: 'Qdrant',
-    source: 'https://github.com/qdrant/qdrant',
-    homepage: 'https://qdrant.com/',
   },
   radarr: {
     license: 'GPL-3.0-only',

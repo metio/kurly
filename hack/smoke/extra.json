@@ -2,17 +2,11 @@
   "baikal": {
     "dbEngine": "mysql"
   },
-  "baserow": {
-    "compose": "+ k.env({ BASEROW_PUBLIC_URL: 'http://baserow:80' })"
-  },
   "cobalt": {
     "compose": "+ k.env({ API_URL: 'http://cobalt:9000/' })"
   },
   "docmost": {
     "compose": "+ k.env({ APP_URL: 'http://docmost:3000' })"
-  },
-  "documenso": {
-    "compose": "+ k.env({ NEXTAUTH_URL: 'http://documenso:3000', NEXT_PUBLIC_WEBAPP_URL: 'http://documenso:3000' })"
   },
   "endurain": {
     "compose": "+ k.env({ ENDURAIN_HOST: 'http://endurain:8080' })"
@@ -38,9 +32,6 @@
   "metrics-server/server": {
     "params": "kubeletInsecureTLS=true"
   },
-  "ntfy": {
-    "compose": "+ k.env({ NTFY_BASE_URL: 'http://ntfy:80' })"
-  },
   "opencost/server": {
     "params": "prometheusEndpoint='http://prometheus:9090'"
   },
@@ -62,12 +53,6 @@
   },
   "synapse/server": {
     "params": "serverName='synapse.example.com'"
-  },
-  "teable": {
-    "compose": "+ k.env({ PUBLIC_ORIGIN: 'http://teable:3000' })"
-  },
-  "twenty": {
-    "compose": "+ k.env({ SERVER_URL: 'http://twenty:3000' })"
   },
   "vikunja": {
     "compose": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"

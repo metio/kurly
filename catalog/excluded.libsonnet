@@ -86,4 +86,22 @@
   sonarqube: 'upstream sells hosting (SonarQube Cloud) — https://www.sonarsource.com/products/sonarcloud/',
   typesense: 'upstream sells hosting (Typesense Cloud) — https://cloud.typesense.org/',
   umami: 'upstream sells hosting (Umami Cloud) — https://umami.is/pricing',
+
+  // Second pass over the same test, each checked against the project's own site.
+  anythingllm: 'upstream sells hosting (AnythingLLM cloud, $50/mo) — https://anythingllm.com/pricing',
+  baserow: 'upstream sells hosting (Baserow Premium/Advanced) — https://baserow.io/pricing',
+  documenso: 'upstream sells hosting (Documenso cloud plans) — https://documenso.com/pricing',
+  formbricks: 'upstream sells hosting (Formbricks Cloud) — https://formbricks.com/pricing',
+  grist: 'upstream sells hosting (Grist Labs cloud plans) — https://www.getgrist.com/pricing/',
+  linkwarden: 'upstream sells hosting (Linkwarden cloud, $3/mo) — https://linkwarden.app/pricing',
+  mariadb: 'upstream sells hosting (MariaDB Cloud) — https://mariadb.com/products/skysql/',
+  mysql: 'upstream sells hosting (Oracle MySQL HeatWave Service) — https://www.oracle.com/mysql/',
+  ntfy: 'upstream sells hosting (ntfy.sh paid plans, by the author) — https://ntfy.sh/',
+  openobserve: 'upstream sells hosting (OpenObserve Cloud) — https://openobserve.ai/pricing',
+  penpot: 'upstream sells hosting (Penpot paid tiers) — https://penpot.app/pricing',
+  qdrant: 'upstream sells hosting (Qdrant Cloud) — https://qdrant.tech/pricing/',
+  redis: 'upstream sells hosting (Redis Cloud) — https://redis.io/pricing/',
+  teable: 'upstream sells hosting (Teable Pro/Business) — https://teable.ai/pricing',
+  twenty: 'upstream sells hosting (Twenty cloud, $9/user/mo) — https://twenty.com/pricing',
+  victoriametrics: 'upstream sells hosting (VictoriaMetrics Cloud) — https://victoriametrics.com/products/cloud/',
 }
