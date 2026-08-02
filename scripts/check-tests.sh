@@ -341,3 +341,25 @@ positive "memcached sized through memoryMB" \
 # Dragonfly exits at startup when maxmemory is under 256MiB per io thread, so
 # the workload asserts the floor at render — the pod would otherwise CrashLoop
 # with the reason buried in its log.
+
+# A smoke scenario whose workload is gone. Removing a workload takes its
+# directory, and a scenario left behind names something that cannot be rendered
+# — it never runs, because the e2e matrix is built from workloads/*/ rather than
+# from the scenario files, so it sits there looking like coverage that exists.
+# Three did exactly that after the licence exclusions.
+#
+# The three named here are deliberate: they exercise a policy set and two
+# operators, not a workload directory of their own.
+orphans=""
+for scenario in hack/smoke/scenario-*.sh; do
+  id="$(basename "$scenario" .sh)"
+  id="${id#scenario-}"
+  case "$id" in bollwerk | cnpg | otel) continue ;; esac
+  [ -d "workloads/${id}" ] || orphans="${orphans} ${scenario}"
+done
+if [ -n "$orphans" ]; then
+  echo "::error::smoke scenarios without a workload —${orphans}"
+  echo "  a removed workload takes its scenario with it (hack/exclude-workload.sh does this)"
+  exit 1
+fi
+echo "ok: every smoke scenario has a workload"
