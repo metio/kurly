@@ -2828,8 +2828,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -2994,13 +2993,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -3131,13 +3125,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -3264,8 +3253,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -3384,12 +3372,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -3533,7 +3517,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -3790,8 +3773,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -3913,13 +3895,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -4041,8 +4018,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -4162,13 +4138,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -4303,13 +4274,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -4479,9 +4445,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -4625,10 +4589,8 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
                      "require-probes",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -4803,13 +4765,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -4950,13 +4907,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
-                     "SYS.1.6.A17"
+                     "SYS.1.6.A15"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-probes",
-                     "require-run-as-non-root-user"
+                     "require-probes"
                   ]
                },
                "clusterScoped": false,
@@ -5110,8 +5064,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -5256,7 +5209,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -5377,13 +5329,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -5493,13 +5440,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -5636,13 +5578,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -5814,7 +5751,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -5972,7 +5908,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -6117,7 +6052,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -6260,8 +6194,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -6488,13 +6421,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -6603,13 +6531,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -7035,13 +6958,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -7161,13 +7079,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -7292,13 +7205,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -7417,13 +7325,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -7548,13 +7451,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -7695,9 +7593,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -7814,8 +7710,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -7934,13 +7829,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -8070,8 +7960,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -8226,7 +8115,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -8370,7 +8258,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -8504,13 +8391,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -8644,8 +8526,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -8789,13 +8670,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -8933,8 +8809,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -9054,8 +8929,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -9164,13 +9038,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -9282,12 +9151,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -9416,12 +9281,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -9602,7 +9463,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -9733,13 +9593,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -9875,12 +9730,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -10049,8 +9900,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -10192,13 +10042,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -10296,8 +10141,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -10417,12 +10261,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -10564,13 +10404,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -10693,8 +10528,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -10808,13 +10642,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -10941,13 +10770,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -11080,13 +10904,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -11239,13 +11058,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -11363,13 +11177,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -11526,8 +11335,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -11657,8 +11465,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -11790,9 +11597,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -11915,9 +11720,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -12046,13 +11849,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -12195,7 +11993,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -12354,13 +12151,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -12494,8 +12286,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -12643,8 +12434,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -12776,13 +12566,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -12921,9 +12706,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -13054,13 +12837,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -13179,8 +12957,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -13302,13 +13079,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -13422,13 +13194,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -13547,13 +13314,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -13682,13 +13444,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -13832,7 +13589,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -13962,8 +13718,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -14127,7 +13882,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -14254,13 +14008,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -14427,13 +14176,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -14588,7 +14332,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -14697,13 +14440,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -14832,8 +14570,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -14961,12 +14698,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15095,13 +14828,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15233,13 +14961,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15353,13 +15076,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15494,13 +15212,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15628,13 +15341,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15760,13 +15468,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15879,8 +15582,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -16025,7 +15727,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -16170,7 +15871,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -16285,13 +15985,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -16412,13 +16107,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -16575,8 +16265,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -16758,13 +16447,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -16920,7 +16604,10 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "requirements": [ ],
+                  "violates": [ ]
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "A one-off Backup: one snapshot of every volume in the namespace, taken now rather than on a cron. Runs on apply and finishes, so a caller can gate on the outcome — it signals completion with status.finished and a Completed condition, never readiness. Tag it, or the snapshot can only be found again by timestamp.",
@@ -17023,7 +16710,10 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "requirements": [ ],
+                  "violates": [ ]
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "A Restore: the half that proves the other half. Runs once when applied — into a claim (recovery) or to object storage as a tarball (inspection). K8up cannot stage one, so applying it is starting it.",
@@ -17163,7 +16853,10 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "requirements": [ ],
+                  "violates": [ ]
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "A Schedule: the nightly backup, plus the prune that makes the retention policy real and the check that notices a repository has rotted before a restore does. Backends kurly does not model pass through verbatim via `backend`, which is merged last.",
@@ -17279,8 +16972,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -17427,8 +17119,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -17560,13 +17251,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -17795,12 +17481,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -17933,9 +17615,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -18098,13 +17778,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18250,8 +17925,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -18392,13 +18066,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18497,13 +18166,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18609,13 +18273,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18759,7 +18418,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -18905,7 +18563,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -19029,13 +18686,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -19151,8 +18803,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -19304,13 +18955,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
-                     "SYS.1.6.A17"
+                     "SYS.1.6.A15"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-request-limits",
-                     "require-run-as-non-root-user"
+                     "require-request-limits"
                   ]
                },
                "clusterScoped": false,
@@ -19468,8 +19116,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -19589,13 +19236,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -19829,8 +19471,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -19945,13 +19586,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -20067,13 +19703,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -21060,8 +20691,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -21234,13 +20864,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
-                     "SYS.1.6.A17"
+                     "SYS.1.6.A15"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-probes",
-                     "require-run-as-non-root-user"
+                     "require-probes"
                   ]
                },
                "clusterScoped": false,
@@ -21407,13 +21034,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -21586,13 +21208,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
-                     "SYS.1.6.A17"
+                     "SYS.1.6.A15"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-request-limits",
-                     "require-run-as-non-root-user"
+                     "require-request-limits"
                   ]
                },
                "clusterScoped": false,
@@ -21759,13 +21378,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -21923,8 +21537,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -22041,13 +21654,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -22176,13 +21784,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -22304,12 +21907,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -22405,13 +22004,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -22530,13 +22124,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -22648,8 +22237,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -22899,13 +22487,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -23022,13 +22605,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -23170,9 +22748,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -23294,9 +22870,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -23475,8 +23049,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -23616,13 +23189,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -23742,13 +23310,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -23899,7 +23462,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -24129,13 +23691,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -24257,13 +23814,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -24387,9 +23939,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -24540,7 +24090,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -24723,13 +24272,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -24879,13 +24423,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
-                     "SYS.1.6.A17"
+                     "SYS.1.6.A15"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-probes",
-                     "require-run-as-non-root-user"
+                     "require-probes"
                   ]
                },
                "clusterScoped": false,
@@ -25029,8 +24570,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -25168,8 +24708,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -25323,8 +24862,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -25453,13 +24991,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -25603,7 +25136,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -25749,7 +25281,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -25872,13 +25403,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -26028,13 +25554,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -26178,7 +25699,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -26310,8 +25830,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -26454,13 +25973,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -26730,7 +26244,6 @@
                   "violates": [
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "require-secrets-in-secret"
                   ]
                },
@@ -26956,8 +26469,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -27043,13 +26555,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": true,
                "clusterScopedBecause": [
@@ -27204,8 +26711,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -27327,13 +26833,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -27457,9 +26958,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -27567,13 +27066,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -27692,13 +27186,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -27873,8 +27362,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -28020,12 +27508,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A4"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user",
                      "require-secrets-in-secret"
                   ]
                },
@@ -28206,8 +27691,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -28358,9 +27842,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -28519,8 +28001,7 @@
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -28669,13 +28150,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -28815,12 +28291,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -28959,8 +28431,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -29106,8 +28577,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -29265,7 +28735,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -29391,13 +28860,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -29511,13 +28975,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -29641,12 +29100,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -29770,13 +29225,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -29919,8 +29369,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -30073,12 +29522,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -30225,7 +29670,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -30539,7 +29983,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -30685,7 +30128,6 @@
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -30830,7 +30272,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -30955,13 +30396,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -31117,7 +30553,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -31233,13 +30668,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -31374,13 +30804,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -31505,13 +30930,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -31630,13 +31050,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -31773,9 +31188,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -31925,13 +31338,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -32061,9 +31469,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -32210,8 +31616,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -32331,8 +31736,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -32469,9 +31873,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -32622,7 +32024,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -32755,13 +32156,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -32896,13 +32292,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33021,13 +32412,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33098,13 +32484,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33169,13 +32550,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33263,13 +32639,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33388,8 +32759,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -33515,13 +32885,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33671,13 +33036,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33813,13 +33173,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33947,8 +33302,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -34072,13 +33426,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -34203,8 +33552,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -34362,8 +33710,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -34520,7 +33867,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -34752,7 +34098,10 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "requirements": [ ],
+                  "violates": [ ]
+               },
                "clusterScoped": true,
                "clusterScopedBecause": [
                   "daemonSet",
@@ -34853,13 +34202,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -34981,8 +34325,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -35121,10 +34464,8 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
                      "require-request-limits",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -35276,7 +34617,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -35403,9 +34743,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -35539,8 +34877,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -35722,7 +35059,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -35850,12 +35186,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36091,13 +35423,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36202,13 +35529,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36302,13 +35624,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36425,13 +35742,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36650,13 +35962,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36779,8 +36086,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -36869,13 +36175,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36990,13 +36291,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -37126,8 +36422,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -37271,7 +36566,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -37396,8 +36690,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -37537,7 +36830,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
                },
@@ -37653,13 +36945,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -37747,14 +37034,11 @@
                "bsi": {
                   "requirements": [
                      "SYS.1.6.A15",
-                     "SYS.1.6.A17",
                      "SYS.1.6.A5"
                   ],
                   "violates": [
-                     "require-non-root-groups",
                      "require-probes",
                      "require-request-limits",
-                     "require-run-as-non-root-user",
                      "restrict-sa-automount-sa-token"
                   ]
                },
@@ -37841,13 +37125,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
-                     "SYS.1.6.A17"
+                     "SYS.1.6.A15"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-probes",
-                     "require-run-as-non-root-user"
+                     "require-probes"
                   ]
                },
                "clusterScoped": false,
@@ -37979,13 +37260,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -38123,13 +37399,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -38598,8 +37869,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -38732,8 +38002,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -38873,8 +38142,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -39037,9 +38305,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -39207,12 +38473,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-run-as-nonroot"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -39333,13 +38595,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -39480,13 +38737,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -39647,8 +38899,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-unwanted-capabilities",
-                     "require-run-as-nonroot"
+                     "disallow-unwanted-capabilities"
                   ]
                },
                "clusterScoped": false,
@@ -39787,8 +39038,7 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -39934,8 +39184,7 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -40064,13 +39313,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "require-non-root-groups",
-                     "require-run-as-non-root-user"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [

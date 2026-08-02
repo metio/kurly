@@ -111,8 +111,14 @@ for dir in workloads/*/; do
     [ -f "$file" ] || continue
     stage="$(basename "$file" .libsonnet)"
     render="${work}/render.json"
+    # The stage exactly as a consumer renders it. It used to be composed with
+    # k.hostUsers() — the relaxation the smoke scenarios need because kind
+    # cannot nest user namespaces — but nothing here ever starts a pod: a
+    # server-side dry run is admission only. Composing it meant every verdict
+    # described a workload with hostUsers:true, which is not the workload kurly
+    # ships, and it hid the user namespace from the very policies that read it.
     if ! jsonnet -J vendor -e \
-      "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${file}')() + k.hostUsers())" \
+      "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${file}')())" \
       > "$render" 2>/dev/null; then
       unevaluated="${unevaluated}${id}/${stage} "
       continue

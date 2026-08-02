@@ -58,6 +58,19 @@
     |||,
   },
 
+  // Whether the pod asks for its OWN user namespace. `hostUsers` defaults to
+  // true, and a missing field must never relax a rule — only the explicit
+  // `hostUsers: false` counts.
+  //
+  // DEVIATION from the upstream IG BvC policies, documented in the README: the
+  // Kubernetes Pod Security Standards themselves waive the non-root
+  // requirements for a pod in its own user namespace, and this restores that
+  // agreement. Remove it once upstream carries the exemption.
+  userNamespacedVar:: {
+    name: 'userNamespaced',
+    expression: 'variables.podSpec.?hostUsers.orValue(true) == false',
+  },
+
   // All containers (regular + init + ephemeral).
   containersVar:: {
     name: 'containers',
@@ -254,21 +267,24 @@
 
     '013-require-run-as-nonroot': $.policy('013', 'require-run-as-nonroot', {
       bsi: { requirement: 'SYS.1.6.A17', protection: 'standard', category: 'must' },
-      variables: [$.podSpecVar, $.containersVar],
+      variables: [$.podSpecVar, $.containersVar, $.userNamespacedVar],
       action: 'Audit',
       validations: [{
         expression: |||
-          (has(variables.podSpec.securityContext) &&
+          variables.userNamespaced ||
+          (
+            (has(variables.podSpec.securityContext) &&
             has(variables.podSpec.securityContext.runAsNonRoot) &&
             variables.podSpec.securityContext.runAsNonRoot == true &&
             variables.containers.all(c,
-              c.?securityContext.?runAsNonRoot.orValue(true) == true)
+            c.?securityContext.?runAsNonRoot.orValue(true) == true)
             )
-          ||
-          variables.containers.all(c,
+            ||
+            variables.containers.all(c,
             has(c.securityContext) &&
             has(c.securityContext.runAsNonRoot) &&
             c.securityContext.runAsNonRoot == true)
+          )
         |||,
         message: 'Running as root is not allowed. Either the field spec.securityContext.runAsNonRoot or all of spec.containers[*].securityContext.runAsNonRoot, spec.initContainers[*].securityContext.runAsNonRoot and spec.ephemeralContainers[*].securityContext.runAsNonRoot, must be set to true.',
       }],
@@ -326,27 +342,33 @@
 
     '017-require-run-as-non-root-user': $.policy('017', 'require-run-as-non-root-user', {
       bsi: { requirement: 'SYS.1.6.A17', protection: 'standard', category: 'must' },
-      variables: [$.podSpecVar, $.containersVar],
+      variables: [$.podSpecVar, $.containersVar, $.userNamespacedVar],
       action: 'Audit',
       validations: [
         {
           expression: |||
-            variables.containers.all(c,
+            variables.userNamespaced ||
+            (
+              variables.containers.all(c,
               !(has(c.securityContext)) ||
               !(has(c.securityContext.runAsUser )) ||
               c.securityContext.runAsUser > 65535 )
+            )
           |||,
           message: 'Fehler: Jeder gesetzte runAsUser auf Container-Ebene muss größer als 65535 sein.',
         },
         {
           expression: |||
-            !(has(variables.podSpec.securityContext.runAsUser)) ||
-            !(has(variables.podSpec.securityContext)) ||
-            variables.podSpec.securityContext.runAsUser > 65535 ||
-            variables.containers.all(c,
+            variables.userNamespaced ||
+            (
+              !(has(variables.podSpec.securityContext.runAsUser)) ||
+              !(has(variables.podSpec.securityContext)) ||
+              variables.podSpec.securityContext.runAsUser > 65535 ||
+              variables.containers.all(c,
               has(c.securityContext) &&
               has(c.securityContext.runAsUser) &&
               c.securityContext.runAsUser > 65535)
+            )
           |||,
           message: 'Fehler: Pod-Ebene runAsUser ≤ 65535 muss von allen Containern überschrieben werden.',
         },
@@ -355,36 +377,42 @@
 
     '018-require-non-root-groups': $.policy('018', 'require-non-root-groups', {
       bsi: { requirement: 'SYS.1.6.A17', protection: 'standard', category: 'must' },
-      variables: [$.podSpecVar, $.containersVar],
+      variables: [$.podSpecVar, $.containersVar, $.userNamespacedVar],
       action: 'Audit',
       validations: [
         {
           expression: |||
-            variables.containers.all(c,
+            variables.userNamespaced ||
+            (
+              variables.containers.all(c,
               !(has(c.securityContext)) ||
               !(has(c.securityContext.runAsGroup )) ||
               c.securityContext.runAsGroup > 65535 )
+            )
           |||,
           message: 'Fehler: Jeder gesetzte runAsGroup auf Container-Ebene muss größer als 65535 sein.',
         },
         {
           expression: |||
-            !(has(variables.podSpec.securityContext.runAsGroup)) ||
-            !(has(variables.podSpec.securityContext)) ||
-            variables.podSpec.securityContext.runAsGroup > 65535 ||
-            variables.containers.all(c,
+            variables.userNamespaced ||
+            (
+              !(has(variables.podSpec.securityContext.runAsGroup)) ||
+              !(has(variables.podSpec.securityContext)) ||
+              variables.podSpec.securityContext.runAsGroup > 65535 ||
+              variables.containers.all(c,
               has(c.securityContext) &&
               has(c.securityContext.runAsGroup) &&
               c.securityContext.runAsGroup > 65535)
+            )
           |||,
           message: 'Fehler: Pod-Ebene runAsGroup ≤ 65535 muss von allen Containern überschrieben werden.',
         },
         {
-          expression: 'variables.podSpec.?securityContext.?supplementalGroups.orValue([]).all(group, group > 65535)',
+          expression: 'variables.userNamespaced || (variables.podSpec.?securityContext.?supplementalGroups.orValue([]).all(group, group > 65535))',
           message: 'supplementalGroups: Alle GIDs müssen größer als 65535 sein (oder unset).',
         },
         {
-          expression: 'variables.podSpec.?securityContext.?fsGroup.orValue(65536) > 65535',
+          expression: 'variables.userNamespaced || (variables.podSpec.?securityContext.?fsGroup.orValue(65536) > 65535)',
           message: 'fsGroup muss größer als 65535 sein (oder unset).',
         },
       ],

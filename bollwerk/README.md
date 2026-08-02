@@ -67,7 +67,7 @@ ServiceAccount and token automount, Service `externalIPs`, and NetworkPolicy
 remote-access ports. Each carries the source's BSI annotations
 (`policies.opencode.de/bsi-requirement`, …).
 
-## Three deliberate departures from the source
+## Four deliberate departures from the source
 
 - **Pod-spec located by shape, not `object.kind`.** The source branches the
   pod-spec location on `object.kind`, which is unreliable under native VAP —
@@ -83,6 +83,35 @@ remote-access ports. Each carries the source's BSI annotations
 - **Policy 130 reinterpreted.** The source's `disallow-remote-access-ports` is a
   legacy Kyverno `anyPattern` (not CEL); Bollwerk renders its **intent** as CEL —
   no NetworkPolicy ingress rule may open SSH/Telnet/RDP/VNC (22/23/3389/5900).
+
+- **Policies 013, 017 and 018 waive the non-root rules for a pod in its own
+  user namespace** (`spec.hostUsers: false`). The Kubernetes Pod Security
+  Standards themselves do this, by default and without a feature gate — the
+  identical Pod is rejected under `restricted` with `hostUsers: true` and
+  admitted with `hostUsers: false` (verified against v1.35.0):
+
+  ```text
+  hostUsers: true   → Forbidden: violates PodSecurity "restricted:latest":
+                      runAsNonRoot != true, runAsUser=0
+  hostUsers: false  → created
+  ```
+
+  The reasoning is the one SYS.1.6.A17 rests on. Its concern is that a breakout
+  lands on the host as root; a user namespace maps container UID 0 to an
+  unprivileged host UID and confines capabilities to the namespace, so it does
+  not. For 017 and 018 it applies twice over: the `> 65535` threshold exists so
+  container UIDs cannot collide with real host users, and inside a user
+  namespace the whole range is mapped away from them.
+
+  Only an explicit `hostUsers: false` counts — the field defaults to `true`, and
+  a missing one must never relax a rule.
+
+  **This one is temporary.** It has been proposed upstream, and if it is taken
+  the departure disappears and the logic goes back to being transferred word for
+  word. The others above exist because the source cannot be transferred
+  verbatim; this one exists because we think the source is behind Kubernetes,
+  which is a different and weaker justification — so it is written down here
+  rather than left to be discovered in a diff.
 
 **Not converted:** `XXX-require-unique-uid-per-workload` needs to compare against
 *other* objects in the cluster, which `ValidatingAdmissionPolicy` cannot do (no
