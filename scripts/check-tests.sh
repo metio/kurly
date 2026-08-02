@@ -33,15 +33,16 @@ done
 # The ignored tokens are not API references: a docs URL
 # (kurly.projects.metio.wtf), the policy file (policy/kurly.rego), the
 # kurly.test/* and kurly.metio.wtf/* label keys the gates and workloads use, and
-# the per-workload metadata media type
-# (application/vnd.metio.kurly.workload.v1+json), which reads as `kurly.workload`
-# to a pattern looking for API references and is not one.
+# and the two artifact media types
+# (application/vnd.metio.kurly.workload.v1+json and …kurly.catalog.v1+json),
+# which read as `kurly.workload` and `kurly.catalog` to a pattern looking for API
+# references and are not ones.
 # Only TRACKED files are scanned, so the vendored library and generated build
 # output (docs/public, both gitignored) cannot fabricate a reference.
 exports="$(jsonnet -J vendor -e "std.objectFieldsAll(import 'main.libsonnet')" | jq -r '.[]' | sort -u)"
 # -d skip steps over the theme submodule, which git ls-files reports as a path.
 referenced="$(git ls-files -z | xargs -0 grep -IhoE -d skip 'kurly\.[a-zA-Z_][a-zA-Z0-9_]*' \
-  | sed 's/^kurly\.//' | sort -u | grep -vxE 'projects|rego|test|metio|workload' || true)"
+  | sed 's/^kurly\.//' | sort -u | grep -vxE 'projects|rego|test|metio|workload|catalog' || true)"
 unknown="$(comm -23 <(printf '%s\n' "$referenced") <(printf '%s\n' "$exports"))"
 if [ -n "$unknown" ]; then
   echo "::error::these kurly.<name> references are not exported by main.libsonnet:" >&2

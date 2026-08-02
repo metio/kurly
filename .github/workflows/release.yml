@@ -30,7 +30,6 @@ on:
       - 'lib/**'
       - Containerfile
       - workload.Containerfile
-      - catalog.Containerfile
       - 'catalog/**'
       - 'workloads/**'
       # A workload README is documentation, not shipped in the source artifact,
@@ -120,7 +119,7 @@ jobs:
               # that packages it. Gating on catalog/** matters beyond release
               # noise: a consumer pins this image, so republishing it on every
               # merge would open a pull request there for changes it cannot see.
-              echo "$diff" | grep -qE '^(catalog/.*|catalog\.Containerfile)$' && catalog=true
+              echo "$diff" | grep -qE '^catalog/.*$' && catalog=true
               # A README-only change to a workload is not a release (the README
               # is docs, not part of the shipped source artifact). And only a
               # workload whose directory still EXISTS is releasable — a DELETED
@@ -270,7 +269,8 @@ jobs:
     permissions:
       contents: write # push the catalog-<version> tag + GitHub Release
       packages: write # push to GHCR
-      id-token: write # cosign keyless image signing
+      id-token: write # cosign keyless artifact signing
+      attestations: write # attach build provenance as a referrer
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -305,36 +305,78 @@ jobs:
             exit 1
           }
           echo "the published catalog is the committed one plus the artifacts it names"
-      - name: Assert single layer and a readable catalog in the built image
-        # Single layer, like the library and workload images. And the layer has
-        # to carry a catalog a consumer can actually READ: parse it out of the
-        # image's own filesystem and check the fields every consumer keys on —
-        # the schema version it refuses to boot on, and a non-empty workload
-        # list. A published-but-empty catalog would otherwise reach a consumer
-        # as "every product disappeared".
+      - name: The catalog a consumer will read
+        # The published artifact is the file itself, so this checks the file: the
+        # schema version a consumer refuses to boot on, and a non-empty workload
+        # list. A published-but-empty catalog would otherwise reach a consumer as
+        # "every product disappeared".
         run: |
           set -euo pipefail
-          docker buildx build --load --file catalog.Containerfile --tag kurly-catalog-verify:latest .
-          n=$(docker image inspect kurly-catalog-verify:latest --format '{{ len .RootFS.Layers }}')
-          [ "$n" = "1" ] || { echo "::error::catalog image has $n layers, expected 1"; exit 1; }
-          tree="$(mktemp -d)"
-          # A FROM-scratch image carries no command, and `docker create` rejects
-          # that — pass a throwaway one; the container exists only to export its
-          # filesystem.
-          cid="$(docker create kurly-catalog-verify:latest /nonexistent)"
-          docker export "$cid" | tar -xf - -C "$tree"
-          docker rm "$cid" >/dev/null
-          version="$(jq -r '.schemaVersion // empty' "$tree/catalog.json")"
-          [ -n "$version" ] || { echo "::error::catalog image carries no schemaVersion"; exit 1; }
-          count="$(jq -r '.workloads | length' "$tree/catalog.json")"
-          [ "$count" -gt 0 ] || { echo "::error::catalog image carries an empty workload list"; exit 1; }
-          echo "catalog image carries schemaVersion ${version} and ${count} workloads"
-      - name: Build, push and sign the image
-        uses: metio/ci/container-release@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+          version="$(jq -r '.schemaVersion // empty' catalog/catalog.json)"
+          [ -n "$version" ] || { echo "::error::catalog carries no schemaVersion"; exit 1; }
+          count="$(jq -r '.workloads | length' catalog/catalog.json)"
+          [ "$count" -gt 0 ] || { echo "::error::catalog carries an empty workload list"; exit 1; }
+          echo "catalog carries schemaVersion ${version} and ${count} workloads"
+      # A PLAIN OCI ARTIFACT, not a container image. The catalogue is data with
+      # no platform, and publishing it as an image produced a multi-platform
+      # index whose six children all pointed at the same blob — six identical
+      # copies of a JSON file, none carrying a layer title, so `oras pull`
+      # downloaded every manifest and wrote nothing. Getting one file out meant
+      # walking the index, filtering the attestation manifests, and fetching the
+      # blob by hand.
+      #
+      # One manifest, one titled layer. `oras pull` writes catalog.json into the
+      # working directory and that is the whole consumer side.
+      #
+      # Uncompressed application/json, so the blob is 1.4 MB rather than 148 KB.
+      # The catalogue is fetched when a pin moves, not per build, and handing a
+      # consumer a file rather than a tarball to unpack is the point of the
+      # change.
+      - id: push
+        name: Push the catalog artifact
+        env:
+          VERSION: ${{ needs.discover.outputs.version }}
+          ACTOR: ${{ github.actor }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          nix develop --command oras login ghcr.io --username "$ACTOR" --password "$GH_TOKEN"
+          # Pushed from inside catalog/, because oras takes the layer title from
+          # the path it is given and a consumer should get `catalog.json` rather
+          # than `catalog/catalog.json`.
+          cd catalog
+          nix develop --command oras push \
+            "ghcr.io/metio/kurly/catalog:${VERSION},latest" \
+            --artifact-type application/vnd.metio.kurly.catalog.v1+json \
+            catalog.json:application/json
+          digest="$(nix develop --command oras resolve "ghcr.io/metio/kurly/catalog:${VERSION}")"
+          echo "digest=${digest}" >> "$GITHUB_OUTPUT"
+          echo "pushed ghcr.io/metio/kurly/catalog@${digest}"
+      - name: Sign the artifact
+        env:
+          DIGEST: ${{ steps.push.outputs.digest }}
+        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/catalog@${DIGEST}"
+      # Provenance came free from buildx when this was an image. It is worth
+      # keeping, so it is attached explicitly — as a referrer on the artifact,
+      # which is where the referrers API expects it and which leaves the
+      # artifact itself uncluttered.
+      - name: Attach build provenance
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
         with:
-          image: ghcr.io/metio/kurly/catalog
-          version: ${{ needs.discover.outputs.version }}
-          file: ./catalog.Containerfile
+          subject-name: ghcr.io/metio/kurly/catalog
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+      # What a consumer will actually run, against what was just published.
+      - name: A consumer can pull it with one command
+        env:
+          DIGEST: ${{ steps.push.outputs.digest }}
+        run: |
+          set -euo pipefail
+          out="$(mktemp -d)"
+          (cd "$out" && nix develop --command oras pull "ghcr.io/metio/kurly/catalog@${DIGEST}")
+          [ -f "${out}/catalog.json" ] || { echo "::error::oras pull wrote no catalog.json"; exit 1; }
+          diff -q "${out}/catalog.json" catalog/catalog.json
+          echo "oras pull yields catalog.json, byte-identical to the published file"
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list 'catalog-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
@@ -349,7 +391,7 @@ jobs:
           previous: ${{ steps.prev.outputs.prev }}
           # Path-scoped notes since this unit's last tag; tag-pattern keeps
           # another unit's tag inside the range from splitting the notes.
-          include-paths: catalog catalog.Containerfile
+          include-paths: catalog
           tag-pattern: ^catalog-
       - name: Tag and publish the GitHub Release
         env:
