@@ -11,3 +11,6 @@
 # jsonnet toolchain or the k8s-libsonnet the library renders against.
 FROM scratch
 COPY catalog/catalog.json /catalog.json
+# Matching the library image: a scratch base inherits no user, and USER is
+# metadata rather than a layer, so the single-layer contract above is unaffected.
+USER 65532:65532

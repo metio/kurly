@@ -20,3 +20,8 @@ COPY lib /github.com/metio/kurly/lib
 
 FROM scratch
 COPY --from=src / /
+# A scratch image inherits no user, so anything that did exec this would run as
+# root. It carries Jsonnet source and no process, but the declaration costs
+# nothing and every metio image answers this the same way. USER is config
+# metadata rather than a filesystem diff, so the single-layer contract holds.
+USER 65532:65532
