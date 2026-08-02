@@ -47,7 +47,22 @@ inspect_one() {
       "$(printf '%s' "$previous" | sed "s/\"digest\":/digest:/; s/\"architectures\":/architectures:/; s/\"/'/g")"
     return 0
   fi
-  raw="$(skopeo inspect --retry-times 3 --raw "docker://${ref}" 2>/dev/null || true)"
+  # skopeo refuses a reference that carries BOTH a tag and a digest — the very
+  # shape every pin here has since images became digest-pinned. It fails on
+  # every image, the run falls back to what it derived last time, and the file
+  # looks freshly written while saying nothing new. So the tag is dropped and
+  # the digest kept: the digest is what identifies the bits anyway.
+  local inspectRef="$ref"
+  case "$ref" in
+    *@sha256:*)
+      local namePart="${ref%@*}" digestPart="${ref#*@}"
+      # Strip the tag only when the last colon really introduces one — a
+      # registry port (host:5000/name@sha256:…) has a slash after its colon.
+      case "${namePart##*/}" in *:*) namePart="${namePart%:*}" ;; esac
+      inspectRef="${namePart}@${digestPart}"
+      ;;
+  esac
+  raw="$(skopeo inspect --retry-times 3 --raw "docker://${inspectRef}" 2>/dev/null || true)"
   if [ -z "$raw" ]; then
     # The registry did not answer. Three hundred inspects meet a rate limit
     # sooner or later, and defaulting to amd64 there would quietly retract every
@@ -69,12 +84,16 @@ inspect_one() {
   elif printf '%s' "$raw" | jq -e '.manifests' >/dev/null 2>&1; then
     arches="$(printf '%s' "$raw" | jq -c '[.manifests[].platform | select(.os=="linux") | .architecture] | unique')"
   else
-    arches="$(skopeo inspect --retry-times 3 "docker://${ref}" 2>/dev/null | jq -c '[.Architecture]' 2>/dev/null || printf '["amd64"]')"
+    arches="$(skopeo inspect --retry-times 3 "docker://${inspectRef}" 2>/dev/null | jq -c '[.Architecture]' 2>/dev/null || printf '["amd64"]')"
   fi
-  # Only the architectures. The digest a reference resolves to is stated by the
-  # reference itself — every pin carries one — so observing it here would be a
-  # second, weaker answer to a question already answered exactly.
-  printf '  "%s": { architectures: %s },\n' "$key" "$arches"
+  # The digest this answer is ABOUT, alongside the answer. The reference states
+  # its own digest, but that is the reference as it stands now — and Renovate
+  # moves it. Recording what was measured lets catalog.jsonnet drop the claim
+  # when the pin moves past it, rather than publishing last month's
+  # architectures for this month's image.
+  local digest="${ref##*@}"
+  case "$digest" in sha256:*) ;; *) digest="" ;; esac
+  printf '  "%s": { digest: '"'"'%s'"'"', architectures: %s },\n' "$key" "$digest" "$arches"
 }
 export -f inspect_one
 

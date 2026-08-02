@@ -3723,7 +3723,13 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
                ],
                "args": [
                   {
@@ -3969,7 +3975,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -6167,7 +6174,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -6543,7 +6551,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -6969,7 +6978,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -9102,7 +9112,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -10123,7 +10134,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -10221,7 +10233,8 @@
             },
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -11293,7 +11306,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -12832,7 +12846,9 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm",
+                  "arm64"
                ],
                "args": [
                   {
@@ -13227,7 +13243,10 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "386",
+                  "amd64",
+                  "arm",
+                  "arm64"
                ],
                "args": [
                   {
@@ -14626,7 +14645,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -18162,7 +18182,9 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm",
+                  "arm64"
                ],
                "args": [
                   {
@@ -19515,7 +19537,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -19983,7 +20006,9 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "386",
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -20973,7 +20998,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -21963,7 +21989,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -22565,7 +22592,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -26864,7 +26892,9 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm",
+                  "arm64"
                ],
                "args": [
                   {
@@ -27362,7 +27392,9 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm",
+                  "arm64"
                ],
                "args": [
                   {
@@ -29421,7 +29453,9 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm",
+                  "arm64"
                ],
                "args": [
                   {
@@ -31537,7 +31571,9 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm",
+                  "arm64"
                ],
                "args": [
                   {
@@ -33976,7 +34012,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -35434,7 +35471,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -37417,7 +37455,8 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64"
                ],
                "args": [
                   {
@@ -38927,7 +38966,11 @@
          "stages": [
             {
                "architectures": [
-                  "amd64"
+                  "amd64",
+                  "arm64",
+                  "ppc64le",
+                  "riscv64",
+                  "s390x"
                ],
                "args": [
                   {
