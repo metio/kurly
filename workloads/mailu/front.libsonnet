@@ -99,7 +99,6 @@ function(
     + kurly.allowPrivilegeEscalation()
     + kurly.keepCapabilities()
     + kurly.writableRootFilesystem()
-    + kurly.hostUsers()
     + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
     + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
     + kurly.resources(

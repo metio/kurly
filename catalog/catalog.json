@@ -19859,8 +19859,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -19878,7 +19877,7 @@
                "kind": "http",
                "posture": {
                   "multiTenantSafe": false,
-                  "ownUserNamespace": false,
+                  "ownUserNamespace": true,
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
@@ -20000,8 +19999,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -20019,7 +20017,7 @@
                "kind": "http",
                "posture": {
                   "multiTenantSafe": false,
-                  "ownUserNamespace": false,
+                  "ownUserNamespace": true,
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
@@ -20147,8 +20145,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -20166,7 +20163,7 @@
                "kind": "http",
                "posture": {
                   "multiTenantSafe": false,
-                  "ownUserNamespace": false,
+                  "ownUserNamespace": true,
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
@@ -20288,8 +20285,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -20307,7 +20303,7 @@
                "kind": "http",
                "posture": {
                   "multiTenantSafe": false,
-                  "ownUserNamespace": false,
+                  "ownUserNamespace": true,
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
@@ -20429,8 +20425,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -20448,7 +20443,7 @@
                "kind": "http",
                "posture": {
                   "multiTenantSafe": false,
-                  "ownUserNamespace": false,
+                  "ownUserNamespace": true,
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
@@ -20564,8 +20559,7 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "require-run-as-nonroot"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -20583,7 +20577,7 @@
                "kind": "http",
                "posture": {
                   "multiTenantSafe": false,
-                  "ownUserNamespace": false,
+                  "ownUserNamespace": true,
                   "runsAsRoot": true,
                   "writableRootFilesystem": true
                },
