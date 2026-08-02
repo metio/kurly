@@ -17,3 +17,6 @@
 FROM scratch
 ARG WORKLOAD
 COPY workloads/${WORKLOAD} /github.com/metio/kurly/workloads/${WORKLOAD}
+# Matching the library image: a scratch base inherits no user, and USER is
+# metadata rather than a layer, so the single-layer contract above is unaffected.
+USER 65532:65532
