@@ -2999,7 +2999,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -3266,7 +3265,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -3390,7 +3388,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -3536,7 +3533,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -3789,7 +3785,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -4806,7 +4801,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -4955,7 +4949,6 @@
                   "violates": [
                      "require-non-root-groups",
                      "require-probes",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -5256,7 +5249,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -5642,7 +5634,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -6119,7 +6110,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -6263,7 +6253,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -6496,7 +6485,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -7042,7 +7030,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -7169,7 +7156,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -7819,7 +7805,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -8231,7 +8216,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -8376,7 +8360,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -8801,7 +8784,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -8942,7 +8924,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -9064,7 +9045,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -9178,7 +9158,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -9296,7 +9275,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -9431,7 +9409,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -9614,7 +9591,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -9892,7 +9868,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -10433,7 +10408,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -10707,7 +10681,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -11258,7 +11231,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -11382,7 +11354,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -12066,7 +12037,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -12211,7 +12181,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -13319,7 +13288,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -13440,7 +13408,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -13701,7 +13668,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -14274,7 +14240,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -14717,7 +14682,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -14981,7 +14945,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -15255,7 +15218,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -15517,7 +15479,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -15652,7 +15613,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -15900,7 +15860,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -16046,7 +16005,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -16192,7 +16150,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -16313,7 +16270,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -16441,7 +16397,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -16601,7 +16556,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -16789,7 +16743,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -17455,7 +17408,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -17593,7 +17545,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -17828,7 +17779,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -18133,7 +18083,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -18531,7 +18480,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -18644,7 +18592,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -18936,7 +18883,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -19066,7 +19012,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -19626,7 +19571,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -20103,7 +20047,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -21092,7 +21035,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -21272,7 +21214,6 @@
                   "violates": [
                      "require-non-root-groups",
                      "require-probes",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -21445,7 +21386,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -21626,7 +21566,6 @@
                   "violates": [
                      "require-non-root-groups",
                      "require-request-limits",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -21799,7 +21738,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -21960,7 +21898,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -22082,7 +22019,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -22218,7 +22154,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -22346,7 +22281,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -22687,7 +22621,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -22943,7 +22876,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -23516,7 +23448,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -23788,7 +23719,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -23941,7 +23871,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -24583,7 +24512,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -25074,7 +25002,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -25503,7 +25430,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -25649,7 +25575,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -25796,7 +25721,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -26081,7 +26005,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -26227,7 +26150,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -26509,7 +26431,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -27381,7 +27302,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -27620,7 +27540,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -27923,7 +27842,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -28070,12 +27988,13 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17"
+                     "SYS.1.6.A17",
+                     "SYS.1.6.A4"
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
-                     "require-run-as-non-root-user"
+                     "require-run-as-non-root-user",
+                     "require-secrets-in-secret"
                   ]
                },
                "clusterScoped": false,
@@ -28569,7 +28488,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -28724,7 +28642,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -28870,7 +28787,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -29448,7 +29364,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -29567,7 +29482,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -30129,7 +30043,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -30592,7 +30505,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -30884,7 +30796,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -31172,7 +31083,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -31294,7 +31204,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -31690,7 +31599,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -32678,7 +32586,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -32817,7 +32724,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -34134,7 +34040,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -34578,7 +34483,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -35335,7 +35239,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -35781,7 +35684,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -35914,7 +35816,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -36841,7 +36742,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -37057,7 +36957,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -37334,7 +37233,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -37600,7 +37498,6 @@
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot",
                      "restrict-image-registries"
                   ]
@@ -39271,7 +39168,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
@@ -39399,7 +39295,6 @@
                   ],
                   "violates": [
                      "require-non-root-groups",
-                     "require-ro-rootfs",
                      "require-run-as-non-root-user"
                   ]
                },
@@ -39710,7 +39605,6 @@
                   ],
                   "violates": [
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
                      "require-run-as-nonroot"
                   ]
                },
