@@ -2884,9 +2884,9 @@
          "maturity": {
             "delivered": {
                "databaseEngine": "postgres",
-               "databaseReadOn": "2026-08-01",
+               "databaseReadOn": "2026-08-02",
                "databaseTables": 77,
-               "since": "2026-08-01"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -3179,7 +3179,7 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -3301,7 +3301,10 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-02",
+               "databaseTables": 0,
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -3426,7 +3429,7 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -3692,7 +3695,7 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -5118,7 +5121,7 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -5494,7 +5497,10 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-02",
+               "databaseTables": 29,
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -6348,7 +6354,7 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -7646,7 +7652,7 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -8578,7 +8584,10 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-02",
+               "databaseTables": 42,
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -8859,7 +8868,7 @@
          "licenseVariantAssumed": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -9199,7 +9208,10 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-30"
+               "databaseEngine": "postgres",
+               "databaseReadOn": "2026-08-02",
+               "databaseTables": 0,
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -10464,7 +10476,7 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-31"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -11784,7 +11796,7 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-07-31"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },
@@ -22166,7 +22178,7 @@
          "licenseOsiApproved": true,
          "maturity": {
             "delivered": {
-               "since": "2026-08-01"
+               "since": "2026-08-02"
             },
             "tier": "e2e"
          },

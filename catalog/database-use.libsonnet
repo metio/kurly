@@ -33,8 +33,12 @@
 // it against a database they could not use. Two facts, two files.
 
 {
-  activepieces: { tables: 77, engine: 'postgres', on: '2026-08-01' },
+  activepieces: { tables: 77, engine: 'postgres', on: '2026-08-02' },
+  adminer: { tables: 0, engine: 'postgres', on: '2026-08-02' },
   automatisch: { tables: 22, engine: 'postgres', on: '2026-08-01' },
+  blinko: { tables: 29, engine: 'postgres', on: '2026-08-02' },
+  docmost: { tables: 42, engine: 'postgres', on: '2026-08-02' },
+  drupal: { tables: 0, engine: 'postgres', on: '2026-08-02' },
   ferretdb: { tables: 0, engine: 'postgres', on: '2026-08-01' },
   immich: { tables: 51, engine: 'postgres', on: '2026-08-01' },
   joplin: { tables: 26, engine: 'postgres', on: '2026-08-01' },

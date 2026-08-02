@@ -19,33 +19,49 @@
 // treat the unfamiliar value as the weakest rung, and report the best-proven
 // workloads in the catalogue as never having been booted.
 //
+// THE DATE IS PART OF THE CLAIM. It says the delivery path was walked for the
+// workload AS IT STOOD THAT DAY, not that it holds for whatever the stage renders
+// now. A stage edited after its date carries a claim about the older manifest, and
+// a reader who needs the current one has to re-walk it — `git log` on the stage
+// against the date beside it is the whole check.
+//
+// The security hardening of 2026-08-02 changed 109 stages that were already
+// listed here, and they were NOT all re-walked: fourteen were, chosen to cover
+// every kind of change made (a relaxation simply deleted, a scratch at /run for
+// the s6 images, /var/run/apache2, /var/cache/nginx, an app-specific path), and
+// all fourteen delivered. The rest keep their earlier dates. What that sample
+// supports is that the CHANGE does not break delivery — a securityContext is not
+// something the pipeline reads — and not that each individual workload was seen
+// again. The distinction is worth the paragraph: this file is meant to be read
+// literally.
+//
 // A workload is added when `hack/smoke/deep-run.sh` (or the e2e pipeline) observes
 // its deep check green. Remove it if that starts failing; the tier must never claim
 // more than the run proves. Workloads whose stages render only a custom resource
 // have no controller to roll out and cannot reach this tier at all.
 {
   '2fauth': '2026-07-30',
-  activepieces: '2026-08-01',
+  activepieces: '2026-08-02',
   actualbudget: '2026-07-30',
-  adguardhome: '2026-07-30',
-  adminer: '2026-07-30',
-  'airsonic-advanced': '2026-07-30',
-  alist: '2026-07-30',
+  adguardhome: '2026-08-02',
+  adminer: '2026-08-02',
+  'airsonic-advanced': '2026-08-02',
+  alist: '2026-08-02',
   answer: '2026-07-30',
   apprise: '2026-07-30',
   audiobookshelf: '2026-07-30',
   authelia: '2026-07-30',
   automatisch: '2026-08-01',
   baikal: '2026-07-30',
-  bazarr: '2026-07-30',
+  bazarr: '2026-08-02',
   beszel: '2026-07-30',
   'blackbox-exporter': '2026-07-30',
-  blinko: '2026-07-30',
+  blinko: '2026-08-02',
   bookstack: '2026-07-30',
   calibre: '2026-07-30',
   'calibre-web': '2026-07-30',
   'calibre-web-automated': '2026-07-30',
-  changedetection: '2026-07-30',
+  changedetection: '2026-08-02',
   chatpad: '2026-08-01',
   cobalt: '2026-08-01',
   'code-server': '2026-07-30',
@@ -53,19 +69,19 @@
   convertx: '2026-08-01',
   couchdb: '2026-07-30',
   cryptpad: '2026-07-30',
-  cyberchef: '2026-07-30',
+  cyberchef: '2026-08-02',
   dashy: '2026-08-01',
   davis: '2026-07-30',
   davos: '2026-07-30',
   deluge: '2026-07-30',
   dex: '2026-07-31',
   'docker-registry-ui': '2026-07-30',
-  docmost: '2026-07-30',
+  docmost: '2026-08-02',
   docuseal: '2026-07-30',
-  dokuwiki: '2026-07-30',
+  dokuwiki: '2026-08-02',
   'draw-io': '2026-08-01',
   drawio: '2026-07-30',
-  drupal: '2026-07-30',
+  drupal: '2026-08-02',
   duplicati: '2026-07-31',
   ejabberd: '2026-07-30',
   'element-web': '2026-07-31',
@@ -73,7 +89,7 @@
   ente: '2026-07-31',
   esphome: '2026-07-31',
   etherpad: '2026-07-31',
-  excalidraw: '2026-07-31',
+  excalidraw: '2026-08-02',
   expenseowl: '2026-07-31',
   ferretdb: '2026-08-01',
   fider: '2026-07-31',
@@ -83,7 +99,7 @@
   flame: '2026-07-31',
   flaresolverr: '2026-07-31',
   flatnotes: '2026-07-31',
-  focalboard: '2026-07-31',
+  focalboard: '2026-08-02',
   foldingathome: '2026-07-31',
   forgejo: '2026-07-31',
   freshrss: '2026-07-31',
@@ -142,7 +158,7 @@
   mediawiki: '2026-07-31',
   memcached: '2026-07-31',
   memos: '2026-07-30',
-  'mermaid-live-editor': '2026-08-01',
+  'mermaid-live-editor': '2026-08-02',
   'metrics-server': '2026-07-31',
   metube: '2026-07-31',
   microbin: '2026-07-31',
