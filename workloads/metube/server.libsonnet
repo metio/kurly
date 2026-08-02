@@ -35,7 +35,6 @@ function(
   + kurly.servicePort(8081)
   + kurly.env({ DOWNLOAD_DIR: '/downloads', STATE_DIR: '/downloads/.metube' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/downloads', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

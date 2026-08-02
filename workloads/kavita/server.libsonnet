@@ -50,7 +50,6 @@ function(
   + kurly.servicePort(5000)
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/kavita/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

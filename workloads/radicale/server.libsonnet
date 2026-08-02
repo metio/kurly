@@ -44,7 +44,6 @@ function(
   + kurly.servicePort(5232)
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(2999, gid=2999, fsGroup=2999)
-  + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

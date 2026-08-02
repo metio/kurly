@@ -31,7 +31,10 @@ function(
   + kurly.env(env)
   // The image's own whoogle account owns the static tree it builds into on start.
   + kurly.runAs(927, gid=927, fsGroup=927)
-  + kurly.writableRootFilesystem()
+  // Writes under /whoogle/app/static/build; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/whoogle/app/static/build')
+  // Writes under /whoogle/app/static/css; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/whoogle/app/static/css')
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

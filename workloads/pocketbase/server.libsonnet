@@ -36,7 +36,6 @@ function(
   + kurly.servicePort(8080)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/pb_data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/api/health', port: 'http' } })

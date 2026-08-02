@@ -39,7 +39,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({ PICTRS__SERVER__ADDRESS: '0.0.0.0:8080', PICTRS__REPO__TYPE: 'sled', PICTRS__STORE__TYPE: 'filesystem' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   + kurly.store('/mnt', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

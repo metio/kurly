@@ -35,7 +35,8 @@ function(
   + kurly.servicePort(8080)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   + kurly.store('/var/jenkins_home', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/login', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/login', port: 'http' } })

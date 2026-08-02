@@ -37,7 +37,8 @@ function(
   + kurly.servicePort(8000)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /var/tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/tmp')
   // The bundled config keeps the SQLite database and uploaded files under the
   // app's own data directory, relative to its working directory.
   + kurly.store('/opt/focalboard/data', storageSize, storageClass=storageClass)

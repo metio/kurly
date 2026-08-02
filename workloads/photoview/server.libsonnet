@@ -47,7 +47,6 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({ PHOTOVIEW_LISTEN_IP: '0.0.0.0', PHOTOVIEW_LISTEN_PORT: '80', PHOTOVIEW_MEDIA_CACHE: '/app/cache' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   // Two distinct PVCs: the media library it scans, and the thumbnail cache.
   + kurly.store('/photos', mediaSize, storageClass=storageClass)
   + kurly.store('/app/cache', cacheSize, storageClass=storageClass)

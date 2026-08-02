@@ -43,7 +43,8 @@ function(
   // The web app finds guacd in its own pod, on localhost.
   + kurly.env({ GUACD_HOSTNAME: 'localhost', GUACD_PORT: '4822' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   // guacd — the proxy daemon that speaks the remote-desktop protocols — as a sidecar. It
   // inherits the pod's security posture; the web container reaches it at localhost:4822.
   + kurly.sidecar({

@@ -44,7 +44,6 @@ function(
   // The image runs as uid 1000 (coder); pin it and its fsGroup so the workspace
   // volume is writable and the restricted posture admits the pod.
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/home/coder', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/healthz', port: 'http' } })

@@ -37,7 +37,6 @@ function(
   + kurly.extraPort('smtp', 1025)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/readyz', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/livez', port: 'http' } })

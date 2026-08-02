@@ -47,7 +47,6 @@ function(
   // official image starts as root; pin a non-root uid that owns the media volume
   // and keep the root filesystem writable.
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   // The non-secret connection settings. The password lives in `secretName` as
   // DB_PASSWORD — an Immich-shaped Secret the operator supplies (kurly mints no

@@ -36,7 +36,6 @@ function(
   + kurly.servicePort(53842)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/app/data', storageSize, storageClass=storageClass)
   // The app reads its port from the environment, which the Service-link variables
   // would overwrite with a tcp:// URL.

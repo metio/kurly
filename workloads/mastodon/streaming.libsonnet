@@ -50,7 +50,6 @@ function(
     REDIS_PORT: std.toString(redisPort),
   } + env)
   + kurly.runAs(991, gid=991, fsGroup=991)
-  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/api/v1/streaming/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

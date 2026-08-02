@@ -54,7 +54,8 @@ function(
   + kurly.servicePort(8080)
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   + kurly.store('/gotosocial/storage', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/readyz', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/livez', port: 'http' } })

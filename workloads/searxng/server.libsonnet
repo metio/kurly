@@ -59,7 +59,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   // The app reads its port from the environment, which the Service-link variables
   // would overwrite with a tcp:// URL.
   + kurly.disableServiceLinks()

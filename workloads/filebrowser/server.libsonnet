@@ -41,7 +41,6 @@ function(
   + kurly.servicePort(80)
   + kurly.env({ FB_DATABASE: '/database/filebrowser.db', FB_ROOT: '/srv' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/database', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

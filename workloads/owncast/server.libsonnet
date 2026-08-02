@@ -42,7 +42,6 @@ function(
   + kurly.extraPort('rtmp', 1935)
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
   + kurly.store('/app/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/status', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/api/status', port: 'http' } })

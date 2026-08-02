@@ -38,7 +38,8 @@ function(
   + kurly.servicePort(11434)
   + kurly.env({ OLLAMA_MODELS: '/models', OLLAMA_HOST: '0.0.0.0:11434' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /home/ubuntu; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/home/ubuntu')
   + kurly.store('/models', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

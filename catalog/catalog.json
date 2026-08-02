@@ -5660,10 +5660,10 @@
                "importPath": "github.com/metio/kurly/workloads/blinko/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:31c3bc9f4fc00c82328c098c0c1120fe7fe43152a9f3cbc04b0303c32a2e60d3",
@@ -6514,10 +6514,10 @@
                "importPath": "github.com/metio/kurly/workloads/changedetection/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:5438423d5e906eff4e8f7886823482ad23f472bf7b8530ccaca89fb48c337882",
@@ -7187,10 +7187,10 @@
                "importPath": "github.com/metio/kurly/workloads/code-server/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:fa367e7eddd303a95c736f7aede351cdee9036a7383cecfd8786bb5bbe78c13b",
@@ -8819,10 +8819,10 @@
                "importPath": "github.com/metio/kurly/workloads/docmost/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:41c8d777cf23c74e78f94e676aec328b7d7856f48df5e573543dac68d371e37c",
@@ -11276,10 +11276,10 @@
                "importPath": "github.com/metio/kurly/workloads/filebrowser/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:b1d9980d79d6d0ad334e327eea3501324a07fe2bce94a4cd84187bccbcfbe3f8",
@@ -11400,10 +11400,10 @@
                "importPath": "github.com/metio/kurly/workloads/filestash/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:12cddfca10c85861ddac79c1c6442ecdaa5b093f5e4064c23d375999ba05693d",
@@ -12084,10 +12084,10 @@
                "importPath": "github.com/metio/kurly/workloads/focalboard/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:c935a2879dc7bcb8243a562afea21a30edbb6dbe029b53a9c0ae7ab4b3255c54",
@@ -13337,10 +13337,10 @@
                "importPath": "github.com/metio/kurly/workloads/gokapi/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:7303dc0e658b8442f00d8363937ac0ffca3b4690930801b47aac6c0631d0cbcf",
@@ -13719,10 +13719,10 @@
                "importPath": "github.com/metio/kurly/workloads/gotosocial/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:0078ca451dda5e8c4a8630784519f99b69f48c3dda79586a9703d4bf8ea14dae",
@@ -14298,10 +14298,10 @@
                "importPath": "github.com/metio/kurly/workloads/guacamole/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "alsoRuns": [
@@ -15273,10 +15273,10 @@
                "importPath": "github.com/metio/kurly/workloads/homepage/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:a0b71c8e757298d02560186bab9fbe3fc2d375c523a62cc1019177b37e48aa28",
@@ -15535,10 +15535,10 @@
                "importPath": "github.com/metio/kurly/workloads/immich/machine-learning.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:20b1a58406882400c25909054628ee98565dde88e3e028235f5da493ca33b11a",
@@ -15670,10 +15670,10 @@
                "importPath": "github.com/metio/kurly/workloads/immich/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:761a60e899bcc00e86018085babf21f8dd68e38f5b48d3e817271f1f74705a16",
@@ -16331,10 +16331,10 @@
                "importPath": "github.com/metio/kurly/workloads/jellyseerr/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:4538137bc5af902dece165f2bf73776d9cf4eafb6dd714670724af8f3eb77764",
@@ -16459,10 +16459,10 @@
                "importPath": "github.com/metio/kurly/workloads/jenkins/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:f4f65e6cd1405cd889b7f5ac33f9d5cdc2a099de6b87fe8a3933b9c5d53d1d02",
@@ -17611,10 +17611,10 @@
                "importPath": "github.com/metio/kurly/workloads/kavita/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982",
@@ -18549,10 +18549,10 @@
                "importPath": "github.com/metio/kurly/workloads/lemmy/pictrs.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:7c1cada5566fe729c2bd3c2e2c246d3ac031d95268edeed6670a70861d905e83",
@@ -18662,10 +18662,10 @@
                "importPath": "github.com/metio/kurly/workloads/lemmy/ui.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ee4c620d8e933ab0266b8aaf0e78247455ab70a90eeb86f1548b7e2aa87c9d40",
@@ -19084,10 +19084,10 @@
                "importPath": "github.com/metio/kurly/workloads/linkding/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:61b2eb9eed8e5772a473fb7f1f8923e046cb8cbbeb50e88150afd5ff287d4060",
@@ -20121,10 +20121,10 @@
                "importPath": "github.com/metio/kurly/workloads/mailpit/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:7f33095f80e901f6ad08028f06ca284aa58fe84942be5496008d041d3b9f4d4d",
@@ -21463,10 +21463,10 @@
                "importPath": "github.com/metio/kurly/workloads/mastodon/streaming.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:f4cacc762093adcae739e4549de1717411a19b518efb34ef4d58dbe6f96168c2",
@@ -21817,10 +21817,10 @@
                "importPath": "github.com/metio/kurly/workloads/matrix-conduit/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:4078e80577ccaaf05290a7bb08badc321a5c44a8c8f5f3dce0fb1ae5a0825e64",
@@ -22236,10 +22236,10 @@
                "importPath": "github.com/metio/kurly/workloads/mealie/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:9b680f5dad8618e69317a005e083a00a699845fb2a72c392a558a4e2898aed20",
@@ -22961,10 +22961,10 @@
                "importPath": "github.com/metio/kurly/workloads/metube/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:98e1c8f37b009954ed1a663908f9c7fb102153d98bc06b5d51926381d1a3641c",
@@ -23806,10 +23806,10 @@
                "importPath": "github.com/metio/kurly/workloads/mumble/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:b9fb72d772eb52b5c7d4c402054c183886ecde07efc59c829c53001542365a81",
@@ -25521,10 +25521,10 @@
                "importPath": "github.com/metio/kurly/workloads/node-red/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:6cb1b27fa5a83deec6a662db62eec8bb32e55ac5412d6b7a653e874ce62055d5",
@@ -26099,10 +26099,10 @@
                "importPath": "github.com/metio/kurly/workloads/ollama/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:10c13eb515db310990527d36ca14a136da4bcc0fbf2bf3b15e9c1f111e9d3cd4",
@@ -26527,10 +26527,10 @@
                "importPath": "github.com/metio/kurly/workloads/open-webui/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:fe7a6870ec6b2fd540c0f2007e6aa812dc4bf04a2d0a305bb344eeb10de0a7b7",
@@ -27399,10 +27399,10 @@
                "importPath": "github.com/metio/kurly/workloads/owncast/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:6765d85fdadd6f159729a7238c62adeb57da35fc0dce5233b322c9424285b076",
@@ -27638,10 +27638,10 @@
                "importPath": "github.com/metio/kurly/workloads/pairdrop/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:c4b30977264a76e335740089e693a52a0d0d616330dec7f93c7b96beef7b4a02",
@@ -28742,10 +28742,10 @@
                "importPath": "github.com/metio/kurly/workloads/photoview/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:f914c44b202fc8175e09bd56f35bb1a4a7c04dc451652306f240aabc3eea133e",
@@ -29466,10 +29466,10 @@
                "importPath": "github.com/metio/kurly/workloads/pocket-id/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:bb4b1debee6fa1245a36a0d8a0bd23794033028b803d7639c898bc11697f155f",
@@ -29585,10 +29585,10 @@
                "importPath": "github.com/metio/kurly/workloads/pocketbase/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:dfebd2550d6b5176d67afd3e859f9b642096e624c7f6ada1b5a5bc70a5d21be1",
@@ -31312,10 +31312,10 @@
                "importPath": "github.com/metio/kurly/workloads/radicale/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:89fa44d02b134f0ac37cad809883327af8424499d913eec74f95085c458a93b7",
@@ -31708,10 +31708,10 @@
                "importPath": "github.com/metio/kurly/workloads/redis-commander/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:1ad484c1fc0a3b4072dfa2bb10d44f0eba8ecb342c8c0f9e17cb21a6557e4b7e",
@@ -32835,10 +32835,10 @@
                "importPath": "github.com/metio/kurly/workloads/searxng/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:a1a04679fe6a4fa6bfe9efb82adfbe7bee4eaef8d77b2392562ca5bfe032c4be",
@@ -34152,10 +34152,10 @@
                "importPath": "github.com/metio/kurly/workloads/smtp4dev/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:25c434c1900a9c5b61e17ead0a774d9e81b80554d05cf64719d69e5ea8c66537",
@@ -39417,10 +39417,10 @@
                "importPath": "github.com/metio/kurly/workloads/whoogle/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
                   "runsAsRoot": false,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:e9a1616cc3234cfe25f42c10d18316d60e555c248f8d46861738e44a4f50fe3a",

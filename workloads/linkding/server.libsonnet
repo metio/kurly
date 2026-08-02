@@ -37,7 +37,8 @@ function(
   + kurly.servicePort(9090)
   + (if env == {} then {} else kurly.env(env))
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   + kurly.store('/etc/linkding/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/health', port: 'http' } })

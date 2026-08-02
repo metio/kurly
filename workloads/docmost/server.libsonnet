@@ -49,7 +49,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv { STORAGE_DRIVER: 'local', FILE_UPLOAD_SIZE_LIMIT: '50mb' } + env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /app/apps/client/dist; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/app/apps/client/dist')
   + kurly.store('/app/data/storage', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

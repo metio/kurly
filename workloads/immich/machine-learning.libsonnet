@@ -37,7 +37,8 @@ function(
   // pin a non-root uid that owns the volume and keep the root filesystem
   // writable for the model downloads and the ML runtime's scratch files.
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   + kurly.store('/cache', storageSize, storageClass=storageClass)
   + kurly.env({ MACHINE_LEARNING_CACHE_FOLDER: '/cache' } + env)
   + kurly.readinessProbe({ httpGet: { path: '/ping', port: 'http' } })
