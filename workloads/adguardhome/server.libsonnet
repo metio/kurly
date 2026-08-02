@@ -48,7 +48,6 @@ function(
   // AdGuard Home binds the privileged DNS port, so it needs root and a writable root
   // filesystem alongside its data volume.
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   // The image's AdGuardHome binary carries cap_net_bind_service (for the DNS port
   // 53), so it must be allowed to gain privileges on exec and keep the default
   // capability set rather than dropping ALL.

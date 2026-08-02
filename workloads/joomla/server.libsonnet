@@ -48,7 +48,10 @@ function(
     JOOMLA_DB_TYPE: dbType,
   } + env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   // The entrypoint unpacks Joomla onto the volume and hands it to the web user.
   + kurly.keepCapabilities()
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)

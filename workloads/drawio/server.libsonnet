@@ -34,7 +34,6 @@ function(
   // The bundled Tomcat starts as root; the root filesystem stays writable for its work
   // and temp directories.
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

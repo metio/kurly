@@ -48,7 +48,8 @@ function(
   // The entrypoint syncs the application tree onto the volume and hands it to the
   // web user.
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/status.php', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

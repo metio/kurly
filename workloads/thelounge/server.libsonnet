@@ -36,7 +36,6 @@ function(
   // The entrypoint adjusts its data directory before dropping to the app user.
   + kurly.rootUser()
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
   + kurly.store('/var/opt/thelounge', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

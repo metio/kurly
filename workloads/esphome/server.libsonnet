@@ -38,7 +38,6 @@ function(
   + kurly.servicePort(6052)
   + kurly.env(env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

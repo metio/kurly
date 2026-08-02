@@ -31,7 +31,10 @@ function(
   + kurly.servicePort(8000)
   + kurly.env(env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/cache/nginx; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/cache/nginx')
+  // Writes under /var/run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run')
   // nginx starts as root and hands its cache and temp directories to the nginx
   // user before dropping to it, so it keeps CHOWN/SETUID/SETGID.
   + kurly.keepCapabilities()

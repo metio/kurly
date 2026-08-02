@@ -34,7 +34,10 @@ function(
   // The bundled nginx serves on :80 as the root master, then workers drop privileges;
   // the root filesystem stays writable for nginx's runtime state.
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/cache/nginx; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/cache/nginx')
+  // Writes under /var/run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run')
   // The bundled nginx starts as root and chowns its cache dir to the worker
   // uid, so it needs CAP_CHOWN kept rather than dropping ALL capabilities.
   + kurly.keepCapabilities()

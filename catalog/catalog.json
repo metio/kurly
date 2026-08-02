@@ -3287,7 +3287,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:1ea34eafe5dc691007946e8eaab7bf46b0de9412f39213d8c06e48b53bf9a6c5",
@@ -3411,7 +3411,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:494d4a9461105644222c938679fe58d5e3fd13fb228c76a426e81c16d4ffbaef",
@@ -3558,7 +3558,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:e6d6ecf0834000f260111b52f05c7a2937288b30b50a4d9525b85792a50c16c5",
@@ -3810,7 +3810,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ee46012c344c0f40387b1c1aeddee4c114887764d3aebdd1d7bba83920423c5e",
@@ -5278,7 +5278,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ab401a0f361cfad328e444838b13d5b334b189d0f556fc91a3623eb581df36df",
@@ -6141,7 +6141,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:a7277fd8884b3d77e8659a2d82b0974af9812d4c1f4040c98b910da21e764a36",
@@ -6284,7 +6284,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d",
@@ -7840,7 +7840,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:a2bfe382b2547bdd0a3d0523b9a6b85fab833c56bcec86d600ba6266910b533e",
@@ -8253,7 +8253,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:3d623a05753ad37db517180a2b397add40984112751aa5aa54e14ba432a1f314",
@@ -8398,7 +8398,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:33a939576f7ecfc1227db1a0cb2afce030ce983e620ec9d93c956e3700e21fe9",
@@ -8963,7 +8963,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:d20b62c1eac8719d2ffa31188d83866cf1b0d41c1aeea01c37bd850ef32cb517",
@@ -9085,7 +9085,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:f5c089e2ace97a5c16cf1cd80af7514a85e3fc405bc25d6aa6bbf5a1dd20924b",
@@ -9317,7 +9317,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b",
@@ -9452,7 +9452,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:7a93ee9c8bec6a780cc25ec4e1610ae6dde483368db3d5aa0ac477567a645d6b",
@@ -9636,7 +9636,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:93902cefee39f7c35214eb63312b7685c4b223b12adf6ede4ecddb9711210f85",
@@ -9913,7 +9913,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:3367f18a2b830fa6dd454c605a1c0a58ea328e831226b9774e9051ae573bd13f",
@@ -10454,7 +10454,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:3621aa0ea5baea19e5562193855b02d8ff913301dc3e1c0b518e2b471364c3c9",
@@ -10728,7 +10728,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:3d243e15afde6c6511be36b14cef3d095b9d91bcd35ba98aca3b546f4b477df9",
@@ -12233,7 +12233,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:4c0a6ee7821ce938d91a6a7d4d004f3e1f93f6be324d2f40ac841d9dcfa819f8",
@@ -15002,7 +15002,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:e5bf3905955081dc4aae3b3980870c43ce6d8ffb880b5447addb3b3ba00f7bc0",
@@ -15921,7 +15921,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:8b8128748339583ca951af03dfe02a9a4d7363f61a216226fc28030731a5a61f",
@@ -16068,7 +16068,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:c22f9973da49011099966492fda8d5f6846144bc9eab3aecafdb2701308fd304",
@@ -16214,7 +16214,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:b8dcc7b71d0ea872b74314da4b995c0cf282b1778438c295996e7be88c70fdda",
@@ -16622,7 +16622,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:b13aae2cab3b2857e9690811fc80b342c8f5103c38843bb43424379690cbffe9",
@@ -17476,7 +17476,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:64d6a9bbf2d37b5c808cf06b5d87f1f1c7846fdd3844724145a9741aeb06fd31",
@@ -17849,7 +17849,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:6504f7187f2e2b748ee6dae04fc82ae08bbf61cc0b403c09e90feb5b44ecb32d",
@@ -18958,7 +18958,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:60be9a1faad3dfba5a711163fc18526845e2ce7b50b463dd9effae7f766c9beb",
@@ -21113,7 +21113,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95",
@@ -21981,7 +21981,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:373a3de08dfce296e31fe0b7caf269594c43020454628f445c169990b9af4d5e",
@@ -22367,7 +22367,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ef0557f6a503cbf5bd7f7ec0f880b61409a45c861c6113a7bf38f33d15099186",
@@ -23537,7 +23537,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:84c6703c05bf92562a91b9a282245a0d66ae5e032d63e8e61b3b3ce556a7d02d",
@@ -23963,7 +23963,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:4e81d9559b60e6ded17f11b6c4d2e48efcdc962ccb6415f487f81621cab53b74",
@@ -24605,7 +24605,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:74a87cf5b6e013fed2ae38fbb48852ae62b0339b5bf3088cf3d36c0f28b14b94",
@@ -25095,7 +25095,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:e93ccfc952c95f18175f3d297fb2f60c35070c05ca976050c250a9ddab793e75",
@@ -25671,7 +25671,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:87eba87ec46982b003ab1f54cfabd962c5c5e95cb9eb2069cbec7b6370d0784b",
@@ -25818,7 +25818,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:9ba095a9aae0d709df87c90b371c9212e23d68ac4605add3371d3f7a343eae60",
@@ -26249,7 +26249,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:be76ec2c9376186b37354e5e2bbe62d6d7776d509aeb00223eb5024e36a8615c",
@@ -27944,7 +27944,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f",
@@ -28590,7 +28590,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:650c6ad5a6517ea95671eedb0f2a9c49f05729a1d95809fcf01533b96149582e",
@@ -28891,7 +28891,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:b68f318c5fd85541795ed8eb4ced28ea6908a89910871783b3e479cc6c6d1e1b",
@@ -30150,7 +30150,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:91e3adf17da1c9e2715cb57ff22940a6644252a5488d9819a64eebbaf64cc58a",
@@ -30614,7 +30614,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:4fd7a166c8f46dd3370a871c250ee577d6c2ae97a0dbe0e3614b5ef736205620",
@@ -30906,7 +30906,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:b024436f8ca665d16d9a997d26fd27fdf867ee5566ba09f32764e7b2976d3e02",
@@ -31194,7 +31194,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:e35056574cdc695a9ee745aa1ecda9eab3842450bf4b7b8471b023790fa3861d",
@@ -32700,7 +32700,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:302be8972d4627222a0701634f2f9025826d760d856414aa6e67c0a66833e5be",
@@ -34600,7 +34600,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:24acea2956a0ccb11f103877d9f4f8576600fb34bff34820ed749c2256dab89f",
@@ -35357,7 +35357,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ae909bee7c41f516be03fd7de72317a44f4a043bcba76884de941b99407b6957",
@@ -35803,7 +35803,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ef7f4329e5029f83bc93a6fef9a06e67b97652573ce3d62402645ba0d933a0be",
@@ -35935,7 +35935,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:df7d90ef0f7b6fff6916d291a7022cd902290cc31c3141d4158b6c375a641b41",
@@ -36862,7 +36862,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:9a7ca90fb5e2c9d86910497f3fa40d4fff3372a63b5e2b4eca1674a1f9a7e958",
@@ -37356,7 +37356,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:6b78970a0cb00709d3817fcb47b7cf74da56a43384bbd50d03955ca87e38c5f0",
@@ -37622,7 +37622,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067",
@@ -39292,7 +39292,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01",
@@ -39731,7 +39731,7 @@
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
                   "runsAsRoot": true,
-                  "writableRootFilesystem": true
+                  "writableRootFilesystem": false
                },
                "runs": {
                   "digest": "sha256:9fac4d47b61186131ffefb5d966f0045d0eea94bfd7bd40cafae29b78a709d1b",

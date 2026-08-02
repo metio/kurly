@@ -62,7 +62,10 @@ function(
   + kurly.rootUser()
   // The entrypoint hands the application's storage tree to the web user.
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
   + kurly.store('/var/www/html/storage', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

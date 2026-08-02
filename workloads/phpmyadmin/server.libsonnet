@@ -35,7 +35,10 @@ function(
   + kurly.servicePort(80)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /etc/phpmyadmin; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/etc/phpmyadmin')
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

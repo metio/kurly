@@ -49,7 +49,8 @@ function(
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   // The s6-overlay init needs root and a writable root filesystem; it drops to PUID.
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/run')
   // The LinuxServer.io s6-overlay init starts as root and drops to PUID/PGID,
   // so it needs to gain privileges and keep the SETUID/SETGID capabilities.
   + kurly.allowPrivilegeEscalation()

@@ -43,7 +43,8 @@ function(
   + kurly.servicePort(8083)
   + kurly.env({ PUID: std.toString(puid), PGID: std.toString(pgid), TZ: timezone } + env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/run')
   // The s6-overlay init starts as root and drops to PUID/PGID, and the ingest service
   // chowns the mounted library, so it needs to gain privileges and keep SETUID/SETGID/CHOWN.
   + kurly.allowPrivilegeEscalation()

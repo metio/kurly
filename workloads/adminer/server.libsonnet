@@ -30,7 +30,6 @@ function(
   + kurly.servicePort(8080)
   + kurly.env(env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

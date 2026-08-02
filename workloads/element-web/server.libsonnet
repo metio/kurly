@@ -47,7 +47,10 @@ function(
   + kurly.config({ 'config.json': std.manifestJsonEx(configJson, '  ') }, mountPath='/app', subPath=true)
   + kurly.env(env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /etc/nginx/conf.d; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/etc/nginx/conf.d')
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   // The image substitutes ${ELEMENT_WEB_PORT} into its nginx template, which the
   // Service-link environment would overwrite with a tcp:// URL nginx rejects.
   + kurly.disableServiceLinks()

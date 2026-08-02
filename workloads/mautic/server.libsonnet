@@ -76,7 +76,8 @@ function(
   + kurly.rootUser()
   // The entrypoint hands its config and log directories to the web user.
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
   + kurly.store('/var/www/html/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

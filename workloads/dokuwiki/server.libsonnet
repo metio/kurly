@@ -42,7 +42,8 @@ function(
   + kurly.servicePort(80)
   + (if env == {} then {} else kurly.env(env))
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
   // The entrypoint hands /storage to www-data before dropping to it.
   + kurly.keepCapabilities()
   + kurly.store('/storage', storageSize, storageClass=storageClass)

@@ -40,7 +40,6 @@ function(
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
   + kurly.store('/opt/alist/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/ping', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/ping', port: 'http' } })

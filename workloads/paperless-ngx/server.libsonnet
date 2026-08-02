@@ -92,7 +92,12 @@ function(
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
+  // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/run')
+  // Writes under /tmp/paperless; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp/paperless')
+  // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/tmp')
   + kurly.store('/usr/src/paperless/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

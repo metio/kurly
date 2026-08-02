@@ -38,7 +38,10 @@ function(
   + kurly.servicePort(80)
   + (if env == {} then {} else kurly.env(env))
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/cache/nginx; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/cache/nginx')
+  // Writes under /var/run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run')
   // nginx hands its cache directories to the nginx user before dropping to it.
   + kurly.keepCapabilities()
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

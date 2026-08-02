@@ -40,7 +40,8 @@ function(
   + kurly.servicePort(8123)
   + kurly.env(env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/run')
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

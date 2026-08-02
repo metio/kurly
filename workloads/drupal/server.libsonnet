@@ -38,7 +38,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({} + env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
   + kurly.store('/var/www/html/sites', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

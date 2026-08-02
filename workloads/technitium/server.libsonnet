@@ -46,7 +46,8 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({ DNS_SERVER_WEB_SERVICE_HTTP_PORT: '5380' } + env)
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/log/technitium; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/log/technitium')
   + kurly.store('/etc/dns', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

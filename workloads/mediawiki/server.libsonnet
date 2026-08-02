@@ -45,7 +45,8 @@ function(
   + kurly.servicePort(80)
   + (if env == {} then {} else kurly.env(env))
   + kurly.rootUser()
-  + kurly.writableRootFilesystem()
+  // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/var/run/apache2')
   + kurly.store('/var/www/html/images', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

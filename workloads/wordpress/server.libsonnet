@@ -59,7 +59,6 @@ function(
   + kurly.rootUser()
   // The entrypoint unpacks WordPress onto the volume and hands it to the web user.
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

@@ -37,7 +37,14 @@ function(
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
   + kurly.keepCapabilities()
-  + kurly.writableRootFilesystem()
+  // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/run')
+  // Writes under /app; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/app')
+  // Writes under /config; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/config')
+  // Writes under /defaults; a scratch there keeps the rest of the root filesystem read-only.
+  + kurly.scratch('/defaults')
   + kurly.store('/mljdata', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
