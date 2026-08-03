@@ -1263,9 +1263,9 @@ local workloadEntries =
     for id in std.objectFields(trademark)
   ]) : 'catalog: a trademark record without a posture and the policy it was read from',
   assert std.all([
-    std.member(['restricted', 'unrestricted'], trademark[id].posture)
+    std.member(['restricted', 'unrestricted', 'unaddressed'], trademark[id].posture)
     for id in std.objectFields(trademark)
-  ]) : 'catalog: a trademark record with an unknown posture (restricted, unrestricted)',
+  ]) : 'catalog: a trademark record with an unknown posture (restricted, unrestricted, unaddressed)',
   assert std.all([std.objectHas(ann.workloads, id) for id in std.objectFields(trademark)]) :
          'catalog: trademark.libsonnet names a workload that does not exist',
   // Every exclusion states a reason from the closed vocabulary, so a consumer

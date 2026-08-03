@@ -10172,6 +10172,11 @@
             }
          ],
          "summary": "An Endurain server (a self-hosted fitness and training-activity tracker) backed by an external PostgreSQL and Redis, with uploads on a PersistentVolume. Pairs with a cnpg-cluster named endurain-db and a valkey named endurain-cache. kurly authors no Secret; DB_PASSWORD and SECRET_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
+         "trademark": {
+            "note": "Non-commercial self-hosting may use the name freely; offering paid hosting or SaaS under it needs prior written permission, and a commercial fork must be renamed.",
+            "policy": "https://github.com/endurain-project/endurain/blob/master/TRADEMARK.md",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://endurain.com",
             "repo": "https://github.com/endurain-project/endurain"
@@ -12682,6 +12687,11 @@
             }
          ],
          "summary": "Frigate — a self-hosted NVR with real-time object detection. Keeps its config and SQLite database on one volume and recordings on another, decodes frames through a shared-memory scratch, and exposes an authenticated UI on :8971. Ships a minimal starter config (CPU detector, no cameras); replace it with your own. Hardware detectors (Coral, GPU) need device access added with the raw + escape hatch.",
+         "trademark": {
+            "note": "MIT covers the code and explicitly not the brand: the name may not be used in a commercial product or service name, nor in a confusing domain; a fork must be renamed.",
+            "policy": "https://github.com/blakeblackshear/frigate/blob/master/TRADEMARK.md",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://frigate.video",
             "repo": "https://github.com/blakeblackshear/frigate"
@@ -16513,6 +16523,11 @@
             }
          ],
          "summary": "A Joomla server — a popular self-hosted CMS for building websites and online applications (backed by MySQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "trademark": {
+            "note": "Open Source Matters grants permission case by case; unpermitted use requires disclaiming affiliation, and domain names are governed separately with an approved-domains list.",
+            "policy": "https://tm.joomla.org/trademark-policy.html",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.joomla.org",
             "repo": "https://github.com/joomla/joomla-cms"
@@ -18179,6 +18194,11 @@
             }
          ],
          "summary": "A Leantime server (a self-hosted, open-source project-management system for non-project-managers: goals, ideas, tasks, time tracking) on the official image, backed by an external MySQL/MariaDB; uploaded files on a PersistentVolume under /var/www/html/userfiles. A plain composable http workload. kurly authors no Secret; LEAN_DB_* and LEAN_SESSION_PASSWORD come from a provided Secret via envFrom. Pair it with a MySQL/MariaDB you run separately. Single writer over a ReadWriteOnce uploads volume: one replica, recreated. Serves on :8080.",
+         "trademark": {
+            "note": "Model Trademark Guidelines: uses outside the policy need separate written permission, and the policy declines to say whether anything else is lawful.",
+            "policy": "https://leantime.io/trademark",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://leantime.io",
             "repo": "https://github.com/Leantime/leantime"
@@ -21792,6 +21812,11 @@
             }
          ],
          "summary": "A Mautic server (open-source marketing automation) on the official Apache image, backed by an external MySQL/MariaDB, with configuration and media on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MAUTIC_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "trademark": {
+            "note": "Any use of the marks requires a licence first, granted automatically or on application; the mark is held by Open Source Collective for the project.",
+            "policy": "https://www.mautic.org/trademark",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.mautic.org",
             "repo": "https://github.com/mautic/mautic"
@@ -22155,6 +22180,11 @@
             }
          ],
          "summary": "A MediaWiki server (the wiki engine behind Wikipedia) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with uploaded files on a PersistentVolume. Configured by a LocalSettings.php mounted from a Secret (it holds the DB password and secret key). The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "trademark": {
+            "note": "The Wikimedia policy governs the Wikimedia marks and the look of its sites; it says using the MediaWiki software needs no contact, and does not address the name in a commercial listing either way.",
+            "policy": "https://foundation.wikimedia.org/wiki/Policy:Trademark_policy",
+            "posture": "unaddressed"
+         },
          "upstream": {
             "homepage": "https://www.mediawiki.org",
             "repo": "https://github.com/wikimedia/mediawiki"
@@ -23821,6 +23851,11 @@
             }
          ],
          "summary": "A highly-available MySQL cluster as an Oracle MySQL Operator InnoDBCluster custom resource (Group Replication fronted by MySQL Router). The MySQL counterpart to cnpg-cluster — an app that needs MySQL/MariaDB instead of PostgreSQL points its dbHost at this cluster. Requires the MySQL Operator for Kubernetes; unlike CNPG, you provide the root-credentials Secret (kurly mints none).",
+         "trademark": {
+            "note": "Oracle's Third Party Usage Guidelines govern; only a narrow set of Conditional Use Logos may be shown without written permission, and Oracle judges the conditions at its own discretion.",
+            "policy": "https://www.mysql.com/about/legal/trademark.html",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "http://www.mysql.com/",
             "repo": "https://github.com/mysql/mysql-server"
@@ -26464,6 +26499,11 @@
             }
          ],
          "summary": "An openHAB server (a vendor-neutral, self-hosted home-automation platform integrating a huge range of devices behind one engine, UI and rule system) on the official image; its three persistent directories — config (/openhab/conf), runtime userdata (/openhab/userdata) and installed add-ons (/openhab/addons) — each get their own PersistentVolume (kurly.store composed three times). USB/serial radios are hardware and not modelled. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8080.",
+         "trademark": {
+            "note": "Permission is granted to refer to the software, not to trade under the marks; any use implying endorsement or affiliation needs express authorisation.",
+            "policy": "https://www.openhab.org/about/trademark",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.openhab.org/",
             "repo": "https://github.com/openhab/openhab-core"
@@ -28218,6 +28258,11 @@
             }
          ],
          "summary": "A PhotoPrism server (an AI-powered, self-hosted photo-management app with face recognition and automatic tagging) on the official image. A plain composable http workload — with the SQLite backend its database, cache, and originals live on a PersistentVolume, no external database. The image runs TensorFlow indexing and writes the rootfs, relaxing read-only-rootfs while keeping non-root and dropped capabilities. kurly authors no Secret; PHOTOPRISM_ADMIN_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :2342.",
+         "trademark": {
+            "note": "The name may not appear in the name of any app, product or service, commercial or not; the logo may never be used for one.",
+            "policy": "https://www.photoprism.app/trademark",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.photoprism.app",
             "repo": "https://github.com/photoprism/photoprism"
@@ -28647,6 +28692,11 @@
             }
          ],
          "summary": "A Pi-hole server (a self-hosted, network-wide DNS sinkhole that blocks ads and trackers, with a web admin dashboard) on the official image; its config and query database live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. kurly authors no Secret; the admin password (FTLCONF_webserver_api_password) comes from a provided Secret via envFrom. It binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin dashboard on :80.",
+         "trademark": {
+            "note": "Fair use of the word mark is conditioned on there being no commercial purpose and on not offering Pi-hole commercially under the same domain; the logo is excluded.",
+            "policy": "https://pi-hole.net/trademark",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://pi-hole.net",
             "repo": "https://github.com/pi-hole/pi-hole"
@@ -30614,6 +30664,11 @@
             }
          ],
          "summary": "A RabbitMQ server (a widely-used, self-hosted message broker implementing AMQP) on the official management image; the broker speaks AMQP on :5672 with data on a PersistentVolume. Single node (not a cluster). The management UI (:15672) needs a separate Service. kurly authors no Secret; RABBITMQ_DEFAULT_USER/PASS come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves AMQP on :5672.",
+         "trademark": {
+            "note": "The word mark is granted only for non-commercial use, and may not appear in a company name or a software product name.",
+            "policy": "https://www.rabbitmq.com/trademark-guidelines",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.rabbitmq.com/",
             "repo": "https://github.com/rabbitmq/rabbitmq-server"
