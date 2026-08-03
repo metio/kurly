@@ -53,6 +53,16 @@ are run deliberately:
 nix develop --command bash hack/smoke/deep/tik-stageset.sh
 ```
 
+One of them proves an **axis** rather than a workload. `mesh-istio.sh` stands up
+a real Istio control plane and checks what rendering cannot: that a pod composed
+with `kurly.mesh.istio()` comes up with a sidecar in a namespace carrying no
+injection label, that the same app carrying the annotation form instead comes up
+without one, that a client with no sidecar is refused, that a client with one
+gets through — and, as the control, that removing the `PeerAuthentication` and
+changing nothing else lets the refused request succeed. Without that last step
+the refusal proves only that a request failed, which it can do for a hundred
+reasons that have nothing to do with mTLS.
+
 They are not part of the per-workload walk, so a missing registry or an operator
 that is slow to come up never blocks a workload's fast check. A workload a deep
 scenario exercises still counts toward the `e2e` maturity tier.
