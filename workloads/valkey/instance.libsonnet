@@ -50,3 +50,8 @@ function(
   // OOM-capped rather than left to starve its node's neighbours. Set it above
   // maxMemory when you set one; override the whole block with kurly.resources.
   + kurly.resources(requests={ cpu: '50m', memory: '128Mi' }, limits={ memory: '512Mi' })
+  // PING is answered once the server is accepting commands, which is what a
+  // client waits for — and it stops answering while Valkey is loading an append
+  // only file back in after a restart, so readiness follows the recovery rather
+  // than reporting a server that is up but not yet serving.
+  + kurly.readinessProbe({ exec: { command: ['valkey-cli', 'ping'] } })

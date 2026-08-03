@@ -48,6 +48,11 @@ function(
   + kurly.writableRootFilesystem()
   // Three distinct PVCs: configuration, runtime userdata, and installed add-ons.
   + kurly.store('/openhab/conf', confSize, storageClass=storageClass)
+  // bollwerk's require-secrets-in-secret matches volume NAMES against a word
+  // list that includes `user`, so `openhab-userdata` is reported as a secret
+  // stored outside a Secret. It is openhab's own userdata directory. The name
+  // says what the volume holds; renaming it to slip past a substring match
+  // would make the source less clear and the finding no less wrong.
   + kurly.store('/openhab/userdata', userdataSize, storageClass=storageClass)
   + kurly.store('/openhab/addons', addonsSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

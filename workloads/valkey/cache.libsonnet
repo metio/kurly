@@ -110,6 +110,11 @@ function(
     escaped='%(roleLabel)s'
     last=''
     while true; do
+      # A heartbeat the liveness probe reads. The loop's failure mode is wedging
+      # — nc or kubectl hanging past its timeout — which leaves the process alive
+      # and the role label frozen at whatever it last was. A stale file is the
+      # only outward sign of that.
+      touch "$HOME/alive"
       if { printf 'INFO replication\r\n'; sleep 1; } | timeout 2 nc 127.0.0.1 6379 2>/dev/null | grep -q 'role:master'; then
         value='"primary"'
       else
@@ -173,6 +178,14 @@ function(
     // A writable HOME so kubectl can cache under the read-only root filesystem;
     // the pod's fsGroup owns the emptyDir.
     volumeMounts: [{ name: 'labeler-home', mountPath: '/home/labeler' }],
+    // Wedged is not the same as dead: the loop keeps running while nc or
+    // kubectl hangs, so liveness is the freshness of the heartbeat rather than
+    // the presence of the process.
+    livenessProbe: {
+      exec: { command: ['sh', '-c', 'find /home/labeler/alive -mmin -2 | grep -q .'] },
+      initialDelaySeconds: 15,
+      periodSeconds: 30,
+    },
   })
   // The primary Service is this workload's own plumbing, added with the raw `+`
   // escape hatch rather than a library feature.

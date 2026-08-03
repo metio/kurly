@@ -585,7 +585,16 @@ local exclusionConflicts(exclusive) = [
         // consumer's uid instead of whatever the recipe's author had in mind.
         else {
           initContainers: [
-            (if this.containerSecurity == {} then {} else { securityContext: this.containerSecurity }) + c
+            (if this.containerSecurity == {} then {} else { securityContext: this.containerSecurity })
+            // The workload's own resources, as a floor. An init container runs
+            // the same image doing setup — a migration, a schema install — so
+            // what the application needs is the closest thing to a right answer
+            // available, and a container with no requests at all is one the
+            // scheduler cannot place deliberately and the kubelet will evict
+            // first. Like the security context it goes UNDER, so an init that
+            // states its own still wins.
+            + { resources: cfg.resources }
+            + c
             for c in cfg.initContainers
           ],
         }

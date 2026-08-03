@@ -3508,12 +3508,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -4573,11 +4569,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-probes",
                      "require-ro-rootfs"
                   ]
                },
@@ -5188,12 +5182,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -5730,12 +5720,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -5885,12 +5873,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -6027,12 +6013,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -8077,12 +8059,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -8217,12 +8195,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -9416,12 +9390,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -11935,12 +11905,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -13525,12 +13491,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -13816,12 +13780,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -14264,12 +14226,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -15652,12 +15612,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -15793,12 +15749,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18327,12 +18279,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -18470,12 +18420,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18865,12 +18811,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A15"
-                  ],
-                  "violates": [
-                     "require-request-limits"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18881,7 +18823,9 @@
                      "name": "listmonk"
                   },
                   {
+                     "cpu": "50m",
                      "kind": "init",
+                     "memory": "128Mi",
                      "name": "install"
                   }
                ],
@@ -21106,12 +21050,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A15"
-                  ],
-                  "violates": [
-                     "require-request-limits"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -21122,7 +21062,9 @@
                      "name": "mastodon"
                   },
                   {
+                     "cpu": "250m",
                      "kind": "init",
+                     "memory": "768Mi",
                      "name": "migrate"
                   }
                ],
@@ -23342,12 +23284,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -23967,12 +23905,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -25003,12 +24937,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -25145,12 +25075,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -25560,12 +25486,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -28572,12 +28494,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -29505,14 +29425,12 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
                      "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -29818,12 +29736,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -29960,12 +29874,10 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
-                     "SYS.1.6.A6"
+                     "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-ro-rootfs",
-                     "restrict-image-registries"
+                     "require-ro-rootfs"
                   ]
                },
                "clusterScoped": false,
@@ -30102,12 +30014,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -30380,12 +30288,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -31847,12 +31751,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -33681,12 +33581,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -34277,11 +34173,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "require-request-limits",
                      "require-ro-rootfs"
                   ]
                },
@@ -34294,7 +34188,9 @@
                      "name": "synapse"
                   },
                   {
+                     "cpu": "100m",
                      "kind": "init",
+                     "memory": "512Mi",
                      "name": "generate"
                   }
                ],
@@ -34427,12 +34323,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -34865,12 +34757,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36365,12 +36253,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36622,12 +36506,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A6"
-                  ],
-                  "violates": [
-                     "restrict-image-registries"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -36829,12 +36709,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A15",
                      "SYS.1.6.A5"
                   ],
                   "violates": [
-                     "require-probes",
-                     "require-request-limits",
                      "restrict-sa-automount-sa-token"
                   ]
                },
@@ -36853,7 +36730,9 @@
                      "name": "role-labeler"
                   },
                   {
+                     "cpu": "50m",
                      "kind": "init",
+                     "memory": "128Mi",
                      "name": "discover-primary"
                   }
                ],
@@ -36920,12 +36799,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A15"
-                  ],
-                  "violates": [
-                     "require-probes"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [

@@ -34,6 +34,11 @@
     'registry.k8s.io',
     'gcr.io',
     'codeberg.org',
+    // LinuxServer.io, which 33 stages ship from. Missing here while the list's
+    // job is to admit the registries kurly's own workloads use, so those 33
+    // reported an "unknown image registry" for a registry the catalogue has
+    // always pulled from.
+    'lscr.io',
   ],
 
   // ---- shared matchConstraints resourceRules -----------------------------------

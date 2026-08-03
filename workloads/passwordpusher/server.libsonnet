@@ -54,6 +54,10 @@ function(
   // that not so, a password-sharing app minting a fresh secret on every restart
   // could not read back anything it had encrypted — so this is a fact about the
   // stage's configuration, not a general licence to scratch a Rails tmp/.
+  // bollwerk's require-secrets-in-secret matches volume NAMES against a word
+  // list that includes `password`, and every volume here is named after the
+  // directory it covers under /opt/PasswordPusher. The finding is the product's
+  // name, not a credential on disk.
   + kurly.scratch('/opt/PasswordPusher/tmp', '128Mi')
   // ActiveStorage writes here — the first-run boot code, and any file a user pushes.
   // A scratch changes NOTHING about durability: this stage claims no PersistentVolume,

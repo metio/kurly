@@ -34,6 +34,16 @@ function(
   + kurly.version(version)
   + kurly.replicas(replicas)
   + kurly.args(['worker'])
+  // authentik's own health command. The worker writes its mode to
+  // /dev/shm/authentik-mode at startup and `ak healthcheck` reads it back and
+  // checks the worker can still reach what it needs — so this reports a worker
+  // that has lost its database or broker, which a process check cannot see.
+  + kurly.livenessProbe({
+    exec: { command: ['ak', 'healthcheck'] },
+    initialDelaySeconds: 60,
+    periodSeconds: 30,
+    timeoutSeconds: 10,
+  })
   + kurly.envFromSecret(secretName)
   + kurly.env({
     AUTHENTIK_POSTGRESQL__HOST: dbHost,
