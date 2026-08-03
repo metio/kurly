@@ -129,6 +129,52 @@ back to the shared namespace — the pod loses that isolation but schedules.
 `security.baseline` keeps `hostUsers: false`; only `security.privileged`, which
 emits no security fields at all, leaves it off without the hatch.
 
+## Running under a service mesh
+
+Sidecar injection is an annotation, so it is already a feature — no mesh-specific
+recipe is needed, and one that only set an annotation would hide a one-liner
+behind a name that promised more:
+
+```jsonnet
+kurly.http('app', image) + kurly.podAnnotations({ 'sidecar.istio.io/inject': 'true' })
+kurly.http('app', image) + kurly.podAnnotations({ 'linkerd.io/inject': 'enabled' })
+```
+
+`podAnnotations` and `podLabels` land on the pod template only, never on the
+controller's immutable selector, which is what makes them safe to add to a
+running workload: a selector that changed would need a delete and reinstall.
+
+A workload whose stage renders a **custom resource** cannot take a composed
+feature — it says so at render rather than accepting one and doing nothing — so
+its pod metadata goes through the parameter the operator honours instead. The
+shape differs per operator: `podMetadata` on a Prometheus, `inheritedMetadata` on
+a CNPG Cluster.
+
+```jsonnet
+(import 'github.com/metio/kurly/workloads/cnpg-cluster/cluster.libsonnet')(
+  annotations={ 'sidecar.istio.io/inject': 'true' },
+)
+```
+
+Cilium needs no injection at all, and its policy side is already a kurly axis:
+`kurly.network.cilium(...)` emits a `CiliumNetworkPolicy` from the same
+allow-list vocabulary the Kubernetes and Calico variants use.
+
+### What kurly does not emit, and why it matters for mTLS
+
+kurly writes no `PeerAuthentication`, `AuthorizationPolicy` or Linkerd `Server`.
+Enabling the mesh is a per-workload annotation; *enforcing* mTLS is a
+cluster-or-namespace decision that belongs with whoever installed the mesh.
+
+Worth knowing if a compliance regime requires encryption in transit: **no
+admission policy can verify that requirement**. A `ValidatingAdmissionPolicy`
+sees the object being written — it cannot observe traffic, and it cannot require
+that some other object exists elsewhere. So a workload passing every policy in
+`bsi` says nothing either way about whether its traffic is encrypted, and an
+absent verdict there is not a negative one. Enforcement has to come from the mesh
+configuration, and the evidence for it from the mesh rather than from this
+catalogue.
+
 ## Workloads
 
 A **workload** is a deployable app built from the recipes, released as its own
