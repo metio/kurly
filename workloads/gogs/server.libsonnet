@@ -44,8 +44,6 @@ function(
   // The image runs its init as root and serves as the git user; the root filesystem
   // stays writable for its runtime state.
   + kurly.rootUser()
-  // The s6 init drops to the git user to run the app.
-  + kurly.allowPrivilegeEscalation()
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])

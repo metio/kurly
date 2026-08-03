@@ -38,7 +38,6 @@ function(
   // own user via su-exec — so it needs to start as root, keep CAP_CHOWN/SETGID,
   // and be allowed to change uid rather than being pinned to a non-root user.
   + kurly.rootUser()
-  + kurly.allowPrivilegeEscalation()
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])

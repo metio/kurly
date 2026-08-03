@@ -3248,12 +3248,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -3513,11 +3509,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -3769,12 +3763,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -4016,7 +4006,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -5061,7 +5050,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -5201,11 +5189,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -5748,7 +5734,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -5904,7 +5889,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -6044,11 +6028,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -6186,12 +6168,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -8100,11 +8078,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -8242,11 +8218,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -9443,11 +9417,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -9883,7 +9855,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -11965,11 +11936,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -12931,7 +12900,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -13561,7 +13529,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -13853,7 +13820,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -14302,7 +14268,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -15688,11 +15653,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -15831,11 +15794,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -17074,12 +17035,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -18374,7 +18331,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -18515,11 +18471,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -20636,12 +20590,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -23393,11 +23343,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -24020,11 +23968,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -24637,7 +24583,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -25059,11 +25004,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -25203,11 +25146,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -25620,11 +25561,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -26391,7 +26330,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -27280,12 +27218,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -27608,12 +27542,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -27917,12 +27847,8 @@
                   }
                ],
                "bsi": {
-                  "requirements": [
-                     "SYS.1.6.A17"
-                  ],
-                  "violates": [
-                     "disallow-privilege-escalation"
-                  ]
+                  "requirements": [ ],
+                  "violates": [ ]
                },
                "clusterScoped": false,
                "declaredRequests": [
@@ -28349,7 +28275,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "disallow-unwanted-capabilities",
                      "require-ro-rootfs"
                   ]
@@ -28651,7 +28576,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -29895,11 +29819,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -30042,7 +29964,6 @@
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs",
                      "restrict-image-registries"
                   ]
@@ -30182,11 +30103,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -30462,11 +30381,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -31931,11 +31848,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -33211,7 +33126,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -33460,7 +33374,6 @@
                      "SYS.1.6.A17"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "require-ro-rootfs"
                   ]
                },
@@ -33769,11 +33682,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -34517,11 +34428,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -34957,11 +34866,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -36459,11 +36366,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },
@@ -36718,11 +36623,9 @@
                ],
                "bsi": {
                   "requirements": [
-                     "SYS.1.6.A17",
                      "SYS.1.6.A6"
                   ],
                   "violates": [
-                     "disallow-privilege-escalation",
                      "restrict-image-registries"
                   ]
                },

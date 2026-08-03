@@ -51,7 +51,6 @@ function(
   // The image's AdGuardHome binary carries cap_net_bind_service (for the DNS port
   // 53), so it must be allowed to gain privileges on exec and keep the default
   // capability set rather than dropping ALL.
-  + kurly.allowPrivilegeEscalation()
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'NET_BIND_SERVICE', 'SETGID', 'SETUID'])

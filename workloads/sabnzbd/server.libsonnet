@@ -48,9 +48,6 @@ function(
   + kurly.rootUser()
   // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/run')
-  // The LinuxServer.io s6-overlay init starts as root and drops to PUID/PGID,
-  // so it needs to gain privileges and keep the SETUID/SETGID capabilities.
-  + kurly.allowPrivilegeEscalation()
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])

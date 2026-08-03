@@ -81,7 +81,6 @@ function(
   // writable and the restricted posture admits the pod.
   // Its init hands the config and data directories to the app user.
   + kurly.rootUser()
-  + kurly.allowPrivilegeEscalation()
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])

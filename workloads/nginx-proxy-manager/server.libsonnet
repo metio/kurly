@@ -44,8 +44,6 @@ function(
   + kurly.extraPort('proxy-https', 443)
   + kurly.env(env)
   + kurly.rootUser()
-  // Its s6 init prepares the runtime directories and drops to the app user.
-  + kurly.allowPrivilegeEscalation()
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])

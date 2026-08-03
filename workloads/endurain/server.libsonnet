@@ -77,7 +77,6 @@ function(
   + kurly.rootUser()
   // The entrypoint writes the frontend's runtime configuration into the built
   // bundle it serves, so the root filesystem cannot stay read-only.
-  + kurly.allowPrivilegeEscalation()
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
