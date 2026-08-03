@@ -8,9 +8,11 @@
 //
 // It does two things and deliberately not a third.
 //
-// IT ENABLES INJECTION, by putting the mesh's annotation on the pod template.
-// That much was always possible with kurly.podAnnotations, and a recipe that did
-// only that would be a one-liner wearing a name that promised more.
+// IT ENABLES INJECTION, by putting the mesh's marker on the pod template — which
+// is a label for Istio and an annotation for Linkerd, a difference the recipe
+// knows so a consumer does not have to. That much was always reachable with
+// kurly.podLabels, and a recipe that did only it would be a one-liner wearing a
+// name that promised more.
 //
 // IT ENFORCES mTLS, by emitting a PeerAuthentication selecting the workload's own
 // pods with `mode: STRICT` — the object that makes the sidecar refuse plaintext
@@ -55,8 +57,8 @@
   //          'DISABLE'    no mTLS
   //          null         emit no PeerAuthentication at all, leaving the
   //                       namespace or mesh default in force
-  //   inject  false to skip the injection annotation, for a cluster that labels
-  //           the namespace instead
+  //   inject  false to skip the injection marker, for a cluster that labels the
+  //           namespace instead
   //   peerAuthentication  merged verbatim into the emitted object's spec, for
   //           the per-port overrides this vocabulary does not model
   istio(mtls='STRICT', inject=true, peerAuthentication={}):: mesh('istio') {
@@ -64,10 +66,22 @@
       mesh: {
         variant: 'istio',
         inject: inject,
-        // The annotation goes on the POD template, never the controller — the
-        // sidecar is injected into pods, and an annotation on the Deployment
-        // reaches nothing.
-        injectAnnotations: if inject then { 'sidecar.istio.io/inject': 'true' } else {},
+        // A LABEL, not an annotation, and on the POD template rather than the
+        // controller. Both halves of that are load-bearing.
+        //
+        // Istio's MutatingWebhookConfiguration selects on labels only — an
+        // objectSelector cannot read annotations. In a namespace carrying
+        // neither `istio-injection` nor `istio.io/rev`, the one webhook that can
+        // fire requires `sidecar.istio.io/inject: "true"` IN THE POD'S LABELS,
+        // so the annotation form injects nothing at all there and does so
+        // silently. In a namespace that IS labelled, the webhook fires for every
+        // pod regardless and the "true" value falls outside its NotIn ["false"]
+        // exclusion, so the label is right in both worlds.
+        //
+        // And the marker belongs to the pod: the injector mutates pods, so one
+        // on the Deployment reaches nothing.
+        injectLabels: if inject then { 'sidecar.istio.io/inject': 'true' } else {},
+        injectAnnotations: {},
         mtls: mtls,
         peerAuthentication: peerAuthentication,
       },

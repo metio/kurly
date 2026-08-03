@@ -282,8 +282,11 @@ through the exceptions a real baseline keeps, such as an allow for kube-dns.
 kurly.http('users', image) + kurly.mesh.istio()
 ```
 
-It enables sidecar injection — an annotation on the pod template, never on the
-controller where the injector would not see it — and emits a
+It enables sidecar injection — for Istio the **label**
+`sidecar.istio.io/inject: "true"` on the pod template, never on the controller
+where the injector would not see it, and a label rather than an annotation
+because Istio's webhook selects on labels only, so the annotation form injects
+nothing in an unlabelled namespace and says nothing about it — and emits a
 `security.istio.io/v1` `PeerAuthentication` named after the workload, selecting
 its own pods, with `mode: STRICT`. That second object is the point: it makes the
 sidecar **refuse** plaintext rather than merely accept TLS, and it is the half no

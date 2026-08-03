@@ -584,10 +584,14 @@ local exclusionConflicts(exclusive) = [
     // workload annotations plus pod-only annotations. The selector is unaffected
     // (it keys on selectorLabels alone), so pod labels never reach the immutable
     // field.
-    podTemplateLabels:: this.labels + this.config.podLabels,
-    // The mesh's injection annotation goes UNDER the user's, so an explicit
-    // podAnnotations still wins — a consumer opting one workload out of
-    // injection on a mesh-wide cluster says so and is obeyed.
+    // A mesh's injection marker goes UNDER the consumer's own labels and
+    // annotations, so an explicit podLabels/podAnnotations still wins — a
+    // consumer opting one workload out of injection on a mesh-wide cluster says
+    // so and is obeyed. Which of the two a mesh uses is the mesh's business:
+    // Istio's injector selects on a LABEL, Linkerd's reads an ANNOTATION.
+    podTemplateLabels::
+      (if this.config.mesh == null then {} else this.config.mesh.injectLabels)
+      + this.labels + this.config.podLabels,
     podTemplateAnnotations::
       (if this.config.mesh == null then {} else this.config.mesh.injectAnnotations)
       + this.config.annotations + this.config.podAnnotations,

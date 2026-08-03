@@ -397,7 +397,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   // peerAuthentication is the verbatim escape hatch. strictNamespace is the
   // standalone namespace-wide floor, placed with kurly.list rather than composed.
   mesh: {
-    istio: d.fn('Runs the workload in an Istio mesh: the sidecar injection annotation on the pod template, plus a security.istio.io/v1 PeerAuthentication named after the workload selecting its own pods, with mode STRICT so the sidecar refuses plaintext. mtls=null emits no PeerAuthentication (the namespace or mesh default stands); inject=false skips the annotation for a cluster that labels the namespace; peerAuthentication merges verbatim into the emitted spec.', [
+    istio: d.fn("Runs the workload in an Istio mesh: the sidecar injection LABEL (sidecar.istio.io/inject) on the pod template — a label rather than an annotation because Istio's injection webhook selects on labels only, so the annotation form injects nothing in a namespace that is not itself labelled — plus a security.istio.io/v1 PeerAuthentication named after the workload selecting its own pods, with mode STRICT so the sidecar refuses plaintext. mtls=null emits no PeerAuthentication (the namespace or mesh default stands); inject=false skips the marker for a cluster that labels the namespace; peerAuthentication merges verbatim into the emitted spec.", [
       d.arg('mtls', d.T.string, default='STRICT'),
       d.arg('inject', d.T.bool, default=true),
       d.arg('peerAuthentication', d.T.object, default={}),

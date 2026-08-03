@@ -587,21 +587,29 @@ local podOf(app) = app.deployment.spec.template.spec;
   ),
 
   // --- kurly.mesh axis --------------------------------------------------------
-  // Istio does both halves: the injection annotation on the POD template (never
-  // the controller, where the injector would not see it) and a PeerAuthentication
+  // Istio does both halves: the injection marker on the POD template (never the
+  // controller, where the injector would not see it) and a PeerAuthentication
   // named after the workload, selecting its own pods, STRICT by default.
+  //
+  // The marker is a LABEL. Istio's MutatingWebhookConfiguration selects on
+  // labels only, and in a namespace carrying neither `istio-injection` nor
+  // `istio.io/rev` the one webhook that can fire requires
+  // `sidecar.istio.io/inject: "true"` among the pod's labels — an annotation
+  // there injects nothing, silently. This is the assertion that pins it.
   mesh_istio_injects_and_enforces: std.assertEqual(
     local a = shop + kurly.mesh.istio();
     local pa = [m for m in kurly.list(a).items if m.kind == 'PeerAuthentication'][0];
     [
-      a.deployment.spec.template.metadata.annotations,
-      std.objectHas(a.deployment.metadata, 'annotations'),
+      a.deployment.spec.template.metadata.labels['sidecar.istio.io/inject'],
+      std.objectHas(a.deployment.spec.template.metadata, 'annotations'),
+      std.objectHas(a.deployment.metadata.labels, 'sidecar.istio.io/inject'),
       pa.apiVersion,
       pa.metadata.name,
       pa.spec,
     ],
     [
-      { 'sidecar.istio.io/inject': 'true' },
+      'true',
+      false,
       false,
       'security.istio.io/v1',
       'shop',
@@ -609,13 +617,21 @@ local podOf(app) = app.deployment.spec.template.spec;
     ]
   ),
 
-  // A consumer's own podAnnotations wins over the recipe's, so opting one
-  // workload out of injection on a mesh-wide cluster is obeyed rather than
-  // silently overwritten.
-  mesh_pod_annotations_win: std.assertEqual(
-    local a = shop + kurly.mesh.istio() + kurly.podAnnotations({ 'sidecar.istio.io/inject': 'false' });
-    a.deployment.spec.template.metadata.annotations,
-    { 'sidecar.istio.io/inject': 'false' }
+  // The marker never reaches the controller's immutable selector, so composing a
+  // mesh onto a running workload is an ordinary rollout rather than a delete and
+  // reinstall.
+  mesh_marker_stays_out_of_the_selector: std.assertEqual(
+    (shop + kurly.mesh.istio()).deployment.spec.selector.matchLabels,
+    { 'app.kubernetes.io/name': 'shop', name: 'shop' }
+  ),
+
+  // A consumer's own podLabels win over the recipe's, so opting one workload out
+  // of injection on a mesh-wide cluster is obeyed rather than silently
+  // overwritten.
+  mesh_pod_labels_win: std.assertEqual(
+    local a = shop + kurly.mesh.istio() + kurly.podLabels({ 'sidecar.istio.io/inject': 'false' });
+    a.deployment.spec.template.metadata.labels['sidecar.istio.io/inject'],
+    'false'
   ),
 
   // mtls=null leaves the namespace or mesh default in force: injection still
@@ -624,10 +640,10 @@ local podOf(app) = app.deployment.spec.template.spec;
   mesh_istio_optional_halves: std.assertEqual(
     [
       std.length([m for m in kurly.list(shop + kurly.mesh.istio(mtls=null)).items if m.kind == 'PeerAuthentication']),
-      (shop + kurly.mesh.istio(mtls=null)).deployment.spec.template.metadata.annotations,
-      std.objectHas((shop + kurly.mesh.istio(inject=false)).deployment.spec.template.metadata, 'annotations'),
+      (shop + kurly.mesh.istio(mtls=null)).deployment.spec.template.metadata.labels['sidecar.istio.io/inject'],
+      std.objectHas((shop + kurly.mesh.istio(inject=false)).deployment.spec.template.metadata.labels, 'sidecar.istio.io/inject'),
     ],
-    [0, { 'sidecar.istio.io/inject': 'true' }, false]
+    [0, 'true', false]
   ),
 
   // peerAuthentication passes verbatim into the emitted spec — the escape hatch

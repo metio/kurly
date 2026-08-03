@@ -138,28 +138,36 @@ mesh, composed onto a workload with `+`:
 kurly.http('app', image) + kurly.mesh.istio()
 ```
 
-That does two things. It puts the sidecar injection annotation on the **pod
+That does two things. It puts the sidecar injection marker on the **pod
 template** (never the controller, where the injector would not see it), and it
 emits a `security.istio.io/v1` `PeerAuthentication` named after the workload,
 selecting its own pods, with `mode: STRICT` — the object that makes the sidecar
 **refuse** plaintext rather than merely accept TLS.
 
-The second half is why the recipe exists. Injection alone was always a
-one-liner:
+For Istio that marker is the **label** `sidecar.istio.io/inject: "true"`, and
+the distinction is worth knowing if you have ever set it by hand. Istio's
+injection webhook selects on labels only — an `objectSelector` cannot read
+annotations — so in a namespace carrying neither `istio-injection` nor
+`istio.io/rev`, the annotation form injects nothing, and does so without a word.
+Linkerd's injector reads an annotation instead. Which one a mesh wants is the
+recipe's business rather than yours.
+
+Your own `podLabels` still win over the recipe's, so opting one workload out of
+injection on a mesh-wide cluster is obeyed rather than overwritten:
 
 ```jsonnet
-kurly.http('app', image) + kurly.podAnnotations({ 'sidecar.istio.io/inject': 'true' })
+kurly.http('app', image) + kurly.mesh.istio()
++ kurly.podLabels({ 'sidecar.istio.io/inject': 'false' })
 ```
 
-Your own `podAnnotations` still wins over the recipe's, so opting one workload
-out of injection on a mesh-wide cluster is obeyed rather than overwritten.
-`podAnnotations` and `podLabels` land on the pod template only, never on the
-controller's immutable selector, which is what makes them safe to add to a
-running workload: a selector that changed would need a delete and reinstall.
+`podLabels` and `podAnnotations` land on the pod template only, never on the
+controller's immutable selector, which is what makes composing a mesh onto a
+running workload an ordinary rollout: a selector that changed would need a
+delete and reinstall.
 
 Each half can be turned off on its own. `mtls=null` emits no
 `PeerAuthentication`, leaving the namespace or mesh default in force;
-`inject=false` skips the annotation, for a cluster that labels the namespace
+`inject=false` skips the marker, for a cluster that labels the namespace
 instead. Per-port overrides go through `peerAuthentication`, merged verbatim
 into the emitted spec.
 
