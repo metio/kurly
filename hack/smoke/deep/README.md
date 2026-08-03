@@ -53,7 +53,7 @@ are run deliberately:
 nix develop --command bash hack/smoke/deep/tik-stageset.sh
 ```
 
-One of them proves an **axis** rather than a workload. `mesh-istio.sh` stands up
+One of them proves an **axis** rather than a workload, and it is green. `mesh-istio.sh` stands up
 a real Istio control plane and checks what rendering cannot: that a pod composed
 with `kurly.mesh.istio()` comes up with a sidecar in a namespace carrying no
 injection label, that the same app carrying the annotation form instead comes up

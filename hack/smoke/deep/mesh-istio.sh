@@ -19,10 +19,10 @@
 #
 # What is proven, in order:
 #
-#   1. INJECTION HAPPENS from the recipe alone — the pod comes up 2/2 in an
-#      unlabelled namespace.
+#   1. INJECTION HAPPENS from the recipe alone — the pod carries an istio-proxy
+#      in an unlabelled namespace.
 #   2. THE ANNOTATION FORM DOES NOT — the same app carrying
-#      `sidecar.istio.io/inject: "true"` as a pod ANNOTATION comes up 1/1. This
+#      `sidecar.istio.io/inject: "true"` as a pod ANNOTATION carries none. This
 #      is the bug the recipe was fixed for, kept as a live fact rather than a
 #      reading of the webhook's selectors.
 #   3. PLAINTEXT IS REFUSED — a client with no sidecar cannot reach the workload.
@@ -61,18 +61,33 @@ fail() {
 # test is a recipe rather than a catalogued workload, so it is written inline
 # instead of imported from workloads/ — nothing in the fleet composes a mesh, and
 # one that did would be testing the workload rather than the axis.
+#
+# whoami is a static binary in a scratch image, so it satisfies the hardened
+# default with a uid pinned and its port moved above 1024 — kurly's runAsNonRoot
+# refuses the image on its default :80 as root, which is the recipe working
+# rather than a problem to route around.
 render_app() {
   local name="$1" compose="$2"
   jsonnet -J vendor -e \
     "local k = import 'github.com/metio/kurly/main.libsonnet';
-     k.list(k.http('${name}', '${app_image}') + k.port(80) + k.hostUsers() ${compose})"
+     k.list(k.http('${name}', '${app_image}')
+       + k.port(8080) + k.env({ WHOAMI_PORT_NUMBER: '8080' })
+       + k.runAs(65532) + k.replicas(1) + k.probes('/') + k.hostUsers() ${compose})"
 }
 
-# The number of containers in the named Deployment's single pod, once it is
-# Ready. A sidecar shows up as a second one.
-containers_in() {
-  kubectl --namespace="$ns" get pods --selector="app.kubernetes.io/name=$1" \
-    -o jsonpath='{.items[0].spec.containers[*].name}' 2>/dev/null | wc -w
+# Whether the pods matching a selector carry an Istio sidecar, as `yes` or `no`.
+#
+# Look for the container BY NAME, in both container lists. Modern Istio injects
+# the proxy as a NATIVE SIDECAR — a restartable init container — rather than as a
+# second entry in spec.containers, so a check counting spec.containers reports
+# one container on a perfectly injected pod and concludes the marker did not
+# take. That is precisely the shape of confident wrong answer this scenario
+# exists to catch, and it caught it here first.
+has_sidecar() {
+  local names
+  names="$(kubectl --namespace="$ns" get pods --selector="$1" \
+    -o jsonpath='{.items[0].spec.containers[*].name} {.items[0].spec.initContainers[*].name}' 2>/dev/null)"
+  if printf '%s' "$names" | grep -qw istio-proxy; then echo yes; else echo no; fi
 }
 
 # Whether the sidecar-less client can reach $1 over plain HTTP. Echoes `yes` or
@@ -109,18 +124,18 @@ render_app meshed "+ k.mesh.istio()" | kubectl apply --namespace="$ns" --filenam
   || fail "the meshed app did not apply"
 kubectl --namespace="$ns" rollout status deployment/meshed --timeout=300s \
   || fail "the meshed app never became Ready"
-[ "$(containers_in meshed)" = 2 ] \
-  || fail "the meshed app came up with $(containers_in meshed) container(s): the injection marker did not take"
-echo "ok: 2/2 containers in a namespace with no injection label"
+[ "$(has_sidecar app.kubernetes.io/name=meshed)" = yes ] \
+  || fail "the meshed app has no istio-proxy: the injection marker did not take"
+echo "ok: a sidecar, in a namespace with no injection label"
 
 echo "== 2. the annotation form does NOT inject =="
 render_app annotated "+ k.podAnnotations({ 'sidecar.istio.io/inject': 'true' })" \
   | kubectl apply --namespace="$ns" --filename=- || fail "the annotated app did not apply"
 kubectl --namespace="$ns" rollout status deployment/annotated --timeout=300s \
   || fail "the annotated app never became Ready"
-[ "$(containers_in annotated)" = 1 ] \
+[ "$(has_sidecar app.kubernetes.io/name=annotated)" = no ] \
   || fail "the annotated app got a sidecar: this scenario's premise (webhooks select on labels) is wrong, re-read the MutatingWebhookConfiguration"
-echo "ok: 1/1 containers — the annotation is invisible to the injector, as the webhook's selectors say"
+echo "ok: no sidecar — the annotation is invisible to the injector, as the webhook's selectors say"
 
 echo "== a client on each side of the mesh =="
 kubectl --namespace="$ns" run plain-client --image="$client_image" \
@@ -132,7 +147,7 @@ for pod in plain-client mesh-client; do
   kubectl --namespace="$ns" wait --for=condition=Ready "pod/${pod}" --timeout=180s \
     || fail "${pod} never became Ready"
 done
-[ "$(kubectl --namespace="$ns" get pod mesh-client -o jsonpath='{.spec.containers[*].name}' | wc -w)" = 2 ] \
+[ "$(has_sidecar run=mesh-client)" = yes ] \
   || fail "mesh-client has no sidecar, so step 4 would prove nothing"
 
 echo "== 3. STRICT refuses the sidecar-less client =="

@@ -182,6 +182,15 @@ kurly.list([app, kurly.mesh.strictNamespace()])
 
 Recipes join the `mesh` exclusion group, so a workload cannot compose two meshes.
 
+Every workload in the catalogue that takes composed features — 255 of the 273
+stages — renders with a mesh composed onto it, and the gate checks each one: the
+injection marker reaches every pod template the stage renders, and the emitted
+`PeerAuthentication` selects those pods. Both are ways a mesh can fail to reach a
+workload while the manifest set looks perfectly correct — an unmarked pod gets no
+sidecar and says nothing about it, and a policy that selects nothing enforces
+mTLS on nothing. The remaining 18 stages render a custom resource, so their pod
+metadata goes through the operator's own parameter instead.
+
 ### What kurly does not emit
 
 **No `AuthorizationPolicy`.** Which principals may call which paths of a

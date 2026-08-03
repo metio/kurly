@@ -90,8 +90,8 @@ done
 
 # Every glob-driven per-workload invariant, checked over a SINGLE batched render.
 # Each invariant needs the same workload composed a few different ways (default,
-# named, mirrored, and — for a feature-accepting workload — with pod features and
-# an IP-family override composed on). Rendering those per stage paid ~60ms of
+# named, mirrored, and — for a feature-accepting workload — with pod features, a
+# mesh, and an IP-family override composed on). Rendering those per stage paid ~60ms of
 # jsonnet startup and k8s-libsonnet re-parse EVERY render, so the cost grew with
 # the workload count. Instead, ONE jsonnet process renders every variant for every
 # stage into a keyed blob (k8s-libsonnet parsed once), and check_stage reads its
@@ -133,6 +133,7 @@ for stage in "${stages[@]}"; do
         + k.podAnnotations({ 'kurly.test/annotation': 'set' })
         + k.supplementalGroups([4242])
         + k.dns(config={ nameservers: ['10.0.0.10'] }, hostAliases=[{ ip: '10.0.0.5', hostnames: ['db.internal'] }])
+        + k.mesh.istio()
         + k.runAs(1000700000)),
       ipfam: k.list(app + k.ipFamilies(['IPv6'], 'SingleStack')),
       storeOverride: (if std.length(app.config.stores) > 0
@@ -245,6 +246,28 @@ check_stage() {
 
   strays="$(printf '%s' "$rendered" | jq -r '[.. | objects | select(has("containers") or has("initContainers")) | ((.initContainers // []) + (.containers // []))[] | select(.securityContext.runAsUser != null and .securityContext.runAsUser != 1000700000) | "\(.name)=\(.securityContext.runAsUser)"] | unique | join(" ")')"
   [ -z "$strays" ] || { echo "::error::${stage}: container(s) keep a uid of their own after kurly.runAs(): ${strays}" >&2; return 1; }
+
+  # A composed mesh must actually reach the workload, and there are two ways it
+  # could fail to while looking perfectly fine in the manifest set. A kind that
+  # drops the pod-template labels leaves pods the injector never sees — Istio's
+  # webhook selects on labels, so an unmarked pod gets no sidecar and says
+  # nothing about it. And a PeerAuthentication whose selector matches none of the
+  # workload's own pods enforces mTLS on nothing at all, which renders, applies,
+  # and reports Ready exactly like one that works.
+  local mesh_verdict
+  mesh_verdict="$(printf '%s' "$rendered" | jq -r "
+    ${pod_templates} as \$pt
+    | [.items[] | select(.kind == \"PeerAuthentication\")] as \$pa
+    | if (\$pt | length) == 0 then \"ok\"
+      elif (\$pa | length) != 1 then \"the stage rendered \(\$pa | length) PeerAuthentication(s), expected exactly one\"
+      else (\$pa[0].spec.selector.matchLabels) as \$sel
+        | [\$pt[] | select((.metadata.labels // {})[\"sidecar.istio.io/inject\"] != \"true\")] as \$unmarked
+        | [\$pt[] | .metadata.labels as \$l | select([\$sel | to_entries[] | \$l[.key] == .value] | all | not)] as \$unselected
+        | if (\$unmarked | length) > 0 then \"\(\$unmarked | length) pod template(s) never got the mesh injection marker\"
+          elif (\$unselected | length) > 0 then \"the PeerAuthentication selects none of \(\$unselected | length) pod template(s)\"
+          else \"ok\" end
+      end")"
+  [ "$mesh_verdict" = "ok" ] || { echo "::error::${stage}: ${mesh_verdict}" >&2; return 1; }
 
   # Every Service must follow the composed IP families — a workload that writes a
   # Service by hand otherwise keeps the cluster default on it while the rest
