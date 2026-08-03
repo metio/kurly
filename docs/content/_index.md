@@ -141,7 +141,7 @@ kurly.http('app', image) + kurly.mesh.linkerd()
 
 Each does two things: it puts the mesh's injection marker on the **pod
 template** (never the controller, where the injector would not see it), and it
-makes the proxy **refuse** plaintext rather than merely accept TLS.
+asks the proxy to **refuse** plaintext rather than merely accept TLS.
 
 Both meshes do both things, and they do them with almost nothing in common:
 
@@ -150,6 +150,7 @@ Both meshes do both things, and they do them with almost nothing in common:
 | injection marker | label `sidecar.istio.io/inject: "true"` | annotation `linkerd.io/inject: enabled` |
 | enforcement | a `PeerAuthentication` object, `mode: STRICT` | annotation `config.linkerd.io/default-inbound-policy: all-authenticated` |
 | namespace first? | must carry `istio-injection` or the pod must be labelled | no, the injector is called for every pod |
+| enforcement proven end to end? | yes | **no** — see below |
 
 The label-versus-annotation split is worth knowing if you have ever set one by
 hand. Istio's webhook selects on labels only — an `objectSelector` cannot read
@@ -271,6 +272,27 @@ and [Upgrading](/installation/upgrading/) has the commands.
 
 `hack/smoke/deep/mesh-bsi.sh` is the measurement; re-run it against a newer Istio
 rather than trusting the table.
+
+### Linkerd's enforcement is unverified
+
+The Istio recipe's refusal is proven on a live cluster:
+`hack/smoke/deep/mesh-istio.sh` shows an unmeshed client refused, a meshed
+client served, and — the control — the refused request succeeding once the
+`PeerAuthentication` is removed and nothing else changes.
+
+`hack/smoke/deep/mesh-linkerd.sh` gets through injection and the meshed path and
+then **fails**. On the test cluster an unmeshed client was served anyway, with
+`config.linkerd.io/default-inbound-policy` on the pod, on the namespace, set to
+`deny` rather than `all-authenticated`, and with a `Server` resource selecting
+the port. What is established is that the annotation reaches the proxy — it
+arrives as `LINKERD2_PROXY_INBOUND_DEFAULT_POLICY` — so the gap is in the
+refusal, not the plumbing. Whether that is something about the test cluster or a
+wrong reading of how Linkerd enforces is not settled.
+
+Until it is: use `kurly.mesh.linkerd()` for injection, and do not count its
+inbound policy as encryption in transit. The scenario is left failing on
+purpose, because a scenario edited until it passes proves only that it was
+edited.
 
 ### Why mTLS needs a rendered object, not a policy
 

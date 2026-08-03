@@ -283,7 +283,7 @@ kurly.http('users', image) + kurly.mesh.istio()
 kurly.http('users', image) + kurly.mesh.linkerd()
 ```
 
-Each enables proxy injection and makes the proxy **refuse** plaintext rather
+Each enables proxy injection and asks the proxy to **refuse** plaintext rather
 than merely accept TLS — and the two meshes have almost nothing in common in how
 they say it:
 
@@ -291,6 +291,7 @@ they say it:
 | --- | --- | --- |
 | injection marker | label `sidecar.istio.io/inject: "true"` | annotation `linkerd.io/inject: enabled` |
 | enforcement | a `PeerAuthentication` object, `mode: STRICT` | annotation `config.linkerd.io/default-inbound-policy: all-authenticated` |
+| enforcement proven end to end? | yes | **no — see below** |
 
 Getting that split backwards is silent. Istio's webhook selects on labels only,
 so the annotation form injects nothing in an unlabelled namespace and says
@@ -302,6 +303,17 @@ The enforcement half is the other reason: no policy engine can supply it. A
 observe traffic nor require that another object exists — a workload passing
 every policy in `bsi` says nothing either way about whether its traffic is
 encrypted.
+
+**The two halves are not equally proven, and the difference is recorded rather
+than smoothed over.** For Istio, `hack/smoke/deep/mesh-istio.sh` shows an
+unmeshed client being refused and getting through again once the
+`PeerAuthentication` is removed. For Linkerd that has not been reproduced:
+injection and the meshed path pass, and then the scenario fails, because an
+unmeshed client was served anyway — with the annotation on the pod, on the
+namespace, at `deny`, and with a `Server` in place. The annotation
+demonstrably reaches the proxy (`LINKERD2_PROXY_INBOUND_DEFAULT_POLICY`), so
+what is unproven is the refusal, not the plumbing. Treat Linkerd's enforcement
+as unverified until that scenario passes.
 
 Each half turns off alone (`mtls=null` / `inboundPolicy=null`, `inject=false`),
 and each mesh keeps its own vocabulary rather than a shared invented one:

@@ -75,3 +75,7 @@ numbers.
 The registry half applies to Linkerd too — it publishes from `cr.l5d.io` — and
 `kurly.mesh.linkerd(proxyImage=…)` takes the same treatment. Its injected proxy
 has not been measured against the policies; that is a gap, not a clean bill.
+
+`kurly.mesh.linkerd()` injects reliably, but **its inbound policy has not been
+shown to refuse anything** — see the mesh section on the front page. Use it for
+injection; do not count it as encryption in transit yet.

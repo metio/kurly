@@ -69,6 +69,15 @@ nothing in common, so the evidence has to be the same shape or the promise is
 not tested. Its steps 1 and 2 are the mirror image of Istio's — Linkerd's
 injector reads an annotation and ignores the label, Istio's the reverse.
 
+**It currently fails at step 4, and is left failing.** Injection and the meshed
+path pass; the refusal does not, on a cluster where an unmeshed client was
+served regardless of the inbound policy — pod annotation, namespace annotation,
+`deny`, or a `Server` resource. Editing it until it passes would prove only that
+it was edited. Both scenarios also run their POSITIVE control first, which is
+what caught this: an earlier ordering asserted the refusal before establishing
+that the endpoint answered at all, and passed against a port nothing was
+listening on.
+
 `mesh-bsi.sh <mesh>` asks the follow-on question: what does the mesh cost at admission?
 The catalogue's `bsi` is measured on what kurly RENDERS, and a meshed pod is not
 that — the injector adds containers between the manifest and the pod, and those

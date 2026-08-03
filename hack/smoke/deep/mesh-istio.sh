@@ -25,12 +25,14 @@
 #      `sidecar.istio.io/inject: "true"` as a pod ANNOTATION carries none. This
 #      is the bug the recipe was fixed for, kept as a live fact rather than a
 #      reading of the webhook's selectors.
-#   3. PLAINTEXT IS REFUSED — a client with no sidecar cannot reach the workload.
-#   4. THE MESH PATH WORKS — a client with a sidecar can.
+#   3. THE MESH PATH WORKS — a client with a sidecar reaches the workload. This
+#      comes FIRST on purpose: it establishes that the endpoint answers at all,
+#      without which the refusal below is just a request that failed.
+#   4. PLAINTEXT IS REFUSED — a client with no sidecar cannot reach the same
+#      endpoint that just answered.
 #   5. THE CONTROL: with the PeerAuthentication removed and nothing else changed,
-#      the sidecar-less client CAN reach the workload. Without this, step 3 proves
-#      only that a request failed, and a request can fail for a hundred reasons
-#      that have nothing to do with mTLS.
+#      the sidecar-less client CAN reach the workload — so the refusal was that
+#      object's doing and not something ambient.
 cd "$(dirname "$0")/../../.."
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
@@ -150,16 +152,23 @@ done
 [ "$(has_sidecar run=mesh-client)" = yes ] \
   || fail "mesh-client has no sidecar, so step 4 would prove nothing"
 
-echo "== 3. STRICT refuses the sidecar-less client =="
-[ "$(plaintext_reaches meshed)" = no ] \
-  || fail "a client with no sidecar reached the meshed workload: STRICT mTLS is not being enforced"
-echo "ok: plaintext refused"
-
-echo "== 4. the meshed client gets through =="
+# The POSITIVE control comes first, and the order is load-bearing. "The request
+# failed" is the weakest evidence in this file: a wrong port, a wrong name, a
+# pod not yet serving all produce it, and each reads exactly like enforcement.
+# Establishing that the endpoint answers a meshed client first is what turns the
+# refusal below into a fact about the PeerAuthentication. The Linkerd scenario
+# was written the other way round and passed its refusal against a port nothing
+# was listening on.
+echo "== 3. the meshed client gets through =="
 kubectl --namespace="$ns" exec mesh-client -- \
   curl -sS --max-time 10 -o /dev/null -w '%{http_code}\n' "http://meshed.${ns}.svc/" \
   | grep -qx 200 || fail "a client inside the mesh could not reach the workload"
-echo "ok: mTLS path works"
+echo "ok: mTLS path works, so the endpoint demonstrably answers"
+
+echo "== 4. STRICT refuses the sidecar-less client =="
+[ "$(plaintext_reaches meshed)" = no ] \
+  || fail "a client with no sidecar reached the meshed workload: STRICT mTLS is not being enforced"
+echo "ok: plaintext refused"
 
 echo "== 5. control: without the PeerAuthentication, the same request succeeds =="
 # Re-render with mtls=null — same app, same injection, no enforcing object — so
@@ -179,8 +188,8 @@ for _ in $(seq 1 30); do
   sleep 2
 done
 [ "$reached" = yes ] \
-  || fail "plaintext was still refused with no PeerAuthentication in place: step 3's refusal was not this recipe's doing"
-echo "ok: the refusal in step 3 came from the object the recipe emits"
+  || fail "plaintext was still refused with no PeerAuthentication in place: step 4's refusal was not this recipe's doing"
+echo "ok: the refusal in step 4 came from the object the recipe emits"
 
 echo "== clean up =="
 kubectl delete namespace "$ns" --wait=false

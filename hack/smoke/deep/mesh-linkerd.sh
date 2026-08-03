@@ -28,12 +28,14 @@
 #      pod LABEL carries no proxy. The mirror image of mesh-istio.sh's step 2,
 #      and together they are the evidence that the axis knows which mesh wants
 #      which.
-#   3. PLAINTEXT IS REFUSED — a client with no proxy cannot reach the workload.
-#   4. THE MESH PATH WORKS — a client with a proxy can.
+#   3. THE MESH PATH WORKS — a client with a proxy reaches the workload. This
+#      comes FIRST on purpose: it establishes that the endpoint answers at all,
+#      without which the refusal below is just a request that failed.
+#   4. PLAINTEXT IS REFUSED — a client with no proxy cannot reach the same
+#      endpoint that just answered.
 #   5. THE CONTROL: with the inbound policy back at Linkerd's own default and
-#      nothing else changed, the proxy-less client CAN reach the workload.
-#      Without this, step 3 proves only that a request failed, and a request can
-#      fail for a hundred reasons that have nothing to do with mTLS.
+#      nothing else changed, the proxy-less client CAN reach the workload — so
+#      the refusal was the annotation's doing and not something ambient.
 #
 # Linkerd's `stable` channel stopped at 2.14.10 when Buoyant moved it into their
 # commercial distribution, so the open line is `edge` and that is what this
@@ -129,7 +131,7 @@ has_proxy() {
 # one at different points below.
 plaintext_reaches() {
   if kubectl --namespace="$ns" exec plain-client -- \
-    curl -sS --max-time 5 -o /dev/null "http://$1.${ns}.svc:8080/" >/dev/null 2>&1
+    curl -sS --max-time 5 -o /dev/null "http://$1.${ns}.svc/" >/dev/null 2>&1
   then echo yes; else echo no; fi
 }
 
@@ -172,16 +174,22 @@ done
 [ "$(has_proxy run=mesh-client)" = yes ] \
   || fail "mesh-client has no proxy, so step 4 would prove nothing"
 
-echo "== 3. all-authenticated refuses the proxy-less client =="
+# The POSITIVE control comes first, and the order is load-bearing. "The request
+# failed" is the weakest evidence in this file: a wrong port, a wrong name, a
+# pod not yet serving all produce it, and each reads exactly like enforcement.
+# Establishing that the endpoint answers a meshed client first is what turns the
+# refusal below into a fact about the policy. Written the other way round, this
+# scenario passed step 3 against a port nothing was listening on.
+echo "== 3. the meshed client gets through =="
+kubectl --namespace="$ns" exec mesh-client -- \
+  curl -sS --max-time 10 -o /dev/null -w '%{http_code}\n' "http://meshed.${ns}.svc/" \
+  | grep -qx 200 || fail "a client inside the mesh could not reach the workload"
+echo "ok: mTLS path works, so the endpoint demonstrably answers"
+
+echo "== 4. all-authenticated refuses the proxy-less client =="
 [ "$(plaintext_reaches meshed)" = no ] \
   || fail "a client with no proxy reached the meshed workload: the inbound policy is not being enforced"
 echo "ok: plaintext refused"
-
-echo "== 4. the meshed client gets through =="
-kubectl --namespace="$ns" exec mesh-client -- \
-  curl -sS --max-time 10 -o /dev/null -w '%{http_code}\n' "http://meshed.${ns}.svc:8080/" \
-  | grep -qx 200 || fail "a client inside the mesh could not reach the workload"
-echo "ok: mTLS path works"
 
 echo "== 5. control: at Linkerd's own default policy, the same request succeeds =="
 # Re-render with the policy back at all-unauthenticated — same app, same
@@ -200,8 +208,8 @@ for _ in $(seq 1 30); do
   sleep 2
 done
 [ "$reached" = yes ] \
-  || fail "plaintext was still refused at all-unauthenticated: step 3's refusal was not this recipe's doing"
-echo "ok: the refusal in step 3 came from the annotation the recipe sets"
+  || fail "plaintext was still refused at all-unauthenticated: step 4's refusal was not this recipe's doing"
+echo "ok: the refusal in step 4 came from the annotation the recipe sets"
 
 echo "== clean up =="
 kubectl delete namespace "$ns" --wait=false
