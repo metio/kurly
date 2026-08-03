@@ -44,6 +44,15 @@ jobs:
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - name: Regenerate the derived catalog, and commit it if it moved
         run: |
+          set -euo pipefail
+          # catalog.jsonnet imports every stage through the vendor tree
+          # (github.com/metio/kurly/workloads/…), the same path a consumer uses,
+          # so the tree has to exist before it renders. check-catalog builds it
+          # too — but that runs after this step, which is why this one failed on
+          # the first import while the gate after it passed.
+          nix develop --command jb install
+          mkdir -p vendor/github.com/metio
+          ln -sfn ../../.. vendor/github.com/metio/kurly
           nix develop --command bash -c 'jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json'
           if ! git diff --quiet -- catalog/catalog.json; then
             git config user.name 'github-actions[bot]'
