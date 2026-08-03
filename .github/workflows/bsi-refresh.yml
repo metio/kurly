@@ -1,0 +1,120 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Re-asks an API server what the BSI verdicts are, and opens a pull request when
+# an answer has moved.
+#
+# e2e.yml already regenerates them on every pull request and fails on drift, so a
+# change made HERE cannot ship stale. That covers one of the two ways these
+# answers rot, and not the commoner one: the policies are evaluated against
+# software that is not ours. A workload's image is bumped by Renovate, an
+# operator releases a version whose pods run as a different user, Kubernetes
+# changes a default — and none of that is a pull request against this repository,
+# so nothing re-asks and the published claim quietly describes last month.
+#
+# A compliance claim that ages silently is worse than no claim: it reads exactly
+# like a fresh one. So it is re-asked weekly and the diff becomes something to
+# review.
+#
+# Two things are regenerated, and they answer different questions:
+#
+#   gen-bsi   what the policies say about the manifests KURLY renders. Needs
+#             only a cluster.
+#   cr-bsi    what they say about the pods an OPERATOR creates from a custom
+#             resource — the part gen-bsi structurally cannot see, because no
+#             policy selects a Prometheus or a LokiStack, while every pod the
+#             operator makes from one is selected. Needs the operators, which is
+#             why this is a scheduled job and not a gate.
+name: BSI refresh
+
+on:
+  schedule:
+    # Sundays, clear of the Saturday catalog refresh and the Monday release.
+    - cron: 41 4 * * SUN
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bsi-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Re-ask the API server
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write # push the branch the pull request is opened from
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Create the kind cluster (latest Kubernetes)
+        run: nix develop --command kind create cluster --wait 120s
+      - name: Regenerate the manifest verdicts
+        run: nix develop --command gen-bsi
+      - name: Install the operators the custom-resource stages need
+        # Reports the ones that will not install rather than failing: an operator
+        # that has broken upstream leaves its stages unmeasured, which the ledger
+        # records as an absence with a reason. Failing the whole run would throw
+        # away the verdicts every other operator produced.
+        run: nix develop --command bash hack/smoke/deep/cr-bsi-operators.sh
+      - name: Measure the pods those operators create
+        # Every stage the catalogue reports as out of scope for its own manifest.
+        # A stage this run cannot measure keeps whatever the committed ledger
+        # already held, so a partial run narrows rather than retracts.
+        run: |
+          set -euo pipefail
+          # shellcheck disable=SC2016  # jq's \(…) is not shell interpolation
+          stages="$(nix develop --command jq -r '
+            .workloads[] | .id as $w | .stages[]
+            | select(.bsi.applicable == false)
+            | "\($w)/\(.id)"' catalog/catalog.json | tr '\n' ' ')"
+          echo "asking about: ${stages}"
+          # shellcheck disable=SC2086  # deliberate: one argument per stage
+          nix develop --command bash hack/smoke/deep/cr-bsi.sh /tmp/cr-bsi ${stages}
+      - name: Rebuild the catalog from the new answers
+        run: |
+          set -euo pipefail
+          nix develop --command jb install
+          mkdir -p vendor/github.com/metio
+          ln -sfn ../../.. vendor/github.com/metio/kurly
+          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json
+      # A pull request rather than a push: a verdict that changed is a claim
+      # about compliance that changed, and somebody should read why before it
+      # ships. Same token handling as the catalog refresh — a pull request opened
+      # with the default GITHUB_TOKEN starts no workflows, so without the secret
+      # there are no checks and nothing to auto-merge.
+      - name: Open a pull request for whatever moved
+        env:
+          GH_TOKEN: ${{ secrets.CATALOG_REFRESH_TOKEN || github.token }}
+          CATALOG_REFRESH_TOKEN: ${{ secrets.CATALOG_REFRESH_TOKEN }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- catalog/; then
+            echo "nothing moved — the API server says what the committed verdicts say"
+            exit 0
+          fi
+          git --no-pager diff --stat -- catalog/
+          branch="bsi-refresh/$(date +%Y-%m-%d)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch --create "$branch"
+          git add catalog/
+          git commit --message 'chore(catalog): regenerate the BSI verdicts' \
+            --message 'An API server was asked again. A verdict moves when
+          something outside this repository moves: an image Renovate bumped, an
+          operator release whose pods run differently, a Kubernetes default.' \
+            --message 'A policy that started passing is as interesting as one
+          that started failing. An entry that vanished from the operator ledger
+          means its operator stopped installing, not that its pods became
+          compliant.'
+          git push --set-upstream origin "$branch"
+          gh pr create --fill --base "${GITHUB_REF_NAME}" \
+            --title 'chore(catalog): the BSI verdicts moved'
+          # Never auto-merged, unlike the catalog refresh. That one re-reads
+          # facts from elsewhere; this one changes what the catalogue claims
+          # about compliance, and that is worth a person looking at the diff.
+          echo "::notice::opened ${branch} — read the diff before merging"

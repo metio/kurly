@@ -120,4 +120,34 @@ for key in "$@"; do
   echo "== ${key} =="
   measure_one "$key"
 done
+
+# The ledger the catalogue imports, assembled from the per-stage results. Only
+# MEASURED stages are written: a stage whose operator would not run, or whose CR
+# creates no pod, has no verdict, and recording a blank for it would read as a
+# clean one. The header says which kind of absence each is.
+#
+# Entries this run did not measure are carried over from the committed file, so a
+# partial run — one operator down, one stage retried — narrows rather than
+# retracts. Rerunning a subset is then safe, which is what makes it usable from a
+# schedule.
+if [ "${WRITE_LEDGER:-1}" = 1 ]; then
+  ledger=catalog/bsi-operator.gen.libsonnet
+  previous="$(mktemp)"
+  if [ -f "$ledger" ]; then jsonnet "$ledger" >"$previous" 2>/dev/null || echo '{}' >"$previous"; else echo '{}' >"$previous"; fi
+  header="$(sed -n '1,/^{$/p' "$ledger" 2>/dev/null | sed '$d')"
+  {
+    printf '%s\n{\n' "$header"
+    jq -s --slurpfile prev "$previous" '
+      ([.[] | select(.verdict == "measured") | {key: .stage, value: {pods: .pods, violates: .violates}}] | from_entries) as $now
+      | ($prev[0] + $now)
+      | to_entries | sort_by(.key)[]
+      | "  \(.key | @json): { pods: \(.value.pods), violates: [\(.value.violates | map(@json) | join(", "))] },"
+    ' -r "$OUT"/*.json 2>/dev/null | sed "s/\"/'/g; s/'\([a-z0-9-]*\/[a-z0-9-]*\)':/'\1':/"
+    printf '}\n'
+  } >"${ledger}.new"
+  mv "${ledger}.new" "$ledger"
+  jsonnetfmt --in-place "$ledger"
+  echo "wrote ${ledger} ($(grep -c 'pods:' "$ledger") stages measured)"
+  rm -f "$previous"
+fi
 echo "cr-bsi: done ($# stages) -> $OUT"
