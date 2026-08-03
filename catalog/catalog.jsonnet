@@ -23,6 +23,7 @@ local bsiViolations = import './bsi.gen.libsonnet';
 local bsiOperatorPods = import './bsi-operator.gen.libsonnet';
 local bollwerk = import '../bollwerk/bollwerk.libsonnet';
 local excluded = import './excluded.libsonnet';
+local consent = import './consent.libsonnet';
 local forge = import './forge.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
 local signatures = import './signatures.gen.libsonnet';
@@ -1054,6 +1055,18 @@ local bsiOf(key, fn) =
     requirements: std.set([bsiPolicies[name].requirement for name in bsiViolations[key]]),
   } + operatorPods;
 
+// The reasons a workload is not carried. Closed, and published, so a consumer
+// switches on the reason rather than reading the sentence beside it — rendering
+// all of them as "not offered" says the same thing about a proprietary media
+// server and about a project whose authors sell their own hosting.
+local excludedReasons = [
+  'licence-forbids-saas',
+  'no-published-source',
+  'undeployable',
+  'upstream-archived',
+  'upstream-sells-hosting',
+];
+
 local workloadEntries =
   assert reconcile('workload stages', stageKeys, std.objectFields(stageImports));
   // Every generated architecture entry maps to a real stage — a renamed or
@@ -1222,6 +1235,26 @@ local workloadEntries =
   // Software this catalogue has decided not to carry cannot come back by someone
   // adding an annotation for it. The reason is in excluded.libsonnet beside the id;
   // deleting a directory would have left nothing to read and nothing to stop it.
+  // A consent record is a claim about somebody else's wishes, published to every
+  // consumer of this catalogue. It carries the evidence or it does not exist.
+  assert std.all([
+    std.objectHas(consent[id], 'verifiedBy') && std.objectHas(consent[id], 'evidence')
+    for id in std.objectFields(consent)
+  ]) : 'catalog: a consent record without verifiedBy and evidence — a claim about a maintainer needs the thing a reader can check',
+  assert std.all([
+    std.member(['no-new-orders', 'winding-down'], consent[id].status)
+    for id in std.objectFields(consent)
+  ]) : 'catalog: a consent record with an unknown status (no-new-orders, winding-down)',
+  assert std.all([
+    std.member(['repository-commit', 'signed-email', 'dns-txt'], consent[id].verifiedBy)
+    for id in std.objectFields(consent)
+  ]) : 'catalog: a consent record verified by an unrecognised method',
+  // Every exclusion states a reason from the closed vocabulary, so a consumer
+  // switches on it rather than parsing the sentence beside it.
+  assert std.all([
+    std.member(excludedReasons, excluded[id].reason)
+    for id in std.objectFields(excluded)
+  ]) : 'catalog: an exclusion with a reason outside the published vocabulary',
   assert std.all([!std.objectHas(ann.workloads, name) for name in std.objectFields(excluded)]) :
          'catalog: an excluded workload is annotated again — see catalog/excluded.libsonnet for why it was removed',
   assert std.all([std.objectHas(ann.workloads, name) for name in maturity.productionNames]) :
@@ -1248,6 +1281,18 @@ local workloadEntries =
   // consumer validates against it and fails loudly on a term it does not know,
   // rather than carrying an unpriced dependency it silently ignored.
   requiresKinds: requiresKinds,
+  // Workloads this catalogue does not carry, and WHY — OUR decision, not a
+  // maintainer's wish. A consumer switches on `reason` (one of
+  // `excludedReasons`) and shows `note`, which carries the specific project and
+  // the URL it was read from.
+  excluded: excluded,
+  excludedReasons: excludedReasons,
+  // What MAINTAINERS have asked of anyone hosting their software. Empty: nobody
+  // has asked. An absent entry means nobody asked, NEVER that they consent —
+  // there is no `offered` status for the same reason. Kept apart from `excluded`
+  // because that is our decision and this is theirs, and publishing one as the
+  // other misrepresents somebody else's position.
+  consent: consent,
   // The policy set every stage's `bsi` field refers to, with the BSI requirement
   // each one implements.
   bsiPolicies: bsiPolicies,

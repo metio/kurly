@@ -31,9 +31,9 @@
   // container image and no source, so the `upstream` field a consumer would use to
   // read, audit or fund the software has nothing to point at — the absence is not
   // a gap in kurly's annotations, it is the shape of the thing.
-  emby: 'proprietary (LicenseRef-Proprietary); no published source repository',
-  plex: 'proprietary (LicenseRef-Proprietary); no published source repository',
-  'resilio-sync': 'proprietary (LicenseRef-Proprietary); no published source repository',
+  emby: { reason: 'no-published-source', note: 'proprietary (LicenseRef-Proprietary); no published source repository' },
+  plex: { reason: 'no-published-source', note: 'proprietary (LicenseRef-Proprietary); no published source repository' },
+  'resilio-sync': { reason: 'no-published-source', note: 'proprietary (LicenseRef-Proprietary); no published source repository' },
 
   // Licences that forbid, or are designed to forbid, exactly what a hosting portal
   // does: offer the software as a service to third parties. SSPL and the
@@ -46,18 +46,18 @@
   // Note this is a decision about HOSTING them commercially, not a judgement on the
   // licences. Anyone may still run these themselves; kurly simply is not the thing
   // that helps them do it.
-  browserless: 'SSPL-1.0 (or a commercial licence); forbids offering the software as a service',
-  bugsink: 'PolyForm Shield 1.0.0; forbids use in a competing product or service',
-  directus: 'BUSL-1.1; forbids offering the software as a service for the licence term',
-  dragonfly: 'BUSL-1.1; forbids offering the software as a service for the licence term',
-  emqx: 'BUSL-1.1; forbids offering the software as a service for the licence term',
-  invoiceninja: 'Elastic-2.0; forbids providing the software to others as a managed service',
-  mongo: 'SSPL-1.0; forbids offering the software as a service without releasing the service source',
-  'mongodb-cluster': 'SSPL-1.0; same, via the operator that runs it',
-  n8n: 'n8n Sustainable Use Licence; forbids offering the software as a service',
-  nocodb: 'NocoDB Sustainable Use Licence; forbids offering the software as a service',
-  outline: 'BUSL-1.1; forbids offering the software as a service for the licence term',
-  planka: 'PLANKA Community licence; forbids offering the software as a service',
+  browserless: { reason: 'licence-forbids-saas', note: 'SSPL-1.0 (or a commercial licence); forbids offering the software as a service' },
+  bugsink: { reason: 'licence-forbids-saas', note: 'PolyForm Shield 1.0.0; forbids use in a competing product or service' },
+  directus: { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids offering the software as a service for the licence term' },
+  dragonfly: { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids offering the software as a service for the licence term' },
+  emqx: { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids offering the software as a service for the licence term' },
+  invoiceninja: { reason: 'licence-forbids-saas', note: 'Elastic-2.0; forbids providing the software to others as a managed service' },
+  mongo: { reason: 'licence-forbids-saas', note: 'SSPL-1.0; forbids offering the software as a service without releasing the service source' },
+  'mongodb-cluster': { reason: 'licence-forbids-saas', note: 'SSPL-1.0; same, via the operator that runs it' },
+  n8n: { reason: 'licence-forbids-saas', note: 'n8n Sustainable Use Licence; forbids offering the software as a service' },
+  nocodb: { reason: 'licence-forbids-saas', note: 'NocoDB Sustainable Use Licence; forbids offering the software as a service' },
+  outline: { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids offering the software as a service for the licence term' },
+  planka: { reason: 'licence-forbids-saas', note: 'PLANKA Community licence; forbids offering the software as a service' },
 
   // Software whose OWN authors sell hosting for it. A portal charging to host these
   // competes with the project it depends on, and takes the money that funds it —
@@ -68,42 +68,42 @@
   // A THIRD PARTY hosting it is not this: elest.io and a dozen VPS shops sell most
   // of the catalogue, and that takes nothing from the authors. What is excluded is
   // the project's own paid service.
-  'cal-com': 'upstream sells hosting (cal.com paid plans) — https://cal.com/pricing',
-  clickhouse: 'upstream sells hosting (ClickHouse Cloud) — https://clickhouse.com/cloud',
-  ghost: 'upstream sells hosting (Ghost Pro) — https://ghost.org/pricing/',
-  gitea: 'upstream sells hosting (Gitea Cloud) — https://about.gitea.com/pricing',
-  glitchtip: 'upstream sells hosting (app.glitchtip.com) — https://glitchtip.com/pricing',
-  grafana: 'upstream sells hosting (Grafana Cloud) — https://grafana.com/products/cloud/',
-  healthchecks: 'upstream sells hosting (healthchecks.io, by the project authors) — https://healthchecks.io/pricing/',
-  influxdb: 'upstream sells hosting (InfluxDB Cloud) — https://www.influxdata.com/products/influxdb-cloud/',
-  matomo: 'upstream sells hosting (Matomo Cloud) — https://matomo.org/pricing/',
-  meilisearch: 'upstream sells hosting (Meilisearch Cloud) — https://www.meilisearch.com/pricing',
-  metabase: 'upstream sells hosting (Metabase Cloud) — https://www.metabase.com/pricing/',
-  miniflux: 'upstream sells hosting (miniflux.app, $15/year) — https://miniflux.app/hosting.html',
-  mattermost: 'upstream sells hosting (Mattermost Cloud) — https://mattermost.com/pricing/',
-  odoo: 'upstream sells hosting (Odoo Online / Odoo.sh) — https://www.odoo.com/pricing',
-  openproject: 'upstream sells hosting (OpenProject cloud) — https://www.openproject.org/pricing/',
-  sonarqube: 'upstream sells hosting (SonarQube Cloud) — https://www.sonarsource.com/products/sonarcloud/',
-  typesense: 'upstream sells hosting (Typesense Cloud) — https://cloud.typesense.org/',
-  umami: 'upstream sells hosting (Umami Cloud) — https://umami.is/pricing',
+  'cal-com': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (cal.com paid plans) — https://cal.com/pricing' },
+  clickhouse: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (ClickHouse Cloud) — https://clickhouse.com/cloud' },
+  ghost: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Ghost Pro) — https://ghost.org/pricing/' },
+  gitea: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Gitea Cloud) — https://about.gitea.com/pricing' },
+  glitchtip: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (app.glitchtip.com) — https://glitchtip.com/pricing' },
+  grafana: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Grafana Cloud) — https://grafana.com/products/cloud/' },
+  healthchecks: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (healthchecks.io, by the project authors) — https://healthchecks.io/pricing/' },
+  influxdb: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (InfluxDB Cloud) — https://www.influxdata.com/products/influxdb-cloud/' },
+  matomo: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Matomo Cloud) — https://matomo.org/pricing/' },
+  meilisearch: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Meilisearch Cloud) — https://www.meilisearch.com/pricing' },
+  metabase: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Metabase Cloud) — https://www.metabase.com/pricing/' },
+  miniflux: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (miniflux.app, $15/year) — https://miniflux.app/hosting.html' },
+  mattermost: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Mattermost Cloud) — https://mattermost.com/pricing/' },
+  odoo: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Odoo Online / Odoo.sh) — https://www.odoo.com/pricing' },
+  openproject: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (OpenProject cloud) — https://www.openproject.org/pricing/' },
+  sonarqube: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (SonarQube Cloud) — https://www.sonarsource.com/products/sonarcloud/' },
+  typesense: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Typesense Cloud) — https://cloud.typesense.org/' },
+  umami: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Umami Cloud) — https://umami.is/pricing' },
 
   // Second pass over the same test, each checked against the project's own site.
-  anythingllm: 'upstream sells hosting (AnythingLLM cloud, $50/mo) — https://anythingllm.com/pricing',
-  baserow: 'upstream sells hosting (Baserow Premium/Advanced) — https://baserow.io/pricing',
-  documenso: 'upstream sells hosting (Documenso cloud plans) — https://documenso.com/pricing',
-  formbricks: 'upstream sells hosting (Formbricks Cloud) — https://formbricks.com/pricing',
-  grist: 'upstream sells hosting (Grist Labs cloud plans) — https://www.getgrist.com/pricing/',
-  linkwarden: 'upstream sells hosting (Linkwarden cloud, $3/mo) — https://linkwarden.app/pricing',
-  mariadb: 'upstream sells hosting (MariaDB Cloud) — https://mariadb.com/products/skysql/',
-  mysql: 'upstream sells hosting (Oracle MySQL HeatWave Service) — https://www.oracle.com/mysql/',
-  ntfy: 'upstream sells hosting (ntfy.sh paid plans, by the author) — https://ntfy.sh/',
-  openobserve: 'upstream sells hosting (OpenObserve Cloud) — https://openobserve.ai/pricing',
-  penpot: 'upstream sells hosting (Penpot paid tiers) — https://penpot.app/pricing',
-  qdrant: 'upstream sells hosting (Qdrant Cloud) — https://qdrant.tech/pricing/',
-  redis: 'upstream sells hosting (Redis Cloud) — https://redis.io/pricing/',
-  teable: 'upstream sells hosting (Teable Pro/Business) — https://teable.ai/pricing',
-  twenty: 'upstream sells hosting (Twenty cloud, $9/user/mo) — https://twenty.com/pricing',
-  victoriametrics: 'upstream sells hosting (VictoriaMetrics Cloud) — https://victoriametrics.com/products/cloud/',
+  anythingllm: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (AnythingLLM cloud, $50/mo) — https://anythingllm.com/pricing' },
+  baserow: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Baserow Premium/Advanced) — https://baserow.io/pricing' },
+  documenso: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Documenso cloud plans) — https://documenso.com/pricing' },
+  formbricks: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Formbricks Cloud) — https://formbricks.com/pricing' },
+  grist: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Grist Labs cloud plans) — https://www.getgrist.com/pricing/' },
+  linkwarden: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Linkwarden cloud, $3/mo) — https://linkwarden.app/pricing' },
+  mariadb: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (MariaDB Cloud) — https://mariadb.com/products/skysql/' },
+  mysql: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Oracle MySQL HeatWave Service) — https://www.oracle.com/mysql/' },
+  ntfy: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (ntfy.sh paid plans, by the author) — https://ntfy.sh/' },
+  openobserve: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (OpenObserve Cloud) — https://openobserve.ai/pricing' },
+  penpot: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Penpot paid tiers) — https://penpot.app/pricing' },
+  qdrant: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Qdrant Cloud) — https://qdrant.tech/pricing/' },
+  redis: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Redis Cloud) — https://redis.io/pricing/' },
+  teable: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Teable Pro/Business) — https://teable.ai/pricing' },
+  twenty: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Twenty cloud, $9/user/mo) — https://twenty.com/pricing' },
+  victoriametrics: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (VictoriaMetrics Cloud) — https://victoriametrics.com/products/cloud/' },
 
   // Upstream is no longer maintained. A catalogue that keeps offering an archived
   // project is selling something nobody will fix — every future CVE in it stays
@@ -112,13 +112,13 @@
   // This is checkable rather than remembered: gen-forge already asks each GitHub
   // repository about itself, and `archived` is one field further. Worth deriving
   // so the next one is caught rather than noticed.
-  minio: 'upstream archived on 2026-04-24 — https://github.com/minio/minio (repository is read-only)',
-  maybe: 'upstream archived on 2025-07-24 — https://github.com/maybe-finance/maybe',
-  overseerr: 'upstream archived on 2026-02-15 — https://github.com/sct/overseerr',
-  'pingvin-share': 'upstream archived on 2026-05-18 — https://github.com/stonith404/pingvin-share',
-  readarr: 'upstream archived on 2025-06-27 — https://github.com/Readarr/Readarr',
+  minio: { reason: 'upstream-archived', note: 'upstream archived on 2026-04-24 — https://github.com/minio/minio (repository is read-only)' },
+  maybe: { reason: 'upstream-archived', note: 'upstream archived on 2025-07-24 — https://github.com/maybe-finance/maybe' },
+  overseerr: { reason: 'upstream-archived', note: 'upstream archived on 2026-02-15 — https://github.com/sct/overseerr' },
+  'pingvin-share': { reason: 'upstream-archived', note: 'upstream archived on 2026-05-18 — https://github.com/stonith404/pingvin-share' },
+  readarr: { reason: 'upstream-archived', note: 'upstream archived on 2025-06-27 — https://github.com/Readarr/Readarr' },
 
   // Undeployable as packaged: an image it needs does not exist. Not a licence or a
   // maintenance judgement — the thing simply cannot start.
-  bigcapital: 'docker.io/bigcapitalhq/gateway does not exist (siblings server and webapp do); the workload cannot run without its gateway',
+  bigcapital: { reason: 'undeployable', note: 'docker.io/bigcapitalhq/gateway does not exist (siblings server and webapp do); the workload cannot run without its gateway' },
 }
