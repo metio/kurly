@@ -44,7 +44,17 @@ function(
   // point of a Thanos Ruler over a plain Prometheus rule evaluator. Passed
   // verbatim (the operator's schema); the `dnssrv+` prefix makes the operator
   // resolve the SRV record so every Query replica is used.
-  queryEndpoints=[],
+  //
+  // Defaulted to the sibling query stage rather than left empty, because the
+  // operator REFUSES a ThanosRuler with no query endpoint — "thanos ruler
+  // requires query config or at least one query endpoint to be specified" —
+  // and builds no StatefulSet at all. An empty default passes the CRD schema,
+  // so nothing short of a real operator notices; the workload simply never
+  // starts. A consumer whose Query lives elsewhere passes its own.
+  // A bare Service name, so it resolves in whatever namespace the ruler is
+  // deployed into — the stage takes no namespace parameter and should not
+  // invent one.
+  queryEndpoints=['dnssrv+_http._tcp.thanos-query'],
   // The Alertmanager targets for firing alerts — plain URLs, no auth. For
   // authenticated or TLS Alertmanagers, leave this empty and reference a Secret
   // you provide through `spec.alertmanagersConfig` (kurly never mints the Secret;

@@ -3648,14 +3648,21 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The Alertmanager. alertmanagerConfigSelector (verbatim operator schema) decides which AlertmanagerConfig objects supply routing/receivers; {} selects everything, none runs the operator default. Wire a Prometheus to it through that workload's spec escape (alerting.alertmanagers -> alertmanager-operated:web). Reach it at alertmanager-operated.<namespace>.svc:9093.",
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/alertmanager/server.libsonnet",
                "kind": "alertmanager",
-               "posture": null,
+               "posture": {
+                  "multiTenantSafe": null,
+                  "ownUserNamespace": null,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": null
+               },
                "runs": {
                   "digest": "sha256:9e082985f56f4c8c9f724e18f2288c6708f472e56a5286b8863d080434ea065d",
                   "image": "docker.io/prom/alertmanager:v0.33.1@sha256:9e082985f56f4c8c9f724e18f2288c6708f472e56a5286b8863d080434ea065d",
@@ -6269,7 +6276,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The CassandraDatacenter CR. name is the datacenter name; clusterName defaults to it. size is the node count. config is extra cassandra.yaml/JVM tuning (cass-operator schema, verbatim). Render with kurly.list.",
@@ -6696,7 +6705,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The PostgreSQL Cluster CR. Adapt it with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource, not a base kind). Point it at a cnpg-image-catalog with catalog/major to keep the image choice in one place, or pin imageName directly; the two are mutually exclusive.",
@@ -6761,7 +6772,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": true,
                "clusterScopedBecause": [
                   "clusterScopedObjects"
@@ -6815,7 +6828,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "A namespaced ImageCatalog, owned by the team that owns the databases. Keys of `images` are PostgreSQL major versions; a cnpg-cluster pins one with catalog/major and the catalog owns the patch.",
@@ -16479,8 +16494,7 @@
                   }
                ],
                "bsi": {
-                  "requirements": [ ],
-                  "violates": [ ]
+                  "applicable": false
                },
                "clusterScoped": false,
                "declaredRequests": null,
@@ -16585,8 +16599,7 @@
                   }
                ],
                "bsi": {
-                  "requirements": [ ],
-                  "violates": [ ]
+                  "applicable": false
                },
                "clusterScoped": false,
                "declaredRequests": null,
@@ -16728,8 +16741,7 @@
                   }
                ],
                "bsi": {
-                  "requirements": [ ],
-                  "violates": [ ]
+                  "applicable": false
                },
                "clusterScoped": false,
                "declaredRequests": null,
@@ -17248,7 +17260,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The Keycloak server. It needs a PostgreSQL database: dbHost/dbName/dbSecret default to a cnpg-cluster named keycloak-db (its -rw Service and the -app Secret CNPG mints, keys username/password). hostname is the public URL for production; tlsSecret names the cert Keycloak terminates, or plain HTTP (httpEnabled) behind a TLS-terminating proxy. The operator chooses the Keycloak image unless image pins one. kurly authors no Secret — the database and TLS Secrets are the consumer's.",
@@ -19207,7 +19221,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The LokiStack. size is the operator's t-shirt scaling (1x.demo is the smallest, for a test cluster; production wants 1x.extra-small+). storageSecret names the object-storage Secret you create (keys bucketnames/endpoint/access_key_id/access_key_secret/region) — point it at the seaweedfs workload's S3. The operator chooses the Loki image, so there is none to pin. Reach it at the gateway Service lokistack-gateway-http.",
@@ -23409,7 +23425,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The MySQL InnoDBCluster CR. Adapt with the parameters and render with kurly.list — composed by parameter, not by + feature (it is a custom resource). secretName is a Secret you provide with rootUser/rootHost/rootPassword. instances are Group Replication members (odd count for quorum); routerInstances the routing tier.",
@@ -26150,7 +26168,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The OpenSearchCluster CR. replicas is the default node pool size (each node is cluster_manager+data+ingest; split into dedicated pools via the raw + hatch for large clusters). dashboards runs OpenSearch Dashboards alongside. Render with kurly.list.",
@@ -29609,7 +29629,10 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "requirements": [ ],
+                  "violates": [ ]
+               },
                "clusterScoped": true,
                "clusterScopedBecause": [
                   "clusterRbac"
@@ -29619,7 +29642,12 @@
                "id": "server",
                "importPath": "github.com/metio/kurly/workloads/prometheus/server.libsonnet",
                "kind": "prometheus",
-               "posture": null,
+               "posture": {
+                  "multiTenantSafe": null,
+                  "ownUserNamespace": null,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": null
+               },
                "runs": {
                   "digest": "sha256:3c42b892cf723fa54d2f262c37a0e1f80aa8c8ddb1da7b9b0df9455a35a7f893",
                   "image": "docker.io/prom/prometheus:v3.13.1@sha256:3c42b892cf723fa54d2f262c37a0e1f80aa8c8ddb1da7b9b0df9455a35a7f893",
@@ -34993,7 +35021,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The TempoStack. storageSecret names the object-storage Secret you create (keys bucket/endpoint/access_key_id/access_key_secret) — point it at the seaweedfs workload's S3. storageSize is the per-component PVC. The operator chooses the Tempo image, so there is none to pin. Send spans to tempo-<name>-distributor (OTLP :4317/:4318) and read them from Grafana via tempo-<name>-query-frontend:3200.",
@@ -35568,14 +35598,21 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "The Thanos Ruler as a prometheus-operator ThanosRuler custom resource. queryEndpoints (verbatim operator schema, dnssrv+ resolves every Query replica) are what it evaluates rules against; ruleSelector/ruleNamespaceSelector decide which PrometheusRule objects it loads ({} selects everything, none selects nothing). alertmanagersUrl lists plain Alertmanager targets; for authenticated ones reference your own Secret through spec.alertmanagersConfig. Reach it at thanos-ruler-operated.<namespace>.svc:10902.",
                "id": "ruler",
                "importPath": "github.com/metio/kurly/workloads/thanos/ruler.libsonnet",
                "kind": "thanos-ruler",
-               "posture": null,
+               "posture": {
+                  "multiTenantSafe": null,
+                  "ownUserNamespace": null,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": null
+               },
                "runs": {
                   "digest": "sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "image": "quay.io/thanos/thanos:v0.42.2@sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
@@ -37235,7 +37272,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "A ReplicationSource: what to copy, where to, how often, and how much to keep. Restic fields kurly does not model pass through verbatim via `restic`, which is merged last.",
@@ -37381,7 +37420,9 @@
                      "type": "object"
                   }
                ],
-               "bsi": null,
+               "bsi": {
+                  "applicable": false
+               },
                "clusterScoped": false,
                "declaredRequests": null,
                "help": "A ReplicationDestination: the half that proves the other half. Restores the latest snapshot once, into a volume VolSync provisions (capacity) or one that already exists (destinationPVC); restoreAsOf and previous walk back past a corruption that was itself backed up.",

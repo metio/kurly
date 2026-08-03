@@ -85,6 +85,24 @@ kubectl apply --filename="${work}/policies.json" >/dev/null
 jsonnet -e 'local b = import "bollwerk/bollwerk.libsonnet";
   [ i.metadata.name for i in b.list.items if i.kind == "ValidatingAdmissionPolicy" ]' > "${work}/names.json"
 
+# The resource types the policies actually match. A stage that renders nothing in
+# this set cannot be judged by any of them — which is a different fact from "we
+# could not ask", and the catalogue publishes it as one. Derived from the
+# policies rather than listed here, so a new matchConstraint is picked up.
+inScopeKinds="$(jsonnet -e 'local b = import "bollwerk/bollwerk.libsonnet";
+  local used = std.set([
+    r.resources[i]
+    for p in b.list.items
+    if p.kind == "ValidatingAdmissionPolicy"
+    for r in p.spec.matchConstraints.resourceRules
+    for i in std.range(0, std.length(r.resources) - 1)
+  ]);
+  // A resource the map does not name would silently drop out of scope.
+  assert std.all([std.objectHas(b.resourceKinds, u) for u in used]) :
+         "bollwerk matches a resource resourceKinds does not name";
+  std.join("|", std.set([b.resourceKinds[u] for u in used]))' | jq -r .)"
+export inScopeKinds
+
 # A binding is not enforced the instant it lands; give the API server a moment to
 # pick the set up before trusting a verdict.
 sleep 10
@@ -123,9 +141,22 @@ for dir in workloads/*/; do
       unevaluated="${unevaluated}${id}/${stage} "
       continue
     fi
-    # Warnings arrive on stderr; a rejection means the object never reached the
-    # policies (a custom resource without its CRD), which is not a verdict.
-    warnings="$(kubectl apply --namespace="$ns" --dry-run=server --filename="$render" 2>&1 >/dev/null || true)"
+    # Judge the objects the policies can see. A stage that mixes a custom
+    # resource with a ServiceAccount had the whole apply rejected for the CRD it
+    # needs, taking the judgeable half with it — so the in-scope objects are
+    # applied on their own.
+    jq --arg re "^(${inScopeKinds})$" \
+      '{apiVersion, kind, items: [.items[] | select(.kind | test($re))]}' \
+      "$render" > "${render}.inscope"
+    # Nothing in scope at all — a stage that is only custom resources. Applying
+    # an empty list succeeds and draws no warnings, which would be written here
+    # as "judged, violates nothing". It was never judged: no policy selects any
+    # of it. Left out, so this file holds verdicts and not silence dressed as
+    # one. catalog.jsonnet marks these applicable:false from what they render.
+    if [ "$(jq '.items | length' "${render}.inscope")" -eq 0 ]; then
+      continue
+    fi
+    warnings="$(kubectl apply --namespace="$ns" --dry-run=server --filename="${render}.inscope" 2>&1 >/dev/null || true)"
     if grep -q 'no matches for kind\|failed to create typed patch object\|is invalid' <<<"$warnings"; then
       unevaluated="${unevaluated}${id}/${stage} "
       continue

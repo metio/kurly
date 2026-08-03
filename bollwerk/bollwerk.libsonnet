@@ -41,6 +41,24 @@
     'lscr.io',
   ],
 
+  // The Kubernetes KIND behind each resource name a matchConstraint can name.
+  // `daemonsets` -> `DaemonSet` is not a rule any string function knows, so it is
+  // written out — and anything reading this map should assert it covers every
+  // resource the rules below actually use, because a missing entry silently
+  // narrows what is considered in scope.
+  resourceKinds:: {
+    pods: 'Pod',
+    deployments: 'Deployment',
+    daemonsets: 'DaemonSet',
+    statefulsets: 'StatefulSet',
+    jobs: 'Job',
+    cronjobs: 'CronJob',
+    serviceaccounts: 'ServiceAccount',
+    services: 'Service',
+    networkpolicies: 'NetworkPolicy',
+    persistentvolumes: 'PersistentVolume',
+  },
+
   // ---- shared matchConstraints resourceRules -----------------------------------
   local writeOps = ['CREATE', 'UPDATE'],
 

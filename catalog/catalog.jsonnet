@@ -20,6 +20,7 @@ local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
 local bsiViolations = import './bsi.gen.libsonnet';
+local bollwerk = import '../bollwerk/bollwerk.libsonnet';
 local excluded = import './excluded.libsonnet';
 local forge = import './forge.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
@@ -579,8 +580,38 @@ local declaredRequests(fn) =
     std.flattenArrays([entries(t) for t in tmpls]);
 
 local posture(fn) =
-  local tmpls = podTemplates(main.list(fn()).items);
-  if tmpls == [] then null
+  local items = main.list(fn()).items;
+  local tmpls = podTemplates(items);
+  // A custom resource whose schema takes a POD securityContext, which kurly
+  // fills in — the Prometheus operator's CRD is one. The operator creates the
+  // pod, but what that pod runs as is stated here, in kurly's manifest, so the
+  // posture IS kurly's to report. Reading it as "not ours to state" published a
+  // null for a stage that says runAsNonRoot: true in plain sight.
+  //
+  // Only a pod-level securityContext counts. A CR field of the same name that
+  // configures something else would be a different thing wearing the word.
+  local crPodSecurity = [
+    item.spec.securityContext
+    for item in items
+    if std.objectHas(item, 'spec')
+       && std.isObject(std.get(item.spec, 'securityContext', null))
+       && !std.objectHas(item.spec, 'template')
+       && std.length(std.setInter(
+         std.set(std.objectFields(item.spec.securityContext)),
+         ['runAsNonRoot', 'runAsUser', 'fsGroup', 'seccompProfile']
+       )) > 0
+  ];
+  if tmpls == [] && crPodSecurity != [] then
+    // No container list to read, so the container-level halves are unknown
+    // rather than false: the operator decides them.
+    local nonRoot = std.all([std.get(c, 'runAsNonRoot', false) for c in crPodSecurity]);
+    {
+      runsAsRoot: !nonRoot,
+      writableRootFilesystem: null,
+      ownUserNamespace: null,
+      multiTenantSafe: null,
+    }
+  else if tmpls == [] then null
   else
     local containers = std.flattenArrays([std.get(t.spec, 'containers', []) for t in tmpls]);
     local nonRoot = std.all([std.get(std.get(t.spec, 'securityContext', {}), 'runAsNonRoot', false) for t in tmpls]);
@@ -973,8 +1004,41 @@ local bsiPolicies = {
 // Which of them a stage breaks, as an API server judged it (gen-bsi). A stage the
 // generator could not judge — a custom resource whose CRD it does not install —
 // carries null rather than an empty list, because "not measured" is not "clean".
-local bsiOf(key) =
-  if !std.objectHas(bsiViolations, key) then null
+// The Kubernetes kinds bollwerk's policies select. Derived from the policies
+// themselves rather than listed by hand, so a new matchConstraint widens this
+// automatically — with a map from the plural resource name to the kind, because
+// `daemonsets` -> `DaemonSet` is not a rule any string function knows.
+local kindOfResource = bollwerk.resourceKinds;
+local bollwerkResources = std.set([
+  resource
+  for policy in bollwerk.list.items
+  if policy.kind == 'ValidatingAdmissionPolicy'
+  for rule in policy.spec.matchConstraints.resourceRules
+  for resource in rule.resources
+]);
+// A resource bollwerk started matching that this file cannot name is a silent
+// narrowing of scope — every stage rendering only that kind would quietly read
+// as out of scope. Fail instead.
+assert std.all([std.objectHas(kindOfResource, r) for r in bollwerkResources]) :
+       'catalog: bollwerk matches a resource kindOfResource does not name — %s' % [
+  [r for r in bollwerkResources if !std.objectHas(kindOfResource, r)],
+];
+local bollwerkKinds = std.set([kindOfResource[r] for r in bollwerkResources]);
+
+// What the bollwerk policies say about a stage, in three states rather than two.
+//
+// A stage that renders ONLY custom resources — a Prometheus, a LokiStack, a CNPG
+// Cluster — is not unmeasured: no policy has a matchConstraint that selects any
+// of it, so there is nothing for them to say. Installing the operator would not
+// change that. `applicable: false` states it, where a null would leave a
+// consumer unable to tell "no rule reaches this" from "nobody asked".
+//
+// null still means nobody asked, and still must never be read as compliant.
+local bsiOf(key, fn) =
+  local kinds = std.set([item.kind for item in main.list(fn()).items]);
+  local inScope = std.setInter(kinds, bollwerkKinds);
+  if std.length(inScope) == 0 then { applicable: false }
+  else if !std.objectHas(bsiViolations, key) then null
   else {
     violates: bsiViolations[key],
     // The requirements those violations touch, deduplicated: a consumer showing
@@ -1072,7 +1136,7 @@ local workloadEntries =
         + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])
         // Which bollwerk policies the stage breaks, from bsi.gen.libsonnet.
-        + { bsi: bsiOf(workload + '/' + stage) }
+        + { bsi: bsiOf(workload + '/' + stage, stageImports[workload + '/' + stage]) }
         for stage in std.objectFields(ann.workloads[workload].stages)
       ],
     }
