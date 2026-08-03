@@ -124,12 +124,29 @@ for dir in workloads/*/; do
   # --retry-times covers the transient failures skopeo recognises; the loop
   # covers the ones it does not (a timeout, a rate limit answered as an error),
   # backing off so a burst of three hundred inspects does not sustain one.
+  # skopeo refuses a reference carrying BOTH a tag and a digest, which is the
+  # shape of every pin here since images became digest-pinned. It failed on all
+  # of them, and because an unanswered inspect keeps the previous answer, the
+  # run reported "unreachable" for the lot and looked like a rate limit — while
+  # the workloads added after digest pinning simply never got labels at all.
+  # The tag is dropped and the digest kept: the digest identifies the bits.
+  local_ref="$image"
+  case "$image" in
+    *@sha256:*)
+      namePart="${image%@*}"
+      digestPart="${image#*@}"
+      # Strip the tag only when the last colon really introduces one — a
+      # registry port (host:5000/name@sha256:…) has a slash after its colon.
+      case "${namePart##*/}" in *:*) namePart="${namePart%:*}" ;; esac
+      local_ref="${namePart}@${digestPart}"
+      ;;
+  esac
   labels=""
   attempts=0
   for delay in 0 5 20; do
     attempts=$((attempts + 1))
     [ "$delay" = 0 ] || sleep "$delay"
-    if labels="$(timeout 60 skopeo inspect --retry-times 3 --no-tags "docker://${image}" 2>/dev/null | jq -c '.Labels // {}')"; then
+    if labels="$(timeout 60 skopeo inspect --retry-times 3 --no-tags "docker://${local_ref}" 2>/dev/null | jq -c '.Labels // {}')"; then
       [ -n "$labels" ] && break
     fi
     labels=""
