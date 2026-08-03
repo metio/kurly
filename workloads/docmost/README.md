@@ -50,7 +50,7 @@ recreated**. Point `STORAGE_DRIVER` at S3 to scale past the single writer.
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage. Delivered end to end through Flux, JaaS and stageset-controller on 2026-07-30, and observed rolling out.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage. Delivered end to end through Flux, JaaS and stageset-controller on 2026-08-02, and observed rolling out.
 
 ## Deploy with JaaS
 
