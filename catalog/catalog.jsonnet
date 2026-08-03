@@ -24,6 +24,7 @@ local bsiOperatorPods = import './bsi-operator.gen.libsonnet';
 local bollwerk = import '../bollwerk/bollwerk.libsonnet';
 local excluded = import './excluded.libsonnet';
 local consent = import './consent.libsonnet';
+local trademark = import './trademark.libsonnet';
 local forge = import './forge.gen.libsonnet';
 local maturity = import './maturity.libsonnet';
 local signatures = import './signatures.gen.libsonnet';
@@ -1111,6 +1112,12 @@ local workloadEntries =
       maturity: maturity.of(workload),
     }
     + softwareFacts(workload)
+    // What the PROJECT's trademark policy says. ABSENT means nobody looked, and
+    // a consumer must not read that as permission — a trademark binds whether or
+    // not its holder has heard of the person publishing this. Deliberately never
+    // derived from `license`: the code grant and the mark are separate and
+    // routinely disagree.
+    + (local t = std.get(trademark, workload, null); if t == null then {} else { trademark: t })
     + {
       // The external infrastructure the workload depends on: a LIST of
       // { kind, required, engine?, extensions? }. Which kinds it needs is
@@ -1249,6 +1256,18 @@ local workloadEntries =
     std.member(['repository-commit', 'signed-email', 'dns-txt'], consent[id].verifiedBy)
     for id in std.objectFields(consent)
   ]) : 'catalog: a consent record verified by an unrecognised method',
+  // A trademark posture with nothing behind it is an assertion about somebody
+  // else's rights that a reader cannot check.
+  assert std.all([
+    std.objectHas(trademark[id], 'policy') && std.objectHas(trademark[id], 'posture')
+    for id in std.objectFields(trademark)
+  ]) : 'catalog: a trademark record without a posture and the policy it was read from',
+  assert std.all([
+    std.member(['restricted', 'unrestricted'], trademark[id].posture)
+    for id in std.objectFields(trademark)
+  ]) : 'catalog: a trademark record with an unknown posture (restricted, unrestricted)',
+  assert std.all([std.objectHas(ann.workloads, id) for id in std.objectFields(trademark)]) :
+         'catalog: trademark.libsonnet names a workload that does not exist',
   // Every exclusion states a reason from the closed vocabulary, so a consumer
   // switches on it rather than parsing the sentence beside it.
   assert std.all([

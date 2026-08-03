@@ -12,7 +12,7 @@
     source: 'https://github.com/Bubka/2FAuth',
     homepage: 'https://github.com/Bubka/2FAuth',
   },
-  'adguardhome': {
+  adguardhome: {
     license: 'GPL-3.0',
     title: 'AdGuard Home',
     source: 'https://github.com/AdguardTeam/AdGuardHome',
@@ -24,65 +24,65 @@
     source: 'https://github.com/linuxserver/docker-airsonic-advanced',
     homepage: 'https://github.com/linuxserver/docker-airsonic-advanced/packages',
   },
-  'alertmanager': {
+  alertmanager: {
     source: 'https://github.com/prometheus/alertmanager',
   },
-  'alist': {
+  alist: {
     license: 'AGPL-3.0',
     title: 'alist',
     source: 'https://github.com/AlistGo/alist',
     homepage: 'https://github.com/AlistGo/alist',
   },
-  'answer': {
+  answer: {
     source: 'https://github.com/apache/answer',
   },
-  'apprise': {
+  apprise: {
     license: 'MIT',
     title: 'apprise-api',
     source: 'https://github.com/caronc/apprise-api',
     homepage: 'https://github.com/caronc/apprise-api',
   },
-  'audiobookshelf': {
+  audiobookshelf: {
     license: 'GPL-3.0',
     title: 'audiobookshelf',
     source: 'https://github.com/advplyr/audiobookshelf',
     homepage: 'https://github.com/advplyr/audiobookshelf',
   },
-  'authelia': {
+  authelia: {
     license: 'Apache-2.0',
     title: 'authelia',
     source: 'https://github.com/authelia/authelia/tree/86f0463547329ebe778c82a168c41614a71bb0f6',
     homepage: 'https://github.com/authelia/authelia/pkgs/container/authelia',
   },
-  'authentik': {
+  authentik: {
     source: 'https://github.com/goauthentik/authentik',
     homepage: 'https://goauthentik.io',
   },
-  'baikal': {
+  baikal: {
     license: 'MIT',
     title: 'Baikal',
     source: 'https://github.com/ckulka/baikal-docker',
     homepage: 'https://hub.docker.com/r/ckulka/baikal',
   },
-  'bazarr': {
+  bazarr: {
     license: 'GPL-3.0-only',
     title: 'Bazarr',
     source: 'https://github.com/linuxserver/docker-bazarr',
     homepage: 'https://github.com/linuxserver/docker-bazarr/packages',
   },
-  'beszel': {
+  beszel: {
     license: 'MIT',
     title: 'beszel',
     source: 'https://github.com/henrygd/beszel',
     homepage: 'https://github.com/henrygd/beszel',
   },
-  'blinko': {
+  blinko: {
     license: 'GPL-3.0',
     title: 'blinko',
     source: 'https://github.com/blinkospace/blinko',
     homepage: 'https://github.com/blinkospace/blinko',
   },
-  'bookstack': {
+  bookstack: {
     license: 'GPL-3.0-only',
     title: 'Bookstack',
     source: 'https://github.com/linuxserver/docker-bookstack',
@@ -100,84 +100,84 @@
     source: 'https://github.com/linuxserver/docker-calibre-web',
     homepage: 'https://github.com/linuxserver/docker-calibre-web/packages',
   },
-  'calibre': {
+  calibre: {
     license: 'GPL-3.0-only',
     title: 'Calibre',
     source: 'https://github.com/linuxserver/docker-calibre',
     homepage: 'https://github.com/linuxserver/docker-calibre/packages',
   },
-  'changedetection': {
+  changedetection: {
     license: 'Apache-2.0',
     title: 'changedetection.io',
     source: 'https://github.com/dgtlmoon/changedetection.io',
     homepage: 'https://changedetection.io',
   },
-  'cobalt': {
+  cobalt: {
     license: 'AGPL-3.0',
     title: 'cobalt',
     source: 'https://github.com/imputnet/cobalt',
     homepage: 'https://github.com/imputnet/cobalt',
   },
-  'convertx': {
+  convertx: {
     license: 'AGPL-3.0',
     title: 'ConvertX',
     source: 'https://github.com/C4illin/ConvertX',
     homepage: 'https://github.com/C4illin/ConvertX',
   },
-  'cyberchef': {
+  cyberchef: {
     license: 'Apache-2.0',
     title: 'CyberChef',
     source: 'https://github.com/gchq/CyberChef',
     homepage: 'https://github.com/gchq/CyberChef',
   },
-  'dashy': {
+  dashy: {
     license: 'MIT',
     title: 'Dashy',
     source: 'https://github.com/lissy93/dashy',
     homepage: 'https://dashy.to',
   },
-  'davis': {
+  davis: {
     license: 'MIT',
     title: 'davis',
     source: 'https://github.com/tchapi/davis',
     homepage: 'https://github.com/tchapi/davis',
   },
-  'davos': {
+  davos: {
     license: 'GPL-3.0-only',
     title: 'Davos',
     source: 'https://github.com/linuxserver/docker-davos',
     homepage: 'https://github.com/linuxserver/docker-davos/packages',
   },
-  'deluge': {
+  deluge: {
     license: 'GPL-3.0-only',
     title: 'Deluge',
     source: 'https://github.com/linuxserver/docker-deluge',
     homepage: 'https://github.com/linuxserver/docker-deluge/packages',
   },
-  'dex': {
+  dex: {
     license: 'Apache-2.0',
     title: 'dex',
     source: 'https://github.com/dexidp/dex',
     homepage: 'https://github.com/dexidp/dex',
   },
-  'docmost': {
+  docmost: {
     source: 'https://github.com/docmost/docmost',
   },
   'draw-io': {
     source: 'https://github.com/jgraph/docker-drawio',
     homepage: 'https://www.drawio.com',
   },
-  'drawio': {
+  drawio: {
     source: 'https://github.com/jgraph/docker-drawio',
     homepage: 'https://www.drawio.com',
   },
-  'duplicati': {
+  duplicati: {
     license: 'GPL-3.0-only',
     title: 'Duplicati',
     source: 'https://github.com/linuxserver/docker-duplicati',
     homepage: 'https://github.com/linuxserver/docker-duplicati/packages',
   },
-  'ejabberd': {
+  ejabberd: {
     license: 'GPL-2.0',
     title: 'docker-ejabberd',
     source: 'https://github.com/processone/docker-ejabberd',
@@ -189,24 +189,24 @@
     source: 'https://github.com/element-hq/element-web',
     homepage: 'https://github.com/element-hq/element-web',
   },
-  'esphome': {
+  esphome: {
     license: 'ESPHome',
     title: 'ESPHome',
     source: 'https://github.com/esphome/esphome',
     homepage: 'https://esphome.io/',
   },
-  'etherpad': {
+  etherpad: {
     license: 'Apache-2.0',
     title: 'etherpad',
     source: 'https://github.com/ether/etherpad',
     homepage: 'https://github.com/ether/etherpad',
   },
-  'ferretdb': {
+  ferretdb: {
     title: 'FerretDB',
     source: 'https://github.com/FerretDB/FerretDB',
     homepage: 'https://www.ferretdb.com/',
   },
-  'filebrowser': {
+  filebrowser: {
     source: 'https://github.com/filebrowser/filebrowser',
   },
   'firefly-iii': {
@@ -215,77 +215,77 @@
     source: 'https://dev.azure.com/Firefly-III/_git/MainImage',
     homepage: 'https://github.com/firefly-iii/docker',
   },
-  'flaresolverr': {
+  flaresolverr: {
     license: 'MIT',
     title: 'FlareSolverr',
     source: 'https://github.com/FlareSolverr/FlareSolverr',
     homepage: 'https://github.com/FlareSolverr/FlareSolverr',
   },
-  'foldingathome': {
+  foldingathome: {
     license: 'GPL-3.0-only',
     title: 'Foldingathome',
     source: 'https://github.com/linuxserver/docker-foldingathome',
     homepage: 'https://github.com/linuxserver/docker-foldingathome/packages',
   },
-  'forgejo': {
+  forgejo: {
     license: 'GPL-3.0-or-later',
     title: 'Forgejo. Beyond coding. We forge.',
     source: 'https://codeberg.org/forgejo/forgejo',
     homepage: 'https://forgejo.org',
   },
-  'freshrss': {
+  freshrss: {
     license: 'AGPL-3.0',
     title: 'FreshRSS',
     source: 'https://github.com/FreshRSS/FreshRSS',
     homepage: 'https://freshrss.org/',
   },
-  'gatus': {
+  gatus: {
     license: 'Apache-2.0',
     title: 'gatus',
     source: 'https://github.com/TwiN/gatus',
     homepage: 'https://github.com/TwiN/gatus',
   },
-  'ghostfolio': {
+  ghostfolio: {
     source: 'https://github.com/ghostfolio/ghostfolio',
   },
-  'gotenberg': {
+  gotenberg: {
     title: 'Gotenberg',
     source: 'https://github.com/gotenberg/gotenberg',
   },
-  'gotify': {
+  gotify: {
     source: 'https://github.com/gotify/server',
   },
-  'gotosocial': {
+  gotosocial: {
     license: 'AGPL-3.0-or-later',
     title: 'GoToSocial',
     source: 'https://codeberg.org/superseriousbusiness/gotosocial',
     homepage: 'https://docs.gotosocial.org',
   },
-  'grav': {
+  grav: {
     license: 'GPL-3.0-only',
     title: 'Grav',
     source: 'https://github.com/linuxserver/docker-grav',
     homepage: 'https://github.com/linuxserver/docker-grav/packages',
   },
-  'grocy': {
+  grocy: {
     license: 'GPL-3.0-only',
     title: 'Grocy',
     source: 'https://github.com/linuxserver/docker-grocy',
     homepage: 'https://github.com/linuxserver/docker-grocy/packages',
   },
-  'hedgedoc': {
+  hedgedoc: {
     license: 'AGPL-3.0',
     title: 'HedgeDoc production image(debian)',
     source: 'https://github.com/hedgedoc/container',
     homepage: 'https://hedgedoc.org',
   },
-  'heimdall': {
+  heimdall: {
     license: 'GPL-3.0-only',
     title: 'Heimdall',
     source: 'https://github.com/linuxserver/docker-heimdall',
     homepage: 'https://github.com/linuxserver/docker-heimdall/packages',
   },
-  'homarr': {
+  homarr: {
     license: 'Apache-2.0',
     title: 'homarr',
     source: 'https://github.com/homarr-labs/homarr',
@@ -297,103 +297,103 @@
     source: 'https://github.com/home-assistant/core',
     homepage: 'https://www.home-assistant.io/',
   },
-  'homebox': {
+  homebox: {
     license: 'AGPL-3.0',
     title: 'homebox',
     source: 'https://github.com/sysadminsmedia/homebox',
     homepage: 'https://github.com/sysadminsmedia/homebox',
   },
-  'homepage': {
+  homepage: {
     license: 'GPL-3.0',
     title: 'homepage',
     source: 'https://github.com/gethomepage/homepage',
     homepage: 'https://github.com/gethomepage/homepage',
   },
-  'homer': {
+  homer: {
     title: 'Homer Image',
     source: 'https://github.com/bastienwirtz/homer',
     homepage: 'https://hub.docker.com/r/b4bz/homer',
   },
-  'immich': {
+  immich: {
     license: 'AGPL-3.0',
     title: 'immich',
     source: 'https://github.com/immich-app/immich',
     homepage: 'https://github.com/immich-app/immich',
   },
-  'jackett': {
+  jackett: {
     license: 'GPL-3.0-only',
     title: 'Jackett',
     source: 'https://github.com/linuxserver/docker-jackett',
     homepage: 'https://github.com/linuxserver/docker-jackett/packages',
   },
-  'jellyfin': {
+  jellyfin: {
     license: 'GPL-3.0-only',
     title: 'Jellyfin',
     source: 'https://github.com/linuxserver/docker-jellyfin',
     homepage: 'https://github.com/linuxserver/docker-jellyfin/packages',
   },
-  'jellyseerr': {
+  jellyseerr: {
     license: 'MIT',
     title: 'Jellyseerr',
     source: 'https://github.com/fallenbagel/jellyseerr',
   },
-  'jenkins': {
+  jenkins: {
     license: 'MIT',
     title: 'Official Jenkins Docker image',
     source: 'https://github.com/jenkinsci/docker',
     homepage: 'https://www.jenkins.io/',
   },
-  'joplin': {
+  joplin: {
     title: 'Joplin Server',
     source: 'https://github.com/laurent22/joplin',
     homepage: 'https://joplinapp.org/',
   },
-  'kanboard': {
+  kanboard: {
     license: 'MIT',
     title: 'Kanboard',
     source: 'https://github.com/kanboard/kanboard',
     homepage: 'https://kanboard.org',
   },
-  'karakeep': {
+  karakeep: {
     source: 'https://github.com/karakeep-app/karakeep',
   },
-  'kimai': {
+  kimai: {
     license: 'AGPL-3.0',
     title: 'Kimai',
     source: 'https://github.com/kimai/kimai',
     homepage: 'https://www.kimai.org/',
   },
-  'komga': {
+  komga: {
     title: 'ubuntu',
     source: 'https://github.com/gotson/komga',
   },
-  'lemmy': {
+  lemmy: {
     license: 'AGPL-3.0-or-later',
     source: 'https://github.com/LemmyNet/lemmy',
     homepage: 'https://github.com/LemmyNet/lemmy',
   },
-  'librespeed': {
+  librespeed: {
     license: 'GPL-3.0-only',
     title: 'Librespeed',
     source: 'https://github.com/linuxserver/docker-librespeed',
     homepage: 'https://github.com/linuxserver/docker-librespeed/packages',
   },
-  'lidarr': {
+  lidarr: {
     license: 'GPL-3.0-only',
     title: 'Lidarr',
     source: 'https://github.com/linuxserver/docker-lidarr',
     homepage: 'https://github.com/linuxserver/docker-lidarr/packages',
   },
-  'linkding': {
+  linkding: {
     source: 'https://github.com/sissbruecker/linkding',
   },
-  'listmonk': {
+  listmonk: {
     license: 'AGPL-3.0',
     title: 'listmonk',
     source: 'https://github.com/knadh/listmonk',
     homepage: 'https://github.com/knadh/listmonk',
   },
-  'lldap': {
+  lldap: {
     license: 'GPL-3.0',
     title: 'lldap',
     source: 'https://github.com/lldap/lldap',
@@ -405,31 +405,31 @@
     source: 'https://github.com/lobehub/lobe-chat',
     homepage: 'https://github.com/lobehub/lobe-chat',
   },
-  'lychee': {
+  lychee: {
     license: 'MIT',
     title: 'Lychee',
     source: 'https://github.com/LycheeOrg/Lychee',
     homepage: 'https://github.com/LycheeOrg/Lychee',
   },
-  'mailpit': {
+  mailpit: {
     license: 'MIT',
     title: 'Mailpit',
     source: 'https://github.com/axllent/mailpit',
     homepage: 'https://mailpit.axllent.org',
   },
-  'maloja': {
+  maloja: {
     license: 'GPL-3.0',
     title: 'maloja',
     source: 'https://github.com/krateng/maloja',
     homepage: 'https://github.com/krateng/maloja',
   },
-  'mastodon': {
+  mastodon: {
     license: 'AGPL-3.0',
     title: 'mastodon',
     source: 'https://github.com/mastodon/mastodon',
     homepage: 'https://github.com/mastodon/mastodon',
   },
-  'mealie': {
+  mealie: {
     license: 'AGPL-3.0',
     title: 'mealie',
     source: 'https://github.com/mealie-recipes/mealie',
@@ -441,54 +441,54 @@
     source: 'https://github.com/mermaid-js/mermaid-live-editor',
     homepage: 'https://github.com/mermaid-js/mermaid-live-editor',
   },
-  'microbin': {
+  microbin: {
     license: 'BSD-3-Clause',
     title: 'microbin',
     source: 'https://github.com/szabodanika/microbin',
     homepage: 'https://github.com/szabodanika/microbin',
   },
-  'misskey': {
+  misskey: {
     license: 'AGPL-3.0',
     title: 'misskey',
     source: 'https://github.com/misskey-dev/misskey',
     homepage: 'https://github.com/misskey-dev/misskey',
   },
-  'monica': {
+  monica: {
     title: 'MonicaHQ, the Personal Relationship Manager',
     source: 'https://github.com/monicahq/docker',
     homepage: 'https://monicahq.com',
   },
-  'mosquitto': {
+  mosquitto: {
     license: 'EPL-2.0 OR BSD-3-Clause',
     title: 'eclipse-mosquitto',
     source: 'https://github.com/eclipse-mosquitto/mosquitto',
     homepage: 'https://mosquitto.org/',
   },
-  'mylar3': {
+  mylar3: {
     license: 'GPL-3.0-only',
     title: 'Mylar3',
     source: 'https://github.com/linuxserver/docker-mylar3',
     homepage: 'https://github.com/linuxserver/docker-mylar3/packages',
   },
-  'nats': {
+  nats: {
     license: 'Apache-2.0',
     title: 'NATS Server',
     source: 'https://github.com/nats-io/nats-docker',
     homepage: 'https://nats.io',
   },
-  'navidrome': {
+  navidrome: {
     license: 'GPL-3.0',
     title: 'navidrome',
     source: 'https://github.com/navidrome/navidrome',
     homepage: 'https://github.com/navidrome/navidrome',
   },
-  'netbootxyz': {
+  netbootxyz: {
     license: 'GPL-3.0-only',
     title: 'Netbootxyz',
     source: 'https://github.com/linuxserver/docker-netbootxyz',
     homepage: 'https://github.com/linuxserver/docker-netbootxyz/packages',
   },
-  'netbox': {
+  netbox: {
     license: 'Apache-2.0',
     title: 'NetBox Docker',
     source: 'https://github.com/netbox-community/netbox-docker',
@@ -497,19 +497,19 @@
   'node-red': {
     source: 'https://github.com/node-red/node-red-docker',
   },
-  'nzbget': {
+  nzbget: {
     license: 'GPL-3.0-only',
     title: 'Nzbget',
     source: 'https://github.com/linuxserver/docker-nzbget',
     homepage: 'https://github.com/linuxserver/docker-nzbget/packages',
   },
-  'nzbhydra2': {
+  nzbhydra2: {
     license: 'GPL-3.0-only',
     title: 'Nzbhydra2',
     source: 'https://github.com/linuxserver/docker-nzbhydra2',
     homepage: 'https://github.com/linuxserver/docker-nzbhydra2/packages',
   },
-  'ombi': {
+  ombi: {
     license: 'GPL-3.0-only',
     title: 'Ombi',
     source: 'https://github.com/linuxserver/docker-ombi',
@@ -521,19 +521,19 @@
     source: 'https://github.com/open-webui/open-webui',
     homepage: 'https://github.com/open-webui/open-webui',
   },
-  'opencost': {
+  opencost: {
     license: 'Apache-2.0',
     title: 'kubecost-cost-model',
     source: 'https://github.com/opencost/opencost',
     homepage: 'https://opencost.io',
   },
-  'openhab': {
+  openhab: {
     license: 'EPL-2.0',
     title: 'openHAB',
     source: 'https://github.com/openhab/openhab-docker',
     homepage: 'https://www.openhab.org/',
   },
-  'organizr': {
+  organizr: {
     title: 'organizr/base',
     source: 'https://github.com/Organizr/docker-organizr/tree/master',
     homepage: 'https://github.com/Organizr/docker-organizr/blob/master/README.md',
@@ -542,13 +542,13 @@
     license: 'Apache-2.0',
     source: 'https://github.com/open-telemetry/opentelemetry-collector-releases',
   },
-  'pairdrop': {
+  pairdrop: {
     license: 'GPL-3.0',
     title: 'PairDrop',
     source: 'https://github.com/schlagmichdoch/PairDrop',
     homepage: 'https://github.com/schlagmichdoch/PairDrop',
   },
-  'paisa': {
+  paisa: {
     license: 'AGPL-3.0',
     title: 'paisa',
     source: 'https://github.com/ananthakumaran/paisa',
@@ -560,41 +560,41 @@
     source: 'https://github.com/paperless-ngx/paperless-ngx',
     homepage: 'https://github.com/paperless-ngx/paperless-ngx',
   },
-  'passwordpusher': {
+  passwordpusher: {
     license: 'Apache-2.0',
     title: 'PasswordPusher',
     source: 'https://github.com/pglombardo/PasswordPusher',
     homepage: 'https://github.com/pglombardo/PasswordPusher',
   },
-  'photoprism': {
+  photoprism: {
     title: 'PhotoPrism® Plus (Ubuntu 26.04 LTS)',
     source: 'https://github.com/photoprism/photoprism',
   },
-  'photoview': {
+  photoview: {
     license: 'AGPL-3.0',
     title: 'photoview',
     source: 'https://github.com/photoview/photoview',
     homepage: 'https://github.com/photoview/photoview',
   },
-  'phpmyadmin': {
+  phpmyadmin: {
     license: 'GPL-2.0-only',
     title: 'Official phpMyAdmin Docker image',
     source: 'https://github.com/phpmyadmin/docker',
     homepage: 'https://github.com/phpmyadmin/docker#readme',
   },
-  'pihole': {
+  pihole: {
     license: 'NOASSERTION',
     title: 'docker-pi-hole',
     source: 'https://github.com/pi-hole/docker-pi-hole',
     homepage: 'https://github.com/pi-hole/docker-pi-hole',
   },
-  'pilos': {
+  pilos: {
     license: 'LGPL-2.1',
     title: 'PILOS',
     source: 'https://github.com/THM-Health/PILOS',
     homepage: 'https://github.com/THM-Health/PILOS',
   },
-  'piwigo': {
+  piwigo: {
     license: 'GPL-3.0-only',
     title: 'Piwigo',
     source: 'https://github.com/linuxserver/docker-piwigo',
@@ -606,31 +606,31 @@
     source: 'https://github.com/pocket-id/pocket-id',
     homepage: 'https://github.com/pocket-id/pocket-id',
   },
-  'pocketbase': {
+  pocketbase: {
     title: 'pocketbase-docker',
     source: 'https://github.com/muchobien/pocketbase-docker',
     homepage: 'https://github.com/muchobien/pocketbase-docker',
   },
-  'portainer': {
+  portainer: {
     title: 'Portainer CE',
     homepage: 'https://www.portainer.io',
   },
-  'privatebin': {
+  privatebin: {
     license: 'zlib-acknowledgement',
     source: 'https://github.com/PrivateBin/docker-nginx-fpm-alpine',
   },
-  'projectsend': {
+  projectsend: {
     license: 'GPL-3.0-only',
     title: 'Projectsend',
     source: 'https://github.com/linuxserver/docker-projectsend',
     homepage: 'https://github.com/linuxserver/docker-projectsend/packages',
   },
-  'prometheus': {
+  prometheus: {
     title: 'Prometheus',
     source: 'https://github.com/prometheus/prometheus',
     homepage: 'https://github.com/prometheus/prometheus',
   },
-  'prowlarr': {
+  prowlarr: {
     license: 'GPL-3.0-only',
     title: 'Prowlarr',
     source: 'https://github.com/linuxserver/docker-prowlarr',
@@ -642,28 +642,28 @@
     source: 'https://github.com/linuxserver/docker-pyload-ng',
     homepage: 'https://github.com/linuxserver/docker-pyload-ng/packages',
   },
-  'qbittorrent': {
+  qbittorrent: {
     license: 'GPL-3.0-only',
     title: 'Qbittorrent',
     source: 'https://github.com/linuxserver/docker-qbittorrent',
     homepage: 'https://github.com/linuxserver/docker-qbittorrent/packages',
   },
-  'radarr': {
+  radarr: {
     license: 'GPL-3.0-only',
     title: 'Radarr',
     source: 'https://github.com/linuxserver/docker-radarr',
     homepage: 'https://github.com/linuxserver/docker-radarr/packages',
   },
-  'rallly': {
+  rallly: {
     license: 'AGPL-3.0',
     title: 'rallly',
     source: 'https://github.com/lukevella/rallly',
     homepage: 'https://github.com/lukevella/rallly',
   },
-  'rocketchat': {
+  rocketchat: {
     source: 'https://github.com/RocketChat/Rocket.Chat',
   },
-  'roundcube': {
+  roundcube: {
     source: 'https://github.com/roundcube/roundcubemail-docker',
   },
   'rss-bridge': {
@@ -672,44 +672,44 @@
     source: 'https://github.com/RSS-Bridge/rss-bridge',
     homepage: 'https://github.com/RSS-Bridge/rss-bridge',
   },
-  'sabnzbd': {
+  sabnzbd: {
     license: 'GPL-3.0-only',
     title: 'Sabnzbd',
     source: 'https://github.com/linuxserver/docker-sabnzbd',
     homepage: 'https://github.com/linuxserver/docker-sabnzbd/packages',
   },
-  'searxng': {
+  searxng: {
     license: 'AGPL-3.0-or-later',
     title: 'SearXNG',
     source: 'https://github.com/searxng/searxng',
     homepage: 'https://searxng.org',
   },
-  'seatsurfing': {
+  seatsurfing: {
     source: 'https://github.com/seatsurfing/seatsurfing',
     homepage: 'https://seatsurfing.io',
   },
-  'seaweedfs': {
+  seaweedfs: {
     license: 'Apache-2.0',
     title: 'seaweedfs',
     source: 'https://github.com/seaweedfs/seaweedfs',
     homepage: 'https://github.com/seaweedfs/seaweedfs',
   },
-  'shiori': {
+  shiori: {
     source: 'https://github.com/go-shiori/shiori',
   },
-  'shlink': {
+  shlink: {
     license: 'MIT',
     title: 'shlink',
     source: 'https://github.com/shlinkio/shlink',
     homepage: 'https://github.com/shlinkio/shlink',
   },
-  'silverbullet': {
+  silverbullet: {
     license: 'MIT',
     title: 'silverbullet',
     source: 'https://github.com/silverbulletmd/silverbullet',
     homepage: 'https://github.com/silverbulletmd/silverbullet',
   },
-  'snappymail': {
+  snappymail: {
     license: 'AGPLv3',
     title: 'snappymail',
     source: 'https://github.com/the-djmaze/snappymail',
@@ -721,13 +721,13 @@
     source: 'https://github.com/grokability/snipe-it',
     homepage: 'https://github.com/grokability/snipe-it',
   },
-  'sonarr': {
+  sonarr: {
     license: 'GPL-3.0-only',
     title: 'Sonarr',
     source: 'https://github.com/linuxserver/docker-sonarr',
     homepage: 'https://github.com/linuxserver/docker-sonarr/packages',
   },
-  'spegel': {
+  spegel: {
     license: 'MIT',
     title: 'spegel',
     source: 'https://github.com/spegel-org/spegel',
@@ -739,74 +739,74 @@
     source: 'https://github.com/Stirling-Tools/Stirling-PDF',
     homepage: 'https://github.com/Stirling-Tools/Stirling-PDF',
   },
-  'synapse': {
+  synapse: {
     license: 'AGPL-3.0-or-later OR LicenseRef-Element-Commercial',
     source: 'https://github.com/element-hq/synapse',
     homepage: 'https://github.com/element-hq/synapse',
   },
-  'syncthing': {
+  syncthing: {
     license: 'GPL-3.0-only',
     title: 'Syncthing',
     source: 'https://github.com/linuxserver/docker-syncthing',
     homepage: 'https://github.com/linuxserver/docker-syncthing/packages',
   },
-  'tachidesk': {
+  tachidesk: {
     license: 'MPL-2.0',
     title: 'Suwayomi Docker',
     source: 'https://github.com/suwayomi/docker-tachidesk',
     homepage: 'https://github.com/suwayomi/docker-tachidesk/pkgs/container/tachidesk',
   },
-  'tandoor': {
+  tandoor: {
     license: 'NOASSERTION',
     title: 'recipes',
     source: 'https://github.com/TandoorRecipes/recipes',
     homepage: 'https://github.com/TandoorRecipes/recipes',
   },
-  'tautulli': {
+  tautulli: {
     license: 'GPL-3.0-only',
     title: 'Tautulli',
     source: 'https://github.com/linuxserver/docker-tautulli',
     homepage: 'https://github.com/linuxserver/docker-tautulli/packages',
   },
-  'technitium': {
+  technitium: {
     title: 'Technitium DNS Server',
     source: 'https://github.com/TechnitiumSoftware/DnsServer',
     homepage: 'https://technitium.com/dns/',
   },
-  'thelounge': {
+  thelounge: {
     license: 'MIT',
     title: 'Official The Lounge image',
     source: 'https://github.com/thelounge/thelounge-docker',
     homepage: 'https://github.com/thelounge/thelounge-docker',
   },
-  'tik': {
+  tik: {
     license: '0BSD',
     title: 'tik',
     source: 'https://github.com/metio/tik',
     homepage: 'https://github.com/metio/tik',
   },
-  'tika': {
+  tika: {
     title: 'ubuntu',
   },
-  'traccar': {
+  traccar: {
     license: 'Apache-2.0',
     title: 'traccar',
     source: 'https://github.com/traccar/traccar',
     homepage: 'https://github.com/traccar/traccar',
   },
-  'transmission': {
+  transmission: {
     license: 'GPL-3.0-only',
     title: 'Transmission',
     source: 'https://github.com/linuxserver/docker-transmission',
     homepage: 'https://github.com/linuxserver/docker-transmission/packages',
   },
-  'trilium': {
+  trilium: {
     license: 'AGPL-3.0',
     title: 'Trilium',
     source: 'https://github.com/TriliumNext/Trilium',
     homepage: 'https://github.com/TriliumNext/Trilium',
   },
-  'tvheadend': {
+  tvheadend: {
     license: 'GPL-3.0-only',
     title: 'Tvheadend',
     source: 'https://github.com/linuxserver/docker-tvheadend',
@@ -815,32 +815,32 @@
   'uptime-kuma': {
     source: 'https://github.com/louislam/uptime-kuma',
   },
-  'valkey': {
+  valkey: {
     source: 'https://github.com/valkey-io/valkey',
   },
-  'vaultwarden': {
+  vaultwarden: {
     license: 'AGPL-3.0-only',
     source: 'https://github.com/dani-garcia/vaultwarden',
     homepage: 'https://github.com/dani-garcia/vaultwarden',
   },
-  'vikunja': {
+  vikunja: {
     license: 'AGPL-3.0',
     title: 'vikunja',
     source: 'https://github.com/go-vikunja/vikunja',
     homepage: 'https://github.com/go-vikunja/vikunja',
   },
-  'wallabag': {
+  wallabag: {
     title: 'docker',
     source: 'https://github.com/wallabag/docker',
     homepage: 'https://github.com/wallabag/docker',
   },
-  'wallos': {
+  wallos: {
     license: 'GPL-3.0',
     title: 'Wallos',
     source: 'https://github.com/ellite/Wallos',
     homepage: 'https://github.com/ellite/Wallos',
   },
-  'wekan': {
+  wekan: {
     title: 'ubuntu',
     source: 'https://github.com/wekan/wekan',
   },
