@@ -20,6 +20,7 @@ local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
 local bsiViolations = import './bsi.gen.libsonnet';
+local bsiOperatorPods = import './bsi-operator.gen.libsonnet';
 local bollwerk = import '../bollwerk/bollwerk.libsonnet';
 local excluded = import './excluded.libsonnet';
 local forge = import './forge.gen.libsonnet';
@@ -1037,14 +1038,21 @@ local bollwerkKinds = std.set([kindOfResource[r] for r in bollwerkResources]);
 local bsiOf(key, fn) =
   local kinds = std.set([item.kind for item in main.list(fn()).items]);
   local inScope = std.setInter(kinds, bollwerkKinds);
-  if std.length(inScope) == 0 then { applicable: false }
+  // What the operator's pods were measured to violate, where that was measured.
+  // It rides on both branches: a stage out of scope for its own manifest still
+  // has pods, and a stage whose manifest IS judged may ALSO have an operator
+  // making more of them.
+  local operatorPods =
+    local m = std.get(bsiOperatorPods, key, null);
+    if m == null then {} else { operatorPods: m };
+  if std.length(inScope) == 0 then { applicable: false } + operatorPods
   else if !std.objectHas(bsiViolations, key) then null
   else {
     violates: bsiViolations[key],
     // The requirements those violations touch, deduplicated: a consumer showing
     // a compliance summary wants the requirement, not the policy id.
     requirements: std.set([bsiPolicies[name].requirement for name in bsiViolations[key]]),
-  };
+  } + operatorPods;
 
 local workloadEntries =
   assert reconcile('workload stages', stageKeys, std.objectFields(stageImports));
@@ -1061,6 +1069,13 @@ local workloadEntries =
          'forge.gen.libsonnet names a workload that does not exist — rerun gen-forge';
   assert std.all([std.member(stageKeys, key) for key in std.objectFields(bsiViolations)]) :
          'bsi.gen.libsonnet names a stage that does not exist — rerun gen-bsi';
+  assert std.all([std.member(stageKeys, key) for key in std.objectFields(bsiOperatorPods)]) :
+         'bsi-operator.gen.libsonnet names a stage that does not exist';
+  assert std.all([
+    std.objectHas(bsiPolicies, name)
+    for key in std.objectFields(bsiOperatorPods)
+    for name in bsiOperatorPods[key].violates
+  ]) : 'bsi-operator.gen.libsonnet names a policy bollwerk no longer ships';
   // Signature entries are checked for staleness but never for completeness: an
   // image bump invalidates the CLAIM (the digest no longer matches) while
   // leaving the key in place, so a full set of keys would prove nothing about

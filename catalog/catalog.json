@@ -3649,7 +3649,17 @@
                   }
                ],
                "bsi": {
-                  "applicable": false
+                  "applicable": false,
+                  "operatorPods": {
+                     "pods": 1,
+                     "violates": [
+                        "disallow-default-serviceaccount",
+                        "require-non-root-groups",
+                        "require-probes",
+                        "require-run-as-non-root-user",
+                        "restrict-sa-automount-sa-token"
+                     ]
+                  }
                },
                "clusterScoped": false,
                "declaredRequests": null,
@@ -6706,7 +6716,17 @@
                   }
                ],
                "bsi": {
-                  "applicable": false
+                  "applicable": false,
+                  "operatorPods": {
+                     "pods": 1,
+                     "violates": [
+                        "require-non-root-groups",
+                        "require-probes",
+                        "require-request-limits",
+                        "require-run-as-non-root-user",
+                        "restrict-sa-automount-sa-token"
+                     ]
+                  }
                },
                "clusterScoped": false,
                "declaredRequests": null,
@@ -16599,7 +16619,20 @@
                   }
                ],
                "bsi": {
-                  "applicable": false
+                  "applicable": false,
+                  "operatorPods": {
+                     "pods": 1,
+                     "violates": [
+                        "disallow-default-serviceaccount",
+                        "disallow-privilege-escalation",
+                        "disallow-unwanted-capabilities",
+                        "require-probes",
+                        "require-request-limits",
+                        "require-ro-rootfs",
+                        "require-run-as-nonroot",
+                        "restrict-sa-automount-sa-token"
+                     ]
+                  }
                },
                "clusterScoped": false,
                "declaredRequests": null,
@@ -23426,7 +23459,19 @@
                   }
                ],
                "bsi": {
-                  "applicable": false
+                  "applicable": false,
+                  "operatorPods": {
+                     "pods": 3,
+                     "violates": [
+                        "require-non-root-groups",
+                        "require-probes",
+                        "require-request-limits",
+                        "require-run-as-non-root-user",
+                        "require-run-as-nonroot",
+                        "restrict-image-registries",
+                        "restrict-sa-automount-sa-token"
+                     ]
+                  }
                },
                "clusterScoped": false,
                "declaredRequests": null,
@@ -29630,6 +29675,15 @@
                   }
                ],
                "bsi": {
+                  "operatorPods": {
+                     "pods": 1,
+                     "violates": [
+                        "require-non-root-groups",
+                        "require-probes",
+                        "require-run-as-non-root-user",
+                        "restrict-sa-automount-sa-token"
+                     ]
+                  },
                   "requirements": [ ],
                   "violates": [ ]
                },
@@ -35599,7 +35653,18 @@
                   }
                ],
                "bsi": {
-                  "applicable": false
+                  "applicable": false,
+                  "operatorPods": {
+                     "pods": 1,
+                     "violates": [
+                        "disallow-default-serviceaccount",
+                        "require-non-root-groups",
+                        "require-probes",
+                        "require-request-limits",
+                        "require-run-as-non-root-user",
+                        "restrict-sa-automount-sa-token"
+                     ]
+                  }
                },
                "clusterScoped": false,
                "declaredRequests": null,
