@@ -33,7 +33,9 @@ function(
   + kurly.env(env)
   // The bundled Tomcat starts as root; the root filesystem stays writable for its work
   // and temp directories.
-  + kurly.rootUser()
+  // The image declares root, but it runs as an ordinary uid: its files are
+  // world-readable and everything it writes is under a volume fsGroup owns.
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

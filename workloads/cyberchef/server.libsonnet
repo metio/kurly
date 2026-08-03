@@ -30,7 +30,9 @@ function(
   + kurly.port(80)
   + kurly.servicePort(8000)
   + kurly.env(env)
-  + kurly.rootUser()
+  // The image declares root, but it runs as an ordinary uid: its files are
+  // world-readable and everything it writes is under a volume fsGroup owns.
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   // Writes under /var/cache/nginx; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/var/cache/nginx')
   // Writes under /var/run; a scratch there keeps the rest of the root filesystem read-only.

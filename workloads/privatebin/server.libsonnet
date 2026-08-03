@@ -36,9 +36,6 @@ function(
   + kurly.port(8080)
   + kurly.servicePort(8080)
   + kurly.env(env)
-  // The bundled nginx and php-fpm masters run as root then serve as an unprivileged user;
-  // the root filesystem stays writable for their runtime state.
-  + kurly.rootUser()
   + kurly.store('/srv/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

@@ -40,7 +40,9 @@ function(
   + kurly.servicePort(8080)
   + kurly.envFromSecret(secretName)
   + kurly.env(env)
-  + kurly.rootUser()
+  // The image declares root, but it runs as an ordinary uid: its files are
+  // world-readable and everything it writes is under a volume fsGroup owns.
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html/userfiles', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

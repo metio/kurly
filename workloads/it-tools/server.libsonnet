@@ -31,9 +31,9 @@ function(
   + kurly.port(80)
   + kurly.servicePort(80)
   + kurly.env(env)
-  // The bundled nginx serves on :80 as the root master, then workers drop privileges;
-  // the root filesystem stays writable for nginx's runtime state.
-  + kurly.rootUser()
+  // The image declares root, but it runs as an ordinary uid: its files are
+  // world-readable and everything it writes is under a volume fsGroup owns.
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   // Writes under /var/cache/nginx; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/var/cache/nginx')
   // Writes under /var/run; a scratch there keeps the rest of the root filesystem read-only.

@@ -29,9 +29,9 @@ function(
   + kurly.port(8080)
   + kurly.servicePort(8080)
   + kurly.env(env)
-  // nginx starts as root, prepares its cache directories, then drops to the nginx
-  // user for the workers.
-  + kurly.rootUser()
+  // The image declares root, but it runs as an ordinary uid: its files are
+  // world-readable and everything it writes is under a volume fsGroup owns.
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])

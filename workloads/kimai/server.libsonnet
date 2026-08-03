@@ -37,7 +37,9 @@ function(
   + kurly.servicePort(8001)
   + kurly.envFromSecret(secretName)
   + kurly.env({ APP_ENV: 'prod' } + env)
-  + kurly.rootUser()
+  // The image declares root, but it runs as an ordinary uid: its files are
+  // world-readable and everything it writes is under a volume fsGroup owns.
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/var/run/apache2')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

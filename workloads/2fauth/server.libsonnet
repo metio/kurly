@@ -45,7 +45,6 @@ function(
   + kurly.servicePort(8000)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.rootUser()
   + kurly.writableRootFilesystem()
   + kurly.store('/2fauth', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

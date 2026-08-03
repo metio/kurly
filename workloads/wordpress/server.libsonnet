@@ -56,7 +56,9 @@ function(
   + kurly.servicePort(80)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
-  + kurly.rootUser()
+  // The image declares root, but it runs as an ordinary uid: its files are
+  // world-readable and everything it writes is under a volume fsGroup owns.
+  + kurly.runAs(1000, gid=1000, fsGroup=1000)
   // The entrypoint unpacks WordPress onto the volume and hands it to the web user.
   // Everything is dropped and these are granted back by name — the
   // smallest set this image was observed to boot with.

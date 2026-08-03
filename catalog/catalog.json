@@ -2847,7 +2847,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
                "runs": {
@@ -3387,9 +3387,9 @@
                "importPath": "github.com/metio/kurly/workloads/adminer/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -4021,7 +4021,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
                "runs": {
@@ -7679,9 +7679,9 @@
                "importPath": "github.com/metio/kurly/workloads/cyberchef/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -8877,9 +8877,9 @@
                "importPath": "github.com/metio/kurly/workloads/dokuwiki/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -9099,9 +9099,9 @@
                "importPath": "github.com/metio/kurly/workloads/drawio/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -9232,9 +9232,9 @@
                "importPath": "github.com/metio/kurly/workloads/drupal/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -9674,9 +9674,9 @@
                "importPath": "github.com/metio/kurly/workloads/element-web/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -10202,9 +10202,9 @@
                "importPath": "github.com/metio/kurly/workloads/esphome/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -10465,9 +10465,9 @@
                "importPath": "github.com/metio/kurly/workloads/excalidraw/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -14611,9 +14611,9 @@
                "importPath": "github.com/metio/kurly/workloads/home-assistant/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -15491,9 +15491,9 @@
                "importPath": "github.com/metio/kurly/workloads/it-tools/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -16156,9 +16156,9 @@
                "importPath": "github.com/metio/kurly/workloads/joomla/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -17366,9 +17366,9 @@
                "importPath": "github.com/metio/kurly/workloads/kimai/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -17812,7 +17812,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
                "runs": {
@@ -21761,9 +21761,9 @@
                "importPath": "github.com/metio/kurly/workloads/mediawiki/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -22087,9 +22087,9 @@
                "importPath": "github.com/metio/kurly/workloads/mermaid-live-editor/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -24398,9 +24398,9 @@
                "importPath": "github.com/metio/kurly/workloads/nextcloud/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -27481,9 +27481,9 @@
                "importPath": "github.com/metio/kurly/workloads/peertube/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -28076,9 +28076,9 @@
                "importPath": "github.com/metio/kurly/workloads/phpmyadmin/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -28879,9 +28879,9 @@
                "importPath": "github.com/metio/kurly/workloads/portainer/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -29301,9 +29301,9 @@
                "importPath": "github.com/metio/kurly/workloads/privatebin/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -31370,7 +31370,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
                "runs": {
@@ -34601,7 +34601,7 @@
                "posture": {
                   "multiTenantSafe": false,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": true
                },
                "runs": {
@@ -34901,9 +34901,9 @@
                "importPath": "github.com/metio/kurly/workloads/technitium/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -38158,9 +38158,9 @@
                "importPath": "github.com/metio/kurly/workloads/wger/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
@@ -38580,9 +38580,9 @@
                "importPath": "github.com/metio/kurly/workloads/wordpress/server.libsonnet",
                "kind": "http",
                "posture": {
-                  "multiTenantSafe": false,
+                  "multiTenantSafe": true,
                   "ownUserNamespace": true,
-                  "runsAsRoot": true,
+                  "runsAsRoot": false,
                   "writableRootFilesystem": false
                },
                "runs": {
