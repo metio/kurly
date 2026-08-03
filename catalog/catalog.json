@@ -21977,13 +21977,7 @@
          ],
          "stages": [
             {
-               "architectures": [
-                  "386",
-                  "amd64",
-                  "arm",
-                  "arm64",
-                  "ppc64le"
-               ],
+               "architectures": null,
                "args": [
                   {
                      "default": "mediawiki",
@@ -22061,13 +22055,11 @@
                   "writableRootFilesystem": false
                },
                "runs": {
-                  "digest": "sha256:ef0557f6a503cbf5bd7f7ec0f880b61409a45c861c6113a7bf38f33d15099186",
-                  "image": "docker.io/library/mediawiki:1.46.0@sha256:ef0557f6a503cbf5bd7f7ec0f880b61409a45c861c6113a7bf38f33d15099186",
+                  "digest": "sha256:38989f476fd3226bd608816547e2f8eee88c1582d656e9b39c65a2e5ddbdacc6",
+                  "image": "docker.io/library/mediawiki:1.46.0@sha256:38989f476fd3226bd608816547e2f8eee88c1582d656e9b39c65a2e5ddbdacc6",
                   "tag": "1.46.0"
                },
-               "signature": {
-                  "signed": false
-               },
+               "signature": null,
                "storage": {
                   "pvcs": 1
                }
