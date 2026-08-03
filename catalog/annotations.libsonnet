@@ -388,6 +388,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     ]) + { group: 'networking', standalone: true },
   },
 
+  // Service mesh — another separate axis, one recipe per mesh, joined to the
+  // `mesh` exclusion group. A recipe enables sidecar injection AND emits the
+  // object that enforces mTLS, which is the half no admission policy can check:
+  // a policy sees the object being written, so it can neither observe traffic
+  // nor require that another object exists. Authorization rules are deliberately
+  // out of scope (they depend on what else a tenant runs, and the schema moves);
+  // peerAuthentication is the verbatim escape hatch. strictNamespace is the
+  // standalone namespace-wide floor, placed with kurly.list rather than composed.
+  mesh: {
+    istio: d.fn('Runs the workload in an Istio mesh: the sidecar injection annotation on the pod template, plus a security.istio.io/v1 PeerAuthentication named after the workload selecting its own pods, with mode STRICT so the sidecar refuses plaintext. mtls=null emits no PeerAuthentication (the namespace or mesh default stands); inject=false skips the annotation for a cluster that labels the namespace; peerAuthentication merges verbatim into the emitted spec.', [
+      d.arg('mtls', d.T.string, default='STRICT'),
+      d.arg('inject', d.T.bool, default=true),
+      d.arg('peerAuthentication', d.T.object, default={}),
+    ]) + { kinds: allKinds, exclusiveGroup: 'mesh', group: 'networking' },
+    strictNamespace: d.fn('The standalone namespace-wide mTLS floor: a PeerAuthentication selecting every pod in the namespace it is applied to. Not composed onto a workload — a workload that emitted one would legislate for its neighbours — so place it into a manifest set with kurly.list, the way network.denyAll is.', [
+      d.arg('name', d.T.string, default='default-strict-mtls'),
+      d.arg('mtls', d.T.string, default='STRICT'),
+    ]) + { group: 'networking', standalone: true },
+  },
+
   // Deployable workloads — the starting point the assembler composes onto. Each
   // stage is a `function(params)` app (a base kind with defaults, no exposure); a
   // consumer imports it by its canonical path, adds `+` features (chiefly an

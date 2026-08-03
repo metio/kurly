@@ -75,6 +75,19 @@ if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 
 fi
 echo "network policy exclusion assert fired as expected"
 
+# A network or mesh recipe configures a workload, so composing one onto anything
+# that is not one — a bare manifest, a hand-authored custom resource — must fail
+# rather than silently doing nothing. The recipe contributes `config` itself, so
+# these guards have to read a knob only a kind sets; a guard asking merely whether
+# `config` exists passes on every object and is worth nothing.
+for recipe in "kurly.network.kubernetes()" "kurly.mesh.istio()"; do
+  if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; { kind: 'ConfigMap' } + ${recipe}" >/dev/null 2>&1; then
+    echo "composing ${recipe} onto a non-workload rendered instead of failing" >&2
+    exit 1
+  fi
+  echo "${recipe} composition assert fired as expected"
+done
+
 # Every glob-driven per-workload invariant, checked over a SINGLE batched render.
 # Each invariant needs the same workload composed a few different ways (default,
 # named, mirrored, and — for a feature-accepting workload — with pod features and

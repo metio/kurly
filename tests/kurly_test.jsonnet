@@ -586,6 +586,65 @@ local podOf(app) = app.deployment.spec.template.spec;
     ]
   ),
 
+  // --- kurly.mesh axis --------------------------------------------------------
+  // Istio does both halves: the injection annotation on the POD template (never
+  // the controller, where the injector would not see it) and a PeerAuthentication
+  // named after the workload, selecting its own pods, STRICT by default.
+  mesh_istio_injects_and_enforces: std.assertEqual(
+    local a = shop + kurly.mesh.istio();
+    local pa = [m for m in kurly.list(a).items if m.kind == 'PeerAuthentication'][0];
+    [
+      a.deployment.spec.template.metadata.annotations,
+      std.objectHas(a.deployment.metadata, 'annotations'),
+      pa.apiVersion,
+      pa.metadata.name,
+      pa.spec,
+    ],
+    [
+      { 'sidecar.istio.io/inject': 'true' },
+      false,
+      'security.istio.io/v1',
+      'shop',
+      { selector: { matchLabels: { 'app.kubernetes.io/name': 'shop' } }, mtls: { mode: 'STRICT' } },
+    ]
+  ),
+
+  // A consumer's own podAnnotations wins over the recipe's, so opting one
+  // workload out of injection on a mesh-wide cluster is obeyed rather than
+  // silently overwritten.
+  mesh_pod_annotations_win: std.assertEqual(
+    local a = shop + kurly.mesh.istio() + kurly.podAnnotations({ 'sidecar.istio.io/inject': 'false' });
+    a.deployment.spec.template.metadata.annotations,
+    { 'sidecar.istio.io/inject': 'false' }
+  ),
+
+  // mtls=null leaves the namespace or mesh default in force: injection still
+  // happens, but no PeerAuthentication is emitted at all. inject=false is the
+  // other half, for a cluster that labels the namespace instead.
+  mesh_istio_optional_halves: std.assertEqual(
+    [
+      std.length([m for m in kurly.list(shop + kurly.mesh.istio(mtls=null)).items if m.kind == 'PeerAuthentication']),
+      (shop + kurly.mesh.istio(mtls=null)).deployment.spec.template.metadata.annotations,
+      std.objectHas((shop + kurly.mesh.istio(inject=false)).deployment.spec.template.metadata, 'annotations'),
+    ],
+    [0, { 'sidecar.istio.io/inject': 'true' }, false]
+  ),
+
+  // peerAuthentication passes verbatim into the emitted spec — the escape hatch
+  // for the per-port overrides the vocabulary does not model.
+  mesh_peer_authentication_verbatim: std.assertEqual(
+    local a = shop + kurly.mesh.istio(peerAuthentication={ portLevelMtls: { '9090': { mode: 'PERMISSIVE' } } });
+    [m for m in kurly.list(a).items if m.kind == 'PeerAuthentication'][0].spec.portLevelMtls,
+    { '9090': { mode: 'PERMISSIVE' } }
+  ),
+
+  // strictNamespace is standalone (not composed onto a workload): it selects
+  // every pod in the namespace it lands in, so it names no selector at all.
+  mesh_strict_namespace_baseline: std.assertEqual(
+    [kurly.mesh.strictNamespace().metadata.name, kurly.mesh.strictNamespace().spec],
+    ['default-strict-mtls', { mtls: { mode: 'STRICT' } }]
+  ),
+
   // --- stateful & job kinds ---------------------------------------------------
   // stateful emits a StatefulSet + a headless Service naming it; the store
   // becomes a per-pod volumeClaimTemplate, not a shared owned PVC.

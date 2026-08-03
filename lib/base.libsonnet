@@ -328,6 +328,10 @@ local exclusionConflicts(exclusive) = [
       pdb: null,  // { minAvailable, maxUnavailable }
       hpa: null,  // { minReplicas, maxReplicas, targetCPU, targetMemory }
       networkPolicy: null,  // { variant, allowFrom, allowTo, ingress, egress, policyTypes, extraSpec } — see kurly.network
+      // { variant, inject, injectAnnotations, mtls, peerAuthentication } — see
+      // kurly.mesh. Null renders nothing: a workload outside a mesh must not
+      // carry a policy that only means something inside one.
+      mesh: null,
       serviceMonitor: null,  // { port, path, interval }
       rbac: null,  // { rules }
       // Cross-cutting requirements a capability declares so the manifest that
@@ -478,6 +482,19 @@ local exclusionConflicts(exclusive) = [
     networkPolicy::
       if this.config.networkPolicy == null then null
       else networkPolicy.render(this.config.name, this.config.networkPolicy, this.selectorLabels, this.labels, this.config.requiredEgress),
+    // The object that makes a sidecar refuse plaintext. Selects this workload's
+    // own pods by the same stable labels the controller does, so it cannot drift
+    // onto a neighbour's.
+    peerAuthentication::
+      local m = this.config.mesh;
+      if m == null || m.variant != 'istio' || m.mtls == null then null
+      else {
+        apiVersion: 'security.istio.io/v1',
+        kind: 'PeerAuthentication',
+        metadata: { name: this.config.name, labels: this.labels },
+        spec: { selector: { matchLabels: this.selectorLabels }, mtls: { mode: m.mtls } }
+              + m.peerAuthentication,
+      },
     serviceMonitor::
       if this.config.serviceMonitor == null then null else serviceMonitorManifest(this.config.name, this.config.serviceMonitor, this.selectorLabels, this.labels),
     headlessService::
@@ -519,6 +536,7 @@ local exclusionConflicts(exclusive) = [
         this.pdb,
         this.hpa,
         this.networkPolicy,
+        this.peerAuthentication,
         this.serviceMonitor,
         this.headlessService,
         this.serviceAccount,
@@ -567,7 +585,12 @@ local exclusionConflicts(exclusive) = [
     // (it keys on selectorLabels alone), so pod labels never reach the immutable
     // field.
     podTemplateLabels:: this.labels + this.config.podLabels,
-    podTemplateAnnotations:: this.config.annotations + this.config.podAnnotations,
+    // The mesh's injection annotation goes UNDER the user's, so an explicit
+    // podAnnotations still wins — a consumer opting one workload out of
+    // injection on a mesh-wide cluster says so and is obeyed.
+    podTemplateAnnotations::
+      (if this.config.mesh == null then {} else this.config.mesh.injectAnnotations)
+      + this.config.annotations + this.config.podAnnotations,
 
     // Pod-spec extras every kind merges alongside podSecurity/podVolumes/
     // podScheduling: image-pull secrets, a priority class, and the resolved

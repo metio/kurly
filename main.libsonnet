@@ -56,6 +56,7 @@ local itemsOf(value) =
   expose: import './lib/expose.libsonnet',
   security: import './lib/security.libsonnet',
   network: import './lib/network.libsonnet',
+  mesh: import './lib/mesh.libsonnet',
   migrations: import './lib/migrations.libsonnet',
 
   // list renders manifests as a single `kind: List`, ready for

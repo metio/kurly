@@ -274,6 +274,41 @@ kurly.list([ kurly.network.denyAll.kubernetes() ])          // this namespace
 `global=true` (Calico/Cilium) emits the cluster-wide kind; `extraSpec` passes
 through the exceptions a real baseline keeps, such as an allow for kube-dns.
 
+## Service mesh
+
+`kurly.mesh` runs a workload inside a mesh, on its own axis:
+
+```jsonnet
+kurly.http('users', image) + kurly.mesh.istio()
+```
+
+It enables sidecar injection — an annotation on the pod template, never on the
+controller where the injector would not see it — and emits a
+`security.istio.io/v1` `PeerAuthentication` named after the workload, selecting
+its own pods, with `mode: STRICT`. That second object is the point: it makes the
+sidecar **refuse** plaintext rather than merely accept TLS, and it is the half no
+policy engine can supply. A `ValidatingAdmissionPolicy` sees the object being
+written, so it can neither observe traffic nor require that another object
+exists — a workload passing every policy in `bsi` says nothing either way about
+whether its traffic is encrypted.
+
+Each half turns off on its own: `mtls=null` leaves the namespace or mesh default
+in force, `inject=false` suits a cluster that labels the namespace instead, and
+`peerAuthentication` merges per-port overrides into the emitted spec verbatim.
+Recipes share the `mesh` exclusion group.
+
+There is deliberately **no `AuthorizationPolicy`**. Which principals may call
+which paths depends on what else the tenant runs, and Istio's authorization
+schema is large and moves — the same reason the network axis does not model the
+CNI schemas.
+
+The namespace-wide floor is a standalone generator, because a workload that
+emitted one would be legislating for its neighbours:
+
+```jsonnet
+kurly.list([ app, kurly.mesh.strictNamespace() ])
+```
+
 ## Documentation
 
 The full documentation lives at **<https://kurly.projects.metio.wtf/>**:

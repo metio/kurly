@@ -23,6 +23,8 @@
     <a href="#kinds">Kinds</a>
     <a href="#features">Features</a>
     <a href="#exposure">Exposure</a>
+    <a href="#network">Network policy</a>
+    <a href="#mesh">Service mesh</a>
     <a href="#security">Security</a>
     <a href="#helpers">Helpers</a>
   </nav>
@@ -94,6 +96,31 @@
       <code>exposure</code> exclusion group — one exposure per workload.</p>
     {{ range $cat.expose }}
       {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.expose.%s" .id)) }}
+    {{ end }}
+  </section>
+
+  <section id="network">
+    <h2>Network policy</h2>
+    <p>Allow-list firewalls, one recipe per CNI. The rules are written once in a
+      neutral vocabulary and translated into each CNI's own kind; all join the
+      <code>networkPolicy</code> exclusion group — a workload firewalls one way.
+      <code>denyAll</code> is standalone: place it with <code>kurly.list</code>
+      rather than composing it onto a workload.</p>
+    {{ range $cat.network }}
+      {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.network.%s" .id)) }}
+    {{ end }}
+  </section>
+
+  <section id="mesh">
+    <h2>Service mesh</h2>
+    <p>Sidecar injection plus the object that enforces mTLS — the half no
+      admission policy can check, since a policy sees the object being written
+      and can neither observe traffic nor require that another object exists.
+      Recipes join the <code>mesh</code> exclusion group.
+      <code>strictNamespace</code> is standalone: it selects every pod in the
+      namespace, so place it with <code>kurly.list</code>.</p>
+    {{ range $cat.mesh }}
+      {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.mesh.%s" .id)) }}
     {{ end }}
   </section>
 

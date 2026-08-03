@@ -79,4 +79,12 @@ local networkCases = [
   if !(std.objectHas(n, 'standalone') && n.standalone)
 ];
 
-kindCases + featureCases + exposeCases + securityCases + networkCases
+// Each composable mesh recipe on http. strictNamespace is a standalone
+// generator, skipped here for the same reason denyAll is.
+local meshCases = [
+  { name: 'mesh-' + m.id, snippet: snippetFor('http', ' + ' + call('kurly.mesh.' + m.id, m)) }
+  for m in catalog.mesh
+  if !(std.objectHas(m, 'standalone') && m.standalone)
+];
+
+kindCases + featureCases + exposeCases + securityCases + networkCases + meshCases

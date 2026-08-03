@@ -44,8 +44,11 @@ local slot(variant, allowFrom, allowTo, ingress, egress, policyTypes, extraSpec)
 
 // A variant recipe claims the shared `networkPolicy` exclusion group, so no two
 // can coexist on one workload, and asserts it composes onto a real workload.
+// The assert reads a knob only base.core sets, NOT the presence of `config`
+// itself: this very mixin contributes `config`, so asking whether the merged
+// object has one is a question that answers itself and admits everything.
 local policy(name) = {
-  assert std.objectHasAll(self, 'config') :
+  assert std.objectHasAll(self.config, 'name') :
          'kurly.network recipes firewall a workload — compose them onto a kurly kind (http, worker, …)',
   config+:: { exclusive+: { networkPolicy+: [name] } },
 };

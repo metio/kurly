@@ -2735,6 +2735,61 @@
          "id": "worker"
       }
    ],
+   "mesh": [
+      {
+         "args": [
+            {
+               "default": "STRICT",
+               "name": "mtls",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": true,
+               "name": "inject",
+               "required": false,
+               "type": "bool"
+            },
+            {
+               "name": "peerAuthentication",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "exclusiveGroup": "mesh",
+         "group": "networking",
+         "help": "Runs the workload in an Istio mesh: the sidecar injection annotation on the pod template, plus a security.istio.io/v1 PeerAuthentication named after the workload selecting its own pods, with mode STRICT so the sidecar refuses plaintext. mtls=null emits no PeerAuthentication (the namespace or mesh default stands); inject=false skips the annotation for a cluster that labels the namespace; peerAuthentication merges verbatim into the emitted spec.",
+         "id": "istio",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "default": "default-strict-mtls",
+               "name": "name",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "STRICT",
+               "name": "mtls",
+               "required": false,
+               "type": "string"
+            }
+         ],
+         "group": "networking",
+         "help": "The standalone namespace-wide mTLS floor: a PeerAuthentication selecting every pod in the namespace it is applied to. Not composed onto a workload — a workload that emitted one would legislate for its neighbours — so place it into a manifest set with kurly.list, the way network.denyAll is.",
+         "id": "strictNamespace",
+         "standalone": true
+      }
+   ],
    "migrations": [
       {
          "args": [

@@ -131,18 +131,56 @@ emits no security fields at all, leaves it off without the hatch.
 
 ## Running under a service mesh
 
-Sidecar injection is an annotation, so it is already a feature — no mesh-specific
-recipe is needed, and one that only set an annotation would hide a one-liner
-behind a name that promised more:
+`kurly.mesh` is a composable axis like `expose` and `network` — one recipe per
+mesh, composed onto a workload with `+`:
+
+```jsonnet
+kurly.http('app', image) + kurly.mesh.istio()
+```
+
+That does two things. It puts the sidecar injection annotation on the **pod
+template** (never the controller, where the injector would not see it), and it
+emits a `security.istio.io/v1` `PeerAuthentication` named after the workload,
+selecting its own pods, with `mode: STRICT` — the object that makes the sidecar
+**refuse** plaintext rather than merely accept TLS.
+
+The second half is why the recipe exists. Injection alone was always a
+one-liner:
 
 ```jsonnet
 kurly.http('app', image) + kurly.podAnnotations({ 'sidecar.istio.io/inject': 'true' })
-kurly.http('app', image) + kurly.podAnnotations({ 'linkerd.io/inject': 'enabled' })
 ```
 
+Your own `podAnnotations` still wins over the recipe's, so opting one workload
+out of injection on a mesh-wide cluster is obeyed rather than overwritten.
 `podAnnotations` and `podLabels` land on the pod template only, never on the
 controller's immutable selector, which is what makes them safe to add to a
 running workload: a selector that changed would need a delete and reinstall.
+
+Each half can be turned off on its own. `mtls=null` emits no
+`PeerAuthentication`, leaving the namespace or mesh default in force;
+`inject=false` skips the annotation, for a cluster that labels the namespace
+instead. Per-port overrides go through `peerAuthentication`, merged verbatim
+into the emitted spec.
+
+For the namespace-wide floor — every pod, not just this workload — there is a
+standalone generator, placed with `kurly.list` the way `network.denyAll` is. A
+workload does not emit one of these itself; it would be legislating for its
+neighbours:
+
+```jsonnet
+kurly.list([app, kurly.mesh.strictNamespace()])
+```
+
+Recipes join the `mesh` exclusion group, so a workload cannot compose two meshes.
+
+### What kurly does not emit
+
+**No `AuthorizationPolicy`.** Which principals may call which paths of a
+workload depends on what else the tenant runs, so it is not something a workload
+recipe knows — and Istio's authorization schema is large and moves. That is the
+same restraint the network axis takes with the CNI schemas: model the small
+stable thing, and pass the rest through verbatim.
 
 A workload whose stage renders a **custom resource** cannot take a composed
 feature — it says so at render rather than accepting one and doing nothing — so
@@ -160,20 +198,19 @@ Cilium needs no injection at all, and its policy side is already a kurly axis:
 `kurly.network.cilium(...)` emits a `CiliumNetworkPolicy` from the same
 allow-list vocabulary the Kubernetes and Calico variants use.
 
-### What kurly does not emit, and why it matters for mTLS
-
-kurly writes no `PeerAuthentication`, `AuthorizationPolicy` or Linkerd `Server`.
-Enabling the mesh is a per-workload annotation; *enforcing* mTLS is a
-cluster-or-namespace decision that belongs with whoever installed the mesh.
+### Why mTLS needs a rendered object, not a policy
 
 Worth knowing if a compliance regime requires encryption in transit: **no
 admission policy can verify that requirement**. A `ValidatingAdmissionPolicy`
 sees the object being written — it cannot observe traffic, and it cannot require
 that some other object exists elsewhere. So a workload passing every policy in
 `bsi` says nothing either way about whether its traffic is encrypted, and an
-absent verdict there is not a negative one. Enforcement has to come from the mesh
-configuration, and the evidence for it from the mesh rather than from this
-catalogue.
+absent verdict there is not a negative one.
+
+That is exactly the gap a recipe can close. Emitting the enforcing object is
+something a renderer can do and an admission controller cannot, and the object
+is then evidence in its own right: it is in the manifest set, under version
+control, applied by the same reconciler as the workload.
 
 ## Workloads
 
