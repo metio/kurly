@@ -4,38 +4,52 @@
 // mesh: run a workload inside a service mesh, composed onto it with `+`. Another
 // separate axis, the same shape as expose and network:
 //
-//   Istio:  kurly.mesh.istio()
+//   Istio:    kurly.mesh.istio()
+//   Linkerd:  kurly.mesh.linkerd()
 //
-// It does two things and deliberately not a third.
+// Each recipe does two things and deliberately not a third.
 //
-// IT ENABLES INJECTION, by putting the mesh's marker on the pod template — which
-// is a label for Istio and an annotation for Linkerd, a difference the recipe
-// knows so a consumer does not have to. That much was always reachable with
-// kurly.podLabels, and a recipe that did only it would be a one-liner wearing a
-// name that promised more.
+// IT ENABLES INJECTION, by putting the mesh's marker on the pod template. Which
+// marker is the mesh's business rather than the consumer's, and the two do not
+// agree: Istio's webhook selects on a LABEL, Linkerd's injector reads an
+// ANNOTATION. Getting that backwards is silent — the pod is admitted, carries no
+// proxy, and nothing says so.
 //
-// IT ENFORCES mTLS, by emitting a PeerAuthentication selecting the workload's own
-// pods with `mode: STRICT` — the object that makes the sidecar refuse plaintext
-// rather than merely accept TLS. This is the part worth a recipe, because it is
-// the part a compliance regime asks about and the part NO ADMISSION POLICY CAN
-// CHECK: a ValidatingAdmissionPolicy sees the object being written, so it cannot
-// observe traffic and cannot require that some other object exists elsewhere. A
-// workload passing every policy in the catalogue's `bsi` says nothing either way
-// about whether its traffic is encrypted. Emitting the enforcing object is how a
-// recipe can help where a policy engine structurally cannot.
+// IT REFUSES PLAINTEXT, which is the half worth a recipe. A compliance regime
+// asks about encryption in transit, and NO ADMISSION POLICY CAN ANSWER: a
+// ValidatingAdmissionPolicy sees the object being written, so it cannot observe
+// traffic and cannot require that some other object exists elsewhere. A workload
+// passing every policy in the catalogue's `bsi` says nothing either way about
+// whether its traffic is encrypted. Rendering the thing that enforces it is
+// where a recipe can help and a policy engine structurally cannot.
 //
-// IT DOES NOT WRITE AN AuthorizationPolicy. Which principals may call which
-// paths of this workload depends on what else the tenant runs, so it is not a
-// fact a workload recipe knows — and Istio's authorization schema is large and
-// moves. That is the restraint the network axis takes with the CNI schemas and
-// migrations() takes with stageset Actions: model the small stable thing, and
-// pass the rest through verbatim. `peerAuthentication` is that escape hatch here.
+// The two meshes do that differently enough that a shared vocabulary would be a
+// lie rather than an abstraction. Istio emits an OBJECT — a PeerAuthentication
+// with mode STRICT. Linkerd sets an ANNOTATION — a default inbound policy of
+// all-authenticated, meaning the proxy accepts only mesh-authenticated clients.
+// So each recipe takes its own native knob with its own vocabulary, and the
+// neutral promise lives at the recipe: `kurly.mesh.<mesh>()` with no arguments
+// means "meshed, plaintext refused" in both.
 //
-// The mTLS mode is a per-workload STRICT by default, not a namespace-wide one. A
-// mesh-wide policy is an operator's decision about a cluster they installed, so
-// it is offered separately as strictNamespace() below rather than smuggled into
-// every workload that composes a mesh.
+// NEITHER WRITES AN AUTHORIZATION RULE (Istio's AuthorizationPolicy, Linkerd's
+// Server/AuthorizationPolicy). Which principals may call which paths of this
+// workload depends on what else the tenant runs, so it is not a fact a workload
+// recipe knows — and both schemas are large and move. That is the restraint the
+// network axis takes with the CNI schemas and migrations() takes with stageset
+// Actions: model the small stable thing, and pass the rest through verbatim.
 {
+  // A neutral config.mesh slot, so every variant writes the same shape and the
+  // base's computed fields dispatch on `variant` rather than on which optional
+  // fields happen to be present.
+  local slot(variant, inject, injectLabels, injectAnnotations, mtls, peerAuthentication) = {
+    variant: variant,
+    inject: inject,
+    injectLabels: injectLabels,
+    injectAnnotations: injectAnnotations,
+    mtls: mtls,
+    peerAuthentication: peerAuthentication,
+  },
+
   // A recipe claims the shared `mesh` exclusion group, so two meshes cannot
   // compose onto one workload, and asserts it landed on a real workload rather
   // than on a custom resource that would read none of it.
@@ -70,9 +84,9 @@
   //           the per-port overrides this vocabulary does not model
   istio(mtls='STRICT', inject=true, proxyImage=null, peerAuthentication={}):: mesh('istio') {
     config+:: {
-      mesh: {
-        variant: 'istio',
-        inject: inject,
+      mesh: slot(
+        'istio',
+        inject,
         // A LABEL, not an annotation, and on the POD template rather than the
         // controller. Both halves of that are load-bearing.
         //
@@ -87,32 +101,79 @@
         //
         // And the marker belongs to the pod: the injector mutates pods, so one
         // on the Deployment reaches nothing.
-        injectLabels: if inject then { 'sidecar.istio.io/inject': 'true' } else {},
+        if inject then { 'sidecar.istio.io/inject': 'true' } else {},
         // Independent of `inject`: a cluster that injects by namespace label
         // still lets a pod say which image to inject, so the two knobs do not
         // gate each other.
-        injectAnnotations:
-          if proxyImage == null then {}
-          else { 'sidecar.istio.io/proxyImage': proxyImage },
-        mtls: mtls,
-        peerAuthentication: peerAuthentication,
-      },
+        if proxyImage == null then {} else { 'sidecar.istio.io/proxyImage': proxyImage },
+        mtls,
+        peerAuthentication,
+      ),
     },
   },
 
-  // A namespace-wide STRICT policy, for an operator setting the floor once
-  // instead of per workload. Dropped into a manifest set with kurly.list, the
-  // same way network.denyAll is:
+  // linkerd enables proxy injection and refuses unauthenticated inbound traffic.
   //
-  //   kurly.list([ app, kurly.mesh.strictNamespace() ])
+  // Everything here is an ANNOTATION, including the enforcement — Linkerd has no
+  // object equivalent to a PeerAuthentication. Its proxy-injector webhook is
+  // called for every pod in every namespace that has not opted out, and the
+  // injector then reads `linkerd.io/inject` to decide, so unlike Istio there is
+  // no namespace to label first.
+  //
+  //   inboundPolicy  what the proxy accepts on inbound connections:
+  //          'all-authenticated'      only mesh-authenticated (mTLS) clients —
+  //                                   the default here, and the one that
+  //                                   constitutes encryption in transit
+  //          'cluster-authenticated'  authenticated clients from the cluster
+  //                                   networks only
+  //          'all-unauthenticated'    anything, which is Linkerd's own default
+  //          'deny' / 'audit'         refuse everything no Server names / allow
+  //                                   it but log what would have been refused
+  //          null                     set nothing, leaving the namespace or
+  //                                   control-plane default in force
+  //   inject  false to skip the injection annotation, for a namespace annotated
+  //          with linkerd.io/inject already
+  //   proxyImage  the image the injected proxy pulls. Linkerd publishes from
+  //          cr.l5d.io, which an allow-list cluster does not permit and an
+  //          air-gapped one cannot reach.
+  linkerd(inboundPolicy='all-authenticated', inject=true, proxyImage=null):: mesh('linkerd') {
+    config+:: {
+      mesh: slot(
+        'linkerd',
+        inject,
+        {},
+        (if inject then { 'linkerd.io/inject': 'enabled' } else {})
+        + (if inboundPolicy == null then {} else { 'config.linkerd.io/default-inbound-policy': inboundPolicy })
+        + (if proxyImage == null then {} else { 'config.linkerd.io/proxy-image': proxyImage }),
+        // Linkerd enforces through the annotations above, so the slot's
+        // object-shaped fields stay empty and the base emits no manifest for it.
+        null,
+        {},
+      ),
+    },
+  },
+
+  // The namespace-wide floor, for an operator setting it once instead of per
+  // workload. Dropped into a manifest set with kurly.list, the same way
+  // network.denyAll is:
+  //
+  //   kurly.list([ app, kurly.mesh.strictNamespace.istio() ])
   //
   // It selects every pod in the namespace it is applied to, so it is not a
   // workload's to carry — a workload that emitted one would be legislating for
   // its neighbours.
-  strictNamespace(name='default-strict-mtls', mtls='STRICT'):: {
-    apiVersion: 'security.istio.io/v1',
-    kind: 'PeerAuthentication',
-    metadata: { name: name },
-    spec: { mtls: { mode: mtls } },
+  //
+  // There is no linkerd member, and the absence is the answer rather than a gap:
+  // Linkerd's namespace floor is an annotation on the NAMESPACE object, or
+  // `proxy.defaultInboundPolicy` on the control plane. kurly renders neither —
+  // its objects are namespace-less by design, placed by the consumer — so a
+  // generator here would have to author someone else's namespace to say it.
+  strictNamespace:: {
+    istio(name='default-strict-mtls', mtls='STRICT'):: {
+      apiVersion: 'security.istio.io/v1',
+      kind: 'PeerAuthentication',
+      metadata: { name: name },
+      spec: { mtls: { mode: mtls } },
+    },
   },
 }

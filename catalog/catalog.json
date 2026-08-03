@@ -2778,20 +2778,41 @@
       {
          "args": [
             {
-               "default": "default-strict-mtls",
-               "name": "name",
+               "default": "all-authenticated",
+               "name": "inboundPolicy",
                "required": false,
                "type": "string"
             },
             {
-               "default": "STRICT",
-               "name": "mtls",
+               "default": true,
+               "name": "inject",
+               "required": false,
+               "type": "bool"
+            },
+            {
+               "example": "ghcr.io/acme/mesh/linkerd-proxy:edge-26.8.1",
+               "name": "proxyImage",
                "required": false,
                "type": "string"
             }
          ],
+         "exclusiveGroup": "mesh",
          "group": "networking",
-         "help": "The standalone namespace-wide mTLS floor: a PeerAuthentication selecting every pod in the namespace it is applied to. Not composed onto a workload — a workload that emitted one would legislate for its neighbours — so place it into a manifest set with kurly.list, the way network.denyAll is.",
+         "help": "Runs the workload in a Linkerd mesh. Everything is an ANNOTATION, enforcement included: linkerd.io/inject asks the proxy-injector for a sidecar (its webhook is called for every pod in every namespace that has not opted out, so unlike Istio there is no namespace to label first), and config.linkerd.io/default-inbound-policy=all-authenticated makes the proxy accept only mesh-authenticated clients. Linkerd has no object equivalent to a PeerAuthentication. inboundPolicy also takes cluster-authenticated / all-unauthenticated / deny / audit, or null to leave the namespace or control-plane default in force; inject=false suits an already-annotated namespace; proxyImage names the image the injected proxy pulls (Linkerd publishes from cr.l5d.io, which an allow-list cluster refuses and an air-gapped one cannot reach), and kurly.mirror follows it onto a private registry.",
+         "id": "linkerd",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [ ],
+         "group": "networking",
+         "help": "The standalone namespace-wide mTLS floor, one member per mesh that has an object for it — strictNamespace.istio() emits a PeerAuthentication selecting every pod in the namespace it is applied to. Not composed onto a workload (a workload that emitted one would legislate for its neighbours), so place it into a manifest set with kurly.list, the way network.denyAll is. There is no linkerd member: its floor is an annotation on the Namespace object or a control-plane setting, and kurly renders neither.",
          "id": "strictNamespace",
          "standalone": true
       }

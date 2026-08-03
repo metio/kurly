@@ -89,6 +89,11 @@
             kubernetes-helm
             curl
             minikube
+            # Linkerd's helm install wants an mTLS trust anchor and issuer up
+            # front — the `linkerd` CLI mints them, helm does not — so the mesh
+            # scenario builds them here, from the toolchain rather than from
+            # whatever openssl the host happens to carry.
+            step-cli
           ];
 
           # Multi-step gate commands. Each is a plain scripts/<name>.sh that nix

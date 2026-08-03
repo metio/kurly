@@ -10,6 +10,21 @@ kurly cuts a release on every push, with a calendar version that carries the
 time of day (`library-2026.8.3141650`), so an entry is dated rather than
 numbered and applies from the first release of that day onward.
 
+## 2026-08-04 — `kurly.mesh.strictNamespace()` moved
+
+The namespace-wide mTLS floor is now named for the mesh it belongs to, because
+the axis has more than one and the object it emits is Istio's:
+
+```jsonnet
+kurly.list([app, kurly.mesh.strictNamespace.istio()])   // was strictNamespace()
+```
+
+Nothing else changes; the object it returns is the same. A render calling the
+old name fails outright rather than silently emitting nothing.
+
+Linkerd has no member there and will not get one: its floor is an annotation on
+the Namespace object or a control-plane setting, and kurly renders neither.
+
 ## 2026-08-03 — service mesh support
 
 `kurly.mesh.istio()` is new, and running a workload under it changes what your
@@ -56,3 +71,7 @@ and for `istio-init` alike.
 `hack/smoke/deep/mesh-bsi.sh` in the repository is the measurement behind all of
 this. Re-run it against your own Istio version rather than trusting these
 numbers.
+
+The registry half applies to Linkerd too — it publishes from `cr.l5d.io` — and
+`kurly.mesh.linkerd(proxyImage=…)` takes the same treatment. Its injected proxy
+has not been measured against the policies; that is a gap, not a clean bill.

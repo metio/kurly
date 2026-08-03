@@ -680,11 +680,51 @@ local podOf(app) = app.deployment.spec.template.spec;
     { '9090': { mode: 'PERMISSIVE' } }
   ),
 
-  // strictNamespace is standalone (not composed onto a workload): it selects
-  // every pod in the namespace it lands in, so it names no selector at all.
+  // strictNamespace.istio is standalone (not composed onto a workload): it
+  // selects every pod in the namespace it lands in, so it names no selector.
   mesh_strict_namespace_baseline: std.assertEqual(
-    [kurly.mesh.strictNamespace().metadata.name, kurly.mesh.strictNamespace().spec],
+    [kurly.mesh.strictNamespace.istio().metadata.name, kurly.mesh.strictNamespace.istio().spec],
     ['default-strict-mtls', { mtls: { mode: 'STRICT' } }]
+  ),
+
+  // Linkerd says the same thing entirely in ANNOTATIONS — its injector reads one
+  // rather than selecting on a label, and its enforcement is a default inbound
+  // policy rather than an object. So a meshed workload renders no extra manifest
+  // at all, which is the difference the axis exists to hide from a consumer.
+  mesh_linkerd_is_all_annotations: std.assertEqual(
+    local a = shop + kurly.mesh.linkerd();
+    [
+      a.deployment.spec.template.metadata.annotations,
+      std.objectHas(a.deployment.spec.template.metadata.labels, 'linkerd.io/inject'),
+      std.sort(std.set([m.kind for m in kurly.list(a).items])),
+    ],
+    [
+      { 'linkerd.io/inject': 'enabled', 'config.linkerd.io/default-inbound-policy': 'all-authenticated' },
+      false,
+      ['Deployment', 'Service', 'ServiceAccount'],
+    ]
+  ),
+
+  // Each half turns off on its own, and the proxy image follows kurly.mirror
+  // onto a private registry the way Istio's does — Linkerd publishes from
+  // cr.l5d.io, which an allow-list cluster refuses.
+  mesh_linkerd_knobs: std.assertEqual(
+    local unenforced = shop + kurly.mesh.linkerd(inboundPolicy=null);
+    local mirrored = kurly.mirror(
+      'harbor.internal/mesh',
+      kurly.list(shop + kurly.mesh.linkerd(inject=false, proxyImage='cr.l5d.io/linkerd/proxy:edge-26.8.1'))
+    );
+    [
+      unenforced.deployment.spec.template.metadata.annotations,
+      mirrored.items[0].spec.template.metadata.annotations,
+    ],
+    [
+      { 'linkerd.io/inject': 'enabled' },
+      {
+        'config.linkerd.io/default-inbound-policy': 'all-authenticated',
+        'config.linkerd.io/proxy-image': 'harbor.internal/mesh/linkerd/proxy:edge-26.8.1',
+      },
+    ]
   ),
 
   // --- stateful & job kinds ---------------------------------------------------

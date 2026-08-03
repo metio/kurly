@@ -116,9 +116,12 @@
     <p>Sidecar injection plus the object that enforces mTLS — the half no
       admission policy can check, since a policy sees the object being written
       and can neither observe traffic nor require that another object exists.
-      Recipes join the <code>mesh</code> exclusion group.
-      <code>strictNamespace</code> is standalone: it selects every pod in the
-      namespace, so place it with <code>kurly.list</code>.</p>
+      The marker differs per mesh — Istio's webhook selects on a label, Linkerd's
+      injector reads an annotation — and the recipe knows which. Recipes join the
+      <code>mesh</code> exclusion group. <code>strictNamespace</code> is
+      standalone and has one member per mesh that has an object for it: it
+      selects every pod in the namespace, so place it with
+      <code>kurly.list</code>.</p>
     {{ range $cat.mesh }}
       {{ partial "ref-entry.html" (dict "entry" . "call" (printf "kurly.mesh.%s" .id)) }}
     {{ end }}

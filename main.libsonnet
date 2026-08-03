@@ -132,7 +132,7 @@ local itemsOf(value) =
     // run. Leaving it out mirrors the workload onto the private registry and
     // leaves its sidecar reaching for the public internet, which on an
     // air-gapped cluster is not a partial success either: the pod does not start.
-    local imageFields = ['image', 'imageName', 'sidecar.istio.io/proxyImage'];
+    local imageFields = ['image', 'imageName', 'sidecar.istio.io/proxyImage', 'config.linkerd.io/proxy-image'];
     local rewriteRef(ref) =
       local slash = std.findSubstr('/', ref);
       // A reference with no slash carries no registry to replace, so it is left

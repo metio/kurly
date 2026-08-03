@@ -2,7 +2,9 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# What does putting a workload in an Istio mesh COST it at admission?
+# What does putting a workload in a mesh COST it at admission?
+#
+#   mesh-bsi.sh [istio|linkerd]
 #
 # kurly's recipes keep a hardened posture that the bollwerk policies are built to
 # check, and the catalogue publishes the result per stage. But `bsi` is measured
@@ -25,14 +27,15 @@
 # lists. Reporting the meshed pod's violations alone would credit the sidecar
 # with every policy the bare workload already broke.
 #
-# Then it measures the mesh a SECOND time with Istio's CNI plugin installed.
-# Without it, Istio programs the pod's iptables from an `istio-init` container
-# that runs as root with NET_ADMIN and NET_RAW — everything the baseline exists
-# to forbid. The CNI plugin moves that work to a node agent, so the injected pod
-# no longer needs it. Whether that actually clears the violations is a question
-# about a running cluster, and the point of asking it here is that an operator
-# who has to offer both an encrypted mesh and an enforced baseline needs the
-# configuration that gives them both, not the news that they conflict.
+# Then it measures the mesh a SECOND time with that mesh's CNI plugin installed.
+# Both meshes have the same problem and the same escape: by default each programs
+# the pod's iptables from an init container running as root with NET_ADMIN and
+# NET_RAW — everything the baseline exists to forbid — and each offers a CNI
+# plugin that moves the work to a node agent so the injected pod no longer needs
+# it. Whether that actually clears the violations is a question about a running
+# cluster, and the point of asking it here is that an operator who has to offer
+# both an encrypted mesh and an enforced baseline needs the configuration that
+# gives them both, not the news that they conflict.
 #
 # Stripping volumes (as cr-bsi.sh does, so the dry-run does not fail on objects
 # that are not there) means any policy reading volume names is under-measured for
@@ -46,9 +49,35 @@ source hack/smoke/lib.sh
 
 # renovate: datasource=helm depName=istiod registryUrl=https://istio-release.storage.googleapis.com/charts
 ISTIO_VERSION="1.30.3"
+# renovate: datasource=helm depName=linkerd-control-plane registryUrl=https://helm.linkerd.io/edge
+LINKERD_VERSION="2026.8.1"
+
+MESH="${1:-istio}"
+case "$MESH" in
+  istio | linkerd) ;;
+  *) echo "::error::unknown mesh '${MESH}' — use istio or linkerd"; exit 1 ;;
+esac
 
 ns=kurly-mesh-bsi
 app_image="docker.io/traefik/whoami:v1.11.0"
+
+# Everything that differs between the two meshes, in one place: the container
+# each injects to program iptables (the one the CNI plugin removes), the proxy
+# it injects, the label its CNI node agent carries, and the recipe to compose.
+case "$MESH" in
+  istio)
+    proxy_container=istio-proxy
+    cni_selector=k8s-app=istio-cni-node
+    cni_namespace=istio-system
+    compose="+ k.mesh.istio()"
+    ;;
+  linkerd)
+    proxy_container=linkerd-proxy
+    cni_selector=k8s-app=linkerd-cni
+    cni_namespace=linkerd-cni
+    compose="+ k.mesh.linkerd()"
+    ;;
+esac
 
 # The policies are cluster-scoped, so this must never run against a cluster
 # anyone relies on — even as Warn, they would annotate everything admitted there.
@@ -70,15 +99,41 @@ fail() {
   exit 1
 }
 
-echo "== install Istio ${ISTIO_VERSION} =="
-helm repo add istio https://istio-release.storage.googleapis.com/charts >/dev/null
-helm repo update >/dev/null
-helm upgrade --install istio-base istio/base \
-  --version "$ISTIO_VERSION" --namespace istio-system --create-namespace --wait --timeout 5m \
-  || fail "the Istio base chart never installed"
-helm upgrade --install istiod istio/istiod \
-  --version "$ISTIO_VERSION" --namespace istio-system --wait --timeout 10m \
-  || fail "istiod never became Ready"
+install_istio() {
+  echo "== install Istio ${ISTIO_VERSION} =="
+  helm repo add istio https://istio-release.storage.googleapis.com/charts >/dev/null
+  helm repo update >/dev/null
+  helm upgrade --install istio-base istio/base \
+    --version "$ISTIO_VERSION" --namespace istio-system --create-namespace --wait --timeout 5m \
+    || fail "the Istio base chart never installed"
+  helm upgrade --install istiod istio/istiod \
+    --version "$ISTIO_VERSION" --namespace istio-system --wait --timeout 10m \
+    || fail "istiod never became Ready"
+}
+
+# Linkerd's identity system needs a trust anchor and an issuer signed by it, and
+# helm — unlike the linkerd CLI — will not mint them. Throwaway, like the cluster.
+install_linkerd() {
+  echo "== install Linkerd edge-${LINKERD_VERSION} =="
+  step certificate create root.linkerd.cluster.local "${work}/ca.crt" "${work}/ca.key" \
+    --profile root-ca --no-password --insecure >/dev/null || fail "could not create the trust anchor"
+  step certificate create identity.linkerd.cluster.local "${work}/issuer.crt" "${work}/issuer.key" \
+    --profile intermediate-ca --not-after 8760h --no-password --insecure \
+    --ca "${work}/ca.crt" --ca-key "${work}/ca.key" >/dev/null || fail "could not create the issuer"
+  helm repo add linkerd-edge https://helm.linkerd.io/edge >/dev/null
+  helm repo update >/dev/null
+  helm upgrade --install linkerd-crds linkerd-edge/linkerd-crds \
+    --version "$LINKERD_VERSION" --namespace linkerd --create-namespace --wait --timeout 5m \
+    || fail "the Linkerd CRDs never installed"
+  helm upgrade --install linkerd-control-plane linkerd-edge/linkerd-control-plane \
+    --version "$LINKERD_VERSION" --namespace linkerd --wait --timeout 10m \
+    --set-file identityTrustAnchorsPEM="${work}/ca.crt" \
+    --set-file identity.issuer.tls.crtPEM="${work}/issuer.crt" \
+    --set-file identity.issuer.tls.keyPEM="${work}/issuer.key" \
+    || fail "the Linkerd control plane never became Ready"
+}
+
+"install_${MESH}"
 
 # Every binding as Warn, for the reason gen-bsi installs them that way: Deny
 # stops at the first violation and Audit only reaches the audit log, while Warn
@@ -111,7 +166,7 @@ render_app() {
        + k.runAs(65532) + k.replicas(1) + k.probes('/') + k.hostUsers() ${compose})"
 }
 
-for pair in "bare:" "meshed:+ k.mesh.istio()"; do
+for pair in "bare:" "meshed:${compose}"; do
   name="${pair%%:*}"
   render_app "$name" "${pair#*:}" | kubectl apply --namespace="$ns" --filename=- >/dev/null 2>&1 \
     || fail "${name} did not apply"
@@ -120,11 +175,11 @@ for pair in "bare:" "meshed:+ k.mesh.istio()"; do
 done
 
 # Sanity: the meshed pod must actually carry a proxy, or the difference measures
-# nothing. Istio injects it as a NATIVE SIDECAR — a restartable init container —
-# so look in both container lists.
+# nothing. Both meshes inject it as a NATIVE SIDECAR — a restartable init
+# container — so look in both container lists.
 kubectl --namespace="$ns" get pods --selector=app.kubernetes.io/name=meshed \
   -o jsonpath='{.items[0].spec.containers[*].name} {.items[0].spec.initContainers[*].name}' \
-  | grep -qw istio-proxy || fail "the meshed pod has no istio-proxy: there is nothing to measure"
+  | grep -qw "$proxy_container" || fail "the meshed pod has no ${proxy_container}: there is nothing to measure"
 
 # Re-submits a live pod as a dry-run CREATE and echoes the policies that warned.
 # Everything the API server filled in is stripped: a pod carrying status,
@@ -175,15 +230,28 @@ difference() {
 
 difference "${work}/bare.txt" "${work}/meshed.txt" "what the sidecar costs, with no CNI plugin"
 
+# Installing the plugin's chart is not enough for either mesh: the control plane
+# keeps injecting its init container until it is TOLD the plugin is there. Left
+# out, the re-measurement repeats the first one and reads like a result — which
+# is what the init-container guard below is for, and it has already caught it
+# once.
+enable_cni_istio() {
+  helm upgrade --install istio-cni istio/cni \
+    --version "$ISTIO_VERSION" --namespace istio-system --wait --timeout 5m >/dev/null 2>&1 \
+  && helm upgrade istiod istio/istiod --version "$ISTIO_VERSION" --namespace istio-system \
+    --reuse-values --set pilot.cni.enabled=true --wait --timeout 10m >/dev/null 2>&1
+}
+enable_cni_linkerd() {
+  helm upgrade --install linkerd-cni linkerd-edge/linkerd2-cni \
+    --version "$LINKERD_VERSION" --namespace linkerd-cni --create-namespace --wait --timeout 5m >/dev/null 2>&1 \
+  && helm upgrade linkerd-control-plane linkerd-edge/linkerd-control-plane \
+    --version "$LINKERD_VERSION" --namespace linkerd --reuse-values \
+    --set cniEnabled=true --wait --timeout 10m >/dev/null 2>&1
+}
+
 echo
-echo "== install the Istio CNI plugin ${ISTIO_VERSION} and re-measure =="
-# Installing the chart is not enough: istiod keeps injecting istio-init until it
-# is TOLD the plugin is there. Left out, the re-measurement repeats the first one
-# and reads like a result, which is what the istio-init guard below is for.
-if helm upgrade --install istio-cni istio/cni \
-     --version "$ISTIO_VERSION" --namespace istio-system --wait --timeout 5m >/dev/null 2>&1 \
-   && helm upgrade istiod istio/istiod --version "$ISTIO_VERSION" --namespace istio-system \
-     --reuse-values --set pilot.cni.enabled=true --wait --timeout 10m >/dev/null 2>&1
+echo "== install the ${MESH} CNI plugin and re-measure =="
+if "enable_cni_${MESH}"
 then
   kubectl --namespace="$ns" rollout restart deployment/meshed >/dev/null
   kubectl --namespace="$ns" rollout status deployment/meshed --timeout=300s >/dev/null \
@@ -191,8 +259,15 @@ then
   initnames="$(kubectl --namespace="$ns" get pods --selector=app.kubernetes.io/name=meshed \
     -o jsonpath='{.items[0].spec.initContainers[*].name}')"
   echo "   init containers now: ${initnames:-none}"
-  if grep -qw istio-init <<<"$initnames"; then
-    echo "::warning::istio-init is still present with the CNI plugin installed — what follows is NOT the CNI case, do not read it as one"
+  # The whole claim is that the privileged init container is gone. Name it by the
+  # mesh rather than by a pattern: an init list that merely lost a name for some
+  # other reason must not read as the plugin working.
+  case "$MESH" in
+    istio) gone_container=istio-init ;;
+    linkerd) gone_container=linkerd-init ;;
+  esac
+  if grep -qw "$gone_container" <<<"$initnames"; then
+    echo "::warning::${gone_container} is still present with the CNI plugin installed — what follows is NOT the CNI case, do not read it as one"
   fi
   policies_tripped "$ns" app.kubernetes.io/name=meshed >"${work}/meshed-cni.txt" \
     || fail "could not probe the meshed pod after the CNI plugin went in"
@@ -207,7 +282,7 @@ then
   # would be reporting half a trade.
   echo
   echo "== the CNI node agent, which now does that work =="
-  if policies_tripped istio-system k8s-app=istio-cni-node >"${work}/cni-agent.txt"; then
+  if policies_tripped "$cni_namespace" "$cni_selector" >"${work}/cni-agent.txt"; then
     sed 's/^/   /' "${work}/cni-agent.txt"
     [ -s "${work}/cni-agent.txt" ] || echo "   (none)"
   else
@@ -224,5 +299,9 @@ kubectl delete --filename="${work}/policies.json" --ignore-not-found --wait=fals
 for release in istio-cni istiod istio-base; do
   helm uninstall "$release" --namespace istio-system >/dev/null 2>&1 || true
 done
-kubectl delete namespace istio-system --wait=false >/dev/null 2>&1 || true
+helm uninstall linkerd-cni --namespace linkerd-cni >/dev/null 2>&1 || true
+for release in linkerd-control-plane linkerd-crds; do
+  helm uninstall "$release" --namespace linkerd >/dev/null 2>&1 || true
+done
+kubectl delete namespace istio-system linkerd linkerd-cni --wait=false >/dev/null 2>&1 || true
 echo "done"

@@ -280,37 +280,53 @@ through the exceptions a real baseline keeps, such as an allow for kube-dns.
 
 ```jsonnet
 kurly.http('users', image) + kurly.mesh.istio()
+kurly.http('users', image) + kurly.mesh.linkerd()
 ```
 
-It enables sidecar injection — for Istio the **label**
-`sidecar.istio.io/inject: "true"` on the pod template, never on the controller
-where the injector would not see it, and a label rather than an annotation
-because Istio's webhook selects on labels only, so the annotation form injects
-nothing in an unlabelled namespace and says nothing about it — and emits a
-`security.istio.io/v1` `PeerAuthentication` named after the workload, selecting
-its own pods, with `mode: STRICT`. That second object is the point: it makes the
-sidecar **refuse** plaintext rather than merely accept TLS, and it is the half no
-policy engine can supply. A `ValidatingAdmissionPolicy` sees the object being
-written, so it can neither observe traffic nor require that another object
-exists — a workload passing every policy in `bsi` says nothing either way about
-whether its traffic is encrypted.
+Each enables proxy injection and makes the proxy **refuse** plaintext rather
+than merely accept TLS — and the two meshes have almost nothing in common in how
+they say it:
 
-Each half turns off on its own: `mtls=null` leaves the namespace or mesh default
-in force, `inject=false` suits a cluster that labels the namespace instead, and
-`peerAuthentication` merges per-port overrides into the emitted spec verbatim.
-Recipes share the `mesh` exclusion group.
+|  | Istio | Linkerd |
+| --- | --- | --- |
+| injection marker | label `sidecar.istio.io/inject: "true"` | annotation `linkerd.io/inject: enabled` |
+| enforcement | a `PeerAuthentication` object, `mode: STRICT` | annotation `config.linkerd.io/default-inbound-policy: all-authenticated` |
 
-There is deliberately **no `AuthorizationPolicy`**. Which principals may call
-which paths depends on what else the tenant runs, and Istio's authorization
-schema is large and moves — the same reason the network axis does not model the
-CNI schemas.
+Getting that split backwards is silent. Istio's webhook selects on labels only,
+so the annotation form injects nothing in an unlabelled namespace and says
+nothing about it; Linkerd's injector reads only the annotation. Knowing which is
+the recipe's job, and it is most of why the axis exists.
+
+The enforcement half is the other reason: no policy engine can supply it. A
+`ValidatingAdmissionPolicy` sees the object being written, so it can neither
+observe traffic nor require that another object exists — a workload passing
+every policy in `bsi` says nothing either way about whether its traffic is
+encrypted.
+
+Each half turns off alone (`mtls=null` / `inboundPolicy=null`, `inject=false`),
+and each mesh keeps its own vocabulary rather than a shared invented one:
+`STRICT` means nothing to Linkerd, and `cluster-authenticated` has no Istio
+equivalent. Recipes share the `mesh` exclusion group.
+
+Both take a `proxyImage`, because Istio publishes from `registry.istio.io/release`
+and Linkerd from `cr.l5d.io` — neither of which an allow-list cluster permits nor
+an air-gapped one can reach — and `kurly.mirror` follows it onto your registry
+along with everything else.
+
+There are deliberately **no authorization rules** (Istio's
+`AuthorizationPolicy`, Linkerd's `Server`). Which principals may call which
+paths depends on what else the tenant runs, and both schemas are large and move
+— the same reason the network axis does not model the CNI schemas.
 
 The namespace-wide floor is a standalone generator, because a workload that
 emitted one would be legislating for its neighbours:
 
 ```jsonnet
-kurly.list([ app, kurly.mesh.strictNamespace() ])
+kurly.list([ app, kurly.mesh.strictNamespace.istio() ])
 ```
+
+Linkerd has no member there: its floor is an annotation on the Namespace object
+or a control-plane setting, and kurly renders neither.
 
 ## Documentation
 

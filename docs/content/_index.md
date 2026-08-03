@@ -136,21 +136,27 @@ mesh, composed onto a workload with `+`:
 
 ```jsonnet
 kurly.http('app', image) + kurly.mesh.istio()
+kurly.http('app', image) + kurly.mesh.linkerd()
 ```
 
-That does two things. It puts the sidecar injection marker on the **pod
+Each does two things: it puts the mesh's injection marker on the **pod
 template** (never the controller, where the injector would not see it), and it
-emits a `security.istio.io/v1` `PeerAuthentication` named after the workload,
-selecting its own pods, with `mode: STRICT` — the object that makes the sidecar
-**refuse** plaintext rather than merely accept TLS.
+makes the proxy **refuse** plaintext rather than merely accept TLS.
 
-For Istio that marker is the **label** `sidecar.istio.io/inject: "true"`, and
-the distinction is worth knowing if you have ever set it by hand. Istio's
-injection webhook selects on labels only — an `objectSelector` cannot read
+Both meshes do both things, and they do them with almost nothing in common:
+
+| | Istio | Linkerd |
+|---|---|---|
+| injection marker | label `sidecar.istio.io/inject: "true"` | annotation `linkerd.io/inject: enabled` |
+| enforcement | a `PeerAuthentication` object, `mode: STRICT` | annotation `config.linkerd.io/default-inbound-policy: all-authenticated` |
+| namespace first? | must carry `istio-injection` or the pod must be labelled | no, the injector is called for every pod |
+
+The label-versus-annotation split is worth knowing if you have ever set one by
+hand. Istio's webhook selects on labels only — an `objectSelector` cannot read
 annotations — so in a namespace carrying neither `istio-injection` nor
-`istio.io/rev`, the annotation form injects nothing, and does so without a word.
-Linkerd's injector reads an annotation instead. Which one a mesh wants is the
-recipe's business rather than yours.
+`istio.io/rev`, the annotation form injects nothing and says nothing about it.
+Linkerd is the other way round. Which one a mesh wants is the recipe's business
+rather than yours, and that is most of why the axis exists.
 
 Your own `podLabels` still win over the recipe's, so opting one workload out of
 injection on a mesh-wide cluster is obeyed rather than overwritten:
@@ -165,11 +171,18 @@ controller's immutable selector, which is what makes composing a mesh onto a
 running workload an ordinary rollout: a selector that changed would need a
 delete and reinstall.
 
-Each half can be turned off on its own. `mtls=null` emits no
-`PeerAuthentication`, leaving the namespace or mesh default in force;
-`inject=false` skips the marker, for a cluster that labels the namespace
-instead. Per-port overrides go through `peerAuthentication`, merged verbatim
-into the emitted spec.
+Each half turns off on its own. For Istio, `mtls=null` emits no
+`PeerAuthentication` and per-port overrides go through `peerAuthentication`,
+merged verbatim; for Linkerd, `inboundPolicy=null` sets no policy, and the other
+values it accepts are `cluster-authenticated`, `all-unauthenticated`, `deny` and
+`audit`. `inject=false` skips the marker in both, for a cluster that has already
+marked the namespace.
+
+The knobs keep each mesh's own vocabulary rather than inventing a shared one.
+`STRICT` means nothing to Linkerd and `cluster-authenticated` has no Istio
+equivalent, so a neutral word would be a translation that quietly loses. The
+neutral promise is at the recipe: `kurly.mesh.<mesh>()` with no arguments means
+*meshed, plaintext refused*, in both.
 
 For the namespace-wide floor — every pod, not just this workload — there is a
 standalone generator, placed with `kurly.list` the way `network.denyAll` is. A
@@ -177,8 +190,13 @@ workload does not emit one of these itself; it would be legislating for its
 neighbours:
 
 ```jsonnet
-kurly.list([app, kurly.mesh.strictNamespace()])
+kurly.list([app, kurly.mesh.strictNamespace.istio()])
 ```
+
+There is no Linkerd member, and the absence is the answer rather than a gap:
+Linkerd's floor is an annotation on the Namespace object or a control-plane
+setting, and kurly renders neither — its objects are namespace-less by design,
+placed by you.
 
 Recipes join the `mesh` exclusion group, so a workload cannot compose two meshes.
 
@@ -193,9 +211,10 @@ metadata goes through the operator's own parameter instead.
 
 ### What kurly does not emit
 
-**No `AuthorizationPolicy`.** Which principals may call which paths of a
-workload depends on what else the tenant runs, so it is not something a workload
-recipe knows — and Istio's authorization schema is large and moves. That is the
+**No authorization rules** — Istio's `AuthorizationPolicy`, Linkerd's `Server`
+and `AuthorizationPolicy`. Which principals may call which paths of a workload
+depends on what else the tenant runs, so it is not something a workload recipe
+knows — and both schemas are large and move. That is the
 same restraint the network axis takes with the CNI schemas: model the small
 stable thing, and pass the rest through verbatim.
 
