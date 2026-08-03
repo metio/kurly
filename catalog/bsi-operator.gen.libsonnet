@@ -15,12 +15,31 @@
 // operator produced, and submitting it again as a dry-run create so the
 // admission warnings come back to us rather than to the operator.
 //
-// ABSENT means not measured — an operator that would not install here, or a
-// schedule-driven CR that creates no pod until it fires. Never read as clean.
+// ABSENT means NOT MEASURED. Never read as clean. What is absent today, and why:
+//
+//   cnpg-image-catalog/cluster, /namespaced
+//       creates no pod, ever. An ImageCatalog is a list of images for other
+//       CNPG Clusters to reference; there is nothing for a policy to judge and
+//       nothing that could be rejected.
+//   volsync/backup, /restore, k8up/backup, /schedule
+//       schedule-driven: the Job appears when the schedule fires, so there is no
+//       pod standing to measure. Measuring them needs a triggered run.
+//   tempo/server
+//       the TempoStack needs an object-storage Secret the consumer provides
+//       (kurly mints none), and the operator builds nothing without it.
+//   keycloak/server
+//       the operator runs but produced no pod from the default render.
+//   cassandra-cluster/cluster
+//       cass-operator never started here: its webhook waits on a certificate
+//       that never arrived.
+//   opensearch-cluster/cluster
+//       the operator's manifest pulls gcr.io/kubebuilder/kube-rbac-proxy:v0.15.0,
+//       which no longer exists in that registry.
 {
   'alertmanager/server': { pods: 1, violates: ['disallow-default-serviceaccount', 'require-non-root-groups', 'require-probes', 'require-run-as-non-root-user', 'restrict-sa-automount-sa-token'] },
   'cnpg-cluster/cluster': { pods: 1, violates: ['require-non-root-groups', 'require-probes', 'require-request-limits', 'require-run-as-non-root-user', 'restrict-sa-automount-sa-token'] },
   'k8up/restore': { pods: 1, violates: ['disallow-default-serviceaccount', 'disallow-privilege-escalation', 'disallow-unwanted-capabilities', 'require-probes', 'require-request-limits', 'require-ro-rootfs', 'require-run-as-nonroot', 'restrict-sa-automount-sa-token'] },
+  'loki/server': { pods: 8, violates: ['disallow-default-serviceaccount', 'disallow-privilege-escalation', 'disallow-unwanted-capabilities', 'require-non-root-groups', 'require-probes', 'require-request-limits', 'require-ro-rootfs', 'require-run-as-nonroot', 'require-run-as-non-root-user', 'restrict-sa-automount-sa-token'] },
   'mysql-cluster/cluster': { pods: 3, violates: ['require-non-root-groups', 'require-probes', 'require-request-limits', 'require-run-as-non-root-user', 'require-run-as-nonroot', 'restrict-image-registries', 'restrict-sa-automount-sa-token'] },
   'prometheus/server': { pods: 1, violates: ['require-non-root-groups', 'require-probes', 'require-run-as-non-root-user', 'restrict-sa-automount-sa-token'] },
   'thanos/ruler': { pods: 1, violates: ['disallow-default-serviceaccount', 'require-non-root-groups', 'require-probes', 'require-request-limits', 'require-run-as-non-root-user', 'restrict-sa-automount-sa-token'] },

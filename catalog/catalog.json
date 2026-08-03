@@ -19485,7 +19485,22 @@
                   }
                ],
                "bsi": {
-                  "applicable": false
+                  "applicable": false,
+                  "operatorPods": {
+                     "pods": 8,
+                     "violates": [
+                        "disallow-default-serviceaccount",
+                        "disallow-privilege-escalation",
+                        "disallow-unwanted-capabilities",
+                        "require-non-root-groups",
+                        "require-probes",
+                        "require-request-limits",
+                        "require-ro-rootfs",
+                        "require-run-as-nonroot",
+                        "require-run-as-non-root-user",
+                        "restrict-sa-automount-sa-token"
+                     ]
+                  }
                },
                "clusterScoped": false,
                "declaredRequests": null,
