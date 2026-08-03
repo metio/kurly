@@ -246,7 +246,15 @@ enable_cni_linkerd() {
     --version "$LINKERD_VERSION" --namespace linkerd-cni --create-namespace --wait --timeout 5m >/dev/null 2>&1 \
   && helm upgrade linkerd-control-plane linkerd-edge/linkerd-control-plane \
     --version "$LINKERD_VERSION" --namespace linkerd --reuse-values \
-    --set cniEnabled=true --wait --timeout 10m >/dev/null 2>&1
+    --set cniEnabled=true --wait --timeout 10m >/dev/null 2>&1 \
+  && {
+    # The proxy-injector holds its configuration from startup, and the chart does
+    # not roll it when that configuration changes — so without this it keeps
+    # injecting linkerd-init from the old config and the re-measurement silently
+    # repeats the first one. The guard below caught exactly that.
+    kubectl --namespace=linkerd rollout restart deployment/linkerd-proxy-injector >/dev/null 2>&1
+    kubectl --namespace=linkerd rollout status deployment/linkerd-proxy-injector --timeout=5m >/dev/null 2>&1
+  }
 }
 
 echo

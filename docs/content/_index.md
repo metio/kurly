@@ -244,34 +244,35 @@ answer is the difference rather than a list the workload already earned:
 
 | | policies broken by the injected containers |
 |---|---|
-| Istio's default install | `disallow-unwanted-capabilities`, `require-run-as-nonroot`, `require-ro-rootfs`, `restrict-image-registries` |
-| with Istio's CNI plugin | `restrict-image-registries` |
+| Istio, default install | `disallow-unwanted-capabilities`, `require-run-as-nonroot`, `require-ro-rootfs`, `restrict-image-registries` |
+| Istio, with its CNI plugin | `restrict-image-registries` |
+| Linkerd, default install | `disallow-unwanted-capabilities`, `require-request-limits`, `restrict-image-registries` |
+| Linkerd, with its CNI plugin | *not measured* — see below |
 
-By default Istio programs each pod's iptables from an `istio-init` container that
-runs as root with `NET_ADMIN` and `NET_RAW` — precisely what a hardened baseline
-exists to forbid, and it lands in **every meshed pod**. The CNI plugin replaces
-that container with an unprivileged `istio-validation`, and the workload's cost
-falls to the proxy image's registry not being on the allow-list — a one-line
-decision for whoever runs the mesh.
+By default each mesh programs the pod's iptables from an init container running
+as root with `NET_ADMIN` and `NET_RAW` — precisely what a hardened baseline
+exists to forbid, and it lands in **every meshed pod**. Istio's `istio-init`
+brings a writable root filesystem and a root user with it as well; Linkerd's
+`linkerd-init` costs less, and its proxy carrying no resource limits is
+something an operator can simply set.
 
-The privilege does not vanish, though; it **moves**. The CNI node agent that now
-does the work is itself privileged and breaks nine policies. That is a far better
-place for it — one cluster component an operator installs and exempts
-deliberately, the way a CSI driver is exempted, instead of a relaxation in every
-tenant's pod — but it is a relocation, not a removal, and an operator promising
-both an encrypted mesh and an enforced baseline should be told which of the two
-they are buying.
+Istio's CNI plugin replaces that container with an unprivileged
+`istio-validation`, and the workload's cost falls to the proxy image's registry
+not being on the allow-list — a one-line decision for whoever runs the mesh. The
+Linkerd equivalent is **not measured**: the plugin installs and its node agent
+runs, but the injected pod kept `linkerd-init` across two attempts, including one
+that restarted the proxy-injector, so the comparison would have been the non-CNI
+case wearing a CNI label. The scenario refuses to report it as one.
 
-The registry line is the one kurly can close from the workload itself:
-`kurly.mesh.istio(proxyImage='ghcr.io/acme/mesh/proxyv2:1.30.3')` names the image
-the injector pulls, and `kurly.mirror` follows it onto a private registry along
-with everything else. Without it, mirroring a meshed workload leaves its sidecar
-reaching for the public internet — on an air-gapped cluster, not a partial
-success but a pod that does not start. The other three are the cluster's to fix,
-and [Upgrading](/installation/upgrading/) has the commands.
+Where it is measured, the privilege does not vanish; it **moves**. Istio's CNI
+node agent breaks nine policies, Linkerd's seven. That is a far better place for
+it — one cluster component an operator installs and exempts deliberately, the way
+a CSI driver is exempted, instead of a relaxation in every tenant's pod — but it
+is a relocation, not a removal, and an operator promising both an encrypted mesh
+and an enforced baseline should be told which of the two they are buying.
 
-`hack/smoke/deep/mesh-bsi.sh` is the measurement; re-run it against a newer Istio
-rather than trusting the table.
+`hack/smoke/deep/mesh-bsi.sh <mesh>` is the measurement; re-run it against your
+own versions rather than trusting the table.
 
 ### Linkerd's enforcement is unverified
 

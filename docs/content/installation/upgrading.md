@@ -79,3 +79,10 @@ has not been measured against the policies; that is a gap, not a clean bill.
 `kurly.mesh.linkerd()` injects reliably, but **its inbound policy has not been
 shown to refuse anything** — see the mesh section on the front page. Use it for
 injection; do not count it as encryption in transit yet.
+
+Measured the same way, Linkerd's injected containers break three policies rather
+than Istio's four: `disallow-unwanted-capabilities`, `require-request-limits` and
+`restrict-image-registries`. They stay non-root with a read-only root filesystem,
+which Istio's `istio-init` does not. Whether Linkerd's CNI plugin clears the
+capability line is unmeasured — the injected pod kept `linkerd-init` in both
+attempts, so there is no CNI figure to quote.
