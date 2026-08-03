@@ -2751,6 +2751,12 @@
                "type": "bool"
             },
             {
+               "example": "ghcr.io/acme/mesh/proxyv2:1.30.3",
+               "name": "proxyImage",
+               "required": false,
+               "type": "string"
+            },
+            {
                "name": "peerAuthentication",
                "required": false,
                "type": "object"
@@ -2758,7 +2764,7 @@
          ],
          "exclusiveGroup": "mesh",
          "group": "networking",
-         "help": "Runs the workload in an Istio mesh: the sidecar injection LABEL (sidecar.istio.io/inject) on the pod template — a label rather than an annotation because Istio's injection webhook selects on labels only, so the annotation form injects nothing in a namespace that is not itself labelled — plus a security.istio.io/v1 PeerAuthentication named after the workload selecting its own pods, with mode STRICT so the sidecar refuses plaintext. mtls=null emits no PeerAuthentication (the namespace or mesh default stands); inject=false skips the marker for a cluster that labels the namespace; peerAuthentication merges verbatim into the emitted spec.",
+         "help": "Runs the workload in an Istio mesh: the sidecar injection LABEL (sidecar.istio.io/inject) on the pod template — a label rather than an annotation because Istio's injection webhook selects on labels only, so the annotation form injects nothing in a namespace that is not itself labelled — plus a security.istio.io/v1 PeerAuthentication named after the workload selecting its own pods, with mode STRICT so the sidecar refuses plaintext. mtls=null emits no PeerAuthentication (the namespace or mesh default stands); inject=false skips the marker for a cluster that labels the namespace; proxyImage names the image the INJECTED containers pull (Istio publishes from registry.istio.io/release, which an allow-list cluster refuses and an air-gapped one cannot reach), and kurly.mirror follows it onto a private registry; peerAuthentication merges verbatim into the emitted spec.",
          "id": "istio",
          "kinds": [
             "http",

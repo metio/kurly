@@ -122,9 +122,17 @@ local itemsOf(value) =
   // is for a registry that renames the path, or an air-gapped copy.
   mirror(registry, manifests)::
     // Only `image` (containers, initContainers, sidecars, an ImageCatalog's
-    // entries) and `imageName` (a CNPG Cluster) are rewritten. Rewriting every
-    // field that merely looks like an image would reach into ConfigMap data and
-    // arbitrary CR fields that happen to share a name.
+    // entries), `imageName` (a CNPG Cluster) and the mesh's proxy-image
+    // annotation are rewritten. Rewriting every field that merely looks like an
+    // image would reach into ConfigMap data and arbitrary CR fields that happen
+    // to share a name.
+    //
+    // The annotation is here because the image it names is pulled by a container
+    // that does not exist yet — the mesh injects it at admission, after this has
+    // run. Leaving it out mirrors the workload onto the private registry and
+    // leaves its sidecar reaching for the public internet, which on an
+    // air-gapped cluster is not a partial success either: the pod does not start.
+    local imageFields = ['image', 'imageName', 'sidecar.istio.io/proxyImage'];
     local rewriteRef(ref) =
       local slash = std.findSubstr('/', ref);
       // A reference with no slash carries no registry to replace, so it is left
@@ -140,7 +148,7 @@ local itemsOf(value) =
           // rewrite a config value the moment it contained a slash — and
           // kurly.config({ image: 'foo/bar' }) is an ordinary thing to write.
           if k == 'data' || k == 'stringData' then node[k]
-          else if (k == 'image' || k == 'imageName') && std.isString(node[k])
+          else if std.member(imageFields, k) && std.isString(node[k])
           then rewriteRef(node[k])
           else walk(node[k])
         for k in std.objectFields(node)

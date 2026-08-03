@@ -47,3 +47,8 @@ pygmentsUseClasses = true
     name = "Reference"
     url = "/reference/"
     weight = 20
+  [[menu.main]]
+    identifier = "installation"
+    name = "Installation"
+    url = "/installation/"
+    weight = 30

@@ -242,6 +242,14 @@ tenant's pod — but it is a relocation, not a removal, and an operator promisin
 both an encrypted mesh and an enforced baseline should be told which of the two
 they are buying.
 
+The registry line is the one kurly can close from the workload itself:
+`kurly.mesh.istio(proxyImage='ghcr.io/acme/mesh/proxyv2:1.30.3')` names the image
+the injector pulls, and `kurly.mirror` follows it onto a private registry along
+with everything else. Without it, mirroring a meshed workload leaves its sidecar
+reaching for the public internet — on an air-gapped cluster, not a partial
+success but a pod that does not start. The other three are the cluster's to fix,
+and [Upgrading](/installation/upgrading/) has the commands.
+
 `hack/smoke/deep/mesh-bsi.sh` is the measurement; re-run it against a newer Istio
 rather than trusting the table.
 

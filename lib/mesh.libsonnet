@@ -59,9 +59,16 @@
   //                       namespace or mesh default in force
   //   inject  false to skip the injection marker, for a cluster that labels the
   //           namespace instead
+  //   proxyImage  the image the injected containers pull, overriding the mesh's
+  //           default. Istio publishes from registry.istio.io/release, which an
+  //           allow-list cluster does not permit and an air-gapped one cannot
+  //           reach — and no amount of care in this manifest changes an image
+  //           the injector chose. One annotation covers BOTH injected
+  //           containers: istiod's template reads it for the proxy and for
+  //           istio-init alike.
   //   peerAuthentication  merged verbatim into the emitted object's spec, for
   //           the per-port overrides this vocabulary does not model
-  istio(mtls='STRICT', inject=true, peerAuthentication={}):: mesh('istio') {
+  istio(mtls='STRICT', inject=true, proxyImage=null, peerAuthentication={}):: mesh('istio') {
     config+:: {
       mesh: {
         variant: 'istio',
@@ -81,7 +88,12 @@
         // And the marker belongs to the pod: the injector mutates pods, so one
         // on the Deployment reaches nothing.
         injectLabels: if inject then { 'sidecar.istio.io/inject': 'true' } else {},
-        injectAnnotations: {},
+        // Independent of `inject`: a cluster that injects by namespace label
+        // still lets a pod say which image to inject, so the two knobs do not
+        // gate each other.
+        injectAnnotations:
+          if proxyImage == null then {}
+          else { 'sidecar.istio.io/proxyImage': proxyImage },
         mtls: mtls,
         peerAuthentication: peerAuthentication,
       },

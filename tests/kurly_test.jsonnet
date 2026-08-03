@@ -646,6 +646,32 @@ local podOf(app) = app.deployment.spec.template.spec;
     [0, 'true', false]
   ),
 
+  // proxyImage names the image the INJECTOR pulls, which no care in this
+  // manifest otherwise reaches — Istio publishes from registry.istio.io/release,
+  // which an allow-list cluster refuses and an air-gapped one cannot reach. And
+  // kurly.mirror must follow it onto the private registry, or a mirrored
+  // workload starts with a sidecar reaching for the public internet.
+  mesh_proxy_image_is_mirrorable: std.assertEqual(
+    local a = shop + kurly.mesh.istio(proxyImage='registry.istio.io/release/proxyv2:1.30.3');
+    [
+      a.deployment.spec.template.metadata.annotations,
+      kurly.mirror('harbor.internal/mesh', kurly.list(a)).items[0].spec.template.metadata.annotations,
+    ],
+    [
+      { 'sidecar.istio.io/proxyImage': 'registry.istio.io/release/proxyv2:1.30.3' },
+      { 'sidecar.istio.io/proxyImage': 'harbor.internal/mesh/release/proxyv2:1.30.3' },
+    ]
+  ),
+
+  // Naming the image does not turn injection on, and turning injection off does
+  // not withdraw the name: a cluster that injects by namespace label still lets
+  // a pod say which image to inject.
+  mesh_proxy_image_is_independent_of_inject: std.assertEqual(
+    (shop + kurly.mesh.istio(inject=false, proxyImage='ghcr.io/acme/proxyv2:1.30.3'))
+    .deployment.spec.template.metadata.annotations,
+    { 'sidecar.istio.io/proxyImage': 'ghcr.io/acme/proxyv2:1.30.3' }
+  ),
+
   // peerAuthentication passes verbatim into the emitted spec — the escape hatch
   // for the per-port overrides the vocabulary does not model.
   mesh_peer_authentication_verbatim: std.assertEqual(
