@@ -63,6 +63,15 @@ changing nothing else lets the refused request succeed. Without that last step
 the refusal proves only that a request failed, which it can do for a hundred
 reasons that have nothing to do with mTLS.
 
+`mesh-bsi.sh` asks the follow-on question: what does the mesh cost at admission?
+The catalogue's `bsi` is measured on what kurly RENDERS, and a meshed pod is not
+that — the injector adds containers between the manifest and the pod, and those
+containers are in bollwerk's scope. It deploys the same app meshed and bare,
+re-submits each resulting pod as a dry-run CREATE so the policies warn to us
+(the method `cr-bsi.sh` uses for operator-made pods), and reports the difference,
+then repeats it with Istio's CNI plugin installed and measures the node agent
+that takes over the privileged work.
+
 They are not part of the per-workload walk, so a missing registry or an operator
 that is slow to come up never blocks a workload's fast check. A workload a deep
 scenario exercises still counts toward the `e2e` maturity tier.

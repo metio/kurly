@@ -215,6 +215,36 @@ Cilium needs no injection at all, and its policy side is already a kurly axis:
 `kurly.network.cilium(...)` emits a `CiliumNetworkPolicy` from the same
 allow-list vocabulary the Kubernetes and Calico variants use.
 
+### What the mesh costs at admission, and where to put that cost
+
+Composing a mesh changes what runs, so it changes what an admission baseline
+sees. Measured against every [bollwerk](https://github.com/metio/bollwerk) policy
+on a live API server — the same workload deployed twice, meshed and bare, so the
+answer is the difference rather than a list the workload already earned:
+
+| | policies broken by the injected containers |
+|---|---|
+| Istio's default install | `disallow-unwanted-capabilities`, `require-run-as-nonroot`, `require-ro-rootfs`, `restrict-image-registries` |
+| with Istio's CNI plugin | `restrict-image-registries` |
+
+By default Istio programs each pod's iptables from an `istio-init` container that
+runs as root with `NET_ADMIN` and `NET_RAW` — precisely what a hardened baseline
+exists to forbid, and it lands in **every meshed pod**. The CNI plugin replaces
+that container with an unprivileged `istio-validation`, and the workload's cost
+falls to the proxy image's registry not being on the allow-list — a one-line
+decision for whoever runs the mesh.
+
+The privilege does not vanish, though; it **moves**. The CNI node agent that now
+does the work is itself privileged and breaks nine policies. That is a far better
+place for it — one cluster component an operator installs and exempts
+deliberately, the way a CSI driver is exempted, instead of a relaxation in every
+tenant's pod — but it is a relocation, not a removal, and an operator promising
+both an encrypted mesh and an enforced baseline should be told which of the two
+they are buying.
+
+`hack/smoke/deep/mesh-bsi.sh` is the measurement; re-run it against a newer Istio
+rather than trusting the table.
+
 ### Why mTLS needs a rendered object, not a policy
 
 Worth knowing if a compliance regime requires encryption in transit: **no
