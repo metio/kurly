@@ -39,7 +39,9 @@ function(
   + kurly.rootUser()
   // The entrypoint hands its data directory to the web user before dropping to it.
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.writableRootFilesystem()
   + kurly.store('/var/lib/snappymail', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

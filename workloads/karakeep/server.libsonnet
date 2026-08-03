@@ -62,7 +62,9 @@ function(
   // The s6-overlay init prepares /run as root and drops to the app user.
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/run')
   + kurly.store('/data', storageSize, storageClass=storageClass)

@@ -44,8 +44,9 @@ function(
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
   // The entrypoint rewrites the bundled UI's index.html, which the image owns as the
-  // nginx user — root needs DAC_OVERRIDE for that, and the workers need SETUID/SETGID.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

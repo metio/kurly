@@ -46,7 +46,9 @@ function(
   + kurly.rootUser()
   // The s6 init drops to the git user to run the app.
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/healthcheck', port: 'http' } })

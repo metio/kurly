@@ -39,7 +39,9 @@ function(
   // filesystem stays writable for its runtime state.
   + kurly.rootUser()
   // The entrypoint hands the application tree to the web user.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html/db', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

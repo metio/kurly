@@ -40,7 +40,9 @@ function(
   + kurly.env(env)
   // The entrypoint hands its data directory to the app user before dropping to it.
   + kurly.rootUser()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   + kurly.store('/app/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

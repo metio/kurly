@@ -47,7 +47,9 @@ function(
   // both of which the image owns as root.
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.store('/appdata', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

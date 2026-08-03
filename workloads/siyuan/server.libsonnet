@@ -45,7 +45,9 @@ function(
   // The entrypoint creates its account and hands the workspace to it.
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   + kurly.store('/siyuan/workspace', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

@@ -82,7 +82,9 @@ function(
   // Its init hands the config and data directories to the app user.
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.store('/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '256Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

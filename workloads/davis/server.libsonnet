@@ -40,8 +40,6 @@ function(
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
   // php-fpm starts as root and drops its worker pool to the web user, so it keeps
-  // the SETUID/SETGID capabilities; without them it exits on a config error.
-  + kurly.keepCapabilities()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

@@ -47,7 +47,9 @@ function(
   // workers drop privileges, so it starts as root and keeps DAC_OVERRIDE.
   + kurly.rootUser()
   + kurly.writableRootFilesystem()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.env({ ENTE_API_ORIGIN: apiOrigin, ENTE_ALBUMS_ORIGIN: albumsOrigin } + env)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

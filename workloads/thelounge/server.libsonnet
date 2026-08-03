@@ -35,7 +35,9 @@ function(
   + kurly.env({ THELOUNGE_HOME: '/var/opt/thelounge' } + env)
   // The entrypoint adjusts its data directory before dropping to the app user.
   + kurly.rootUser()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.store('/var/opt/thelounge', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

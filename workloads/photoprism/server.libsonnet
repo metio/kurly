@@ -72,7 +72,6 @@ function(
   // The s6-overlay init prepares /run as root and drops to the app user.
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
   // Writes under /run; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/run')
   + kurly.store('/photoprism/storage', storageSize, storageClass=storageClass)

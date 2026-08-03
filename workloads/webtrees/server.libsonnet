@@ -46,7 +46,9 @@ function(
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
   // The entrypoint hands its data directory to the web user.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/webtrees/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })

@@ -49,7 +49,9 @@ function(
   // The LinuxServer.io s6-overlay init starts as root and drops to PUID/PGID, so
   // it needs to gain privileges and keep the SETUID/SETGID capabilities.
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

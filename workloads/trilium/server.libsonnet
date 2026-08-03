@@ -37,7 +37,9 @@ function(
   + kurly.env({ TRILIUM_DATA_DIR: '/home/node/trilium-data' } + env)
   // The entrypoint hands its data directory to the node user.
   + kurly.rootUser()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.store('/home/node/trilium-data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')
   // The Service is named after the app, so the Service-link environment defines

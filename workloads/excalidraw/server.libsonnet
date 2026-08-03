@@ -43,7 +43,9 @@ function(
   // Writes under /var/run; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/var/run')
   // nginx hands its cache directories to the nginx user before dropping to it.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.resources(

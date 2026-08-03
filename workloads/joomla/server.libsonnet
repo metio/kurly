@@ -53,7 +53,9 @@ function(
   // Writes under /tmp; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/tmp')
   // The entrypoint unpacks Joomla onto the volume and hands it to the web user.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

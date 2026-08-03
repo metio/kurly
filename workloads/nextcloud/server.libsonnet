@@ -47,7 +47,9 @@ function(
   + kurly.rootUser()
   // The entrypoint syncs the application tree onto the volume and hands it to the
   // web user.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   // Writes under /var/run/apache2; a scratch there keeps the rest of the root filesystem read-only.
   + kurly.scratch('/var/run/apache2')
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)

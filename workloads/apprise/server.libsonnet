@@ -41,7 +41,9 @@ function(
   // The image's init creates its runtime user (useradd) and drops privileges, so
   // it needs privilege escalation allowed and the default capabilities kept.
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/status', port: 'http' } })

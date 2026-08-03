@@ -39,7 +39,9 @@ function(
   // and be allowed to change uid rather than being pinned to a non-root user.
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.store('/opt/alist/data', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/ping', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/ping', port: 'http' } })

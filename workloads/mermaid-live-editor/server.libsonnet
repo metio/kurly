@@ -32,7 +32,9 @@ function(
   // nginx starts as root, prepares its cache directories, then drops to the nginx
   // user for the workers.
   + kurly.rootUser()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.scratch('/tmp', '32Mi')
   // nginx creates its temp directories under /var/cache/nginx on start and writes
   // its pid under /var/run. The image ships an empty cache directory, so a scratch

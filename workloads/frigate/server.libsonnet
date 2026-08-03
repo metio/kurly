@@ -70,7 +70,9 @@ function(
   // filesystem, so run as root with a writable root filesystem.
   + kurly.rootUser()
   // The init hands its shared-memory log directories to the app user.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.store('/config', storageSize, storageClass=storageClass)
   + kurly.store('/media', mediaSize, storageClass=storageClass)
   // config.yml rides read-only over the /config volume as a single file, leaving

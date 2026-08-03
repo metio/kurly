@@ -39,8 +39,9 @@ function(
   // The bundled Apache/PHP-FPM master runs as root then serves as www-data; the root
   // filesystem stays writable for its runtime state.
   + kurly.rootUser()
-  // php-fpm hands its socket to the web user before dropping privileges.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/shaarli/data', storageSize, storageClass=storageClass)
   // An uninstalled Shaarli redirects every request into its installer, and the

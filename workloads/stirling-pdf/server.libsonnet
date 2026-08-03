@@ -42,7 +42,9 @@ function(
   + (if env == {} then {} else kurly.env(env))
   // The entrypoint prepares its working directories under /tmp and hands them over.
   + kurly.rootUser()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.writableRootFilesystem()
   + kurly.store('/configs', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/api/v1/info/status', port: 'http' }, initialDelaySeconds: 20, periodSeconds: 15, failureThreshold: 12 })

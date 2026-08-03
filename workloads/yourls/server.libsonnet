@@ -43,7 +43,9 @@ function(
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
   // The entrypoint unpacks YOURLS onto the volume and hands it to the web user.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.writableRootFilesystem()
   // An uninstalled YOURLS redirects into its installer, and the kubelet follows the
   // chain — so readiness is a connection check.

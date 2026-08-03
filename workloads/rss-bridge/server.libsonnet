@@ -38,7 +38,9 @@ function(
   // writable for Apache's runtime state.
   + kurly.rootUser()
   // nginx and php-fpm prepare their runtime directories and socket as root.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   // php-fpm binds its socket under /run/php.
   + kurly.scratch('/run/php', '8Mi')
   // Kept: two writes, and only one of them is scratchable. nginx wants

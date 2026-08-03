@@ -48,7 +48,9 @@ function(
   // The s6-overlay init starts as root and drops to PUID/PGID, and the ingest service
   // chowns the mounted library, so it needs to gain privileges and keep SETUID/SETGID/CHOWN.
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.store('/config', configSize, storageClass=storageClass)
   + kurly.store('/calibre-library', librarySize, storageClass=storageClass)
   // Unpacking the bundled Calibre binaries takes minutes on a cold volume — gate the

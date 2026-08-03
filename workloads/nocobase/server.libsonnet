@@ -52,7 +52,9 @@ function(
   // The image runs the app as root and owns its tree as root.
   + kurly.rootUser()
   // The bundled nginx writes its logs and cache in directories the image owns.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.writableRootFilesystem()
   + kurly.store('/app/nocobase/storage', storageSize, storageClass=storageClass)
   // The bundled nginx answers only once the app behind it has installed itself,

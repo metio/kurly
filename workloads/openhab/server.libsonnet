@@ -42,7 +42,9 @@ function(
   + kurly.env(env)
   // The entrypoint links the host timezone and prepares its runtime directories.
   + kurly.rootUser()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   // Three distinct PVCs: configuration, runtime userdata, and installed add-ons.
   + kurly.store('/openhab/conf', confSize, storageClass=storageClass)

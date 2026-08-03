@@ -50,7 +50,9 @@ function(
   + kurly.env(env)
   + kurly.rootUser()
   // nginx and php-fpm prepare their runtime directories and socket as root.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'SETGID', 'SETUID', 'SETPCAP'])
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html/storage/app', storageSize, storageClass=storageClass)
   // The bundled nginx answers a request whose Host it does not know with 400, and

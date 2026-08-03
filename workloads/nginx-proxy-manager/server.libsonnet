@@ -46,7 +46,9 @@ function(
   + kurly.rootUser()
   // Its s6 init prepares the runtime directories and drops to the app user.
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   // The image refuses to start unless its certificate store is a mount of its own;

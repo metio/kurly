@@ -43,7 +43,9 @@ function(
   + kurly.env(env)
   // The entrypoint collects static files into the app tree the image owns.
   + kurly.rootUser()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID'])
   + kurly.writableRootFilesystem()
   + kurly.store('/opt/recipes/mediafiles', storageSize, storageClass=storageClass)
   // The first start migrates the schema and collects static files before it listens.

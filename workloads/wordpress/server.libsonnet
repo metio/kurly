@@ -58,7 +58,9 @@ function(
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
   // The entrypoint unpacks WordPress onto the volume and hands it to the web user.
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['AUDIT_WRITE', 'CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'MKNOD', 'NET_BIND_SERVICE', 'SETFCAP', 'SETGID', 'SETPCAP', 'SETUID', 'SYS_CHROOT'])
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })

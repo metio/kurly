@@ -52,7 +52,9 @@ function(
   // 53), so it must be allowed to gain privileges on exec and keep the default
   // capability set rather than dropping ALL.
   + kurly.allowPrivilegeEscalation()
-  + kurly.keepCapabilities()
+  // Everything is dropped and these are granted back by name — the
+  // smallest set this image was observed to boot with.
+  + kurly.addCapabilities(['CHOWN', 'NET_BIND_SERVICE', 'SETGID', 'SETUID'])
   // The image ships its binary at /opt/adguardhome/AdGuardHome, so the data volume
   // mounts a SUBDIR (…/work) rather than the whole directory — mounting over
   // /opt/adguardhome would hide the executable. Config and work both live under it.
