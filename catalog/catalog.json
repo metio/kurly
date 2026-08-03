@@ -9567,6 +9567,11 @@
             }
          ],
          "summary": "A Drupal server — a powerful, self-hosted open-source CMS and content framework (backed by MySQL/PostgreSQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "trademark": {
+            "note": "The mark may be used only in combination with your own name, so the source is unambiguous; never as a whole company name or domain (\"Drupal Hosting LLC\", \"drupal.tld\" are the policy's own counter-examples).",
+            "policy": "https://www.drupal.org/trademark",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://drupal.org/project/drupal",
             "repo": "https://github.com/drupal/drupal"
@@ -16322,6 +16327,11 @@
             }
          ],
          "summary": "A Jenkins controller (the self-hosted automation server for building, testing and deploying software) on the official LTS image. A plain composable http workload that keeps JENKINS_HOME (jobs, plugins, config, build history) on a PersistentVolume. Single controller over a ReadWriteOnce volume: one replica, recreated. Inbound agents connect over the same HTTP port (websocket). Serves on :8080.",
+         "trademark": {
+            "note": "Using \"Jenkins\" as part of a brand identifier for Jenkins-based goods or services is governed by the Linux Foundation Trademark Usage Policy.",
+            "policy": "https://www.jenkins.io/project/trademark/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.jenkins.io",
             "repo": "https://github.com/jenkinsci/jenkins"
@@ -24813,6 +24823,11 @@
             }
          ],
          "summary": "A Nextcloud server (a self-hosted content-collaboration platform: file sync and share, calendars, contacts, office documents) on the official Apache image; with the default SQLite backend the whole installation lives on a PersistentVolume. kurly authors no Secret; NEXTCLOUD_ADMIN_* come from a provided Secret via envFrom. Point it at an external PostgreSQL/MySQL and S3 primary storage to scale out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "trademark": {
+            "note": "Advertising commercial Nextcloud hosting under the marks requires permission from Nextcloud GmbH; the policy names hosting a Nextcloud image explicitly.",
+            "policy": "https://nextcloud.com/trademarks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://nextcloud.com",
             "repo": "https://github.com/nextcloud/server"
