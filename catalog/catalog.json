@@ -3045,6 +3045,7 @@
    "workloads": [
       {
          "category": "application",
+         "description": "Keep your two-factor accounts in one place and generate the one-time codes yourself.",
          "id": "2fauth",
          "image": {
             "homepage": "https://github.com/Bubka/2FAuth",
@@ -3867,6 +3868,7 @@
       },
       {
          "category": "observability",
+         "description": "Group, silence and route the alerts your monitoring raises to the people who should see them.",
          "id": "alertmanager",
          "image": {
             "source": "https://github.com/prometheus/alertmanager"
@@ -5578,6 +5580,7 @@
       },
       {
          "category": "observability",
+         "description": "Watch the health of your servers from one lightweight dashboard.",
          "id": "beszel",
          "image": {
             "homepage": "https://github.com/henrygd/beszel",
@@ -5810,6 +5813,7 @@
       },
       {
          "category": "application",
+         "description": "Capture a thought in seconds and let search and AI find it again later.",
          "id": "blinko",
          "image": {
             "homepage": "https://github.com/blinkospace/blinko",
@@ -6556,6 +6560,7 @@
       },
       {
          "category": "database",
+         "description": "Store enormous amounts of data across many machines with no single point of failure.",
          "id": "cassandra-cluster",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -6897,6 +6902,7 @@
       },
       {
          "category": "database",
+         "description": "Run PostgreSQL with failover and backups looked after for you.",
          "id": "cnpg-cluster",
          "license": "PostgreSQL",
          "licenseOsiApproved": true,
@@ -7098,6 +7104,7 @@
       },
       {
          "category": "database",
+         "description": "Pin which PostgreSQL version each of your databases runs, in one place.",
          "id": "cnpg-image-catalog",
          "license": "PostgreSQL",
          "licenseOsiApproved": true,
@@ -7225,6 +7232,7 @@
       },
       {
          "category": "tool",
+         "description": "Save media from a link, cleanly and without the surrounding site.",
          "id": "cobalt",
          "image": {
             "homepage": "https://github.com/imputnet/cobalt",
@@ -9534,6 +9542,7 @@
       },
       {
          "category": "application",
+         "description": "Build a website or a content platform that can grow into almost anything.",
          "id": "drupal",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
@@ -9699,6 +9708,7 @@
       },
       {
          "category": "application",
+         "description": "Back up your files to almost any cloud or remote storage, encrypted before they leave.",
          "id": "duplicati",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-duplicati/packages",
@@ -9858,6 +9868,7 @@
       },
       {
          "category": "messaging",
+         "description": "Run your own chat network on XMPP, from a handful of users to millions.",
          "id": "ejabberd",
          "image": {
             "homepage": "https://github.com/processone/docker-ejabberd",
@@ -9977,6 +9988,7 @@
       },
       {
          "category": "application",
+         "description": "Chat on Matrix from the browser, on a client you host yourself.",
          "id": "element-web",
          "image": {
             "homepage": "https://github.com/element-hq/element-web",
@@ -10118,6 +10130,7 @@
       },
       {
          "category": "application",
+         "description": "Track your runs, rides and workouts without handing them to a fitness company.",
          "id": "endurain",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -10304,6 +10317,7 @@
       },
       {
          "category": "application",
+         "description": "Back up your photos and videos end-to-end encrypted, so only you can see them.",
          "id": "ente",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -10527,6 +10541,7 @@
       },
       {
          "category": "application",
+         "description": "Write firmware for your smart-home sensors in YAML and flash it over the air.",
          "id": "esphome",
          "image": {
             "homepage": "https://esphome.io/",
@@ -10647,6 +10662,7 @@
       },
       {
          "category": "application",
+         "description": "Write a document together, in the same window, at the same time.",
          "id": "etherpad",
          "image": {
             "homepage": "https://github.com/ether/etherpad",
@@ -10802,6 +10818,7 @@
       },
       {
          "category": "tool",
+         "description": "Sketch diagrams and ideas on a whiteboard that looks hand-drawn.",
          "id": "excalidraw",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -10910,6 +10927,7 @@
       },
       {
          "category": "application",
+         "description": "Note what you spent, and see where the money went.",
          "id": "expenseowl",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -11023,6 +11041,7 @@
       },
       {
          "category": "database",
+         "description": "Talk MongoDB to your applications while the data lives in PostgreSQL.",
          "id": "ferretdb",
          "image": {
             "homepage": "https://www.ferretdb.com/",
@@ -11158,6 +11177,7 @@
       },
       {
          "category": "application",
+         "description": "Collect what your users want and let them vote on what comes next.",
          "id": "fider",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -11322,6 +11342,7 @@
       },
       {
          "category": "application",
+         "description": "Browse, upload, edit and share your files from a clean web interface.",
          "id": "filebrowser",
          "image": {
             "source": "https://github.com/filebrowser/filebrowser"
@@ -11439,6 +11460,7 @@
       },
       {
          "category": "application",
+         "description": "Reach SFTP, S3, WebDAV and more through one good file manager in the browser.",
          "id": "filestash",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -11559,6 +11581,7 @@
       },
       {
          "category": "application",
+         "description": "Track where your money goes and plan where it should.",
          "id": "firefly-iii",
          "image": {
             "homepage": "https://github.com/firefly-iii/docker",
@@ -11729,6 +11752,7 @@
       },
       {
          "category": "application",
+         "description": "Give your home lab a start page with your apps and bookmarks on it.",
          "id": "flame",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -11852,6 +11876,7 @@
       },
       {
          "category": "tool",
+         "description": "Get past browser challenges that would otherwise block your scrapers and indexers.",
          "id": "flaresolverr",
          "image": {
             "homepage": "https://github.com/FlareSolverr/FlareSolverr",
@@ -11977,6 +12002,7 @@
       },
       {
          "category": "application",
+         "description": "Write notes as plain markdown files you can still read without this app.",
          "id": "flatnotes",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -12117,6 +12143,7 @@
       },
       {
          "category": "application",
+         "description": "Plan work on boards and cards, without the subscription.",
          "id": "focalboard",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -12230,6 +12257,7 @@
       },
       {
          "category": "application",
+         "description": "Donate spare compute to disease research.",
          "id": "foldingathome",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-foldingathome/packages",
@@ -12366,6 +12394,7 @@
       },
       {
          "category": "application",
+         "description": "Host your Git repositories, issues and pull requests yourself.",
          "id": "forgejo",
          "image": {
             "homepage": "https://forgejo.org",
@@ -12524,6 +12553,7 @@
       },
       {
          "category": "application",
+         "description": "Follow the web through RSS instead of somebody else’s timeline.",
          "id": "freshrss",
          "image": {
             "homepage": "https://freshrss.org/",
@@ -12660,6 +12690,7 @@
       },
       {
          "category": "application",
+         "description": "Watch your cameras and get told when a person or car appears, not when a leaf moves.",
          "id": "frigate",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -12819,6 +12850,7 @@
       },
       {
          "category": "observability",
+         "description": "Probe your services on a schedule and publish an honest status page.",
          "id": "gatus",
          "image": {
             "homepage": "https://github.com/TwiN/gatus",
@@ -12944,6 +12976,7 @@
       },
       {
          "category": "application",
+         "description": "See what your investments are actually worth, across every account.",
          "id": "ghostfolio",
          "image": {
             "source": "https://github.com/ghostfolio/ghostfolio"
@@ -13218,6 +13251,7 @@
       },
       {
          "category": "application",
+         "description": "Host Git repositories on something small enough to run anywhere.",
          "id": "gogs",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -13337,6 +13371,7 @@
       },
       {
          "category": "tool",
+         "description": "Share a file with a link that expires after a set time or a set number of downloads.",
          "id": "gokapi",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -13458,6 +13493,7 @@
       },
       {
          "category": "tool",
+         "description": "Turn HTML, Markdown and Office documents into PDFs through an API.",
          "id": "gotenberg",
          "image": {
             "source": "https://github.com/gotenberg/gotenberg",
@@ -13574,6 +13610,7 @@
       },
       {
          "category": "application",
+         "description": "Send yourself push notifications from your scripts and servers.",
          "id": "gotify",
          "image": {
             "source": "https://github.com/gotify/server"
@@ -13694,6 +13731,7 @@
       },
       {
          "category": "application",
+         "description": "Join the fediverse from a small server you run, federating with Mastodon.",
          "id": "gotosocial",
          "image": {
             "homepage": "https://docs.gotosocial.org",
@@ -13824,6 +13862,7 @@
       },
       {
          "category": "application",
+         "description": "Publish a fast website from Markdown files, with no database to maintain.",
          "id": "grav",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-grav/packages",
@@ -13965,6 +14004,7 @@
       },
       {
          "category": "application",
+         "description": "Give people a simple front door for scheduling and joining BigBlueButton meetings.",
          "id": "greenlight",
          "license": "LGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -14113,6 +14153,7 @@
       },
       {
          "category": "application",
+         "description": "Keep track of what is in the house, what needs buying and whose turn it is to do the chores.",
          "id": "grocy",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-grocy/packages",
@@ -14254,6 +14295,7 @@
       },
       {
          "category": "application",
+         "description": "Reach your remote desktops and servers from a browser tab, with nothing to install.",
          "id": "guacamole",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -14411,6 +14453,7 @@
       },
       {
          "category": "application",
+         "description": "Write markdown notes together in real time.",
          "id": "hedgedoc",
          "image": {
             "homepage": "https://hedgedoc.org",
@@ -14559,6 +14602,7 @@
       },
       {
          "category": "application",
+         "description": "Give every service you run one elegant launcher page.",
          "id": "heimdall",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-heimdall/packages",
@@ -14699,6 +14743,7 @@
       },
       {
          "category": "application",
+         "description": "Chat with local or hosted language models through a minimal interface.",
          "id": "hollama",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -14808,6 +14853,7 @@
       },
       {
          "category": "application",
+         "description": "Bring your home lab services onto one dashboard, with live status.",
          "id": "homarr",
          "image": {
             "homepage": "https://github.com/homarr-labs/homarr",
@@ -14944,6 +14990,7 @@
       },
       {
          "category": "application",
+         "description": "Run your smart home locally, so it keeps working when the internet does not.",
          "id": "home-assistant",
          "image": {
             "homepage": "https://www.home-assistant.io/",
@@ -15069,6 +15116,7 @@
       },
       {
          "category": "application",
+         "description": "Keep an inventory of what you own and where you put it.",
          "id": "homebox",
          "image": {
             "homepage": "https://github.com/sysadminsmedia/homebox",
@@ -15202,6 +15250,7 @@
       },
       {
          "category": "application",
+         "description": "Build a fast dashboard of your services and bookmarks, with live widgets.",
          "id": "homepage",
          "image": {
             "homepage": "https://github.com/gethomepage/homepage",
@@ -15328,6 +15377,7 @@
       },
       {
          "category": "application",
+         "description": "Put your self-hosted services on one simple, static page.",
          "id": "homer",
          "image": {
             "homepage": "https://hub.docker.com/r/b4bz/homer",
@@ -15448,6 +15498,7 @@
       },
       {
          "category": "application",
+         "description": "Back up your phone photos and videos to your own server, with search that actually works.",
          "id": "immich",
          "image": {
             "homepage": "https://github.com/immich-app/immich",
@@ -15725,6 +15776,7 @@
       },
       {
          "category": "messaging",
+         "description": "Run your own IRC network.",
          "id": "inspircd",
          "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
@@ -15840,6 +15892,7 @@
       },
       {
          "category": "tool",
+         "description": "Reach for a hundred small developer utilities without pasting your data into a stranger.",
          "id": "it-tools",
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
@@ -15950,6 +16003,7 @@
       },
       {
          "category": "application",
+         "description": "Search many trackers through one API your download tools can use.",
          "id": "jackett",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-jackett/packages",
@@ -16087,6 +16141,7 @@
       },
       {
          "category": "application",
+         "description": "Stream your films, shows and music to any device, with nothing to subscribe to.",
          "id": "jellyfin",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-jellyfin/packages",
@@ -16225,6 +16280,7 @@
       },
       {
          "category": "application",
+         "description": "Let people request the films and shows they want, and track what arrives.",
          "id": "jellyseerr",
          "image": {
             "source": "https://github.com/fallenbagel/jellyseerr",
@@ -16343,6 +16399,7 @@
       },
       {
          "category": "application",
+         "description": "Build, test and ship your software on your own automation server.",
          "id": "jenkins",
          "image": {
             "homepage": "https://www.jenkins.io/",
@@ -16470,6 +16527,7 @@
       },
       {
          "category": "application",
+         "description": "Build a website or web application on a mature content management system.",
          "id": "joomla",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
@@ -16656,6 +16714,7 @@
       },
       {
          "category": "application",
+         "description": "Sync your Joplin notes between devices through a server you own.",
          "id": "joplin",
          "image": {
             "homepage": "https://joplinapp.org/",
@@ -16823,6 +16882,7 @@
       },
       {
          "category": "storage",
+         "description": "Back up your data on a schedule, and get it back when you need it.",
          "id": "k8up",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -17226,6 +17286,7 @@
       },
       {
          "category": "application",
+         "description": "Move work across a kanban board, with nothing you did not ask for.",
          "id": "kanboard",
          "image": {
             "homepage": "https://kanboard.org",
@@ -17355,6 +17416,7 @@
       },
       {
          "category": "application",
+         "description": "Save links, notes and images, and find them again with AI tagging.",
          "id": "karakeep",
          "image": {
             "source": "https://github.com/karakeep-app/karakeep"
@@ -17513,6 +17575,7 @@
       },
       {
          "category": "application",
+         "description": "Read your comics, manga and ebooks in a fast reader on any screen.",
          "id": "kavita",
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
@@ -17629,6 +17692,7 @@
       },
       {
          "category": "identity",
+         "description": "Run your own identity provider with single sign-on, social login and fine-grained roles.",
          "id": "keycloak",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -17740,6 +17804,7 @@
       },
       {
          "category": "application",
+         "description": "Track the hours you and your team work, and turn them into invoices.",
          "id": "kimai",
          "image": {
             "homepage": "https://www.kimai.org/",
@@ -17877,6 +17942,7 @@
       },
       {
          "category": "application",
+         "description": "Serve your comics, manga and digital books to the readers you already use.",
          "id": "komga",
          "image": {
             "source": "https://github.com/gotson/komga",
@@ -18000,6 +18066,7 @@
       },
       {
          "category": "application",
+         "description": "Shorten links on your own domain and see what people click.",
          "id": "kutt",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -18180,6 +18247,7 @@
       },
       {
          "category": "application",
+         "description": "Run projects for people who do not think of themselves as project managers.",
          "id": "leantime",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -18327,6 +18395,7 @@
       },
       {
          "category": "application",
+         "description": "Run a link-aggregator community that federates with the rest of the fediverse.",
          "id": "lemmy",
          "image": {
             "homepage": "https://github.com/LemmyNet/lemmy",
@@ -18663,6 +18732,7 @@
       },
       {
          "category": "application",
+         "description": "Measure the real speed of your network from a browser.",
          "id": "librespeed",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-librespeed/packages",
@@ -18804,6 +18874,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your music collection complete, automatically.",
          "id": "lidarr",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-lidarr/packages",
@@ -18942,6 +19013,7 @@
       },
       {
          "category": "application",
+         "description": "Save bookmarks somewhere small, fast and yours.",
          "id": "linkding",
          "image": {
             "source": "https://github.com/sissbruecker/linkding"
@@ -19065,6 +19137,7 @@
       },
       {
          "category": "application",
+         "description": "Publish one page linking to everything you do.",
          "id": "linkstack",
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
@@ -19182,6 +19255,7 @@
       },
       {
          "category": "application",
+         "description": "Send newsletters to your own mailing list, at your own cost.",
          "id": "listmonk",
          "image": {
             "homepage": "https://github.com/knadh/listmonk",
@@ -19356,6 +19430,7 @@
       },
       {
          "category": "identity",
+         "description": "Give your applications a small, friendly user directory to authenticate against.",
          "id": "lldap",
          "image": {
             "homepage": "https://github.com/lldap/lldap",
@@ -19508,6 +19583,7 @@
       },
       {
          "category": "application",
+         "description": "Chat with many different AI models through one polished interface.",
          "id": "lobe-chat",
          "image": {
             "homepage": "https://github.com/lobehub/lobe-chat",
@@ -19623,6 +19699,7 @@
       },
       {
          "category": "observability",
+         "description": "Collect your logs and search them by label, without indexing every word.",
          "id": "loki",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -19736,6 +19813,7 @@
       },
       {
          "category": "application",
+         "description": "Publish and organise your photos in a gallery you control.",
          "id": "lychee",
          "image": {
             "homepage": "https://github.com/LycheeOrg/Lychee",
@@ -19881,6 +19959,7 @@
       },
       {
          "category": "tool",
+         "description": "Catch the email your applications send in testing, instead of delivering it.",
          "id": "mailhog",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -19988,6 +20067,7 @@
       },
       {
          "category": "tool",
+         "description": "See every message your application sends while you develop, in a web inbox.",
          "id": "mailpit",
          "image": {
             "homepage": "https://mailpit.axllent.org",
@@ -20111,6 +20191,7 @@
       },
       {
          "category": "application",
+         "description": "Run your own mail: sending, receiving, webmail and spam filtering.",
          "id": "mailu",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -20974,6 +21055,7 @@
       },
       {
          "category": "application",
+         "description": "Keep a record of everything you listen to, and see what that adds up to.",
          "id": "maloja",
          "image": {
             "homepage": "https://github.com/krateng/maloja",
@@ -21093,6 +21175,7 @@
       },
       {
          "category": "application",
+         "description": "Run a microblogging server that federates with the wider fediverse.",
          "id": "mastodon",
          "image": {
             "homepage": "https://github.com/mastodon/mastodon",
@@ -21652,6 +21735,7 @@
       },
       {
          "category": "application",
+         "description": "Run a small, fast Matrix homeserver that federates with the rest of the network.",
          "id": "matrix-conduit",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -21777,6 +21861,7 @@
       },
       {
          "category": "application",
+         "description": "Run marketing campaigns and nurture contacts without a per-seat bill.",
          "id": "mautic",
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
@@ -21945,6 +22030,7 @@
       },
       {
          "category": "tool",
+         "description": "Shrink and convert images in your browser, so they never leave your machine.",
          "id": "mazanoke",
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
@@ -22055,6 +22141,7 @@
       },
       {
          "category": "application",
+         "description": "Collect recipes, plan the week and get the shopping list out of it.",
          "id": "mealie",
          "image": {
             "homepage": "https://github.com/mealie-recipes/mealie",
@@ -22186,6 +22273,7 @@
       },
       {
          "category": "application",
+         "description": "Run the wiki engine behind Wikipedia for your own knowledge base.",
          "id": "mediawiki",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
@@ -22313,6 +22401,7 @@
       },
       {
          "category": "cache",
+         "description": "Keep hot data in memory so your application stops asking the database twice.",
          "id": "memcached",
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
@@ -22410,6 +22499,7 @@
       },
       {
          "category": "application",
+         "description": "Jot down short notes and thoughts, and keep them searchable.",
          "id": "memos",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -22530,6 +22620,7 @@
       },
       {
          "category": "tool",
+         "description": "Write diagrams as text and watch them draw themselves.",
          "id": "mermaid-live-editor",
          "image": {
             "homepage": "https://github.com/mermaid-js/mermaid-live-editor",
@@ -22648,6 +22739,7 @@
       },
       {
          "category": "observability",
+         "description": "Give your cluster the CPU and memory numbers that autoscaling and kubectl top need.",
          "id": "metrics-server",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -22779,6 +22871,7 @@
       },
       {
          "category": "application",
+         "description": "Paste a video or playlist link and have it downloaded for you.",
          "id": "metube",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -22893,6 +22986,7 @@
       },
       {
          "category": "application",
+         "description": "Share a snippet of text or a small file with a link.",
          "id": "microbin",
          "image": {
             "homepage": "https://github.com/szabodanika/microbin",
@@ -23012,6 +23106,7 @@
       },
       {
          "category": "application",
+         "description": "Run a lively fediverse social server with reactions, custom emoji and more.",
          "id": "misskey",
          "image": {
             "homepage": "https://github.com/misskey-dev/misskey",
@@ -23155,6 +23250,7 @@
       },
       {
          "category": "admin",
+         "description": "Look inside your MongoDB from the browser.",
          "id": "mongo-express",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -23293,6 +23389,7 @@
       },
       {
          "category": "application",
+         "description": "Remember the details about the people you care about.",
          "id": "monica",
          "image": {
             "homepage": "https://monicahq.com",
@@ -23464,6 +23561,7 @@
       },
       {
          "category": "messaging",
+         "description": "Let your sensors and smart-home devices talk to each other over MQTT.",
          "id": "mosquitto",
          "image": {
             "homepage": "https://mosquitto.org/",
@@ -23592,6 +23690,7 @@
       },
       {
          "category": "application",
+         "description": "Talk to your group with low latency and good quality while gaming.",
          "id": "mumble",
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
@@ -23720,6 +23819,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your comic collection complete and organised.",
          "id": "mylar3",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-mylar3/packages",
@@ -23857,6 +23957,7 @@
       },
       {
          "category": "database",
+         "description": "Run MySQL with failover looked after for you.",
          "id": "mysql-cluster",
          "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
@@ -23984,6 +24085,7 @@
       },
       {
          "category": "messaging",
+         "description": "Move messages between your services quickly, with streams when you need them.",
          "id": "nats",
          "image": {
             "homepage": "https://nats.io",
@@ -24106,6 +24208,7 @@
       },
       {
          "category": "application",
+         "description": "Stream your own music library to the Subsonic apps you already use.",
          "id": "navidrome",
          "image": {
             "homepage": "https://github.com/navidrome/navidrome",
@@ -24229,6 +24332,7 @@
       },
       {
          "category": "database",
+         "description": "Store your data as a graph and ask questions about how things connect.",
          "id": "neo4j",
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
@@ -24361,6 +24465,7 @@
       },
       {
          "category": "application",
+         "description": "Boot installers and rescue tools over the network, with no USB stick.",
          "id": "netbootxyz",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-netbootxyz/packages",
@@ -24498,6 +24603,7 @@
       },
       {
          "category": "application",
+         "description": "Keep the authoritative record of your networks, addresses and data-centre kit.",
          "id": "netbox",
          "image": {
             "homepage": "https://github.com/netbox-community/netbox-docker",
@@ -24834,6 +24940,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your files, calendars and contacts in sync on storage you own.",
          "id": "nextcloud",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
@@ -24991,6 +25098,7 @@
       },
       {
          "category": "networking",
+         "description": "Put your services behind a reverse proxy with certificates, from a web interface.",
          "id": "nginx-proxy-manager",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -25115,6 +25223,7 @@
       },
       {
          "category": "application",
+         "description": "Build internal tools and databases without writing much code.",
          "id": "nocobase",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -25280,6 +25389,7 @@
       },
       {
          "category": "application",
+         "description": "Wire APIs, devices and services together by dragging nodes onto a canvas.",
          "id": "node-red",
          "image": {
             "source": "https://github.com/node-red/node-red-docker"
@@ -25397,6 +25507,7 @@
       },
       {
          "category": "application",
+         "description": "Download from Usenet quickly, on very little hardware.",
          "id": "nzbget",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-nzbget/packages",
@@ -25535,6 +25646,7 @@
       },
       {
          "category": "application",
+         "description": "Search all your Usenet indexers at once, behind one API.",
          "id": "nzbhydra2",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-nzbhydra2/packages",
@@ -25672,6 +25784,7 @@
       },
       {
          "category": "identity",
+         "description": "Put a login in front of any application that has none.",
          "id": "oauth2-proxy",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -25832,6 +25945,7 @@
       },
       {
          "category": "application",
+         "description": "Run large language models on your own hardware, behind a simple API.",
          "id": "ollama",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -25946,6 +26060,7 @@
       },
       {
          "category": "application",
+         "description": "Let your users ask for films and shows, and track the requests.",
          "id": "ombi",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-ombi/packages",
@@ -26084,6 +26199,7 @@
       },
       {
          "category": "application",
+         "description": "Edit documents, spreadsheets and slides together in the browser.",
          "id": "onlyoffice",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -26221,6 +26337,7 @@
       },
       {
          "category": "application",
+         "description": "Chat with local and hosted language models through a rich web interface.",
          "id": "open-webui",
          "image": {
             "homepage": "https://github.com/open-webui/open-webui",
@@ -26364,6 +26481,7 @@
       },
       {
          "category": "observability",
+         "description": "See what each team and workload actually costs you.",
          "id": "opencost",
          "image": {
             "homepage": "https://opencost.io",
@@ -26490,6 +26608,7 @@
       },
       {
          "category": "application",
+         "description": "Automate a home full of devices from different vendors through one engine.",
          "id": "openhab",
          "image": {
             "homepage": "https://www.openhab.org/",
@@ -26632,6 +26751,7 @@
       },
       {
          "category": "search",
+         "description": "Search and analyse large amounts of data, with dashboards on top.",
          "id": "opensearch-cluster",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -26737,6 +26857,7 @@
       },
       {
          "category": "application",
+         "description": "Tie all your home lab apps together behind one tabbed interface.",
          "id": "organizr",
          "image": {
             "homepage": "https://github.com/Organizr/docker-organizr/blob/master/README.md",
@@ -26861,6 +26982,7 @@
       },
       {
          "category": "observability",
+         "description": "Collect traces, metrics and logs from your applications and forward them anywhere.",
          "id": "otel-collector",
          "image": {
             "source": "https://github.com/open-telemetry/opentelemetry-collector-releases"
@@ -26955,6 +27077,7 @@
       },
       {
          "category": "application",
+         "description": "Write LaTeX papers together in the browser.",
          "id": "overleaf",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -27110,6 +27233,7 @@
       },
       {
          "category": "application",
+         "description": "Run your own live video stream and chat, with nobody taking a cut.",
          "id": "owncast",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -27226,6 +27350,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your own location history from your phone, and see it on a map.",
          "id": "owntracks-recorder",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
@@ -27350,6 +27475,7 @@
       },
       {
          "category": "tool",
+         "description": "Send files between devices on your network, straight from the browser.",
          "id": "pairdrop",
          "image": {
             "homepage": "https://github.com/schlagmichdoch/PairDrop",
@@ -27459,6 +27585,7 @@
       },
       {
          "category": "application",
+         "description": "Manage your money with plain-text, double-entry accounting.",
          "id": "paisa",
          "image": {
             "homepage": "https://github.com/ananthakumaran/paisa",
@@ -27579,6 +27706,7 @@
       },
       {
          "category": "application",
+         "description": "Scan your paperwork once and find any document again by searching its text.",
          "id": "paperless-ngx",
          "image": {
             "homepage": "https://github.com/paperless-ngx/paperless-ngx",
@@ -27767,6 +27895,7 @@
       },
       {
          "category": "application",
+         "description": "Share a password over a link that destroys itself after it is read.",
          "id": "passwordpusher",
          "image": {
             "homepage": "https://github.com/pglombardo/PasswordPusher",
@@ -27910,6 +28039,7 @@
       },
       {
          "category": "application",
+         "description": "Publish video on a platform that federates instead of recommending.",
          "id": "peertube",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -28096,6 +28226,7 @@
       },
       {
          "category": "admin",
+         "description": "Administer your PostgreSQL databases from the browser.",
          "id": "pgadmin",
          "license": "PostgreSQL",
          "licenseOsiApproved": true,
@@ -28237,6 +28368,7 @@
       },
       {
          "category": "application",
+         "description": "Browse your photo collection with faces, places and automatic tagging.",
          "id": "photoprism",
          "image": {
             "source": "https://github.com/photoprism/photoprism",
@@ -28391,6 +28523,7 @@
       },
       {
          "category": "application",
+         "description": "Serve a photo gallery straight from the folders your photos already live in.",
          "id": "photoview",
          "image": {
             "homepage": "https://github.com/photoview/photoview",
@@ -28544,6 +28677,7 @@
       },
       {
          "category": "admin",
+         "description": "Administer your MySQL and MariaDB databases from the browser.",
          "id": "phpmyadmin",
          "image": {
             "homepage": "https://github.com/phpmyadmin/docker#readme",
@@ -28674,6 +28808,7 @@
       },
       {
          "category": "networking",
+         "description": "Block ads and trackers for your whole network, with a dashboard showing what it stopped.",
          "id": "pihole",
          "image": {
             "homepage": "https://github.com/pi-hole/docker-pi-hole",
@@ -28825,6 +28960,7 @@
       },
       {
          "category": "application",
+         "description": "Give people a friendly place to book and join BigBlueButton meetings.",
          "id": "pilos",
          "image": {
             "homepage": "https://github.com/THM-Health/PILOS",
@@ -28970,6 +29106,7 @@
       },
       {
          "category": "application",
+         "description": "Publish a photo gallery with albums, tags and user accounts.",
          "id": "piwigo",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-piwigo/packages",
@@ -29117,6 +29254,7 @@
       },
       {
          "category": "identity",
+         "description": "Sign in with a passkey instead of a password, against your own provider.",
          "id": "pocket-id",
          "image": {
             "homepage": "https://github.com/pocket-id/pocket-id",
@@ -29242,6 +29380,7 @@
       },
       {
          "category": "application",
+         "description": "Get a database, authentication and file storage for your app in one small backend.",
          "id": "pocketbase",
          "image": {
             "homepage": "https://github.com/muchobien/pocketbase-docker",
@@ -29362,6 +29501,7 @@
       },
       {
          "category": "application",
+         "description": "Manage the workloads on your Docker hosts and clusters from a web interface.",
          "id": "portainer",
          "image": {
             "homepage": "https://www.portainer.io",
@@ -29487,6 +29627,7 @@
       },
       {
          "category": "database",
+         "description": "Store your application data in the relational database most things are written for.",
          "id": "postgres",
          "license": "PostgreSQL",
          "licenseOsiApproved": true,
@@ -29629,6 +29770,7 @@
       },
       {
          "category": "application",
+         "description": "Run an online shop you own end to end.",
          "id": "prestashop",
          "license": "OSL-3.0",
          "licenseOsiApproved": true,
@@ -29788,6 +29930,7 @@
       },
       {
          "category": "application",
+         "description": "Paste text the server itself cannot read.",
          "id": "privatebin",
          "image": {
             "source": "https://github.com/PrivateBin/docker-nginx-fpm-alpine"
@@ -29909,6 +30052,7 @@
       },
       {
          "category": "application",
+         "description": "Send files to specific clients, privately, without a public link.",
          "id": "projectsend",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-projectsend/packages",
@@ -30055,6 +30199,7 @@
       },
       {
          "category": "observability",
+         "description": "Collect metrics from everything you run and alert when they go wrong.",
          "id": "prometheus",
          "image": {
             "homepage": "https://github.com/prometheus/prometheus",
@@ -30240,6 +30385,7 @@
       },
       {
          "category": "application",
+         "description": "Manage your indexers once and sync them to every download tool you use.",
          "id": "prowlarr",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-prowlarr/packages",
@@ -30378,6 +30524,7 @@
       },
       {
          "category": "application",
+         "description": "Queue downloads from one-click hosters and let them run unattended.",
          "id": "pyload-ng",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-pyload-ng/packages",
@@ -30519,6 +30666,7 @@
       },
       {
          "category": "application",
+         "description": "Manage your BitTorrent downloads from a full-featured web interface.",
          "id": "qbittorrent",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-qbittorrent/packages",
@@ -30656,6 +30804,7 @@
       },
       {
          "category": "messaging",
+         "description": "Pass messages between your services reliably, with queues that survive a restart.",
          "id": "rabbitmq",
          "license": "MPL-2.0",
          "licenseOsiApproved": true,
@@ -30797,6 +30946,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your film collection complete, automatically.",
          "id": "radarr",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-radarr/packages",
@@ -30935,6 +31085,7 @@
       },
       {
          "category": "application",
+         "description": "Host your calendars and contacts on something very small.",
          "id": "radicale",
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
@@ -31050,6 +31201,7 @@
       },
       {
          "category": "application",
+         "description": "Find a date everyone can make, without a chain of emails.",
          "id": "rallly",
          "image": {
             "homepage": "https://github.com/lukevella/rallly",
@@ -31197,6 +31349,7 @@
       },
       {
          "category": "application",
+         "description": "Save articles to read later, kept clean and readable.",
          "id": "readeck",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -31311,6 +31464,7 @@
       },
       {
          "category": "admin",
+         "description": "Look inside your Redis from the browser.",
          "id": "redis-commander",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -31432,6 +31586,7 @@
       },
       {
          "category": "application",
+         "description": "Track issues, plan projects and keep the wiki in one place.",
          "id": "redmine",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
@@ -31597,6 +31752,7 @@
       },
       {
          "category": "storage",
+         "description": "Store and distribute your own images.",
          "id": "registry",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -31720,6 +31876,7 @@
       },
       {
          "category": "application",
+         "description": "Give your team a chat platform you host yourself.",
          "id": "rocketchat",
          "image": {
             "source": "https://github.com/RocketChat/Rocket.Chat"
@@ -31863,6 +32020,7 @@
       },
       {
          "category": "application",
+         "description": "Read your mail in the browser, against your own IMAP server.",
          "id": "roundcube",
          "image": {
             "source": "https://github.com/roundcube/roundcubemail-docker"
@@ -31998,6 +32156,7 @@
       },
       {
          "category": "application",
+         "description": "Get a feed out of sites that stopped offering one.",
          "id": "rss-bridge",
          "image": {
             "homepage": "https://github.com/RSS-Bridge/rss-bridge",
@@ -32117,6 +32276,7 @@
       },
       {
          "category": "application",
+         "description": "Turn your runbooks into jobs other people can safely run.",
          "id": "rundeck",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -32261,6 +32421,7 @@
       },
       {
          "category": "application",
+         "description": "Download from Usenet through a friendly web interface.",
          "id": "sabnzbd",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-sabnzbd/packages",
@@ -32398,6 +32559,7 @@
       },
       {
          "category": "tool",
+         "description": "Search the web through many engines at once, without being tracked.",
          "id": "searxng",
          "image": {
             "homepage": "https://searxng.org",
@@ -32537,6 +32699,7 @@
       },
       {
          "category": "application",
+         "description": "Book desks and meeting rooms without a spreadsheet.",
          "id": "seatsurfing",
          "image": {
             "homepage": "https://seatsurfing.io",
@@ -32682,6 +32845,7 @@
       },
       {
          "category": "storage",
+         "description": "Store objects and files at scale on your own hardware, S3-compatible.",
          "id": "seaweedfs",
          "image": {
             "homepage": "https://github.com/seaweedfs/seaweedfs",
@@ -33013,6 +33177,7 @@
       },
       {
          "category": "application",
+         "description": "Save and share links from a bookmarking app with no database to look after.",
          "id": "shaarli",
          "license": "GPL-3.0-only",
          "licenseOsiApproved": true,
@@ -33132,6 +33297,7 @@
       },
       {
          "category": "application",
+         "description": "Bookmark pages and keep a readable copy in case they disappear.",
          "id": "shiori",
          "image": {
             "source": "https://github.com/go-shiori/shiori"
@@ -33257,6 +33423,7 @@
       },
       {
          "category": "application",
+         "description": "Shorten links on your own domain, with an API and real analytics.",
          "id": "shlink",
          "image": {
             "homepage": "https://github.com/shlinkio/shlink",
@@ -33420,6 +33587,7 @@
       },
       {
          "category": "application",
+         "description": "Keep a markdown notebook you can extend and script yourself.",
          "id": "silverbullet",
          "image": {
             "homepage": "https://github.com/silverbulletmd/silverbullet",
@@ -33553,6 +33721,7 @@
       },
       {
          "category": "application",
+         "description": "Build a personal knowledge base out of blocks, kept privately.",
          "id": "siyuan",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -33680,6 +33849,7 @@
       },
       {
          "category": "tool",
+         "description": "Catch the mail your application sends in development, and inspect it.",
          "id": "smtp4dev",
          "license": "BSD-3-Clause",
          "licenseOsiApproved": true,
@@ -33796,6 +33966,7 @@
       },
       {
          "category": "application",
+         "description": "Read your mail in a fast, modern browser client against your own IMAP server.",
          "id": "snappymail",
          "image": {
             "homepage": "https://github.com/the-djmaze/snappymail",
@@ -33921,6 +34092,7 @@
       },
       {
          "category": "application",
+         "description": "Know which laptop, licence and phone belongs to whom.",
          "id": "snipe-it",
          "image": {
             "homepage": "https://github.com/grokability/snipe-it",
@@ -34095,6 +34267,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your TV collection complete, automatically.",
          "id": "sonarr",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-sonarr/packages",
@@ -34233,6 +34406,7 @@
       },
       {
          "category": "networking",
+         "description": "Let your nodes pull images from each other instead of the internet.",
          "id": "spegel",
          "image": {
             "homepage": "https://github.com/spegel-org/spegel",
@@ -34477,6 +34651,7 @@
       },
       {
          "category": "observability",
+         "description": "Answer every request with one fixed status, so a path can be taken off the internet.",
          "id": "status-responder",
          "license": "MPL-2.0",
          "licenseOsiApproved": true,
@@ -34572,6 +34747,7 @@
       },
       {
          "category": "tool",
+         "description": "Split, merge, convert and edit PDFs without uploading them anywhere.",
          "id": "stirling-pdf",
          "image": {
             "homepage": "https://github.com/Stirling-Tools/Stirling-PDF",
@@ -34695,6 +34871,7 @@
       },
       {
          "category": "application",
+         "description": "Run the reference Matrix homeserver and federate with the whole network.",
          "id": "synapse",
          "image": {
             "homepage": "https://github.com/element-hq/synapse",
@@ -34847,6 +35024,7 @@
       },
       {
          "category": "application",
+         "description": "Keep folders in sync between your devices, directly and continuously.",
          "id": "syncthing",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-syncthing/packages",
@@ -34984,6 +35162,7 @@
       },
       {
          "category": "application",
+         "description": "Read and manage your manga library from any browser.",
          "id": "tachidesk",
          "image": {
             "homepage": "https://github.com/suwayomi/docker-tachidesk/pkgs/container/tachidesk",
@@ -35109,6 +35288,7 @@
       },
       {
          "category": "application",
+         "description": "Collect recipes, plan meals and get a smart shopping list.",
          "id": "tandoor",
          "image": {
             "homepage": "https://github.com/TandoorRecipes/recipes",
@@ -35285,6 +35465,7 @@
       },
       {
          "category": "application",
+         "description": "See who watched what on your Plex server, and get told when things happen.",
          "id": "tautulli",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-tautulli/packages",
@@ -35423,6 +35604,7 @@
       },
       {
          "category": "networking",
+         "description": "Run your own DNS with ad-blocking and encrypted lookups.",
          "id": "technitium",
          "image": {
             "homepage": "https://technitium.com/dns/",
@@ -35557,6 +35739,7 @@
       },
       {
          "category": "observability",
+         "description": "Store and query distributed traces, so you can see where a request spent its time.",
          "id": "tempo",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -35641,6 +35824,7 @@
       },
       {
          "category": "observability",
+         "description": "Keep your metrics for years and query them across every cluster at once.",
          "id": "thanos",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -36346,6 +36530,7 @@
       },
       {
          "category": "application",
+         "description": "Stay connected to IRC and pick up the conversation from any browser.",
          "id": "thelounge",
          "image": {
             "homepage": "https://github.com/thelounge/thelounge-docker",
@@ -36466,6 +36651,7 @@
       },
       {
          "category": "application",
+         "description": "Run a small ticket board and release supervisor over an append-only event log.",
          "id": "tik",
          "image": {
             "homepage": "https://github.com/metio/tik",
@@ -36558,6 +36744,7 @@
       },
       {
          "category": "tool",
+         "description": "Pull text and metadata out of a thousand different file formats.",
          "id": "tika",
          "image": {
             "title": "ubuntu"
@@ -36671,6 +36858,7 @@
       },
       {
          "category": "application",
+         "description": "Track your vehicles and devices on a map from their GPS reports.",
          "id": "traccar",
          "image": {
             "homepage": "https://github.com/traccar/traccar",
@@ -36807,6 +36995,7 @@
       },
       {
          "category": "application",
+         "description": "Manage your BitTorrent downloads from something small and fast.",
          "id": "transmission",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-transmission/packages",
@@ -36944,6 +37133,7 @@
       },
       {
          "category": "application",
+         "description": "Build a personal knowledge base out of deeply nested, linked notes.",
          "id": "trilium",
          "image": {
             "homepage": "https://github.com/TriliumNext/Trilium",
@@ -37064,6 +37254,7 @@
       },
       {
          "category": "application",
+         "description": "Watch and record live TV from your tuners on any device.",
          "id": "tvheadend",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-tvheadend/packages",
@@ -37202,6 +37393,7 @@
       },
       {
          "category": "observability",
+         "description": "Watch your sites and services, and publish a status page when they wobble.",
          "id": "uptime-kuma",
          "image": {
             "source": "https://github.com/louislam/uptime-kuma"
@@ -37320,6 +37512,7 @@
       },
       {
          "category": "cache",
+         "description": "Keep hot data in memory with the open fork of Redis.",
          "id": "valkey",
          "image": {
             "source": "https://github.com/valkey-io/valkey"
@@ -37641,6 +37834,7 @@
       },
       {
          "category": "application",
+         "description": "Track your tasks and projects the way you actually work.",
          "id": "vikunja",
          "image": {
             "homepage": "https://github.com/go-vikunja/vikunja",
@@ -37794,6 +37988,7 @@
       },
       {
          "category": "storage",
+         "description": "Copy your application data somewhere safe, and bring it back when you need it.",
          "id": "volsync",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -38098,6 +38293,7 @@
       },
       {
          "category": "application",
+         "description": "Save articles to read later, cleanly, on a server you own.",
          "id": "wallabag",
          "image": {
             "homepage": "https://github.com/wallabag/docker",
@@ -38272,6 +38468,7 @@
       },
       {
          "category": "application",
+         "description": "Know what your subscriptions cost you and when they renew.",
          "id": "wallos",
          "image": {
             "homepage": "https://github.com/ellite/Wallos",
@@ -38397,6 +38594,7 @@
       },
       {
          "category": "application",
+         "description": "Build your family tree with your relatives, online.",
          "id": "webtrees",
          "license": "GPL-3.0-or-later",
          "licenseOsiApproved": true,
@@ -38568,6 +38766,7 @@
       },
       {
          "category": "application",
+         "description": "Move work across a kanban board your team hosts itself.",
          "id": "wekan",
          "image": {
             "source": "https://github.com/wekan/wekan",
@@ -38709,6 +38908,7 @@
       },
       {
          "category": "application",
+         "description": "Plan your workouts, log your lifts and track your body weight.",
          "id": "wger",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
@@ -38883,6 +39083,7 @@
       },
       {
          "category": "tool",
+         "description": "Search Google without the ads, the tracking or the JavaScript.",
          "id": "whoogle",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -38993,6 +39194,7 @@
       },
       {
          "category": "application",
+         "description": "Write and organise documentation in a modern wiki.",
          "id": "wikijs",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -39142,6 +39344,7 @@
       },
       {
          "category": "application",
+         "description": "Publish a blog or a website on the platform most of the web runs on.",
          "id": "wordpress",
          "license": "GPL-2.0-or-later",
          "licenseOsiApproved": true,
@@ -39305,6 +39508,7 @@
       },
       {
          "category": "application",
+         "description": "Run a wiki that can grow into an application platform.",
          "id": "xwiki",
          "license": "LGPL-2.1-or-later",
          "licenseOsiApproved": true,
@@ -39444,6 +39648,7 @@
       },
       {
          "category": "application",
+         "description": "Shorten links on your own domain, with stats and plugins.",
          "id": "yourls",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -39599,6 +39804,7 @@
       },
       {
          "category": "messaging",
+         "description": "Stay connected to IRC and replay what you missed while away.",
          "id": "znc",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,

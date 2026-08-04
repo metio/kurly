@@ -1148,6 +1148,9 @@ local workloadEntries =
     'revolutionary',
     'robust',
   ];
+  // Every catalogued workload carries one today. It stays OPTIONAL rather than
+  // required: a workload arriving without a good sentence should be published
+  // without one, not with a filler that a shop would then render.
   local descriptionOf(workload) =
     local w = ann.workloads[workload];
     if !std.objectHas(w, 'description') then {}
