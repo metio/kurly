@@ -3190,6 +3190,7 @@
       },
       {
          "category": "application",
+         "description": "Wire your apps together with no-code automations, on infrastructure you control.",
          "id": "activepieces",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -3365,6 +3366,7 @@
       },
       {
          "category": "application",
+         "description": "Budget your money with envelope budgeting that stays local and fast.",
          "id": "actualbudget",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -3480,6 +3482,7 @@
       },
       {
          "category": "networking",
+         "description": "Block ads and trackers for every device on your network, at the DNS level.",
          "id": "adguardhome",
          "image": {
             "homepage": "https://adguard.com/en/adguard-home/overview.html",
@@ -3603,6 +3606,7 @@
       },
       {
          "category": "admin",
+         "description": "Browse and edit any SQL database from a single web page.",
          "id": "adminer",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -3725,6 +3729,7 @@
       },
       {
          "category": "application",
+         "description": "Stream your own music collection to any device, anywhere.",
          "id": "airsonic-advanced",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-airsonic-advanced/packages",
@@ -4006,6 +4011,7 @@
       },
       {
          "category": "application",
+         "description": "Put every one of your storage backends behind a single file browser and WebDAV endpoint.",
          "id": "alist",
          "image": {
             "homepage": "https://github.com/AlistGo/alist",
@@ -4136,6 +4142,7 @@
       },
       {
          "category": "application",
+         "description": "Turn your team knowledge into a searchable question-and-answer site.",
          "id": "answer",
          "image": {
             "source": "https://github.com/apache/answer"
@@ -4258,6 +4265,7 @@
       },
       {
          "category": "tool",
+         "description": "Send one notification and have it reach every service you use.",
          "id": "apprise",
          "image": {
             "homepage": "https://github.com/caronc/apprise-api",
@@ -4384,6 +4392,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your audiobooks and podcasts in one library and pick up where you left off on any device.",
          "id": "audiobookshelf",
          "image": {
             "homepage": "https://github.com/advplyr/audiobookshelf",
@@ -4504,6 +4513,7 @@
       },
       {
          "category": "identity",
+         "description": "Put single sign-on and two-factor in front of applications that have neither.",
          "id": "authelia",
          "image": {
             "homepage": "https://github.com/authelia/authelia/pkgs/container/authelia",
@@ -4657,6 +4667,7 @@
       },
       {
          "category": "identity",
+         "description": "Run your own identity provider, so every application signs in against you.",
          "id": "authentik",
          "image": {
             "homepage": "https://goauthentik.io",
@@ -4975,6 +4986,7 @@
       },
       {
          "category": "application",
+         "description": "Automate the work between your apps without writing code, and keep the data yours.",
          "id": "automatisch",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -5296,6 +5308,7 @@
       },
       {
          "category": "application",
+         "description": "Host your own calendars and contacts, syncing to every device that speaks CalDAV.",
          "id": "baikal",
          "image": {
             "homepage": "https://hub.docker.com/r/ckulka/baikal",
@@ -5426,6 +5439,7 @@
       },
       {
          "category": "application",
+         "description": "Find and download the right subtitles for your films and shows automatically.",
          "id": "bazarr",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-bazarr/packages",
@@ -5684,6 +5698,7 @@
       },
       {
          "category": "observability",
+         "description": "Check that your endpoints answer from the outside, and turn every probe into a metric.",
          "id": "blackbox-exporter",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -5947,6 +5962,7 @@
       },
       {
          "category": "application",
+         "description": "Organise your documentation into books and chapters that people actually read.",
          "id": "bookstack",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-bookstack/packages",
@@ -6117,6 +6133,7 @@
       },
       {
          "category": "application",
+         "description": "Manage a large e-book library with the full desktop tool, from a browser.",
          "id": "calibre",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-calibre/packages",
@@ -6258,6 +6275,7 @@
       },
       {
          "category": "application",
+         "description": "Browse, read and download from your e-book library in a clean web reader.",
          "id": "calibre-web",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-calibre-web/packages",
@@ -6394,6 +6412,7 @@
       },
       {
          "category": "application",
+         "description": "Read your e-book library in a browser, with new books ingested and converted for you.",
          "id": "calibre-web-automated",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-baseimage-ubuntu/packages",
@@ -6640,6 +6659,7 @@
       },
       {
          "category": "application",
+         "description": "Watch any web page and get told the moment it changes.",
          "id": "changedetection",
          "image": {
             "homepage": "https://changedetection.io",
@@ -6766,6 +6786,7 @@
       },
       {
          "category": "application",
+         "description": "Talk to OpenAI models through a clean interface that keeps your key on your own machine.",
          "id": "chatpad",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -7325,6 +7346,7 @@
       },
       {
          "category": "application",
+         "description": "Write code in VS Code from any browser, with your projects on the server.",
          "id": "code-server",
          "license": "MIT",
          "licenseOsiApproved": true,
@@ -7452,6 +7474,7 @@
       },
       {
          "category": "application",
+         "description": "Read your RSS and Atom feeds the way Google Reader used to let you.",
          "id": "commafeed",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -7571,6 +7594,7 @@
       },
       {
          "category": "tool",
+         "description": "Convert files between a thousand formats without uploading them to a stranger.",
          "id": "convertx",
          "image": {
             "homepage": "https://github.com/C4illin/ConvertX",
@@ -7697,6 +7721,7 @@
       },
       {
          "category": "database",
+         "description": "Store JSON documents in a database that syncs cleanly with offline-first apps.",
          "id": "couchdb",
          "license": "Apache-2.0",
          "licenseOsiApproved": true,
@@ -7829,6 +7854,7 @@
       },
       {
          "category": "application",
+         "description": "Write and collaborate on documents the server itself cannot read.",
          "id": "cryptpad",
          "license": "AGPL-3.0-or-later",
          "licenseOsiApproved": true,
@@ -7959,6 +7985,7 @@
       },
       {
          "category": "tool",
+         "description": "Encode, decrypt, compress and pick apart data in the browser, one recipe at a time.",
          "id": "cyberchef",
          "image": {
             "homepage": "https://github.com/gchq/CyberChef",
@@ -8072,6 +8099,7 @@
       },
       {
          "category": "application",
+         "description": "Give every service you run a single, good-looking home page.",
          "id": "dashy",
          "image": {
             "homepage": "https://dashy.to",
@@ -8191,6 +8219,7 @@
       },
       {
          "category": "application",
+         "description": "Host your own calendars and contacts with a simple admin interface.",
          "id": "davis",
          "image": {
             "homepage": "https://github.com/tchapi/davis",
@@ -8332,6 +8361,7 @@
       },
       {
          "category": "application",
+         "description": "Watch remote FTP directories and pull down new files on a schedule.",
          "id": "davos",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-davos/packages",
@@ -8468,6 +8498,7 @@
       },
       {
          "category": "application",
+         "description": "Manage your BitTorrent downloads from a light web interface.",
          "id": "deluge",
          "image": {
             "homepage": "https://github.com/linuxserver/docker-deluge/packages",
@@ -8605,6 +8636,7 @@
       },
       {
          "category": "identity",
+         "description": "Sign in against your existing LDAP, SAML or GitHub accounts through one OpenID Connect endpoint.",
          "id": "dex",
          "image": {
             "homepage": "https://github.com/dexidp/dex",
@@ -8742,6 +8774,7 @@
       },
       {
          "category": "admin",
+         "description": "Browse the repositories, tags and images in a registry you run.",
          "id": "docker-registry-ui",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -8872,6 +8905,7 @@
       },
       {
          "category": "application",
+         "description": "Write your team documentation together in a wiki that stays yours.",
          "id": "docmost",
          "image": {
             "source": "https://github.com/docmost/docmost"
@@ -9034,6 +9068,7 @@
       },
       {
          "category": "application",
+         "description": "Build fillable PDF forms and collect legally binding signatures.",
          "id": "docuseal",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -9155,6 +9190,7 @@
       },
       {
          "category": "application",
+         "description": "Run a wiki that stores every page as a plain file, with no database to look after.",
          "id": "dokuwiki",
          "license": "GPL-2.0-only",
          "licenseOsiApproved": true,
@@ -9270,6 +9306,7 @@
       },
       {
          "category": "tool",
+         "description": "Draw flowcharts, UML and network diagrams entirely in the browser.",
          "id": "draw-io",
          "image": {
             "homepage": "https://www.drawio.com",
@@ -9383,6 +9420,7 @@
       },
       {
          "category": "tool",
+         "description": "Draw flowcharts, UML and network diagrams in the browser.",
          "id": "drawio",
          "image": {
             "homepage": "https://www.drawio.com",
@@ -13070,6 +13108,7 @@
       },
       {
          "category": "application",
+         "description": "Put your feeds, weather, markets and home lab on one fast page.",
          "id": "glance",
          "license": "AGPL-3.0-only",
          "licenseOsiApproved": true,
@@ -37462,6 +37501,7 @@
       },
       {
          "category": "application",
+         "description": "Keep your passwords in a vault you host, with the Bitwarden apps you already use.",
          "id": "vaultwarden",
          "image": {
             "homepage": "https://github.com/dani-garcia/vaultwarden",

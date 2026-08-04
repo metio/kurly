@@ -1106,12 +1106,74 @@ local workloadEntries =
     std.isFunction(stageImports[key])
     for key in std.objectFields(stageImports)
   ]) : 'workloads: every stage import must resolve to a function(params) app';
+  // `description` is one sentence for somebody deciding whether they WANT the
+  // software; `summary` is for somebody deciding how to RUN it. They are kept
+  // apart for the reason `consent` and `trademark` were: a field with an
+  // audience must not be quietly reused for a different one. Absent is a real
+  // answer and the common one — a shop would rather show a technical summary
+  // than a sentence somebody generated to fill a field.
+  //
+  // The three rules the portal asked for are enforced here rather than
+  // documented, because a guard that only exists in prose is one nobody runs:
+  // one sentence, never opening with the software's own name (the card already
+  // carries it as a heading), no deployment mechanics, and no marketing.
+  local mechanicsWords = [
+    'configmap',
+    'persistentvolume',
+    'readwriteonce',
+    'readwritemany',
+    'pvc',
+    'replica',
+    'statefulset',
+    'deployment',
+    'sidecar',
+    'ingress',
+    'kubernetes',
+    'container',
+    'official image',
+    'serves on',
+    'stateless',
+    'volume',
+    'port ',
+  ];
+  local marketingWords = [
+    'powerful',
+    'seamless',
+    'enterprise-grade',
+    'best-in-class',
+    'blazing',
+    'cutting-edge',
+    'world-class',
+    'next-generation',
+    'revolutionary',
+    'robust',
+  ];
+  local descriptionOf(workload) =
+    local w = ann.workloads[workload];
+    if !std.objectHas(w, 'description') then {}
+    else
+      local d = w.description;
+      local lower = std.asciiLower(d);
+      local displayName = std.get(w, 'name', workload);
+      assert std.length(d) <= 160 :
+             'workloads.%s.description must fit one line (<=160 chars), got %d' % [workload, std.length(d)];
+      assert std.endsWith(d, '.') && std.length(std.findSubstr('. ', d)) == 0 :
+             'workloads.%s.description must be ONE sentence ending in a full stop' % workload;
+      assert !std.startsWith(lower, std.asciiLower(displayName) + ' ') :
+             'workloads.%s.description must not open with the software name — the card already shows it' % workload;
+      assert std.all([std.length(std.findSubstr(t, lower)) == 0 for t in mechanicsWords]) :
+             'workloads.%s.description names deployment mechanics — that belongs in summary' % workload;
+      assert std.all([std.length(std.findSubstr(t, lower)) == 0 for t in marketingWords]) :
+             'workloads.%s.description reads as marketing — plain is the register' % workload;
+      { description: d };
+
   [
     {
       id: workload,
       summary: ann.workloads[workload].summary,
       maturity: maturity.of(workload),
     }
+    + descriptionOf(workload)
     + softwareFacts(workload)
     // What the PROJECT's trademark policy says. ABSENT means nobody looked, and
     // a consumer must not read that as permission — a trademark binds whether or

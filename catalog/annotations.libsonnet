@@ -460,6 +460,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'AGPL-3.0-only',
       upstream: { repo: 'https://github.com/dani-garcia/vaultwarden' },
       name: 'Vaultwarden',
+      description: 'Keep your passwords in a vault you host, with the Bitwarden apps you already use.',
       summary: 'A Vaultwarden server (a lightweight, Bitwarden-compatible password manager in Rust). A plain composable http workload that keeps its vault, attachments, and JWT signing key in a SQLite database on a PersistentVolume — no external database needed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web vault and API on :8080.',
       category: 'application',
       requires: { database: 'optional' },
@@ -549,6 +550,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     dex: {
       name: 'Dex',
+      description: 'Sign in against your existing LDAP, SAML or GitHub accounts through one OpenID Connect endpoint.',
       summary: 'A Dex server (an OpenID Connect / OAuth 2.0 identity provider that federates to upstream connectors — LDAP, SAML, GitHub, Google, …) on the official image. A plain composable http workload; with the SQLite storage backend its state lives on a PersistentVolume, no external database. Driven entirely by a config.yaml (issuer, storage, connectors, staticClients) mounted from a Secret — kurly authors none. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves OIDC on :5556.',
       category: 'identity',
       requires: { database: 'optional' },
@@ -688,6 +690,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     'code-server': {
       name: 'code-server',
       upstream: { repo: 'https://github.com/coder/code-server' },
+      description: 'Write code in VS Code from any browser, with your projects on the server.',
       summary: 'A code-server instance (VS Code running in the browser, on a remote server) on the official image. A plain composable http workload — your projects, extensions, and settings live on a PersistentVolume. kurly authors no Secret; PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',
       stages: {
@@ -723,6 +726,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     audiobookshelf: {
       name: 'Audiobookshelf',
+      description: 'Keep your audiobooks and podcasts in one library and pick up where you left off on any device.',
       summary: 'An Audiobookshelf server (a self-hosted audiobook and podcast server) on the official image. A plain composable http workload that keeps its config, metadata, and library on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       stages: {
@@ -795,6 +799,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     alist: {
       name: 'AList',
       upstream: { repo: 'https://github.com/AlistGo/alist' },
+      description: 'Put every one of your storage backends behind a single file browser and WebDAV endpoint.',
       summary: 'An AList server (a self-hosted file list / WebDAV program fronting many storage backends — local disk, S3, WebDAV, cloud drives — behind one web UI) on the official image. A plain composable http workload that keeps its SQLite database and configuration on a PersistentVolume under /opt/alist/data. Single writer over a ReadWriteOnce volume: one replica, recreated. On first start it logs a randomly generated admin password. Serves the UI and WebDAV on :5244.',
       category: 'application',
       requires: { objectStorage: 'optional' },
@@ -814,6 +819,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     'draw-io': {
       upstream: { repo: 'https://github.com/jgraph/drawio' },
       name: 'draw.io',
+      description: 'Draw flowcharts, UML and network diagrams entirely in the browser.',
       summary: 'A draw.io / diagrams.net server (a self-hosted, client-side diagram editor) on the official image. A plain composable http workload. The editor runs entirely in the browser; the server only serves static assets and a stateless export/proxy endpoint, so it holds no data — a plain, horizontally scalable Deployment. Serves on :8080.',
       category: 'tool',
       stages: {
@@ -850,6 +856,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'GPL-3.0-only',
       name: 'Calibre-Web Automated',
       upstream: { repo: 'https://github.com/crocodilestick/Calibre-Web-Automated' },
+      description: 'Read your e-book library in a browser, with new books ingested and converted for you.',
       summary: 'A Calibre-Web Automated server (a self-hosted web reader and library manager for a Calibre ebook library, adding automatic ingest and format conversion on top of Calibre-Web) on the LinuxServer.io-based image. A plain composable http workload that keeps its application config on one PersistentVolume under /config and the Calibre library on another under /calibre-library. The s6-overlay init runs as root and drops to PUID/PGID, so this runs as root with a writable root filesystem while keeping the rest of the hardening. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8083.',
       category: 'application',
       stages: {
@@ -988,6 +995,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     davis: {
       name: 'Davis',
+      description: 'Host your own calendars and contacts with a simple admin interface.',
       summary: 'A Davis server (a self-hosted CalDAV and CardDAV server with a simple admin UI, built on sabre/dav) on the official image, backed by an external database (MySQL/MariaDB, PostgreSQL, or SQLite). A plain composable http workload. kurly authors no Secret; DATABASE_URL, APP_SECRET and the admin login come from a provided Secret via envFrom. Pair it with a database you run separately. Stateless: calendars and contacts live in the database, so a plain rolling Deployment. Serves on :80.',
       category: 'application',
       requires: { database: 'optional' },
@@ -1048,6 +1056,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     chatpad: {
       name: 'Chatpad AI',
       upstream: { repo: 'https://github.com/deiucanta/chatpad' },
+      description: 'Talk to OpenAI models through a clean interface that keeps your key on your own machine.',
       summary: 'A Chatpad AI server (a self-hosted, clean web UI for OpenAI chat models) on the official image. A plain composable http workload. Conversations and the API key are stored client-side, so the server only serves static assets and holds no data — a plain, horizontally scalable Deployment. The browser talks to OpenAI directly with the user own key. Serves on :80.',
       category: 'application',
       stages: {
@@ -1165,6 +1174,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     apprise: {
       name: 'Apprise',
       upstream: { repo: 'https://github.com/caronc/apprise' },
+      description: 'Send one notification and have it reach every service you use.',
       summary: 'An Apprise API server (a self-hosted push-notification relay that fans one request out to 100+ services: email, Slack, Telegram, ntfy, webhooks) on the official image. A plain composable http workload that keeps persistent named notification configs on a PersistentVolume under /config; it can also run stateless (POST with inline URLs). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.',
       category: 'tool',
       stages: {
@@ -1253,6 +1263,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     dashy: {
       name: 'Dashy',
+      description: 'Give every service you run a single, good-looking home page.',
       summary: 'A Dashy server (a highly customizable, self-hosted dashboard for your services) on the official image. A plain composable http workload — its configuration lives on a PersistentVolume, no external database. The image rebuilds assets on a config change and writes the root filesystem, so read-only-rootfs is relaxed while non-root and dropped capabilities stay. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',
       stages: {
@@ -1306,6 +1317,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     dokuwiki: {
       name: 'DokuWiki',
       upstream: { repo: 'https://github.com/dokuwiki/dokuwiki' },
+      description: 'Run a wiki that stores every page as a plain file, with no database to look after.',
       summary: 'A DokuWiki server (a simple, database-less wiki that stores its pages as flat files) on the official image. A plain composable http workload — all content lives on a PersistentVolume, no external database. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       stages: {
@@ -1640,6 +1652,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'GPL-3.0-only',
       name: 'Baikal',
       upstream: { repo: 'https://github.com/sabre-io/Baikal' },
+      description: 'Host your own calendars and contacts, syncing to every device that speaks CalDAV.',
       summary: 'A Baikal server (a lightweight CalDAV + CardDAV server on sabre/dav) on the maintained ckulka image. A plain composable http workload that keeps its configuration and SQLite database on a PersistentVolume — no external database by default. The nginx + PHP-FPM image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       requires: { database: 'optional' },
@@ -1660,6 +1673,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'AGPL-3.0-or-later',
       name: 'CryptPad',
       upstream: { repo: 'https://github.com/cryptpad/cryptpad' },
+      description: 'Write and collaborate on documents the server itself cannot read.',
       summary: 'A CryptPad server (end-to-end encrypted, collaborative documents and spreadsheets) on the official image. A plain composable http workload that keeps its encrypted blocks, blobs, and datastore on a PersistentVolume — no external database. The Node app writes under /cryptpad, so it relaxes read-only-rootfs while keeping non-root and dropped capabilities. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000; needs a config.js with a main and a separate sandbox origin.',
       category: 'application',
       stages: {
@@ -1788,6 +1802,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     actualbudget: {
       name: 'Actual Budget',
       upstream: { repo: 'https://github.com/actualbudget/actual' },
+      description: 'Budget your money with envelope budgeting that stays local and fast.',
       summary: 'An Actual Budget server (a local-first personal finance and budgeting app). A plain composable http workload that keeps its budgets and sync state in a SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and sync API on :5006.',
       category: 'application',
       stages: {
@@ -2110,6 +2125,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     bazarr: {
       name: 'Bazarr',
       upstream: { repo: 'https://github.com/morpheus65535/bazarr' },
+      description: 'Find and download the right subtitles for your films and shows automatically.',
       summary: 'A Bazarr server — a companion to Sonarr and Radarr that manages and downloads subtitles. On the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. Mount your media/download directories and point it at them in its settings. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :6767.',
       category: 'application',
       stages: {
@@ -2250,6 +2266,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     drawio: {
       name: 'draw.io',
       upstream: { repo: 'https://github.com/jgraph/drawio' },
+      description: 'Draw flowcharts, UML and network diagrams in the browser.',
       summary: 'A draw.io server — the self-hosted diagrams.net web editor for flowcharts, UML and network diagrams. On the official image; stateless (a plain rolling Deployment). Serves on :8080.',
       category: 'tool',
       stages: {
@@ -2428,6 +2445,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     docuseal: {
       name: 'DocuSeal',
       upstream: { repo: 'https://github.com/docusealco/docuseal' },
+      description: 'Build fillable PDF forms and collect legally binding signatures.',
       summary: 'A DocuSeal server (a self-hosted document-signing platform: build fillable PDF forms and collect legally-binding e-signatures, an open alternative to DocuSign) on the official image; with the default SQLite backend its database and uploaded documents live on a PersistentVolume. Point it at an external PostgreSQL (DATABASE_URL) to scale past the single SQLite writer. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       category: 'application',
       requires: { database: 'optional' },
@@ -2651,6 +2669,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     deluge: {
       name: 'Deluge',
       upstream: { repo: 'https://github.com/deluge-torrent/deluge' },
+      description: 'Manage your BitTorrent downloads from a light web interface.',
       summary: 'A Deluge server — a lightweight, self-hosted BitTorrent client with a web UI. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8112.',
       category: 'application',
       stages: {
@@ -2715,6 +2734,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'GPL-3.0-only',
       name: 'Calibre',
       upstream: { repo: 'https://github.com/kovidgoyal/calibre' },
+      description: 'Manage a large e-book library with the full desktop tool, from a browser.',
       summary: 'A Calibre server (the full Calibre e-book management desktop app, served in the browser over a remote-desktop session) on the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',
       stages: {
@@ -2783,6 +2803,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     'airsonic-advanced': {
       name: 'Airsonic-Advanced',
       upstream: { repo: 'https://github.com/airsonic-advanced/airsonic-advanced' },
+      description: 'Stream your own music collection to any device, anywhere.',
       summary: 'An Airsonic-Advanced server — a free, self-hosted music streaming server, an actively-maintained fork of Airsonic. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4040.',
       category: 'application',
       stages: {
@@ -2882,6 +2903,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     adguardhome: {
       name: 'AdGuard Home',
+      description: 'Block ads and trackers for every device on your network, at the DNS level.',
       summary: 'An AdGuard Home server (a self-hosted, network-wide DNS ad- and tracker-blocker with a friendly web UI, an alternative to Pi-hole) on the official image; its configuration and runtime data live on a PersistentVolume. It answers DNS on :53 (TCP/UDP), separate ports to add a Service for. The config and work directory both live under /opt/adguardhome, so a single volume persists everything; it binds the privileged DNS port so it runs as root with a writable root filesystem. Single writer over a ReadWriteOnce volume: one replica, recreated. The admin UI (setup wizard) serves on :3000.',
       category: 'networking',
       stages: {
@@ -2956,6 +2978,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     convertx: {
       name: 'ConvertX',
+      description: 'Convert files between a thousand formats without uploading them to a stranger.',
       summary: 'A ConvertX server (a self-hosted online file converter supporting 1000+ formats) on the official image; its SQLite database and in-flight files live on a PersistentVolume. kurly authors no Secret; JWT_SECRET comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       category: 'tool',
       stages: {
@@ -2979,6 +3002,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     cyberchef: {
       name: 'CyberChef',
+      description: 'Encode, decrypt, compress and pick apart data in the browser, one recipe at a time.',
       summary: 'A CyberChef server (GCHQ\'s "cyber Swiss-army knife" for encoding, encryption, compression and data analysis, all in the browser) on the official image. Stateless: a plain rolling Deployment. Serves on :8000.',
       category: 'tool',
       stages: {
@@ -3102,6 +3126,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'Apache-2.0',
       name: 'Adminer',
       upstream: { repo: 'https://github.com/vrana/adminer' },
+      description: 'Browse and edit any SQL database from a single web page.',
       summary: 'An Adminer server (a full-featured database management tool in a single PHP file: MySQL, PostgreSQL, SQLite and more) on the official image. Stateless: a plain rolling Deployment. Serves on :8080.',
       category: 'admin',
       requires: { database: 'optional' },
@@ -3205,6 +3230,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     davos: {
       name: 'davos',
       upstream: { repo: 'https://github.com/linuxserver/davos' },
+      description: 'Watch remote FTP directories and pull down new files on a schedule.',
       summary: 'A davos server — a self-hosted FTP automation tool that watches remote directories and downloads on a schedule. On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',
       stages: {
@@ -3398,6 +3424,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     glance: {
       name: 'Glance',
       upstream: { repo: 'https://github.com/glanceapp/glance' },
+      description: 'Put your feeds, weather, markets and home lab on one fast page.',
       summary: 'A Glance server (a self-hosted dashboard that puts feeds, RSS, weather, markets, monitoring and homelab widgets on one fast page) on the official image. Its layout is its glance.yml, mounted as a ConfigMap and passed verbatim; it keeps no persistent state. Stateless: the default shows a minimal page. Serves on :8080.',
       category: 'application',
       stages: {
@@ -3470,6 +3497,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     couchdb: {
       name: 'Apache CouchDB',
       upstream: { repo: 'https://github.com/apache/couchdb' },
+      description: 'Store JSON documents in a database that syncs cleanly with offline-first apps.',
       summary: 'An Apache CouchDB server (a self-hosted, document-oriented NoSQL database that speaks HTTP/JSON and syncs with offline-first apps) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; COUCHDB_USER and COUCHDB_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5984.',
       category: 'database',
       stages: {
@@ -3572,6 +3600,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     authelia: {
       name: 'Authelia',
+      description: 'Put single sign-on and two-factor in front of applications that have neither.',
       summary: 'An Authelia server (a self-hosted authentication and authorization gateway adding SSO and 2FA in front of your apps via a reverse proxy forward-auth) on the official image. Its behaviour is its configuration.yml, mounted as a ConfigMap and passed verbatim; with the default SQLite storage its database lives on a PersistentVolume. The default config is a minimal skeleton that MUST be completed. kurly authors no Secret; the session/storage/JWT secrets come from a provided Secret via envFrom (as AUTHELIA_* env). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :9091.',
       category: 'identity',
       stages: {
@@ -3755,6 +3784,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     'docker-registry-ui': {
       name: 'Docker Registry UI',
       upstream: { repo: 'https://github.com/Joxit/docker-registry-ui' },
+      description: 'Browse the repositories, tags and images in a registry you run.',
       summary: 'A Docker Registry UI server (a clean, self-hosted web interface for browsing a Docker/OCI registry: repositories, tags, inspect and delete images) on the official image. Stateless: a plain rolling Deployment that talks to the registry you point it at. Serves on :80.',
       category: 'admin',
       stages: {
@@ -4197,6 +4227,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     authentik: {
       license: 'MIT',
       name: 'authentik',
+      description: 'Run your own identity provider, so every application signs in against you.',
       summary: 'An authentik server (a self-hosted identity provider and SSO: OAuth2, SAML, LDAP, forward-auth) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web/API server (HTTP :9000) and a background worker (migrations, scheduled tasks, outposts). kurly authors no Secret; the PostgreSQL/Redis connection and AUTHENTIK_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Pairs with a cnpg-cluster named authentik-db and a Redis. Stateless.',
       category: 'identity',
       requires: { database: 'required', cache: 'required' },
@@ -4428,6 +4459,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     changedetection: {
       name: 'changedetection.io',
+      description: 'Watch any web page and get told the moment it changes.',
       summary: 'A changedetection.io server (self-hosted website change detection: watch pages and get notified when they change) on the official image; its datastore (SQLite plus page snapshots) lives on a PersistentVolume. Fetching JavaScript pages needs a companion Playwright/Chrome service (PLAYWRIGHT_DRIVER_URL); the plain HTTP fetcher works without it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.',
       category: 'application',
       stages: {
@@ -4448,6 +4480,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'GPL-3.0-or-later',
       name: 'Calibre-Web',
       upstream: { repo: 'https://github.com/janeczku/calibre-web' },
+      description: 'Browse, read and download from your e-book library in a clean web reader.',
       summary: 'A Calibre-Web server (a clean web interface for browsing, reading and downloading books from an existing Calibre library) on the LinuxServer.io image; its application config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8083.',
       category: 'application',
       stages: {
@@ -4610,6 +4643,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'MIT',
       name: 'Activepieces',
       upstream: { repo: 'https://github.com/activepieces/activepieces' },
+      description: 'Wire your apps together with no-code automations, on infrastructure you control.',
       summary: 'An Activepieces server (a self-hosted, open-source no-code automation / workflow builder à la Zapier) on the official all-in-one image, backed by an external PostgreSQL and Redis. Pairs with a cnpg-cluster named activepieces-db and a Redis. Connection settings are env from the dbHost/database/dbUser/redisHost parameters; a provided Secret holds AP_POSTGRES_PASSWORD, AP_ENCRYPTION_KEY and AP_JWT_SECRET via envFrom (kurly authors none). Stateless: a plain rolling Deployment. Serves on :80.',
       category: 'application',
       requires: { database: 'required', cache: 'required' },
@@ -4635,6 +4669,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       license: 'AGPL-3.0',
       name: 'Automatisch',
       upstream: { repo: 'https://github.com/automatisch/automatisch' },
+      description: 'Automate the work between your apps without writing code, and keep the data yours.',
       summary: 'An Automatisch server (a self-hosted, open-source business-automation / workflow tool, an open alternative to Zapier) on the official image, backed by an external PostgreSQL and Redis. Two stages: a web server (HTTP :3000) and a background worker that runs the flow executions the server enqueues onto Redis. Pairs with a cnpg-cluster named automatisch-db and a Redis. kurly authors no Secret; the PostgreSQL/Redis connection and the ENCRYPTION_KEY / WEBHOOK_SECRET_KEY / APP_SECRET_KEY come from a provided Secret via envFrom, shared by both stages. Stateless.',
       category: 'application',
       requires: { database: 'required', cache: 'required' },
@@ -4754,6 +4789,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     docmost: {
       name: 'Docmost',
+      description: 'Write your team documentation together in a wiki that stays yours.',
       summary: 'A Docmost server (a self-hosted, open-source collaborative wiki and documentation platform) on the official image, backed by an external PostgreSQL and Redis, with attachments on a PersistentVolume. Pairs with a cnpg-cluster named docmost-db and a Redis. kurly authors no Secret; DATABASE_URL, REDIS_URL and APP_SECRET come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3000.',
       category: 'application',
       requires: { database: 'required', cache: 'required', objectStorage: 'optional' },
@@ -4794,6 +4830,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     answer: {
       name: 'Apache Answer',
+      description: 'Turn your team knowledge into a searchable question-and-answer site.',
       summary: 'An Apache Answer server (a self-hosted Q&A platform for a community knowledge base, à la Stack Overflow) on the official image. A plain composable http workload — with the SQLite backend its data and uploads live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80. Configure external PostgreSQL/MySQL via the installer to scale out.',
       category: 'application',
       requires: { database: 'optional' },
@@ -4855,6 +4892,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     commafeed: {
       name: 'CommaFeed',
       upstream: { repo: 'https://github.com/Athou/commafeed' },
+      description: 'Read your RSS and Atom feeds the way Google Reader used to let you.',
       summary: 'A CommaFeed server (a self-hosted Google Reader-style RSS/Atom feed reader) on the official image. A plain composable http workload — the H2 variant keeps its feeds in an embedded database on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8082. Use the PostgreSQL image variant to scale past the embedded DB.',
       category: 'application',
       requires: { database: 'required' },
@@ -5075,6 +5113,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     bookstack: {
       name: 'BookStack',
       upstream: { repo: 'https://github.com/BookStackApp/BookStack' },
+      description: 'Organise your documentation into books and chapters that people actually read.',
       summary: 'A BookStack server (a simple, self-hosted platform for organising and storing documentation) on the maintained LinuxServer image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and uploads on a PersistentVolume. The LinuxServer s6 image runs as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASS and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       requires: { database: 'required' },
@@ -5452,6 +5491,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     'blackbox-exporter': {
       name: 'Blackbox exporter',
       upstream: { repo: 'https://github.com/prometheus/blackbox_exporter' },
+      description: 'Check that your endpoints answer from the outside, and turn every probe into a metric.',
       summary: 'The Prometheus blackbox_exporter: it probes endpoints from the outside (HTTP, TCP, DNS, ICMP) and turns each probe into metrics. A plain composable http workload, deployed once as the prober kurly.expose.probe points a workload Probe at. Serves /probe on :9115.',
       category: 'observability',
       stages: {
