@@ -158,6 +158,7 @@
     'ombi',
     'onlyoffice',
     'open-webui',
+    'opengist',
     'openhab',
     'opensearch-cluster',
     'organizr',

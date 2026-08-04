@@ -31720,7 +31720,7 @@
          "licenseOsiApproved": true,
          "licenseVariantAssumed": true,
          "maturity": {
-            "tier": "rendered"
+            "tier": "e2e"
          },
          "name": "Opengist",
          "requires": [

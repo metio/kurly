@@ -161,6 +161,7 @@
   onlyoffice: '2026-07-28',
   'open-webui': '2026-07-28',
   openhab: '2026-07-28',
+  opengist: '2026-08-04',
   'opensearch-cluster': '2026-07-28',
   organizr: '2026-07-28',
   'otel-collector': '2026-07-28',

@@ -189,11 +189,24 @@ for w in "${targets[@]}"; do
 done
 
 echo
+# check-catalog regenerates the derived ledgers and then asks `git diff` whether
+# they moved. That is a drift check against the INDEX, which is what CI wants —
+# there the checkout is clean, so any difference means the committed file was
+# stale. Locally it reports the data this run just legitimately regenerated,
+# until it is staged. Saying so is the difference between a gate that looks
+# broken and one that is telling you to `git add`.
 echo "==> check-catalog"
 if check-catalog >/dev/null 2>&1; then
   echo "    ok"
 else
-  echo "::error::check-catalog failed — run it directly for the drift" >&2
+  if ! git diff --quiet -- catalog/ 2>/dev/null; then
+    echo "    check-catalog reports drift, and catalog/ has unstaged changes —"
+    echo "    it compares against the git index, so stage what this run wrote:"
+    echo "      git add catalog/ hack/smoke/ workloads/"
+    echo "    then re-run check-catalog. If it still fails, the drift is real."
+  else
+    echo "::error::check-catalog failed — run it directly for the drift" >&2
+  fi
   failed=1
 fi
 

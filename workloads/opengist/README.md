@@ -83,7 +83,7 @@ already non-root and execs the server directly, so pinning a uid keeps the
 
 ## Maturity
 
-**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
 
 ## Deploy with JaaS
 
