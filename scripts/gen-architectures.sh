@@ -41,8 +41,17 @@ inspect_one() {
   # what exhausts the budget before reaching the ones that were not.
   if [ -n "${ONLY:-}" ] && ! grep -qw -- "$key" <<<"$ONLY"; then
     local previous
+    # Rebuilt field-by-field rather than passed through, to emit the same key
+    # order the freshly-measured branch below writes. PREVIOUS comes from
+    # jsonnet, which sorts an object's fields, so passing it through would put
+    # `architectures` first — and every carried-over line would be rewritten by
+    # any subset run, burying the one stage that was actually re-asked in three
+    # hundred lines of reordering.
     previous="$(jq --compact-output --arg key "$key" \
-      '.[$key] // empty | if type == "array" then { architectures: . } else . end' "$PREVIOUS" 2>/dev/null || true)"
+      '.[$key] // empty
+       | if type == "array" then { architectures: . }
+         elif has("digest") then { digest: .digest, architectures: .architectures }
+         else { architectures: .architectures } end' "$PREVIOUS" 2>/dev/null || true)"
     [ -z "$previous" ] || printf '  "%s": %s,\n' "$key" \
       "$(printf '%s' "$previous" | sed "s/\"digest\":/digest:/; s/\"architectures\":/architectures:/; s/\"/'/g")"
     return 0

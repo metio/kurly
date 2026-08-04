@@ -71,6 +71,24 @@ trap 'rm -f "$previous"' EXIT
   else echo '{}'; fi
 } | jq --slurp '.[0] * .[1]' > "$previous"
 
+# One entry carried over unasked — because it is outside the requested subset, or
+# because the registry never answered. Emitted in the same field order the
+# freshly-measured branch writes: `previous` comes from jsonnet, which sorts an
+# object's fields, so emitting them as they iterate puts `homepage` first, and
+# every carried-over workload is rewritten by any subset run — burying the
+# handful actually re-asked under hundreds of lines of reordering. A key outside
+# the known set still survives, at the end, so an entry is never narrowed by
+# being carried.
+emit_carried() {
+  printf "  '%s': {\n" "$1"
+  jq -r --argjson order '["license","title","source","homepage"]' '
+    . as $e
+    | ($order + (($e | keys) - $order))[]
+    | select($e[.] != null)
+    | "    \(.): '"'"'\($e[.])'"'"',"' <<<"$2"
+  printf '  },\n'
+}
+
 # An SPDX expression as it appears in practice: identifiers, an optional `-only`
 # / `-or-later`, joined by AND/OR/WITH. Shape only, on purpose: the label is
 # recorded as the image states it, and catalog/spdx.gen.libsonnet decides which
@@ -112,11 +130,7 @@ for dir in workloads/*/; do
     entry="$(jq -c --arg id "$id" '.[$id] // empty' "$previous")"
     if [ -n "$entry" ]; then
       covered=$((covered + 1))
-      {
-        printf "  '%s': {\n" "$id"
-        jq -r 'to_entries[] | "    \(.key): '"'"'\(.value)'"'"',"' <<<"$entry"
-        printf '  },\n'
-      } >> "$tmp"
+      emit_carried "$id" "$entry" >> "$tmp"
     fi
     continue
   fi
@@ -159,11 +173,7 @@ for dir in workloads/*/; do
     entry="$(jq -c --arg id "$id" '.[$id] // empty' "$previous")"
     if [ -n "$entry" ]; then
       covered=$((covered + 1))
-      {
-        printf "  '%s': {\n" "$id"
-        jq -r 'to_entries[] | "    \(.key): '"'"'\(.value)'"'"',"' <<<"$entry"
-        printf '  },\n'
-      } >> "$tmp"
+      emit_carried "$id" "$entry" >> "$tmp"
     fi
     continue
   fi
@@ -202,6 +212,10 @@ done
 
 printf '}\n' >> "$tmp"
 mv "$tmp" "$out"
+# The keys above are emitted quoted; jsonnetfmt drops the quotes where they are
+# not needed, which is the shape check-fmt demands — the same last step
+# gen-architectures and gen-signatures take.
+jsonnetfmt --in-place "$out"
 
 echo "wrote ${out}: ${covered}/${total} workloads carry usable image labels"
 [ -n "$missing" ] && {
