@@ -10,6 +10,21 @@ workload. Written down because most of it was previously spread across
 `CLAUDE.md`, a dozen gates, and things learned by booting the whole catalogue
 and watching what broke.
 
+**This file is the HOW. The state of any particular candidate lives in tik**, as
+the `kurly-workload` process in the metio store — one ticket per candidate,
+stages derived from evidence rather than ticked off. The two are complementary
+and deliberately not duplicated: tik records what is *true* about a workload and
+regresses when that stops being true; this file explains how to *make* it true.
+
+```shell
+tik new kurly-workload --title "carry <name>"
+tik explain <id>          # what evidence is missing, and who can act
+tik probe <id>            # re-derive from the catalogue, the ledgers and git
+```
+
+Each stage's runbook (`kb/runbooks/kurly-workload-<stage>.md` in the store)
+points back at the section here that tells you how.
+
 Two habits run through all of it:
 
 - **Look it up, do not remember it.** Almost every field here has been wrong at
