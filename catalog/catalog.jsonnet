@@ -583,6 +583,57 @@ local declaredRequests(fn) =
     ];
     std.flattenArrays([entries(t) for t in tmpls]);
 
+// What the stage's STORAGE TOPOLOGY permits by way of replicas — the fact any
+// "production profile" has to consult before it does anything, because on most
+// of this catalogue "make it highly available" is not a setting.
+//
+// A Deployment that owns a ReadWriteOnce claim cannot run a second replica: the
+// volume attaches to one node, so the second pod sits Pending forever. Handing
+// such a workload replicas=3 does not make it available, it makes it down. That
+// is the common case here, not the exception.
+//
+// Read from what the stage RENDERS, like posture and storage.pvcs:
+//
+//   stateless     no owned volume stands in the way
+//   singleWriter  a Deployment owning a ReadWriteOnce claim — one replica, full stop
+//   sharedVolume  a Deployment owning a ReadWriteMany claim — the volume allows
+//                 more than one; whether the APPLICATION does is not ours to say
+//   perPod        a StatefulSet with volumeClaimTemplates — each replica its own
+//   perNode       a DaemonSet — one per node by definition
+//   oneOff        a Job or CronJob, where replicas is not the question
+//
+// `horizontal` is the single bit a caller needs: whether more than one replica
+// is possible WITHOUT changing the storage. It is deliberately false for
+// sharedVolume too — a ReadWriteMany volume makes concurrency possible, and
+// plenty of applications corrupt themselves given it. Saying "yes" there would
+// be inferring an application property from a storage one.
+local scaling(fn) =
+  local items = main.list(fn()).items;
+  local controllers = [i for i in items if std.member(['Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob'], std.get(i, 'kind', ''))];
+  local ownedClaims = [i for i in items if std.get(i, 'kind', '') == 'PersistentVolumeClaim'];
+  local anyRWX = std.any([
+    std.member(std.get(std.get(c, 'spec', {}), 'accessModes', []), 'ReadWriteMany')
+    for c in ownedClaims
+  ]);
+  local kinds = std.set([c.kind for c in controllers]);
+  if controllers == [] then null
+  else
+    local topology =
+      if std.member(kinds, 'DaemonSet') then 'perNode'
+      else if std.member(kinds, 'StatefulSet') then 'perPod'
+      else if std.member(kinds, 'Deployment') && ownedClaims != [] then (if anyRWX then 'sharedVolume' else 'singleWriter')
+      else if std.member(kinds, 'Deployment') then 'stateless'
+      else 'oneOff';
+    {
+      topology: topology,
+      horizontal: std.member(['stateless', 'perPod'], topology),
+      replicas: std.foldl(
+        function(acc, c) if std.objectHas(std.get(c, 'spec', {}), 'replicas') then c.spec.replicas else acc,
+        controllers,
+        null
+      ),
+    };
+
 local posture(fn) =
   local items = main.list(fn()).items;
   local tmpls = podTemplates(items);
@@ -1234,6 +1285,7 @@ local workloadEntries =
           )
         )
         + { posture: posture(stageImports[workload + '/' + stage]) }
+        + { scaling: scaling(stageImports[workload + '/' + stage]) }
         + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])
         // Which bollwerk policies the stage breaks, from bsi.gen.libsonnet.

@@ -586,6 +586,53 @@ local podOf(app) = app.deployment.spec.template.spec;
     ]
   ),
 
+  // --- kurly.production ---------------------------------------------------------
+  // One production profile, applied to workloads of different storage shapes,
+  // must come out CORRECT for each rather than uniform. A Deployment owning a
+  // volume can never have a second replica — the volume attaches to one node and
+  // the next pod waits forever — so the profile clamps instead of refusing, and
+  // clamps everything the replicas would have justified along with it: a
+  // PodDisruptionBudget wanting two of a one-replica workload blocks every node
+  // drain in the cluster, and spreading one pod across zones constrains nothing.
+  production_clamps_to_what_the_workload_can_run: std.assertEqual(
+    local ask(app) = kurly.list(kurly.production(
+      app,
+      host='t.example.com',
+      gateway='shared',
+      replicas=3,
+      pdb=2,
+      spread=['kubernetes.io/hostname'],
+    ));
+    local shape(l) = {
+      replicas: [i.spec.replicas for i in l.items if std.objectHas(std.get(i, 'spec', {}), 'replicas')],
+      pdb: [i.spec.minAvailable for i in l.items if i.kind == 'PodDisruptionBudget'],
+      spread: [
+        std.length(std.get(i.spec.template.spec, 'topologySpreadConstraints', []))
+        for i in l.items
+        if i.kind == 'Deployment'
+      ],
+    };
+    [
+      shape(ask(kurly.http('stateless', 'img:1'))),
+      shape(ask(kurly.http('writer', 'img:1') + kurly.store('/data', '1Gi'))),
+    ],
+    [
+      { replicas: [3], pdb: [2], spread: [1] },
+      { replicas: [1], pdb: [1], spread: [0] },
+    ]
+  ),
+
+  // The clamp reads the STORAGE, not the replica count it was handed: a
+  // ReadWriteMany claim is not taken as permission either, because whether the
+  // application survives concurrent writers is a fact about the application.
+  production_shared_volume_is_not_permission: std.assertEqual(
+    kurly.list(kurly.production(
+      kurly.http('shared', 'img:1') + kurly.store('/data', '1Gi', accessModes=['ReadWriteMany']),
+      replicas=4,
+    )).items[0].spec.replicas,
+    1
+  ),
+
   // --- kurly.mesh axis --------------------------------------------------------
   // Istio does both halves: the injection marker on the POD template (never the
   // controller, where the injector would not see it) and a PeerAuthentication

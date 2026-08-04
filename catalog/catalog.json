@@ -3168,6 +3168,11 @@
                   "image": "docker.io/2fauth/2fauth:8.0.1@sha256:4a1f329e42b9bdfb625db3094bd6f79a2f44640b6259d4cdb9f336c676bf120e",
                   "tag": "8.0.1"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -3334,6 +3339,11 @@
                   "image": "docker.io/activepieces/activepieces:0.86.3@sha256:208517c4f0d798a477a0c594bf432dd0f4918433f4b6f5b5f188a6e10e638c6c",
                   "tag": "0.86.3"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -3467,6 +3477,11 @@
                   "image": "docker.io/actualbudget/actual-server:26.7.0@sha256:e18b7fbfec6157a368fad4146563f397502e9da70a120aeaeac63b4977405d1c",
                   "tag": "26.7.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -3591,6 +3606,11 @@
                   "image": "docker.io/adguard/adguardhome:v0.107.78@sha256:1ea34eafe5dc691007946e8eaab7bf46b0de9412f39213d8c06e48b53bf9a6c5",
                   "tag": "v0.107.78"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -3713,6 +3733,11 @@
                   "digest": "sha256:494d4a9461105644222c938679fe58d5e3fd13fb228c76a426e81c16d4ffbaef",
                   "image": "docker.io/library/adminer:5.5.0@sha256:494d4a9461105644222c938679fe58d5e3fd13fb228c76a426e81c16d4ffbaef",
                   "tag": "5.5.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -3852,6 +3877,11 @@
                   "digest": "sha256:e6d6ecf0834000f260111b52f05c7a2937288b30b50a4d9525b85792a50c16c5",
                   "image": "lscr.io/linuxserver/airsonic-advanced:11.0.0@sha256:e6d6ecf0834000f260111b52f05c7a2937288b30b50a4d9525b85792a50c16c5",
                   "tag": "11.0.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -3997,6 +4027,7 @@
                   "image": "docker.io/prom/alertmanager:v0.33.1@sha256:9e082985f56f4c8c9f724e18f2288c6708f472e56a5286b8863d080434ea065d",
                   "tag": "v0.33.1"
                },
+               "scaling": null,
                "signature": {
                   "signed": false
                },
@@ -4133,6 +4164,11 @@
                   "image": "ghcr.io/alistgo/alist:latest@sha256:ee46012c344c0f40387b1c1aeddee4c114887764d3aebdd1d7bba83920423c5e",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -4255,6 +4291,11 @@
                   "digest": "sha256:a0d71b0e30a5c8d3eda31184abc64dbebccb6dd3e229aab1f7e332b41ade54f7",
                   "image": "docker.io/apache/answer:2.0.2@sha256:a0d71b0e30a5c8d3eda31184abc64dbebccb6dd3e229aab1f7e332b41ade54f7",
                   "tag": "2.0.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -4388,6 +4429,11 @@
                   "image": "docker.io/caronc/apprise:latest@sha256:91321755496e8472bdb674e4b14eb64d1f3b15510ef94971309c9f76ef3171e7",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -4508,6 +4554,11 @@
                   "digest": "sha256:1eef6716183c52abafe5405e7d6be8390248ecd59c7488c44af871757ac8fc4d",
                   "image": "ghcr.io/advplyr/audiobookshelf:2.35.1@sha256:1eef6716183c52abafe5405e7d6be8390248ecd59c7488c44af871757ac8fc4d",
                   "tag": "2.35.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -4645,6 +4696,11 @@
                   "digest": "sha256:023e02e5203dfa0ebaee7a48b5bae34f393d1f9cada4a9df7fbf87eb1759c671",
                   "image": "ghcr.io/authelia/authelia:4.39.5@sha256:023e02e5203dfa0ebaee7a48b5bae34f393d1f9cada4a9df7fbf87eb1759c671",
                   "tag": "4.39.5"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -4818,6 +4874,11 @@
                   "image": "ghcr.io/goauthentik/server:2024.10.5@sha256:c4aa2113d0c2379faa9e8a28f4ab13816b4e6f2847b272e37d68e518fdf76880",
                   "tag": "2024.10.5"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -4960,6 +5021,11 @@
                   "digest": "sha256:c4aa2113d0c2379faa9e8a28f4ab13816b4e6f2847b272e37d68e518fdf76880",
                   "image": "ghcr.io/goauthentik/server:2024.10.5@sha256:c4aa2113d0c2379faa9e8a28f4ab13816b4e6f2847b272e37d68e518fdf76880",
                   "tag": "2024.10.5"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -5137,6 +5203,11 @@
                   "image": "ghcr.io/automatisch/automatisch:0.15.0@sha256:3bace7a12d5fb3f5b1305a6a52232270e0e0abd8465a8b78baacb07f6ea89594",
                   "tag": "0.15.0"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -5281,6 +5352,11 @@
                   "digest": "sha256:3bace7a12d5fb3f5b1305a6a52232270e0e0abd8465a8b78baacb07f6ea89594",
                   "image": "ghcr.io/automatisch/automatisch:0.15.0@sha256:3bace7a12d5fb3f5b1305a6a52232270e0e0abd8465a8b78baacb07f6ea89594",
                   "tag": "0.15.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -5435,6 +5511,11 @@
                   "image": "docker.io/ckulka/baikal:0.10.1-nginx@sha256:434bdd162247cc6aa6f878c9b4dce6216e39e79526b980453b13812d5f8ebf4b",
                   "tag": "0.10.1-nginx"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -5574,6 +5655,11 @@
                   "image": "lscr.io/linuxserver/bazarr:1.6.0@sha256:ab401a0f361cfad328e444838b13d5b334b189d0f556fc91a3623eb581df36df",
                   "tag": "1.6.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -5695,6 +5781,11 @@
                   "image": "ghcr.io/henrygd/beszel/beszel:0.18.7@sha256:5b583633750cae65a9c1ab399c4c0eed229666ad74e103801724e3bc465338b8",
                   "tag": "0.18.7"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -5806,6 +5897,11 @@
                   "digest": "sha256:e753ff9f3fc458d02cca5eddab5a77e1c175eee484a8925ac7d524f04366c2fc",
                   "image": "quay.io/prometheus/blackbox-exporter:v0.28.0@sha256:e753ff9f3fc458d02cca5eddab5a77e1c175eee484a8925ac7d524f04366c2fc",
                   "tag": "v0.28.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -5953,6 +6049,11 @@
                   "digest": "sha256:31c3bc9f4fc00c82328c098c0c1120fe7fe43152a9f3cbc04b0303c32a2e60d3",
                   "image": "docker.io/blinkospace/blinko:1.8.8@sha256:31c3bc9f4fc00c82328c098c0c1120fe7fe43152a9f3cbc04b0303c32a2e60d3",
                   "tag": "1.8.8"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -6124,6 +6225,11 @@
                   "image": "lscr.io/linuxserver/bookstack:26.05.2@sha256:3db259db582808ab498d49ae96b0a63f935d9cf3635c9d5bd8b8815c6ff1f8a1",
                   "tag": "26.05.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -6278,6 +6384,11 @@
                   "image": "lscr.io/linuxserver/calibre:8.14.0@sha256:1ce25a9e5155591232c94952c278df8084787f8098964fae38de9811b3dba34b",
                   "tag": "8.14.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -6415,6 +6526,11 @@
                   "digest": "sha256:a7277fd8884b3d77e8659a2d82b0974af9812d4c1f4040c98b910da21e764a36",
                   "image": "lscr.io/linuxserver/calibre-web:0.6.26@sha256:a7277fd8884b3d77e8659a2d82b0974af9812d4c1f4040c98b910da21e764a36",
                   "tag": "0.6.26"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -6559,6 +6675,11 @@
                   "image": "ghcr.io/crocodilestick/calibre-web-automated:latest@sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -6665,6 +6786,7 @@
                "runs": {
                   "version": "5.0.8"
                },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -6795,6 +6917,11 @@
                   "image": "ghcr.io/dgtlmoon/changedetection.io:0.55.8@sha256:5438423d5e906eff4e8f7886823482ad23f472bf7b8530ccaca89fb48c337882",
                   "tag": "0.55.8"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -6905,6 +7032,11 @@
                   "digest": "sha256:15155e3a09fd677d578583f6bd3848c991cf768997400e37bc4c27e62a918a7e",
                   "image": "ghcr.io/deiucanta/chatpad:latest@sha256:15155e3a09fd677d578583f6bd3848c991cf768997400e37bc4c27e62a918a7e",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -7110,6 +7242,7 @@
                "kind": "cnpg",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -7190,6 +7323,7 @@
                   "image": "ghcr.io/cloudnative-pg/postgresql:17.2@sha256:61d2b391e3e324d05edc6c65c555989a7c544ddb72ef271b3abd4a35b57942b1",
                   "tag": "17.2"
                },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -7243,6 +7377,7 @@
                   "image": "ghcr.io/cloudnative-pg/postgresql:17.2@sha256:61d2b391e3e324d05edc6c65c555989a7c544ddb72ef271b3abd4a35b57942b1",
                   "tag": "17.2"
                },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -7361,6 +7496,11 @@
                   "digest": "sha256:e5d3fff05a0a5a24ef31b034736fa5075ba45bdb051da1910b84be1c7798f5b4",
                   "image": "ghcr.io/imputnet/cobalt:10@sha256:e5d3fff05a0a5a24ef31b034736fa5075ba45bdb051da1910b84be1c7798f5b4",
                   "tag": "10"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [ ],
                "signature": {
@@ -7483,6 +7623,11 @@
                   "digest": "sha256:fa367e7eddd303a95c736f7aede351cdee9036a7383cecfd8786bb5bbe78c13b",
                   "image": "docker.io/codercom/code-server:4.130.0@sha256:fa367e7eddd303a95c736f7aede351cdee9036a7383cecfd8786bb5bbe78c13b",
                   "tag": "4.130.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -7611,6 +7756,11 @@
                   "image": "docker.io/athou/commafeed:7.2.0-h2@sha256:e9f07f0dca51943ed0368695f2f325d4c95640b67bb1770301876ffd10b06e80",
                   "tag": "7.2.0-h2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -7731,6 +7881,11 @@
                   "digest": "sha256:b515b04bfd25298a5cdc775b2fcd48b9399bab658ce13e2598b65df1b16098c8",
                   "image": "ghcr.io/c4illin/convertx:v0.18.0@sha256:b515b04bfd25298a5cdc775b2fcd48b9399bab658ce13e2598b65df1b16098c8",
                   "tag": "v0.18.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -7858,6 +8013,11 @@
                   "digest": "sha256:7feb744b60195233219f3fa801cbc2384efa24b28c76a5d1f3e93efe6557f921",
                   "image": "docker.io/library/couchdb:3.5.2@sha256:7feb744b60195233219f3fa801cbc2384efa24b28c76a5d1f3e93efe6557f921",
                   "tag": "3.5.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -8007,6 +8167,11 @@
                   "image": "docker.io/cryptpad/cryptpad:version-5.7.0@sha256:36ba5092672283d3cf6927022659d70456f2d2010605313752733416d7aeff87",
                   "tag": "version-5.7.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -8120,6 +8285,11 @@
                   "digest": "sha256:a2bfe382b2547bdd0a3d0523b9a6b85fab833c56bcec86d600ba6266910b533e",
                   "image": "ghcr.io/gchq/cyberchef:10.19.4@sha256:a2bfe382b2547bdd0a3d0523b9a6b85fab833c56bcec86d600ba6266910b533e",
                   "tag": "10.19.4"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -8240,6 +8410,11 @@
                   "digest": "sha256:54d5ba3eff1fe31856fda9eed06e64e3f4ab2a4473c2bbf81b13a9bff6cba7dd",
                   "image": "docker.io/lissy93/dashy:4.5.0@sha256:54d5ba3eff1fe31856fda9eed06e64e3f4ab2a4473c2bbf81b13a9bff6cba7dd",
                   "tag": "4.5.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -8371,6 +8546,11 @@
                   "digest": "sha256:d6aa181af5a8a099bcb0e84115336714c3d1a0b6d85e5419af12c776908beb5e",
                   "image": "ghcr.io/tchapi/davis-standalone:5.4.3@sha256:d6aa181af5a8a099bcb0e84115336714c3d1a0b6d85e5419af12c776908beb5e",
                   "tag": "5.4.3"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -8521,6 +8701,11 @@
                   "image": "lscr.io/linuxserver/davos:2.2.2-ls220@sha256:3d623a05753ad37db517180a2b397add40984112751aa5aa54e14ba432a1f314",
                   "tag": "2.2.2-ls220"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -8658,6 +8843,11 @@
                   "image": "lscr.io/linuxserver/deluge:2.2.0@sha256:33a939576f7ecfc1227db1a0cb2afce030ce983e620ec9d93c956e3700e21fe9",
                   "tag": "2.2.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -8791,6 +8981,11 @@
                   "digest": "sha256:8499afd690c437f52301efd2b05b2455da5bd2dfc20332cd697dc9937f808462",
                   "image": "ghcr.io/dexidp/dex:v2.45.1@sha256:8499afd690c437f52301efd2b05b2455da5bd2dfc20332cd697dc9937f808462",
                   "tag": "v2.45.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "identity": "https://github.com/dexidp/dex/.github/workflows/artifacts.yaml@refs/tags/v2.45.1",
@@ -8926,6 +9121,11 @@
                   "digest": "sha256:bb5956a6b378706f1c3a92c947d0a0c606e280460cd9e37c0198caf46399c839",
                   "image": "docker.io/joxit/docker-registry-ui:2.6.0@sha256:bb5956a6b378706f1c3a92c947d0a0c606e280460cd9e37c0198caf46399c839",
                   "tag": "2.6.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -9075,6 +9275,11 @@
                   "image": "docker.io/docmost/docmost:0.95.0@sha256:41c8d777cf23c74e78f94e676aec328b7d7856f48df5e573543dac68d371e37c",
                   "tag": "0.95.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "postgresUrl",
@@ -9211,6 +9416,11 @@
                   "image": "docker.io/docuseal/docuseal:3.1.5@sha256:d20b62c1eac8719d2ffa31188d83866cf1b0d41c1aeea01c37bd850ef32cb517",
                   "tag": "3.1.5"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [ ],
                "signature": {
                   "signed": false
@@ -9328,6 +9538,11 @@
                   "image": "docker.io/dokuwiki/dokuwiki:2025-05-14b@sha256:f5c089e2ace97a5c16cf1cd80af7514a85e3fc405bc25d6aa6bbf5a1dd20924b",
                   "tag": "2025-05-14b"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -9442,6 +9657,11 @@
                   "image": "docker.io/jgraph/drawio:latest@sha256:9dfa053d1fe2724f824c61eac8b8bb2e93acc8ecb23dea58b8c11028127c572c",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -9555,6 +9775,11 @@
                   "digest": "sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b",
                   "image": "docker.io/jgraph/drawio:31.0.2@sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b",
                   "tag": "31.0.2"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -9689,6 +9914,11 @@
                   "digest": "sha256:7a93ee9c8bec6a780cc25ec4e1610ae6dde483368db3d5aa0ac477567a645d6b",
                   "image": "docker.io/library/drupal:11.4@sha256:7a93ee9c8bec6a780cc25ec4e1610ae6dde483368db3d5aa0ac477567a645d6b",
                   "tag": "11.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -9871,6 +10101,11 @@
                   "image": "lscr.io/linuxserver/duplicati:v2.3.0.4_stable_2026-07-09-ls301@sha256:93902cefee39f7c35214eb63312b7685c4b223b12adf6ede4ecddb9711210f85",
                   "tag": "v2.3.0.4_stable_2026-07-09-ls301"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -10001,6 +10236,11 @@
                   "digest": "sha256:2d0d509a0b5add64f7af5b778b8e9d77ab4b2d3dd0723925c22928b25e539776",
                   "image": "docker.io/ejabberd/ecs:26.04@sha256:2d0d509a0b5add64f7af5b778b8e9d77ab4b2d3dd0723925c22928b25e539776",
                   "tag": "26.04"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -10139,6 +10379,11 @@
                   "digest": "sha256:3367f18a2b830fa6dd454c605a1c0a58ea328e831226b9774e9051ae573bd13f",
                   "image": "ghcr.io/element-hq/element-web:v1.11.100@sha256:3367f18a2b830fa6dd454c605a1c0a58ea328e831226b9774e9051ae573bd13f",
                   "tag": "v1.11.100"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "identity": "https://github.com/element-hq/element-web/.github/workflows/docker.yaml@refs/tags/v1.11.100",
@@ -10309,6 +10554,11 @@
                   "image": "ghcr.io/joaovitoriasilva/endurain:v0.16.2@sha256:ba8a147d7026efa5ddd61ecdfdbf5b2fb4e6edac0b1e06d9baae9df01378ebe3",
                   "tag": "v0.16.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -10457,6 +10707,11 @@
                   "image": "ghcr.io/ente/server:latest@sha256:e9e06eb01834c38f41a3a09f9a64885b631346ce0005ccff2153faea403bd6e2",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -10554,6 +10809,11 @@
                   "digest": "sha256:bf3c9c22b37e49598153127a0c9cfcbd7198a1ee7ae84e2f89c7821dc31d4816",
                   "image": "ghcr.io/ente/web:latest@sha256:bf3c9c22b37e49598153127a0c9cfcbd7198a1ee7ae84e2f89c7821dc31d4816",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -10675,6 +10935,11 @@
                   "digest": "sha256:3621aa0ea5baea19e5562193855b02d8ff913301dc3e1c0b518e2b471364c3c9",
                   "image": "ghcr.io/esphome/esphome:2025.7.3@sha256:3621aa0ea5baea19e5562193855b02d8ff913301dc3e1c0b518e2b471364c3c9",
                   "tag": "2025.7.3"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -10820,6 +11085,11 @@
                   "image": "docker.io/etherpad/etherpad:3.3.2@sha256:044e5b58686f22e2c8b792ed0a7c35a83986458e1ee91f12119276c1e2572bce",
                   "tag": "3.3.2"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -10941,6 +11211,11 @@
                   "image": "docker.io/excalidraw/excalidraw:sha-4bfc5bb@sha256:3d243e15afde6c6511be36b14cef3d095b9d91bcd35ba98aca3b546f4b477df9",
                   "tag": "sha-4bfc5bb"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -11055,6 +11330,11 @@
                   "digest": "sha256:f9097cf2890b45e6bbf39311bf0fccaf58c3c7c06ec39dc39d8b013e176391b5",
                   "image": "docker.io/tanq16/expenseowl:v4.1@sha256:f9097cf2890b45e6bbf39311bf0fccaf58c3c7c06ec39dc39d8b013e176391b5",
                   "tag": "v4.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -11184,6 +11464,11 @@
                   "digest": "sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985",
                   "image": "ghcr.io/ferretdb/ferretdb:2.7.0@sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985",
                   "tag": "2.7.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -11319,6 +11604,11 @@
                   "digest": "sha256:466669b3c932158d7fc082d4037ad881fce6c5cd49cf973e15d9bcaedc27889a",
                   "image": "docker.io/getfider/fider:v0.36.0@sha256:466669b3c932158d7fc082d4037ad881fce6c5cd49cf973e15d9bcaedc27889a",
                   "tag": "v0.36.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -11475,6 +11765,11 @@
                   "image": "docker.io/filebrowser/filebrowser:v2.63.21@sha256:b1d9980d79d6d0ad334e327eea3501324a07fe2bce94a4cd84187bccbcfbe3f8",
                   "tag": "v2.63.21"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -11594,6 +11889,11 @@
                   "digest": "sha256:12cddfca10c85861ddac79c1c6442ecdaa5b093f5e4064c23d375999ba05693d",
                   "image": "docker.io/machines/filestash:latest@sha256:12cddfca10c85861ddac79c1c6442ecdaa5b093f5e4064c23d375999ba05693d",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -11754,6 +12054,11 @@
                   "image": "docker.io/fireflyiii/core:version-6.6.6@sha256:ae69fdd95cdef9038cd7a460a5aec731f14813973e4f096511d5a4ea9ff0e972",
                   "tag": "version-6.6.6"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -11883,6 +12188,11 @@
                   "digest": "sha256:7a5edc859235486a82871eb624f03048e44f603cba42ea3f60dc7cfe60ca6b3f",
                   "image": "docker.io/pawelmalak/flame:2.4.0@sha256:7a5edc859235486a82871eb624f03048e44f603cba42ea3f60dc7cfe60ca6b3f",
                   "tag": "2.4.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -12017,6 +12327,11 @@
                   "image": "ghcr.io/flaresolverr/flaresolverr:v3.5.0@sha256:139dfee1c6f89249c8d665d1333a42e8ec74ec0a86bc6bb1c8461e10d3a66a47",
                   "tag": "v3.5.0"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -12140,6 +12455,11 @@
                   "digest": "sha256:a509830073d6548d35450a98be3a432716430b674cc70ac93cbbaed1555b5a28",
                   "image": "docker.io/dullage/flatnotes:v5.5.4@sha256:a509830073d6548d35450a98be3a432716430b674cc70ac93cbbaed1555b5a28",
                   "tag": "v5.5.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -12270,6 +12590,11 @@
                   "digest": "sha256:c935a2879dc7bcb8243a562afea21a30edbb6dbe029b53a9c0ae7ab4b3255c54",
                   "image": "docker.io/mattermost/focalboard:7.11.4@sha256:c935a2879dc7bcb8243a562afea21a30edbb6dbe029b53a9c0ae7ab4b3255c54",
                   "tag": "7.11.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -12408,6 +12733,11 @@
                   "digest": "sha256:4c0a6ee7821ce938d91a6a7d4d004f3e1f93f6be324d2f40ac841d9dcfa819f8",
                   "image": "lscr.io/linuxserver/foldingathome:8.5.6@sha256:4c0a6ee7821ce938d91a6a7d4d004f3e1f93f6be324d2f40ac841d9dcfa819f8",
                   "tag": "8.5.6"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -12568,6 +12898,11 @@
                   "image": "codeberg.org/forgejo/forgejo:16.0-rootless@sha256:71863f6b6c5837a27b3a2d133c3161c78a432aa878d57798d74b1d917ff842be",
                   "tag": "16.0-rootless"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -12703,6 +13038,11 @@
                   "digest": "sha256:ab6b363102ccdbc39f6a62db926f567c61a5289bf25ba460f1c34423d8cc1a4d",
                   "image": "docker.io/freshrss/freshrss:1.29.1@sha256:ab6b363102ccdbc39f6a62db926f567c61a5289bf25ba460f1c34423d8cc1a4d",
                   "tag": "1.29.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -12852,6 +13192,11 @@
                   "image": "ghcr.io/blakeblackshear/frigate:0.15.0@sha256:dc77295ccc5a7258510ab6b1d9d5b7a339027305e2d29224338534febc4d1e89",
                   "tag": "0.15.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -12989,6 +13334,11 @@
                   "digest": "sha256:c5f210d095fa78e6efaa20ffeb14803f2ba4f10615e16a6d12087697149617f0",
                   "image": "docker.io/twinproduction/gatus:v5.36.0@sha256:c5f210d095fa78e6efaa20ffeb14803f2ba4f10615e16a6d12087697149617f0",
                   "tag": "v5.36.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -13134,6 +13484,11 @@
                   "image": "docker.io/ghostfolio/ghostfolio:latest@sha256:369cf19ae629062ae3b316cbdd0c6952536219ee0326cc03733a93f4e2639606",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "postgresUrl",
@@ -13266,6 +13621,11 @@
                   "image": "docker.io/glanceapp/glance:v0.8.5@sha256:32ab73d80f2b8b5fb0735b0431deb36b93fbb6b2fb43592449b0178c8b83e350",
                   "tag": "v0.8.5"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -13384,6 +13744,11 @@
                   "digest": "sha256:3c7dbdf05a64471296eddf510312589aa8f478c795387993fabcf5d54c68e5cd",
                   "image": "docker.io/gogs/gogs:0.14.3@sha256:3c7dbdf05a64471296eddf510312589aa8f478c795387993fabcf5d54c68e5cd",
                   "tag": "0.14.3"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -13508,6 +13873,11 @@
                   "image": "docker.io/f0rc3/gokapi:latest@sha256:7303dc0e658b8442f00d8363937ac0ffca3b4690930801b47aac6c0631d0cbcf",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -13623,6 +13993,11 @@
                   "digest": "sha256:67097317623a503ba2a6a7e9ae8db6929a1f7e1bbd88077bacf2d325fbdab923",
                   "image": "docker.io/gotenberg/gotenberg:8.34.0@sha256:67097317623a503ba2a6a7e9ae8db6929a1f7e1bbd88077bacf2d325fbdab923",
                   "tag": "8.34.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -13744,6 +14119,11 @@
                   "digest": "sha256:d75e89e0e28389c00c2556afe01282a37ee9756b0285799aa25214243aebd5e5",
                   "image": "docker.io/gotify/server:3.0.0@sha256:d75e89e0e28389c00c2556afe01282a37ee9756b0285799aa25214243aebd5e5",
                   "tag": "3.0.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -13875,6 +14255,11 @@
                   "digest": "sha256:0078ca451dda5e8c4a8630784519f99b69f48c3dda79586a9703d4bf8ea14dae",
                   "image": "docker.io/superseriousbusiness/gotosocial:0.22.1@sha256:0078ca451dda5e8c4a8630784519f99b69f48c3dda79586a9703d4bf8ea14dae",
                   "tag": "0.22.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [ ],
                "signature": {
@@ -14018,6 +14403,11 @@
                   "image": "lscr.io/linuxserver/grav:2.0.9@sha256:1dfc09866cac79018e34b79065cdab973287e9eb7532078960cc19ead7cf1e2d",
                   "tag": "2.0.9"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -14147,6 +14537,11 @@
                   "digest": "sha256:bbe93074f6d27836e86d7aad425d21d5c3a66cb1cc19c66b7aa18706f798ce52",
                   "image": "docker.io/bigbluebutton/greenlight:v3.8.2.4@sha256:bbe93074f6d27836e86d7aad425d21d5c3a66cb1cc19c66b7aa18706f798ce52",
                   "tag": "v3.8.2.4"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -14309,6 +14704,11 @@
                   "image": "lscr.io/linuxserver/grocy:4.6.0@sha256:35b2c85b1238f8249c9b349fb03619d1915917e61b2e4bff580729ec87397b4c",
                   "tag": "4.6.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -14444,6 +14844,11 @@
                   "digest": "sha256:f344085e618bb05e22b964b0208dbd06d3468275bac70206f93805245e067b40",
                   "image": "docker.io/guacamole/guacamole:1.6.0@sha256:f344085e618bb05e22b964b0208dbd06d3468275bac70206f93805245e067b40",
                   "tag": "1.6.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -14610,6 +15015,11 @@
                   "image": "quay.io/hedgedoc/hedgedoc:1.11.1@sha256:7b3f79667ad58c6419758547f10940638bcdc85ebee2a4e650318a704095975b",
                   "tag": "1.11.1"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "postgresUrl",
@@ -14763,6 +15173,11 @@
                   "image": "lscr.io/linuxserver/heimdall:2.8.1@sha256:97d0cdf2a70da1f276da96051f47926f68b880293b3e1bd3e4d209e11573fb93",
                   "tag": "2.8.1"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -14871,6 +15286,11 @@
                   "digest": "sha256:74999be7ac1cb23e72c81b9e21055aec20576f9ef67b394fe0eeb2e36c3a8b93",
                   "image": "ghcr.io/fmaclen/hollama:latest@sha256:74999be7ac1cb23e72c81b9e21055aec20576f9ef67b394fe0eeb2e36c3a8b93",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -15002,6 +15422,11 @@
                   "image": "ghcr.io/homarr-labs/homarr:v1.71.0@sha256:ae875bfbcfd6d5cb5d9f40ba656920373c058d73ca3f360d2ffea835c7b76fa9",
                   "tag": "v1.71.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -15130,6 +15555,11 @@
                   "digest": "sha256:e5bf3905955081dc4aae3b3980870c43ce6d8ffb880b5447addb3b3ba00f7bc0",
                   "image": "ghcr.io/home-assistant/home-assistant:2025.7@sha256:e5bf3905955081dc4aae3b3980870c43ce6d8ffb880b5447addb3b3ba00f7bc0",
                   "tag": "2025.7"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "identity": "https://github.com/home-assistant/core/.github/workflows/builder.yml@refs/tags/2025.7.4",
@@ -15261,6 +15691,11 @@
                   "digest": "sha256:a41a3081ac724a2f4955b71b9294bd916b0e92035e4ea8438e84def74f4ae692",
                   "image": "ghcr.io/sysadminsmedia/homebox:0.26.2-rootless@sha256:a41a3081ac724a2f4955b71b9294bd916b0e92035e4ea8438e84def74f4ae692",
                   "tag": "0.26.2-rootless"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -15396,6 +15831,11 @@
                   "image": "ghcr.io/gethomepage/homepage:v1.13.2@sha256:a0b71c8e757298d02560186bab9fbe3fc2d375c523a62cc1019177b37e48aa28",
                   "tag": "v1.13.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -15516,6 +15956,11 @@
                   "digest": "sha256:ace7c6a2cfb66e13f0e94d5534cb569562f190aa5cac9446b2453ef7822cd195",
                   "image": "docker.io/b4bz/homer:v26.4.2@sha256:ace7c6a2cfb66e13f0e94d5534cb569562f190aa5cac9446b2453ef7822cd195",
                   "tag": "v26.4.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -15654,6 +16099,11 @@
                   "image": "ghcr.io/immich-app/immich-machine-learning:v1.140.0@sha256:20b1a58406882400c25909054628ee98565dde88e3e028235f5da493ca33b11a",
                   "tag": "v1.140.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -15783,6 +16233,11 @@
                   "image": "ghcr.io/immich-app/immich-server:v1.140.0@sha256:761a60e899bcc00e86018085babf21f8dd68e38f5b48d3e817271f1f74705a16",
                   "tag": "v1.140.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -15911,6 +16366,11 @@
                   "image": "docker.io/inspircd/inspircd-docker:4.11.0@sha256:2d3970aec5faabe2912fe310ff0f2f66d7caef23dc9b18523ff6a4c5cce713e8",
                   "tag": "4.11.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -16021,6 +16481,11 @@
                   "digest": "sha256:8b8128748339583ca951af03dfe02a9a4d7363f61a216226fc28030731a5a61f",
                   "image": "ghcr.io/corentinth/it-tools:2024.10.22-7ca5933@sha256:8b8128748339583ca951af03dfe02a9a4d7363f61a216226fc28030731a5a61f",
                   "tag": "2024.10.22-7ca5933"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -16161,6 +16626,11 @@
                   "image": "lscr.io/linuxserver/jackett:0.24.2246@sha256:c22f9973da49011099966492fda8d5f6846144bc9eab3aecafdb2701308fd304",
                   "tag": "0.24.2246"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -16299,6 +16769,11 @@
                   "image": "lscr.io/linuxserver/jellyfin:10.11.11@sha256:b8dcc7b71d0ea872b74314da4b995c0cf282b1778438c295996e7be88c70fdda",
                   "tag": "10.11.11"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -16423,6 +16898,11 @@
                   "image": "docker.io/fallenbagel/jellyseerr:2.7.3@sha256:4538137bc5af902dece165f2bf73776d9cf4eafb6dd714670724af8f3eb77764",
                   "tag": "2.7.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -16545,6 +17025,11 @@
                   "digest": "sha256:f4f65e6cd1405cd889b7f5ac33f9d5cdc2a099de6b87fe8a3933b9c5d53d1d02",
                   "image": "docker.io/jenkins/jenkins:2.568.1-lts@sha256:f4f65e6cd1405cd889b7f5ac33f9d5cdc2a099de6b87fe8a3933b9c5d53d1d02",
                   "tag": "2.568.1-lts"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -16705,6 +17190,11 @@
                   "digest": "sha256:b13aae2cab3b2857e9690811fc80b342c8f5103c38843bb43424379690cbffe9",
                   "image": "docker.io/library/joomla:6.1@sha256:b13aae2cab3b2857e9690811fc80b342c8f5103c38843bb43424379690cbffe9",
                   "tag": "6.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -16899,6 +17389,11 @@
                   "image": "docker.io/joplin/server:3.7.1@sha256:0877bfba41a943017c42c58e90db9d8d548bfe699b5e410248b5b879371734f9",
                   "tag": "3.7.1"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -17041,6 +17536,7 @@
                "kind": "k8up",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -17159,6 +17655,7 @@
                "kind": "k8up",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -17301,6 +17798,7 @@
                "kind": "k8up",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -17439,6 +17937,11 @@
                   "digest": "sha256:e9dc25fa37246a89a9b353b5657222961bd221afa463c32112307bc0385cca29",
                   "image": "docker.io/kanboard/kanboard:v1.2.53@sha256:e9dc25fa37246a89a9b353b5657222961bd221afa463c32112307bc0385cca29",
                   "tag": "v1.2.53"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -17583,6 +18086,11 @@
                   "image": "ghcr.io/karakeep-app/karakeep:0.32.0@sha256:64d6a9bbf2d37b5c808cf06b5d87f1f1c7846fdd3844724145a9741aeb06fd31",
                   "tag": "0.32.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -17716,6 +18224,11 @@
                   "image": "docker.io/jvmilazz0/kavita:0.9.0.2@sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982",
                   "tag": "0.9.0.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -17830,6 +18343,7 @@
                "kind": "keycloak",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -17959,6 +18473,11 @@
                   "digest": "sha256:6504f7187f2e2b748ee6dae04fc82ae08bbf61cc0b403c09e90feb5b44ecb32d",
                   "image": "docker.io/kimai/kimai2:apache-2.38.0@sha256:6504f7187f2e2b748ee6dae04fc82ae08bbf61cc0b403c09e90feb5b44ecb32d",
                   "tag": "apache-2.38.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -18094,6 +18613,11 @@
                   "digest": "sha256:c4f9885fc077e2e9cd684dc95e8f6cfa5e33b100b46712b2de7f5cc2ff59e6fb",
                   "image": "docker.io/gotson/komga:1.25.0@sha256:c4f9885fc077e2e9cd684dc95e8f6cfa5e33b100b46712b2de7f5cc2ff59e6fb",
                   "tag": "1.25.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -18259,6 +18783,11 @@
                   "image": "docker.io/kutt/kutt:v3.2.6@sha256:fa3d24a89b04e0feb542ed7d3c77993d58dbcc1406e5291a369595d543886146",
                   "tag": "v3.2.6"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -18407,6 +18936,11 @@
                   "image": "docker.io/leantime/leantime:latest@sha256:6150dd3e8a1e17f1ead8d462d31e26177fe906ce3602dbbbf6af5417ef809de3",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -18554,6 +19088,11 @@
                   "image": "docker.io/dessalines/lemmy:0.19.20@sha256:79e9f02c286c324a779faa6b9d36bb47a2ed17caa2656c5b91101254bd1269d9",
                   "tag": "0.19.20"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -18653,6 +19192,11 @@
                   "digest": "sha256:7c1cada5566fe729c2bd3c2e2c246d3ac031d95268edeed6670a70861d905e83",
                   "image": "docker.io/asonix/pictrs:0.5.24@sha256:7c1cada5566fe729c2bd3c2e2c246d3ac031d95268edeed6670a70861d905e83",
                   "tag": "0.5.24"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -18760,6 +19304,11 @@
                   "digest": "sha256:ee4c620d8e933ab0266b8aaf0e78247455ab70a90eeb86f1548b7e2aa87c9d40",
                   "image": "docker.io/dessalines/lemmy-ui:0.19.20@sha256:ee4c620d8e933ab0266b8aaf0e78247455ab70a90eeb86f1548b7e2aa87c9d40",
                   "tag": "0.19.20"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -18903,6 +19452,11 @@
                   "image": "lscr.io/linuxserver/librespeed:6.1.0@sha256:7b6e8879f9d17bbe39a5ecd52c41f31688fd5730111780128d0bb6f3e6ce9fd1",
                   "tag": "6.1.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -19042,6 +19596,11 @@
                   "image": "lscr.io/linuxserver/lidarr:3.1.0@sha256:60be9a1faad3dfba5a711163fc18526845e2ce7b50b463dd9effae7f766c9beb",
                   "tag": "3.1.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -19166,6 +19725,11 @@
                   "image": "docker.io/sissbruecker/linkding:1.45.0@sha256:61b2eb9eed8e5772a473fb7f1f8923e046cb8cbbeb50e88150afd5ff287d4060",
                   "tag": "1.45.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -19283,6 +19847,11 @@
                   "digest": "sha256:6e7e8f44099f7c4f1340bb9ffda5411f97da766a06fd63cf1ff90c57ce22dd61",
                   "image": "ghcr.io/linkstackorg/linkstack:latest@sha256:6e7e8f44099f7c4f1340bb9ffda5411f97da766a06fd63cf1ff90c57ce22dd61",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -19447,6 +20016,11 @@
                   "image": "docker.io/listmonk/listmonk:v6.2.0@sha256:f535d59e14991337a9f2d570273685378ae86b0d7698c3e00da444e3bc205286",
                   "tag": "v6.2.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -19601,6 +20175,11 @@
                   "image": "docker.io/lldap/lldap:v0.6.3@sha256:2a8454b668c1aba7157e832eab0e242e1e7eb5fb7591d7e7774ba05286511ca8",
                   "tag": "v0.6.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -19727,6 +20306,11 @@
                   "image": "docker.io/lobehub/lobe-chat:latest@sha256:b2d2454525523d9f0a19c79661f83ec45f13363dbadd5c1180887e77af35d872",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [ ],
                "signature": {
                   "signed": false
@@ -19844,6 +20428,7 @@
                "kind": "loki",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -19986,6 +20571,11 @@
                   "image": "docker.io/lycheeorg/lychee:v7.7.1@sha256:7935326ba0877c410b7dfc59f171eced1a0095a99bef63310766704ca90dbdbc",
                   "tag": "v7.7.1"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "base64",
@@ -20101,6 +20691,11 @@
                   "digest": "sha256:8d76a3d4ffa32a3661311944007a415332c4bb855657f4f6c57996405c009bea",
                   "image": "docker.io/mailhog/mailhog:latest@sha256:8d76a3d4ffa32a3661311944007a415332c4bb855657f4f6c57996405c009bea",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -20224,6 +20819,11 @@
                   "digest": "sha256:7f33095f80e901f6ad08028f06ca284aa58fe84942be5496008d041d3b9f4d4d",
                   "image": "docker.io/axllent/mailpit:latest@sha256:7f33095f80e901f6ad08028f06ca284aa58fe84942be5496008d041d3b9f4d4d",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -20382,6 +20982,11 @@
                   "image": "ghcr.io/mailu/admin:2024.06@sha256:75582dca1479e6860548ced981337719a6ab0eb28128de9ac3c2e575790e8df8",
                   "tag": "2024.06"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -20521,6 +21126,11 @@
                   "digest": "sha256:77d3f1c414790d03de60c0364b56e037970006028273c353841c2c1b68da4a3f",
                   "image": "ghcr.io/mailu/rspamd:2024.06@sha256:77d3f1c414790d03de60c0364b56e037970006028273c353841c2c1b68da4a3f",
                   "tag": "2024.06"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -20668,6 +21278,11 @@
                   "image": "ghcr.io/mailu/nginx:2024.06@sha256:6fb64e071c47ce6624001b512916630e7237bc6ee79280e25f6447260e1ff8a5",
                   "tag": "2024.06"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -20807,6 +21422,11 @@
                   "digest": "sha256:28a7c6ca30c9f88b2040d36e5c3d8226b1c622e913c16aa27e7d8d676f408701",
                   "image": "ghcr.io/mailu/dovecot:2024.06@sha256:28a7c6ca30c9f88b2040d36e5c3d8226b1c622e913c16aa27e7d8d676f408701",
                   "tag": "2024.06"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -20948,6 +21568,11 @@
                   "image": "ghcr.io/mailu/postfix:2024.06@sha256:23a068564fb8656e3734830a768083e61564fe48cc5bb244c372b4256dd0e13e",
                   "tag": "2024.06"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -21082,6 +21707,11 @@
                   "image": "ghcr.io/mailu/webmail:2024.06@sha256:87d2b2d5cdc710aefab1b90575b49dbf5d76620ab27b5d32ce97f802fdc22f9c",
                   "tag": "2024.06"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -21208,6 +21838,11 @@
                   "digest": "sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95",
                   "image": "docker.io/krateng/maloja:latest@sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -21386,6 +22021,11 @@
                   "image": "ghcr.io/mastodon/mastodon:v4.3.1@sha256:a18ce2a5b443a7074a083d7a5afb162fdaaca78d85850aaee287144f337f0901",
                   "tag": "v4.3.1"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -21552,6 +22192,11 @@
                   "digest": "sha256:f4cacc762093adcae739e4549de1717411a19b518efb34ef4d58dbe6f96168c2",
                   "image": "ghcr.io/mastodon/mastodon-streaming:v4.3.1@sha256:f4cacc762093adcae739e4549de1717411a19b518efb34ef4d58dbe6f96168c2",
                   "tag": "v4.3.1"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -21732,6 +22377,11 @@
                   "image": "ghcr.io/mastodon/mastodon:v4.3.1@sha256:a18ce2a5b443a7074a083d7a5afb162fdaaca78d85850aaee287144f337f0901",
                   "tag": "v4.3.1"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -21901,6 +22551,11 @@
                   "image": "docker.io/matrixconduit/matrix-conduit:v0.10.12@sha256:4078e80577ccaaf05290a7bb08badc321a5c44a8c8f5f3dce0fb1ae5a0825e64",
                   "tag": "v0.10.12"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -22057,6 +22712,11 @@
                   "image": "docker.io/mautic/mautic:7.1.3-apache@sha256:373a3de08dfce296e31fe0b7caf269594c43020454628f445c169990b9af4d5e",
                   "tag": "7.1.3-apache"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -22179,6 +22839,11 @@
                   "digest": "sha256:92cc7474deb789af6549318563b7a9ee750131f9f7b297cc9c87ab67e656c22c",
                   "image": "ghcr.io/civilblur/mazanoke:latest@sha256:92cc7474deb789af6549318563b7a9ee750131f9f7b297cc9c87ab67e656c22c",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -22311,6 +22976,11 @@
                   "image": "ghcr.io/mealie-recipes/mealie:v3.20.1@sha256:9b680f5dad8618e69317a005e083a00a699845fb2a72c392a558a4e2898aed20",
                   "tag": "v3.20.1"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [ ],
                "signature": {
                   "signed": false
@@ -22435,6 +23105,11 @@
                   "image": "docker.io/library/mediawiki:1.46.0@sha256:ef0557f6a503cbf5bd7f7ec0f880b61409a45c861c6113a7bf38f33d15099186",
                   "tag": "1.46.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -22537,6 +23212,11 @@
                   "digest": "sha256:dc561d52bb8ad3c038867123ed2dc8357c4c128f047cdbd526cd65cf39408cbd",
                   "image": "docker.io/library/memcached:1.6.45@sha256:dc561d52bb8ad3c038867123ed2dc8357c4c128f047cdbd526cd65cf39408cbd",
                   "tag": "1.6.45"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 3,
+                  "topology": "perPod"
                },
                "signature": {
                   "signed": false
@@ -22659,6 +23339,11 @@
                   "image": "docker.io/neosmemo/memos:0.30.0@sha256:71a5b4738d1bed96e92112004054f0888e92791b64eb78afd79077c96e6f9327",
                   "tag": "0.30.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -22773,6 +23458,11 @@
                   "digest": "sha256:836616adc144fdc0f711a8fb149cc572eed63fe4de347c2ab6448831c8992c28",
                   "image": "ghcr.io/mermaid-js/mermaid-live-editor:latest@sha256:836616adc144fdc0f711a8fb149cc572eed63fe4de347c2ab6448831c8992c28",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "identity": "https://github.com/mermaid-js/mermaid-live-editor/.github/workflows/docker-publish.yml@refs/heads/master",
@@ -22908,6 +23598,11 @@
                   "image": "registry.k8s.io/metrics-server/metrics-server:v0.8.1@sha256:b2d2efaf5ac3b366ed0f839d2412a2c4279d4fc2a2a733f12c52133faed36c41",
                   "tag": "v0.8.1"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "identity": "krel-trust@k8s-releng-prod.iam.gserviceaccount.com",
                   "issuer": "https://accounts.google.com",
@@ -23031,6 +23726,11 @@
                   "image": "ghcr.io/alexta69/metube:2026.07.18@sha256:98e1c8f37b009954ed1a663908f9c7fb102153d98bc06b5d51926381d1a3641c",
                   "tag": "2026.07.18"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -23149,6 +23849,11 @@
                   "digest": "sha256:6660e5ccad0d764fa3c0032464ffb8f4b4f28c92a2eb9e39202b94cdc5b68909",
                   "image": "docker.io/danielszabo99/microbin:2.1.4@sha256:6660e5ccad0d764fa3c0032464ffb8f4b4f28c92a2eb9e39202b94cdc5b68909",
                   "tag": "2.1.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -23294,6 +23999,11 @@
                   "image": "docker.io/misskey/misskey:2026.6.0@sha256:d3c2bf280aa930ea266e65fef4b0611ff5a2813041797c9be48ce0e8587c8c8c",
                   "tag": "2026.6.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -23416,6 +24126,11 @@
                   "digest": "sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64",
                   "image": "docker.io/library/mongo-express:1.0.2@sha256:1b23d7976f0210dbec74045c209e52fbb26d29b2e873d6c6fa3d3f0ae32c2a64",
                   "tag": "1.0.2"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -23593,6 +24308,11 @@
                   "image": "docker.io/library/monica:4.1.2-apache@sha256:84c6703c05bf92562a91b9a282245a0d66ae5e032d63e8e61b3b3ce556a7d02d",
                   "tag": "4.1.2-apache"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -23734,6 +24454,11 @@
                   "image": "docker.io/eclipse-mosquitto:2.0.22@sha256:212f89e1eaeb2c322d6441b64396e3346026674db8fa9c27beac293405c32b3c",
                   "tag": "2.0.22"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -23860,6 +24585,11 @@
                   "digest": "sha256:b9fb72d772eb52b5c7d4c402054c183886ecde07efc59c829c53001542365a81",
                   "image": "docker.io/mumblevoip/mumble-server:v1.6.870-0@sha256:b9fb72d772eb52b5c7d4c402054c183886ecde07efc59c829c53001542365a81",
                   "tag": "v1.6.870-0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -24007,6 +24737,11 @@
                   "image": "lscr.io/linuxserver/mylar3:0.8.3@sha256:4e81d9559b60e6ded17f11b6c4d2e48efcdc962ccb6415f487f81621cab53b74",
                   "tag": "0.8.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -24131,6 +24866,7 @@
                "runs": {
                   "version": "9.7.1"
                },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -24256,6 +24992,11 @@
                   "digest": "sha256:c11af972c99ae542de8925e6a7d9c533aa1eb039660420d2074beed6089b3bf0",
                   "image": "docker.io/library/nats:2.14-alpine@sha256:c11af972c99ae542de8925e6a7d9c533aa1eb039660420d2074beed6089b3bf0",
                   "tag": "2.14-alpine"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -24386,6 +25127,11 @@
                   "image": "docker.io/deluan/navidrome:0.63.2@sha256:9012939114fbb1bb641b81cf96dec5ded15f0aafefe8d47a511d7cb919658e40",
                   "tag": "0.63.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -24511,6 +25257,11 @@
                   "digest": "sha256:362542416de6c09a971484d1893878016cc3b5cdec166e54b1c824a220ecd6b9",
                   "image": "docker.io/library/neo4j:5.26.28-community@sha256:362542416de6c09a971484d1893878016cc3b5cdec166e54b1c824a220ecd6b9",
                   "tag": "5.26.28-community"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -24656,6 +25407,11 @@
                   "digest": "sha256:74a87cf5b6e013fed2ae38fbb48852ae62b0339b5bf3088cf3d36c0f28b14b94",
                   "image": "lscr.io/linuxserver/netbootxyz:0.7.5@sha256:74a87cf5b6e013fed2ae38fbb48852ae62b0339b5bf3088cf3d36c0f28b14b94",
                   "tag": "0.7.5"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -24840,6 +25596,11 @@
                   "image": "docker.io/netboxcommunity/netbox:v4.6.5@sha256:691ec1a4f569f3dfb9fefd9f086cca1b39689ad59c3eae753712a741447e5e60",
                   "tag": "v4.6.5"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -24994,6 +25755,11 @@
                   "image": "docker.io/netboxcommunity/netbox:v4.6.5@sha256:691ec1a4f569f3dfb9fefd9f086cca1b39689ad59c3eae753712a741447e5e60",
                   "tag": "v4.6.5"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -25134,6 +25900,11 @@
                   "digest": "sha256:e93ccfc952c95f18175f3d297fb2f60c35070c05ca976050c250a9ddab793e75",
                   "image": "docker.io/library/nextcloud:34.0.2@sha256:e93ccfc952c95f18175f3d297fb2f60c35070c05ca976050c250a9ddab793e75",
                   "tag": "34.0.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -25276,6 +26047,11 @@
                   "digest": "sha256:52b2c59994f3d36acfcf70a1626f29734df0ed8c71bacc0269f78b6f939858bb",
                   "image": "docker.io/jc21/nginx-proxy-manager:2.15.1@sha256:52b2c59994f3d36acfcf70a1626f29734df0ed8c71bacc0269f78b6f939858bb",
                   "tag": "2.15.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -25431,6 +26207,11 @@
                   "image": "docker.io/nocobase/nocobase:2.1.30@sha256:374578e273d67e017d1074335a74dd8fd1cb8bb1e405e2d55b93b898ecf77fa6",
                   "tag": "2.1.30"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -25560,6 +26341,11 @@
                   "digest": "sha256:6cb1b27fa5a83deec6a662db62eec8bb32e55ac5412d6b7a653e874ce62055d5",
                   "image": "docker.io/nodered/node-red:5.0.1@sha256:6cb1b27fa5a83deec6a662db62eec8bb32e55ac5412d6b7a653e874ce62055d5",
                   "tag": "5.0.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -25700,6 +26486,11 @@
                   "image": "lscr.io/linuxserver/nzbget:26.2.20260717@sha256:87eba87ec46982b003ab1f54cfabd962c5c5e95cb9eb2069cbec7b6370d0784b",
                   "tag": "26.2.20260717"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -25839,6 +26630,11 @@
                   "image": "lscr.io/linuxserver/nzbhydra2:v8.9.0-ls97@sha256:9ba095a9aae0d709df87c90b371c9212e23d68ac4605add3371d3f7a343eae60",
                   "tag": "v8.9.0-ls97"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -25961,6 +26757,11 @@
                   "digest": "sha256:f6a4aa83a27e316114bf79664302b1ffb2cc8ce697fb479273af4feb3fb16fe3",
                   "image": "quay.io/oauth2-proxy/oauth2-proxy:v7.7.1@sha256:f6a4aa83a27e316114bf79664302b1ffb2cc8ce697fb479273af4feb3fb16fe3",
                   "tag": "v7.7.1"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -26119,6 +26920,11 @@
                   "image": "docker.io/ollama/ollama:0.32.4@sha256:10c13eb515db310990527d36ca14a136da4bcc0fbf2bf3b15e9c1f111e9d3cd4",
                   "tag": "0.32.4"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -26258,6 +27064,11 @@
                   "image": "lscr.io/linuxserver/ombi:4.53.10@sha256:be76ec2c9376186b37354e5e2bbe62d6d7776d509aeb00223eb5024e36a8615c",
                   "tag": "4.53.10"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -26388,6 +27199,11 @@
                   "digest": "sha256:e3da62a847b9a5d51a11f73cfea1d9c13c3be3809614490d4edddcf01dcf919b",
                   "image": "docker.io/onlyoffice/documentserver:9.4.0@sha256:e3da62a847b9a5d51a11f73cfea1d9c13c3be3809614490d4edddcf01dcf919b",
                   "tag": "9.4.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -26533,6 +27349,11 @@
                   "image": "ghcr.io/open-webui/open-webui:v0.6.5@sha256:fe7a6870ec6b2fd540c0f2007e6aa812dc4bf04a2d0a305bb344eeb10de0a7b7",
                   "tag": "v0.6.5"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -26666,6 +27487,11 @@
                   "digest": "sha256:4b8de6e029b9dc1f7e68bdf1cf02fca7649614c23812e51a63820f113ca97b89",
                   "image": "ghcr.io/opencost/opencost:1.119.2@sha256:4b8de6e029b9dc1f7e68bdf1cf02fca7649614c23812e51a63820f113ca97b89",
                   "tag": "1.119.2"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -26810,6 +27636,11 @@
                   "image": "docker.io/openhab/openhab:5.2.0@sha256:450d2175af9f3ddf0720ed3efd4b1cac2bb2445b76c202c8dedeb7f7b2fdf8a9",
                   "tag": "5.2.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -26923,6 +27754,7 @@
                "runs": {
                   "version": "3.7.0"
                },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -27052,6 +27884,11 @@
                   "image": "docker.io/organizr/organizr:latest@sha256:1ce319d73cdfd2666ec7ef21e15907531fabc8a6f333c4ac61e2b2e9d2d162f5",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -27141,6 +27978,11 @@
                   "digest": "sha256:f2f01157055a9b2aab9df7118e1f1c9abf345e99b23bc7a2bc791db374a7d0f6",
                   "image": "docker.io/otel/opentelemetry-collector-contrib:0.157.0@sha256:f2f01157055a9b2aab9df7118e1f1c9abf345e99b23bc7a2bc791db374a7d0f6",
                   "tag": "0.157.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": null,
+                  "topology": "perNode"
                },
                "signature": {
                   "identity": "https://github.com/open-telemetry/opentelemetry-collector-releases/.github/workflows/base-release.yaml@refs/tags/v0.157.0",
@@ -27301,6 +28143,11 @@
                   "image": "docker.io/sharelatex/sharelatex:6.2.2@sha256:cfdeecb4e55a7ae76f0244b86d1b896580bc7137b82733b886a97575fba19d43",
                   "tag": "6.2.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -27423,6 +28270,11 @@
                   "digest": "sha256:6765d85fdadd6f159729a7238c62adeb57da35fc0dce5233b322c9424285b076",
                   "image": "docker.io/owncast/owncast:0.2.5@sha256:6765d85fdadd6f159729a7238c62adeb57da35fc0dce5233b322c9424285b076",
                   "tag": "0.2.5"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -27550,6 +28402,11 @@
                   "image": "docker.io/owntracks/recorder:latest@sha256:050c3ac9ed798d4110f12e53851e94f9fa0fcecb16cf4d7457967eac2e498da7",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -27658,6 +28515,11 @@
                   "digest": "sha256:c4b30977264a76e335740089e693a52a0d0d616330dec7f93c7b96beef7b4a02",
                   "image": "ghcr.io/schlagmichdoch/pairdrop:v1.11.2@sha256:c4b30977264a76e335740089e693a52a0d0d616330dec7f93c7b96beef7b4a02",
                   "tag": "v1.11.2"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -27779,6 +28641,11 @@
                   "digest": "sha256:80fdaf6ba5b4c9e1a0bf49d07d7fec6664198acb63f12f9f7f7f236222851137",
                   "image": "docker.io/ananthakumaran/paisa:v0.7.4-all@sha256:80fdaf6ba5b4c9e1a0bf49d07d7fec6664198acb63f12f9f7f7f236222851137",
                   "tag": "v0.7.4-all"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -27952,6 +28819,11 @@
                   "image": "ghcr.io/paperless-ngx/paperless-ngx:2.20.15@sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f",
                   "tag": "2.20.15"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -28101,6 +28973,11 @@
                   "digest": "sha256:35138dd53d5537e26be6cd2673b5e45104cc763316a60a19a71c556c414e00fa",
                   "image": "docker.io/pglombardo/pwpush:2.9.4@sha256:35138dd53d5537e26be6cd2673b5e45104cc763316a60a19a71c556c414e00fa",
                   "tag": "2.9.4"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -28278,6 +29155,11 @@
                   "image": "docker.io/chocobozzz/peertube:v8.2.2-trixie@sha256:078044d9f7b69b03d88f5b582a75596534cea7d6cc2133870a905b4b38f03ef5",
                   "tag": "v8.2.2-trixie"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -28429,6 +29311,11 @@
                   "digest": "sha256:40fa840c5bb7c8463957f1255b01283732c2d8c9396a956d180f8e6c296753b3",
                   "image": "docker.io/dpage/pgadmin4:9.16@sha256:40fa840c5bb7c8463957f1255b01283732c2d8c9396a956d180f8e6c296753b3",
                   "tag": "9.16"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -28585,6 +29472,11 @@
                   "image": "docker.io/photoprism/photoprism:260601@sha256:650c6ad5a6517ea95671eedb0f2a9c49f05729a1d95809fcf01533b96149582e",
                   "tag": "260601"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -28740,6 +29632,11 @@
                   "image": "docker.io/viktorstrate/photoview:2.4.0@sha256:f914c44b202fc8175e09bd56f35bb1a4a7c04dc451652306f240aabc3eea133e",
                   "tag": "2.4.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -28882,6 +29779,11 @@
                   "image": "docker.io/library/phpmyadmin:5.2.3@sha256:b68f318c5fd85541795ed8eb4ced28ea6908a89910871783b3e479cc6c6d1e1b",
                   "tag": "5.2.3"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -29021,6 +29923,11 @@
                   "digest": "sha256:f7d1be836e3bc608b56d82fc9904f5a831cdfbc0dc9c6d58f94e4c985c70038b",
                   "image": "docker.io/pihole/pihole:2026.07.2@sha256:f7d1be836e3bc608b56d82fc9904f5a831cdfbc0dc9c6d58f94e4c985c70038b",
                   "tag": "2026.07.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -29172,6 +30079,11 @@
                   "digest": "sha256:363568ef0c1b0e4a3af93ab97bdfb3d4d2f345bce961002af1de317cba135c49",
                   "image": "docker.io/pilos/pilos:4.17.0@sha256:363568ef0c1b0e4a3af93ab97bdfb3d4d2f345bce961002af1de317cba135c49",
                   "tag": "4.17.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -29328,6 +30240,11 @@
                   "image": "lscr.io/linuxserver/piwigo:15.5.0@sha256:82155338f6cd8a009809daff87af5901075b683b2670204c7dbbe20c630b0ecf",
                   "tag": "15.5.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -29454,6 +30371,11 @@
                   "image": "ghcr.io/pocket-id/pocket-id:v1.0.0@sha256:bb4b1debee6fa1245a36a0d8a0bd23794033028b803d7639c898bc11697f155f",
                   "tag": "v1.0.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -29574,6 +30496,11 @@
                   "digest": "sha256:dfebd2550d6b5176d67afd3e859f9b642096e624c7f6ada1b5a5bc70a5d21be1",
                   "image": "ghcr.io/muchobien/pocketbase:latest@sha256:dfebd2550d6b5176d67afd3e859f9b642096e624c7f6ada1b5a5bc70a5d21be1",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -29701,6 +30628,11 @@
                   "image": "docker.io/portainer/portainer-ce:2.43.0@sha256:707366c811956fe077135a6633af67e698529612869711cdb24896c892b28feb",
                   "tag": "2.43.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -29826,6 +30758,11 @@
                   "digest": "sha256:3a82e1f56c8f0f5616a11103ac3d47e632c3938698946a7ad26da0df1334744a",
                   "image": "docker.io/library/postgres:18.4@sha256:3a82e1f56c8f0f5616a11103ac3d47e632c3938698946a7ad26da0df1334744a",
                   "tag": "18.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -29976,6 +30913,11 @@
                   "digest": "sha256:2f339136154feddf679f9dd6868542466e760f54865a95ae2d0fb065efb14a1f",
                   "image": "docker.io/prestashop/prestashop:9.1@sha256:2f339136154feddf679f9dd6868542466e760f54865a95ae2d0fb065efb14a1f",
                   "tag": "9.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -30136,6 +31078,11 @@
                   "image": "docker.io/privatebin/nginx-fpm-alpine:2.0.5@sha256:91e3adf17da1c9e2715cb57ff22940a6644252a5488d9819a64eebbaf64cc58a",
                   "tag": "2.0.5"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -30282,6 +31229,11 @@
                   "digest": "sha256:db84505b03d252dae254353c86a1fd04aef91cd68a8aed3f2882d7a4a413d976",
                   "image": "lscr.io/linuxserver/projectsend:2021.12.10@sha256:db84505b03d252dae254353c86a1fd04aef91cd68a8aed3f2882d7a4a413d976",
                   "tag": "2021.12.10"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -30469,6 +31421,7 @@
                   "image": "docker.io/prom/prometheus:v3.13.1@sha256:3c42b892cf723fa54d2f262c37a0e1f80aa8c8ddb1da7b9b0df9455a35a7f893",
                   "tag": "v3.13.1"
                },
+               "scaling": null,
                "signature": {
                   "signed": false
                },
@@ -30613,6 +31566,11 @@
                   "image": "lscr.io/linuxserver/prowlarr:2.4.0@sha256:4fd7a166c8f46dd3370a871c250ee577d6c2ae97a0dbe0e3614b5ef736205620",
                   "tag": "2.4.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -30755,6 +31713,11 @@
                   "image": "lscr.io/linuxserver/pyload-ng:0.5.0@sha256:1027d179918098b4b870b7886c44139a6dd40f8aa3f99f8e6c382d47c1ccc261",
                   "tag": "0.5.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -30893,6 +31856,11 @@
                   "image": "lscr.io/linuxserver/qbittorrent:5.2.3@sha256:b024436f8ca665d16d9a997d26fd27fdf867ee5566ba09f32764e7b2976d3e02",
                   "tag": "5.2.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -31017,6 +31985,11 @@
                   "digest": "sha256:4e628d3cbc61ef45c5918e19bb9844874410d96d4ced897ced7d072d63ad555c",
                   "image": "docker.io/library/rabbitmq:4.3.4-management@sha256:4e628d3cbc61ef45c5918e19bb9844874410d96d4ced897ced7d072d63ad555c",
                   "tag": "4.3.4-management"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -31174,6 +32147,11 @@
                   "image": "lscr.io/linuxserver/radarr:6.3.0@sha256:e35056574cdc695a9ee745aa1ecda9eab3842450bf4b7b8471b023790fa3861d",
                   "tag": "6.3.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -31289,6 +32267,11 @@
                   "digest": "sha256:89fa44d02b134f0ac37cad809883327af8424499d913eec74f95085c458a93b7",
                   "image": "docker.io/tomsquest/docker-radicale:3.7.6.0@sha256:89fa44d02b134f0ac37cad809883327af8424499d913eec74f95085c458a93b7",
                   "tag": "3.7.6.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -31427,6 +32410,11 @@
                   "image": "docker.io/lukevella/rallly:4.11.1@sha256:b2acb78afb1e2e88445e78cec4393cd8b8cc63f9268cf1defe19f96d0db945b0",
                   "tag": "4.11.1"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "postgresUrl",
@@ -31554,6 +32542,11 @@
                   "image": "codeberg.org/readeck/readeck:0.22.3@sha256:ed1c513f8e1d59b1d38fda324ac279eeb65afd0327907e498061ec9fd2f31c15",
                   "tag": "0.22.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -31674,6 +32667,11 @@
                   "digest": "sha256:1ad484c1fc0a3b4072dfa2bb10d44f0eba8ecb342c8c0f9e17cb21a6557e4b7e",
                   "image": "ghcr.io/joeferner/redis-commander:latest@sha256:1ad484c1fc0a3b4072dfa2bb10d44f0eba8ecb342c8c0f9e17cb21a6557e4b7e",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -31813,6 +32811,11 @@
                   "digest": "sha256:49e5c5aeda67a7adb8edd6f4ed64ade7313d56dc4683f9be0ca5b2a6d05d652e",
                   "image": "docker.io/library/redmine:7.0.0@sha256:49e5c5aeda67a7adb8edd6f4ed64ade7313d56dc4683f9be0ca5b2a6d05d652e",
                   "tag": "7.0.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -31965,6 +32968,11 @@
                   "image": "docker.io/library/registry:3.1.1@sha256:1be55279f18a2fe1a74edf2664cac61c1bea305b7b4642dab412e7affdcb3e33",
                   "tag": "3.1.1"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -32101,6 +33109,11 @@
                   "digest": "sha256:c8ee1044c2c0503eddc1abc212240012ec9ba73e2cfa80d001cd23d582ec7c51",
                   "image": "docker.io/rocketchat/rocket.chat:8.6.1@sha256:c8ee1044c2c0503eddc1abc212240012ec9ba73e2cfa80d001cd23d582ec7c51",
                   "tag": "8.6.1"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -32250,6 +33263,11 @@
                   "image": "docker.io/roundcube/roundcubemail:1.7.2-apache@sha256:aed1b9b5dc34f8db7cf107a5092f04fd84170d42e7e25ac378c32418ab303185",
                   "tag": "1.7.2-apache"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -32369,6 +33387,11 @@
                   "digest": "sha256:569f01f3faecd0d34d702e01b34eb0a769f7bedb84caf6dff29821d18b46f971",
                   "image": "docker.io/rssbridge/rss-bridge:2025-08-05@sha256:569f01f3faecd0d34d702e01b34eb0a769f7bedb84caf6dff29821d18b46f971",
                   "tag": "2025-08-05"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -32507,6 +33530,11 @@
                   "digest": "sha256:0d0713199f08e0e78f9647e03acd8fc4f9ca562343338a8e85bbcb66dbbe22af",
                   "image": "docker.io/rundeck/rundeck:7.0.1@sha256:0d0713199f08e0e78f9647e03acd8fc4f9ca562343338a8e85bbcb66dbbe22af",
                   "tag": "7.0.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -32653,6 +33681,11 @@
                   "image": "lscr.io/linuxserver/sabnzbd:5.0.4@sha256:302be8972d4627222a0701634f2f9025826d760d856414aa6e67c0a66833e5be",
                   "tag": "5.0.4"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -32785,6 +33818,11 @@
                   "digest": "sha256:a1a04679fe6a4fa6bfe9efb82adfbe7bee4eaef8d77b2392562ca5bfe032c4be",
                   "image": "docker.io/searxng/searxng:2026.7.9-b512eaa27@sha256:a1a04679fe6a4fa6bfe9efb82adfbe7bee4eaef8d77b2392562ca5bfe032c4be",
                   "tag": "2026.7.9-b512eaa27"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -32923,6 +33961,11 @@
                   "image": "ghcr.io/seatsurfing/backend:1.118.2@sha256:9b54054166803140426d3d4fb36a1ef2f49935bc4ef7e3d5cc2fe17b6a6f9d04",
                   "tag": "1.118.2"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -33044,6 +34087,11 @@
                   "image": "docker.io/chrislusf/seaweedfs:4.40@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602",
                   "tag": "4.40"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "perPod"
+               },
                "signature": {
                   "signed": false
                },
@@ -33116,6 +34164,11 @@
                   "image": "docker.io/chrislusf/seaweedfs:4.40@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602",
                   "tag": "4.40"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "perPod"
+               },
                "signature": {
                   "signed": false
                },
@@ -33186,6 +34239,11 @@
                   "digest": "sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602",
                   "image": "docker.io/chrislusf/seaweedfs:4.40@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602",
                   "tag": "4.40"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "perPod"
                },
                "signature": {
                   "signed": false
@@ -33270,6 +34328,11 @@
                   "digest": "sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602",
                   "image": "docker.io/chrislusf/seaweedfs:4.40@sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602",
                   "tag": "4.40"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "perPod"
                },
                "signature": {
                   "signed": false
@@ -33390,6 +34453,11 @@
                   "digest": "sha256:c15f3458687a3f36edac9f02583efc5152da47ba669dd9a179a771193c23bb69",
                   "image": "docker.io/shaarli/shaarli:v0.16.3@sha256:c15f3458687a3f36edac9f02583efc5152da47ba669dd9a179a771193c23bb69",
                   "tag": "v0.16.3"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -33517,6 +34585,11 @@
                   "digest": "sha256:d3bdfc1b68b8f267a04cf74d73b8a0e1d99ac71c3a9047375e97202f079eb1f6",
                   "image": "ghcr.io/go-shiori/shiori:v1.8.0@sha256:d3bdfc1b68b8f267a04cf74d73b8a0e1d99ac71c3a9047375e97202f079eb1f6",
                   "tag": "v1.8.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -33670,6 +34743,11 @@
                   "image": "docker.io/shlinkio/shlink:5.1.5@sha256:77b8eb87bcb1a56bd0ecc590398d415545e5ba83414f28d37dc565a91c3c50b2",
                   "tag": "5.1.5"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -33808,6 +34886,11 @@
                   "image": "ghcr.io/silverbulletmd/silverbullet:2.9.0@sha256:82e76a800920370d83e2f50c6946d3c420954b0bd417dbb96f7911513fa05620",
                   "tag": "2.9.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -33936,6 +35019,11 @@
                   "image": "docker.io/b3log/siyuan:v3.7.3@sha256:908faf8ec55d391d95244982c081edabbaec118552d01fc3dc189d098cc0ffc8",
                   "tag": "v3.7.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -34061,6 +35149,11 @@
                   "image": "docker.io/rnwood/smtp4dev:latest@sha256:25c434c1900a9c5b61e17ead0a774d9e81b80554d05cf64719d69e5ea8c66537",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -34185,6 +35278,11 @@
                   "digest": "sha256:5e3d990438809a8a49f8ac5758db03e858e6e9fc0e369e1f9e474f7664079905",
                   "image": "docker.io/djmaze/snappymail:v2.38.2@sha256:5e3d990438809a8a49f8ac5758db03e858e6e9fc0e369e1f9e474f7664079905",
                   "tag": "v2.38.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -34349,6 +35447,11 @@
                   "image": "docker.io/snipe/snipe-it:v8.6.3@sha256:6476be7cca765880374a6d489d22ad43d3edba965ab3cb862bf828f5fc856e50",
                   "tag": "v8.6.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "hex",
@@ -34499,6 +35602,11 @@
                   "digest": "sha256:24acea2956a0ccb11f103877d9f4f8576600fb34bff34820ed749c2256dab89f",
                   "image": "lscr.io/linuxserver/sonarr:4.0.19@sha256:24acea2956a0ccb11f103877d9f4f8576600fb34bff34820ed749c2256dab89f",
                   "tag": "4.0.19"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -34741,6 +35849,11 @@
                   "image": "ghcr.io/spegel-org/spegel:v0.7.4@sha256:26c60b05e08ac738e8442bc389c5780bff0e1d8153956e45d810a2f1008cf56f",
                   "tag": "v0.7.4"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": null,
+                  "topology": "perNode"
+               },
                "signature": {
                   "identity": "https://github.com/spegel-org/spegel/.github/workflows/release.yaml@refs/tags/v0.7.4",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -34841,6 +35954,11 @@
                   "digest": "sha256:fcb75f691c8b0414d670ae570240cbf95502cc18a9ba57e982ecac589760a186",
                   "image": "docker.io/hashicorp/http-echo:1.0@sha256:fcb75f691c8b0414d670ae570240cbf95502cc18a9ba57e982ecac589760a186",
                   "tag": "1.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -34964,6 +36082,11 @@
                   "digest": "sha256:7ed4d9681d18e4fbc3aa6a63647c4b5c2bcc4b75841df7c05d7e3d2320f5c9a1",
                   "image": "docker.io/stirlingtools/stirling-pdf:2.14.2@sha256:7ed4d9681d18e4fbc3aa6a63647c4b5c2bcc4b75841df7c05d7e3d2320f5c9a1",
                   "tag": "2.14.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -35114,6 +36237,11 @@
                   "image": "docker.io/matrixdotorg/synapse:v1.157.1@sha256:d1fce43d7501428c461f2758dc10342555b946dc9f1d03c1b1b8aec1a4e8d130",
                   "tag": "v1.157.1"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "identity": "https://github.com/element-hq/synapse/.github/workflows/docker.yml@refs/tags/v1.157.1",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -35256,6 +36384,11 @@
                   "image": "lscr.io/linuxserver/syncthing:2.1.2@sha256:ae909bee7c41f516be03fd7de72317a44f4a043bcba76884de941b99407b6957",
                   "tag": "2.1.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -35382,6 +36515,11 @@
                   "digest": "sha256:acad9ea1cbb968bc95477a69e32dbc682b710a00ed6e7b06f0eb167caf382e81",
                   "image": "ghcr.io/suwayomi/tachidesk:v2.1.1867@sha256:acad9ea1cbb968bc95477a69e32dbc682b710a00ed6e7b06f0eb167caf382e81",
                   "tag": "v2.1.1867"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -35521,6 +36659,11 @@
                   "digest": "sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451",
                   "image": "ghcr.io/tandoorrecipes/recipes:latest@sha256:f6c58afdea7a721d079ebd6ee5483f2c9da77dd1e709e16d60a82c218e80a451",
                   "tag": "latest"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -35698,6 +36841,11 @@
                   "image": "lscr.io/linuxserver/tautulli:2.17.2@sha256:ef7f4329e5029f83bc93a6fef9a06e67b97652573ce3d62402645ba0d933a0be",
                   "tag": "2.17.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -35826,6 +36974,11 @@
                   "image": "docker.io/technitium/dns-server:15.4.0@sha256:df7d90ef0f7b6fff6916d291a7022cd902290cc31c3141d4158b6c375a641b41",
                   "tag": "15.4.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -35920,6 +37073,7 @@
                "kind": "tempo",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -36072,6 +37226,11 @@
                   "image": "quay.io/thanos/thanos:v0.42.2@sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "tag": "v0.42.2"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -36178,6 +37337,11 @@
                   "image": "quay.io/thanos/thanos:v0.42.2@sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "tag": "v0.42.2"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -36272,6 +37436,11 @@
                   "digest": "sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "image": "quay.io/thanos/thanos:v0.42.2@sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "tag": "v0.42.2"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -36390,6 +37559,11 @@
                   "digest": "sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "image": "quay.io/thanos/thanos:v0.42.2@sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "tag": "v0.42.2"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "perPod"
                },
                "signature": {
                   "signed": false
@@ -36523,6 +37697,7 @@
                   "image": "quay.io/thanos/thanos:v0.42.2@sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "tag": "v0.42.2"
                },
+               "scaling": null,
                "signature": {
                   "signed": false
                },
@@ -36628,6 +37803,11 @@
                   "digest": "sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "image": "quay.io/thanos/thanos:v0.42.2@sha256:6249f7aaadd3695df637fb2eb4cb9a9955611eee691c3970892fe9c0dc3f2db6",
                   "tag": "v0.42.2"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "perPod"
                },
                "signature": {
                   "signed": false
@@ -36755,6 +37935,11 @@
                   "image": "ghcr.io/thelounge/thelounge:4.4.3@sha256:9a7ca90fb5e2c9d86910497f3fa40d4fff3372a63b5e2b4eca1674a1f9a7e958",
                   "tag": "4.4.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -36844,6 +38029,11 @@
                   "digest": "sha256:7829cc2cb3393ac65c21078d7b0b1221049e0ad2588c8c723f09975220ebc501",
                   "image": "ghcr.io/metio/tik:2026.7.18213457@sha256:7829cc2cb3393ac65c21078d7b0b1221049e0ad2588c8c723f09975220ebc501",
                   "tag": "2026.7.18213457"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "identity": "https://github.com/metio/tik/.github/workflows/release.yml@refs/heads/main",
@@ -36961,6 +38151,11 @@
                   "digest": "sha256:90b7fa1dc018434075fce9e1d9b88b1e3d0ea6979d0cf86e116c79a8073ae973",
                   "image": "docker.io/apache/tika:3.3.1.0@sha256:90b7fa1dc018434075fce9e1d9b88b1e3d0ea6979d0cf86e116c79a8073ae973",
                   "tag": "3.3.1.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -37104,6 +38299,11 @@
                   "image": "docker.io/traccar/traccar:6.14.5@sha256:b7a19c3aa641dd775897173ac21ba6ca410a72047736d065fe63ab344f62eaac",
                   "tag": "6.14.5"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -37242,6 +38442,11 @@
                   "image": "lscr.io/linuxserver/transmission:4.1.3@sha256:6b78970a0cb00709d3817fcb47b7cf74da56a43384bbd50d03955ca87e38c5f0",
                   "tag": "4.1.3"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -37362,6 +38567,11 @@
                   "digest": "sha256:8e053aa58a90c1690106a324a4692690ba0491c21ae40485b4051e2911df9489",
                   "image": "ghcr.io/triliumnext/trilium:v0.104.0@sha256:8e053aa58a90c1690106a324a4692690ba0491c21ae40485b4051e2911df9489",
                   "tag": "v0.104.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -37502,6 +38712,11 @@
                   "image": "lscr.io/linuxserver/tvheadend:latest@sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067",
                   "tag": "latest"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -37621,6 +38836,11 @@
                   "image": "docker.io/louislam/uptime-kuma:2.4.0@sha256:91e963bfda569ba115206e843febb446f473ab525add4e08b2b9e3beffa16985",
                   "tag": "2.4.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "signature": {
                   "signed": false
                },
@@ -37731,6 +38951,11 @@
                   "image": "docker.io/valkey/valkey:9.1.1@sha256:3acc0687f2a2e1091fae6450d7842dd658c941338cf0a873ddd9e14b9e4ea4dd",
                   "tag": "9.1.1"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
                "signature": {
                   "signed": false
                },
@@ -37802,6 +39027,11 @@
                   "digest": "sha256:3acc0687f2a2e1091fae6450d7842dd658c941338cf0a873ddd9e14b9e4ea4dd",
                   "image": "docker.io/valkey/valkey:9.1.1@sha256:3acc0687f2a2e1091fae6450d7842dd658c941338cf0a873ddd9e14b9e4ea4dd",
                   "tag": "9.1.1"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "perPod"
                },
                "signature": {
                   "signed": false
@@ -37944,6 +39174,11 @@
                   "digest": "sha256:e6443e3d5ed8fcee2204b89ec778d7f24d0173bcc42d1ea34f990304f5f63f51",
                   "image": "docker.io/vaultwarden/server:1.37.0@sha256:e6443e3d5ed8fcee2204b89ec778d7f24d0173bcc42d1ea34f990304f5f63f51",
                   "tag": "1.37.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "identity": "https://github.com/dani-garcia/vaultwarden/.github/workflows/release.yml@refs/tags/1.37.0",
@@ -38089,6 +39324,11 @@
                   "digest": "sha256:1a5dd2d410b5359f689c77bbd1c66742cde1993f82d4adfe9aefa400ff1dd833",
                   "image": "docker.io/vikunja/vikunja:2.4.0@sha256:1a5dd2d410b5359f689c77bbd1c66742cde1993f82d4adfe9aefa400ff1dd833",
                   "tag": "2.4.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -38240,6 +39480,7 @@
                "kind": "volsync",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -38388,6 +39629,7 @@
                "kind": "volsync",
                "posture": null,
                "runs": { },
+               "scaling": null,
                "secretKeys": [
                   {
                      "generate": "literal",
@@ -38570,6 +39812,11 @@
                   "image": "docker.io/wallabag/wallabag:2.6.14@sha256:4a527e027e0d59e87c14225ef11e005af3d4890374202ad319ce5e63dfc66709",
                   "tag": "2.6.14"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -38707,6 +39954,11 @@
                   "digest": "sha256:3f0238f4017d3eb649fb88c9308822b8080f12fe6ae0059e8dcf4aea46460252",
                   "image": "ghcr.io/ellite/wallos:4.4.0@sha256:3f0238f4017d3eb649fb88c9308822b8080f12fe6ae0059e8dcf4aea46460252",
                   "tag": "4.4.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false
@@ -38847,6 +40099,11 @@
                   "digest": "sha256:7a4449a9c73994f11d51df3fbbc5d254e1c14083bcfcfae273971439a858c8a1",
                   "image": "ghcr.io/nathanvaughn/webtrees:2.2.1@sha256:7a4449a9c73994f11d51df3fbbc5d254e1c14083bcfcfae273971439a858c8a1",
                   "tag": "2.2.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -39015,6 +40272,11 @@
                   "digest": "sha256:28b8e8bf7a1d8a178f9d9dbcb2a25613707aa15db9efef277e58dc1ea2d9f1f6",
                   "image": "ghcr.io/wekan/wekan:v10.03@sha256:28b8e8bf7a1d8a178f9d9dbcb2a25613707aa15db9efef277e58dc1ea2d9f1f6",
                   "tag": "v10.03"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -39185,6 +40447,11 @@
                   "image": "docker.io/wger/server:2.6.0@sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01",
                   "tag": "2.6.0"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -39307,6 +40574,11 @@
                   "digest": "sha256:e9a1616cc3234cfe25f42c10d18316d60e555c248f8d46861738e44a4f50fe3a",
                   "image": "ghcr.io/benbusby/whoogle-search:0.9.0@sha256:e9a1616cc3234cfe25f42c10d18316d60e555c248f8d46861738e44a4f50fe3a",
                   "tag": "0.9.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
                },
                "signature": {
                   "signed": false
@@ -39450,6 +40722,11 @@
                   "digest": "sha256:68f0d1848261ae76492ba358e30a96a76fed5d97a3fff381656082bf90f70d7e",
                   "image": "ghcr.io/requarks/wiki:2.5.314@sha256:68f0d1848261ae76492ba358e30a96a76fed5d97a3fff381656082bf90f70d7e",
                   "tag": "2.5.314"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
                },
                "secretKeys": [
                   {
@@ -39610,6 +40887,11 @@
                   "image": "docker.io/library/wordpress:7.0.2-php8.3-apache@sha256:9fac4d47b61186131ffefb5d966f0045d0eea94bfd7bd40cafae29b78a709d1b",
                   "tag": "7.0.2-php8.3-apache"
                },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -39754,6 +41036,11 @@
                   "digest": "sha256:57417773ff8b7985a3117f52cf13891aa050692eed8eec070106caa0e00a6b89",
                   "image": "docker.io/xwiki:18-postgres-tomcat@sha256:57417773ff8b7985a3117f52cf13891aa050692eed8eec070106caa0e00a6b89",
                   "tag": "18-postgres-tomcat"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "secretKeys": [
                   {
@@ -39901,6 +41188,11 @@
                   "image": "docker.io/library/yourls:1.10.4@sha256:533c5023b94dd951b9a21cb239facfdeea8b6e867352167fe963fd0f220a35e2",
                   "tag": "1.10.4"
                },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 2,
+                  "topology": "stateless"
+               },
                "secretKeys": [
                   {
                      "generate": "password",
@@ -40030,6 +41322,11 @@
                   "digest": "sha256:040a38a8a146e28f9b17182827f3e37c4ca22d9a489e0aea4816bf8aabb405b5",
                   "image": "docker.io/library/znc:1.10.2@sha256:040a38a8a146e28f9b17182827f3e37c4ca22d9a489e0aea4816bf8aabb405b5",
                   "tag": "1.10.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
                },
                "signature": {
                   "signed": false

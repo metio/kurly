@@ -343,7 +343,37 @@ local itemsOf(value) =
     networkVariant='kubernetes',
     replicas=null,
     priorityClassName=null,
+    pdb=null,
+    spread=null,
+    serviceMonitor=null,
+    mesh=null,
   )::
+    // `replicas` is what the caller WANTS, and what the workload gets is what it
+    // can actually run. A Deployment that owns a ReadWriteOnce claim cannot have
+    // a second replica: the volume attaches to one node and every pod after the
+    // first waits for it forever. Two-thirds of the catalogue is shaped that
+    // way, so this is the common case, not an edge.
+    //
+    // It CLAMPS rather than refuses, so that one production profile can be
+    // applied across a fleet without the caller having to know each workload's
+    // storage topology — which is knowledge this library already has and the
+    // caller would only be re-deriving. A portal that wants to explain why a
+    // tenant's "make it highly available" did nothing reads `scaling.topology`
+    // from the catalog, where the same fact is published per stage.
+    //
+    // A ReadWriteMany claim is not taken as permission either: the volume allows
+    // concurrency, and whether the application survives it is a fact about the
+    // application that nothing here knows.
+    local singleWriter =
+      std.objectHasAll(app, 'deployment')
+      && std.length(std.get(app.config, 'stores', [])) > 0;
+    local wantedReplicas = if singleWriter && replicas != null && replicas > 1 then 1 else replicas;
+    // The same clamp applies to everything replicas would have justified. A
+    // PodDisruptionBudget asking for two of a one-replica workload blocks every
+    // node drain in the cluster, and spreading one pod across zones is a
+    // constraint with nothing to constrain.
+    local wantedPdb = if singleWriter && pdb != null && pdb > 1 then 1 else pdb;
+    local wantedSpread = if singleWriter then null else spread;
     local exposed =
       if host == null then app
       else if gatewayClass != null then app + $.expose.ownGateway(host, gatewayClass, annotations=gatewayAnnotations, tls=tls)
@@ -352,8 +382,34 @@ local itemsOf(value) =
       exposed
       + (if cpu == null || memory == null then {} else $.reserve(cpu, memory))
       + (if allowFrom == [] && allowTo == [] then {} else $.network[networkVariant](allowFrom=allowFrom, allowTo=allowTo))
-      + (if replicas == null then {} else $.replicas(replicas))
-      + (if priorityClassName == null then {} else $.priorityClassName(priorityClassName));
+      + (if wantedReplicas == null then {} else $.replicas(wantedReplicas))
+      + (if priorityClassName == null then {} else $.priorityClassName(priorityClassName))
+      // The rest of what an operator does before calling something production.
+      // Each stays opt-in and null by default, for the reason the exposure is:
+      // a default that fires on every workload is a default that is wrong on
+      // some of them, and silently.
+      //
+      // pdb keeps a voluntary drain from taking the last pod. It is deliberately
+      // NOT defaulted on: a PodDisruptionBudget with minAvailable=1 over a
+      // single-replica workload blocks node drains outright, which turns every
+      // cluster upgrade into a manual step.
+      + (if wantedPdb == null then {} else $.pdb(minAvailable=wantedPdb))
+      // spread takes a list of topology keys and asks the scheduler to even the
+      // pods across each. Meaningless below two replicas, so it is the caller's
+      // to pair with them.
+      + (
+        if wantedSpread == null then {} else $.topologySpread([
+          {
+            maxSkew: 1,
+            topologyKey: key,
+            whenUnsatisfiable: 'ScheduleAnyway',
+            labelSelector: { matchLabels: { 'app.kubernetes.io/name': app.config.name } },
+          }
+          for key in (if std.isArray(wantedSpread) then wantedSpread else [wantedSpread])
+        ])
+      )
+      + (if serviceMonitor == null then {} else $.serviceMonitor(port=serviceMonitor))
+      + (if mesh == null then {} else $.mesh[mesh]());
     [composed]
     // The certificate covers every name the workload answers on: `host` takes a
     // string or a list, and a certificate naming only the first would leave the
