@@ -163,6 +163,7 @@
   'oauth2-proxy': '2026-07-28',
   ollama: '2026-07-28',
   ombi: '2026-07-28',
+  omnitools: '2026-08-04',
   onlyoffice: '2026-07-28',
   'open-webui': '2026-07-28',
   openhab: '2026-07-28',

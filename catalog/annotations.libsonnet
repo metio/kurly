@@ -6379,6 +6379,25 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    omnitools: {
+      name: 'OmniTools',
+      upstream: { repo: 'https://github.com/iib0011/omni-tools' },
+      license: 'MIT',
+      description: 'Convert, format and generate everyday things without uploading them anywhere.',
+      summary: 'An OmniTools server (a self-hosted collection of everyday utilities: image and video conversion, PDF tools, text and JSON formatting, encoders and generators). About as small as a workload here gets — nginx serving a static bundle, no database, no volume and no Secret. Every tool runs in the browser and files are never uploaded, so it holds no user data at any point and can be scaled out freely. Serves on :80.',
+      category: 'tool',
+      stages: {
+        server: d.fn("The OmniTools server. Static assets only: no volume, no Secret, nothing to back up. Runs as the image's own uid 101 with NET_BIND_SERVICE granted back, rather than as root, so that nginx can bind :80 while everything else stays dropped. replicas is a plain knob here because there is no state to share. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='omnitools'),
+          d.arg('image', d.T.string),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '25m', memory: '32Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

@@ -173,6 +173,7 @@
   'oauth2-proxy/server': { digest: 'sha256:f6a4aa83a27e316114bf79664302b1ffb2cc8ce697fb479273af4feb3fb16fe3', signed: false },
   'ollama/server': { digest: 'sha256:10c13eb515db310990527d36ca14a136da4bcc0fbf2bf3b15e9c1f111e9d3cd4', signed: false },
   'ombi/server': { digest: 'sha256:be76ec2c9376186b37354e5e2bbe62d6d7776d509aeb00223eb5024e36a8615c', signed: false },
+  'omnitools/server': { digest: 'sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69', signed: false },
   'onlyoffice/server': { digest: 'sha256:e3da62a847b9a5d51a11f73cfea1d9c13c3be3809614490d4edddcf01dcf919b', signed: false },
   'open-webui/server': { digest: 'sha256:fe7a6870ec6b2fd540c0f2007e6aa812dc4bf04a2d0a305bb344eeb10de0a7b7', signed: false },
   'opencost/server': { digest: 'sha256:4b8de6e029b9dc1f7e68bdf1cf02fca7649614c23812e51a63820f113ca97b89', signed: false },

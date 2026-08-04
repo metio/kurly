@@ -524,6 +524,12 @@
     source: 'https://github.com/linuxserver/docker-ombi',
     homepage: 'https://github.com/linuxserver/docker-ombi/packages',
   },
+  omnitools: {
+    license: 'MIT',
+    title: 'omni-tools',
+    source: 'https://github.com/iib0011/omni-tools',
+    homepage: 'https://github.com/iib0011/omni-tools',
+  },
   'open-webui': {
     license: 'BSD-3-Clause',
     title: 'open-webui',

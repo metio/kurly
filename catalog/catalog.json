@@ -32005,6 +32005,137 @@
          }
       },
       {
+         "category": "tool",
+         "description": "Convert, format and generate everyday things without uploading them anywhere.",
+         "id": "omnitools",
+         "image": {
+            "homepage": "https://github.com/iib0011/omni-tools",
+            "source": "https://github.com/iib0011/omni-tools",
+            "title": "omni-tools"
+         },
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "OmniTools",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "omnitools",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "128Mi"
+                        },
+                        "requests": {
+                           "cpu": "25m",
+                           "memory": "32Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "25m",
+                     "kind": "regular",
+                     "memory": "32Mi",
+                     "name": "omnitools"
+                  }
+               ],
+               "help": "The OmniTools server. Static assets only: no volume, no Secret, nothing to back up. Runs as the image's own uid 101 with NET_BIND_SERVICE granted back, rather than as root, so that nginx can bind :80 while everything else stays dropped. replicas is a plain knob here because there is no state to share. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/omnitools/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [ ],
+                  "got": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69",
+                  "image": "docker.io/iib0011/omni-tools:0.6.0@sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69",
+                  "tag": "0.6.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 0
+               }
+            }
+         ],
+         "summary": "An OmniTools server (a self-hosted collection of everyday utilities: image and video conversion, PDF tools, text and JSON formatting, encoders and generators). About as small as a workload here gets — nginx serving a static bundle, no database, no volume and no Secret. Every tool runs in the browser and files are never uploaded, so it holds no user data at any point and can be scaled out freely. Serves on :80.",
+         "upstream": {
+            "repo": "https://github.com/iib0011/omni-tools"
+         }
+      },
+      {
          "category": "application",
          "description": "Edit documents, spreadsheets and slides together in the browser.",
          "id": "onlyoffice",

@@ -161,6 +161,7 @@
     'oauth2-proxy',
     'ollama',
     'ombi',
+    'omnitools',
     'onlyoffice',
     'open-webui',
     'opengist',
