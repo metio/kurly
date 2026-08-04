@@ -68,13 +68,19 @@ fail() {
 # default with a uid pinned and its port moved above 1024 — kurly's runAsNonRoot
 # refuses the image on its default :80 as root, which is the recipe working
 # rather than a problem to route around.
+#
+# The probe path deliberately differs from the path the test requests. It does
+# not matter here — Istio enforces at the transport layer and exempts nothing by
+# path — but Linkerd installs a default `probe` authorization that allows the
+# declared probe path WITHOUT identity, and the two scenarios are kept
+# symmetrical so that trap cannot be reintroduced by copying this one.
 render_app() {
   local name="$1" compose="$2"
   jsonnet -J vendor -e \
     "local k = import 'github.com/metio/kurly/main.libsonnet';
      k.list(k.http('${name}', '${app_image}')
        + k.port(8080) + k.env({ WHOAMI_PORT_NUMBER: '8080' })
-       + k.runAs(65532) + k.replicas(1) + k.probes('/') + k.hostUsers() ${compose})"
+       + k.runAs(65532) + k.replicas(1) + k.probes('/healthz') + k.hostUsers() ${compose})"
 }
 
 # Whether the pods matching a selector carry an Istio sidecar, as `yes` or `no`.
@@ -92,13 +98,25 @@ has_sidecar() {
   if printf '%s' "$names" | grep -qw istio-proxy; then echo yes; else echo no; fi
 }
 
-# Whether the sidecar-less client can reach $1 over plain HTTP. Echoes `yes` or
-# `no`; never fails the scenario itself, because BOTH answers are the expected
-# one at different points below.
+# Whether the proxy-less client can reach $1. Echoes `yes` or `no`; never fails
+# the scenario itself, because BOTH answers are the expected one at different
+# points below.
+#
+# The test is the HTTP STATUS, not curl's exit code, and that distinction is the
+# whole reason this reads correctly for both meshes. Istio refuses at the
+# transport layer, so curl gets nothing and exits non-zero. Linkerd refuses at
+# L7, returning 403 — on which curl exits ZERO, because a status it was asked to
+# fetch and did fetch is not a curl error. An exit-code check therefore reads
+# Linkerd's refusal as a success, which is exactly what it did here. A refused
+# connection reports 000, so treating only 2xx as reached covers both.
 plaintext_reaches() {
-  if kubectl --namespace="$ns" exec plain-client -- \
-    curl -sS --max-time 5 -o /dev/null "http://$1.${ns}.svc/" >/dev/null 2>&1
-  then echo yes; else echo no; fi
+  local code
+  code="$(kubectl --namespace="$ns" exec plain-client -- \
+    curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$1.${ns}.svc/" 2>/dev/null | tail -1)"
+  case "$code" in
+    2*) echo yes ;;
+    *) echo no ;;
+  esac
 }
 
 echo "== install Istio ${ISTIO_VERSION} =="

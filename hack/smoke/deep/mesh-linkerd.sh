@@ -105,13 +105,21 @@ kurly::namespace "$ns"
 # with a uid pinned and its port above 1024 — kurly's runAsNonRoot refuses the
 # image on its default :80 as root, which is the recipe working rather than a
 # problem to route around.
+#
+# THE PROBE PATH MUST DIFFER FROM THE PATH THE TEST REQUESTS. Linkerd installs a
+# default `probe` authorization so that an all-authenticated policy does not
+# break kubelet probes, which arrive unauthenticated — so a request to the
+# declared probe path is allowed WITHOUT identity, by design. With both set to
+# `/`, this scenario's refusal check requested the one path the policy is meant
+# to exempt, and read the exemption as the policy not working. whoami answers
+# 200 on any path, so the probe goes somewhere the test does not.
 render_app() {
   local name="$1" compose="$2"
   jsonnet -J vendor -e \
     "local k = import 'github.com/metio/kurly/main.libsonnet';
      k.list(k.http('${name}', '${app_image}')
        + k.port(8080) + k.env({ WHOAMI_PORT_NUMBER: '8080' })
-       + k.runAs(65532) + k.replicas(1) + k.probes('/') + k.hostUsers() ${compose})"
+       + k.runAs(65532) + k.replicas(1) + k.probes('/healthz') + k.hostUsers() ${compose})"
 }
 
 # Whether the pods matching a selector carry a Linkerd proxy, as `yes` or `no`.
@@ -126,13 +134,25 @@ has_proxy() {
   if printf '%s' "$names" | grep -qw linkerd-proxy; then echo yes; else echo no; fi
 }
 
-# Whether the proxy-less client can reach $1 over plain HTTP. Echoes `yes` or
-# `no`; never fails the scenario itself, because BOTH answers are the expected
-# one at different points below.
+# Whether the proxy-less client can reach $1. Echoes `yes` or `no`; never fails
+# the scenario itself, because BOTH answers are the expected one at different
+# points below.
+#
+# The test is the HTTP STATUS, not curl's exit code, and that distinction is the
+# whole reason this reads correctly for both meshes. Istio refuses at the
+# transport layer, so curl gets nothing and exits non-zero. Linkerd refuses at
+# L7, returning 403 — on which curl exits ZERO, because a status it was asked to
+# fetch and did fetch is not a curl error. An exit-code check therefore reads
+# Linkerd's refusal as a success, which is exactly what it did here. A refused
+# connection reports 000, so treating only 2xx as reached covers both.
 plaintext_reaches() {
-  if kubectl --namespace="$ns" exec plain-client -- \
-    curl -sS --max-time 5 -o /dev/null "http://$1.${ns}.svc/" >/dev/null 2>&1
-  then echo yes; else echo no; fi
+  local code
+  code="$(kubectl --namespace="$ns" exec plain-client -- \
+    curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$1.${ns}.svc/" 2>/dev/null | tail -1)"
+  case "$code" in
+    2*) echo yes ;;
+    *) echo no ;;
+  esac
 }
 
 echo "== 1. the recipe injects a proxy =="

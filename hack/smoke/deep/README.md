@@ -69,14 +69,15 @@ nothing in common, so the evidence has to be the same shape or the promise is
 not tested. Its steps 1 and 2 are the mirror image of Istio's — Linkerd's
 injector reads an annotation and ignores the label, Istio's the reverse.
 
-**It currently fails at step 4, and is left failing.** Injection and the meshed
-path pass; the refusal does not, on a cluster where an unmeshed client was
-served regardless of the inbound policy — pod annotation, namespace annotation,
-`deny`, or a `Server` resource. Editing it until it passes would prove only that
-it was edited. Both scenarios also run their POSITIVE control first, which is
-what caught this: an earlier ordering asserted the refusal before establishing
-that the endpoint answered at all, and passed against a port nothing was
-listening on.
+Both scenarios run their POSITIVE control first — a meshed client reaching the
+workload — before asserting the refusal, because "the request failed" is the
+weakest evidence in either file. An earlier ordering asserted the refusal first
+and passed against a port nothing was listening on. Two more differences between
+the meshes are pinned in comments there, having each cost a wrong verdict:
+Linkerd exempts a pod's declared probe path from authentication by design, so
+the scenarios probe a path the test does not request; and Linkerd refuses with a
+403 where Istio closes the connection, so the reachability check reads the HTTP
+status rather than curl's exit code.
 
 `mesh-bsi.sh <mesh>` asks the follow-on question: what does the mesh cost at admission?
 The catalogue's `bsi` is measured on what kurly RENDERS, and a meshed pod is not

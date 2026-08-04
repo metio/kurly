@@ -141,7 +141,7 @@ kurly.http('app', image) + kurly.mesh.linkerd()
 
 Each does two things: it puts the mesh's injection marker on the **pod
 template** (never the controller, where the injector would not see it), and it
-asks the proxy to **refuse** plaintext rather than merely accept TLS.
+makes the proxy **refuse** plaintext rather than merely accept TLS.
 
 Both meshes do both things, and they do them with almost nothing in common:
 
@@ -150,7 +150,7 @@ Both meshes do both things, and they do them with almost nothing in common:
 | injection marker | label `sidecar.istio.io/inject: "true"` | annotation `linkerd.io/inject: enabled` |
 | enforcement | a `PeerAuthentication` object, `mode: STRICT` | annotation `config.linkerd.io/default-inbound-policy: all-authenticated` |
 | namespace first? | must carry `istio-injection` or the pod must be labelled | no, the injector is called for every pod |
-| enforcement proven end to end? | yes | **no** — see below |
+| enforcement proven end to end? | yes | yes |
 
 The label-versus-annotation split is worth knowing if you have ever set one by
 hand. Istio's webhook selects on labels only — an `objectSelector` cannot read
@@ -274,26 +274,23 @@ and an enforced baseline should be told which of the two they are buying.
 `hack/smoke/deep/mesh-bsi.sh <mesh>` is the measurement; re-run it against your
 own versions rather than trusting the table.
 
-### Linkerd's enforcement is unverified
+### Two traps worth knowing if you test this yourself
 
-The Istio recipe's refusal is proven on a live cluster:
-`hack/smoke/deep/mesh-istio.sh` shows an unmeshed client refused, a meshed
-client served, and — the control — the refused request succeeding once the
-`PeerAuthentication` is removed and nothing else changes.
+Both meshes refuse plaintext, but they refuse it differently, and each way is
+easy to misread.
 
-`hack/smoke/deep/mesh-linkerd.sh` gets through injection and the meshed path and
-then **fails**. On the test cluster an unmeshed client was served anyway, with
-`config.linkerd.io/default-inbound-policy` on the pod, on the namespace, set to
-`deny` rather than `all-authenticated`, and with a `Server` resource selecting
-the port. What is established is that the annotation reaches the proxy — it
-arrives as `LINKERD2_PROXY_INBOUND_DEFAULT_POLICY` — so the gap is in the
-refusal, not the plumbing. Whether that is something about the test cluster or a
-wrong reading of how Linkerd enforces is not settled.
+**Linkerd exempts the probe path by design.** It installs a default `probe`
+authorization so an `all-authenticated` policy does not break kubelet probes,
+which arrive with no identity. A request to a pod's declared probe path is
+therefore allowed unauthenticated — so a test that probes `/` and then checks
+that `/` is refused is asking about the one path the policy deliberately
+exempts. Istio has no such carve-out; it enforces at the transport layer and
+exempts nothing by path.
 
-Until it is: use `kurly.mesh.linkerd()` for injection, and do not count its
-inbound policy as encryption in transit. The scenario is left failing on
-purpose, because a scenario edited until it passes proves only that it was
-edited.
+**Linkerd refuses with a 403, Istio by closing the connection.** That matters to
+whatever you test with: `curl` exits zero on a 403, because a status it was
+asked to fetch and did fetch is not a curl error. Check the status, not the exit
+code, or Linkerd's refusal reads as a success.
 
 ### Why mTLS needs a rendered object, not a policy
 

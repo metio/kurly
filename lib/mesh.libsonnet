@@ -15,7 +15,7 @@
 // ANNOTATION. Getting that backwards is silent — the pod is admitted, carries no
 // proxy, and nothing says so.
 //
-// IT ASKS FOR PLAINTEXT TO BE REFUSED, which is the half worth a recipe. A
+// IT REFUSES PLAINTEXT, which is the half worth a recipe. A
 // compliance regime asks about encryption in transit, and NO ADMISSION POLICY
 // CAN ANSWER: a ValidatingAdmissionPolicy sees the object being written, so it
 // cannot observe traffic and cannot require that some other object exists
@@ -28,20 +28,19 @@
 // lie rather than an abstraction. Istio emits an OBJECT — a PeerAuthentication
 // with mode STRICT. Linkerd sets an ANNOTATION — a default inbound policy of
 // all-authenticated. So each recipe takes its own native knob with its own
-// vocabulary rather than a translated one.
+// vocabulary rather than a translated one. Both are proven on a live cluster by
+// hack/smoke/deep/mesh-istio.sh and hack/smoke/deep/mesh-linkerd.sh.
 //
-// THE TWO ARE NOT EQUALLY PROVEN, and the difference is recorded rather than
-// smoothed over. hack/smoke/deep/mesh-istio.sh shows an unmeshed client being
-// refused by the PeerAuthentication and getting through again once it is
-// removed. The Linkerd half of that has NOT been reproduced:
-// hack/smoke/deep/mesh-linkerd.sh proves injection and the meshed path, and then
-// fails, because on the test cluster an unmeshed client was served anyway — with
-// the annotation at pod level, at namespace level, and even at `deny`, and also
-// with a `Server` resource in place. What IS established is that the annotation
-// reaches the proxy: it comes through as
-// LINKERD2_PROXY_INBOUND_DEFAULT_POLICY=all-authenticated. Whether that is an
-// environment problem or a wrong model of Linkerd's enforcement is not settled,
-// so this file claims the first half and not the second.
+// ONE TRAP IS WORTH CARRYING HERE, because it made Linkerd look broken for a
+// while. Linkerd installs a default `probe` authorization so that an
+// all-authenticated policy does not break kubelet probes, which arrive with no
+// identity — so a request to the pod's DECLARED PROBE PATH is allowed without
+// authentication, by design. A test that probes `/` and then checks that `/` is
+// refused is asking about the one path the policy deliberately exempts, and the
+// exemption reads exactly like the policy not working. Istio has no such
+// carve-out (it enforces at the transport layer and exempts nothing by path),
+// which is how the same test could pass there and fail here. The proxy's own
+// metrics name it: srv_name=all-authenticated with authz_name=probe.
 //
 // NEITHER WRITES AN AUTHORIZATION RULE (Istio's AuthorizationPolicy, Linkerd's
 // Server/AuthorizationPolicy). Which principals may call which paths of this
@@ -124,8 +123,7 @@
     },
   },
 
-  // linkerd enables proxy injection and asks the proxy to refuse unauthenticated
-  // inbound traffic.
+  // linkerd enables proxy injection and refuses unauthenticated inbound traffic.
   //
   // Everything here is an ANNOTATION, including the enforcement — Linkerd has no
   // object equivalent to a PeerAuthentication. Its proxy-injector webhook is
@@ -133,14 +131,10 @@
   // injector then reads `linkerd.io/inject` to decide, so unlike Istio there is
   // no namespace to label first.
   //
-  // NOTE: the enforcement half of this recipe is UNVERIFIED — see the header. The
-  // annotation below is the documented mechanism and demonstrably reaches the
-  // proxy, but no test here has yet shown it refusing an unauthenticated client.
-  //
-  //   inboundPolicy  what the proxy is asked to accept on inbound connections:
+  //   inboundPolicy  what the proxy accepts on inbound connections:
   //          'all-authenticated'      only mesh-authenticated (mTLS) clients —
-  //                                   the default here, and the one that would
-  //                                   constitute encryption in transit
+  //                                   the default here, and the one that
+  //                                   constitutes encryption in transit
   //          'cluster-authenticated'  authenticated clients from the cluster
   //                                   networks only
   //          'all-unauthenticated'    anything, which is Linkerd's own default
