@@ -6280,6 +6280,31 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    srs: {
+      name: 'SRS',
+      upstream: { repo: 'https://github.com/ossrs/srs' },
+      // The image carries no OCI labels, so gen-upstream names srs among the
+      // workloads it could not answer for. Read from the repository, which is MIT.
+      license: 'MIT',
+      homepage: 'https://ossrs.io/',
+      description: 'Run your own live streaming server for RTMP, SRT and WebRTC.',
+      summary: 'An SRS server (Simple Realtime Server: a live streaming server that ingests RTMP, SRT or WebRTC and delivers HLS, HTTP-FLV and WebRTC). A plain composable http workload needing nothing external, with recorded segments on a PersistentVolume. Ships a starter configuration, because three of its lines are what make SRS runnable as a container at all — the shipped one daemonises and the process the container was started for exits. Serves HLS and HTTP-FLV on :8080, with RTMP on 1935, the API on 1985, WebRTC on 8000/UDP and SRT on 10080/UDP. Single writer over a ReadWriteOnce volume: one replica, recreated.',
+      category: 'application',
+      stages: {
+        server: d.fn('The SRS server. Segments are written to /usr/local/srs/objs/nginx/html on the volume. config replaces the starter srs.conf, which is mounted as a single file over the shipped one; keep its daemon-off, console-log and /tmp pid settings or the container will not stay up. candidate is the address WebRTC players are told to connect to — unset resolves to the pod address, which is right in-cluster and wrong outside it. Compose an exposure onto the HTTP port; the ingest ports are not HTTP and need their own routes.', [
+          d.arg('name', d.T.string, default='srs'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('config', d.T.string),
+          d.arg('candidate', d.T.string, example='stream.example.com'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

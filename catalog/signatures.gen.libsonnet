@@ -232,6 +232,7 @@
   'snipe-it/server': { digest: 'sha256:6476be7cca765880374a6d489d22ad43d3edba965ab3cb862bf828f5fc856e50', signed: false },
   'sonarr/server': { digest: 'sha256:24acea2956a0ccb11f103877d9f4f8576600fb34bff34820ed749c2256dab89f', signed: false },
   'spegel/mirror': { digest: 'sha256:26c60b05e08ac738e8442bc389c5780bff0e1d8153956e45d810a2f1008cf56f', identity: 'https://github.com/spegel-org/spegel/.github/workflows/release.yaml@refs/tags/v0.7.4', issuer: 'https://token.actions.githubusercontent.com', signed: true, sourceRepository: 'https://github.com/spegel-org/spegel' },
+  'srs/server': { digest: 'sha256:b740a82a7daeb28a35e30ce4cf2c08f295c411879d59d18aa2d9a5eb6a12f687', signed: false },
   'status-responder/responder': { digest: 'sha256:fcb75f691c8b0414d670ae570240cbf95502cc18a9ba57e982ecac589760a186', signed: false },
   'stirling-pdf/server': { digest: 'sha256:7ed4d9681d18e4fbc3aa6a63647c4b5c2bcc4b75841df7c05d7e3d2320f5c9a1', signed: false },
   'synapse/server': { digest: 'sha256:d1fce43d7501428c461f2758dc10342555b946dc9f1d03c1b1b8aec1a4e8d130', identity: 'https://github.com/element-hq/synapse/.github/workflows/docker.yml@refs/tags/v1.157.1', issuer: 'https://token.actions.githubusercontent.com', signed: true, sourceRepository: 'https://github.com/element-hq/synapse' },

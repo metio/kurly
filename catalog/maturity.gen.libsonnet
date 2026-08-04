@@ -212,6 +212,7 @@
     'snappymail',
     'snipe-it',
     'sonarr',
+    'srs',
     'status-responder',
     'stirling-pdf',
     'synapse',

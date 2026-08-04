@@ -41960,6 +41960,153 @@
          }
       },
       {
+         "category": "application",
+         "description": "Run your own live streaming server for RTMP, SRT and WebRTC.",
+         "id": "srs",
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "SRS",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "srs",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "config",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "stream.example.com",
+                     "name": "candidate",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "200m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "200m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "srs"
+                  }
+               ],
+               "help": "The SRS server. Segments are written to /usr/local/srs/objs/nginx/html on the volume. config replaces the starter srs.conf, which is mounted as a single file over the shipped one; keep its daemon-off, console-log and /tmp pid settings or the container will not stay up. candidate is the address WebRTC players are told to connect to — unset resolves to the pod address, which is right in-cluster and wrong outside it. Compose an exposure onto the HTTP port; the ingest ports are not HTTP and need their own routes.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/srs/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:b740a82a7daeb28a35e30ce4cf2c08f295c411879d59d18aa2d9a5eb6a12f687",
+                  "image": "docker.io/ossrs/srs:v6.0.85@sha256:b740a82a7daeb28a35e30ce4cf2c08f295c411879d59d18aa2d9a5eb6a12f687",
+                  "tag": "v6.0.85"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "An SRS server (Simple Realtime Server: a live streaming server that ingests RTMP, SRT or WebRTC and delivers HLS, HTTP-FLV and WebRTC). A plain composable http workload needing nothing external, with recorded segments on a PersistentVolume. Ships a starter configuration, because three of its lines are what make SRS runnable as a container at all — the shipped one daemonises and the process the container was started for exits. Serves HLS and HTTP-FLV on :8080, with RTMP on 1935, the API on 1985, WebRTC on 8000/UDP and SRT on 10080/UDP. Single writer over a ReadWriteOnce volume: one replica, recreated.",
+         "upstream": {
+            "repo": "https://github.com/ossrs/srs"
+         }
+      },
+      {
          "category": "observability",
          "description": "Answer every request with one fixed status, so a path can be taken off the internet.",
          "id": "status-responder",

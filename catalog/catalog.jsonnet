@@ -315,6 +315,7 @@ local stageImports = {
   'opengist/server': import 'github.com/metio/kurly/workloads/opengist/server.libsonnet',
   'cloudbeaver/server': import 'github.com/metio/kurly/workloads/cloudbeaver/server.libsonnet',
   'invoiceshelf/server': import 'github.com/metio/kurly/workloads/invoiceshelf/server.libsonnet',
+  'srs/server': import 'github.com/metio/kurly/workloads/srs/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

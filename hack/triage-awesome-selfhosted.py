@@ -65,8 +65,44 @@ def licence_verdict(licenses):
     return None
 
 
+# awesome-selfhosted distinguishes the free edition in the NAME — "Hoppscotch
+# Community Edition", "Onyx Community Edition", "AFFiNE Community Edition" — while
+# this catalogue calls the same software by its plain name. Comparing the two
+# unstripped reports software already excluded here as a fresh candidate.
+EDITION_SUFFIX = re.compile(
+    r'\s*\b(community|open[\s-]?source|free|self[\s-]?hosted)?\s*'
+    r'\b(edition|ce|oss|server)\b\s*$',
+    re.IGNORECASE,
+)
+
+
+def name_variants(name):
+    """The name as given, and with a trailing edition qualifier removed."""
+    raw = str(name).strip()
+    out = {normalise(raw)}
+    stripped = EDITION_SUFFIX.sub('', raw).strip()
+    if stripped and stripped != raw:
+        out.add(normalise(stripped))
+    return {v for v in out if v}
+
+
 def normalise(name):
     return re.sub(r'[^a-z0-9]', '', str(name).lower())
+
+
+def canonical_repo(url):
+    """A repository URL reduced to `host/owner/name`, so two spellings of the same
+    repository compare equal — trailing slashes, `.git`, `www.`, and the scheme all
+    vary between the two lists and none of them changes which repository it is."""
+    if not url:
+        return ''
+    u = str(url).strip().lower()
+    u = re.sub(r'^https?://', '', u)
+    u = re.sub(r'^www\.', '', u)
+    u = re.sub(r'\.git$', '', u)
+    u = u.rstrip('/')
+    parts = u.split('/')
+    return '/'.join(parts[:3]) if len(parts) >= 3 else u
 
 
 def main():
@@ -86,6 +122,18 @@ def main():
     # `home-assistant`, and normalising both sides is what makes those meet.
     known |= {normalise(w.get('name', '')) for w in catalog['workloads'] if w.get('name')}
 
+    # Names alone are not enough, and the gap is not marginal. awesome-selfhosted
+    # files this catalogue's `homepage` as "Homepage by gethomepage" and its
+    # `actualbudget` as "Actual" — neither normalises onto the id, so both came
+    # back as fresh candidates. The repository URL is the identity that actually
+    # holds across the two lists, so it is matched as well.
+    known_repos = set()
+    for w in catalog['workloads']:
+        for url in (w.get('upstream', {}).get('repo'), w.get('image', {}).get('source')):
+            if url:
+                known_repos.add(canonical_repo(url))
+    known_repos.discard('')
+
     entries = []
     for fname in sorted(os.listdir(data_dir)):
         if not fname.endswith('.yml'):
@@ -103,7 +151,11 @@ def main():
     rows = []
     for e in entries:
         name = e.get('name', e['_file'][:-4])
-        if normalise(name) in known or normalise(e['_file'][:-4]) in known:
+        if (name_variants(name) | name_variants(e['_file'][:-4])) & known:
+            continue
+        if canonical_repo(e.get('source_code_url')) in known_repos:
+            continue
+        if canonical_repo(e.get('website_url')) in known_repos:
             continue
 
         reasons = []
