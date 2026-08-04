@@ -350,6 +350,8 @@ local itemsOf(value) =
     mesh=null,
     alerts=null,
     runbooks=null,
+    drain=null,
+    grace=null,
   )::
     // `replicas` is what the caller WANTS, and what the workload gets is what it
     // can actually run. A Deployment that owns a ReadWriteOnce claim cannot have
@@ -416,7 +418,10 @@ local itemsOf(value) =
       // `alerts` is the namespace the rules are scoped to — a rule left
       // unscoped matches this workload's name in every namespace, which is a
       // quieter mistake than it sounds.
-      + (if alerts == null then {} else $.alerts(namespace=alerts, runbooks=runbooks));
+      + (if alerts == null then {} else $.alerts(namespace=alerts, runbooks=runbooks))
+      // Graceful shutdown, which only means anything for a workload behind a
+      // Service: there is nothing to drain from a worker nobody routes to.
+      + (if drain == null && grace == null then {} else $.shutdown(drain=drain, grace=grace));
     [composed]
     // The certificate covers every name the workload answers on: `host` takes a
     // string or a list, and a certificate naming only the first would leave the

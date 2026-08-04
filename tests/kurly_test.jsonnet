@@ -652,6 +652,28 @@ local podOf(app) = app.deployment.spec.template.spec;
     null
   ),
 
+  // --- kurly.shutdown ------------------------------------------------------------
+  // The drain uses Kubernetes' NATIVE sleep handler rather than an exec of
+  // /bin/sh. On a distroless or scratch image there is no shell, the exec fails,
+  // and a failed preStop hook stops nothing and raises nothing anybody sees — so
+  // the exec form buys no drain and no error.
+  shutdown_uses_the_native_sleep_handler: std.assertEqual(
+    local d = (shop + kurly.shutdown(drain=15, grace=45)).deployment.spec.template.spec;
+    [d.terminationGracePeriodSeconds, d.containers[0].lifecycle],
+    [45, { preStop: { sleep: { seconds: 15 } } }]
+  ),
+
+  // Either half alone is legal — a workload that only needs longer to stop, or
+  // one whose own preStop quiesces it.
+  shutdown_halves_are_independent: std.assertEqual(
+    [
+      std.objectHas((shop + kurly.shutdown(grace=60)).deployment.spec.template.spec.containers[0], 'lifecycle'),
+      (shop + kurly.shutdown(preStop={ exec: { command: ['nginx', '-s', 'quit'] } }))
+      .deployment.spec.template.spec.containers[0].lifecycle.preStop,
+    ],
+    [false, { exec: { command: ['nginx', '-s', 'quit'] } }]
+  ),
+
   // --- kurly.backup axis --------------------------------------------------------
   // VolSync's schema names ONE sourcePVC, so a workload owning two volumes gets
   // two sources. One source for a two-volume workload would back up half of it

@@ -2188,6 +2188,38 @@
       {
          "args": [
             {
+               "example": 15,
+               "name": "drain",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "example": 45,
+               "name": "grace",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "name": "preStop",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "group": "container",
+         "help": "Sets both halves of a graceful stop together, because either alone is how a rolling update drops requests: `drain` seconds of doing nothing after the pod is doomed and before SIGTERM, so the endpoint removal propagates while the container is still serving, and `grace` seconds before SIGKILL. THE DRAIN IS SPENT OUT OF THE GRACE PERIOD rather than added to it — both clocks start when the pod is marked for deletion — so drain >= grace is refused rather than rendered. The drain uses Kubernetes' native sleep handler, not an exec of /bin/sh: on an image with no shell the exec form fails, and a failed preStop hook stops nothing and raises nothing anybody sees. `preStop` replaces the sleep with a verbatim handler for an application that must be told to quiesce.",
+         "id": "shutdown",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
                "example": {
                   "image": "ghcr.io/acme/agent:1.0",
                   "name": "agent"

@@ -166,6 +166,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     initContainer: d.fn('An init container run to completion before the main one — the full container spec, passed through. Composes more than once.', [
       d.arg('container', d.T.object, required=true, example={ name: 'setup', image: 'busybox:1', command: ['sh', '-c', 'echo ready'] }),
     ]) + { kinds: allKinds, group: 'container' },
+    shutdown: d.fn("Sets both halves of a graceful stop together, because either alone is how a rolling update drops requests: `drain` seconds of doing nothing after the pod is doomed and before SIGTERM, so the endpoint removal propagates while the container is still serving, and `grace` seconds before SIGKILL. THE DRAIN IS SPENT OUT OF THE GRACE PERIOD rather than added to it — both clocks start when the pod is marked for deletion — so drain >= grace is refused rather than rendered. The drain uses Kubernetes' native sleep handler, not an exec of /bin/sh: on an image with no shell the exec form fails, and a failed preStop hook stops nothing and raises nothing anybody sees. `preStop` replaces the sleep with a verbatim handler for an application that must be told to quiesce.", [
+      d.arg('drain', d.T.int, example=15),
+      d.arg('grace', d.T.int, example=45),
+      d.arg('preStop', d.T.object),
+    ]) + { kinds: allKinds, group: 'container' },
     terminationGracePeriod: d.fn("How long the pod gets to shut down gracefully (a preStop hook's window).", [
       d.arg('seconds', d.T.int, required=true, example=120),
     ]) + { kinds: allKinds, group: 'container' },

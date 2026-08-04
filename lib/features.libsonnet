@@ -151,6 +151,54 @@
   sidecar(container):: { config+:: { sidecars+: [container] } },
   // How long the pod gets to shut down gracefully (a preStop hook's window).
   terminationGracePeriod(seconds):: { config+:: { terminationGracePeriodSeconds: seconds } },
+  // shutdown sets the two halves of a graceful stop TOGETHER, because setting
+  // either alone is how a rolling update drops requests.
+  //
+  // What actually happens when a pod goes away: its removal from the Service
+  // endpoints and the SIGTERM to its container are dispatched CONCURRENTLY, and
+  // neither waits for the other. Every proxy in the cluster has to hear about
+  // the endpoint change and stop sending new connections — which takes as long
+  // as it takes — while the application has already been told to stop. Requests
+  // arriving in that window reach a process that is shutting down.
+  //
+  //   drain  seconds to do nothing after the pod is doomed and before SIGTERM
+  //          is sent. That is the whole trick: the container keeps serving while
+  //          the endpoint removal propagates, and only then is it asked to stop.
+  //   grace  seconds the kubelet waits after SIGTERM before SIGKILL.
+  //
+  // THE DRAIN IS SPENT OUT OF THE GRACE PERIOD, not added to it. Both clocks
+  // start when the pod is marked for deletion, so `drain` seconds of a `grace`
+  // second budget are gone before the application is even told to stop. Set them
+  // equal and it is killed with no time to finish anything, which is the exact
+  // opposite of what somebody configuring a graceful shutdown intended — so
+  // that composition is refused rather than rendered.
+  //
+  // The drain uses Kubernetes' NATIVE sleep handler rather than
+  // `exec: ["/bin/sh", "-c", "sleep N"]`. On a distroless or scratch image there
+  // is no shell and no sleep binary, so the exec form fails — and a failed
+  // preStop hook does not stop the shutdown or raise anything a person sees. You
+  // would get no drain, no error, and a rollout that quietly drops connections.
+  // Any distroless or FROM-scratch image is in that position, and the native
+  // handler is correct for every image regardless, so there is no reason to
+  // reach for the shell form at all.
+  //
+  // `preStop` replaces the sleep with a verbatim handler, for an application
+  // that needs to be told to quiesce rather than merely waited for.
+  shutdown(drain=null, grace=null, preStop=null)::
+    assert drain == null || grace == null || drain < grace :
+           'kurly.shutdown: drain=%s is spent out of grace=%s, not added to it — leaving the workload %s seconds to stop. Give it a grace period longer than the drain.'
+           % [drain, grace, grace - drain];
+    assert drain == null || preStop == null :
+           'kurly.shutdown: a container has one preStop handler — pass either a drain (which becomes a sleep) or a preStop of your own, not both';
+    {
+      config+::
+        (if grace == null then {} else { terminationGracePeriodSeconds: grace })
+        + (
+          if drain != null then { lifecycle+: { preStop: { sleep: { seconds: drain } } } }
+          else if preStop != null then { lifecycle+: { preStop: preStop } }
+          else {}
+        ),
+    },
   // A headless Service (clusterIP: None) selecting the pods, for DNS peer
   // discovery. publishNotReady lists pods before they are Ready.
   headlessService(port=null, publishNotReady=false):: {
