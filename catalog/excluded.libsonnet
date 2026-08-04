@@ -105,6 +105,25 @@
   twenty: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Twenty cloud, $9/user/mo) — https://twenty.com/pricing' },
   victoriametrics: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (VictoriaMetrics Cloud) — https://victoriametrics.com/products/cloud/' },
 
+  // Third pass, over a batch of candidates that reached triage before anybody
+  // read their pricing pages. Seven of eleven failed this test, which is the
+  // argument for reading them FIRST: each of these would otherwise have been
+  // authored, catalogued and booted before anyone noticed it should not be here.
+  bytebase: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Bytebase Cloud, $20/user/mo at cloud.bytebase.com) — https://www.bytebase.com/pricing/' },
+  lago: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Lago Premium, cloud deployment) — https://www.getlago.com/pricing' },
+  mathesar: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Mathesar Cloud, run by the same nonprofit that develops it) — https://mathesar.org/' },
+  opnform: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (OpnForm cloud, $25-220/mo) — https://opnform.com/pricing' },
+  plane: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Plane cloud, $6-13/seat/mo) — https://plane.so/pricing' },
+  taiga: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (tree.taiga.io, €5-60/mo) — https://www.taiga.io/deployment-pricing-options/' },
+  // The one in this batch whose evidence is weaker than the rest, recorded as such
+  // rather than tidied up. Datasette Cloud is the author's own SaaS built on the
+  // project — "the SaaS platform built on the Datasette open source project" in its
+  // own words — but it published no pricing page when this was read, so the paid
+  // plans every other entry here cites could not be shown. It is excluded on what
+  // the bar is FOR (carrying it competes with the person who wrote it) rather than
+  // on a price list.
+  datasette: { reason: 'upstream-sells-hosting', note: "upstream sells hosting (Datasette Cloud, the author's own SaaS built on the project; no public pricing at time of reading) — https://www.datasette.cloud/" },
+
   // Upstream is no longer maintained. A catalogue that keeps offering an archived
   // project is selling something nobody will fix — every future CVE in it stays
   // open, and the operator who deployed it from here has no upstream to go to.

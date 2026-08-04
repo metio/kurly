@@ -267,12 +267,20 @@
          "note": "PolyForm Shield 1.0.0; forbids use in a competing product or service",
          "reason": "licence-forbids-saas"
       },
+      "bytebase": {
+         "note": "upstream sells hosting (Bytebase Cloud, $20/user/mo at cloud.bytebase.com) — https://www.bytebase.com/pricing/",
+         "reason": "upstream-sells-hosting"
+      },
       "cal-com": {
          "note": "upstream sells hosting (cal.com paid plans) — https://cal.com/pricing",
          "reason": "upstream-sells-hosting"
       },
       "clickhouse": {
          "note": "upstream sells hosting (ClickHouse Cloud) — https://clickhouse.com/cloud",
+         "reason": "upstream-sells-hosting"
+      },
+      "datasette": {
+         "note": "upstream sells hosting (Datasette Cloud, the author's own SaaS built on the project; no public pricing at time of reading) — https://www.datasette.cloud/",
          "reason": "upstream-sells-hosting"
       },
       "directus": {
@@ -331,12 +339,20 @@
          "note": "Elastic-2.0; forbids providing the software to others as a managed service",
          "reason": "licence-forbids-saas"
       },
+      "lago": {
+         "note": "upstream sells hosting (Lago Premium, cloud deployment) — https://www.getlago.com/pricing",
+         "reason": "upstream-sells-hosting"
+      },
       "linkwarden": {
          "note": "upstream sells hosting (Linkwarden cloud, $3/mo) — https://linkwarden.app/pricing",
          "reason": "upstream-sells-hosting"
       },
       "mariadb": {
          "note": "upstream sells hosting (MariaDB Cloud) — https://mariadb.com/products/skysql/",
+         "reason": "upstream-sells-hosting"
+      },
+      "mathesar": {
+         "note": "upstream sells hosting (Mathesar Cloud, run by the same nonprofit that develops it) — https://mathesar.org/",
          "reason": "upstream-sells-hosting"
       },
       "matomo": {
@@ -403,6 +419,10 @@
          "note": "upstream sells hosting (OpenProject cloud) — https://www.openproject.org/pricing/",
          "reason": "upstream-sells-hosting"
       },
+      "opnform": {
+         "note": "upstream sells hosting (OpnForm cloud, $25-220/mo) — https://opnform.com/pricing",
+         "reason": "upstream-sells-hosting"
+      },
       "outline": {
          "note": "BUSL-1.1; forbids offering the software as a service for the licence term",
          "reason": "licence-forbids-saas"
@@ -418,6 +438,10 @@
       "pingvin-share": {
          "note": "upstream archived on 2026-05-18 — https://github.com/stonith404/pingvin-share",
          "reason": "upstream-archived"
+      },
+      "plane": {
+         "note": "upstream sells hosting (Plane cloud, $6-13/seat/mo) — https://plane.so/pricing",
+         "reason": "upstream-sells-hosting"
       },
       "planka": {
          "note": "PLANKA Community licence; forbids offering the software as a service",
@@ -445,6 +469,10 @@
       },
       "sonarqube": {
          "note": "upstream sells hosting (SonarQube Cloud) — https://www.sonarsource.com/products/sonarcloud/",
+         "reason": "upstream-sells-hosting"
+      },
+      "taiga": {
+         "note": "upstream sells hosting (tree.taiga.io, €5-60/mo) — https://www.taiga.io/deployment-pricing-options/",
          "reason": "upstream-sells-hosting"
       },
       "teable": {
