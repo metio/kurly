@@ -748,6 +748,84 @@
          ]
       },
       {
+         "args": [
+            {
+               "example": "apps",
+               "name": "namespace",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "warning",
+               "name": "severity",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "10m",
+               "name": "for_",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": true,
+               "name": "unavailable",
+               "required": false,
+               "type": "bool"
+            },
+            {
+               "default": true,
+               "name": "crashLooping",
+               "required": false,
+               "type": "bool"
+            },
+            {
+               "default": 85,
+               "name": "storageFull",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "default": 90,
+               "name": "memoryPressure",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "example": "https://github.com/metio/gumshoe/blob/main/",
+               "name": "runbooks",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "labels",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "name": "annotations",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "name": "rules",
+               "required": false,
+               "type": "array"
+            }
+         ],
+         "group": "observability",
+         "help": "A PrometheusRule of alerting rules bound to THIS workload's own objects — its controller, its container, each of its claims. Rules that cannot fire are never emitted (no memory rule without a memory limit, no storage rule without a claim, no availability rule for a controller kind with no ready-versus-desired metric pair), because a rule that cannot fire reads as coverage and is not. Every rule names the gumshoe book that investigates or fixes it; `runbooks` supplies the base URL that turns it into a runbook_url. `namespace` scopes the expressions — without it, or without enforcedNamespaceLabel on the scraping Prometheus, a rule matches this name in every namespace. `for`, `storageFull` and `memoryPressure` are SLO decisions and belong to the caller.",
+         "id": "alerts",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
          "args": [ ],
          "group": "security",
          "help": "Allows the process to gain privileges its parent lacks — required to exec a binary carrying file capabilities (relaxes allowPrivilegeEscalation=false).",

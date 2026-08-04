@@ -347,6 +347,8 @@ local itemsOf(value) =
     spread=null,
     serviceMonitor=null,
     mesh=null,
+    alerts=null,
+    runbooks=null,
   )::
     // `replicas` is what the caller WANTS, and what the workload gets is what it
     // can actually run. A Deployment that owns a ReadWriteOnce claim cannot have
@@ -409,7 +411,11 @@ local itemsOf(value) =
         ])
       )
       + (if serviceMonitor == null then {} else $.serviceMonitor(port=serviceMonitor))
-      + (if mesh == null then {} else $.mesh[mesh]());
+      + (if mesh == null then {} else $.mesh[mesh]())
+      // `alerts` is the namespace the rules are scoped to — a rule left
+      // unscoped matches this workload's name in every namespace, which is a
+      // quieter mistake than it sounds.
+      + (if alerts == null then {} else $.alerts(namespace=alerts, runbooks=runbooks));
     [composed]
     // The certificate covers every name the workload answers on: `host` takes a
     // string or a list, and a certificate naming only the first would leave the

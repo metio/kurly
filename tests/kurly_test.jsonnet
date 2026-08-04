@@ -586,6 +586,69 @@ local podOf(app) = app.deployment.spec.template.spec;
     ]
   ),
 
+  // --- kurly.alerts -------------------------------------------------------------
+  // The rules bind to the objects kurly named — this controller, this container,
+  // this claim — and the controller kind decides which availability metric pair
+  // exists, because a StatefulSet and a Deployment do not share one.
+  alerts_bind_to_the_workloads_own_objects: std.assertEqual(
+    local rulesOf(app) =
+      local pr = [m for m in kurly.list(app).items if m.kind == 'PrometheusRule'];
+      if pr == [] then [] else [r.alert for r in pr[0].spec.groups[0].rules];
+    [
+      rulesOf(shop + kurly.alerts()),
+      rulesOf(kurly.stateful('db', 'img:1') + kurly.store('/d', '1Gi') + kurly.alerts()),
+    ],
+    [
+      ['shopUnavailable', 'shopCrashLooping', 'shopMemoryPressure'],
+      ['dbUnavailable', 'dbCrashLooping', 'dbStorageFilling', 'dbMemoryPressure'],
+    ]
+  ),
+
+  // A rule that CANNOT fire is never emitted, because it reads as coverage on a
+  // dashboard and is not: no memory rule without a limit to breach, no storage
+  // rule without a claim to fill.
+  alerts_never_emit_a_rule_that_cannot_fire: std.assertEqual(
+    local rulesOf(app) =
+      local pr = [m for m in kurly.list(app).items if m.kind == 'PrometheusRule'];
+      if pr == [] then [] else [r.alert for r in pr[0].spec.groups[0].rules];
+    [
+      // no memory limit -> no memory rule; no store -> no storage rule.
+      // resources() MERGES, so clearing the kind's default limit takes an
+      // explicit empty one rather than simply not mentioning it.
+      rulesOf(kurly.http('bare', 'img:1') { config+:: { resources: { requests: { cpu: '10m' } } } } + kurly.alerts()),
+      // everything switched off leaves no PrometheusRule at all, rather than an
+      // empty one that alerts on nothing
+      rulesOf(shop + kurly.alerts(unavailable=false, crashLooping=false, storageFull=null, memoryPressure=null)),
+    ],
+    [['bareUnavailable', 'bareCrashLooping'], []]
+  ),
+
+  // A StatefulSet's claims are named by Kubernetes at scale-out as
+  // `<template>-<set>-<ordinal>`, so the selector has to be a PATTERN — an exact
+  // name matches a claim that never exists, and the alert simply never fires.
+  // The template name is read off the rendered object rather than re-derived.
+  alerts_match_per_pod_claims_by_pattern: std.assertEqual(
+    local app = kurly.stateful('db', 'img:1') + kurly.store('/d', '1Gi') + kurly.alerts(namespace='apps');
+    local rules = [m for m in kurly.list(app).items if m.kind == 'PrometheusRule'][0].spec.groups[0].rules;
+    [r.expr for r in rules if r.alert == 'dbStorageFilling'][0],
+    'kubelet_volume_stats_available_bytes{namespace="apps", persistentvolumeclaim=~"store-db-.*"} / kubelet_volume_stats_capacity_bytes{namespace="apps", persistentvolumeclaim=~"store-db-.*"} * 100 < 15'
+  ),
+
+  // Every rule names the gumshoe book that investigates or fixes it, as a
+  // command. A base URL turns that into the link an Alertmanager UI renders;
+  // without one the command is still there, because where a team keeps its books
+  // is not kurly's to assume.
+  alerts_carry_a_runbook: std.assertEqual(
+    local annotationsOf(app) =
+      [m for m in kurly.list(app).items if m.kind == 'PrometheusRule'][0].spec.groups[0].rules[0].annotations;
+    [
+      std.objectHas(annotationsOf(shop + kurly.alerts()), 'runbook_url'),
+      annotationsOf(shop + kurly.alerts()).runbook,
+      annotationsOf(shop + kurly.alerts(runbooks='https://example.com/books/')).runbook_url,
+    ],
+    [false, 'bb runbooks/detectives/workloads.clj', 'https://example.com/books/runbooks/detectives/workloads.clj']
+  ),
+
   // --- kurly.production ---------------------------------------------------------
   // One production profile, applied to workloads of different storage shapes,
   // must come out CORRECT for each rather than uniform. A Deployment owning a

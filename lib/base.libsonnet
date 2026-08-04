@@ -97,6 +97,113 @@ local headlessServiceManifest(name, spec, selectorLabels, labels, ipFamilies) = 
   }) + ipFamilies,
 };
 
+// The alerting rules a workload can have written FOR it, and the reason this
+// belongs in a library rather than in a copied YAML file: the PromQL is the easy
+// half. The hard half is binding it to the right series — this controller's
+// name, this container's name, this claim's name — and getting one selector
+// wrong yields a rule that is syntactically perfect, evaluates forever, and
+// never fires. kurly named every one of those objects, so it can bind them.
+//
+// Two rules are followed throughout:
+//
+// NEVER EMIT AN ALERT THAT CANNOT FIRE. No memory-pressure rule without a memory
+// limit to breach, no storage rule without a claim to fill. A rule that cannot
+// fire is worse than no rule: it reads as coverage on a dashboard and is not.
+//
+// NO THRESHOLDS THAT ARE REALLY SLOs. `for` and the percentages are arguments,
+// because how long a workload may be down before somebody is woken is a decision
+// about that workload's importance to its owner, which nothing here knows.
+local alertRules(name, spec, controllerKind, containerName, claimSelectors, hasMemoryLimit) =
+  // The workload's own pods, however the metric names them. kube-state-metrics
+  // and cAdvisor disagree about which label carries the identity, so each rule
+  // uses the one its own metric actually has.
+  local sel(inner) = if spec.namespace == null then inner else 'namespace="%s", %s' % [spec.namespace, inner];
+  local book(path) =
+    (if spec.runbooks == null then {} else { runbook_url: spec.runbooks + path })
+    + { runbook: 'bb ' + path };
+  local rule(alertName, expr, summary, path) = {
+    alert: alertName,
+    expr: expr,
+    'for': spec['for'],
+    labels: { severity: spec.severity } + spec.labels,
+    annotations: { summary: summary } + book(path) + spec.annotations,
+  };
+  // Ready replicas below desired. The metric pair differs per controller, so a
+  // rule is emitted only for the kinds where the pair exists — a Job has no
+  // notion of "fewer ready than desired" and gets none.
+  local availability =
+    if !spec.unavailable then []
+    else if controllerKind == 'Deployment' then [rule(
+      '%sUnavailable' % name,
+      'kube_deployment_status_replicas_ready{%s} < kube_deployment_spec_replicas{%s}'
+      % [sel('deployment="%s"' % name), sel('deployment="%s"' % name)],
+      '%s has fewer ready replicas than it wants' % name,
+      'runbooks/detectives/workloads.clj',
+    )]
+    else if controllerKind == 'StatefulSet' then [rule(
+      '%sUnavailable' % name,
+      'kube_statefulset_status_replicas_ready{%s} < kube_statefulset_replicas{%s}'
+      % [sel('statefulset="%s"' % name), sel('statefulset="%s"' % name)],
+      '%s has fewer ready replicas than it wants' % name,
+      'runbooks/detectives/workloads.clj',
+    )]
+    else if controllerKind == 'DaemonSet' then [rule(
+      '%sNotOnEveryNode' % name,
+      'kube_daemonset_status_number_ready{%s} < kube_daemonset_status_desired_number_scheduled{%s}'
+      % [sel('daemonset="%s"' % name), sel('daemonset="%s"' % name)],
+      '%s is not ready on every node it is scheduled to' % name,
+      'runbooks/detectives/workloads.clj',
+    )]
+    else [];
+  local crash =
+    if !spec.crashLooping then []
+    else [rule(
+      '%sCrashLooping' % name,
+      'increase(kube_pod_container_status_restarts_total{%s}[15m]) > 0'
+      % sel('container="%s"' % containerName),
+      '%s is restarting repeatedly' % name,
+      'runbooks/detectives/pods.clj',
+    )];
+  // One rule per claim, named after it, so an alert says which volume is full
+  // rather than that one of them is. The book here FIXES rather than diagnoses.
+  // A StatefulSet's storage is a volumeClaimTemplate, so Kubernetes names the
+  // real claims `<template>-<set>-<ordinal>` at scale-out time and no exact
+  // selector can name them. Each claim therefore arrives as a SELECTOR — exact
+  // where kurly owns the PVC, a pattern where the set generates them — because a
+  // rule matching a claim that will never exist is the failure this whole file
+  // is written to avoid.
+  local storage =
+    if spec.storageFull == null then []
+    else [
+      rule(
+        '%sStorageFilling' % name,
+        'kubelet_volume_stats_available_bytes{%s} / kubelet_volume_stats_capacity_bytes{%s} * 100 < %s'
+        % [sel(c.selector), sel(c.selector), 100 - spec.storageFull],
+        '%s is over %s%% full' % [c.label, spec.storageFull],
+        'runbooks/kubernetes/statefulsets/enlarge_volumes.clj',
+      )
+      for c in claimSelectors
+    ];
+  // Only where a limit exists to be measured against: without one the
+  // denominator is zero and the rule is decoration.
+  local memory =
+    if spec.memoryPressure == null || !hasMemoryLimit then []
+    else [rule(
+      '%sMemoryPressure' % name,
+      'container_memory_working_set_bytes{%s} / container_spec_memory_limit_bytes{%s} * 100 > %s'
+      % [sel('container="%s"' % containerName), sel('container="%s"' % containerName), spec.memoryPressure],
+      '%s is close to its memory limit and will be OOM-killed' % name,
+      'runbooks/detectives/workloads.clj',
+    )];
+  availability + crash + storage + memory + spec.rules;
+
+local prometheusRuleManifest(name, rules, labels) = {
+  apiVersion: 'monitoring.coreos.com/v1',
+  kind: 'PrometheusRule',
+  metadata: { name: name, labels: labels },
+  spec: { groups: [{ name: name, rules: rules }] },
+};
+
 local serviceMonitorManifest(name, spec, selectorLabels, labels) = {
   apiVersion: 'monitoring.coreos.com/v1',
   kind: 'ServiceMonitor',
@@ -332,6 +439,9 @@ local exclusionConflicts(exclusive) = [
       // kurly.mesh. Null renders nothing: a workload outside a mesh must not
       // carry a policy that only means something inside one.
       mesh: null,
+      // { for, severity, labels, annotations, runbooks, unavailable,
+      //   crashLooping, storageFull, memoryPressure, rules } — see kurly.alerts
+      alerts: null,
       serviceMonitor: null,  // { port, path, interval }
       rbac: null,  // { rules }
       // Cross-cutting requirements a capability declares so the manifest that
@@ -495,6 +605,46 @@ local exclusionConflicts(exclusive) = [
         spec: { selector: { matchLabels: this.selectorLabels }, mtls: { mode: m.mtls } }
               + m.peerAuthentication,
       },
+    // The controller kind the workload actually renders, which decides which
+    // availability metric pair exists for it.
+    controllerKind::
+      if std.objectHasAll(this, 'statefulset') then 'StatefulSet'
+      else if std.objectHasAll(this, 'daemonset') then 'DaemonSet'
+      else if std.objectHasAll(this, 'cronjob') then 'CronJob'
+      else if std.objectHasAll(this, 'job') then 'Job'
+      else if std.objectHasAll(this, 'deployment') then 'Deployment'
+      else null,
+    prometheusRule::
+      local a = this.config.alerts;
+      if a == null then null
+      else
+        local rules = alertRules(
+          this.config.name,
+          a,
+          this.controllerKind,
+          this.config.name,
+          // Owned PVCs are named exactly; a StatefulSet's are generated per pod
+          // as `<template>-<set>-<ordinal>`. The template name is READ BACK OFF
+          // THE RENDERED OBJECT rather than re-derived here: the rule that
+          // computes it lives in the stateful kind, and a copy of it in this
+          // file would go quietly wrong the day that one changed — leaving a
+          // selector that matches nothing and an alert that never fires.
+          if this.controllerKind == 'StatefulSet' then [
+            {
+              selector: 'persistentvolumeclaim=~"%s-%s-.*"' % [t.metadata.name, this.config.name],
+              label: '%s (per-pod volumes)' % t.metadata.name,
+            }
+            for t in std.get(this.statefulset.spec, 'volumeClaimTemplates', [])
+          ] else [
+            { selector: 'persistentvolumeclaim="%s"' % claim.metadata.name, label: claim.metadata.name }
+            for claim in this.storeClaims
+          ],
+          std.objectHas(std.get(this.config.resources, 'limits', {}), 'memory'),
+        );
+        // A PrometheusRule with no rules is a valid object that alerts on
+        // nothing; emit nothing instead, so an empty one is never mistaken for
+        // coverage.
+        if rules == [] then null else prometheusRuleManifest(this.config.name, rules, this.labels),
     serviceMonitor::
       if this.config.serviceMonitor == null then null else serviceMonitorManifest(this.config.name, this.config.serviceMonitor, this.selectorLabels, this.labels),
     headlessService::
@@ -537,6 +687,7 @@ local exclusionConflicts(exclusive) = [
         this.hpa,
         this.networkPolicy,
         this.peerAuthentication,
+        this.prometheusRule,
         this.serviceMonitor,
         this.headlessService,
         this.serviceAccount,

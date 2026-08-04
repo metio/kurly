@@ -274,6 +274,59 @@
   serviceMonitor(port='http', path='/metrics', interval=null):: {
     config+:: { serviceMonitor: { port: port, path: path, interval: interval } },
   },
+  // alerts writes a PrometheusRule of rules bound to THIS workload's objects.
+  // The PromQL is the easy half; the hard half is the selectors, and kurly named
+  // every object they have to match — the controller, the container, each claim.
+  //
+  // Rules that cannot fire are never emitted: no memory rule without a memory
+  // limit to breach, no storage rule without a claim to fill, and no
+  // availability rule for a controller kind that has no ready-versus-desired
+  // metric pair. A rule that cannot fire reads as coverage and is not.
+  //
+  //   namespace  scopes every expression. Leave it null ONLY if the Prometheus
+  //              scraping these sets enforcedNamespaceLabel, which rewrites
+  //              rules to their own namespace — without either, a rule matches
+  //              this workload's name in EVERY namespace, which is the quiet
+  //              failure this argument exists to prevent.
+  //   for        how long the condition must hold. An SLO, so it is yours.
+  //   storageFull / memoryPressure  percentages, null to skip.
+  //   runbooks   base URL of your book repository. Each rule already names the
+  //              gumshoe book that investigates or fixes it (as `runbook`, the
+  //              command to run); giving a base turns that into the
+  //              `runbook_url` an Alertmanager UI links. Absent by default,
+  //              because where your books live is not kurly's to assume.
+  //   rules      verbatim extra rules, appended — for everything above, which is
+  //              every alert that depends on what the application MEANS rather
+  //              than on whether it is running.
+  alerts(
+    namespace=null,
+    severity='warning',
+    for_='10m',
+    unavailable=true,
+    crashLooping=true,
+    storageFull=85,
+    memoryPressure=90,
+    runbooks=null,
+    labels={},
+    annotations={},
+    rules=[],
+  ):: {
+    config+:: {
+      alerts: {
+        namespace: namespace,
+        severity: severity,
+        'for': for_,
+        unavailable: unavailable,
+        crashLooping: crashLooping,
+        storageFull: storageFull,
+        memoryPressure: memoryPressure,
+        runbooks: runbooks,
+        labels: labels,
+        annotations: annotations,
+        rules: rules,
+      },
+    },
+  },
   rbac(rules):: { config+:: { rbac: { rules: rules } } },
   // Declares that a pod (or one of its sidecars) is a Kubernetes API client: it
   // needs the given Role `rules` AND network egress to the apiserver. Both travel
