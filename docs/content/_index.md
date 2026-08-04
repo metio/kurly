@@ -247,7 +247,7 @@ answer is the difference rather than a list the workload already earned:
 | Istio, default install | `disallow-unwanted-capabilities`, `require-run-as-nonroot`, `require-ro-rootfs`, `restrict-image-registries` |
 | Istio, with its CNI plugin | `restrict-image-registries` |
 | Linkerd, default install | `disallow-unwanted-capabilities`, `require-request-limits`, `restrict-image-registries` |
-| Linkerd, with its CNI plugin | *not measured* — see below |
+| Linkerd, with its CNI plugin | `require-request-limits`, `restrict-image-registries` |
 
 By default each mesh programs the pod's iptables from an init container running
 as root with `NET_ADMIN` and `NET_RAW` — precisely what a hardened baseline
@@ -256,16 +256,21 @@ brings a writable root filesystem and a root user with it as well; Linkerd's
 `linkerd-init` costs less, and its proxy carrying no resource limits is
 something an operator can simply set.
 
-Istio's CNI plugin replaces that container with an unprivileged
-`istio-validation`, and the workload's cost falls to the proxy image's registry
-not being on the allow-list — a one-line decision for whoever runs the mesh. The
-Linkerd equivalent is **not measured**: the plugin installs and its node agent
-runs, but the injected pod kept `linkerd-init` across two attempts, including one
-that restarted the proxy-injector, so the comparison would have been the non-CNI
-case wearing a CNI label. The scenario refuses to report it as one.
+Each mesh's CNI plugin replaces that container with an unprivileged validator —
+`istio-validation`, `linkerd-network-validator` — and the capability line goes
+away in both. What is left is the proxy image's registry not being on the
+allow-list, a one-line decision for whoever runs the mesh, plus for Linkerd the
+proxy carrying no resource limits.
 
-Where it is measured, the privilege does not vanish; it **moves**. Istio's CNI
-node agent breaks nine policies, Linkerd's seven. That is a far better place for
+Measuring that took a retry, and the reason is worth knowing if you script it
+yourself: helm reports success once the control plane is Ready, but the injector
+may not be serving the new configuration yet, and a pod admitted in that window
+is injected in the **old** shape while every command in sight exits zero. The
+scenario now re-admits until the answer settles, and says how many admissions it
+took.
+
+The privilege does not vanish, though; it **moves**. Istio's CNI node agent
+breaks nine policies, Linkerd's seven. That is a far better place for
 it — one cluster component an operator installs and exempts deliberately, the way
 a CSI driver is exempted, instead of a relaxation in every tenant's pod — but it
 is a relocation, not a removal, and an operator promising both an encrypted mesh

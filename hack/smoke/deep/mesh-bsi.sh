@@ -261,12 +261,6 @@ echo
 echo "== install the ${MESH} CNI plugin and re-measure =="
 if "enable_cni_${MESH}"
 then
-  kubectl --namespace="$ns" rollout restart deployment/meshed >/dev/null
-  kubectl --namespace="$ns" rollout status deployment/meshed --timeout=300s >/dev/null \
-    || fail "the meshed app never came back after the CNI plugin went in"
-  initnames="$(kubectl --namespace="$ns" get pods --selector=app.kubernetes.io/name=meshed \
-    -o jsonpath='{.items[0].spec.initContainers[*].name}')"
-  echo "   init containers now: ${initnames:-none}"
   # The whole claim is that the privileged init container is gone. Name it by the
   # mesh rather than by a pattern: an init list that merely lost a name for some
   # other reason must not read as the plugin working.
@@ -274,6 +268,24 @@ then
     istio) gone_container=istio-init ;;
     linkerd) gone_container=linkerd-init ;;
   esac
+  # RETRY, because a rollout finishing is not the same as the injector serving
+  # the new configuration. Helm reports success once the control plane is Ready,
+  # and a workload pod admitted in the window before the injector has actually
+  # picked up the change is injected in the OLD shape — while every command in
+  # sight has exited zero. Reading it once cost two runs that reported the
+  # non-CNI case as the CNI one. So ask repeatedly and let the answer settle.
+  attempt=0; initnames=""
+  while [ "$attempt" -lt 12 ]; do
+    kubectl --namespace="$ns" rollout restart deployment/meshed >/dev/null
+    kubectl --namespace="$ns" rollout status deployment/meshed --timeout=300s >/dev/null \
+      || fail "the meshed app never came back after the CNI plugin went in"
+    initnames="$(kubectl --namespace="$ns" get pods --selector=app.kubernetes.io/name=meshed \
+      -o jsonpath='{.items[0].spec.initContainers[*].name}')"
+    grep -qw "$gone_container" <<<"$initnames" || break
+    attempt=$((attempt + 1))
+    sleep 10
+  done
+  echo "   init containers now: ${initnames:-none} (after $((attempt + 1)) admission(s))"
   if grep -qw "$gone_container" <<<"$initnames"; then
     echo "::warning::${gone_container} is still present with the CNI plugin installed — what follows is NOT the CNI case, do not read it as one"
   fi
