@@ -33,6 +33,7 @@
     'calibre-web',
     'calibre-web-automated',
     'cassandra-cluster',
+    'centrifugo',
     'changedetection',
     'chatpad',
     'cloudbeaver',

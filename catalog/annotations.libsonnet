@@ -6331,6 +6331,33 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    centrifugo: {
+      name: 'Centrifugo',
+      upstream: { repo: 'https://github.com/centrifugal/centrifugo' },
+      license: 'MIT',
+      homepage: 'https://centrifugal.dev/',
+      description: 'Push live updates to browsers and apps over WebSocket without writing a server.',
+      summary: 'A Centrifugo server (a real-time messaging server: clients subscribe over WebSocket, SSE or HTTP-streaming and a backend publishes to them over an HTTP/GRPC API). A plain composable http workload and a STATELESS one: channel history and presence live in memory or in Redis, never on disk, so it claims no PersistentVolume. One replica by default, which is a correctness bound rather than caution — without a broker each instance knows only its own subscribers. Point it at Redis to scale horizontally. Serves clients and the API on :8000.',
+      category: 'messaging',
+      stages: {
+        server: d.fn('The Centrifugo server. Stateless, so it claims no volume. secretName holds the token key, the HTTP API key and any admin credentials — everything here authenticates somebody and kurly mints none of it. admin turns on the administrative web UI, which is off by default because it answers on the same port as the client traffic an exposure publishes. Compose an exposure that does not cut long-lived connections; WebSocket and SSE are the point.', [
+          d.arg('name', d.T.string, default='centrifugo'),
+          d.arg('image', d.T.string),
+          d.arg('secretName', d.T.string, default='centrifugo'),
+          d.arg('admin', d.T.bool, default=false),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'CENTRIFUGO_CLIENT_TOKEN_HMAC_SECRET_KEY', generate: 'hex', length: 64 },
+            { key: 'CENTRIFUGO_HTTP_API_KEY', generate: 'hex', length: 64 },
+          ],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

@@ -317,6 +317,7 @@ local stageImports = {
   'invoiceshelf/server': import 'github.com/metio/kurly/workloads/invoiceshelf/server.libsonnet',
   'srs/server': import 'github.com/metio/kurly/workloads/srs/server.libsonnet',
   'archivebox/server': import 'github.com/metio/kurly/workloads/archivebox/server.libsonnet',
+  'centrifugo/server': import 'github.com/metio/kurly/workloads/centrifugo/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

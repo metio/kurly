@@ -7809,6 +7809,158 @@
          }
       },
       {
+         "category": "messaging",
+         "description": "Push live updates to browsers and apps over WebSocket without writing a server.",
+         "id": "centrifugo",
+         "image": {
+            "source": "https://github.com/centrifugal/centrifugo"
+         },
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Centrifugo",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "centrifugo",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "centrifugo",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": false,
+                     "name": "admin",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "centrifugo"
+                  }
+               ],
+               "help": "The Centrifugo server. Stateless, so it claims no volume. secretName holds the token key, the HTTP API key and any admin credentials — everything here authenticates somebody and kurly mints none of it. admin turns on the administrative web UI, which is off by default because it answers on the same port as the client traffic an exposure publishes. Compose an exposure that does not cut long-lived connections; WebSocket and SSE are the point.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/centrifugo/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [ ],
+                  "got": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:8ba0c9443dadedc21b20254b3fc76f35c1998b29acc7cdec877ea0c3636c237e",
+                  "image": "docker.io/centrifugo/centrifugo:v6.9.1@sha256:8ba0c9443dadedc21b20254b3fc76f35c1998b29acc7cdec877ea0c3636c237e",
+                  "tag": "v6.9.1"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "CENTRIFUGO_CLIENT_TOKEN_HMAC_SECRET_KEY",
+                     "length": 64
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "CENTRIFUGO_HTTP_API_KEY",
+                     "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "centrifugo"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 0
+               }
+            }
+         ],
+         "summary": "A Centrifugo server (a real-time messaging server: clients subscribe over WebSocket, SSE or HTTP-streaming and a backend publishes to them over an HTTP/GRPC API). A plain composable http workload and a STATELESS one: channel history and presence live in memory or in Redis, never on disk, so it claims no PersistentVolume. One replica by default, which is a correctness bound rather than caution — without a broker each instance knows only its own subscribers. Point it at Redis to scale horizontally. Serves clients and the API on :8000.",
+         "upstream": {
+            "repo": "https://github.com/centrifugal/centrifugo"
+         }
+      },
+      {
          "category": "application",
          "description": "Watch any web page and get told the moment it changes.",
          "id": "changedetection",

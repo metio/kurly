@@ -106,6 +106,9 @@
     source: 'https://github.com/linuxserver/docker-calibre',
     homepage: 'https://github.com/linuxserver/docker-calibre/packages',
   },
+  centrifugo: {
+    source: 'https://github.com/centrifugal/centrifugo',
+  },
   changedetection: {
     license: 'Apache-2.0',
     title: 'changedetection.io',

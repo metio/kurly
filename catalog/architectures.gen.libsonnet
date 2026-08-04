@@ -31,6 +31,7 @@
   'calibre-web-automated/server': { digest: 'sha256:c31a738b6d5ec6982c050063dd3f063b6943eb1051fc81144789f840d9093a8d', architectures: ['amd64', 'arm64'] },
   'calibre-web/server': { digest: 'sha256:a7277fd8884b3d77e8659a2d82b0974af9812d4c1f4040c98b910da21e764a36', architectures: ['amd64', 'arm64'] },
   'calibre/server': { digest: 'sha256:1ce25a9e5155591232c94952c278df8084787f8098964fae38de9811b3dba34b', architectures: ['amd64', 'arm64'] },
+  'centrifugo/server': { digest: 'sha256:8ba0c9443dadedc21b20254b3fc76f35c1998b29acc7cdec877ea0c3636c237e', architectures: ['amd64', 'arm64'] },
   'changedetection/server': { digest: 'sha256:5438423d5e906eff4e8f7886823482ad23f472bf7b8530ccaca89fb48c337882', architectures: ['amd64', 'arm', 'arm64'] },
   'chatpad/server': { digest: 'sha256:15155e3a09fd677d578583f6bd3848c991cf768997400e37bc4c27e62a918a7e', architectures: ['amd64', 'arm64'] },
   'cloudbeaver/server': { digest: 'sha256:c0975db279e488c6f770e4a5a74e7f8d388d5bc53c75bce82647e82cb6358a3f', architectures: ['amd64', 'arm64'] },

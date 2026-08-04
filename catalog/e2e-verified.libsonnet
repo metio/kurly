@@ -35,6 +35,7 @@
   'calibre-web': '2026-07-28',
   'calibre-web-automated': '2026-07-28',
   'cassandra-cluster': '2026-07-28',
+  centrifugo: '2026-08-04',
   changedetection: '2026-07-28',
   chatpad: '2026-07-28',
   cloudbeaver: '2026-08-04',
