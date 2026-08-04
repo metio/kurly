@@ -43870,9 +43870,7 @@
          "requires": [ ],
          "stages": [
             {
-               "architectures": [
-                  "amd64"
-               ],
+               "architectures": null,
                "args": [
                   {
                      "default": "tik",
@@ -43942,9 +43940,9 @@
                   "violates": [ ]
                },
                "runs": {
-                  "digest": "sha256:7829cc2cb3393ac65c21078d7b0b1221049e0ad2588c8c723f09975220ebc501",
-                  "image": "ghcr.io/metio/tik:2026.7.18213457@sha256:7829cc2cb3393ac65c21078d7b0b1221049e0ad2588c8c723f09975220ebc501",
-                  "tag": "2026.7.18213457"
+                  "digest": "sha256:8882bedb84da4bd6cde0270457446c403cce8d8d08a79628eed6190acd203349",
+                  "image": "ghcr.io/metio/tik:2026.8.4202345@sha256:8882bedb84da4bd6cde0270457446c403cce8d8d08a79628eed6190acd203349",
+                  "tag": "2026.8.4202345"
                },
                "scaling": {
                   "horizontal": false,
@@ -43958,13 +43956,7 @@
                      "path": "/etc/tik-key"
                   }
                ],
-               "signature": {
-                  "identity": "https://github.com/metio/tik/.github/workflows/release.yml@refs/heads/main",
-                  "issuer": "https://token.actions.githubusercontent.com",
-                  "signed": true,
-                  "signedByUpstream": true,
-                  "sourceRepository": "https://github.com/metio/tik"
-               },
+               "signature": null,
                "storage": {
                   "pvcs": 1
                }
