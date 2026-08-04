@@ -403,6 +403,33 @@
             ++ devshell.lib.lintTools pkgs;
             text = builtins.readFile ./scripts/verify.sh;
           };
+          # Walks an authored workload through every generator in the order the
+          # data flows between them, then the gate. checklist.md is the prose
+          # around it — the judgement calls (is it carryable, what does the
+          # trademark policy say) stay with a person.
+          onboard-workload = pkgs.writeShellApplication {
+            name = "onboard-workload";
+            runtimeInputs = [
+              check-tests
+              check-catalog
+              gen-architectures
+              gen-upstream
+              gen-signatures
+              gen-maturity
+              gen-smoke
+              gen-readme
+              verify
+            ]
+            ++ (with pkgs; [
+              go-jsonnet
+              jsonnet-bundler
+              jq
+              git
+              gnugrep
+              coreutils
+            ]);
+            text = builtins.readFile ./scripts/onboard-workload.sh;
+          };
           commands = [
             check-fmt
             check-catalog
@@ -425,6 +452,7 @@
             gen-workload-metadata
             gen-smoke
             gen-docs-data
+            onboard-workload
             verify
           ];
         in
@@ -461,6 +489,7 @@
               echo "  gen-readme       splice the deploy walkthrough into every workload README"
               echo "  gen-workload-metadata  one workload's catalogue entry, as its own document"
               echo "  gen-docs-data    stage catalog.json into docs/data/ for the site"
+              echo "  onboard-workload <name>  run every generator for a new workload, in order"
               echo "  verify           run every gate locally (what CI runs)"
             '';
           };
