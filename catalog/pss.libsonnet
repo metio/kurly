@@ -34,8 +34,22 @@
     if std.member(['Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob'], m.kind)
   ],
 
-  of(items)::
-    local tmpls = $.podTemplates(items);
+  // Two entry points over one implementation.
+  //
+  //   of(items)      what a stage RENDERS — the pod templates in its manifests.
+  //   ofPods(pods)   what an OPERATOR RAN — real pods taken off a cluster, for
+  //                  the stages that render only a custom resource and so have
+  //                  no template to read.
+  //
+  // A pod's `spec` is the same shape a template's is, so both reduce to the same
+  // evaluation. They are kept as separate entry points rather than one clever
+  // one because the two produce DIFFERENT KINDS OF EVIDENCE — derived from what
+  // we wrote, versus measured from what ran — and a catalogue that let them
+  // share a field would be claiming the second while holding the first.
+  of(items):: $.evaluate($.podTemplates(items)),
+  ofPods(pods):: $.evaluate([{ spec: p.spec } for p in pods]),
+
+  evaluate(tmpls)::
     if tmpls == [] then null
     else
       // Every container the admission controller would look at.

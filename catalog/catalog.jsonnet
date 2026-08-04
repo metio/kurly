@@ -23,6 +23,7 @@ local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
 local bsiViolations = import './bsi.gen.libsonnet';
 local bsiOperatorPods = import './bsi-operator.gen.libsonnet';
+local pssOperatorPods = import './pss-operator.gen.libsonnet';
 local bollwerk = import '../bollwerk/bollwerk.libsonnet';
 local excluded = import './excluded.libsonnet';
 local consent = import './consent.libsonnet';
@@ -1201,6 +1202,16 @@ local workloadEntries =
          'bsi.gen.libsonnet names a stage that does not exist — rerun gen-bsi';
   assert std.all([std.member(stageKeys, key) for key in std.objectFields(bsiOperatorPods)]) :
          'bsi-operator.gen.libsonnet names a stage that does not exist';
+  assert std.all([std.member(stageKeys, key) for key in std.objectFields(pssOperatorPods)]) :
+         'pss-operator.gen.libsonnet names a stage that does not exist — rerun cr-pss.sh';
+  // A measured verdict is only meaningful for a stage whose own manifest could
+  // not be judged. If a stage grew a pod template, its derived `pss` is the
+  // better evidence and the measured one must not sit beside it pretending to
+  // add something.
+  assert std.all([
+    pssLib.of(main.list(stageImports[key]()).items) == null
+    for key in std.objectFields(pssOperatorPods)
+  ]) : 'pss-operator.gen.libsonnet measures a stage that now renders its own pod template — its derived pss is the better evidence, so drop the measured one';
   assert std.all([
     std.objectHas(bsiPolicies, name)
     for key in std.objectFields(bsiOperatorPods)
@@ -1351,6 +1362,15 @@ local workloadEntries =
         + { posture: posture(stageImports[workload + '/' + stage]) }
         + { scaling: scaling(stageImports[workload + '/' + stage]) }
         + { pss: pssLib.of(main.list(stageImports[workload + '/' + stage]()).items) }
+        // What the pods an OPERATOR ran actually clear, for the stages whose own
+        // manifest has no pod template to read. A SEPARATE field, never merged
+        // into `pss`: one is derived from what kurly wrote and the other is
+        // measured from what ran, and a consumer must be able to tell which it
+        // is holding. ABSENT means not measured, never clean.
+        + (
+          local m = std.get(pssOperatorPods, workload + '/' + stage, null);
+          if m == null then {} else { pssOperator: m }
+        )
         + { profile: profile(stageImports[workload + '/' + stage]) }
         + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])
