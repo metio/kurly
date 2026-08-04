@@ -36,13 +36,32 @@
 // ── the shape ───────────────────────────────────────────────────────────────
 //
 //   '<workload-id>': {
-//     posture: 'restricted' | 'unrestricted' | 'unaddressed',
+//     posture: 'restricted' | 'permitted-with-attribution' | 'unrestricted'
+//              | 'unaddressed',
 //     policy: '<url>',                  // required: the page this was read from
 //     neutralName: '<name>',            // optional, and only where the project
 //                                       // or common practice offers one — not
 //                                       // a name invented here
 //     note: '<what the policy actually restricts>',   // optional
 //   }
+//
+// `permitted-with-attribution` means the policy GRANTS the use a catalogue entry
+// makes — naming a service after the software — on a condition about how it is
+// presented: that the page says who runs the service, and does not let the mark
+// outrank that. Named for the CONDITION rather than for the permission, because
+// the condition is the part that has to survive a redesign.
+//
+// It exists because `restricted` was not merely mislabelling these; it was
+// withholding the name. A consumer falling back to a neutral name published
+// OpenSearch as `opensearch` — doing the one thing its holders went out of their
+// way to say was unnecessary, on the strength of a value that meant "we could
+// not tell". A posture that cannot express "yes, if you attribute" turns a
+// permission into a prohibition.
+//
+// The condition is not optional. Taking a permission and quietly not honouring
+// what it was granted for is worse than never having read the policy, because it
+// looks like diligence. A consumer that cannot render the attribution should
+// treat this exactly as `restricted`.
 //
 // `unaddressed` means SOMEBODY READ IT AND IT DOES NOT SAY. A project can have a
 // long trademark policy that never addresses using its name to offer the software
@@ -439,7 +458,7 @@
   // domain needs consent, a subdomain does not, and nothing may imply the
   // project endorses the service.
   'opensearch-cluster': {
-    posture: 'restricted',
+    posture: 'permitted-with-attribution',
     policy: 'https://opensearch.org/trademark-brand-policy/',
     note: 'Explicitly permits using the name to refer to a service for OpenSearch, provided your own branding is more prominent and identifies you as the source; a primary domain still needs permission, a subdomain does not.',
   },
@@ -470,6 +489,16 @@
   //    method of contact for the server."
   //
   // So a free instance may carry the name and a paid one may not, unchanged.
+  // Deliberately NOT `permitted-with-attribution`, and this is the reasoning
+  // rather than an oversight. Jellyfin's condition is not about presentation, it
+  // is whether the instance is free to its users — and evaluating that requires
+  // knowing whether the OPERATOR charges. A catalogue that knew that would stop
+  // describing the world and start describing one deployment, and the next
+  // person running kurly for a free community instance would inherit an answer
+  // computed for somebody else's business.
+  //
+  // So it fails closed. That costs a free operator a name they were entitled to
+  // use, which is the cheap direction to be wrong in.
   jellyfin: {
     posture: 'restricted',
     policy: 'https://jellyfin.org/docs/project/branding/',

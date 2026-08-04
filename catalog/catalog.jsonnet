@@ -605,6 +605,72 @@ local declaredRequests(fn) =
 // sharedVolume too — a ReadWriteMany volume makes concurrency possible, and
 // plenty of applications corrupt themselves given it. Saying "yes" there would
 // be inferring an application property from a storage one.
+// What kurly.production() actually DOES to this stage — rendered by CALLING it,
+// never written down beside it.
+//
+// The distinction is the whole value of the field. A table of recommended
+// settings maintained next to the function is a second implementation, and the
+// day the two disagree a consumer shows somebody a preview of a deployment that
+// does not happen — a promise made in the one place a reader has every reason to
+// trust, about the one thing they came to check. So this asks the function and
+// records its answer.
+//
+// The ask is CANONICAL and stated, not a recommendation: three replicas, a
+// disruption budget of two, one spread constraint. Nobody should read `asked` as
+// advice about how many replicas a workload wants. It is a probe, chosen high
+// enough that every clamp fires.
+//
+// `clamped` is the interesting half. Without it a reader learns that vaultwarden
+// gets one replica; with it they learn that three were asked for and the software
+// cannot take them, which is the sentence a tenant actually needs — and
+// reconstructing it by diffing against an invented profile would be guessing at
+// this logic from outside, which is the drift again by another route.
+local profileAsk = { replicas: 3, podDisruptionBudget: 2, topologySpreadConstraints: 1 };
+local profile(fn) =
+  local app = fn();
+  // A stage that renders plain manifests rather than composing a kurly base
+  // rejects every feature, so production() cannot be asked about it at all.
+  if !std.objectHasAll(app, 'config') then null
+  else
+    local rendered = main.list(main.production(
+      app,
+      replicas=profileAsk.replicas,
+      pdb=profileAsk.podDisruptionBudget,
+      spread=['kubernetes.io/hostname'],
+    )).items;
+    // Every controller kind that carries a pod template, DaemonSet included — a
+    // list that stopped at Deployment and StatefulSet read a DaemonSet's spread
+    // constraints as absent and reported them clamped, which is a measurement
+    // reporting itself as a finding.
+    local controllers = [
+      i
+      for i in rendered
+      if std.member(['Deployment', 'StatefulSet', 'DaemonSet'], std.get(i, 'kind', ''))
+    ];
+    local budgets = [i for i in rendered if std.get(i, 'kind', '') == 'PodDisruptionBudget'];
+    local got = {
+      replicas:
+        if controllers == [] then null
+        else std.get(controllers[0].spec, 'replicas', null),
+      podDisruptionBudget:
+        if budgets == [] then null else std.get(budgets[0].spec, 'minAvailable', null),
+      topologySpreadConstraints:
+        if controllers == [] then 0
+        else std.length(std.get(controllers[0].spec.template.spec, 'topologySpreadConstraints', [])),
+    };
+    {
+      asked: profileAsk,
+      got: got,
+      // A null in `got` means the workload HAS NO SUCH KNOB — a DaemonSet has no
+      // replica count — which is a different thing from an ask that was reduced,
+      // and must not be reported as one.
+      clamped: [
+        k
+        for k in std.objectFields(profileAsk)
+        if got[k] != null && got[k] != profileAsk[k]
+      ],
+    };
+
 local scaling(fn) =
   local items = main.list(fn()).items;
   local controllers = [i for i in items if std.member(['Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob'], std.get(i, 'kind', ''))];
@@ -1285,6 +1351,7 @@ local workloadEntries =
         + { posture: posture(stageImports[workload + '/' + stage]) }
         + { scaling: scaling(stageImports[workload + '/' + stage]) }
         + { pss: pssLib.of(main.list(stageImports[workload + '/' + stage]()).items) }
+        + { profile: profile(stageImports[workload + '/' + stage]) }
         + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])
         // Which bollwerk policies the stage breaks, from bsi.gen.libsonnet.
@@ -1302,6 +1369,18 @@ local workloadEntries =
   assert reconcile('network', std.objectFields(ann.network), std.objectFieldsAll(network)),
   assert reconcile('mesh', std.objectFields(ann.mesh), std.objectFieldsAll(mesh)),
   assert reconcile('backup', std.objectFields(ann.backup), std.objectFieldsAll(backup)),
+  // `scaling` and `profile` are derived independently — one reads the storage
+  // topology, the other asks production() what it did — so they can disagree,
+  // and a disagreement means one of them is lying. A stage that cannot scale
+  // horizontally must come back from production() with a single replica, or
+  // with none at all where the controller has no such field.
+  assert std.all([
+    local p = stage.profile;
+    p == null || stage.scaling == null || stage.scaling.horizontal
+    || p.got.replicas == null || p.got.replicas == 1
+    for w in workloadEntries
+    for stage in w.stages
+  ]) : 'catalog: a stage that cannot scale horizontally came back from production() with more than one replica — scaling and profile disagree, and one of them is wrong',
   assert reconcile('security', std.objectFields(ann.security), std.objectFieldsAll(security)),
   assert reconcile('migrations', std.objectFields(ann.migrations), std.objectFieldsAll(migrations)),
   // Kinds live in separate files; assert the annotated set is exactly the four
@@ -1382,9 +1461,9 @@ local workloadEntries =
     for id in std.objectFields(trademark)
   ]) : 'catalog: a trademark record without a posture and the policy it was read from',
   assert std.all([
-    std.member(['restricted', 'unrestricted', 'unaddressed'], trademark[id].posture)
+    std.member(['restricted', 'permitted-with-attribution', 'unrestricted', 'unaddressed'], trademark[id].posture)
     for id in std.objectFields(trademark)
-  ]) : 'catalog: a trademark record with an unknown posture (restricted, unrestricted, unaddressed)',
+  ]) : 'catalog: a trademark record with an unknown posture (restricted, permitted-with-attribution, unrestricted, unaddressed)',
   assert std.all([std.objectHas(ann.workloads, id) for id in std.objectFields(trademark)]) :
          'catalog: trademark.libsonnet names a workload that does not exist',
   // Every exclusion states a reason from the closed vocabulary, so a consumer
