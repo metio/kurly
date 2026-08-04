@@ -586,6 +586,53 @@ local podOf(app) = app.deployment.spec.template.spec;
     ]
   ),
 
+  // --- kurly.backup axis --------------------------------------------------------
+  // VolSync's schema names ONE sourcePVC, so a workload owning two volumes gets
+  // two sources. One source for a two-volume workload would back up half of it
+  // and report success.
+  backup_volsync_is_per_claim: std.assertEqual(
+    local a = shop + kurly.store('/a', '1Gi') + kurly.store('/b', '1Gi') + kurly.backup.volsync(repository='shop-restic');
+    [m.spec.sourcePVC for m in kurly.list(a).items if m.kind == 'ReplicationSource'],
+    ['shop-store', 'shop-b']
+  ),
+
+  // A StatefulSet's claims are created per pod, so the sources are enumerated
+  // from the replicas being rendered — the same naming the alert selectors use,
+  // and the same limit: a set scaled out later is uncovered until it is rendered
+  // again, which is stated rather than hidden behind a source pointing at a
+  // claim that does not exist.
+  backup_volsync_enumerates_per_pod_claims: std.assertEqual(
+    local a = kurly.stateful('db', 'img:1') + kurly.store('/d', '1Gi') + kurly.replicas(3)
+              + kurly.backup.volsync(repository='db-restic');
+    [m.spec.sourcePVC for m in kurly.list(a).items if m.kind == 'ReplicationSource'],
+    ['store-db-0', 'store-db-1', 'store-db-2']
+  ),
+
+  // K8up is per NAMESPACE, so a workload has nothing to opt into and emits no
+  // object — what it can say is written on the claim, which is the thing the
+  // operator selects on. exclude() is the same mechanism saying the opposite.
+  backup_k8up_marks_the_claim_and_emits_nothing: std.assertEqual(
+    local marks(recipe) =
+      local l = kurly.list(shop + kurly.store('/a', '1Gi') + recipe);
+      [
+        [m.metadata.annotations for m in l.items if m.kind == 'PersistentVolumeClaim'][0],
+        std.length([m for m in l.items if m.kind == 'ReplicationSource']),
+      ];
+    [marks(kurly.backup.k8up()), marks(kurly.backup.exclude())],
+    [
+      [{ 'k8up.io/backup': 'true' }, 0],
+      [{ 'k8up.io/backup': 'false' }, 0],
+    ]
+  ),
+
+  // A consumer's own claim annotation wins over the scheme's marker, so somebody
+  // who set the key by hand is not overruled by composing a recipe.
+  backup_claim_annotations_defer_to_the_consumer: std.assertEqual(
+    local a = shop + kurly.store('/a', '1Gi', annotations={ 'k8up.io/backup': 'false' }) + kurly.backup.k8up();
+    [m.metadata.annotations for m in kurly.list(a).items if m.kind == 'PersistentVolumeClaim'][0],
+    { 'k8up.io/backup': 'false' }
+  ),
+
   // --- kurly.alerts -------------------------------------------------------------
   // The rules bind to the objects kurly named — this controller, this container,
   // this claim — and the controller kind decides which availability metric pair

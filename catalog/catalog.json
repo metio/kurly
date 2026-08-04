@@ -1,4 +1,110 @@
 {
+   "backup": [
+      {
+         "args": [ ],
+         "exclusiveGroup": "backup",
+         "group": "storage",
+         "help": "Marks every claim the workload owns to be LEFT OUT of a namespace-wide backup — for a volume that is a cache, a scratch area, or a copy of something already backed up elsewhere, where putting it in the repository costs storage and restore time and protects nothing.",
+         "id": "exclude",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [ ],
+         "exclusiveGroup": "backup",
+         "group": "storage",
+         "help": "Marks every claim the workload owns for inclusion in a namespace-wide K8up Schedule, which is a workload of its own (workloads/k8up/schedule.libsonnet) rather than something composed here. Emits no object: K8up already includes every claim it finds, so this writes the decision down explicitly instead of leaving it to a default that can flip.",
+         "id": "k8up",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      },
+      {
+         "args": [
+            {
+               "example": "app-restic",
+               "name": "repository",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": "0 2 * * *",
+               "name": "schedule",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "manual",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "default": {
+                  "daily": 7,
+                  "monthly": 6,
+                  "weekly": 4
+               },
+               "name": "retain",
+               "required": false,
+               "type": "object"
+            },
+            {
+               "default": "Direct",
+               "name": "copyMethod",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "pruneIntervalDays",
+               "required": false,
+               "type": "int"
+            },
+            {
+               "name": "cacheCapacity",
+               "required": false,
+               "type": "quantity"
+            },
+            {
+               "name": "storageClassName",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "volumeSnapshotClassName",
+               "required": false,
+               "type": "string"
+            },
+            {
+               "name": "restic",
+               "required": false,
+               "type": "object"
+            }
+         ],
+         "exclusiveGroup": "backup",
+         "group": "storage",
+         "help": "One VolSync ReplicationSource per volume the workload owns, backing it up on a schedule with restic underneath. A StatefulSet's per-pod claims are enumerated from the replicas being rendered, so a set scaled out later has volumes no source covers until it is rendered again. `repository` names the Secret holding the restic URL and password — kurly authors no Secret. `restic` merges last, so anything this vocabulary does not model stays reachable. Requires the VolSync operator.",
+         "id": "volsync",
+         "kinds": [
+            "http",
+            "worker",
+            "cron",
+            "daemon",
+            "stateful",
+            "job"
+         ]
+      }
+   ],
    "bsiPolicies": {
       "disallow-default-serviceaccount": {
          "category": "must",

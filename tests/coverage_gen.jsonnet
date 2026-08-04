@@ -87,4 +87,13 @@ local meshCases = [
   if !(std.objectHas(m, 'standalone') && m.standalone)
 ];
 
-kindCases + featureCases + exposeCases + securityCases + networkCases + meshCases
+// Each backup recipe on http. A recipe emitting a ReplicationSource needs a
+// volume to point at, so the store rides along — otherwise the case renders
+// nothing and proves nothing.
+local backupCases = [
+  { name: 'backup-' + b.id, snippet: snippetFor('http', " + kurly.store('/data', '1Gi') + " + call('kurly.backup.' + b.id, b)) }
+  for b in catalog.backup
+  if !(std.objectHas(b, 'standalone') && b.standalone)
+];
+
+kindCases + featureCases + exposeCases + securityCases + networkCases + meshCases + backupCases

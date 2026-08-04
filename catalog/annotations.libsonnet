@@ -401,6 +401,33 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     ]) + { group: 'networking', standalone: true },
   },
 
+  // Backup — another separate axis. The two tools disagree about SCOPE and the
+  // vocabulary mirrors that: VolSync is per CLAIM (a ReplicationSource names one
+  // sourcePVC, so a workload gets one per volume it owns), K8up is per NAMESPACE
+  // (a Schedule backs up every claim it finds, so a workload can only usefully
+  // say it should be LEFT OUT). All three join the `backup` exclusion group, so
+  // no workload is handed two schemes that each believe they own its volumes.
+  // Neither restores: restoring is an operation, so it stays a workload of its
+  // own pointed at the same repository.
+  backup: {
+    volsync: d.fn("One VolSync ReplicationSource per volume the workload owns, backing it up on a schedule with restic underneath. A StatefulSet's per-pod claims are enumerated from the replicas being rendered, so a set scaled out later has volumes no source covers until it is rendered again. `repository` names the Secret holding the restic URL and password — kurly authors no Secret. `restic` merges last, so anything this vocabulary does not model stays reachable. Requires the VolSync operator.", [
+      d.arg('repository', d.T.string, example='app-restic'),
+      d.arg('schedule', d.T.string, default='0 2 * * *'),
+      d.arg('manual', d.T.string),
+      d.arg('retain', d.T.object, default={ daily: 7, weekly: 4, monthly: 6 }),
+      d.arg('copyMethod', d.T.string, default='Direct'),
+      d.arg('pruneIntervalDays', d.T.int),
+      d.arg('cacheCapacity', d.T.quantity),
+      d.arg('storageClassName', d.T.string),
+      d.arg('volumeSnapshotClassName', d.T.string),
+      d.arg('restic', d.T.object, default={}),
+    ]) + { kinds: allKinds, exclusiveGroup: 'backup', group: 'storage' },
+    k8up: d.fn('Marks every claim the workload owns for inclusion in a namespace-wide K8up Schedule, which is a workload of its own (workloads/k8up/schedule.libsonnet) rather than something composed here. Emits no object: K8up already includes every claim it finds, so this writes the decision down explicitly instead of leaving it to a default that can flip.', [
+    ]) + { kinds: allKinds, exclusiveGroup: 'backup', group: 'storage' },
+    exclude: d.fn('Marks every claim the workload owns to be LEFT OUT of a namespace-wide backup — for a volume that is a cache, a scratch area, or a copy of something already backed up elsewhere, where putting it in the repository costs storage and restore time and protects nothing.', [
+    ]) + { kinds: allKinds, exclusiveGroup: 'backup', group: 'storage' },
+  },
+
   // Service mesh — another separate axis, one recipe per mesh, joined to the
   // `mesh` exclusion group. A recipe enables sidecar injection AND emits the
   // object that enforces mTLS, which is the half no admission policy can check:

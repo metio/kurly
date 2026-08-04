@@ -16,6 +16,7 @@ local features = import '../lib/features.libsonnet';
 local migrations = import '../lib/migrations.libsonnet';
 local network = import '../lib/network.libsonnet';
 local mesh = import '../lib/mesh.libsonnet';
+local backup = import '../lib/backup.libsonnet';
 local security = import '../lib/security.libsonnet';
 local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
@@ -1302,6 +1303,7 @@ local workloadEntries =
   assert reconcile('expose', std.objectFields(ann.expose), std.objectFieldsAll(expose)),
   assert reconcile('network', std.objectFields(ann.network), std.objectFieldsAll(network)),
   assert reconcile('mesh', std.objectFields(ann.mesh), std.objectFieldsAll(mesh)),
+  assert reconcile('backup', std.objectFields(ann.backup), std.objectFieldsAll(backup)),
   assert reconcile('security', std.objectFields(ann.security), std.objectFieldsAll(security)),
   assert reconcile('migrations', std.objectFields(ann.migrations), std.objectFieldsAll(migrations)),
   // Kinds live in separate files; assert the annotated set is exactly the four
@@ -1440,6 +1442,7 @@ local workloadEntries =
   expose: entries(ann.expose),
   network: entries(ann.network),
   mesh: entries(ann.mesh),
+  backup: entries(ann.backup),
   security: entries(ann.security),
   helpers: entries(ann.helpers),
   migrations: entries(ann.migrations),

@@ -32,10 +32,18 @@ local volumeName(path) =
 // volume — it provisions a different one.
 local storeAnnotations(spec) = if spec.annotations == {} then {} else { annotations: spec.annotations };
 
-local pvcManifest(name, spec, labels) = {
+// A backup scheme's marker belongs on the CLAIM, because that is the object the
+// operator selects on. It is merged UNDER the store's own annotations, so a
+// consumer who set the same key by hand keeps their value.
+local claimAnnotations(spec, backup) =
+  local extra = if backup == null then {} else backup.claimAnnotations;
+  local merged = extra + spec.annotations;
+  if merged == {} then {} else { annotations: merged };
+
+local pvcManifest(name, spec, labels, backup=null) = {
   apiVersion: 'v1',
   kind: 'PersistentVolumeClaim',
-  metadata: { name: name, labels: labels } + storeAnnotations(spec),
+  metadata: { name: name, labels: labels } + claimAnnotations(spec, backup),
   spec: {
           accessModes: spec.accessModes,
           resources: { requests: { storage: spec.size } },
@@ -196,6 +204,31 @@ local alertRules(name, spec, controllerKind, containerName, claimSelectors, hasM
       'runbooks/detectives/workloads.clj',
     )];
   availability + crash + storage + memory + spec.rules;
+
+// One ReplicationSource per volume, because that is what VolSync's schema is:
+// sourcePVC names exactly one claim. A workload with two volumes that emitted
+// one source would back up one of them and say it was covered.
+local replicationSourceManifest(name, claim, spec, labels) = {
+  apiVersion: 'volsync.backube/v1alpha1',
+  kind: 'ReplicationSource',
+  metadata: { name: claim + '-backup', labels: labels },
+  spec: std.prune({
+    sourcePVC: claim,
+    trigger:
+      if spec.manual != null then { manual: spec.manual }
+      else if spec.schedule != null then { schedule: spec.schedule }
+      else null,
+    restic: std.prune({
+      repository: spec.repository,
+      copyMethod: spec.copyMethod,
+      retain: (if spec.retain == {} then null else spec.retain),
+      pruneIntervalDays: spec.pruneIntervalDays,
+      cacheCapacity: spec.cacheCapacity,
+      storageClassName: spec.storageClassName,
+      volumeSnapshotClassName: spec.volumeSnapshotClassName,
+    }) + spec.restic,
+  }),
+};
 
 local prometheusRuleManifest(name, rules, labels) = {
   apiVersion: 'monitoring.coreos.com/v1',
@@ -439,6 +472,10 @@ local exclusionConflicts(exclusive) = [
       // kurly.mesh. Null renders nothing: a workload outside a mesh must not
       // carry a policy that only means something inside one.
       mesh: null,
+      // { variant, repository, schedule, retain, claimAnnotations, … } — see
+      // kurly.backup. Null renders nothing and marks nothing: a workload nobody
+      // decided about must not look like one somebody excluded.
+      backup: null,
       // { for, severity, labels, annotations, runbooks, unavailable,
       //   crashLooping, storageFull, memoryPressure, rules } — see kurly.alerts
       alerts: null,
@@ -576,7 +613,7 @@ local exclusionConflicts(exclusive) = [
     // single-PVC handle an author may place explicitly; storeClaims is all of them,
     // which is what list()/ownedManifests emit.
     storeClaims::
-      [pvcManifest(storePvc(i, this.config.stores[i]), this.config.stores[i], this.labels) for i in storeIndexes],
+      [pvcManifest(storePvc(i, this.config.stores[i]), this.config.stores[i], this.labels, this.config.backup) for i in storeIndexes],
     storeClaim::
       if this.config.stores == [] then null else this.storeClaims[0],
     configMap::
@@ -605,6 +642,24 @@ local exclusionConflicts(exclusive) = [
         spec: { selector: { matchLabels: this.selectorLabels }, mtls: { mode: m.mtls } }
               + m.peerAuthentication,
       },
+    // The volumes this workload owns, as the names VolSync has to be given.
+    // A StatefulSet's claims are created per pod as `<template>-<set>-<ordinal>`,
+    // so they are enumerated from the replicas being RENDERED — which means a
+    // set scaled out later has volumes no source covers until it is rendered
+    // again. That is a real limit and stated rather than hidden; the alternative
+    // is a source pointed at a claim that does not exist, which VolSync reports
+    // as an error rather than as a gap.
+    backupClaims::
+      if this.controllerKind == 'StatefulSet' then [
+        '%s-%s-%d' % [t.metadata.name, this.config.name, ordinal]
+        for t in std.get(this.statefulset.spec, 'volumeClaimTemplates', [])
+        for ordinal in std.range(0, std.max(this.config.replicas, 1) - 1)
+      ]
+      else [claim.metadata.name for claim in this.storeClaims],
+    backupSources::
+      local b = this.config.backup;
+      if b == null || b.variant != 'volsync' then []
+      else [replicationSourceManifest(this.config.name, claim, b, this.labels) for claim in this.backupClaims],
     // The controller kind the workload actually renders, which decides which
     // availability metric pair exists for it.
     controllerKind::
@@ -691,7 +746,7 @@ local exclusionConflicts(exclusive) = [
         this.serviceMonitor,
         this.headlessService,
         this.serviceAccount,
-      ]) + this.rbacManifests,
+      ]) + this.rbacManifests + this.backupSources,
 
     // The pod-level half of the security posture; each workload kind merges
     // this into its pod template spec. The container-level half lives in

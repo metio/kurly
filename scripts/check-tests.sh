@@ -75,12 +75,20 @@ if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.http('h', 
 fi
 echo "network policy exclusion assert fired as expected"
 
+# A workload must never be handed two backup schemes, each of which would believe
+# it owns the volumes.
+if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; kurly.list(kurly.http('h', 'img:1') + kurly.store('/d', '1Gi') + kurly.backup.k8up() + kurly.backup.volsync(repository='r'))" >/dev/null 2>&1; then
+  echo "composing two backup schemes rendered instead of failing" >&2
+  exit 1
+fi
+echo "backup exclusion assert fired as expected"
+
 # A network or mesh recipe configures a workload, so composing one onto anything
 # that is not one — a bare manifest, a hand-authored custom resource — must fail
 # rather than silently doing nothing. The recipe contributes `config` itself, so
 # these guards have to read a knob only a kind sets; a guard asking merely whether
 # `config` exists passes on every object and is worth nothing.
-for recipe in "kurly.network.kubernetes()" "kurly.mesh.istio()"; do
+for recipe in "kurly.network.kubernetes()" "kurly.mesh.istio()" "kurly.backup.k8up()"; do
   if jsonnet -J vendor -e "local kurly = import 'main.libsonnet'; { kind: 'ConfigMap' } + ${recipe}" >/dev/null 2>&1; then
     echo "composing ${recipe} onto a non-workload rendered instead of failing" >&2
     exit 1
