@@ -34,6 +34,7 @@
   'calibre/server': { digest: 'sha256:1ce25a9e5155591232c94952c278df8084787f8098964fae38de9811b3dba34b', signed: false },
   'changedetection/server': { digest: 'sha256:5438423d5e906eff4e8f7886823482ad23f472bf7b8530ccaca89fb48c337882', signed: false },
   'chatpad/server': { digest: 'sha256:15155e3a09fd677d578583f6bd3848c991cf768997400e37bc4c27e62a918a7e', signed: false },
+  'cloudbeaver/server': { digest: 'sha256:c0975db279e488c6f770e4a5a74e7f8d388d5bc53c75bce82647e82cb6358a3f', signed: false },
   'cobalt/server': { digest: 'sha256:e5d3fff05a0a5a24ef31b034736fa5075ba45bdb051da1910b84be1c7798f5b4', signed: false },
   'code-server/server': { digest: 'sha256:fa367e7eddd303a95c736f7aede351cdee9036a7383cecfd8786bb5bbe78c13b', signed: false },
   'commafeed/server': { digest: 'sha256:e9f07f0dca51943ed0368695f2f325d4c95640b67bb1770301876ffd10b06e80', signed: false },

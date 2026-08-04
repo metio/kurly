@@ -36,6 +36,7 @@
   'cassandra-cluster': '2026-07-28',
   changedetection: '2026-07-28',
   chatpad: '2026-07-28',
+  cloudbeaver: '2026-08-04',
   cobalt: '2026-07-28',
   'code-server': '2026-07-28',
   commafeed: '2026-07-28',

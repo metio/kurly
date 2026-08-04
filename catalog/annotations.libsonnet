@@ -6226,6 +6226,32 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'OG_SECRET_KEY', generate: 'hex', length: 64 }] },
       },
     },
+    cloudbeaver: {
+      name: 'CloudBeaver',
+      upstream: { repo: 'https://github.com/dbeaver/cloudbeaver' },
+      // The image carries no OCI labels at all, so none of this is derivable and
+      // gen-upstream names cloudbeaver among the workloads it could not answer for.
+      // Read from the repository, which is Apache-2.0 throughout — the Community
+      // edition; DBeaver's commercial editions are a separate product and not what
+      // this image holds.
+      license: 'Apache-2.0',
+      homepage: 'https://dbeaver.com/',
+      description: 'Browse schemas and run SQL against your databases from a browser tab.',
+      summary: 'A CloudBeaver Community server (the browser database console from the DBeaver project). A plain composable http workload whose entire workspace — configuration, saved connections, users and query history — lives on a PersistentVolume, so it needs no database of its own; the servers it connects to are chosen by an administrator at runtime. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the console on :8978.',
+      category: 'admin',
+      stages: {
+        server: d.fn("The CloudBeaver server. Keeps its whole workspace at /opt/cloudbeaver/workspace on the volume. Runs as the uid 8978 account the image provisions but never selects, so the hardened posture holds. JAVA_OPTS moves Eclipse's writable configuration area onto that volume, keeping the install tree read-only — override it only by appending, or the server will not start. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='cloudbeaver'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

@@ -34,6 +34,7 @@
     'cassandra-cluster',
     'changedetection',
     'chatpad',
+    'cloudbeaver',
     'cobalt',
     'code-server',
     'commafeed',

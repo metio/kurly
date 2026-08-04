@@ -7922,6 +7922,141 @@
          }
       },
       {
+         "category": "admin",
+         "description": "Browse schemas and run SQL against your databases from a browser tab.",
+         "id": "cloudbeaver",
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "CloudBeaver",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "cloudbeaver",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "200m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "200m",
+                     "kind": "regular",
+                     "memory": "512Mi",
+                     "name": "cloudbeaver"
+                  }
+               ],
+               "help": "The CloudBeaver server. Keeps its whole workspace at /opt/cloudbeaver/workspace on the volume. Runs as the uid 8978 account the image provisions but never selects, so the hardened posture holds. JAVA_OPTS moves Eclipse's writable configuration area onto that volume, keeping the install tree read-only — override it only by appending, or the server will not start. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/cloudbeaver/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:c0975db279e488c6f770e4a5a74e7f8d388d5bc53c75bce82647e82cb6358a3f",
+                  "image": "docker.io/dbeaver/cloudbeaver:26.1.4@sha256:c0975db279e488c6f770e4a5a74e7f8d388d5bc53c75bce82647e82cb6358a3f",
+                  "tag": "26.1.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A CloudBeaver Community server (the browser database console from the DBeaver project). A plain composable http workload whose entire workspace — configuration, saved connections, users and query history — lives on a PersistentVolume, so it needs no database of its own; the servers it connects to are chosen by an administrator at runtime. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the console on :8978.",
+         "upstream": {
+            "repo": "https://github.com/dbeaver/cloudbeaver"
+         }
+      },
+      {
          "category": "database",
          "description": "Run PostgreSQL with failover and backups looked after for you.",
          "id": "cnpg-cluster",
