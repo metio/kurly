@@ -3417,6 +3417,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "twofauth"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -3615,6 +3621,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "activepieces"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -3757,6 +3769,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -3910,6 +3923,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -4055,6 +4069,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -4223,6 +4238,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -4375,6 +4391,7 @@
                   "tag": "v0.33.1"
                },
                "scaling": null,
+               "secrets": null,
                "signature": {
                   "signed": false
                },
@@ -4540,6 +4557,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -4689,6 +4707,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -4849,6 +4868,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -4996,6 +5016,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -5174,6 +5195,12 @@
                      "generate": "hex",
                      "key": "AUTHELIA_IDENTITY_VALIDATION_RESET_PASSWORD_JWT_SECRET",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "authelia"
                   }
                ],
                "signature": {
@@ -5370,6 +5397,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "authentik"
+                  }
+               ],
                "signature": {
                   "identity": "https://github.com/goauthentik/authentik/.github/workflows/release-publish.yml@refs/tags/version/2024.10.5",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -5533,6 +5566,12 @@
                      "generate": "hex",
                      "key": "AUTHENTIK_SECRET_KEY",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "authentik"
                   }
                ],
                "signature": {
@@ -5738,6 +5777,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "automatisch"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -5905,6 +5950,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "automatisch"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -6065,6 +6116,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -6233,6 +6285,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -6380,6 +6433,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -6514,6 +6568,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -6696,6 +6751,12 @@
                      "generate": "hex",
                      "key": "NEXTAUTH_SECRET",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "blinko"
                   }
                ],
                "signature": {
@@ -6898,6 +6959,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "bookstack"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -7069,6 +7136,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -7236,6 +7304,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -7408,6 +7477,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -7517,6 +7587,7 @@
                   "version": "5.0.8"
                },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -7673,6 +7744,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -7806,6 +7878,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -8018,6 +8091,7 @@
                },
                "runs": { },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -8101,6 +8175,7 @@
                   "tag": "17.2"
                },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -8157,6 +8232,7 @@
                   "tag": "17.2"
                },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -8299,6 +8375,7 @@
                   "topology": "stateless"
                },
                "secretKeys": [ ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -8453,6 +8530,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "code-server"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -8599,6 +8682,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -8753,6 +8837,7 @@
                      "length": 64
                   }
                ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -8909,6 +8994,12 @@
                      "generate": "password",
                      "key": "COUCHDB_PASSWORD",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "couchdb"
                   }
                ],
                "signature": {
@@ -9073,6 +9164,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -9211,6 +9303,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -9357,6 +9450,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -9521,6 +9615,12 @@
                      "generate": "hex",
                      "key": "APP_SECRET",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "davis"
                   }
                ],
                "signature": {
@@ -9690,6 +9790,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -9856,6 +9957,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -10016,6 +10118,13 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "dex",
+                     "path": "/etc/dex"
+                  }
+               ],
                "signature": {
                   "identity": "https://github.com/dexidp/dex/.github/workflows/artifacts.yaml@refs/tags/v2.45.1",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -10176,6 +10285,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -10365,6 +10475,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "docmost"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -10515,6 +10631,7 @@
                   "topology": "singleWriter"
                },
                "secretKeys": [ ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -10659,6 +10776,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -10795,6 +10913,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -10931,6 +11050,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -11116,6 +11236,12 @@
                      "generate": "password",
                      "key": "DRUPAL_DATABASE_PASSWORD",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "drupal"
                   }
                ],
                "signature": {
@@ -11313,6 +11439,12 @@
                      "length": 24
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "duplicati"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -11458,6 +11590,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -11618,6 +11751,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "https://github.com/element-hq/element-web/.github/workflows/docker.yaml@refs/tags/v1.11.100",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -11833,6 +11967,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "endurain"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -11986,6 +12126,13 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "ente",
+                     "path": "/credentials"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -12109,6 +12256,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -12256,6 +12404,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -12434,6 +12583,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "etherpad"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -12567,6 +12722,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -12708,6 +12864,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -12863,6 +13020,12 @@
                   {
                      "generate": "postgresUrl",
                      "key": "FERRETDB_POSTGRESQL_URL"
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "ferretdb"
                   }
                ],
                "signature": {
@@ -13052,6 +13215,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "fider"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -13197,6 +13366,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -13343,6 +13513,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -13542,6 +13713,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "firefly-iii"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -13696,6 +13873,7 @@
                      "length": 32
                   }
                ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -13844,6 +14022,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -14011,6 +14190,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "flatnotes"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -14150,6 +14335,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -14317,6 +14503,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -14502,6 +14689,13 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "forgejo-db-app",
+                     "path": "/etc/forgejo/secrets"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -14666,6 +14860,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -14850,6 +15045,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "frigate"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -15007,6 +15208,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -15194,6 +15396,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "ghostfolio"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -15327,6 +15535,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -15475,6 +15684,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -15624,6 +15834,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -15762,6 +15973,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -15909,6 +16121,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -16067,6 +16280,7 @@
                   "topology": "singleWriter"
                },
                "secretKeys": [ ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -16237,6 +16451,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -16411,6 +16626,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "greenlight"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -16581,6 +16802,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -16759,6 +16981,12 @@
                      "generate": "password",
                      "key": "POSTGRESQL_PASSWORD",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "guacamole"
                   }
                ],
                "signature": {
@@ -16941,6 +17169,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "hedgedoc"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -17112,6 +17346,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -17243,6 +17478,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -17409,6 +17645,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "homarr"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -17557,6 +17799,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "https://github.com/home-assistant/core/.github/workflows/builder.yml@refs/tags/2025.7.4",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -17721,6 +17964,12 @@
                      "length": 48
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "homebox"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -17874,6 +18123,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -18021,6 +18271,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -18184,6 +18435,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -18351,6 +18603,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "immich"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -18493,6 +18751,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -18628,6 +18887,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -18796,6 +19056,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -18963,6 +19224,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -19113,6 +19375,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -19262,6 +19525,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -19477,6 +19741,12 @@
                      "value": "admin@example.com"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "joomla"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -19672,6 +19942,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "joplin"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -19822,6 +20098,7 @@
                      "length": 32
                   }
                ],
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -19953,6 +20230,7 @@
                      "length": 32
                   }
                ],
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -20098,6 +20376,7 @@
                      "length": 32
                   }
                ],
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -20254,6 +20533,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -20442,6 +20722,12 @@
                      "key": "OPENAI_API_KEY"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "karakeep"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -20585,6 +20871,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -20702,6 +20989,7 @@
                "pss": null,
                "runs": { },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -20865,6 +21153,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "kimai"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -21015,6 +21309,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -21218,6 +21513,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "kutt"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -21387,6 +21688,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "leantime"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -21544,6 +21851,13 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "lemmy",
+                     "path": "/config"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -21677,6 +21991,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "lemmy-pictrs"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -21799,6 +22119,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -21970,6 +22291,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -22138,6 +22460,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -22288,6 +22611,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -22434,6 +22758,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -22635,6 +22960,12 @@
                      "length": 24
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "listmonk"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -22818,6 +23149,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "lldap"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -22955,6 +23292,7 @@
                   "topology": "stateless"
                },
                "secretKeys": [ ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -23074,6 +23412,7 @@
                "pss": null,
                "runs": { },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -23252,6 +23591,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "lychee"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -23383,6 +23728,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -23532,6 +23878,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -23722,6 +24069,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mailu"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -23886,6 +24239,12 @@
                      "generate": "hex",
                      "key": "SECRET_KEY",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mailu"
                   }
                ],
                "signature": {
@@ -24060,6 +24419,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mailu"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -24224,6 +24589,12 @@
                      "generate": "hex",
                      "key": "SECRET_KEY",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mailu"
                   }
                ],
                "signature": {
@@ -24392,6 +24763,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mailu"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -24552,6 +24929,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mailu"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -24701,6 +25084,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -24937,6 +25321,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mastodon"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -25124,6 +25514,12 @@
                      "generate": "hex",
                      "key": "ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mastodon"
                   }
                ],
                "signature": {
@@ -25327,6 +25723,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mastodon"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -25485,6 +25887,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -25677,6 +26080,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mautic"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -25815,6 +26224,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -25973,6 +26383,7 @@
                   "topology": "singleWriter"
                },
                "secretKeys": [ ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -26122,6 +26533,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -26247,6 +26659,7 @@
                   "replicas": 3,
                   "topology": "perPod"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -26394,6 +26807,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -26533,6 +26947,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "https://github.com/mermaid-js/mermaid-live-editor/.github/workflows/docker-publish.yml@refs/heads/master",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -26689,6 +27104,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "krel-trust@k8s-releng-prod.iam.gserviceaccount.com",
                   "issuer": "https://accounts.google.com",
@@ -26838,6 +27254,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -26983,6 +27400,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -27153,6 +27571,13 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "misskey",
+                     "path": "/misskey/.config"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -27313,6 +27738,12 @@
                      "generate": "password",
                      "key": "ME_CONFIG_BASICAUTH_PASSWORD",
                      "length": 24
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mongo-express"
                   }
                ],
                "signature": {
@@ -27515,6 +27946,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "monica"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -27670,6 +28107,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -27828,6 +28266,12 @@
                      "generate": "password",
                      "key": "MUMBLE_SUPERUSER_PASSWORD",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "mumble"
                   }
                ],
                "signature": {
@@ -27998,6 +28442,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -28135,6 +28580,7 @@
                   "version": "9.7.1"
                },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -28287,6 +28733,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -28442,6 +28889,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -28599,6 +29047,12 @@
                      "generate": "literal",
                      "key": "NEO4J_AUTH",
                      "value": "neo4j/Kurly-e2e-Passw0rd"
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "neo4j"
                   }
                ],
                "signature": {
@@ -28768,6 +29222,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -29009,6 +29464,13 @@
                      "length": 16
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "netbox",
+                     "path": "/run/secrets"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -29153,6 +29615,45 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "secret_key",
+                     "length": 64
+                  },
+                  {
+                     "generate": "password",
+                     "key": "db_password",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "redis_password",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "superuser_password",
+                     "length": 24
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "superuser_api_token",
+                     "length": 40
+                  },
+                  {
+                     "generate": "password",
+                     "key": "email_password",
+                     "length": 16
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "netbox",
+                     "path": "/run/secrets"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -29334,6 +29835,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "nextcloud"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -29493,6 +30000,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -29688,6 +30196,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "nocobase"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -29832,6 +30346,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -30000,6 +30515,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -30168,6 +30684,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -30350,6 +30867,12 @@
                      "value": "static://200"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "oauth2-proxy"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -30496,6 +31019,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -30664,6 +31188,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -30829,6 +31354,12 @@
                      "generate": "hex",
                      "key": "JWT_SECRET",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "onlyoffice"
                   }
                ],
                "signature": {
@@ -31001,6 +31532,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "open-webui"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -31150,6 +31687,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -31322,6 +31860,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -31438,6 +31977,7 @@
                   "version": "3.7.0"
                },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -31596,6 +32136,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -31708,6 +32249,7 @@
                   "replicas": null,
                   "topology": "perNode"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "https://github.com/open-telemetry/opentelemetry-collector-releases/.github/workflows/base-release.yaml@refs/tags/v0.157.0",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -31902,6 +32444,12 @@
                      "value": "mongodb://overleaf-mongo:27017/sharelatex"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "overleaf"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -32044,6 +32592,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -32196,6 +32745,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -32327,6 +32877,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -32474,6 +33025,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -32692,6 +33244,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "paperless-ngx"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -32856,6 +33414,12 @@
                      "generate": "hex",
                      "key": "SECRET_KEY_BASE",
                      "length": 128
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "passwordpusher"
                   }
                ],
                "signature": {
@@ -33073,6 +33637,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "peertube"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -33239,6 +33809,12 @@
                      "generate": "password",
                      "key": "PGADMIN_DEFAULT_PASSWORD",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "pgadmin"
                   }
                ],
                "signature": {
@@ -33417,6 +33993,12 @@
                      "generate": "password",
                      "key": "PHOTOPRISM_ADMIN_PASSWORD",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "photoprism"
                   }
                ],
                "signature": {
@@ -33604,6 +34186,12 @@
                      "key": "PHOTOVIEW_POSTGRES_URL"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "photoview"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -33757,6 +34345,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -33930,6 +34519,12 @@
                      "generate": "password",
                      "key": "FTLCONF_webserver_api_password",
                      "length": 24
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "pihole"
                   }
                ],
                "signature": {
@@ -34112,6 +34707,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "pilos"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -34289,6 +34890,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -34441,6 +35043,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -34588,6 +35191,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -34740,6 +35344,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -34907,6 +35512,12 @@
                      "generate": "literal",
                      "key": "POSTGRES_USER",
                      "value": "kurly"
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "postgres"
                   }
                ],
                "signature": {
@@ -35102,6 +35713,12 @@
                      "length": 24
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "prestashop"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -35255,6 +35872,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -35432,6 +36050,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -35626,6 +36245,7 @@
                   "tag": "v3.13.1"
                },
                "scaling": null,
+               "secrets": null,
                "signature": {
                   "signed": false
                },
@@ -35799,6 +36419,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -35970,6 +36591,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -36137,6 +36759,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -36298,6 +36921,12 @@
                      "generate": "password",
                      "key": "RABBITMQ_DEFAULT_PASS",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "rabbitmq"
                   }
                ],
                "signature": {
@@ -36473,6 +37102,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -36615,6 +37245,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -36785,6 +37416,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "rallly"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -36927,6 +37564,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -37070,6 +37708,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -37262,6 +37901,12 @@
                      "length": 128
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "redmine"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -37412,6 +38057,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -37583,6 +38229,12 @@
                      "value": "mongodb://rocketchat-mongo:27017/local?replicaSet=rs0"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "rocketchat"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -37745,6 +38397,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -37890,6 +38543,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -38061,6 +38715,12 @@
                      "length": 24
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "rundeck"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -38228,6 +38888,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -38388,6 +39049,12 @@
                      "generate": "hex",
                      "key": "SEARXNG_SECRET",
                      "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "searxng"
                   }
                ],
                "signature": {
@@ -38558,6 +39225,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "seatsurfing"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -38685,6 +39358,7 @@
                   "replicas": 1,
                   "topology": "perPod"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -38779,6 +39453,7 @@
                   "replicas": 1,
                   "topology": "perPod"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -38872,6 +39547,7 @@
                   "replicas": 1,
                   "topology": "perPod"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -38978,6 +39654,7 @@
                   "replicas": 2,
                   "topology": "perPod"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -39127,6 +39804,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -39280,6 +39958,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -39465,6 +40144,12 @@
                      "key": "GEOLITE_LICENSE_KEY"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "shlink"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -39625,6 +40310,12 @@
                      "value": "admin:Kurly-e2e-Passw0rd"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "silverbullet"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -39782,6 +40473,7 @@
                      "length": 32
                   }
                ],
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -39926,6 +40618,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -40080,6 +40773,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -40284,6 +40978,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "snipe-it"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -40452,6 +41152,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -40706,6 +41407,7 @@
                   "replicas": null,
                   "topology": "perNode"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "https://github.com/spegel-org/spegel/.github/workflows/release.yaml@refs/tags/v0.7.4",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -40829,6 +41531,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -40981,6 +41684,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -41156,6 +41860,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "https://github.com/element-hq/synapse/.github/workflows/docker.yml@refs/tags/v1.157.1",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -41327,6 +42032,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -41480,6 +42186,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -41684,6 +42391,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "tandoor"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -41852,6 +42565,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -42013,6 +42727,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "technitium"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -42103,6 +42823,7 @@
                "pss": null,
                "runs": { },
                "scaling": null,
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -42281,6 +43002,13 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "thanos-objstore",
+                     "path": "/etc/thanos"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -42409,6 +43137,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -42526,6 +43255,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -42666,6 +43396,13 @@
                   "replicas": 1,
                   "topology": "perPod"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "thanos-objstore",
+                     "path": "/etc/objstore"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -42806,6 +43543,7 @@
                   "tag": "v0.42.2"
                },
                "scaling": null,
+               "secrets": null,
                "signature": {
                   "signed": false
                },
@@ -42934,6 +43672,13 @@
                   "replicas": 1,
                   "topology": "perPod"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "thanos-objstore",
+                     "path": "/etc/thanos"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -43089,6 +43834,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -43205,6 +43951,13 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "tik-signing-key",
+                     "path": "/etc/tik-key"
+                  }
+               ],
                "signature": {
                   "identity": "https://github.com/metio/tik/.github/workflows/release.yml@refs/heads/main",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -43344,6 +44097,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -43514,6 +44268,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -43681,6 +44436,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -43831,6 +44587,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -43999,6 +44756,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -44144,6 +44902,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -44276,6 +45035,7 @@
                   "replicas": 1,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -44370,6 +45130,7 @@
                   "replicas": 1,
                   "topology": "perPod"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -44538,6 +45299,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "identity": "https://github.com/dani-garcia/vaultwarden/.github/workflows/release.yml@refs/tags/1.37.0",
                   "issuer": "https://token.actions.githubusercontent.com",
@@ -44721,6 +45483,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "vikunja"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -44884,6 +45652,7 @@
                      "length": 32
                   }
                ],
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -45035,6 +45804,7 @@
                      "length": 32
                   }
                ],
+               "secrets": null,
                "signature": null,
                "storage": {
                   "pvcs": 0
@@ -45236,6 +46006,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "wallabag"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -45391,6 +46167,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -45592,6 +46369,12 @@
                      "value": "http://webtrees"
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "webtrees"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -45754,6 +46537,12 @@
                   {
                      "generate": "literal",
                      "key": "MONGO_URL"
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "wekan"
                   }
                ],
                "signature": {
@@ -45957,6 +46746,12 @@
                      "length": 64
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "wger"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -46090,6 +46885,7 @@
                   "replicas": 2,
                   "topology": "stateless"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },
@@ -46260,6 +47056,12 @@
                      "generate": "password",
                      "key": "DB_PASS",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "wikijs"
                   }
                ],
                "signature": {
@@ -46449,6 +47251,12 @@
                      "length": 32
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "wordpress"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -46620,6 +47428,12 @@
                      "generate": "password",
                      "key": "DB_PASSWORD",
                      "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "xwiki"
                   }
                ],
                "signature": {
@@ -46803,6 +47617,12 @@
                      "length": 24
                   }
                ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "yourls"
+                  }
+               ],
                "signature": {
                   "signed": false
                },
@@ -46942,6 +47762,7 @@
                   "replicas": 1,
                   "topology": "singleWriter"
                },
+               "secrets": [ ],
                "signature": {
                   "signed": false
                },

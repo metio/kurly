@@ -1983,6 +1983,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('annotations', d.T.object, default={}),
         ]) + {
           kind: 'worker',
+          // The same Secret the server reads, at the same path — the worker is
+          // the same image draining queues. The keys were on the server only,
+          // so a consumer minting from the worker's contract alone got none of
+          // them; the derived `secrets` field is what surfaced that.
+          secretKeys: [{ key: 'secret_key', generate: 'hex', length: 64 }, { key: 'db_password', generate: 'password', length: 32 }, { key: 'redis_password', generate: 'password', length: 32 }, { key: 'superuser_password', generate: 'password', length: 24 }, { key: 'superuser_api_token', generate: 'hex', length: 40 }, { key: 'email_password', generate: 'password', length: 16 }],
         },
       },
     },

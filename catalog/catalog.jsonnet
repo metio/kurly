@@ -626,6 +626,67 @@ local declaredRequests(fn) =
 // cannot take them, which is the sentence a tenant actually needs — and
 // reconstructing it by diffing against an invented profile would be guessing at
 // this logic from outside, which is the drift again by another route.
+// Every Secret a stage CONSUMES, and how — derived by rendering it.
+//
+// `secretKeys` says what a Secret must CONTAIN and how to mint each key. It
+// does not say that a Secret is needed at all, which is the question a portal
+// asks first, and 12 stages mount one while declaring no keys — so the catalogue
+// was silent about a hard prerequisite for exactly the workloads that cannot be
+// deployed without a human writing something.
+//
+// The two facts are complementary rather than overlapping:
+//
+//   secrets     WHICH Secrets this stage reads, and whether as environment or as
+//               files at a path. Derived, so it cannot drift from the manifest.
+//   secretKeys  what to put in them, where kurly can say. Hand-annotated,
+//               because an application's env contract is not derivable.
+//
+// A Secret in `secrets` with no matching `secretKeys` is the honest signal that
+// somebody must author its contents: thanos/store wants an objstore.yml naming a
+// bucket, dex/server a config with its connectors. Neither is a password a
+// generator can mint, and pretending otherwise by inventing a `generate: document`
+// would hand a portal a job it cannot do while telling it the job was done.
+local secretsOf(fn) =
+  local items = main.list(fn()).items;
+  local tmpls = pssLib.podTemplates(items);
+  if tmpls == [] then null
+  else
+    // A Secret mounted as files: the volume names it, and the mount that carries
+    // that volume gives the path the application reads it from.
+    local mounted = std.set(std.flattenArrays([
+      [
+        {
+          name: v.secret.secretName,
+          as: 'file',
+          path: m.mountPath,
+        }
+        for v in std.get(t.spec, 'volumes', [])
+        if std.objectHas(v, 'secret')
+        for c in std.get(t.spec, 'containers', [])
+        for m in std.get(c, 'volumeMounts', [])
+        if m.name == v.name
+      ]
+      for t in tmpls
+    ]), function(e) e.name + e.path);
+    // A Secret read as environment, whole (envFrom) or one key at a time.
+    local fromEnv = std.set(std.flattenArrays([
+      [
+        { name: e.secretRef.name, as: 'environment' }
+        for c in std.get(t.spec, 'containers', [])
+        for e in std.get(c, 'envFrom', [])
+        if std.objectHas(e, 'secretRef')
+      ]
+      + [
+        { name: v.valueFrom.secretKeyRef.name, as: 'environment' }
+        for c in std.get(t.spec, 'containers', [])
+        for v in std.get(c, 'env', [])
+        if std.objectHas(v, 'valueFrom') && std.objectHas(v.valueFrom, 'secretKeyRef')
+      ]
+      for t in tmpls
+    ]), function(e) e.name);
+    local all = mounted + fromEnv;
+    if all == [] then [] else std.sort(all, function(e) e.as + e.name);
+
 local profileAsk = { replicas: 3, podDisruptionBudget: 2, topologySpreadConstraints: 1 };
 local profile(fn) =
   local app = fn();
@@ -1372,6 +1433,7 @@ local workloadEntries =
           if m == null then {} else { pssOperator: m }
         )
         + { profile: profile(stageImports[workload + '/' + stage]) }
+        + { secrets: secretsOf(stageImports[workload + '/' + stage]) }
         + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])
         // Which bollwerk policies the stage breaks, from bsi.gen.libsonnet.
@@ -1389,6 +1451,46 @@ local workloadEntries =
   assert reconcile('network', std.objectFields(ann.network), std.objectFieldsAll(network)),
   assert reconcile('mesh', std.objectFields(ann.mesh), std.objectFieldsAll(mesh)),
   assert reconcile('backup', std.objectFields(ann.backup), std.objectFieldsAll(backup)),
+  // A stage that declares secretKeys but whose default render reads no Secret at
+  // all is stating a contract nothing consumes. That is legal — many stages wire
+  // the Secret only when a parameter names one — but a stage that reads a Secret
+  // BY DEFAULT and declares no keys leaves a consumer no way to know what to put
+  // in it, so those are enumerated here rather than left to be rediscovered.
+  //
+  // The nine below are deliberate: each mounts a CONFIGURATION DOCUMENT that no
+  // generator can mint — a Thanos objstore.yml naming a bucket and its
+  // credentials, a Dex config with its connectors, an application signing key
+  // whose format the application defines. Inventing a `generate: document` for
+  // them would hand a portal a job it cannot do while telling it the job was
+  // done. The derived `secrets` field is what says a Secret is needed at all.
+  //
+  // The list is exact rather than a count, so adding a stage that reads a Secret
+  // without declaring its keys fails here and has to be justified.
+  assert (
+    local undeclared = std.set([
+      workload + '/' + stage
+      for workload in std.objectFields(ann.workloads)
+      for stage in std.objectFields(ann.workloads[workload].stages)
+      // A custom-resource stage renders no pod template, so secretsOf reports
+      // null — not measured rather than none — and cannot be judged here.
+      if !std.objectHas(ann.workloads[workload].stages[stage], 'secretKeys')
+         && (
+           local sec = secretsOf(stageImports[workload + '/' + stage]);
+           sec != null && std.length(sec) > 0
+         )
+    ]);
+    undeclared == std.set([
+      'dex/server',
+      'ente/server',
+      'forgejo/server',
+      'lemmy/backend',
+      'misskey/server',
+      'thanos/compact',
+      'thanos/receive',
+      'thanos/store',
+      'tik/backend',
+    ])
+  ) : 'catalog: the set of stages reading a Secret without declaring its keys has changed — a new one needs secretKeys, or a documented reason why its contents cannot be generated',
   // `scaling` and `profile` are derived independently — one reads the storage
   // topology, the other asks production() what it did — so they can disagree,
   // and a disagreement means one of them is lying. A stage that cannot scale
