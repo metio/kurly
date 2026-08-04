@@ -21,6 +21,7 @@
   alist: '2026-07-28',
   answer: '2026-07-28',
   apprise: '2026-07-28',
+  archivebox: '2026-08-04',
   audiobookshelf: '2026-07-28',
   authelia: '2026-07-28',
   automatisch: '2026-07-28',

@@ -4937,6 +4937,157 @@
       },
       {
          "category": "application",
+         "description": "Keep your own copies of the web pages you care about, before they vanish.",
+         "id": "archivebox",
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "ArchiveBox",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "archivebox",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "50Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 911,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 911,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "250m",
+                     "kind": "regular",
+                     "memory": "512Mi",
+                     "name": "archivebox"
+                  }
+               ],
+               "help": "The ArchiveBox server. The archive, its SQLite index and the search index live at /data on the volume. puid/pgid are the account the entrypoint chowns that volume to and runs as, so changing them later means chowning the whole archive. Headless Chrome drives the PDF and screenshot extractors and gets a 256Mi shared-memory scratch. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/archivebox/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "baseline",
+                  "violates": [
+                     "allowPrivilegeEscalation",
+                     "runAsNonRoot",
+                     "capabilities"
+                  ]
+               },
+               "runs": {
+                  "digest": "sha256:1a5a37331091d9df865ead2b9c231aa5a892fc26fe0422ce6140d9e2d9532327",
+                  "image": "docker.io/archivebox/archivebox:stable@sha256:1a5a37331091d9df865ead2b9c231aa5a892fc26fe0422ce6140d9e2d9532327",
+                  "tag": "stable"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "An ArchiveBox server (self-hosted web archiving: give it URLs, RSS feeds or bookmark exports and it keeps copies as HTML, PDF, screenshots and WARC). A plain composable http workload whose archive, SQLite index and search index share one PersistentVolume — no external database. Its entrypoint requires root to drop to an unprivileged account with gosu, and the image needs a writable root filesystem, so this workload is deliberately less hardened than most here. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :8000.",
+         "upstream": {
+            "repo": "https://github.com/ArchiveBox/ArchiveBox"
+         }
+      },
+      {
+         "category": "application",
          "description": "Keep your audiobooks and podcasts in one library and pick up where you left off on any device.",
          "id": "audiobookshelf",
          "image": {

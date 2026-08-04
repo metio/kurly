@@ -19,6 +19,7 @@
     'alist',
     'answer',
     'apprise',
+    'archivebox',
     'audiobookshelf',
     'authelia',
     'automatisch',

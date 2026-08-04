@@ -15,6 +15,7 @@
   'alist/server': { digest: 'sha256:ee46012c344c0f40387b1c1aeddee4c114887764d3aebdd1d7bba83920423c5e', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
   'answer/server': { digest: 'sha256:a0d71b0e30a5c8d3eda31184abc64dbebccb6dd3e229aab1f7e332b41ade54f7', architectures: ['amd64', 'arm64'] },
   'apprise/server': { digest: 'sha256:91321755496e8472bdb674e4b14eb64d1f3b15510ef94971309c9f76ef3171e7', architectures: ['amd64', 'arm64'] },
+  'archivebox/server': { digest: 'sha256:1a5a37331091d9df865ead2b9c231aa5a892fc26fe0422ce6140d9e2d9532327', architectures: ['amd64', 'arm64'] },
   'audiobookshelf/server': { digest: 'sha256:1eef6716183c52abafe5405e7d6be8390248ecd59c7488c44af871757ac8fc4d', architectures: ['amd64', 'arm64'] },
   'authelia/server': { digest: 'sha256:023e02e5203dfa0ebaee7a48b5bae34f393d1f9cada4a9df7fbf87eb1759c671', architectures: ['amd64', 'arm', 'arm64'] },
   'authentik/server': { digest: 'sha256:c4aa2113d0c2379faa9e8a28f4ab13816b4e6f2847b272e37d68e518fdf76880', architectures: ['amd64', 'arm64'] },

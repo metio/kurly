@@ -6305,6 +6305,32 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    archivebox: {
+      name: 'ArchiveBox',
+      upstream: { repo: 'https://github.com/ArchiveBox/ArchiveBox' },
+      // The image carries no OCI labels, so gen-upstream names archivebox among
+      // the workloads it could not answer for. Read from the repository, which is
+      // MIT.
+      license: 'MIT',
+      homepage: 'https://archivebox.io/',
+      description: 'Keep your own copies of the web pages you care about, before they vanish.',
+      summary: 'An ArchiveBox server (self-hosted web archiving: give it URLs, RSS feeds or bookmark exports and it keeps copies as HTML, PDF, screenshots and WARC). A plain composable http workload whose archive, SQLite index and search index share one PersistentVolume — no external database. Its entrypoint requires root to drop to an unprivileged account with gosu, and the image needs a writable root filesystem, so this workload is deliberately less hardened than most here. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI on :8000.',
+      category: 'application',
+      stages: {
+        server: d.fn('The ArchiveBox server. The archive, its SQLite index and the search index live at /data on the volume. puid/pgid are the account the entrypoint chowns that volume to and runs as, so changing them later means chowning the whole archive. Headless Chrome drives the PDF and screenshot extractors and gets a 256Mi shared-memory scratch. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='archivebox'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=911),
+          d.arg('pgid', d.T.int, default=911),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
