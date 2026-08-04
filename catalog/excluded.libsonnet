@@ -124,6 +124,19 @@
   // on a price list.
   datasette: { reason: 'upstream-sells-hosting', note: "upstream sells hosting (Datasette Cloud, the author's own SaaS built on the project; no public pricing at time of reading) — https://www.datasette.cloud/" },
 
+  // Fourth pass, working awesome-selfhosted from the most-starred end. Every one
+  // of the first six checked sells its own cloud, which is worth recording as a
+  // pattern rather than six separate facts: the top of that list by popularity is
+  // largely commercial open source whose business IS hosting. Popularity is
+  // therefore a poor way to choose what to carry here, and the carryable software
+  // sits further down.
+  affine: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (AFFiNE cloud, $6.75/mo) — https://affine.pro/pricing' },
+  appflowy: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (AppFlowy cloud, $10-12.50/user/mo) — https://appflowy.com/pricing' },
+  appwrite: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Appwrite Cloud, from $25/mo) — https://appwrite.io/pricing' },
+  discourse: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Discourse hosting, $100-500/mo) — https://www.discourse.org/pricing' },
+  hoppscotch: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Hoppscotch Organization, $6/user/mo) — https://hoppscotch.com/pricing' },
+  strapi: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Strapi Cloud, $35-450/project/mo) — https://strapi.io/pricing-cloud' },
+
   // Upstream is no longer maintained. A catalogue that keeps offering an archived
   // project is selling something nobody will fix — every future CVE in it stays
   // open, and the operator who deployed it from here has no upstream to go to.

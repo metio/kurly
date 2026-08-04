@@ -247,8 +247,20 @@
    },
    "consent": { },
    "excluded": {
+      "affine": {
+         "note": "upstream sells hosting (AFFiNE cloud, $6.75/mo) — https://affine.pro/pricing",
+         "reason": "upstream-sells-hosting"
+      },
       "anythingllm": {
          "note": "upstream sells hosting (AnythingLLM cloud, $50/mo) — https://anythingllm.com/pricing",
+         "reason": "upstream-sells-hosting"
+      },
+      "appflowy": {
+         "note": "upstream sells hosting (AppFlowy cloud, $10-12.50/user/mo) — https://appflowy.com/pricing",
+         "reason": "upstream-sells-hosting"
+      },
+      "appwrite": {
+         "note": "upstream sells hosting (Appwrite Cloud, from $25/mo) — https://appwrite.io/pricing",
          "reason": "upstream-sells-hosting"
       },
       "baserow": {
@@ -286,6 +298,10 @@
       "directus": {
          "note": "BUSL-1.1; forbids offering the software as a service for the licence term",
          "reason": "licence-forbids-saas"
+      },
+      "discourse": {
+         "note": "upstream sells hosting (Discourse hosting, $100-500/mo) — https://www.discourse.org/pricing",
+         "reason": "upstream-sells-hosting"
       },
       "documenso": {
          "note": "upstream sells hosting (Documenso cloud plans) — https://documenso.com/pricing",
@@ -329,6 +345,10 @@
       },
       "healthchecks": {
          "note": "upstream sells hosting (healthchecks.io, by the project authors) — https://healthchecks.io/pricing/",
+         "reason": "upstream-sells-hosting"
+      },
+      "hoppscotch": {
+         "note": "upstream sells hosting (Hoppscotch Organization, $6/user/mo) — https://hoppscotch.com/pricing",
          "reason": "upstream-sells-hosting"
       },
       "influxdb": {
@@ -469,6 +489,10 @@
       },
       "sonarqube": {
          "note": "upstream sells hosting (SonarQube Cloud) — https://www.sonarsource.com/products/sonarcloud/",
+         "reason": "upstream-sells-hosting"
+      },
+      "strapi": {
+         "note": "upstream sells hosting (Strapi Cloud, $35-450/project/mo) — https://strapi.io/pricing-cloud",
          "reason": "upstream-sells-hosting"
       },
       "taiga": {
