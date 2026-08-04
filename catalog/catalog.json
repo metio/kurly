@@ -4006,6 +4006,11 @@
             }
          ],
          "summary": "An Alertmanager as a prometheus-operator `Alertmanager` custom resource: it receives alerts from a Prometheus, groups and deduplicates them, and routes them to receivers. Authors the CR (like prometheus) for the operator to reconcile into a StatefulSet and the `alertmanager-operated` Service. Requires the prometheus-operator installed. Routing comes from the AlertmanagerConfig objects it selects.",
+         "trademark": {
+            "note": "The project links the Linux Foundation usage policy, which forbids a mark in a product or domain name — but the Foundation's published trademark list does not name this one, so whether the policy binds it is unestablished.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "unaddressed"
+         },
          "upstream": {
             "homepage": "https://prometheus.io",
             "repo": "https://github.com/prometheus/alertmanager"
@@ -4260,6 +4265,11 @@
             }
          ],
          "summary": "An Apache Answer server (a self-hosted Q&A platform for a community knowledge base, à la Stack Overflow) on the official image. A plain composable http workload — with the SQLite backend its data and uploads live on a PersistentVolume, no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80. Configure external PostgreSQL/MySQL via the installer to scale out.",
+         "trademark": {
+            "note": "Naming a service after the mark is listed among uses that are probably infringing, and a confusing domain name needs written approval from the ASF VP, Brand Management; factual reference to the software remains nominative fair use.",
+            "policy": "https://www.apache.org/foundation/marks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://answer.apache.org",
             "repo": "https://github.com/apache/answer"
@@ -5806,6 +5816,11 @@
             }
          ],
          "summary": "The Prometheus blackbox_exporter: it probes endpoints from the outside (HTTP, TCP, DNS, ICMP) and turns each probe into metrics. A plain composable http workload, deployed once as the prober kurly.expose.probe points a workload Probe at. Serves /probe on :9115.",
+         "trademark": {
+            "note": "The project links the Linux Foundation usage policy, which forbids a mark in a product or domain name — but the Foundation's published trademark list does not name this one, so whether the policy binds it is unestablished.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "unaddressed"
+         },
          "upstream": {
             "homepage": "https://prometheus.io",
             "repo": "https://github.com/prometheus/blackbox_exporter"
@@ -6657,6 +6672,11 @@
             }
          ],
          "summary": "A highly-available Apache Cassandra cluster as a cass-operator CassandraDatacenter custom resource. Cassandra is Apache-2.0 — a clean default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires cass-operator; the operator mints the superuser Secret.",
+         "trademark": {
+            "note": "Naming a service after the mark is listed among uses that are probably infringing, and a confusing domain name needs written approval from the ASF VP, Brand Management; factual reference to the software remains nominative fair use.",
+            "policy": "https://www.apache.org/foundation/marks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://cassandra.apache.org/",
             "repo": "https://github.com/apache/cassandra"
@@ -7097,6 +7117,11 @@
             }
          ],
          "summary": "A highly-available PostgreSQL cluster as a CloudNativePG Cluster custom resource (three instances, a bootstrapped database, a PodMonitor). Requires the CloudNativePG operator.",
+         "trademark": {
+            "note": "The marks may not be used in a business, trade, product or domain name without prior approval; commercial uses are asked to carry the registered symbol.",
+            "policy": "https://www.postgresql.org/about/policies/trademarks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.postgresql.org/",
             "repo": "https://github.com/postgres/postgres"
@@ -7855,6 +7880,11 @@
             }
          ],
          "summary": "An Apache CouchDB server (a self-hosted, document-oriented NoSQL database that speaks HTTP/JSON and syncs with offline-first apps) on the official image; its data lives on a PersistentVolume. kurly authors no Secret; COUCHDB_USER and COUCHDB_PASSWORD come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5984.",
+         "trademark": {
+            "note": "Naming a service after the mark is listed among uses that are probably infringing, and a confusing domain name needs written approval from the ASF VP, Brand Management; factual reference to the software remains nominative fair use.",
+            "policy": "https://www.apache.org/foundation/marks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://couchdb.apache.org/",
             "repo": "https://github.com/apache/couchdb"
@@ -14446,6 +14476,11 @@
             }
          ],
          "summary": "An Apache Guacamole server (a clientless remote-desktop gateway for RDP/VNC/SSH from a browser) on the official image, backed by an external PostgreSQL or MySQL. Guacamole is two processes — the web app and the guacd proxy daemon — so this runs guacd as a SIDECAR in the same pod (reached on localhost:4822). kurly authors no Secret; the database connection (POSTGRESQL_*/MYSQL_*) comes from a provided Secret via envFrom, and the schema must be initialised. Pairs with a cnpg-cluster named guacamole-db. Stateless: a plain rolling Deployment. Serves on :8080.",
+         "trademark": {
+            "note": "Naming a service after the mark is listed among uses that are probably infringing, and a confusing domain name needs written approval from the ASF VP, Brand Management; factual reference to the software remains nominative fair use.",
+            "policy": "https://www.apache.org/foundation/marks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://guacamole.apache.org/",
             "repo": "https://github.com/apache/guacamole-server"
@@ -16273,6 +16308,11 @@
             }
          ],
          "summary": "A Jellyfin server — a free, self-hosted media server for streaming your movies, shows and music. On the LinuxServer.io image; its config (SQLite) lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8096.",
+         "trademark": {
+            "note": "A free instance has an implicit licence to use the name and logo; charging for access in any form requires rebranding the server so it is clear the operator is not the project, plus a contact method.",
+            "policy": "https://jellyfin.org/docs/project/branding/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://jellyfin.org",
             "repo": "https://github.com/jellyfin/jellyfin"
@@ -17797,6 +17837,11 @@
             }
          ],
          "summary": "A Keycloak identity server as an official keycloak-operator `Keycloak` custom resource. Authors the CR (like loki and tempo) for the operator to reconcile into a StatefulSet, Services, and the admin credentials Secret. Requires the keycloak-operator (whose recent releases let one operator manage instances across many namespaces) and a PostgreSQL database — pairs with the cnpg-cluster workload.",
+         "trademark": {
+            "note": "Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.keycloak.org",
             "repo": "https://github.com/keycloak/keycloak"
@@ -19806,6 +19851,11 @@
             }
          ],
          "summary": "Grafana Loki in microservices mode as a loki-operator `LokiStack` custom resource: one CR reconciles the whole distributed topology (distributor, ingester, querier, query-frontend, compactor, index-gateway, gateway), with `size` scaling the replicas. Authors the CR (like cnpg-cluster) for the operator to own the components, config, and ring. Requires the loki-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3.",
+         "trademark": {
+            "note": "A registered Grafana Labs mark: it may not be part of a product or service name, nor of a website or domain name; other commercial use needs written permission.",
+            "policy": "https://grafana.com/trademark-policy/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://grafana.com/oss/loki",
             "repo": "https://github.com/grafana/loki"
@@ -21728,6 +21778,11 @@
             }
          ],
          "summary": "Mastodon (the leading self-hosted ActivityPub/Fediverse microblogging platform) as three workloads backed by an external PostgreSQL and Redis, with media in S3-compatible object storage: a web/API server (:3000), a streaming server for real-time timelines (:4000), and a sidekiq background worker. LOCAL_DOMAIN is baked into every @handle and cannot be changed. kurly authors no Secret; the PostgreSQL/Redis connection, SECRET_KEY_BASE, OTP_SECRET, the VAPID keys and the S3 settings come from a provided Secret via envFrom, shared by all three stages. Pairs with a cnpg-cluster named mastodon-db, a Redis and an S3 bucket (e.g. seaweedfs).",
+         "trademark": {
+            "note": "Running a server under the marks is permitted for unmodified or lightly modified software; the word mark may not appear in a domain name without written permission.",
+            "policy": "https://joinmastodon.org/trademark",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://joinmastodon.org",
             "repo": "https://github.com/mastodon/mastodon"
@@ -22864,6 +22919,11 @@
             }
          ],
          "summary": "The Kubernetes Metrics Server: it scrapes CPU/memory usage from every node's kubelet and serves it through the aggregated metrics.k8s.io API — what kubectl top and Horizontal Pod Autoscalers read. A plain composable http workload that registers an APIService and carries the aggregation RBAC (ServiceAccount, ClusterRoles/Bindings, the kube-system auth-reader RoleBinding).",
+         "trademark": {
+            "note": "Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/",
             "repo": "https://github.com/kubernetes-sigs/metrics-server"
@@ -23683,6 +23743,11 @@
             }
          ],
          "summary": "An Eclipse Mosquitto server (a lightweight, self-hosted MQTT message broker for IoT and home automation). Mosquitto speaks MQTT, not HTTP: it listens on :1883, its mosquitto.conf is mounted as a ConfigMap and passed verbatim, and its persistence database lives on a PersistentVolume. The default allows anonymous clients; a real broker sets up authentication. WebSockets (:9001) need a listener in the config and a second Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves MQTT on :1883.",
+         "trademark": {
+            "note": "The project name may not be incorporated into a company or product name; the accepted forms are \"<product> for Eclipse Mosquitto\" or \"<product>, Eclipse Mosquitto Edition\".",
+            "policy": "https://www.eclipse.org/legal/logo-guidelines/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://mosquitto.org",
             "repo": "https://github.com/eclipse-mosquitto/mosquitto"
@@ -24201,6 +24266,11 @@
             }
          ],
          "summary": "A NATS server (a fast, lightweight, self-hosted messaging system: pub/sub, request/reply and, with JetStream, persistent streams) on the official image; NATS speaks its own protocol on :4222 with its JetStream store on a PersistentVolume. JetStream is enabled. Single server (a real deployment runs a cluster). The monitoring endpoint (:8222) needs an extra Service. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves clients on :4222.",
+         "trademark": {
+            "note": "Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://nats.io",
             "repo": "https://github.com/nats-io/nats-server"
@@ -25938,6 +26008,11 @@
             }
          ],
          "summary": "An OAuth2 Proxy server (a reverse proxy and forward-auth service that puts an OAuth2/OIDC login in front of your apps, delegating to Keycloak, authentik, Pocket ID, Google, GitHub) on the official image. Stateless (sessions in a signed cookie or shared Redis): a plain rolling Deployment. kurly authors no Secret; the provider settings, client id/secret and cookie secret come from a provided Secret via envFrom (OAUTH2_PROXY_*). Serves on :4180 — front an app or wire as a reverse proxy forward-auth.",
+         "trademark": {
+            "note": "The project links the Linux Foundation usage policy, which forbids a mark in a product or domain name — but the Foundation's published trademark list does not name this one, so whether the policy binds it is unestablished.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "unaddressed"
+         },
          "upstream": {
             "homepage": "https://oauth2-proxy.github.io/oauth2-proxy",
             "repo": "https://github.com/oauth2-proxy/oauth2-proxy"
@@ -26601,6 +26676,11 @@
             }
          ],
          "summary": "OpenCost, the CNCF cost-monitoring model: it reads resource usage from Prometheus, joins it with pricing, and exposes per-workload cost metrics (and an API) on :9003. A plain composable http workload that carries a ServiceAccount + ClusterRole + ClusterRoleBinding, because attributing cost reads cluster-scoped objects and every namespace. Pairs with the prometheus (or thanos) workload as its data source.",
+         "trademark": {
+            "note": "Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "http://opencost.io",
             "repo": "https://github.com/opencost/opencost"
@@ -26850,6 +26930,11 @@
             }
          ],
          "summary": "A highly-available OpenSearch cluster as an OpenSearch Operator OpenSearchCluster custom resource, with optional OpenSearch Dashboards. OpenSearch is the Apache-2.0 fork of Elasticsearch — no SSPL/Elastic-License restriction on offering it as a service, the right default for a platform that monetizes hosting. Authors the CR directly like cnpg-cluster; composed by parameter, not by + feature. Requires the OpenSearch Operator.",
+         "trademark": {
+            "note": "Explicitly permits using the name to refer to a service for OpenSearch, provided your own branding is more prominent and identifies you as the source; a primary domain still needs permission, a subdomain does not.",
+            "policy": "https://opensearch.org/trademark-brand-policy/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://opensearch.org/docs/latest/opensearch/index/",
             "repo": "https://github.com/opensearch-project/OpenSearch"
@@ -27070,6 +27155,11 @@
             }
          ],
          "summary": "An OpenTelemetry Collector as a per-node agent (a DaemonSet), so local workloads send telemetry to a collector on their own node. The collector config — receivers, processors, exporters, and the pipelines wiring them — is passed verbatim (it is the collector's schema, not kurly's); the default is a working OTLP agent that receives, batches, and prints. Fully restricted by default: node-log collection needs a hostPath and is a documented opt-in.",
+         "trademark": {
+            "note": "Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://opentelemetry.io",
             "repo": "https://github.com/open-telemetry/opentelemetry-collector-releases"
@@ -29763,6 +29853,11 @@
             }
          ],
          "summary": "A PostgreSQL server — a powerful, open-source object-relational database. A single-instance server on the official image (not a replicated cluster — use the operator-backed cluster workloads for HA where kurly ships one). Speaks its own protocol on :5432; data on a PersistentVolume. kurly authors no Secret; credentials come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Reached in-cluster on :5432.",
+         "trademark": {
+            "note": "The marks may not be used in a business, trade, product or domain name without prior approval; commercial uses are asked to carry the registered symbol.",
+            "policy": "https://www.postgresql.org/about/policies/trademarks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.postgresql.org/",
             "repo": "https://github.com/postgres/postgres"
@@ -29923,6 +30018,11 @@
             }
          ],
          "summary": "A PrestaShop server — a self-hosted, open-source e-commerce platform for building online stores (backed by MySQL). On the official image, backed by an external database, with data on a PersistentVolume (the image populates it on first run). kurly authors no Secret; the DB credentials come from a provided Secret via envFrom. The Apache master runs as root then serves as www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "trademark": {
+            "note": "Use of the mark in a domain name is strictly prohibited; the notice says nothing either way about a product or service name.",
+            "policy": "https://www.prestashop-project.org/legal/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://www.prestashop-project.org/",
             "repo": "https://github.com/PrestaShop/PrestaShop"
@@ -30378,6 +30478,11 @@
             }
          ],
          "summary": "A Prometheus server as a prometheus-operator `Prometheus` custom resource, with the cluster-scoped RBAC it scrapes with. Authors the CR (like cnpg-cluster) for the operator to reconcile into a StatefulSet and the `prometheus-operated` Service. Requires the prometheus-operator installed. The default is central monitoring: it selects every ServiceMonitor/PodMonitor in every namespace.",
+         "trademark": {
+            "note": "Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://prometheus.io/",
             "repo": "https://github.com/prometheus/prometheus"
@@ -31869,6 +31974,11 @@
             }
          ],
          "summary": "A Docker Registry server (the reference OCI registry: a self-hosted store and distribution point for container images) on the official image; its stored images live on a PersistentVolume. Usually reached in-cluster; the docker-registry-ui workload gives it a web interface. The bare registry is unauthenticated and plaintext — front it with TLS and auth or keep it in-cluster. Single writer over a ReadWriteOnce volume: one replica, recreated (back it with S3 for a scaled registry). Serves on :5000.",
+         "trademark": {
+            "note": "The project links the Linux Foundation usage policy, which forbids a mark in a product or domain name — but the Foundation's published trademark list does not name this one, so whether the policy binds it is unestablished.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "unaddressed"
+         },
          "upstream": {
             "homepage": "https://distribution.github.io/distribution",
             "repo": "https://github.com/distribution/distribution"
@@ -35817,6 +35927,11 @@
             }
          ],
          "summary": "Grafana Tempo as a tempo-operator `TempoStack` custom resource: one CR reconciles the whole distributed tracing backend (distributor, ingester, querier, query-frontend, compactor) over object storage. Authors the CR (the same shape as loki) for the operator to own the components, config, and Services. Requires the tempo-operator and an object-storage Secret. Pairs with the seaweedfs workload for S3 and the otel-collector workload for span ingestion.",
+         "trademark": {
+            "note": "A registered Grafana Labs mark: it may not be part of a product or service name, nor of a website or domain name; other commercial use needs written permission.",
+            "policy": "https://grafana.com/trademark-policy/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://grafana.com/oss/tempo/",
             "repo": "https://github.com/grafana/tempo"
@@ -36523,6 +36638,11 @@
             }
          ],
          "summary": "The Thanos components as separate, independently-scaled stages under one workload: query (the stateless Querier fanning out to StoreAPIs for a deduplicated global view), query-frontend (an optional splitting/caching layer in front of it), and ruler (recording/alerting rules evaluated against Query). query and query-frontend are plain composable http workloads; ruler authors a prometheus-operator ThanosRuler custom resource and needs that operator installed.",
+         "trademark": {
+            "note": "Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.",
+            "policy": "https://www.linuxfoundation.org/trademark-usage/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://thanos.io",
             "repo": "https://github.com/thanos-io/thanos"
@@ -36851,6 +36971,11 @@
             }
          ],
          "summary": "An Apache Tika server (a content-analysis toolkit that detects and extracts text and metadata from over a thousand file types) on the official image. Stateless: a plain rolling Deployment. The text-extraction companion apps like paperless-ngx expect. Serves on :9998.",
+         "trademark": {
+            "note": "Naming a service after the mark is listed among uses that are probably infringing, and a confusing domain name needs written approval from the ASF VP, Brand Management; factual reference to the software remains nominative fair use.",
+            "policy": "https://www.apache.org/foundation/marks/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://tika.apache.org/",
             "repo": "https://github.com/apache/tika"
@@ -37687,6 +37812,11 @@
             }
          ],
          "summary": "A persistent Valkey server (the BSD Redis fork) on the official upstream image, as a kurly.stateful workload with a per-pod PVC and a headless Service. Single-instance stage; a Redis-compatible alternative runs by overriding the image.",
+         "trademark": {
+            "note": "Factual reference is fair use, but the mark may not be part of a product name or a domain name, and nothing may imply the project endorses the service.",
+            "policy": "https://lfprojects.org/policies/trademark-policy/",
+            "posture": "restricted"
+         },
          "upstream": {
             "homepage": "https://valkey.io",
             "repo": "https://github.com/valkey-io/valkey"

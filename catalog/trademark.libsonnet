@@ -55,6 +55,26 @@
 // `policy` is required because a posture with nothing behind it is an assertion
 // about somebody else's rights with no way to check it. Absent from this file
 // entirely is the right way to say "we have not looked".
+//
+// ── what has been looked at ─────────────────────────────────────────────────
+//
+// 2026-08-04: every workload in the catalogue was swept, by fetching each
+// project's homepage and FOLLOWING the links it already carries whose href
+// mentions trademark/brand/legal, and by asking GitHub for each repository's
+// real file list rather than guessing filenames. That is what the first pass
+// could not do — it guessed paths and filenames, and a policy nobody guesses the
+// path of is invisible to it.
+//
+// Sixteen workloads had a discoverable policy page that way. The rest were then
+// found by looking for them BY NAME, which is how the foundation-held marks
+// arrived: the mark is not the project's to publish a policy about, so its site
+// links a foundation's one policy instead of restating it, and a
+// JavaScript-rendered footer is invisible to a probe reading raw HTML.
+//
+// The workloads not in this file were therefore looked FOR and not found, which
+// is still `absent` — the file has no way to say "searched, nothing published",
+// and adding one would change a value a consumer switches on. Treat absent
+// exactly as before: unknown, and never permission.
 {
   // Read from the policy itself rather than from reputation. It permits using
   // the name to promote a project built on WordPress, and then restricts the two
@@ -245,5 +265,214 @@
     posture: 'restricted',
     policy: 'https://wordpressfoundation.org/trademark-policy/',
     note: 'The name may be used to describe a project built on WordPress, but never as part of a domain name; "WP" must not be used confusingly.',
+  },
+
+  // ── marks held by a foundation ──────────────────────────────────────────────
+  //
+  // The first pass looked for a policy on each PROJECT's own site and in its own
+  // repository, and found four. It could not have found these: the mark is not
+  // the project's to publish a policy about. It belongs to a foundation, which
+  // publishes ONE policy covering everything it holds, and the project site
+  // links it from the footer rather than restating it.
+  //
+  // Each was read at its source, and the workloads below are the ones whose own
+  // NAME is the mark in question — not every project a foundation touches.
+
+  // Apache Software Foundation. Naming a service after the mark is not a grey
+  // area here; the policy lists it among uses that are "probably infringing":
+  //
+  //   "Software service offerings that are for anything other than official
+  //    ASF-distributed software."
+  //   "You may not use ASF trademarks such as 'Apache' or 'ApacheFoo' or 'Foo'
+  //    in your own domain names if that use would be likely to confuse a
+  //    relevant consumer" — without the written approval of the VP, Brand
+  //    Management.
+  //
+  // Factual reference to the software stays nominative fair use; branding a
+  // service does not.
+  local asf = {
+    posture: 'restricted',
+    policy: 'https://www.apache.org/foundation/marks/',
+    note: 'Naming a service after the mark is listed among uses that are probably infringing, and a confusing domain name needs written approval from the ASF VP, Brand Management; factual reference to the software remains nominative fair use.',
+  },
+  'cassandra-cluster': asf,
+  couchdb: asf,
+  guacamole: asf,
+  answer: asf,
+  tika: asf,
+
+  // The Linux Foundation, which holds these as marks in its own name — the
+  // published list carries Prometheus®, NATS™, OpenTelemetry™, Thanos™,
+  // OpenCost™, Kubernetes® and Keycloak™. Its usage policy allows the reference
+  // a catalogue entry makes and refuses the two placements a hosting product
+  // would want:
+  //
+  //   "You may make fair use of word marks to make true factual statements."
+  //   "A trademark should not be used as your domain name or as part of your
+  //    domain name."
+  //   "A trademark should not be used as part of your product name."
+  //
+  // Deliberately NOT applied to every project that links this policy. The same
+  // page says projects "operating as separately incorporated entities" keep
+  // their own marks and guidelines, and the LF list does not name Valkey or
+  // Distribution — so those stay absent rather than borrowing a posture from a
+  // policy their names do not appear in.
+  local lf = {
+    posture: 'restricted',
+    policy: 'https://www.linuxfoundation.org/trademark-usage/',
+    note: 'Fair use of the word mark for true factual statements is permitted; the mark may not be used as, or as part of, a product name or a domain name.',
+  },
+  prometheus: lf,
+  nats: lf,
+  'otel-collector': lf,
+  thanos: lf,
+  opencost: lf,
+  keycloak: lf,
+  'metrics-server': lf,
+
+  // Eclipse Foundation, which states the naming rule and then supplies the two
+  // forms it will accept, which is more than most policies do:
+  //
+  //   "You may not incorporate the name of an Eclipse Project Trademark into
+  //    the name of your company or software product name."
+  //   "<product name> for <Eclipse project name>" or
+  //   "<product name>, <Eclipse project name> Edition"
+  mosquitto: {
+    posture: 'restricted',
+    policy: 'https://www.eclipse.org/legal/logo-guidelines/',
+    note: 'The project name may not be incorporated into a company or product name; the accepted forms are "<product> for Eclipse Mosquitto" or "<product>, Eclipse Mosquitto Edition".',
+  },
+
+  // The PostgreSQL Community Association of Canada. Both workloads are listed
+  // under the PostgreSQL name, so both carry its mark whatever provisions them.
+  //
+  //   "Do not use the marks in a business name or trade name."
+  //   "if you want to use our marks (or some variant of them) in your company
+  //    name, product name or domain name, you must obtain prior approval."
+  local pgca = {
+    posture: 'restricted',
+    policy: 'https://www.postgresql.org/about/policies/trademarks/',
+    note: 'The marks may not be used in a business, trade, product or domain name without prior approval; commercial uses are asked to carry the registered symbol.',
+  },
+  postgres: pgca,
+  'cnpg-cluster': pgca,
+
+  // LF Projects, LLC — the entity the Linux Foundation page means when it says
+  // projects "operating as separately incorporated entities" hold their own
+  // marks. Its policy repeats the same two refusals for every Series it covers:
+  //
+  //   "You may make fair use of word marks to make true factual statements",
+  //   but "fair use does not permit you to state or imply that the owner of a
+  //   mark produces, endorses, or supports your company, products, or services."
+  //   "A trademark should not be used as part of your product name."
+  //   "A trademark should not be used as your domain name or as part of your
+  //    domain name."
+  valkey: {
+    posture: 'restricted',
+    policy: 'https://lfprojects.org/policies/trademark-policy/',
+    note: 'Factual reference is fair use, but the mark may not be part of a product name or a domain name, and nothing may imply the project endorses the service.',
+  },
+
+  // PrestaShop SA. The page is a general legal notice rather than a trademark
+  // policy, and it addresses exactly one placement — but it addresses it
+  // absolutely: "Using the PrestaShop SA trademark in a domain name is strictly
+  // prohibited", with the warning that it "may result in legal proceedings".
+  // What it does not say is anything about a product or service name.
+  prestashop: {
+    posture: 'restricted',
+    policy: 'https://www.prestashop-project.org/legal/',
+    note: 'Use of the mark in a domain name is strictly prohibited; the notice says nothing either way about a product or service name.',
+  },
+
+  // ── read, and still not established ─────────────────────────────────────────
+  //
+  // These projects link the Linux Foundation usage policy from their own sites,
+  // and that policy does forbid putting a mark in a product or domain name — but
+  // it governs the marks the Foundation holds, and its published list does not
+  // name any of these. So the policy is real, it was read, and it does not settle
+  // whether THIS name is one of the marks it binds.
+  //
+  // That is what `unaddressed` is for. It is not permission, and it is not the
+  // same as absent: absent means nobody looked, and somebody has now looked at
+  // every workload in this catalogue.
+  local lfUnlisted = {
+    posture: 'unaddressed',
+    policy: 'https://www.linuxfoundation.org/trademark-usage/',
+    note: "The project links the Linux Foundation usage policy, which forbids a mark in a product or domain name — but the Foundation's published trademark list does not name this one, so whether the policy binds it is unestablished.",
+  },
+  alertmanager: lfUnlisted,
+  'blackbox-exporter': lfUnlisted,
+  registry: lfUnlisted,
+  'oauth2-proxy': lfUnlisted,
+
+  // ── found by name, not by link ──────────────────────────────────────────────
+  //
+  // The link-following probe cannot see a footer that only exists after the
+  // page runs its JavaScript, which is most modern project sites. These were
+  // found by looking for the policy directly and then reading it.
+
+  // Grafana Labs holds Loki® and Tempo® as registered marks — its published
+  // trademark list names both — and the policy refuses both placements a hosting
+  // product wants:
+  //
+  //   "Do not use the Grafana Labs Marks as part of your product or service
+  //    name, or incorporate them into your company's logos or designs."
+  //   "Do not incorporate the Grafana Labs Marks into the name or logo of your
+  //    website, domain name, Internet keywords, social media accounts."
+  local grafana = {
+    posture: 'restricted',
+    policy: 'https://grafana.com/trademark-policy/',
+    note: 'A registered Grafana Labs mark: it may not be part of a product or service name, nor of a website or domain name; other commercial use needs written permission.',
+  },
+  loki: grafana,
+  tempo: grafana,
+
+  // OpenSearch is the one policy in this file that AFFIRMATIVELY PERMITS the
+  // case a hosting catalogue is, and the three-value posture flattens that: it
+  // reads `restricted` beside Apache, whose answer is nearly the opposite.
+  //
+  //   "use the 'OpenSearch' word mark to refer to services for, or software that
+  //    works with, OpenSearch" — provided an identifier shows you as the source
+  //    ("Foocorp's OpenSearch Tool") and your branding is the more prominent.
+  //
+  // The restrictions that remain are placement rather than permission: a primary
+  // domain needs consent, a subdomain does not, and nothing may imply the
+  // project endorses the service.
+  'opensearch-cluster': {
+    posture: 'restricted',
+    policy: 'https://opensearch.org/trademark-brand-policy/',
+    note: 'Explicitly permits using the name to refer to a service for OpenSearch, provided your own branding is more prominent and identifies you as the source; a primary domain still needs permission, a subdomain does not.',
+  },
+
+  // Mastodon gGmbH permits running a server under the marks and refuses exactly
+  // one placement, which happens to be the durable one:
+  //
+  //   "You may not use the Mastodon word mark, or any similar mark, in your
+  //    domain name, unless you have written permission from Mastodon gGmbH."
+  //   "you may use the Mastodon marks included in the Mastodon server software
+  //    for the purposes of running the server."
+  mastodon: {
+    posture: 'restricted',
+    policy: 'https://joinmastodon.org/trademark',
+    note: 'Running a server under the marks is permitted for unmodified or lightly modified software; the word mark may not appear in a domain name without written permission.',
+  },
+
+  // Jellyfin, Inc. answers this catalogue's question more squarely than anything
+  // else in this file, and answers it CONDITIONALLY — the condition being
+  // whether money changes hands:
+  //
+  //   "Any instance of the Jellyfin software running for any purpose accessible
+  //    for no fee to its users is granted an implicit license to use the name
+  //    and logo for that purpose."
+  //   "If you charge for access to your server in any form, you are required to
+  //    change the branding of the server in some way to clearly identify that
+  //    the server owner is not 'Jellyfin' as a project, and provide at least one
+  //    method of contact for the server."
+  //
+  // So a free instance may carry the name and a paid one may not, unchanged.
+  jellyfin: {
+    posture: 'restricted',
+    policy: 'https://jellyfin.org/docs/project/branding/',
+    note: 'A free instance has an implicit licence to use the name and logo; charging for access in any form requires rebranding the server so it is clear the operator is not the project, plus a contact method.',
   },
 }
