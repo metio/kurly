@@ -312,6 +312,7 @@ local stageImports = {
   'frigate/server': import 'github.com/metio/kurly/workloads/frigate/server.libsonnet',
   'valkey/instance': import 'github.com/metio/kurly/workloads/valkey/instance.libsonnet',
   'valkey/cache': import 'github.com/metio/kurly/workloads/valkey/cache.libsonnet',
+  'opengist/server': import 'github.com/metio/kurly/workloads/opengist/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

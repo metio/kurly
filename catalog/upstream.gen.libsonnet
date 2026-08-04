@@ -527,6 +527,12 @@
     source: 'https://github.com/opencost/opencost',
     homepage: 'https://opencost.io',
   },
+  opengist: {
+    license: 'AGPL-3.0',
+    title: 'opengist',
+    source: 'https://github.com/thomiceli/opengist',
+    homepage: 'https://github.com/thomiceli/opengist',
+  },
   openhab: {
     license: 'EPL-2.0',
     title: 'openHAB',

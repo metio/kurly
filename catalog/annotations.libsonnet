@@ -6204,6 +6204,28 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'FRIGATE_RTSP_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
+    opengist: {
+      name: 'Opengist',
+      upstream: { repo: 'https://github.com/thomiceli/opengist' },
+      description: 'Share code snippets that are real Git repositories, so every revision is kept.',
+      summary: 'An Opengist server (a self-hosted pastebin where every snippet is a Git repository). A plain composable http workload that keeps the repositories, a SQLite database and the Bleve search index on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :6157, with built-in Git over SSH on :2222.',
+      category: 'application',
+      requires: { database: 'optional' },
+      stages: {
+        server: d.fn('The Opengist server. Keeps gist repositories, the SQLite database and the search index at /opengist on the volume — the entrypoint pins that path, so it is not a parameter. Point OG_DB_URI at external PostgreSQL or MySQL through env to move the database off the volume. OG_SECRET_KEY comes from `secretName`: unset, the app generates one per start and every restart logs everyone out. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='opengist'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('externalUrl', d.T.string, example='https://gist.example.com'),
+          d.arg('secretName', d.T.string, default='opengist'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'OG_SECRET_KEY', generate: 'hex', length: 64 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

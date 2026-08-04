@@ -31709,6 +31709,176 @@
       },
       {
          "category": "application",
+         "description": "Share code snippets that are real Git repositories, so every revision is kept.",
+         "id": "opengist",
+         "image": {
+            "homepage": "https://github.com/thomiceli/opengist",
+            "source": "https://github.com/thomiceli/opengist",
+            "title": "opengist"
+         },
+         "license": "AGPL-3.0-only",
+         "licenseOsiApproved": true,
+         "licenseVariantAssumed": true,
+         "maturity": {
+            "tier": "rendered"
+         },
+         "name": "Opengist",
+         "requires": [
+            {
+               "kind": "database",
+               "required": false
+            }
+         ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "opengist",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://gist.example.com",
+                     "name": "externalUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "opengist",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "50m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "opengist"
+                  }
+               ],
+               "help": "The Opengist server. Keeps gist repositories, the SQLite database and the search index at /opengist on the volume — the entrypoint pins that path, so it is not a parameter. Point OG_DB_URI at external PostgreSQL or MySQL through env to move the database off the volume. OG_SECRET_KEY comes from `secretName`: unset, the app generates one per start and every restart logs everyone out. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/opengist/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:038d47937d3ba4b49ec28a76d3966383e0a46acf7ee1f19b1bae4ac0758c694c",
+                  "image": "ghcr.io/thomiceli/opengist:1.15.1@sha256:038d47937d3ba4b49ec28a76d3966383e0a46acf7ee1f19b1bae4ac0758c694c",
+                  "tag": "1.15.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "OG_SECRET_KEY",
+                     "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "opengist"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "An Opengist server (a self-hosted pastebin where every snippet is a Git repository). A plain composable http workload that keeps the repositories, a SQLite database and the Bleve search index on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :6157, with built-in Git over SSH on :2222.",
+         "upstream": {
+            "repo": "https://github.com/thomiceli/opengist"
+         }
+      },
+      {
+         "category": "application",
          "description": "Automate a home full of devices from different vendors through one engine.",
          "id": "openhab",
          "image": {
