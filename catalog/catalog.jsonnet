@@ -357,11 +357,8 @@ local pvcCount(fn) =
 // run. Published rather than implied by whatever happens to appear.
 local requiresKinds = ['database', 'cache', 'objectStorage', 'broker'];
 
-local podTemplates(items) = [
-  if m.kind == 'CronJob' then m.spec.jobTemplate.spec.template else m.spec.template
-  for m in items
-  if std.member(['Deployment', 'StatefulSet', 'DaemonSet', 'Job', 'CronJob'], m.kind)
-];
+local pssLib = import './pss.libsonnet';
+local podTemplates(items) = pssLib.podTemplates(items);
 
 // Which database engine a workload connects to, established rather than guessed.
 // Absent when nothing establishes it — which a consumer must read as unknown, and
@@ -1287,6 +1284,7 @@ local workloadEntries =
         )
         + { posture: posture(stageImports[workload + '/' + stage]) }
         + { scaling: scaling(stageImports[workload + '/' + stage]) }
+        + { pss: pssLib.of(main.list(stageImports[workload + '/' + stage]()).items) }
         + { declaredRequests: declaredRequests(stageImports[workload + '/' + stage]) }
         + clusterScoped(stageImports[workload + '/' + stage])
         // Which bollwerk policies the stage breaks, from bsi.gen.libsonnet.

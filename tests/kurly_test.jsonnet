@@ -5,6 +5,7 @@
 // mismatch), so `jsonnet -J vendor tests/kurly_test.jsonnet` is the test run.
 // Error paths (composing conflicting features) cannot be asserted here — jsonnet
 // has no try/catch — so they live as negative checks in the CI test job.
+local pss = import '../catalog/pss.libsonnet';
 local kurly = import '../main.libsonnet';
 
 local shop = kurly.http('shop', 'ghcr.io/example/shop:1.2.3')
@@ -584,6 +585,71 @@ local podOf(app) = app.deployment.spec.template.spec;
       'GlobalNetworkPolicy',
       { ingress: true, egress: true },
     ]
+  ),
+
+  // --- Pod Security Standards ---------------------------------------------------
+  // The published controls, exercised against synthetic workloads rather than
+  // only through whatever the catalogue happens to contain.
+  //
+  // The first case is the one worth reading twice: kurly's `security.privileged`
+  // profile does NOT produce a PSS-privileged pod. It emits no security fields at
+  // all, which fails restricted (nothing is set) but breaks no baseline control
+  // (nothing hostile is set either). The two vocabularies share a word and do not
+  // share a meaning, and a badge that conflated them would be alarming and wrong.
+  pss_levels_of_the_security_profiles: std.assertEqual(
+    local level(app) = pss.of(kurly.list(app).items).level;
+    [
+      level(kurly.http('a', 'i:1')),
+      level(kurly.http('a', 'i:1') + kurly.security.baseline),
+      level(kurly.http('a', 'i:1') + kurly.security.privileged),
+    ],
+    ['restricted', 'baseline', 'baseline']
+  ),
+
+  // Each restricted control, failed one at a time, and named in the standard's
+  // own vocabulary so a verdict can be looked up rather than interpreted.
+  pss_restricted_controls: std.assertEqual(
+    local verdict(app) = pss.of(kurly.list(app).items);
+    [
+      verdict(kurly.http('a', 'i:1') + kurly.rootUser()).violates,
+      verdict(kurly.http('a', 'i:1') + kurly.allowPrivilegeEscalation()).violates,
+      verdict(kurly.http('a', 'i:1') + kurly.keepCapabilities()).violates,
+      // NET_BIND_SERVICE is the one capability restricted allows back.
+      verdict(kurly.http('a', 'i:1') + kurly.addCapabilities(['NET_BIND_SERVICE'])).level,
+    ],
+    [
+      ['runAsNonRoot'],
+      ['allowPrivilegeEscalation'],
+      ['capabilities'],
+      'restricted',
+    ]
+  ),
+
+  // A capability outside baseline's own allow-list fails BASELINE, not merely
+  // restricted — which is why a DNS server that needs NET_ADMIN lands at
+  // privileged rather than one bar down.
+  pss_capability_beyond_baseline_fails_baseline: std.assertEqual(
+    pss.of(kurly.list(kurly.http('a', 'i:1') + kurly.addCapabilities(['NET_ADMIN'])).items),
+    { level: 'privileged', violates: ['capabilities'] }
+  ),
+
+  // hostUsers is not a PSS control at all: running in an own user namespace is
+  // extra hardening the standard does not measure, so it must not move the bar
+  // in either direction.
+  pss_ignores_what_the_standard_does_not_define: std.assertEqual(
+    [
+      pss.of(kurly.list(kurly.http('a', 'i:1') + kurly.hostUsers()).items).level,
+      pss.of(kurly.list(kurly.http('a', 'i:1') + kurly.writableRootFilesystem()).items).level,
+    ],
+    ['restricted', 'restricted']
+  ),
+
+  // A stage that renders no pod template reports null rather than a level: its
+  // pods belong to an operator, and reading that silence as "privileged" would
+  // libel a workload nobody measured.
+  pss_is_null_without_a_pod_template: std.assertEqual(
+    pss.of([{ apiVersion: 'v1', kind: 'ConfigMap', metadata: { name: 'c' } }]),
+    null
   ),
 
   // --- kurly.backup axis --------------------------------------------------------
