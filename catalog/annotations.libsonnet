@@ -6252,6 +6252,34 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    invoiceshelf: {
+      name: 'InvoiceShelf',
+      upstream: { repo: 'https://github.com/InvoiceShelf/InvoiceShelf' },
+      description: 'Send invoices and estimates to clients, and track what has been paid.',
+      summary: 'An InvoiceShelf server (self-hosted invoicing and estimates for freelancers and small businesses; the maintained continuation of Crater). A plain composable http workload that keeps its SQLite database, uploads and PDF templates on a PersistentVolume — no external database. An init container seeds the volume from the image, because storage/ ships content a PersistentVolume would otherwise hide. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app on :8080.',
+      category: 'application',
+      requires: { database: 'optional' },
+      stages: {
+        server: d.fn('The InvoiceShelf server. Keeps the SQLite database, uploads and PDF templates at /var/www/html/storage on the volume; DB_CONNECTION and DB_DATABASE are set explicitly because the entrypoint and the framework otherwise disagree about where the database lives. appUrl is the public URL; secretName holds APP_KEY, which must be stable or every encrypted value becomes unreadable. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='invoiceshelf'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('appUrl', d.T.string, example='https://invoices.example.com'),
+          d.arg('secretName', d.T.string, default='invoiceshelf'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          // Exactly 32 characters, which is what Laravel's AES-256-CBC wants as a
+          // raw key. The `base64:` form the shipped .env shows is the other way of
+          // spelling the same thing, and no generator here can produce that prefix.
+          secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 32 }],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

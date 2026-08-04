@@ -320,6 +320,12 @@
     source: 'https://github.com/immich-app/immich',
     homepage: 'https://github.com/immich-app/immich',
   },
+  invoiceshelf: {
+    license: 'AGPL-3.0',
+    title: 'InvoiceShelf',
+    source: 'https://github.com/InvoiceShelf/InvoiceShelf',
+    homepage: 'https://github.com/InvoiceShelf/InvoiceShelf',
+  },
   jackett: {
     license: 'GPL-3.0-only',
     title: 'Jackett',

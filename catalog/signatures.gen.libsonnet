@@ -100,6 +100,7 @@
   'immich/machine-learning': { digest: 'sha256:20b1a58406882400c25909054628ee98565dde88e3e028235f5da493ca33b11a', signed: false },
   'immich/server': { digest: 'sha256:761a60e899bcc00e86018085babf21f8dd68e38f5b48d3e817271f1f74705a16', signed: false },
   'inspircd/server': { digest: 'sha256:2d3970aec5faabe2912fe310ff0f2f66d7caef23dc9b18523ff6a4c5cce713e8', signed: false },
+  'invoiceshelf/server': { digest: 'sha256:76f13fbf45f4bad494bb360ec062c7268c71ad6d91f96ae1319de414a9959080', signed: false },
   'it-tools/server': { digest: 'sha256:8b8128748339583ca951af03dfe02a9a4d7363f61a216226fc28030731a5a61f', signed: false },
   'jackett/server': { digest: 'sha256:c22f9973da49011099966492fda8d5f6846144bc9eab3aecafdb2701308fd304', signed: false },
   'jellyfin/server': { digest: 'sha256:b8dcc7b71d0ea872b74314da4b995c0cf282b1778438c295996e7be88c70fdda', signed: false },

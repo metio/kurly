@@ -18930,6 +18930,182 @@
          }
       },
       {
+         "category": "application",
+         "description": "Send invoices and estimates to clients, and track what has been paid.",
+         "id": "invoiceshelf",
+         "image": {
+            "homepage": "https://github.com/InvoiceShelf/InvoiceShelf",
+            "source": "https://github.com/InvoiceShelf/InvoiceShelf",
+            "title": "InvoiceShelf"
+         },
+         "license": "AGPL-3.0-only",
+         "licenseOsiApproved": true,
+         "licenseVariantAssumed": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "InvoiceShelf",
+         "requires": [
+            {
+               "kind": "database",
+               "required": false
+            }
+         ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "invoiceshelf",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://invoices.example.com",
+                     "name": "appUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "invoiceshelf",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "invoiceshelf"
+                  },
+                  {
+                     "cpu": "100m",
+                     "kind": "init",
+                     "memory": "256Mi",
+                     "name": "seed-storage"
+                  }
+               ],
+               "help": "The InvoiceShelf server. Keeps the SQLite database, uploads and PDF templates at /var/www/html/storage on the volume; DB_CONNECTION and DB_DATABASE are set explicitly because the entrypoint and the framework otherwise disagree about where the database lives. appUrl is the public URL; secretName holds APP_KEY, which must be stable or every encrypted value becomes unreadable. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/invoiceshelf/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": true
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:76f13fbf45f4bad494bb360ec062c7268c71ad6d91f96ae1319de414a9959080",
+                  "image": "docker.io/invoiceshelf/invoiceshelf:2.4.2@sha256:76f13fbf45f4bad494bb360ec062c7268c71ad6d91f96ae1319de414a9959080",
+                  "tag": "2.4.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "invoiceshelf"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "An InvoiceShelf server (self-hosted invoicing and estimates for freelancers and small businesses; the maintained continuation of Crater). A plain composable http workload that keeps its SQLite database, uploads and PDF templates on a PersistentVolume — no external database. An init container seeds the volume from the image, because storage/ ships content a PersistentVolume would otherwise hide. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app on :8080.",
+         "upstream": {
+            "repo": "https://github.com/InvoiceShelf/InvoiceShelf"
+         }
+      },
+      {
          "category": "tool",
          "description": "Reach for a hundred small developer utilities without pasting your data into a stranger.",
          "id": "it-tools",

@@ -98,6 +98,7 @@
     'homer',
     'immich',
     'inspircd',
+    'invoiceshelf',
     'it-tools',
     'jackett',
     'jellyfin',

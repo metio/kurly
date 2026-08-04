@@ -100,6 +100,7 @@
   homer: '2026-07-28',
   immich: '2026-07-28',
   inspircd: '2026-07-28',
+  invoiceshelf: '2026-08-04',
   'it-tools': '2026-07-28',
   jackett: '2026-07-28',
   jellyfin: '2026-07-28',
