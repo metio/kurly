@@ -137,6 +137,7 @@
   'mailu/smtp': { digest: 'sha256:23a068564fb8656e3734830a768083e61564fe48cc5bb244c372b4256dd0e13e', signed: false },
   'mailu/webmail': { digest: 'sha256:87d2b2d5cdc710aefab1b90575b49dbf5d76620ab27b5d32ce97f802fdc22f9c', signed: false },
   'maloja/server': { digest: 'sha256:4ecea26058d2ca5168a8d53820279942d28f0606664cea6425f42371d5d88f95', signed: false },
+  'manticore/server': { digest: 'sha256:41c8516c29a613297a652b55a3469675c2bfc8dcda2240048858dfc464409cfa', signed: false },
   'mastodon/sidekiq': { digest: 'sha256:a18ce2a5b443a7074a083d7a5afb162fdaaca78d85850aaee287144f337f0901', signed: false },
   'mastodon/streaming': { digest: 'sha256:f4cacc762093adcae739e4549de1717411a19b518efb34ef4d58dbe6f96168c2', signed: false },
   'mastodon/web': { digest: 'sha256:a18ce2a5b443a7074a083d7a5afb162fdaaca78d85850aaee287144f337f0901', signed: false },

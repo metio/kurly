@@ -25766,6 +25766,141 @@
          }
       },
       {
+         "category": "search",
+         "description": "Search text, vectors and structured data from one engine you run yourself.",
+         "id": "manticore",
+         "license": "GPL-2.0-or-later",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Manticore Search",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "manticore",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "250m",
+                     "kind": "regular",
+                     "memory": "512Mi",
+                     "name": "manticore"
+                  }
+               ],
+               "help": "The Manticore Search server. Indexes live at /var/lib/manticore on the volume. Runs as the uid 999 account the image builds, which is what makes its entrypoint skip the root chown-and-gosu path. Compose an exposure onto the JSON port if you have authentication in front of it; the MySQL and replication ports are not HTTP and need their own routes.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/manticore/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:41c8516c29a613297a652b55a3469675c2bfc8dcda2240048858dfc464409cfa",
+                  "image": "docker.io/manticoresearch/manticore:9.3.2@sha256:41c8516c29a613297a652b55a3469675c2bfc8dcda2240048858dfc464409cfa",
+                  "tag": "9.3.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A Manticore Search server (a full-text search and analytics database: SQL over a MySQL-compatible port, JSON over HTTP, full-text and vector search in one engine). A plain composable http workload whose indexes live on a PersistentVolume, needing nothing external. It has no authentication of its own, so an exposure on the JSON port publishes an unauthenticated database — keep it in-cluster or authenticate in front of it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves JSON on :9308, the MySQL protocol on 9306 and the replication protocol on 9312.",
+         "upstream": {
+            "repo": "https://github.com/manticoresoftware/manticoresearch"
+         }
+      },
+      {
          "category": "application",
          "description": "Run a microblogging server that federates with the wider fediverse.",
          "id": "mastodon",

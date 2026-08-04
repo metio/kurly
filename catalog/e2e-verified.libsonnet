@@ -130,6 +130,7 @@
   mailhog: '2026-07-28',
   mailpit: '2026-07-28',
   maloja: '2026-07-28',
+  manticore: '2026-08-04',
   mastodon: '2026-07-28',
   'matrix-conduit': '2026-07-28',
   mautic: '2026-07-28',

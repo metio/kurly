@@ -6358,6 +6358,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    manticore: {
+      name: 'Manticore Search',
+      upstream: { repo: 'https://github.com/manticoresoftware/manticoresearch' },
+      license: 'GPL-2.0-or-later',
+      homepage: 'https://manticoresearch.com/',
+      description: 'Search text, vectors and structured data from one engine you run yourself.',
+      summary: 'A Manticore Search server (a full-text search and analytics database: SQL over a MySQL-compatible port, JSON over HTTP, full-text and vector search in one engine). A plain composable http workload whose indexes live on a PersistentVolume, needing nothing external. It has no authentication of its own, so an exposure on the JSON port publishes an unauthenticated database — keep it in-cluster or authenticate in front of it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves JSON on :9308, the MySQL protocol on 9306 and the replication protocol on 9312.',
+      category: 'search',
+      stages: {
+        server: d.fn('The Manticore Search server. Indexes live at /var/lib/manticore on the volume. Runs as the uid 999 account the image builds, which is what makes its entrypoint skip the root chown-and-gosu path. Compose an exposure onto the JSON port if you have authentication in front of it; the MySQL and replication ports are not HTTP and need their own routes.', [
+          d.arg('name', d.T.string, default='manticore'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

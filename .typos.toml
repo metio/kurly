@@ -19,3 +19,6 @@ EDN = "EDN"
 # `ND` is Navidrome's environment-variable prefix (ND_MUSICFOLDER, ND_PORT, …),
 # not a typo of `AND`.
 ND = "ND"
+# `searchd` is the name of Manticore Search's server binary — the daemon suffix,
+# as in `httpd`, rather than a misspelling of `searched`.
+searchd = "searchd"

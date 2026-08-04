@@ -128,6 +128,7 @@
     'mailhog',
     'mailpit',
     'maloja',
+    'manticore',
     'mastodon',
     'matrix-conduit',
     'mautic',
