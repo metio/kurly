@@ -31,6 +31,10 @@ set -uo pipefail
 
 catalog=.build/catalog.json
 failed=0
+# What this run could NOT do. Reported at the end by name, because a step that
+# is silently skipped is indistinguishable from one that ran and found nothing —
+# and the gate that catches it fails on somebody else's branch, weeks later.
+outstanding=()
 
 # A workload's stage keys, from the files it actually holds — the same shape the
 # subset variables of the registry sweeps take.
@@ -134,8 +138,28 @@ if [ "${NETWORK:-1}" = 1 ]; then
   WORKLOADS="${targets[*]}" gen-upstream || failed=1
   echo "==> gen-signatures (${stage_keys})"
   STAGES="$stage_keys" gen-signatures >/dev/null || failed=1
+  echo "==> gen-forge (${targets[*]})"
+  WORKLOADS="${targets[*]}" gen-forge >/dev/null || failed=1
 else
   echo "==> registry sweeps skipped (NETWORK=0)"
+  outstanding+=("gen-architectures / gen-upstream / gen-signatures / gen-forge — rerun without NETWORK=0")
+fi
+
+# The BSI verdicts come from an API server, so this is the one step that cannot
+# be done from a checkout alone. It is in the onboarding walk anyway, because
+# leaving it out is what let twenty-nine workloads land unjudged: the e2e gate
+# then failed on drift long after the branch that caused it was merged, naming a
+# ledger nobody had touched.
+#
+# gen-bsi installs CLUSTER-SCOPED policies and refuses any context that is not a
+# kind one, so this looks for that itself rather than running it hopefully.
+if [ "${CLUSTER:-1}" = 1 ] && ctx="$(kubectl config current-context 2>/dev/null)" \
+   && case "$ctx" in kind-*) true ;; *) false ;; esac; then
+  echo "==> gen-bsi (${ctx})"
+  gen-bsi >/dev/null || failed=1
+else
+  echo "==> gen-bsi skipped (no kind cluster)"
+  outstanding+=("gen-bsi — needs a kind cluster: kube-cluster up <name>, then gen-bsi")
 fi
 
 echo "==> catalog.json"
@@ -210,5 +234,21 @@ for w in "${targets[@]}"; do
   echo "  bash hack/smoke/scenario-${w}.sh    # boot it, then record the date in catalog/e2e-verified.libsonnet"
 done
 echo "  bash hack/trademark-probe.sh <name>   # then READ what it finds; posture + policy URL together"
+
+# The steps this run could not do, named. A generator that is skipped writes
+# nothing, which looks exactly like a generator that ran and found nothing to
+# change — and the gate that eventually catches it is a drift check on a
+# different branch weeks later, naming a ledger whose staleness has no obvious
+# author. So a skipped step is reported here every time, and the run FAILS: an
+# onboarding that did not do all of it has not finished, and saying so is the
+# only thing that makes the difference visible while somebody is still looking.
+if [ ${#outstanding[@]} -gt 0 ]; then
+  echo
+  echo "::error::this onboarding is INCOMPLETE — these did not run:"
+  for item in "${outstanding[@]}"; do
+    echo "::error::  ${item}"
+  done
+  failed=1
+fi
 
 exit "$failed"

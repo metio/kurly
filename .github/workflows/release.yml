@@ -107,12 +107,19 @@ jobs:
             # from one. Every token is validated before anything runs, so a typo
             # in the tenth name fails the dispatch rather than releasing nine and
             # then stopping.
-            if [ -z "$UNIT_INPUT" ]; then
+            # ANY whitespace or comma separates, and one name is just a list of
+            # one — so there is a single code path rather than a "is this a list?"
+            # test to get wrong. Testing for a space or comma missed a
+            # NEWLINE-separated list, which is what pasting a column of names
+            # produces, and sent the whole block to the single-unit branch where
+            # it matched no directory.
+            units="$(printf '%s' "$UNIT_INPUT" | tr ',\n\t\r' '    ' | tr -s ' ')"
+            if [ -z "${units// /}" ]; then
               library=true
               catalog=true
               workloads="$(all_workloads)"
-            elif printf '%s' "$UNIT_INPUT" | grep -q '[ ,]'; then
-              for unit in $(printf '%s' "$UNIT_INPUT" | tr ',' ' '); do
+            else
+              for unit in $units; do
                 if [ "$unit" = "library" ]; then
                   library=true
                 elif [ "$unit" = "catalog" ]; then
@@ -120,22 +127,15 @@ jobs:
                 elif [ -d "workloads/$unit" ]; then
                   workloads="$(printf '%s\n%s' "$workloads" "$unit")"
                 else
-                  echo "::error::no such unit: $unit"
+                  echo "::error::no such unit: '$unit'"
+                  echo "::error::units are 'library', 'catalog', or a directory under workloads/"
                   exit 1
                 fi
               done
               # Deduplicated, because the same name twice would put a workload in
               # a shard twice and race two releases of it against each other.
               workloads="$(printf '%s\n' "$workloads" | grep -v '^$' | sort -u)"
-            elif [ "$UNIT_INPUT" = "library" ]; then
-              library=true
-            elif [ "$UNIT_INPUT" = "catalog" ]; then
-              catalog=true
-            elif [ -d "workloads/$UNIT_INPUT" ]; then
-              workloads="$UNIT_INPUT"
-            else
-              echo "::error::no such unit: $UNIT_INPUT"
-              exit 1
+              echo "dispatch releases: library=$library catalog=$catalog workloads=$(printf '%s\n' "$workloads" | grep -c . || true)"
             fi
           else
             # On the first push to the branch BEFORE is the all-zeros SHA (and
