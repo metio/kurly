@@ -257,6 +257,7 @@
     'wallabag',
     'wallos',
     'warpgate',
+    'warracker',
     'webtrees',
     'wetty',
     'wger',

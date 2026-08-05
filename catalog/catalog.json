@@ -50099,6 +50099,205 @@
       },
       {
          "category": "application",
+         "description": "Know when the warranty on something you own is about to run out.",
+         "id": "warracker",
+         "image": {
+            "source": "https://github.com/sassanix/Warracker"
+         },
+         "license": "AGPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Warracker",
+         "requires": [
+            {
+               "kind": "database",
+               "required": true
+            }
+         ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "warracker",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "warracker-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "warracker",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "warracker",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "warracker",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "warracker"
+                  }
+               ],
+               "help": "The Warracker server. Uploaded receipts and manuals live at /data/uploads on the volume; everything else is in PostgreSQL. secretName holds DB_PASSWORD, DB_ADMIN_PASSWORD and SECRET_KEY — all three ship with published defaults upstream, and SECRET_KEY signs sessions. supervisord runs nginx and gunicorn together and drops privileges from root, so this workload is deliberately less hardened. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/warracker/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "baseline",
+                  "violates": [
+                     "allowPrivilegeEscalation",
+                     "runAsNonRoot",
+                     "capabilities"
+                  ]
+               },
+               "runs": {
+                  "digest": "sha256:9a0aa0e57a4635e0955cea4d13abe89fd65d10625ee95836ec14ae0789884f22",
+                  "image": "ghcr.io/sassanix/warracker/main:1.0.2@sha256:9a0aa0e57a4635e0955cea4d13abe89fd65d10625ee95836ec14ae0789884f22",
+                  "tag": "1.0.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "DB_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "password",
+                     "key": "DB_ADMIN_PASSWORD",
+                     "length": 32
+                  },
+                  {
+                     "generate": "hex",
+                     "key": "SECRET_KEY",
+                     "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "warracker"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A Warracker server (tracks product warranties: what you bought, when the cover expires, and the receipts and manuals that go with it, with reminders before each lapses). A composable http workload backed by an external PostgreSQL, with uploaded documents on a PersistentVolume. Every credential it needs has a PUBLISHED default in the project's own compose file, the session-signing key included, so supplying the Secret is the difference between having accounts and not. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "upstream": {
+            "repo": "https://github.com/sassanix/Warracker"
+         }
+      },
+      {
+         "category": "application",
          "description": "Build your family tree with your relatives, online.",
          "id": "webtrees",
          "license": "GPL-3.0-or-later",

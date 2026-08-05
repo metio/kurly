@@ -919,6 +919,9 @@
     source: 'https://github.com/warp-tech/warpgate',
     homepage: 'https://github.com/warp-tech/warpgate',
   },
+  warracker: {
+    source: 'https://github.com/sassanix/Warracker',
+  },
   wekan: {
     title: 'ubuntu',
     source: 'https://github.com/wekan/wekan',

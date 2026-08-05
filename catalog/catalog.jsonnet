@@ -339,6 +339,7 @@ local stageImports = {
   'libredesk/server': import 'github.com/metio/kurly/workloads/libredesk/server.libsonnet',
   'matchering/server': import 'github.com/metio/kurly/workloads/matchering/server.libsonnet',
   'otterwiki/server': import 'github.com/metio/kurly/workloads/otterwiki/server.libsonnet',
+  'warracker/server': import 'github.com/metio/kurly/workloads/warracker/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

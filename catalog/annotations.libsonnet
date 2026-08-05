@@ -6813,6 +6813,39 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    warracker: {
+      name: 'Warracker',
+      upstream: { repo: 'https://github.com/sassanix/Warracker' },
+      license: 'AGPL-3.0-only',
+      description: 'Know when the warranty on something you own is about to run out.',
+      summary: "A Warracker server (tracks product warranties: what you bought, when the cover expires, and the receipts and manuals that go with it, with reminders before each lapses). A composable http workload backed by an external PostgreSQL, with uploaded documents on a PersistentVolume. Every credential it needs has a PUBLISHED default in the project's own compose file, the session-signing key included, so supplying the Secret is the difference between having accounts and not. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+      category: 'application',
+      requires: { database: 'required' },
+      stages: {
+        server: d.fn('The Warracker server. Uploaded receipts and manuals live at /data/uploads on the volume; everything else is in PostgreSQL. secretName holds DB_PASSWORD, DB_ADMIN_PASSWORD and SECRET_KEY — all three ship with published defaults upstream, and SECRET_KEY signs sessions. supervisord runs nginx and gunicorn together and drops privileges from root, so this workload is deliberately less hardened. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='warracker'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dbHost', d.T.string, default='warracker-db-rw'),
+          d.arg('dbPort', d.T.int, default=5432),
+          d.arg('database', d.T.string, default='warracker'),
+          d.arg('dbUser', d.T.string, default='warracker'),
+          d.arg('secretName', d.T.string, default='warracker'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'DB_PASSWORD', generate: 'password', length: 32 },
+            { key: 'DB_ADMIN_PASSWORD', generate: 'password', length: 32 },
+            { key: 'SECRET_KEY', generate: 'hex', length: 64 },
+          ],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
