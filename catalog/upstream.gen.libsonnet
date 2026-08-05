@@ -791,6 +791,12 @@
     source: 'https://github.com/Donkie/Spoolman',
     homepage: 'https://github.com/Donkie/Spoolman',
   },
+  sqlpage: {
+    license: 'MIT',
+    title: 'SQLPage',
+    source: 'https://github.com/sqlpage/SQLPage',
+    homepage: 'https://github.com/sqlpage/SQLPage',
+  },
   'stirling-pdf': {
     license: 'NOASSERTION',
     title: 'Stirling-PDF',

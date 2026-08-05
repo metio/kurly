@@ -6683,6 +6683,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    sqlpage: {
+      name: 'SQLPage',
+      upstream: { repo: 'https://github.com/sqlpage/SQLPage' },
+      license: 'MIT',
+      description: 'Build a web application by writing SQL files instead of code.',
+      summary: 'A SQLPage server (each .sql file is a page, and its result rows render as tables, forms and charts). A plain composable http workload where the SITE IS THE CONFIGURATION: the .sql files are delivered as a ConfigMap, and with none it serves only its own welcome page. Queries run with whatever rights DATABASE_URL grants and SQLPage has no user model, so authorisation is something the SQL must do. Single writer over a ReadWriteOnce volume for the default SQLite: one replica, recreated. Serves on :8080.',
+      category: 'application',
+      stages: {
+        server: d.fn("The SQLPage server. site is the application — .sql files keyed by filename, mounted individually into the web root so the image's own assets survive. DATABASE_URL points at SQLite on the volume by default rather than the image default, which would put the database in the web root and serve it alongside the pages; point it at PostgreSQL or MySQL through env instead. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='sqlpage'),
+          d.arg('image', d.T.string),
+          d.arg('site', d.T.object, default={}),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

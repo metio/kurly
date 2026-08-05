@@ -226,6 +226,7 @@
     'sonarr',
     'speedtest-tracker',
     'spoolman',
+    'sqlpage',
     'srs',
     'status-responder',
     'stirling-pdf',

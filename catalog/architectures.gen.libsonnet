@@ -244,6 +244,7 @@
   'speedtest-tracker/server': { digest: 'sha256:19abfdb836bcf5b3d15d65dde992efcfafd44454e378476340a5aa0351a01a32', architectures: ['amd64', 'arm', 'arm64'] },
   'spegel/mirror': { digest: 'sha256:26c60b05e08ac738e8442bc389c5780bff0e1d8153956e45d810a2f1008cf56f', architectures: ['amd64', 'arm', 'arm64'] },
   'spoolman/server': { digest: 'sha256:f17489666719c1a6e12bf0616e9865e3ee8609ef0ac2608d67c1528ceeb609e8', architectures: ['amd64', 'arm', 'arm64'] },
+  'sqlpage/server': { digest: 'sha256:ed0adba603cc0945e728d7b894ce5340d006c737354d252361c25878679e34a6', architectures: ['amd64', 'arm', 'arm64'] },
   'srs/server': { digest: 'sha256:b740a82a7daeb28a35e30ce4cf2c08f295c411879d59d18aa2d9a5eb6a12f687', architectures: ['amd64', 'arm', 'arm64'] },
   'status-responder/responder': { digest: 'sha256:fcb75f691c8b0414d670ae570240cbf95502cc18a9ba57e982ecac589760a186', architectures: ['amd64', 'arm64'] },
   'stirling-pdf/server': { digest: 'sha256:7ed4d9681d18e4fbc3aa6a63647c4b5c2bcc4b75841df7c05d7e3d2320f5c9a1', architectures: ['amd64', 'arm64'] },
