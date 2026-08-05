@@ -116,7 +116,7 @@ record_tables() {
 if [ "$#" -gt 0 ]; then
   targets=("$@")
 else
-  mapfile -t targets < <(jq -r '.workloads[].id' catalog/catalog.json | LC_ALL=C sort)
+  mapfile -t targets < <(jq -r '.workloads[].id' .build/catalog.json | LC_ALL=C sort)
 fi
 
 # Workloads with a diagnosis already made, and why — hack/smoke/known-failures.txt.

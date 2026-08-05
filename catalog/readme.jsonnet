@@ -9,7 +9,7 @@
 //
 // The output is an object keyed by workload id whose values are the markdown
 // sections (without the surrounding markers, which the splicer adds).
-local catalog = import './catalog.json';
+local catalog = import '../.build/catalog.json';
 
 // A jsonnet identifier for a stage's import alias (dashes are illegal there).
 local alias(name) = std.strReplace(name, '-', '_');

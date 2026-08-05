@@ -40,8 +40,8 @@ doc="$(jq -e --arg w "$workload" '
       schemaVersion: .schemaVersion,
       workload: $wl,
     }
-' catalog/catalog.json)" || {
-  echo "::error::no workload '${workload}' in catalog/catalog.json" >&2
+' .build/catalog.json)" || {
+  echo "::error::no workload '${workload}' in .build/catalog.json" >&2
   exit 1
 }
 

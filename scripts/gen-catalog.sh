@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# Renders catalog/catalog.json from the annotations and every derived ledger.
+# Renders .build/catalog.json from the annotations and every derived ledger.
 #
 # catalog.json is a BUILD ARTIFACT, not source. It is the repository's internal
 # join of every derived fact — twenty scripts read it, from gen-smoke to the docs
@@ -25,7 +25,12 @@
 # measures nothing against.
 set -uo pipefail
 
-out=catalog/catalog.json
+out=.build/catalog.json
+
+# .build/ is gitignored and therefore absent in a fresh checkout, so every writer
+# into it creates it. `mv` into a missing directory fails after the render has
+# already succeeded — the most expensive moment to discover a missing mkdir.
+mkdir -p "$(dirname "$out")"
 
 # The generator imports the library, which imports k8s-libsonnet.
 [ "${KURLY_VENDORED:-}" = "1" ] || jb install >/dev/null

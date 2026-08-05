@@ -9,7 +9,7 @@
 // the set is generated straight from catalog.json, a newly annotated feature is
 // covered automatically and a generation gap is caught by the count assertion in
 // the gate.
-local catalog = import '../catalog/catalog.json';
+local catalog = import '../.build/catalog.json';
 
 // Compact Jsonnet literal for a JSON value (JSON is valid Jsonnet).
 local lit(v) = std.manifestJsonEx(v, '', '', ': ');

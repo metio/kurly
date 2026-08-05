@@ -18,7 +18,7 @@
 # nothing).
 set -euo pipefail
 
-catalog=catalog/catalog.json
+catalog=.build/catalog.json
 [ -f "$catalog" ] || { echo "::error::$catalog missing"; exit 1; }
 
 echo "== assembler: syntax =="

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
 
-# The catalog gate: regenerate catalog/catalog.json from the library annotations
+# The catalog gate: regenerate .build/catalog.json from the library annotations
 # and fail if the committed copy is stale. Rendering it also runs the drift
 # asserts in catalog.jsonnet (a feature exported without an annotation, or an
 # annotation with no matching export, fails here) — so the machine-readable API
@@ -76,12 +76,13 @@ ln -sfn ../../.. vendor/github.com/metio/kurly
 # file is a build artifact now, gitignored and regenerated wherever it is needed,
 # so there is nothing to be stale against: a diff would only ever report that
 # somebody had not run the generator, which is not a fact about the library.
-if ! jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json.check; then
-  rm -f catalog/catalog.json.check
+mkdir -p .build
+if ! jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json.check; then
+  rm -f .build/catalog.json.check
   echo "::error::catalog/catalog.jsonnet does not render" >&2
   exit 1
 fi
-mv catalog/catalog.json.check catalog/catalog.json
+mv .build/catalog.json.check .build/catalog.json
 echo "catalog renders, and its asserts hold"
 
 # The catalog claims to be the machine-readable model of kurly's public API — the
@@ -136,7 +137,7 @@ for stage in "${param_stages[@]}"; do
   # dressed up as a safety check.
   actual="$(sed -n '/^function(/,/^)/p' "$stage" | grep -oE '^  [a-zA-Z][a-zA-Z0-9]*=' | tr -d ' =')"
   documented="$(jq -r --arg w "$workload" --arg s "$id" \
-    '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?.name' catalog/catalog.json)"
+    '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?.name' .build/catalog.json)"
 
   missing="$(comm -23 <(printf '%s\n' "$actual" | sort -u) <(printf '%s\n' "$documented" | sort -u) | tr '\n' ' ')"
   stale="$(comm -13 <(printf '%s\n' "$actual" | sort -u) <(printf '%s\n' "$documented" | sort -u) | tr '\n' ' ')"
@@ -179,7 +180,7 @@ for stage in "${param_stages[@]}"; do
     annotated="$(jq -r --arg w "$workload" --arg s "$id" --arg n "$pname" \
       '.workloads[] | select(.id == $w) | .stages[] | select(.id == $s) | .args[]?
        | select(.name == $n) | if has("default") then (.default | tostring) else empty end' \
-      catalog/catalog.json)"
+      .build/catalog.json)"
     # No annotated default is a fair statement about a parameter; a WRONG one is not.
     [ -n "$annotated" ] || continue
     if [ "$annotated" != "$pval" ]; then

@@ -3,7 +3,7 @@
 
 // The kurly assembler: an Alpine component that starts from a published workload,
 // composes kurly `+` features onto it, and emits the Jsonnet snippet and JaaS
-// manifests to deploy it. It reads the catalog (catalog/catalog.json, injected
+// manifests to deploy it. It reads the catalog (.build/catalog.json, injected
 // by the layout) and never talks to a server — every output is generated in the
 // browser from the catalog and the user's choices.
 

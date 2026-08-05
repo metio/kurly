@@ -29,7 +29,7 @@ set -uo pipefail
 
 [ "$#" -gt 0 ] || { echo "usage: onboard-workload <workload> [<workload>...]" >&2; exit 2; }
 
-catalog=catalog/catalog.json
+catalog=.build/catalog.json
 failed=0
 
 # A workload's stage keys, from the files it actually holds — the same shape the

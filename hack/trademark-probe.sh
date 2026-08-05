@@ -19,7 +19,7 @@
 # Emits one JSON line per workload to $OUT so a killed run keeps what it found.
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 1
-CAT=catalog/catalog.json
+CAT=.build/catalog.json
 OUT="${OUT:-./trademark-hits.jsonl}"
 UA='kurly-catalog-trademark-survey/1 (+https://github.com/metio/kurly)'
 

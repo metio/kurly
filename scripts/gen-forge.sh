@@ -126,7 +126,7 @@ ask() {
   esac
 }
 
-repos="$(jq --raw-output '.workloads[] | select(.upstream.repo) | "\(.id)\t\(.upstream.repo)"' catalog/catalog.json)"
+repos="$(jq --raw-output '.workloads[] | select(.upstream.repo) | "\(.id)\t\(.upstream.repo)"' .build/catalog.json)"
 count="$(wc -l <<<"$repos")"
 
 {

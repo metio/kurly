@@ -35,7 +35,7 @@ set -euo pipefail
 
 : "${VERSION:?the release version this run publishes}"
 released="${RELEASED:-}"
-catalog=catalog/catalog.json
+catalog=.build/catalog.json
 registry="${KURLY_REGISTRY:-ghcr.io/metio/kurly}"
 
 # The tag a unit's artifact carries: this run's version when the unit is part of

@@ -9,7 +9,7 @@
 // behind after a feature is removed, breaks the build rather than shipping a
 // catalog that lies. Render from the repo root:
 //
-//   jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json
+//   jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
 local bollwerk = import '../bollwerk/bollwerk.libsonnet';
 local expose = import '../lib/expose.libsonnet';
 local features = import '../lib/features.libsonnet';

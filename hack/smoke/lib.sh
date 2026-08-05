@@ -74,7 +74,7 @@ kurly::verify_min_resources() {
   local stage="$1" extra="${2:-}"
   local mr cpu mem eph
   mr="$(jq -c --arg ip "github.com/metio/kurly/${stage}" \
-    '.workloads[].stages[] | select(.importPath==$ip) | .minimumResources // empty' catalog/catalog.json)"
+    '.workloads[].stages[] | select(.importPath==$ip) | .minimumResources // empty' .build/catalog.json)"
   [ -n "$mr" ] || { echo "::error::${stage} declares no minimumResources in the catalog"; return 1; }
   cpu="$(jq -r '.cpu' <<<"$mr")"; mem="$(jq -r '.memory' <<<"$mr")"; eph="$(jq -r '.ephemeralStorage' <<<"$mr")"
   local ns=min-resources
@@ -175,7 +175,7 @@ kurly::secret() {
   local ns="$1" name="$2" stage="$3"
   local keys
   keys="$(jq -c --arg ip "github.com/metio/kurly/${stage}" \
-    '.workloads[].stages[] | select(.importPath==$ip) | .secretKeys // []' catalog/catalog.json)"
+    '.workloads[].stages[] | select(.importPath==$ip) | .secretKeys // []' .build/catalog.json)"
   [ "$keys" != "[]" ] && [ -n "$keys" ] || return 0
   # The workload id, so a connection-URL key can be built from the throwaway
   # postgres/valkey this app's deps were provisioned under (the <id>-db-rw /
@@ -657,8 +657,8 @@ kurly::provision_deps() {
   # Cleared per workload: these are globals so the post-delivery check can read
   # them, and a workload needing no database must not inherit the last one's.
   KURLY_DB_ENGINE="" KURLY_DB_SVC="" KURLY_DB_NAME="" KURLY_DB_USER=""
-  primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' catalog/catalog.json).libsonnet"
-  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="database"))|length)>0 then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+  primary="workloads/${id}/$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[0].id' .build/catalog.json).libsonnet"
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="database"))|length)>0 then 1 else 0 end' .build/catalog.json)" = 1 ]; then
     wantsSql=true
     # A workload whose Secret is keyed MONGO_URL does not want a SQL server at all.
     # The catalogue records only `database: required` — it has no engine field yet —
@@ -679,8 +679,8 @@ kurly::provision_deps() {
     # stage mentions Mongo throughout and its secretKeys say FERRETDB_POSTGRESQL_URL
     # with a postgresUrl generator, and it has delivered against a PostgreSQL. A
     # check that read the protocol would take its database away.
-    if [ -z "$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.stages[]?|.secretKeys//[]|.[]|.generate]|map(select(test("(postgres|mysql)Url")))|join(",")' catalog/catalog.json)" ] \
-       && { jq -e --arg id "$id" '.workloads[]|select(.id==$id)|[.stages[]?.secretKeys//[]|.[]|.key]|any(test("MONGO"))' catalog/catalog.json >/dev/null 2>&1 \
+    if [ -z "$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.stages[]?|.secretKeys//[]|.[]|.generate]|map(select(test("(postgres|mysql)Url")))|join(",")' .build/catalog.json)" ] \
+       && { jq -e --arg id "$id" '.workloads[]|select(.id==$id)|[.stages[]?.secretKeys//[]|.[]|.key]|any(test("MONGO"))' .build/catalog.json >/dev/null 2>&1 \
             || grep -qE 'MONGO_URL|MONGODB_URI|mongodb-cluster' "$primary" 2>/dev/null; }; then
       echo "::warning::${id}: its Secret is keyed MONGO_*, so it wants MongoDB — provisioning no SQL server, and MongoDB cannot run on this host"
       wantsSql=false
@@ -715,7 +715,7 @@ kurly::provision_deps() {
     # and the annotated engine of requires-v2 is meant to replace the rest.
     local declared engineOverride
     engineOverride="$(jq -r --arg k "${id}/${st:-}" --arg id "$id" '(.[$k] // .[$id] // {}).dbEngine // ""' hack/smoke/extra.json 2>/dev/null || true)"
-    declared="$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.stages[]?|.secretKeys//[]|.[]|.generate]|map(select(test("Url$")))|join(",")' catalog/catalog.json)"
+    declared="$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.stages[]?|.secretKeys//[]|.[]|.generate]|map(select(test("Url$")))|join(",")' .build/catalog.json)"
     if [ -n "$engineOverride" ]; then
       dbEngine="$engineOverride"
     elif [[ "$declared" == *mysqlUrl* ]]; then
@@ -745,7 +745,7 @@ kurly::provision_deps() {
       # The same rule is emitted by gen-smoke for the fast scenarios; this is the
       # deep path, which had no equivalent and so provisioned a stock server for
       # the one workload in the catalogue that cannot use one.
-      case "$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.requires[]?|select(.kind=="database")|.extensions//[]|.[]]|join(",")' catalog/catalog.json)" in
+      case "$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.requires[]?|select(.kind=="database")|.extensions//[]|.[]]|join(",")' .build/catalog.json)" in
         *vchord*)
           kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" \
             ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 \
@@ -764,10 +764,10 @@ kurly::provision_deps() {
   # `required` only. Twenty-one further workloads call it OPTIONAL, and standing up a
   # seaweedfs for each would add a StatefulSet and a rollout wait to a walk that already
   # takes a day, to exercise a path those workloads are explicitly able to skip.
-  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="objectStorage" and .required))|length)>0 then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="objectStorage" and .required))|length)>0 then 1 else 0 end' .build/catalog.json)" = 1 ]; then
     kurly::objectstorage "$ns" "$id"
   fi
-  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="cache"))|length)>0 then 1 else 0 end' catalog/catalog.json)" = 1 ]; then
+  if [ "$(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|if ((.requires//[])|map(select(.kind=="cache"))|length)>0 then 1 else 0 end' .build/catalog.json)" = 1 ]; then
     redisHost="$(kurly::_param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
     # Provision the cache the way the workload actually connects to it. Most take a
     # host and no credential, which is how a cache in the workload's OWN namespace
@@ -779,13 +779,13 @@ kurly::provision_deps() {
     # Getting this backwards fails in both directions: an app with no credential
     # meets NOAUTH, and an app sending one meets "Client sent AUTH, but no password
     # is set". So it is read from the catalog per workload rather than defaulted.
-    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]|select(.generate=="redisUrl")' catalog/catalog.json >/dev/null 2>&1; then
+    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]|select(.generate=="redisUrl")' .build/catalog.json >/dev/null 2>&1; then
       kurly::cache "$ns" "$redisHost"
     else
       kurly::cache "$ns" "$redisHost" ""
     fi
   fi
-  for st in $(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[].id' catalog/catalog.json); do
+  for st in $(jq -r --arg id "$id" '.workloads[]|select(.id==$id)|.stages[].id' .build/catalog.json); do
     f="workloads/${id}/${st}.libsonnet"
     secretName="$(kurly::_param "$f" secretName)"; [ -n "$secretName" ] || secretName="$id"
     kurly::secret "$ns" "$secretName" "$f"
@@ -833,7 +833,7 @@ kurly::deep() {
   # exactly how seaweedfs through status-responder failed, all of them rendering
   # perfectly a minute afterwards. A genuine breakage fails both attempts.
   local rendered stage0
-  stage0="workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' catalog/catalog.json).libsonnet"
+  stage0="workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' .build/catalog.json).libsonnet"
   if ! rendered="$(kurly::render "$stage0" "" 2>&1)" && ! rendered="$(kurly::render "$stage0" "" 2>&1)"; then
     echo "::error::${id}: its stage did not render, so nothing can be concluded about it — run inside the devShell (nix develop --command …)"
     printf '%s\n' "$rendered" | tail -3
@@ -890,7 +890,7 @@ EOF
   local deliveredStages=0
   local stageOrder
   stageOrder="$(jq -r --arg id "$id" '(.[$id] // {}).stageOrder // ""' hack/smoke/extra.json 2>/dev/null || true)"
-  [ -n "$stageOrder" ] || stageOrder="$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[].id' catalog/catalog.json)"
+  [ -n "$stageOrder" ] || stageOrder="$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[].id' .build/catalog.json)"
   for st in $stageOrder; do
     f="workloads/${id}/${st}.libsonnet"
     snip="${id}-${st}"
@@ -943,7 +943,7 @@ EOF
     # The catalogue already derives which stages these are, so ask it rather than
     # keeping a list here.
     clusterScoped="$(jq -r --arg i "$id" --arg s "$st" \
-      '.workloads[]|select(.id==$i)|.stages[]|select(.id==$s)|.clusterScoped // false' catalog/catalog.json)"
+      '.workloads[]|select(.id==$i)|.stages[]|select(.id==$s)|.clusterScoped // false' .build/catalog.json)"
     if [ "$clusterScoped" = true ]; then
       nsRewrite=""
       ctrlNs="$(jq -r '.metadata.namespace // empty' <<<"$ctrl")"; [ -n "$ctrlNs" ] || ctrlNs="$ns"

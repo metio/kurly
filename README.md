@@ -47,10 +47,22 @@ for it; the record of those runs lives in
 
 ## The catalog
 
-[`catalog/catalog.json`](catalog/catalog.json) describes every workload, kind,
-feature and exposure recipe in machine-readable form, and is published as its own
-image — `ghcr.io/metio/kurly/catalog`, `FROM scratch` with the file at the root,
-so a consumer pins it by digest and copies it out without a Jsonnet toolchain.
+The catalog describes every workload, kind, feature and exposure recipe in
+machine-readable form. It is published in two halves, and neither is an aggregate
+file: each workload's facts ride on that workload's OWN artifact as an OCI
+referrer, pinned by the same digest as the bits they describe, while everything
+that is not about one workload — the closed vocabularies, the library's API model,
+the exclusions — is `library.json`, the single layer of
+`ghcr.io/metio/kurly/catalog`. Both come out with `oras pull` and no Jsonnet
+toolchain.
+
+Splitting it this way is what keeps a consumer's facts tied to the images it
+pinned: read from one file naming every workload, they came from whatever build
+produced that file instead. It also removed a single line every change had to
+touch, which had been conflicting on every dependency-update PR.
+
+Locally the whole thing renders to `.build/catalog.json`, a build artifact with no
+committed copy — `gen-catalog` writes it and every gate renders it fresh.
 
 Most of what it carries is derived from the recipes themselves and recomputed on
 every build, so it cannot drift from what they render: the volumes a stage claims,

@@ -53,8 +53,8 @@ set -uo pipefail
 
 out="${1:-}"
 
-[ -f catalog/catalog.json ] || {
-  echo "::error::catalog/catalog.json is not there — run gen-catalog first" >&2
+[ -f .build/catalog.json ] || {
+  echo "::error::.build/catalog.json is not there — run gen-catalog first" >&2
   exit 1
 }
 
@@ -72,8 +72,8 @@ doc="$(jq -e '
   + (if .library or .k8sLibsonnet
      then { renderedFrom: ({ library: .library, k8sLibsonnet: .k8sLibsonnet } | with_entries(select(.value != null))) }
      else {} end)
-' catalog/catalog.json)" || {
-  echo "::error::could not project the library document out of catalog/catalog.json" >&2
+' .build/catalog.json)" || {
+  echo "::error::could not project the library document out of .build/catalog.json" >&2
   exit 1
 }
 

@@ -293,35 +293,36 @@ jobs:
           # not committed, so "what you can read in git" is the SOURCE it renders
           # from — this is that rendering, made before the stamp touches it.
           nix develop --command gen-catalog
-          cp catalog/catalog.json /tmp/catalog.unstamped.json
+          cp .build/catalog.json /tmp/catalog.unstamped.json
           nix develop --command stamp-catalog
       # What the source renders to is what ships, with one enumerated exception.
       # The stamped keys are the only fields allowed to differ, and they are
       # removed before the comparison rather than the comparison being relaxed —
       # a release job that changed anything else fails here.
-      - name: The published catalog is the rendered one plus the stamp
+      - name: The published document is the rendered one plus the stamp
         run: |
           set -euo pipefail
           stripped="$(mktemp)"
-          jq 'del(.library, .k8sLibsonnet) | .workloads |= map(del(.artifact))' catalog/catalog.json > "$stripped"
+          jq 'del(.library, .k8sLibsonnet) | .workloads |= map(del(.artifact))' .build/catalog.json > "$stripped"
           jq . /tmp/catalog.unstamped.json > "${stripped}.unstamped"
           diff -u "${stripped}.unstamped" "$stripped" || {
             echo "::error::the release changed the catalog beyond the artifact stamp"
             exit 1
           }
           echo "the published catalog is the rendered one plus the artifacts it names"
-      - name: The catalog a consumer will read
-        # The published artifact is the file itself, so this checks the file: the
-        # schema version a consumer refuses to boot on, and a non-empty workload
-        # list. A published-but-empty catalog would otherwise reach a consumer as
-        # "every product disappeared".
+      - name: The document a consumer will read
+        # The published artifact is library.json, so this checks that file: the
+        # schema version a consumer refuses to boot on, and a non-empty
+        # vocabulary. A published-but-empty document would otherwise reach a
+        # consumer as "every term disappeared".
         run: |
           set -euo pipefail
-          version="$(jq -r '.schemaVersion // empty' catalog/catalog.json)"
-          [ -n "$version" ] || { echo "::error::catalog carries no schemaVersion"; exit 1; }
-          count="$(jq -r '.workloads | length' catalog/catalog.json)"
-          [ "$count" -gt 0 ] || { echo "::error::catalog carries an empty workload list"; exit 1; }
-          echo "catalog carries schemaVersion ${version} and ${count} workloads"
+          nix develop --command gen-library .build/library.json
+          version="$(jq -r '.schemaVersion // empty' .build/library.json)"
+          [ -n "$version" ] || { echo "::error::library document carries no schemaVersion"; exit 1; }
+          jq -e '.library.requiresKinds | length > 0' .build/library.json >/dev/null \
+            || { echo "::error::library document carries no vocabularies"; exit 1; }
+          echo "library document carries schemaVersion ${version}"
       # A PLAIN OCI ARTIFACT, not a container image. The catalogue is data with
       # no platform, and publishing it as an image produced a multi-platform
       # index whose six children all pointed at the same blob — six identical
@@ -330,13 +331,24 @@ jobs:
       # walking the index, filtering the attestation manifests, and fetching the
       # blob by hand.
       #
-      # One manifest, one titled layer. `oras pull` writes catalog.json into the
+      # One manifest, one titled layer. `oras pull` writes library.json into the
       # working directory and that is the whole consumer side.
       #
-      # Uncompressed application/json, so the blob is 1.4 MB rather than 148 KB.
-      # The catalogue is fetched when a pin moves, not per build, and handing a
-      # consumer a file rather than a tarball to unpack is the point of the
-      # change.
+      # The layer is what the catalogue holds that is NOT about one workload: the
+      # closed vocabularies, the library's API model, and the exclusions. Every
+      # per-workload fact rides on that workload's OWN artifact, published beside
+      # the bits it describes and pinned by the same digest — so a consumer that
+      # pins a workload can never read facts belonging to a different build of
+      # it. `excluded` has nowhere else to ride: a workload kurly refuses to
+      # carry has no artifact to attach anything to, which is why the list is
+      # published here.
+      #
+      # There is deliberately NO aggregate document. One file naming every
+      # workload is a single point every change has to touch — it made every
+      # dependency-update PR conflict on the same lines, and it forced CI to
+      # commit a regenerated copy onto the PR branch, whose head commit then ran
+      # no workflows at all. A consumer reading it also held facts from whatever
+      # build produced the aggregate rather than from the images it pinned.
       - id: push
         name: Push the catalog artifact
         env:
@@ -345,27 +357,15 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          # The second layer is everything the catalogue holds that is NOT about
-          # one workload: the closed vocabularies, the library's API model, and
-          # the exclusions. Per-workload metadata rides on each workload's own
-          # artifact and cannot drift from it; those 64KB have nowhere to ride,
-          # and `excluded` least of all — a workload kurly refuses to carry has no
-          # artifact to attach anything to, which is exactly why the list has to
-          # be published somewhere.
-          #
-          # Shipped as a second titled layer of the same artifact rather than a
-          # new repository: one pin, one signature, and a consumer that wants only
-          # the vocabularies pulls a 100KB blob instead of 1.9MB.
-          nix develop --command gen-library catalog/library.json
           nix develop --command oras login ghcr.io --username "$ACTOR" --password "$GH_TOKEN"
-          # Pushed from inside catalog/, because oras takes the layer title from
-          # the path it is given and a consumer should get `catalog.json` rather
-          # than `catalog/catalog.json`.
-          cd catalog
+          # Pushed from inside the build directory, because oras takes the layer
+          # title from the path it is given and a consumer should get
+          # `library.json` rather than `.build/library.json`.
+          cd .build
           nix develop --command oras push \
             "ghcr.io/metio/kurly/catalog:${VERSION},latest" \
             --artifact-type application/vnd.metio.kurly.catalog.v1+json \
-            catalog.json:application/json library.json:application/json
+            library.json:application/json
           digest="$(nix develop --command oras resolve "ghcr.io/metio/kurly/catalog:${VERSION}")"
           echo "digest=${digest}" >> "$GITHUB_OUTPUT"
           echo "pushed ghcr.io/metio/kurly/catalog@${digest}"
@@ -391,15 +391,9 @@ jobs:
           set -euo pipefail
           out="$(mktemp -d)"
           (cd "$out" && nix develop --command oras pull "ghcr.io/metio/kurly/catalog@${DIGEST}")
-          [ -f "${out}/catalog.json" ] || { echo "::error::oras pull wrote no catalog.json"; exit 1; }
-          diff -q "${out}/catalog.json" catalog/catalog.json
-          # The second layer, checked the same way rather than assumed: a titled
-          # layer that does not come back is exactly the failure the single-layer
-          # rewrite was meant to end, and it would be invisible until a consumer
-          # went looking for the vocabularies.
           [ -f "${out}/library.json" ] || { echo "::error::oras pull wrote no library.json"; exit 1; }
-          diff -q "${out}/library.json" catalog/library.json
-          echo "oras pull yields catalog.json and library.json, byte-identical to what was published"
+          diff -q "${out}/library.json" .build/library.json
+          echo "oras pull yields library.json, byte-identical to what was published"
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list 'catalog-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
@@ -430,8 +424,13 @@ jobs:
           ## Artifacts
 
           \`ghcr.io/metio/kurly/catalog:${VERSION}\` — single layer holding
-          \`/catalog.json\`; pin it by digest and copy the file out
-          (\`COPY --from\`). Signed with cosign keyless.
+          \`library.json\`: the closed vocabularies, the library's API model and
+          the exclusions. Fetch it with \`oras pull\` and pin it by digest.
+          Signed with cosign keyless.
+
+          Per-workload facts are published on each workload's OWN artifact as an
+          OCI referrer, pinned by the same digest as the bits they describe.
+          There is no aggregate \`catalog.json\`.
           EOF
           git tag "$tag" "$SHA"
           git push origin "$tag"

@@ -72,7 +72,7 @@ jobs:
           nix develop --command jb install
           mkdir -p vendor/github.com/metio
           ln -sfn ../../.. vendor/github.com/metio/kurly
-          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json
+          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
       # A pull request rather than a push to the default branch: publishing the
       # catalogue is a release, and a licence that changed is exactly the kind of
       # thing somebody should read before it ships.

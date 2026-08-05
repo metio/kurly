@@ -77,7 +77,7 @@ done
 
 echo "== regenerating =="
 jsonnetfmt -i catalog/*.libsonnet catalog/catalog.jsonnet
-jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json
+jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
 gen-smoke >/dev/null
 gen-readme >/dev/null
-echo "workloads now: $(jq '[.workloads[]]|length' catalog/catalog.json)"
+echo "workloads now: $(jq '[.workloads[]]|length' .build/catalog.json)"

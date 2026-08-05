@@ -19,7 +19,7 @@ jobs:
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - run: nix develop --command check-fmt
   catalog:
-    # Regenerates catalog/catalog.json and then fails on drift — which also runs
+    # Regenerates .build/catalog.json and then fails on drift — which also runs
     # the drift asserts that fail when a feature and its annotation fall out of
     # step, or when a generated ledger names a stage that no longer exists.
     #

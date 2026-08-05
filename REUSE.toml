@@ -19,10 +19,10 @@ precedence = "override"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"
 
-# catalog/catalog.json is generated from the library annotations by
+# .build/*.json is generated from the library annotations by
 # catalog/catalog.jsonnet; JSON carries no inline header.
 [[annotations]]
-path = "catalog/catalog.json"
+path = ".build/*.json"
 precedence = "override"
 SPDX-FileCopyrightText = "The kurly Authors"
 SPDX-License-Identifier = "0BSD"

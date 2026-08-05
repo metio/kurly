@@ -71,7 +71,7 @@ jobs:
           stages="$(nix develop --command jq -r '
             .workloads[] | .id as $w | .stages[]
             | select(.bsi.applicable == false)
-            | "\($w)/\(.id)"' catalog/catalog.json | tr '\n' ' ')"
+            | "\($w)/\(.id)"' .build/catalog.json | tr '\n' ' ')"
           echo "asking about: ${stages}"
           # shellcheck disable=SC2086  # deliberate: one argument per stage
           nix develop --command bash hack/smoke/deep/cr-bsi.sh /tmp/cr-bsi ${stages}
@@ -81,7 +81,7 @@ jobs:
           nix develop --command jb install
           mkdir -p vendor/github.com/metio
           ln -sfn ../../.. vendor/github.com/metio/kurly
-          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json
+          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
       # A pull request rather than a push: a verdict that changed is a claim
       # about compliance that changed, and somebody should read why before it
       # ships. Same token handling as the catalog refresh — a pull request opened

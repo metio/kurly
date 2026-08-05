@@ -18,7 +18,7 @@ docs/public/
 docs/resources/
 docs/.hugo_build.lock
 # The catalog is copied into assets/ and static/ by gen-docs-data; the source of
-# truth is catalog/catalog.json (the assembler.css beside it stays tracked).
+# truth is .build/catalog.json (the assembler.css beside it stays tracked).
 docs/assets/catalog.json
 docs/static/catalog.json
 # Alpine.js is fetched by gen-docs-data at a Renovate-pinned version, never
@@ -34,8 +34,11 @@ catalog/*.gen.libsonnet.partial
 # needed. Committing an aggregate of every workload made every image bump rewrite
 # the same file, so concurrent dependency updates conflicted; and the gate that
 # regenerated and pushed it left pull requests with an unchecked head commit.
-catalog/catalog.json
 
 # library.json is derived from catalog.json by gen-library and published beside
 # it; like the catalogue itself it is a build artifact, never committed.
-catalog/library.json
+
+# Rendered catalogue data. A build artifact with no committed copy: it is
+# derived from catalog/*.libsonnet and the workload sources, and every gate
+# renders it fresh. A committed copy made every Renovate PR touch one file.
+/.build/

@@ -34,7 +34,7 @@ jobs:
         # site generates it here before staging it.
         run: nix develop --command gen-catalog
       - name: Stage catalog into the site
-        # Copies catalog/catalog.json into docs/assets/ (gitignored); the
+        # Copies .build/catalog.json into docs/assets/ (gitignored); the
         # assembler embeds it.
         run: nix develop --command gen-docs-data
       - name: Build Website

@@ -54,7 +54,7 @@
 
           # The documentation site: Hugo builds the static site (the metio theme
           # is a git submodule under docs/themes/), and the assembler page reads
-          # catalog/catalog.json copied into docs/data/ by gen-docs-data.
+          # .build/catalog.json copied into docs/data/ by gen-docs-data.
           docsTools = with pkgs; [
             hugo
             # The docs site ships the assembler, a browser component whose output
@@ -355,7 +355,7 @@
             ];
             text = builtins.readFile ./scripts/gen-library.sh;
           };
-          # Renders catalog/catalog.json, which is a build artifact rather than
+          # Renders .build/catalog.json, which is a build artifact rather than
           # source: generated wherever it is needed, gitignored, never committed.
           gen-catalog = pkgs.writeShellApplication {
             name = "gen-catalog";
@@ -501,14 +501,14 @@
             menu = ''
               echo "kurly commands (also: nix develop --command <name>):"
               echo "  check-fmt        jsonnetfmt --test across all sources"
-              echo "  check-catalog    regenerate catalog/catalog.json, fail if stale"
+              echo "  check-catalog    regenerate .build/catalog.json, fail if stale"
               echo "  check-readme     fail if a workload README's generated section is stale"
               echo "  check-tests      assertion suite + the requiresService negative check"
               echo "  check-examples   render examples + workloads, validate with kubeconform"
               echo "  check-readme-examples  render workload README examples, validate with kubeconform"
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
-              echo "  gen-catalog      render catalog/catalog.json (a build artifact, never committed)"
+              echo "  gen-catalog      render .build/catalog.json (a build artifact, never committed)"
               echo "  gen-library      the vocabularies, API model and exclusions — everything not per-workload"
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
               echo "  gen-spdx         write the SPDX licence register (checked by check-catalog)"
