@@ -149,6 +149,7 @@
     'mosquitto',
     'mumble',
     'mylar3',
+    'myspeed',
     'mysql-cluster',
     'nats',
     'navidrome',

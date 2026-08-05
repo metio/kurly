@@ -151,6 +151,7 @@
   mosquitto: '2026-07-28',
   mumble: '2026-07-28',
   mylar3: '2026-07-28',
+  myspeed: '2026-08-04',
   'mysql-cluster': '2026-07-28',
   nats: '2026-07-28',
   navidrome: '2026-07-28',

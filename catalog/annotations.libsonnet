@@ -6704,6 +6704,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    myspeed: {
+      name: 'MySpeed',
+      upstream: { repo: 'https://github.com/gnmyt/myspeed' },
+      license: 'MIT',
+      description: 'Chart how your connection speed changes through the day.',
+      summary: "A MySpeed server (runs speed tests on a schedule and charts the history, showing when a connection degraded). A plain composable http workload keeping its database on a PersistentVolume. Run from a cluster it measures the NODE'S uplink rather than a home connection. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the dashboard on :5216.",
+      category: 'observability',
+      stages: {
+        server: d.fn('The MySpeed server. Its database lives at /myspeed/data on the volume. /myspeed/bin is scratch as well, because MySpeed creates data, bin, data/logs and data/servers relative to its working directory at every start and downloads the speedtest CLI into bin — without it the only message is "Could not create the data folder", which names the one directory that was fine. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='myspeed'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

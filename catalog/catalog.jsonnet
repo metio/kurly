@@ -334,6 +334,7 @@ local stageImports = {
   'wbo/server': import 'github.com/metio/kurly/workloads/wbo/server.libsonnet',
   'spoolman/server': import 'github.com/metio/kurly/workloads/spoolman/server.libsonnet',
   'sqlpage/server': import 'github.com/metio/kurly/workloads/sqlpage/server.libsonnet',
+  'myspeed/server': import 'github.com/metio/kurly/workloads/myspeed/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

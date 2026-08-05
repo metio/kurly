@@ -159,6 +159,7 @@
   'mosquitto/server': { digest: 'sha256:212f89e1eaeb2c322d6441b64396e3346026674db8fa9c27beac293405c32b3c', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 's390x'] },
   'mumble/server': { digest: 'sha256:b9fb72d772eb52b5c7d4c402054c183886ecde07efc59c829c53001542365a81', architectures: ['amd64', 'arm', 'arm64'] },
   'mylar3/server': { digest: 'sha256:4e81d9559b60e6ded17f11b6c4d2e48efcdc962ccb6415f487f81621cab53b74', architectures: ['amd64', 'arm64'] },
+  'myspeed/server': { digest: 'sha256:3a3e774b3f78d930a5a962d625b99bcb3d71730bfeb4a6b93e04fd38cfe7d9a9', architectures: ['amd64', 'arm', 'arm64'] },
   'nats/server': { digest: 'sha256:c11af972c99ae542de8925e6a7d9c533aa1eb039660420d2074beed6089b3bf0', architectures: ['amd64', 'arm', 'arm64', 'ppc64le', 's390x'] },
   'navidrome/server': { digest: 'sha256:9012939114fbb1bb641b81cf96dec5ded15f0aafefe8d47a511d7cb919658e40', architectures: ['386', 'amd64', 'arm', 'arm64', 'riscv64'] },
   'neo4j/server': { digest: 'sha256:362542416de6c09a971484d1893878016cc3b5cdec166e54b1c824a220ecd6b9', architectures: ['amd64', 'arm64'] },
