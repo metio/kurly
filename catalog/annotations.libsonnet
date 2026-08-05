@@ -6787,6 +6787,31 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    libredesk: {
+      name: 'Libredesk',
+      upstream: { repo: 'https://github.com/abhinavxd/libredesk' },
+      license: 'AGPL-3.0-only',
+      description: 'Answer customer email and chat from shared inboxes your team owns.',
+      summary: 'A Libredesk server (a self-hosted customer support desk: shared inboxes, conversations, assignment rules, canned responses and SLAs, in one binary). A composable http workload backed by an EXTERNAL PostgreSQL — the cnpg-cluster workload provides one — and holding no PersistentVolume of its own, since everything lives in the database. Two init containers install and then upgrade the schema, because install alone leaves it at v0.0.0 and the server refuses to start. Serves the agent UI and API on :9000.',
+      category: 'application',
+      requires: { database: 'required' },
+      stages: {
+        server: d.fn("The Libredesk server. It claims no volume: conversations, users and settings all live in PostgreSQL. The env names follow the shipped config.toml's own sections, and the database one is a TOP-LEVEL [db] table rather than under [app] — LIBREDESK_DB__* not LIBREDESK_APP__DB__* — which matters because an unmatched variable is ignored silently and the server then tries to reach a PostgreSQL called `db`. secretName holds LIBREDESK_DB__PASSWORD. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='libredesk'),
+          d.arg('image', d.T.string),
+          d.arg('dbHost', d.T.string, default='libredesk-db-rw'),
+          d.arg('dbPort', d.T.int, default=5432),
+          d.arg('database', d.T.string, default='libredesk'),
+          d.arg('dbUser', d.T.string, default='libredesk'),
+          d.arg('appUrl', d.T.string, example='https://support.example.com'),
+          d.arg('secretName', d.T.string, default='libredesk'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'LIBREDESK_DB__PASSWORD', generate: 'password', length: 32 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

@@ -391,6 +391,12 @@
     source: 'https://github.com/LemmyNet/lemmy',
     homepage: 'https://github.com/LemmyNet/lemmy',
   },
+  libredesk: {
+    license: 'AGPL-3.0',
+    title: 'libredesk',
+    source: 'https://github.com/abhinavxd/libredesk',
+    homepage: 'https://github.com/abhinavxd/libredesk',
+  },
   librespeed: {
     license: 'GPL-3.0-only',
     title: 'Librespeed',

@@ -338,6 +338,7 @@ local stageImports = {
   'lubelogger/server': import 'github.com/metio/kurly/workloads/lubelogger/server.libsonnet',
   'yt-dlp-web-ui/server': import 'github.com/metio/kurly/workloads/yt-dlp-web-ui/server.libsonnet',
   'tubesync/server': import 'github.com/metio/kurly/workloads/tubesync/server.libsonnet',
+  'libredesk/server': import 'github.com/metio/kurly/workloads/libredesk/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

@@ -23,6 +23,9 @@
   "leantime": {
     "dbEngine": "mysql"
   },
+  "libredesk": {
+    "compose": "+ k.env({ LIBREDESK_APP__ROOT_URL: 'http://libredesk:9000' })"
+  },
   "loki/server": {
     "params": "storageSecret='loki-storage', storageClass='standard'"
   },

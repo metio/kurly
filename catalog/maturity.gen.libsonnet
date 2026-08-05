@@ -120,6 +120,7 @@
     'kutt',
     'leantime',
     'lemmy',
+    'libredesk',
     'librespeed',
     'lidarr',
     'linkding',

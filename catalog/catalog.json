@@ -23257,6 +23257,197 @@
       },
       {
          "category": "application",
+         "description": "Answer customer email and chat from shared inboxes your team owns.",
+         "id": "libredesk",
+         "image": {
+            "homepage": "https://github.com/abhinavxd/libredesk",
+            "source": "https://github.com/abhinavxd/libredesk",
+            "title": "libredesk"
+         },
+         "license": "AGPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Libredesk",
+         "requires": [
+            {
+               "kind": "database",
+               "required": true
+            }
+         ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "libredesk",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "libredesk-db-rw",
+                     "name": "dbHost",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 5432,
+                     "name": "dbPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "libredesk",
+                     "name": "database",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "libredesk",
+                     "name": "dbUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://support.example.com",
+                     "name": "appUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "libredesk",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "libredesk"
+                  },
+                  {
+                     "cpu": "100m",
+                     "kind": "init",
+                     "memory": "256Mi",
+                     "name": "install"
+                  },
+                  {
+                     "cpu": "100m",
+                     "kind": "init",
+                     "memory": "256Mi",
+                     "name": "upgrade"
+                  }
+               ],
+               "help": "The Libredesk server. It claims no volume: conversations, users and settings all live in PostgreSQL. The env names follow the shipped config.toml's own sections, and the database one is a TOP-LEVEL [db] table rather than under [app] — LIBREDESK_DB__* not LIBREDESK_APP__DB__* — which matters because an unmatched variable is ignored silently and the server then tries to reach a PostgreSQL called `db`. secretName holds LIBREDESK_DB__PASSWORD. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/libredesk/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [ ],
+                  "got": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:d39b745859fc4081bba0fe39033a696fc47dec74c2f96ee7fa26e908140b64fb",
+                  "image": "ghcr.io/abhinavxd/libredesk:v2.6.1@sha256:d39b745859fc4081bba0fe39033a696fc47dec74c2f96ee7fa26e908140b64fb",
+                  "tag": "v2.6.1"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "LIBREDESK_DB__PASSWORD",
+                     "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "libredesk"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 0
+               }
+            }
+         ],
+         "summary": "A Libredesk server (a self-hosted customer support desk: shared inboxes, conversations, assignment rules, canned responses and SLAs, in one binary). A composable http workload backed by an EXTERNAL PostgreSQL — the cnpg-cluster workload provides one — and holding no PersistentVolume of its own, since everything lives in the database. Two init containers install and then upgrade the schema, because install alone leaves it at v0.0.0 and the server refuses to start. Serves the agent UI and API on :9000.",
+         "upstream": {
+            "repo": "https://github.com/abhinavxd/libredesk"
+         }
+      },
+      {
+         "category": "application",
          "description": "Measure the real speed of your network from a browser.",
          "id": "librespeed",
          "image": {

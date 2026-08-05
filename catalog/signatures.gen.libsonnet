@@ -123,6 +123,7 @@
   'lemmy/backend': { digest: 'sha256:79e9f02c286c324a779faa6b9d36bb47a2ed17caa2656c5b91101254bd1269d9', signed: false },
   'lemmy/pictrs': { digest: 'sha256:7c1cada5566fe729c2bd3c2e2c246d3ac031d95268edeed6670a70861d905e83', signed: false },
   'lemmy/ui': { digest: 'sha256:ee4c620d8e933ab0266b8aaf0e78247455ab70a90eeb86f1548b7e2aa87c9d40', signed: false },
+  'libredesk/server': { digest: 'sha256:d39b745859fc4081bba0fe39033a696fc47dec74c2f96ee7fa26e908140b64fb', signed: false },
   'librespeed/server': { digest: 'sha256:7b6e8879f9d17bbe39a5ecd52c41f31688fd5730111780128d0bb6f3e6ce9fd1', signed: false },
   'lidarr/server': { digest: 'sha256:60be9a1faad3dfba5a711163fc18526845e2ce7b50b463dd9effae7f766c9beb', signed: false },
   'linkding/server': { digest: 'sha256:61b2eb9eed8e5772a473fb7f1f8923e046cb8cbbeb50e88150afd5ff287d4060', signed: false },

@@ -122,6 +122,7 @@
   kutt: '2026-07-28',
   leantime: '2026-07-28',
   lemmy: '2026-07-28',
+  libredesk: '2026-08-04',
   librespeed: '2026-07-28',
   lidarr: '2026-07-28',
   linkding: '2026-07-28',
