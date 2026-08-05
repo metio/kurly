@@ -178,6 +178,7 @@
   'opensearch-cluster': '2026-07-28',
   organizr: '2026-07-28',
   'otel-collector': '2026-07-28',
+  otterwiki: '2026-08-04',
   owncast: '2026-07-28',
   'owntracks-recorder': '2026-07-28',
   pairdrop: '2026-07-28',

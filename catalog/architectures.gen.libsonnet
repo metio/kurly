@@ -186,6 +186,7 @@
   'openhab/server': { digest: 'sha256:450d2175af9f3ddf0720ed3efd4b1cac2bb2445b76c202c8dedeb7f7b2fdf8a9', architectures: ['amd64', 'arm64'] },
   'organizr/server': { digest: 'sha256:1ce319d73cdfd2666ec7ef21e15907531fabc8a6f333c4ac61e2b2e9d2d162f5', architectures: ['amd64', 'arm', 'arm64'] },
   'otel-collector/agent': { digest: 'sha256:f2f01157055a9b2aab9df7118e1f1c9abf345e99b23bc7a2bc791db374a7d0f6', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
+  'otterwiki/server': { digest: 'sha256:67962747afee2c899cac8f124ee06b264dbf03efb213f4aa5afb7d51076253a1', architectures: ['amd64', 'arm', 'arm64'] },
   'overleaf/server': { digest: 'sha256:cfdeecb4e55a7ae76f0244b86d1b896580bc7137b82733b886a97575fba19d43', architectures: ['amd64'] },
   'owncast/server': { digest: 'sha256:6765d85fdadd6f159729a7238c62adeb57da35fc0dce5233b322c9424285b076', architectures: ['386', 'amd64', 'arm', 'arm64'] },
   'owntracks-recorder/server': { digest: 'sha256:050c3ac9ed798d4110f12e53851e94f9fa0fcecb16cf4d7457967eac2e498da7', architectures: ['amd64', 'arm', 'arm64'] },

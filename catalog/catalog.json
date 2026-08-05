@@ -34457,6 +34457,146 @@
       },
       {
          "category": "application",
+         "description": "Write a wiki in Markdown where every edit is a git commit.",
+         "id": "otterwiki",
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "An Otter Wiki",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "otterwiki",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "50m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "otterwiki"
+                  }
+               ],
+               "help": "The Otter Wiki server. The git repository and its index live at /app-data on the volume. supervisord runs nginx and the application together and drops privileges to their accounts, which it can only do from root, so this workload is deliberately less hardened. Set anonymous read/write and registration from the wiki's own settings page before exposing it. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/otterwiki/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "baseline",
+                  "violates": [
+                     "allowPrivilegeEscalation",
+                     "runAsNonRoot",
+                     "capabilities"
+                  ]
+               },
+               "runs": {
+                  "digest": "sha256:67962747afee2c899cac8f124ee06b264dbf03efb213f4aa5afb7d51076253a1",
+                  "image": "docker.io/redimp/otterwiki:2.9.4@sha256:67962747afee2c899cac8f124ee06b264dbf03efb213f4aa5afb7d51076253a1",
+                  "tag": "2.9.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "An Otter Wiki server (a small Markdown wiki where every page is a file in a git repository and every edit is a commit). A plain composable http workload with the repository on a PersistentVolume. It starts PUBLICLY READABLE AND WRITABLE and the first account registered becomes the administrator, so an exposed instance hands both to whoever arrives first — set the permissions before publishing it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "upstream": {
+            "repo": "https://github.com/redimp/otterwiki"
+         }
+      },
+      {
+         "category": "application",
          "description": "Write LaTeX papers together in the browser.",
          "id": "overleaf",
          "license": "AGPL-3.0-only",

@@ -6833,6 +6833,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'secret_key', generate: 'hex', length: 64 }] },
       },
     },
+    otterwiki: {
+      name: 'An Otter Wiki',
+      upstream: { repo: 'https://github.com/redimp/otterwiki' },
+      license: 'MIT',
+      description: 'Write a wiki in Markdown where every edit is a git commit.',
+      summary: 'An Otter Wiki server (a small Markdown wiki where every page is a file in a git repository and every edit is a commit). A plain composable http workload with the repository on a PersistentVolume. It starts PUBLICLY READABLE AND WRITABLE and the first account registered becomes the administrator, so an exposed instance hands both to whoever arrives first — set the permissions before publishing it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      category: 'application',
+      stages: {
+        server: d.fn("The Otter Wiki server. The git repository and its index live at /app-data on the volume. supervisord runs nginx and the application together and drops privileges to their accounts, which it can only do from root, so this workload is deliberately less hardened. Set anonymous read/write and registration from the wiki's own settings page before exposing it. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='otterwiki'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

@@ -176,6 +176,7 @@
     'opensearch-cluster',
     'organizr',
     'otel-collector',
+    'otterwiki',
     'owncast',
     'owntracks-recorder',
     'pairdrop',
