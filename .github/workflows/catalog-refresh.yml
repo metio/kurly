@@ -72,7 +72,21 @@ jobs:
           nix develop --command jb install
           mkdir -p vendor/github.com/metio
           ln -sfn ../../.. vendor/github.com/metio/kurly
+          mkdir -p .build
           nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
+      # A release matrix runs fail-fast disabled, so one workload's job can fail
+      # while the run still reads as a release — and nothing says so again. The
+      # catalogue keeps listing the workload and a consumer offering it finds
+      # nothing to pull. Asked here, against the registry, because the artifact
+      # being THERE is the claim; a job having once reported pushing it is not.
+      #
+      # continue-on-error: an unpublished workload is worth a loud line in a run
+      # whose job is to re-ask facts, but it must not stop the refresh from
+      # opening its pull request — the licence and signature answers this run
+      # just earned are why it exists.
+      - name: Every catalogued workload has a published artifact
+        continue-on-error: true
+        run: nix develop --command check-published
       # A pull request rather than a push to the default branch: publishing the
       # catalogue is a release, and a licence that changed is exactly the kind of
       # thing somebody should read before it ships.

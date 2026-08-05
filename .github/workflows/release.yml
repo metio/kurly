@@ -14,7 +14,16 @@
 #   vendor/ tree (Flux OCIRepository source, image-volume mount, jb install).
 # - workloads/<name> → ghcr.io/metio/kurly/workloads/<name> — a SINGLE-LAYER
 #   FROM-scratch vendor-tree image of the workload's jsonnet SOURCE (same shape
-#   as the library image), rendered by JaaS with the consumer's parameters.
+#   as the library image), rendered by JaaS with the consumer's parameters. Each
+#   carries its own facts as an OCI referrer on that same digest.
+# - catalog → ghcr.io/metio/kurly/library — a plain OCI artifact holding
+#   library.json: everything the catalogue knows that is NOT about one workload
+#   (the closed vocabularies, the library's API model, the exclusions). Its own
+#   repository, NOT a layer beside an aggregate: a consumer reading vocabularies
+#   must not have to pin something whose digest moves every time an unrelated
+#   workload changes. The unit keeps the name `catalog` because its source is
+#   catalog/ and its tags are catalog-<version>; `library` as a unit name is
+#   already the jsonnet library image above.
 #
 # Change detection covers this push's range only (like helm-charts): a failed
 # run is recovered by re-running via workflow_dispatch, whose empty input
@@ -119,10 +128,9 @@ jobs:
               # lib/ (and its Containerfile). Matching only root-level *.libsonnet
               # would miss every lib/ change and silently skip a library release.
               echo "$diff" | grep -qE '^([^/]+\.libsonnet|lib/.*\.libsonnet|Containerfile)$' && library=true
-              # The catalog artifact is the generated catalog.json and the file
-              # that packages it. Gating on catalog/** matters beyond release
-              # noise: a consumer pins this image, so republishing it on every
-              # merge would open a pull request there for changes it cannot see.
+              # Gating on catalog/** matters beyond release noise: a consumer
+              # pins this artifact, so republishing it on every merge would open
+              # a pull request there for changes it cannot see.
               echo "$diff" | grep -qE '^catalog/.*$' && catalog=true
               # A README-only change to a workload is not a release (the README
               # is docs, not part of the shipped source artifact). And only a
@@ -259,27 +267,27 @@ jobs:
           git push origin "$tag"
           gh release create "$tag" --title "$tag" --notes-file "$NOTES"
   catalog:
-    name: Release catalog
-    # The catalogue names the artifacts its facts were generated from, so it must
-    # publish AFTER them: released in parallel, it would stamp whatever the
-    # registry held a moment ago, and the workload whose facts just changed is
-    # exactly the one whose stamp would be missing or stale. Everything else
-    # would stamp correctly from its git tag, so it would look like it worked.
+    name: Release library document
+    # This unit publishes what the catalogue holds that is NOT about one
+    # workload, and it names the library image its API model was rendered from —
+    # so it must publish AFTER that image. Released in parallel it would stamp
+    # whatever the registry held a moment ago, and look like it worked.
+    #
+    # It deliberately does NOT wait on the workload shards. It carries no
+    # per-workload fact: every one of those rides on that workload's own
+    # artifact. Waiting would mean a single failed workload withheld the
+    # vocabularies from every consumer, which is the coupling this whole change
+    # exists to end.
     #
     # always(), because a unit not released in this run is skipped rather than
-    # failed, and a skipped dependency would otherwise skip the catalogue too. A
-    # unit that genuinely FAILED still blocks it: a catalogue that names an
-    # artifact whose push did not finish is the specific lie this ordering
-    # exists to prevent.
-    needs: [discover, validate, library, workload-0, workload-1, workload-2, workload-3]
+    # failed, and a skipped dependency would otherwise skip this one too. A
+    # library release that genuinely FAILED still blocks it: naming an image
+    # whose push did not finish is the specific lie this ordering prevents.
+    needs: [discover, validate, library]
     if: >-
       always() && needs.discover.outputs.catalog == 'true'
       && needs.validate.result == 'success'
       && needs.library.result != 'failure'
-      && needs.workload-0.result != 'failure'
-      && needs.workload-1.result != 'failure'
-      && needs.workload-2.result != 'failure'
-      && needs.workload-3.result != 'failure'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -379,16 +387,16 @@ jobs:
           # `library.json` rather than `.build/library.json`.
           cd .build
           nix develop --command oras push \
-            "ghcr.io/metio/kurly/catalog:${VERSION},latest" \
-            --artifact-type application/vnd.metio.kurly.catalog.v1+json \
+            "ghcr.io/metio/kurly/library:${VERSION},latest" \
+            --artifact-type application/vnd.metio.kurly.library.v1+json \
             library.json:application/json
-          digest="$(nix develop --command oras resolve "ghcr.io/metio/kurly/catalog:${VERSION}")"
+          digest="$(nix develop --command oras resolve "ghcr.io/metio/kurly/library:${VERSION}")"
           echo "digest=${digest}" >> "$GITHUB_OUTPUT"
-          echo "pushed ghcr.io/metio/kurly/catalog@${digest}"
+          echo "pushed ghcr.io/metio/kurly/library@${digest}"
       - name: Sign the artifact
         env:
           DIGEST: ${{ steps.push.outputs.digest }}
-        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/catalog@${DIGEST}"
+        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/library@${DIGEST}"
       # Provenance came free from buildx when this was an image. It is worth
       # keeping, so it is attached explicitly — as a referrer on the artifact,
       # which is where the referrers API expects it and which leaves the
@@ -396,7 +404,7 @@ jobs:
       - name: Attach build provenance
         uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4.1.1
         with:
-          subject-name: ghcr.io/metio/kurly/catalog
+          subject-name: ghcr.io/metio/kurly/library
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
       # What a consumer will actually run, against what was just published.
@@ -406,7 +414,7 @@ jobs:
         run: |
           set -euo pipefail
           out="$(mktemp -d)"
-          (cd "$out" && nix develop --command oras pull "ghcr.io/metio/kurly/catalog@${DIGEST}")
+          (cd "$out" && nix develop --command oras pull "ghcr.io/metio/kurly/library@${DIGEST}")
           [ -f "${out}/library.json" ] || { echo "::error::oras pull wrote no library.json"; exit 1; }
           diff -q "${out}/library.json" .build/library.json
           echo "oras pull yields library.json, byte-identical to what was published"
@@ -439,10 +447,11 @@ jobs:
 
           ## Artifacts
 
-          \`ghcr.io/metio/kurly/catalog:${VERSION}\` — single layer holding
+          \`ghcr.io/metio/kurly/library:${VERSION}\` — single layer holding
           \`library.json\`: the closed vocabularies, the library's API model and
-          the exclusions. Fetch it with \`oras pull\` and pin it by digest.
-          Signed with cosign keyless.
+          the exclusions. Fetch it with \`oras pull\` and pin it by digest. It
+          moves when a vocabulary moves, not when a workload does. Signed with
+          cosign keyless.
 
           Per-workload facts are published on each workload's OWN artifact as an
           OCI referrer, pinned by the same digest as the bits they describe.

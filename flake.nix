@@ -235,6 +235,19 @@
           # Asks each workload's upstream forge for the project's licence and
           # name, into catalog/forge.gen.libsonnet. Network-bound and rate
           # limited without a GITHUB_TOKEN, so it runs on demand / on a schedule.
+          # Every catalogued workload must have a published artifact. Network-
+          # bound (one registry lookup per workload), so it runs on the refresh
+          # schedule rather than in the per-PR gate.
+          check-published = pkgs.writeShellApplication {
+            name = "check-published";
+            runtimeInputs = with pkgs; [
+              oras
+              jq
+              gnugrep
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/check-published.sh;
+          };
           gen-forge = pkgs.writeShellApplication {
             name = "gen-forge";
             runtimeInputs = with pkgs; [
@@ -471,6 +484,7 @@
             stamp-catalog
             gen-architectures
             gen-signatures
+            check-published
             gen-forge
             gen-upstream
             gen-bsi

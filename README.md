@@ -53,13 +53,18 @@ file: each workload's facts ride on that workload's OWN artifact as an OCI
 referrer, pinned by the same digest as the bits they describe, while everything
 that is not about one workload — the closed vocabularies, the library's API model,
 the exclusions — is `library.json`, the single layer of
-`ghcr.io/metio/kurly/catalog`. Both come out with `oras pull` and no Jsonnet
+`ghcr.io/metio/kurly/library`. Both come out with `oras pull` and no Jsonnet
 toolchain.
 
 Splitting it this way is what keeps a consumer's facts tied to the images it
 pinned: read from one file naming every workload, they came from whatever build
 produced that file instead. It also removed a single line every change had to
 touch, which had been conflicting on every dependency-update PR.
+
+`library.json` has its own repository rather than riding beside the workloads for
+the same reason: its digest must move when a vocabulary moves, not every time an
+unrelated workload is released. A consumer reading only the vocabularies would
+otherwise re-pin several times a day for changes it cannot see.
 
 Locally the whole thing renders to `.build/catalog.json`, a build artifact with no
 committed copy — `gen-catalog` writes it and every gate renders it fresh.
