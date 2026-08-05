@@ -30,6 +30,7 @@
   beszel: '2026-07-28',
   'blackbox-exporter': '2026-07-28',
   blinko: '2026-07-28',
+  blocky: '2026-08-05',
   bookstack: '2026-07-28',
   calibre: '2026-07-28',
   'calibre-web': '2026-07-28',

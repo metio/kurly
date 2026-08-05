@@ -113,7 +113,7 @@ def main():
         sys.exit(f'no software/ directory under {sys.argv[1]}')
 
     repo = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    with open(os.path.join(repo, 'catalog', 'catalog.json'), encoding='utf-8') as fh:
+    with open(os.path.join(repo, '.build', 'catalog.json'), encoding='utf-8') as fh:
         catalog = json.load(fh)
     known = {normalise(w['id']) for w in catalog['workloads']}
     known |= {normalise(k) for k in catalog.get('excluded', {})}

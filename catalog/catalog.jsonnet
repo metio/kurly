@@ -341,6 +341,15 @@ local stageImports = {
   'otterwiki/server': import 'github.com/metio/kurly/workloads/otterwiki/server.libsonnet',
   'warracker/server': import 'github.com/metio/kurly/workloads/warracker/server.libsonnet',
   'watcharr/server': import 'github.com/metio/kurly/workloads/watcharr/server.libsonnet',
+  'blocky/server': import 'github.com/metio/kurly/workloads/blocky/server.libsonnet',
+  'docspell/server': import 'github.com/metio/kurly/workloads/docspell/server.libsonnet',
+  'docspell/joex': import 'github.com/metio/kurly/workloads/docspell/joex.libsonnet',
+  'romm/server': import 'github.com/metio/kurly/workloads/romm/server.libsonnet',
+  'thumbor/server': import 'github.com/metio/kurly/workloads/thumbor/server.libsonnet',
+  'evcc/server': import 'github.com/metio/kurly/workloads/evcc/server.libsonnet',
+  'halo/server': import 'github.com/metio/kurly/workloads/halo/server.libsonnet',
+  'jupyterlab/server': import 'github.com/metio/kurly/workloads/jupyterlab/server.libsonnet',
+  'livebook/server': import 'github.com/metio/kurly/workloads/livebook/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

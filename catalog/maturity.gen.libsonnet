@@ -28,6 +28,7 @@
     'beszel',
     'blackbox-exporter',
     'blinko',
+    'blocky',
     'bookstack',
     'calibre',
     'calibre-web',
