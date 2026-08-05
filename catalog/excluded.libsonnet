@@ -137,6 +137,8 @@
   hoppscotch: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Hoppscotch Organization, $6/user/mo) — https://hoppscotch.com/pricing' },
   strapi: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Strapi Cloud, $35-450/project/mo) — https://strapi.io/pricing-cloud' },
   flipt: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Flipt Pro cloud, $200/mo) — https://flipt.io/pricing' },
+  'tileserver-gl': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (MapTiler Cloud, the maps API by the same company that maintains tileserver-gl) — https://www.maptiler.com/cloud/' },
+  onetimesecret: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Onetime Secret Identity Plus, EUR 35/mo) — https://onetimesecret.com/en/pricing' },
 
   // Upstream is no longer maintained. A catalogue that keeps offering an archived
   // project is selling something nobody will fix — every future CVE in it stays

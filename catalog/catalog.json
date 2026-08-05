@@ -435,6 +435,10 @@
          "note": "upstream sells hosting (Odoo Online / Odoo.sh) — https://www.odoo.com/pricing",
          "reason": "upstream-sells-hosting"
       },
+      "onetimesecret": {
+         "note": "upstream sells hosting (Onetime Secret Identity Plus, EUR 35/mo) — https://onetimesecret.com/en/pricing",
+         "reason": "upstream-sells-hosting"
+      },
       "openobserve": {
          "note": "upstream sells hosting (OpenObserve Cloud) — https://openobserve.ai/pricing",
          "reason": "upstream-sells-hosting"
@@ -505,6 +509,10 @@
       },
       "teable": {
          "note": "upstream sells hosting (Teable Pro/Business) — https://teable.ai/pricing",
+         "reason": "upstream-sells-hosting"
+      },
+      "tileserver-gl": {
+         "note": "upstream sells hosting (MapTiler Cloud, the maps API by the same company that maintains tileserver-gl) — https://www.maptiler.com/cloud/",
          "reason": "upstream-sells-hosting"
       },
       "twenty": {
