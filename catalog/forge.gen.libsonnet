@@ -137,8 +137,8 @@
     name: 'postgres',
   },
   'cnpg-image-catalog': {
-    name: 'postgres',
     homepage: 'https://www.postgresql.org/',
+    name: 'postgres',
   },
   cobalt: {
     homepage: 'https://cobalt.tools',
@@ -206,6 +206,11 @@
     homepage: 'https://docmost.com',
     license: 'AGPL-3.0',
     name: 'docmost',
+  },
+  docspell: {
+    license: 'AGPL-3.0',
+    name: 'docspell',
+    homepage: 'https://docspell.org',
   },
   docuseal: {
     homepage: 'https://www.docuseal.com',
@@ -906,6 +911,11 @@
     homepage: 'https://rocket.chat/',
     name: 'Rocket.Chat',
   },
+  romm: {
+    license: 'AGPL-3.0',
+    name: 'romm',
+    homepage: 'https://romm.app',
+  },
   roundcube: {
     homepage: 'https://roundcube.net',
     name: 'roundcubemail',
@@ -1036,6 +1046,11 @@
     homepage: 'https://thelounge.chat',
     license: 'MIT',
     name: 'thelounge',
+  },
+  thumbor: {
+    license: 'MIT',
+    name: 'thumbor',
+    homepage: 'http://thumbor.org',
   },
   tik: {
     name: 'tik',

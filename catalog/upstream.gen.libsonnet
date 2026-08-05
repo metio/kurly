@@ -82,6 +82,12 @@
     source: 'https://github.com/blinkospace/blinko',
     homepage: 'https://github.com/blinkospace/blinko',
   },
+  blocky: {
+    license: 'Apache-2.0',
+    title: 'blocky',
+    source: 'https://github.com/0xERR0R/blocky',
+    homepage: 'https://github.com/0xERR0R/blocky',
+  },
   bookstack: {
     license: 'GPL-3.0-only',
     title: 'Bookstack',
@@ -717,6 +723,11 @@
   },
   rocketchat: {
     source: 'https://github.com/RocketChat/Rocket.Chat',
+  },
+  romm: {
+    title: '"rommapp/romm"',
+    source: 'https://github.com/rommapp/romm',
+    homepage: 'https://github.com/rommapp/romm',
   },
   roundcube: {
     source: 'https://github.com/roundcube/roundcubemail-docker',
