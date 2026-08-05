@@ -424,7 +424,7 @@ local exclusionConflicts(exclusive) = [
       // path (secret volumes from the Secret name).
       stores: [],  // [{ mountPath, size, accessModes, storageClass, selector, annotations }] — one PVC each
       configFiles: null,  // { mountPath, files, subPath }
-      secretMounts: [],  // [{ secretName, mountPath, readOnly, optional, defaultMode }]
+      secretMounts: [],  // [{ secretName, mountPath, readOnly, optional, defaultMode, subPath }]
       scratch: [],  // [{ mountPath, sizeLimit }]
       // Deployment update strategy ('Recreate' for a single-writer workload on
       // a ReadWriteOnce store, where a rolling update would deadlock on the
@@ -580,7 +580,17 @@ local exclusionConflicts(exclusive) = [
           // default: mount the whole ConfigMap as a directory.
           else [{ name: 'config', mountPath: cfg.configFiles.mountPath, readOnly: true }]
         )
-        + [{ name: m.secretName, mountPath: m.mountPath, readOnly: m.readOnly } for m in cfg.secretMounts]
+        + [
+          // A subPath entry mounts ONE key as a file at mountPath; without it the
+          // whole Secret mounts as a directory there.
+          std.prune({
+            name: m.secretName,
+            mountPath: m.mountPath,
+            readOnly: m.readOnly,
+            subPath: std.get(m, 'subPath', null),
+          })
+          for m in cfg.secretMounts
+        ]
         + [{ name: volumeName(s.mountPath), mountPath: s.mountPath } for s in cfg.scratch],
         function(m) m.mountPath
       ),

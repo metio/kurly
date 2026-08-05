@@ -146,6 +146,7 @@
   'mastodon/sidekiq': { digest: 'sha256:a18ce2a5b443a7074a083d7a5afb162fdaaca78d85850aaee287144f337f0901', signed: false },
   'mastodon/streaming': { digest: 'sha256:f4cacc762093adcae739e4549de1717411a19b518efb34ef4d58dbe6f96168c2', signed: false },
   'mastodon/web': { digest: 'sha256:a18ce2a5b443a7074a083d7a5afb162fdaaca78d85850aaee287144f337f0901', signed: false },
+  'matchering/server': { digest: 'sha256:9894d2ccf228ef743e4cac4e4f03fcb289743d679b8b9904632bdf00c13fd8e0', signed: false },
   'matrix-conduit/server': { digest: 'sha256:4078e80577ccaaf05290a7bb08badc321a5c44a8c8f5f3dce0fb1ae5a0825e64', signed: false },
   'mautic/server': { digest: 'sha256:373a3de08dfce296e31fe0b7caf269594c43020454628f445c169990b9af4d5e', signed: false },
   'mazanoke/server': { digest: 'sha256:92cc7474deb789af6549318563b7a9ee750131f9f7b297cc9c87ab67e656c22c', signed: false },

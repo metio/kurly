@@ -138,6 +138,7 @@
   manticore: '2026-08-04',
   mastodon: '2026-07-28',
   'matrix-conduit': '2026-07-28',
+  matchering: '2026-08-04',
   mautic: '2026-07-28',
   mazanoke: '2026-07-28',
   mealie: '2026-07-28',

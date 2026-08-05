@@ -27337,6 +27337,164 @@
       },
       {
          "category": "application",
+         "description": "Master a track to sound like a reference you already like.",
+         "id": "matchering",
+         "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Matchering",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64"
+               ],
+               "args": [
+                  {
+                     "default": "matchering",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "matchering",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "cpu": "2",
+                           "memory": "4Gi"
+                        },
+                        "requests": {
+                           "cpu": "500m",
+                           "memory": "1Gi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "500m",
+                     "kind": "regular",
+                     "memory": "1Gi",
+                     "name": "matchering"
+                  }
+               ],
+               "help": "The Matchering Web server. Uploads and rendered results live at /app/data on the volume. secretName provides a `secret_key` entry mounted as the single file /app/.secret_key — settings.py reads SECRET_KEY from that path and nowhere else, and the entrypoint generates one when absent, so without the mount every restart silently invalidates every session. supervisord drops privileges to its own account and refuses to start when already unprivileged, so this runs as root by necessity rather than by default. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/matchering/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "baseline",
+                  "violates": [
+                     "allowPrivilegeEscalation",
+                     "runAsNonRoot",
+                     "capabilities"
+                  ]
+               },
+               "runs": {
+                  "digest": "sha256:9894d2ccf228ef743e4cac4e4f03fcb289743d679b8b9904632bdf00c13fd8e0",
+                  "image": "docker.io/sergree/matchering-web:0.1.7@sha256:9894d2ccf228ef743e4cac4e4f03fcb289743d679b8b9904632bdf00c13fd8e0",
+                  "tag": "0.1.7"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "secret_key",
+                     "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "file",
+                     "name": "matchering",
+                     "path": "/app/.secret_key"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A Matchering Web server (audio mastering by reference: upload a track and a reference, and it matches the loudness, frequency balance and stereo width). A plain composable http workload with uploads and results on a PersistentVolume. Mastering saturates whatever CPU it is given for the length of a track, so the limit is what stops one upload starving its neighbours. Django SECRET_KEY arrives as a single-file Secret mount, because the app reads it from a file it would otherwise regenerate on every restart. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8360.",
+         "upstream": {
+            "repo": "https://github.com/sergree/matchering"
+         }
+      },
+      {
+         "category": "application",
          "description": "Run a small, fast Matrix homeserver that federates with the rest of the network.",
          "id": "matrix-conduit",
          "license": "Apache-2.0",

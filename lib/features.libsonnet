@@ -247,7 +247,21 @@
   config(files, mountPath='/etc/config', subPath=false):: {
     config+:: { configFiles: { mountPath: mountPath, files: files, subPath: subPath } },
   },
-  secretMount(secretName, mountPath, readOnly=true, optional=false, defaultMode=null):: {
+  // Mounts a Secret the consumer provides. By default the whole Secret mounts as a
+  // DIRECTORY at mountPath, replacing whatever the image put there.
+  //
+  // `subPath` names ONE key and mounts it as a single FILE at mountPath, leaving
+  // the directory around it intact — the same shape kurly.config offers, and
+  // needed for the same reason: an application that reads a credential from a
+  // fixed path inside its own install tree cannot have that tree shadowed. It is
+  // also how such a file survives a restart when the application would otherwise
+  // GENERATE one (a Django SECRET_KEY written beside the code, regenerated on
+  // every boot and silently invalidating every session).
+  //
+  // A subPath mount does not receive later Secret updates. For a value read once
+  // at startup that is the accepted trade-off; for one that rotates, mount the
+  // directory instead.
+  secretMount(secretName, mountPath, readOnly=true, optional=false, defaultMode=null, subPath=null):: {
     config+:: {
       secretMounts+: [{
         secretName: secretName,
@@ -255,6 +269,7 @@
         readOnly: readOnly,
         optional: optional,
         defaultMode: defaultMode,
+        subPath: subPath,
       }],
     },
   },

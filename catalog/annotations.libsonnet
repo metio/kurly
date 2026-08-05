@@ -6812,6 +6812,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'LIBREDESK_DB__PASSWORD', generate: 'password', length: 32 }] },
       },
     },
+    matchering: {
+      name: 'Matchering',
+      upstream: { repo: 'https://github.com/sergree/matchering' },
+      license: 'GPL-3.0-only',
+      description: 'Master a track to sound like a reference you already like.',
+      summary: 'A Matchering Web server (audio mastering by reference: upload a track and a reference, and it matches the loudness, frequency balance and stereo width). A plain composable http workload with uploads and results on a PersistentVolume. Mastering saturates whatever CPU it is given for the length of a track, so the limit is what stops one upload starving its neighbours. Django SECRET_KEY arrives as a single-file Secret mount, because the app reads it from a file it would otherwise regenerate on every restart. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8360.',
+      category: 'application',
+      stages: {
+        server: d.fn('The Matchering Web server. Uploads and rendered results live at /app/data on the volume. secretName provides a `secret_key` entry mounted as the single file /app/.secret_key — settings.py reads SECRET_KEY from that path and nowhere else, and the entrypoint generates one when absent, so without the mount every restart silently invalidates every session. supervisord drops privileges to its own account and refuses to start when already unprivileged, so this runs as root by necessity rather than by default. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='matchering'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='matchering'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { cpu: '2', memory: '4Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'secret_key', generate: 'hex', length: 64 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
