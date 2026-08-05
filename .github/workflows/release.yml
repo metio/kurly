@@ -47,7 +47,7 @@ on:
   workflow_dispatch:
     inputs:
       unit:
-        description: Unit to force-release ("library", "catalog", or a directory name under workloads/). Leave empty to release every unit.
+        description: Units to force-release — "library", "catalog", or directory names under workloads/, space- or comma-separated. Leave empty to release every unit.
         required: false
 permissions:
   contents: read
@@ -100,10 +100,33 @@ jobs:
           catalog=false
           workloads=""
           if [ "$EVENT" = "workflow_dispatch" ]; then
+            # SEVERAL units in one dispatch, separated by spaces or commas. A
+            # partial failure leaves a handful of units unreleased — a rate limit
+            # refused twenty-one of them once — and re-dispatching one at a time
+            # is twenty-one runs, each rebuilding the same devshell, to recover
+            # from one. Every token is validated before anything runs, so a typo
+            # in the tenth name fails the dispatch rather than releasing nine and
+            # then stopping.
             if [ -z "$UNIT_INPUT" ]; then
               library=true
               catalog=true
               workloads="$(all_workloads)"
+            elif printf '%s' "$UNIT_INPUT" | grep -q '[ ,]'; then
+              for unit in $(printf '%s' "$UNIT_INPUT" | tr ',' ' '); do
+                if [ "$unit" = "library" ]; then
+                  library=true
+                elif [ "$unit" = "catalog" ]; then
+                  catalog=true
+                elif [ -d "workloads/$unit" ]; then
+                  workloads="$(printf '%s\n%s' "$workloads" "$unit")"
+                else
+                  echo "::error::no such unit: $unit"
+                  exit 1
+                fi
+              done
+              # Deduplicated, because the same name twice would put a workload in
+              # a shard twice and race two releases of it against each other.
+              workloads="$(printf '%s\n' "$workloads" | grep -v '^$' | sort -u)"
             elif [ "$UNIT_INPUT" = "library" ]; then
               library=true
             elif [ "$UNIT_INPUT" = "catalog" ]; then
