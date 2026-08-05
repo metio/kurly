@@ -921,6 +921,37 @@ local categories = [
   'tool',
 ];
 
+// Who a workload is FOR. A catalogue that sells hosting carries two kinds of
+// thing and they are not interchangeable: the software a customer orders an
+// instance of, and the software the operator runs to operate the cluster those
+// instances are sold from. A shop reading one as the other either offers a
+// metrics collector as a product or hides a capability it means to sell.
+//
+// TWO values, deliberately, though a shop usually presents three. A platform
+// FEATURE — backup, offered to a customer as a frequency, a retention and a
+// destination — is composed BY the consumer out of infrastructure; which
+// infrastructure it exposes, how it prices it and what a customer may set are
+// its decisions, not facts about the recipe. Another consumer of this library
+// might sell managed backup as a product or not offer it at all. A third value
+// here would be this repository describing one shop.
+//
+// A SEPARATE axis from `category`, not a refinement of it: postgres is
+// `database` AND a product, metrics-server is `observability` AND
+// infrastructure. Reading either off the other is wrong for both.
+local roles = ['product', 'infrastructure'];
+
+// What a workload is FOR, where several workloads are interchangeable ways of
+// getting the same thing. k8up and volsync are both backup mechanisms and the
+// choice between them is an operator's, not a customer's — so a consumer's
+// backup feature asks which workloads provide `backup` and picks one, rather
+// than hardcoding two ids it then has to keep in step with this catalogue.
+//
+// Closed and published, like requiresKinds, so a consumer validates against it
+// and fails loudly on a term it does not know instead of quietly carrying a
+// capability nothing implements. Hand-annotated: what a workload is FOR is not
+// readable off the manifests it renders.
+local capabilities = ['backup'];
+
 // The licence, checked against the SPDX register rather than against a shape.
 // The labels state project names (`ESPHome`), spellings SPDX does not use
 // (`AGPLv3`), and identifiers that mean something other than intended
@@ -1195,6 +1226,48 @@ local softwareFacts(workload) =
     assert std.member(categories, category) :
            'workloads: %s declares an unknown category %s' % [workload, category];
     { category: category }
+  )
+  + (
+    // Who the workload is FOR. DERIVED where derivation reaches, annotated where
+    // it does not, and `product` when nothing establishes otherwise.
+    //
+    // The derived signal is that EVERY stage is cluster-scoped: a workload with
+    // no namespaced instance is not something a tenant is given one of. It is
+    // deliberately the only signal taken. "This drives other workloads' storage"
+    // is what makes volsync infrastructure and there is nothing in a rendered
+    // manifest that says so — inferring it from a shape (no Service, a CRD-only
+    // stage) would catch every worker and cron product as well.
+    //
+    // Defaulting to `product` rather than to null is a decision about which way
+    // to be wrong. An unclassified workload shown as a product is visible and
+    // gets corrected; one hidden as infrastructure is a product nobody can order
+    // and nobody notices is missing.
+    local annotated = std.get(ann_, 'role', null);
+    assert annotated == null || std.member(roles, annotated) :
+           'workloads: %s declares an unknown role %s (one of %s)' % [workload, annotated, std.join(', ', roles)];
+    local stageIds = std.objectFields(ann.workloads[workload].stages);
+    local everyStageClusterScoped =
+      stageIds != [] &&
+      std.all([
+        std.get(clusterScoped(stageImports[workload + '/' + stage]), 'clusterScoped', false)
+        for stage in stageIds
+      ]);
+    local role = if annotated != null then annotated
+    else if everyStageClusterScoped then 'infrastructure'
+    else 'product';
+    { role: role }
+    + (
+      // What the workload is FOR, when several are interchangeable ways of
+      // getting the same thing. Absent rather than empty where it provides no
+      // named capability: an empty list reads as "asked and there are none",
+      // and almost nothing here implements a capability another workload could
+      // stand in for.
+      local provides = std.get(ann_, 'provides', []);
+      assert std.isArray(provides) : 'workloads: %s declares a non-list provides' % workload;
+      assert std.all([std.member(capabilities, c) for c in provides]) :
+             'workloads: %s declares an unknown capability (one of %s)' % [workload, std.join(', ', capabilities)];
+      if provides == [] then {} else { provides: std.set(provides) }
+    )
   );
 
 // What bollwerk checks, straight from the policies themselves: their ids, whether
@@ -1683,11 +1756,13 @@ local workloadEntries =
   // 2: `requires` became a list of { kind, required, engine?, extensions? }. A
   //    workload can need two dependencies of the same kind, which the v1 object
   //    keyed by kind could not express — and a consumer priced the difference.
-  schemaVersion: 3,
+  schemaVersion: 4,
   // The closed set of dependency kinds `requires[].kind` may take. Published so a
   // consumer validates against it and fails loudly on a term it does not know,
   // rather than carrying an unpriced dependency it silently ignored.
   requiresKinds: requiresKinds,
+  roles: roles,
+  capabilities: capabilities,
   // Workloads this catalogue does not carry, and WHY — OUR decision, not a
   // maintainer's wish. A consumer switches on `reason` (one of
   // `excludedReasons`) and shows `note`, which carries the specific project and

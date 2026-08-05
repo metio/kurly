@@ -5543,6 +5543,12 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'VolSync',
       upstream: { repo: 'https://github.com/backube/volsync' },
       description: 'Copy your application data somewhere safe, and bring it back when you need it.',
+      // A mechanism the operator runs, not an instance a tenant is given: a
+      // consumer offering backup as a feature picks between this and k8up
+      // itself, and the customer sets a schedule and a destination without ever
+      // meeting either name.
+      role: 'infrastructure',
+      provides: ['backup'],
       summary: "Copies a PersistentVolume's contents off the cluster and back, as VolSync ReplicationSource and ReplicationDestination custom resources — restic underneath, one resource per claim, so a volume states its own backup policy next to itself. Requires the VolSync operator, and a CSI driver with a VolumeSnapshotClass for the default Snapshot copy method (Direct copies the live volume, which is only safe for a volume nobody writes during the window). Authors the CRs directly like cnpg-cluster; composed by parameter, not by + feature. kurly authors no Secret: the restic repository URL, its password and the object-storage credentials come from a provided one.",
       category: 'storage',
       stages: {
@@ -5609,6 +5615,12 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'K8up',
       upstream: { repo: 'https://github.com/k8up-io/k8up' },
       description: 'Back up your data on a schedule, and get it back when you need it.',
+      // The other backup mechanism. Which of the two a cluster runs is an
+      // operator's choice about scope — per namespace here, per claim in
+      // volsync — and never a customer's, so both answer `backup` and a
+      // consumer's backup feature picks one.
+      role: 'infrastructure',
+      provides: ['backup'],
       summary: 'Backs up every PersistentVolume in a namespace on a schedule, as K8up Schedule and Restore custom resources — restic underneath, one resource per namespace rather than per claim, so a volume is protected the moment it appears rather than when somebody remembers to declare it (a claim annotated k8up.io/backup: "false" is left out). Requires the K8up operator. Authors the CRs directly like cnpg-cluster; composed by parameter, not by + feature. kurly authors no Secret: the repository password and the object-storage credentials come from a provided one.',
       category: 'storage',
       stages: {
