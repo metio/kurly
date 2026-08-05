@@ -733,9 +733,6 @@
     source: 'https://github.com/linuxserver/docker-sabnzbd',
     homepage: 'https://github.com/linuxserver/docker-sabnzbd/packages',
   },
-  screego: {
-    title: 'screego',
-  },
   searxng: {
     license: 'AGPL-3.0-or-later',
     title: 'SearXNG',
@@ -921,9 +918,6 @@
     title: 'warpgate',
     source: 'https://github.com/warp-tech/warpgate',
     homepage: 'https://github.com/warp-tech/warpgate',
-  },
-  wbo: {
-    source: 'https://github.com/lovasoa/whitebophir',
   },
   wekan: {
     title: 'ubuntu',

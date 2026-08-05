@@ -145,6 +145,8 @@
   // offer would sell, at a price nothing undercuts. Carrying these would cost an
   // operator real work and hand a user nothing they cannot already have.
   ihatemoney: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free hosted instance for general use, funded by donations — https://ihatemoney.org' },
+  screego: { reason: 'upstream-hosts-it-free', note: "upstream runs a free public instance — its README calls it a 'Demo / Public Instance' and screego keeps no state, so there is nothing a demo would reset — https://app.screego.net/" },
+  wbo: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free instance whose state is persisted and whose boards are in general use, described as a demonstration server — https://wbo.ophir.dev' },
 
   // Upstream is no longer maintained. A catalogue that keeps offering an archived
   // project is selling something nobody will fix — every future CVE in it stays

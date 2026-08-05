@@ -499,6 +499,10 @@
          "note": "proprietary (LicenseRef-Proprietary); no published source repository",
          "reason": "no-published-source"
       },
+      "screego": {
+         "note": "upstream runs a free public instance — its README calls it a 'Demo / Public Instance' and screego keeps no state, so there is nothing a demo would reset — https://app.screego.net/",
+         "reason": "upstream-hosts-it-free"
+      },
       "sonarqube": {
          "note": "upstream sells hosting (SonarQube Cloud) — https://www.sonarsource.com/products/sonarcloud/",
          "reason": "upstream-sells-hosting"
@@ -534,6 +538,10 @@
       "victoriametrics": {
          "note": "upstream sells hosting (VictoriaMetrics Cloud) — https://victoriametrics.com/products/cloud/",
          "reason": "upstream-sells-hosting"
+      },
+      "wbo": {
+         "note": "upstream runs a free instance whose state is persisted and whose boards are in general use, described as a demonstration server — https://wbo.ophir.dev",
+         "reason": "upstream-hosts-it-free"
       }
    },
    "excludedReasons": [
@@ -41868,157 +41876,6 @@
          }
       },
       {
-         "category": "application",
-         "description": "Share your screen with a few people from a browser, with no account or plugin.",
-         "id": "screego",
-         "image": {
-            "title": "screego"
-         },
-         "license": "GPL-3.0-only",
-         "licenseOsiApproved": true,
-         "maturity": {
-            "tier": "e2e"
-         },
-         "name": "screego",
-         "requires": [ ],
-         "stages": [
-            {
-               "architectures": [
-                  "386",
-                  "amd64",
-                  "arm",
-                  "arm64",
-                  "ppc64le",
-                  "riscv64"
-               ],
-               "args": [
-                  {
-                     "default": "screego",
-                     "name": "name",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "image",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "example": "198.51.100.10",
-                     "name": "externalIp",
-                     "required": true,
-                     "type": "string"
-                  },
-                  {
-                     "default": "screego",
-                     "name": "secretName",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "env",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "default": {
-                        "limits": {
-                           "memory": "256Mi"
-                        },
-                        "requests": {
-                           "cpu": "50m",
-                           "memory": "64Mi"
-                        }
-                     },
-                     "name": "resources",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "labels",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "annotations",
-                     "required": false,
-                     "type": "object"
-                  }
-               ],
-               "bsi": null,
-               "clusterScoped": false,
-               "declaredRequests": [
-                  {
-                     "cpu": "50m",
-                     "kind": "regular",
-                     "memory": "64Mi",
-                     "name": "screego"
-                  }
-               ],
-               "help": "The screego server. Stateless: no volume, nothing to back up. externalIp is the publicly reachable address of its TURN server and is required — screego exits without it, and a wrong value is worse than none, since participants on different networks then join a room and see a blank screen rather than an error. secretName holds SCREEGO_SECRET, which signs sessions; unset, screego mints one per start and logs everybody out on restart. Compose an exposure onto the HTTP port; the TURN ports are not HTTP and need their own routes.",
-               "id": "server",
-               "importPath": "github.com/metio/kurly/workloads/screego/server.libsonnet",
-               "kind": "http",
-               "posture": {
-                  "multiTenantSafe": true,
-                  "ownUserNamespace": true,
-                  "runsAsRoot": false,
-                  "writableRootFilesystem": false
-               },
-               "profile": {
-                  "asked": {
-                     "podDisruptionBudget": 2,
-                     "replicas": 3,
-                     "topologySpreadConstraints": 1
-                  },
-                  "clamped": [ ],
-                  "got": {
-                     "podDisruptionBudget": 2,
-                     "replicas": 3,
-                     "topologySpreadConstraints": 1
-                  }
-               },
-               "pss": {
-                  "level": "restricted",
-                  "violates": [ ]
-               },
-               "runs": {
-                  "digest": "sha256:16afc9c8d0ab26af7e440dd42ebdce0ac9dc631668fb6a2724d61db8c070f997",
-                  "image": "ghcr.io/screego/server:1.12.4@sha256:16afc9c8d0ab26af7e440dd42ebdce0ac9dc631668fb6a2724d61db8c070f997",
-                  "tag": "1.12.4"
-               },
-               "scaling": {
-                  "horizontal": true,
-                  "replicas": 1,
-                  "topology": "stateless"
-               },
-               "secretKeys": [
-                  {
-                     "generate": "hex",
-                     "key": "SCREEGO_SECRET",
-                     "length": 64
-                  }
-               ],
-               "secrets": [
-                  {
-                     "as": "environment",
-                     "name": "screego"
-                  }
-               ],
-               "signature": {
-                  "signed": false
-               },
-               "storage": {
-                  "pvcs": 0
-               }
-            }
-         ],
-         "summary": "A screego server (screen sharing over WebRTC: a room link and a browser, no account and no plugin). A plain composable http workload and a stateless one — rooms live in memory only, so it claims no PersistentVolume and relaxes nothing. It carries its own TURN server on :3478 (TCP and UDP) beside the app on :5050, and REFUSES TO START without externalIp, the address TURN hands out to participants.",
-         "upstream": {
-            "repo": "https://github.com/screego/server"
-         }
-      },
-      {
          "category": "tool",
          "description": "Search the web through many engines at once, without being tracked.",
          "id": "searxng",
@@ -50238,144 +50095,6 @@
          "summary": "A Warpgate server (a smart SSH, HTTPS and database bastion: users connect with an ordinary client, authenticate once, and it proxies them to the targets they are allowed while recording the session). A plain composable http workload whose configuration, SQLite database, SSH host keys and recordings live on one PersistentVolume. An init container runs the unattended setup exactly once, because rerunning it would mint new host keys and break every client that already trusts the old ones. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin UI and HTTPS proxy on :8888, SSH on :2222.",
          "upstream": {
             "repo": "https://github.com/warp-tech/warpgate"
-         }
-      },
-      {
-         "category": "application",
-         "description": "Draw on a shared whiteboard with other people in real time.",
-         "id": "wbo",
-         "image": {
-            "source": "https://github.com/lovasoa/whitebophir"
-         },
-         "license": "AGPL-3.0-only",
-         "licenseOsiApproved": true,
-         "maturity": {
-            "tier": "e2e"
-         },
-         "name": "WBO",
-         "requires": [ ],
-         "stages": [
-            {
-               "architectures": [
-                  "amd64",
-                  "arm64"
-               ],
-               "args": [
-                  {
-                     "default": "wbo",
-                     "name": "name",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "image",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "default": "5Gi",
-                     "name": "storageSize",
-                     "required": false,
-                     "type": "quantity"
-                  },
-                  {
-                     "name": "storageClass",
-                     "required": false,
-                     "type": "string"
-                  },
-                  {
-                     "name": "env",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "default": {
-                        "limits": {
-                           "memory": "512Mi"
-                        },
-                        "requests": {
-                           "cpu": "50m",
-                           "memory": "128Mi"
-                        }
-                     },
-                     "name": "resources",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "labels",
-                     "required": false,
-                     "type": "object"
-                  },
-                  {
-                     "name": "annotations",
-                     "required": false,
-                     "type": "object"
-                  }
-               ],
-               "bsi": null,
-               "clusterScoped": false,
-               "declaredRequests": [
-                  {
-                     "cpu": "50m",
-                     "kind": "regular",
-                     "memory": "128Mi",
-                     "name": "wbo"
-                  }
-               ],
-               "help": "The WBO server. Boards are files at /opt/app/server-data on the volume. One replica, both because the volume is ReadWriteOnce and because two pods would each hold half of a live drawing session. Compose an exposure that does not cut long-lived connections — drawing is streamed over a socket, so a short idle timeout gives a board that stops updating while still looking connected.",
-               "id": "server",
-               "importPath": "github.com/metio/kurly/workloads/wbo/server.libsonnet",
-               "kind": "http",
-               "posture": {
-                  "multiTenantSafe": true,
-                  "ownUserNamespace": true,
-                  "runsAsRoot": false,
-                  "writableRootFilesystem": false
-               },
-               "profile": {
-                  "asked": {
-                     "podDisruptionBudget": 2,
-                     "replicas": 3,
-                     "topologySpreadConstraints": 1
-                  },
-                  "clamped": [
-                     "podDisruptionBudget",
-                     "replicas",
-                     "topologySpreadConstraints"
-                  ],
-                  "got": {
-                     "podDisruptionBudget": 1,
-                     "replicas": 1,
-                     "topologySpreadConstraints": 0
-                  }
-               },
-               "pss": {
-                  "level": "restricted",
-                  "violates": [ ]
-               },
-               "runs": {
-                  "digest": "sha256:4f9e53746bac0d90d5342351eb796df800ffb357a20f72d2bd71fe0d6d810af0",
-                  "image": "docker.io/lovasoa/wbo:v2.9.0@sha256:4f9e53746bac0d90d5342351eb796df800ffb357a20f72d2bd71fe0d6d810af0",
-                  "tag": "v2.9.0"
-               },
-               "scaling": {
-                  "horizontal": false,
-                  "replicas": 1,
-                  "topology": "singleWriter"
-               },
-               "secrets": [ ],
-               "signature": {
-                  "signed": false
-               },
-               "storage": {
-                  "pvcs": 1
-               }
-            }
-         ],
-         "summary": "A WBO server (a collaborative whiteboard: open a board URL, draw, and everyone else on that URL sees it as you draw). A plain composable http workload saving boards as files on a PersistentVolume. It has NO ACCOUNTS and no per-board permissions — the URL is the credential and board names are guessable, so an instance on the internet is a whiteboard for the internet. Binds :80 as an unprivileged user by taking back NET_BIND_SERVICE rather than running as root. Single writer over a ReadWriteOnce volume: one replica, recreated.",
-         "upstream": {
-            "repo": "https://github.com/lovasoa/whitebophir"
          }
       },
       {
