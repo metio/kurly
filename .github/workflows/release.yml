@@ -478,6 +478,15 @@ jobs:
       fail-fast: false
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard0) }}
+    # Granted by the CALLER, not just declared in the called workflow: a called
+    # workflow's token can never exceed what the calling job allows, and the
+    # workflow-level default here is `contents: read`. Declared only on the other
+    # side, the run fails at STARTUP — before any job — with a permissions
+    # mismatch, so nothing publishes and there is no job log to read it from.
+    permissions:
+      contents: write # push the <workload>-<version> tag + GitHub Release
+      packages: write # push to GHCR
+      id-token: write # cosign keyless image signing
     uses: ./.github/workflows/release-workload.yml
     with:
       workload: ${{ matrix.workload }}
@@ -492,6 +501,15 @@ jobs:
       fail-fast: false
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard1) }}
+    # Granted by the CALLER, not just declared in the called workflow: a called
+    # workflow's token can never exceed what the calling job allows, and the
+    # workflow-level default here is `contents: read`. Declared only on the other
+    # side, the run fails at STARTUP — before any job — with a permissions
+    # mismatch, so nothing publishes and there is no job log to read it from.
+    permissions:
+      contents: write # push the <workload>-<version> tag + GitHub Release
+      packages: write # push to GHCR
+      id-token: write # cosign keyless image signing
     uses: ./.github/workflows/release-workload.yml
     with:
       workload: ${{ matrix.workload }}
@@ -506,6 +524,15 @@ jobs:
       fail-fast: false
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard2) }}
+    # Granted by the CALLER, not just declared in the called workflow: a called
+    # workflow's token can never exceed what the calling job allows, and the
+    # workflow-level default here is `contents: read`. Declared only on the other
+    # side, the run fails at STARTUP — before any job — with a permissions
+    # mismatch, so nothing publishes and there is no job log to read it from.
+    permissions:
+      contents: write # push the <workload>-<version> tag + GitHub Release
+      packages: write # push to GHCR
+      id-token: write # cosign keyless image signing
     uses: ./.github/workflows/release-workload.yml
     with:
       workload: ${{ matrix.workload }}
@@ -520,6 +547,15 @@ jobs:
       fail-fast: false
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard3) }}
+    # Granted by the CALLER, not just declared in the called workflow: a called
+    # workflow's token can never exceed what the calling job allows, and the
+    # workflow-level default here is `contents: read`. Declared only on the other
+    # side, the run fails at STARTUP — before any job — with a permissions
+    # mismatch, so nothing publishes and there is no job log to read it from.
+    permissions:
+      contents: write # push the <workload>-<version> tag + GitHub Release
+      packages: write # push to GHCR
+      id-token: write # cosign keyless image signing
     uses: ./.github/workflows/release-workload.yml
     with:
       workload: ${{ matrix.workload }}
