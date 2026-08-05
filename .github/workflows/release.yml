@@ -21,9 +21,11 @@
 #   (the closed vocabularies, the library's API model, the exclusions). Its own
 #   repository, NOT a layer beside an aggregate: a consumer reading vocabularies
 #   must not have to pin something whose digest moves every time an unrelated
-#   workload changes. The unit keeps the name `catalog` because its source is
-#   catalog/ and its tags are catalog-<version>; `library` as a unit name is
-#   already the jsonnet library image above.
+#   workload changes. The unit is called `vocabularies` after what it ships,
+#   not after `catalog/` where its source lives: while it was called `catalog` a
+#   release of it read as "the aggregate is back", and the aggregate is exactly
+#   what it replaced. `library` as a unit name is already the jsonnet library
+#   image above.
 #
 # Change detection covers this push's range only (like helm-charts): a failed
 # run is recovered by re-running via workflow_dispatch, whose empty input
@@ -47,7 +49,7 @@ on:
   workflow_dispatch:
     inputs:
       unit:
-        description: Units to force-release — "library", "catalog", or directory names under workloads/, space- or comma-separated. Leave empty to release every unit.
+        description: Units to force-release — "library", "vocabularies", or directory names under workloads/, space- or comma-separated. Leave empty to release every unit.
         required: false
 permissions:
   contents: read
@@ -65,7 +67,7 @@ jobs:
     timeout-minutes: 15
     outputs:
       library: ${{ steps.changed.outputs.library }}
-      catalog: ${{ steps.changed.outputs.catalog }}
+      vocabularies: ${{ steps.changed.outputs.vocabularies }}
       workloads: ${{ steps.changed.outputs.workloads }}
       shard0: ${{ steps.changed.outputs.shard0 }}
       shard1: ${{ steps.changed.outputs.shard1 }}
@@ -90,14 +92,14 @@ jobs:
           all_workloads() { find workloads -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort || true; }
           # Each non-workload unit's name is also its tag prefix, so a workload
           # directory of that name would collide with it.
-          for reserved in library catalog; do
+          for reserved in library vocabularies; do
             if all_workloads | grep -qx "$reserved"; then
               echo "::error::a workload must not be named '$reserved' (reserved for that unit's tags)"
               exit 1
             fi
           done
           library=false
-          catalog=false
+          vocabularies=false
           workloads=""
           if [ "$EVENT" = "workflow_dispatch" ]; then
             # SEVERAL units in one dispatch, separated by spaces or commas. A
@@ -116,26 +118,26 @@ jobs:
             units="$(printf '%s' "$UNIT_INPUT" | tr ',\n\t\r' '    ' | tr -s ' ')"
             if [ -z "${units// /}" ]; then
               library=true
-              catalog=true
+              vocabularies=true
               workloads="$(all_workloads)"
             else
               for unit in $units; do
                 if [ "$unit" = "library" ]; then
                   library=true
-                elif [ "$unit" = "catalog" ]; then
-                  catalog=true
+                elif [ "$unit" = "vocabularies" ]; then
+                  vocabularies=true
                 elif [ -d "workloads/$unit" ]; then
                   workloads="$(printf '%s\n%s' "$workloads" "$unit")"
                 else
                   echo "::error::no such unit: '$unit'"
-                  echo "::error::units are 'library', 'catalog', or a directory under workloads/"
+                  echo "::error::units are 'library', 'vocabularies', or a directory under workloads/"
                   exit 1
                 fi
               done
               # Deduplicated, because the same name twice would put a workload in
               # a shard twice and race two releases of it against each other.
               workloads="$(printf '%s\n' "$workloads" | grep -v '^$' | sort -u)"
-              echo "dispatch releases: library=$library catalog=$catalog workloads=$(printf '%s\n' "$workloads" | grep -c . || true)"
+              echo "dispatch releases: library=$library vocabularies=$vocabularies workloads=$(printf '%s\n' "$workloads" | grep -c . || true)"
             fi
           else
             # On the first push to the branch BEFORE is the all-zeros SHA (and
@@ -143,7 +145,7 @@ jobs:
             # unit as changed instead of silently releasing nothing.
             if [ -z "$BEFORE" ] || ! git rev-parse -q --verify "${BEFORE}^{commit}" >/dev/null 2>&1; then
               library=true
-              catalog=true
+              vocabularies=true
               workloads="$(all_workloads)"
             else
               diff="$(git diff --name-only "$BEFORE" "$SHA")"
@@ -154,7 +156,7 @@ jobs:
               # Gating on catalog/** matters beyond release noise: a consumer
               # pins this artifact, so republishing it on every merge would open
               # a pull request there for changes it cannot see.
-              echo "$diff" | grep -qE '^catalog/.*$' && catalog=true
+              echo "$diff" | grep -qE '^catalog/.*$' && vocabularies=true
               # A README-only change to a workload is not a release (the README
               # is docs, not part of the shipped source artifact). And only a
               # workload whose directory still EXISTS is releasable — a DELETED
@@ -172,7 +174,7 @@ jobs:
           fi
           {
             echo "library=$library"
-            echo "catalog=$catalog"
+            echo "vocabularies=$vocabularies"
             echo "workloads=$(printf '%s\n' "$workloads" | grep -v '^$' | jq --raw-input . | jq --slurp --compact-output .)"
             # The same list split across four shards, because GitHub refuses a
             # job whose matrix exceeds 256 configurations and the fleet is past
@@ -183,7 +185,7 @@ jobs:
               echo "shard${s}=$(printf '%s\n' "$workloads" | grep -v '^$' \
                 | awk -v s="$s" 'NR % 4 == s' | jq --raw-input . | jq --slurp --compact-output .)"
             done
-            if [ "$library" = "true" ] || [ "$catalog" = "true" ] || [ -n "$workloads" ]; then echo "any=true"; else echo "any=false"; fi
+            if [ "$library" = "true" ] || [ "$vocabularies" = "true" ] || [ -n "$workloads" ]; then echo "any=true"; else echo "any=false"; fi
           } >> "$GITHUB_OUTPUT"
       - id: version
         name: Compute the shared version for this run
@@ -289,8 +291,8 @@ jobs:
           git tag "$tag" "$SHA"
           git push origin "$tag"
           gh release create "$tag" --title "$tag" --notes-file "$NOTES"
-  catalog:
-    name: Release library document
+  vocabularies:
+    name: Release vocabularies
     # This unit publishes what the catalogue holds that is NOT about one
     # workload, and it names the library image its API model was rendered from —
     # so it must publish AFTER that image. Released in parallel it would stamp
@@ -308,13 +310,13 @@ jobs:
     # whose push did not finish is the specific lie this ordering prevents.
     needs: [discover, validate, library]
     if: >-
-      always() && needs.discover.outputs.catalog == 'true'
+      always() && needs.discover.outputs.vocabularies == 'true'
       && needs.validate.result == 'success'
       && needs.library.result != 'failure'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
-      contents: write # push the catalog-<version> tag + GitHub Release
+      contents: write # push the vocabularies-<version> tag + GitHub Release
       packages: write # push to GHCR
       id-token: write # cosign keyless artifact signing
       attestations: write # attach build provenance as a referrer
@@ -327,7 +329,7 @@ jobs:
       # release can do this: those artifacts do not exist yet. Everything the
       # stamp adds is derived from this run's version, the repository's release
       # tags, and the registry answering for a NAMED tag — never for "newest".
-      - name: Name the artifacts this catalog describes
+      - name: Name the artifacts this document describes
         env:
           VERSION: ${{ needs.discover.outputs.version }}
           RELEASED: >-
@@ -353,10 +355,10 @@ jobs:
           jq 'del(.library, .k8sLibsonnet) | .workloads |= map(del(.artifact))' .build/catalog.json > "$stripped"
           jq . /tmp/catalog.unstamped.json > "${stripped}.unstamped"
           diff -u "${stripped}.unstamped" "$stripped" || {
-            echo "::error::the release changed the catalog beyond the artifact stamp"
+            echo "::error::the release changed the document beyond the artifact stamp"
             exit 1
           }
-          echo "the published catalog is the rendered one plus the artifacts it names"
+          echo "the published document is the rendered one plus the artifacts it names"
       - name: The document a consumer will read
         # The published artifact is library.json, so this checks that file: the
         # schema version a consumer refuses to boot on, and a non-empty
@@ -447,20 +449,20 @@ jobs:
           echo "oras pull yields library.json, byte-identical to what was published"
       - id: prev
         name: Find this unit's previous tag
-        run: echo "prev=$(git tag --list 'catalog-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
+        run: echo "prev=$(git tag --list 'vocabularies-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
         uses: metio/ci/release-notes@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
         env:
           # The org cliff config renders the unit name into the notes header.
-          CHART: catalog
+          CHART: vocabularies
         with:
-          version: catalog-${{ needs.discover.outputs.version }}
+          version: vocabularies-${{ needs.discover.outputs.version }}
           previous: ${{ steps.prev.outputs.prev }}
           # Path-scoped notes since this unit's last tag; tag-pattern keeps
           # another unit's tag inside the range from splitting the notes.
           include-paths: catalog
-          tag-pattern: ^catalog-
+          tag-pattern: ^vocabularies-
       - name: Tag and publish the GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -469,7 +471,7 @@ jobs:
           NOTES: ${{ steps.notes.outputs.file }}
         run: |
           set -euo pipefail
-          tag="catalog-${VERSION}"
+          tag="vocabularies-${VERSION}"
           cat >> "$NOTES" <<EOF
 
           ## Artifacts
