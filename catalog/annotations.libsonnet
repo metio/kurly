@@ -6442,6 +6442,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'SCREEGO_SECRET', generate: 'hex', length: 64 }] },
       },
     },
+    cloudreve: {
+      name: 'Cloudreve',
+      upstream: { repo: 'https://github.com/cloudreve/cloudreve' },
+      license: 'GPL-3.0-only',
+      description: 'Keep your files in one place and share them with a link.',
+      summary: 'A Cloudreve server (self-hosted file storage and sharing with a web UI, backed by local disk or any S3-style object storage you point it at). A plain composable http workload whose SQLite database, configuration and — by default — stored files share one PersistentVolume, so it needs nothing external. Runs unprivileged despite an image that starts as root, because it needs nothing root gives it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :5212.',
+      category: 'application',
+      stages: {
+        server: d.fn('The Cloudreve server. Database, configuration and stored files live at /cloudreve/data on the volume; point it at PostgreSQL and object storage from its own settings UI to move both off. The first start prints an administrator password to the log — read it there. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='cloudreve'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

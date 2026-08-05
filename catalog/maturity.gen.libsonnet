@@ -37,6 +37,7 @@
     'changedetection',
     'chatpad',
     'cloudbeaver',
+    'cloudreve',
     'cobalt',
     'code-server',
     'commafeed',

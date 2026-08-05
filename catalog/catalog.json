@@ -8384,6 +8384,141 @@
          }
       },
       {
+         "category": "application",
+         "description": "Keep your files in one place and share them with a link.",
+         "id": "cloudreve",
+         "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Cloudreve",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "cloudreve",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "cloudreve"
+                  }
+               ],
+               "help": "The Cloudreve server. Database, configuration and stored files live at /cloudreve/data on the volume; point it at PostgreSQL and object storage from its own settings UI to move both off. The first start prints an administrator password to the log — read it there. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/cloudreve/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:14861f3123cd637ef5d02592005a1f5ad98f291d560d41ed1879ef7e94512978",
+                  "image": "docker.io/cloudreve/cloudreve:4.9.2@sha256:14861f3123cd637ef5d02592005a1f5ad98f291d560d41ed1879ef7e94512978",
+                  "tag": "4.9.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A Cloudreve server (self-hosted file storage and sharing with a web UI, backed by local disk or any S3-style object storage you point it at). A plain composable http workload whose SQLite database, configuration and — by default — stored files share one PersistentVolume, so it needs nothing external. Runs unprivileged despite an image that starts as root, because it needs nothing root gives it. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and API on :5212.",
+         "upstream": {
+            "repo": "https://github.com/cloudreve/cloudreve"
+         }
+      },
+      {
          "category": "database",
          "description": "Run PostgreSQL with failover and backups looked after for you.",
          "id": "cnpg-cluster",

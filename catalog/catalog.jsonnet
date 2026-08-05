@@ -322,6 +322,7 @@ local stageImports = {
   'omnitools/server': import 'github.com/metio/kurly/workloads/omnitools/server.libsonnet',
   'warpgate/server': import 'github.com/metio/kurly/workloads/warpgate/server.libsonnet',
   'screego/server': import 'github.com/metio/kurly/workloads/screego/server.libsonnet',
+  'cloudreve/server': import 'github.com/metio/kurly/workloads/cloudreve/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
