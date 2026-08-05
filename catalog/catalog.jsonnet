@@ -327,6 +327,7 @@ local stageImports = {
   'remark42/server': import 'github.com/metio/kurly/workloads/remark42/server.libsonnet',
   'pinchflat/server': import 'github.com/metio/kurly/workloads/pinchflat/server.libsonnet',
   'isso/server': import 'github.com/metio/kurly/workloads/isso/server.libsonnet',
+  'restreamer/server': import 'github.com/metio/kurly/workloads/restreamer/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

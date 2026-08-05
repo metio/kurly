@@ -6549,6 +6549,34 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    restreamer: {
+      name: 'Restreamer',
+      upstream: { repo: 'https://github.com/datarhei/restreamer' },
+      license: 'Apache-2.0',
+      description: 'Take a camera or RTMP feed in and publish it to a website or a streaming platform.',
+      summary: 'A datarhei Restreamer server (a complete streaming server with a web UI: ingest a camera or RTMP feed, transcode it with FFmpeg, publish it as HLS or push it on to YouTube and Twitch). A plain composable http workload with two PersistentVolumes, one for configuration and one for recordings. Transcoding is CPU work and the resource limit is what stops one busy stream starving its neighbours. Serves the UI and HLS on :8080, with RTMP on 1935, RTMPS on 1936 and SRT on 6000/UDP.',
+      category: 'application',
+      stages: {
+        server: d.fn('The Restreamer server. Configuration at /core/config and recordings at /core/data, on separate volumes. secretName holds CORE_API_AUTH_USERNAME and CORE_API_AUTH_PASSWORD — without them the first visitor to the web UI is invited to create the administrator, which on an exposed instance is whoever finds it first. Compose an exposure onto the HTTP port; the ingest ports are not HTTP and need their own routes.', [
+          d.arg('name', d.T.string, default='restreamer'),
+          d.arg('image', d.T.string),
+          d.arg('configSize', d.T.quantity, default='1Gi'),
+          d.arg('dataSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='restreamer'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '512Mi' }, limits: { cpu: '2', memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'CORE_API_AUTH_USERNAME', generate: 'literal', value: 'admin' },
+            { key: 'CORE_API_AUTH_PASSWORD', generate: 'password', length: 24 },
+          ],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

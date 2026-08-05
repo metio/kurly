@@ -207,6 +207,7 @@
   'redis-commander': '2026-07-28',
   redmine: '2026-07-28',
   registry: '2026-07-28',
+  restreamer: '2026-08-04',
   roundcube: '2026-07-28',
   remark42: '2026-08-04',
   'rss-bridge': '2026-07-28',

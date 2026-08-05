@@ -39940,6 +39940,177 @@
       },
       {
          "category": "application",
+         "description": "Take a camera or RTMP feed in and publish it to a website or a streaming platform.",
+         "id": "restreamer",
+         "image": {
+            "homepage": "https://github.com/datarhei/restreamer",
+            "source": "https://github.com/datarhei/restreamer",
+            "title": "restreamer"
+         },
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Restreamer",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "restreamer",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "1Gi",
+                     "name": "configSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "dataSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "restreamer",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "cpu": "2",
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "500m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "500m",
+                     "kind": "regular",
+                     "memory": "512Mi",
+                     "name": "restreamer"
+                  }
+               ],
+               "help": "The Restreamer server. Configuration at /core/config and recordings at /core/data, on separate volumes. secretName holds CORE_API_AUTH_USERNAME and CORE_API_AUTH_PASSWORD — without them the first visitor to the web UI is invited to create the administrator, which on an exposed instance is whoever finds it first. Compose an exposure onto the HTTP port; the ingest ports are not HTTP and need their own routes.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/restreamer/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:e2e07cb98f297b4d4230ca25ee23acfbc4fab3dbf4aab98d5287a1a3c6f6be3c",
+                  "image": "docker.io/datarhei/restreamer:2.9.0@sha256:e2e07cb98f297b4d4230ca25ee23acfbc4fab3dbf4aab98d5287a1a3c6f6be3c",
+                  "tag": "2.9.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "literal",
+                     "key": "CORE_API_AUTH_USERNAME",
+                     "value": "admin"
+                  },
+                  {
+                     "generate": "password",
+                     "key": "CORE_API_AUTH_PASSWORD",
+                     "length": 24
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "restreamer"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 2
+               }
+            }
+         ],
+         "summary": "A datarhei Restreamer server (a complete streaming server with a web UI: ingest a camera or RTMP feed, transcode it with FFmpeg, publish it as HLS or push it on to YouTube and Twitch). A plain composable http workload with two PersistentVolumes, one for configuration and one for recordings. Transcoding is CPU work and the resource limit is what stops one busy stream starving its neighbours. Serves the UI and HLS on :8080, with RTMP on 1935, RTMPS on 1936 and SRT on 6000/UDP.",
+         "upstream": {
+            "repo": "https://github.com/datarhei/restreamer"
+         }
+      },
+      {
+         "category": "application",
          "description": "Give your team a chat platform you host yourself.",
          "id": "rocketchat",
          "image": {

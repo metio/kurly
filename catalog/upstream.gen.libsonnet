@@ -697,6 +697,12 @@
     source: 'https://github.com/lukevella/rallly',
     homepage: 'https://github.com/lukevella/rallly',
   },
+  restreamer: {
+    license: 'Apache-2.0',
+    title: 'restreamer',
+    source: 'https://github.com/datarhei/restreamer',
+    homepage: 'https://github.com/datarhei/restreamer',
+  },
   rocketchat: {
     source: 'https://github.com/RocketChat/Rocket.Chat',
   },

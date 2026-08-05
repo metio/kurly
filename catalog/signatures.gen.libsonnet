@@ -220,6 +220,7 @@
   'redmine/server': { digest: 'sha256:49e5c5aeda67a7adb8edd6f4ed64ade7313d56dc4683f9be0ca5b2a6d05d652e', signed: false },
   'registry/server': { digest: 'sha256:1be55279f18a2fe1a74edf2664cac61c1bea305b7b4642dab412e7affdcb3e33', signed: false },
   'remark42/server': { digest: 'sha256:246e0d2ec21feb293481c63da15a9eac8536e49d875b3525566af1656c35f617', signed: false },
+  'restreamer/server': { digest: 'sha256:e2e07cb98f297b4d4230ca25ee23acfbc4fab3dbf4aab98d5287a1a3c6f6be3c', signed: false },
   'rocketchat/server': { digest: 'sha256:c8ee1044c2c0503eddc1abc212240012ec9ba73e2cfa80d001cd23d582ec7c51', signed: false },
   'roundcube/server': { digest: 'sha256:aed1b9b5dc34f8db7cf107a5092f04fd84170d42e7e25ac378c32418ab303185', signed: false },
   'rss-bridge/server': { digest: 'sha256:569f01f3faecd0d34d702e01b34eb0a769f7bedb84caf6dff29821d18b46f971', signed: false },

@@ -206,6 +206,7 @@
     'redmine',
     'registry',
     'remark42',
+    'restreamer',
     'roundcube',
     'rss-bridge',
     'rundeck',
