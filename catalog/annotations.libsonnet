@@ -6724,6 +6724,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    lubelogger: {
+      name: 'LubeLogger',
+      upstream: { repo: 'https://github.com/hargata/lubelog' },
+      license: 'MIT',
+      description: 'Keep a maintenance record for each vehicle, with receipts attached.',
+      summary: 'A LubeLogger server (vehicle maintenance records: services, fuel stops, repairs and reminders per vehicle, with receipts attached). A plain composable http workload keeping its LiteDB database and uploaded documents on a PersistentVolume. HOME points at that volume so ASP.NET keeps its DataProtection keys there — regenerated keys do not fail, they just log everybody out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
+      category: 'application',
+      stages: {
+        server: d.fn('The LubeLogger server. LiteDB and uploads live at /App/data on the volume, and HOME points there too so ASP.NET writes its DataProtection keys onto the volume rather than into the container — upstream mounts a second volume for those; this needs only the one. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='lubelogger'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

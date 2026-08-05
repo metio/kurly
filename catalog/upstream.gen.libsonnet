@@ -424,6 +424,12 @@
     source: 'https://github.com/lobehub/lobe-chat',
     homepage: 'https://github.com/lobehub/lobe-chat',
   },
+  lubelogger: {
+    license: 'MIT',
+    title: 'lubelog',
+    source: 'https://github.com/hargata/lubelog',
+    homepage: 'https://github.com/hargata/lubelog',
+  },
   lychee: {
     license: 'MIT',
     title: 'Lychee',

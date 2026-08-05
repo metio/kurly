@@ -128,6 +128,7 @@
     'lldap',
     'lobe-chat',
     'loki',
+    'lubelogger',
     'mailhog',
     'mailpit',
     'maloja',

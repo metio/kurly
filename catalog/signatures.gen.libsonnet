@@ -130,6 +130,7 @@
   'listmonk/server': { digest: 'sha256:f535d59e14991337a9f2d570273685378ae86b0d7698c3e00da444e3bc205286', signed: false },
   'lldap/server': { digest: 'sha256:2a8454b668c1aba7157e832eab0e242e1e7eb5fb7591d7e7774ba05286511ca8', signed: false },
   'lobe-chat/server': { digest: 'sha256:b2d2454525523d9f0a19c79661f83ec45f13363dbadd5c1180887e77af35d872', signed: false },
+  'lubelogger/server': { digest: 'sha256:01bdb486af71e641c3ae41499e0412a21f2e04fa31b25c5c6531b42c112938e5', signed: false },
   'lychee/server': { digest: 'sha256:7935326ba0877c410b7dfc59f171eced1a0095a99bef63310766704ca90dbdbc', signed: false },
   'mailhog/server': { digest: 'sha256:8d76a3d4ffa32a3661311944007a415332c4bb855657f4f6c57996405c009bea', signed: false },
   'mailpit/server': { digest: 'sha256:7f33095f80e901f6ad08028f06ca284aa58fe84942be5496008d041d3b9f4d4d', signed: false },

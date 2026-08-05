@@ -24545,6 +24545,146 @@
       },
       {
          "category": "application",
+         "description": "Keep a maintenance record for each vehicle, with receipts attached.",
+         "id": "lubelogger",
+         "image": {
+            "homepage": "https://github.com/hargata/lubelog",
+            "source": "https://github.com/hargata/lubelog",
+            "title": "lubelog"
+         },
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "LubeLogger",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "lubelogger",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "lubelogger"
+                  }
+               ],
+               "help": "The LubeLogger server. LiteDB and uploads live at /App/data on the volume, and HOME points there too so ASP.NET writes its DataProtection keys onto the volume rather than into the container — upstream mounts a second volume for those; this needs only the one. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/lubelogger/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:01bdb486af71e641c3ae41499e0412a21f2e04fa31b25c5c6531b42c112938e5",
+                  "image": "ghcr.io/hargata/lubelogger:v1.7.0@sha256:01bdb486af71e641c3ae41499e0412a21f2e04fa31b25c5c6531b42c112938e5",
+                  "tag": "v1.7.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A LubeLogger server (vehicle maintenance records: services, fuel stops, repairs and reminders per vehicle, with receipts attached). A plain composable http workload keeping its LiteDB database and uploaded documents on a PersistentVolume. HOME points at that volume so ASP.NET keeps its DataProtection keys there — regenerated keys do not fail, they just log everybody out. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
+         "upstream": {
+            "repo": "https://github.com/hargata/lubelog"
+         }
+      },
+      {
+         "category": "application",
          "description": "Publish and organise your photos in a gallery you control.",
          "id": "lychee",
          "image": {
