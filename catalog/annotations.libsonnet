@@ -6744,6 +6744,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    'yt-dlp-web-ui': {
+      name: 'yt-dlp Web UI',
+      upstream: { repo: 'https://github.com/marcopiovanello/yt-dlp-web-ui' },
+      license: 'GPL-3.0-only',
+      description: 'Paste a video URL and download it, from a browser instead of a shell.',
+      summary: 'A yt-dlp Web UI server (a browser front end for yt-dlp: paste a URL, pick a format, watch progress, fetch the file). A plain composable http workload with downloads on a PersistentVolume. It downloads whatever it is asked to, from wherever the pod can reach, and has NO authentication unless one is configured — so an exposed instance is an open downloader inside your network, and a NetworkPolicy composed onto it is the other half of that decision. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3033.',
+      category: 'application',
+      stages: {
+        server: d.fn("The yt-dlp Web UI server. Downloads land at /downloads on the volume, which is where the image's own entrypoint already points, so no argument is overridden. Size storageSize for what will be kept. Put an authenticating proxy in front of it and consider what egress the pod has. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='yt-dlp-web-ui'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

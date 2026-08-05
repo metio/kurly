@@ -287,5 +287,6 @@
   'wordpress/server': { digest: 'sha256:9fac4d47b61186131ffefb5d966f0045d0eea94bfd7bd40cafae29b78a709d1b', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
   'xwiki/server': { digest: 'sha256:57417773ff8b7985a3117f52cf13891aa050692eed8eec070106caa0e00a6b89', architectures: ['amd64', 'arm64'] },
   'yourls/server': { digest: 'sha256:533c5023b94dd951b9a21cb239facfdeea8b6e867352167fe963fd0f220a35e2', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
+  'yt-dlp-web-ui/server': { digest: 'sha256:00cf11c10dee570aded552d24738df1669afcca3ca4944b0168378feb6f03bda', architectures: ['amd64', 'arm', 'arm64'] },
   'znc/server': { digest: 'sha256:040a38a8a146e28f9b17182827f3e37c4ca22d9a489e0aea4816bf8aabb405b5', architectures: ['amd64', 'arm', 'arm64'] },
 }

@@ -289,5 +289,6 @@
   'wordpress/server': { digest: 'sha256:9fac4d47b61186131ffefb5d966f0045d0eea94bfd7bd40cafae29b78a709d1b', signed: false },
   'xwiki/server': { digest: 'sha256:57417773ff8b7985a3117f52cf13891aa050692eed8eec070106caa0e00a6b89', signed: false },
   'yourls/server': { digest: 'sha256:533c5023b94dd951b9a21cb239facfdeea8b6e867352167fe963fd0f220a35e2', signed: false },
+  'yt-dlp-web-ui/server': { digest: 'sha256:00cf11c10dee570aded552d24738df1669afcca3ca4944b0168378feb6f03bda', signed: true, identity: 'https://github.com/marcopeocchi/yt-dlp-web-ui/.github/workflows/docker-publish.yml@refs/tags/v3.0.0', issuer: 'https://token.actions.githubusercontent.com', sourceRepository: 'https://github.com/marcopeocchi/yt-dlp-web-ui' },
   'znc/server': { digest: 'sha256:040a38a8a146e28f9b17182827f3e37c4ca22d9a489e0aea4816bf8aabb405b5', signed: false },
 }

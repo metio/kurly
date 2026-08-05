@@ -929,4 +929,10 @@
     source: 'https://github.com/butlerx/wetty',
     homepage: 'https://github.com/butlerx/wetty',
   },
+  'yt-dlp-web-ui': {
+    license: 'MPL-2.0',
+    title: 'yt-dlp-web-ui',
+    source: 'https://github.com/marcopeocchi/yt-dlp-web-ui',
+    homepage: 'https://github.com/marcopeocchi/yt-dlp-web-ui',
+  },
 }

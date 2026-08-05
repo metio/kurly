@@ -51330,6 +51330,151 @@
          }
       },
       {
+         "category": "application",
+         "description": "Paste a video URL and download it, from a browser instead of a shell.",
+         "id": "yt-dlp-web-ui",
+         "image": {
+            "homepage": "https://github.com/marcopeocchi/yt-dlp-web-ui",
+            "source": "https://github.com/marcopeocchi/yt-dlp-web-ui",
+            "title": "yt-dlp-web-ui"
+         },
+         "license": "GPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "yt-dlp Web UI",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "yt-dlp-web-ui",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "50Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "1Gi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "yt-dlp-web-ui"
+                  }
+               ],
+               "help": "The yt-dlp Web UI server. Downloads land at /downloads on the volume, which is where the image's own entrypoint already points, so no argument is overridden. Size storageSize for what will be kept. Put an authenticating proxy in front of it and consider what egress the pod has. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/yt-dlp-web-ui/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:00cf11c10dee570aded552d24738df1669afcca3ca4944b0168378feb6f03bda",
+                  "image": "ghcr.io/marcopiovanello/yt-dlp-web-ui:v3.0.0@sha256:00cf11c10dee570aded552d24738df1669afcca3ca4944b0168378feb6f03bda",
+                  "tag": "v3.0.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "identity": "https://github.com/marcopeocchi/yt-dlp-web-ui/.github/workflows/docker-publish.yml@refs/tags/v3.0.0",
+                  "issuer": "https://token.actions.githubusercontent.com",
+                  "signed": true,
+                  "signedByUpstream": false,
+                  "sourceRepository": "https://github.com/marcopeocchi/yt-dlp-web-ui"
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A yt-dlp Web UI server (a browser front end for yt-dlp: paste a URL, pick a format, watch progress, fetch the file). A plain composable http workload with downloads on a PersistentVolume. It downloads whatever it is asked to, from wherever the pod can reach, and has NO authentication unless one is configured — so an exposed instance is an open downloader inside your network, and a NetworkPolicy composed onto it is the other half of that decision. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3033.",
+         "upstream": {
+            "repo": "https://github.com/marcopiovanello/yt-dlp-web-ui"
+         }
+      },
+      {
          "category": "messaging",
          "description": "Stay connected to IRC and replay what you missed while away.",
          "id": "znc",

@@ -336,6 +336,7 @@ local stageImports = {
   'sqlpage/server': import 'github.com/metio/kurly/workloads/sqlpage/server.libsonnet',
   'myspeed/server': import 'github.com/metio/kurly/workloads/myspeed/server.libsonnet',
   'lubelogger/server': import 'github.com/metio/kurly/workloads/lubelogger/server.libsonnet',
+  'yt-dlp-web-ui/server': import 'github.com/metio/kurly/workloads/yt-dlp-web-ui/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

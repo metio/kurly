@@ -263,6 +263,7 @@
     'wordpress',
     'xwiki',
     'yourls',
+    'yt-dlp-web-ui',
     'znc',
   ],
   tested: [
