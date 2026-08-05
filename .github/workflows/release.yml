@@ -476,6 +476,14 @@ jobs:
     strategy:
       # One workload's failure must not block another's release.
       fail-fast: false
+      # Throttled, because the constraint is the REGISTRY, not the runners. A
+      # fleet release makes hundreds of manifest PUTs against ghcr.io in a few
+      # minutes and trips its secondary rate limit, which answers 403
+      # permission_denied — so jobs fail for load rather than for anything about
+      # the workload. Four shards at four apiece is sixteen concurrent releases,
+      # which the registry sustains; the individual steps retry on top of this
+      # for the bursts it still refuses.
+      max-parallel: 4
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard0) }}
     # Granted by the CALLER, not just declared in the called workflow: a called
@@ -499,6 +507,14 @@ jobs:
     strategy:
       # One workload's failure must not block another's release.
       fail-fast: false
+      # Throttled, because the constraint is the REGISTRY, not the runners. A
+      # fleet release makes hundreds of manifest PUTs against ghcr.io in a few
+      # minutes and trips its secondary rate limit, which answers 403
+      # permission_denied — so jobs fail for load rather than for anything about
+      # the workload. Four shards at four apiece is sixteen concurrent releases,
+      # which the registry sustains; the individual steps retry on top of this
+      # for the bursts it still refuses.
+      max-parallel: 4
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard1) }}
     # Granted by the CALLER, not just declared in the called workflow: a called
@@ -522,6 +538,14 @@ jobs:
     strategy:
       # One workload's failure must not block another's release.
       fail-fast: false
+      # Throttled, because the constraint is the REGISTRY, not the runners. A
+      # fleet release makes hundreds of manifest PUTs against ghcr.io in a few
+      # minutes and trips its secondary rate limit, which answers 403
+      # permission_denied — so jobs fail for load rather than for anything about
+      # the workload. Four shards at four apiece is sixteen concurrent releases,
+      # which the registry sustains; the individual steps retry on top of this
+      # for the bursts it still refuses.
+      max-parallel: 4
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard2) }}
     # Granted by the CALLER, not just declared in the called workflow: a called
@@ -545,6 +569,14 @@ jobs:
     strategy:
       # One workload's failure must not block another's release.
       fail-fast: false
+      # Throttled, because the constraint is the REGISTRY, not the runners. A
+      # fleet release makes hundreds of manifest PUTs against ghcr.io in a few
+      # minutes and trips its secondary rate limit, which answers 403
+      # permission_denied — so jobs fail for load rather than for anything about
+      # the workload. Four shards at four apiece is sixteen concurrent releases,
+      # which the registry sustains; the individual steps retry on top of this
+      # for the bursts it still refuses.
+      max-parallel: 4
       matrix:
         workload: ${{ fromJSON(needs.discover.outputs.shard3) }}
     # Granted by the CALLER, not just declared in the called workflow: a called

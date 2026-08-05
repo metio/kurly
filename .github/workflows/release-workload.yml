@@ -105,16 +105,40 @@ jobs:
           nix develop --command gen-workload-metadata "$WORKLOAD" metadata.json
           nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
           nix develop --command oras attach \
-            --artifact-type application/vnd.metio.kurly.workload.v1+json \
-            --format json \
-            "ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}" \
-            metadata.json:application/json > attached.json
-          # Signed like the image it describes, rather than left as the one
-          # published thing here nobody can verify. A consumer pinning the
-          # referrer by digest already has integrity; a signature is what says
-          # this repository published it.
-          ref="$(jq -r '.reference' attached.json)"
-          nix develop --command cosign sign --yes "$ref"
+          # Both registry writes retry with backoff. A fleet-wide release makes
+          # hundreds of manifest PUTs against ghcr.io within a few minutes and
+          # trips its SECONDARY rate limit, which answers 403 permission_denied —
+          # indistinguishable from a real authorization failure except by the
+          # body, and fatal on the first try. It is transient and asking again
+          # after a wait is the documented remedy, so the step waits rather than
+          # failing a release that was otherwise complete.
+          #
+          # Retried as a PAIR from the attach, not from the signature: the ref to
+          # sign comes out of the attach, and a retry of only the signature would
+          # re-sign whatever the last successful attach produced.
+          publish_metadata() {
+            nix develop --command oras attach \
+              --artifact-type application/vnd.metio.kurly.workload.v1+json \
+              --format json \
+              "ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}" \
+              metadata.json:application/json > attached.json || return 1
+            # Signed like the image it describes, rather than left as the one
+            # published thing here nobody can verify. A consumer pinning the
+            # referrer by digest already has integrity; a signature is what says
+            # this repository published it.
+            local ref
+            ref="$(jq -r '.reference' attached.json)" || return 1
+            nix develop --command cosign sign --yes "$ref" || return 1
+          }
+          published=0
+          for delay in 0 30 90 240; do
+            [ "$delay" = 0 ] || { echo "retrying metadata publish in ${delay}s"; sleep "$delay"; }
+            if publish_metadata; then published=1; break; fi
+          done
+          [ "$published" = 1 ] || {
+            echo "::error::could not publish ${WORKLOAD}'s metadata after four attempts"
+            exit 1
+          }
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
