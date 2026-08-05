@@ -414,7 +414,11 @@ jobs:
         run: |
           set -euo pipefail
           out="$(mktemp -d)"
-          (cd "$out" && nix develop --command oras pull "ghcr.io/metio/kurly/library@${DIGEST}")
+          # --output rather than cd'ing into the directory first: `nix develop`
+          # resolves the flake from the CURRENT directory, so running it from a
+          # temp dir fails with "could not find a flake.nix" before oras is even
+          # invoked — a failure about the shell, in a step about the registry.
+          nix develop --command oras pull --output "$out" "ghcr.io/metio/kurly/library@${DIGEST}"
           [ -f "${out}/library.json" ] || { echo "::error::oras pull wrote no library.json"; exit 1; }
           diff -q "${out}/library.json" .build/library.json
           echo "oras pull yields library.json, byte-identical to what was published"
