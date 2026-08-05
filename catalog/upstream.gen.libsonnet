@@ -922,6 +922,12 @@
   warracker: {
     source: 'https://github.com/sassanix/Warracker',
   },
+  watcharr: {
+    license: 'GPL-3.0',
+    title: 'Watcharr',
+    source: 'https://github.com/sbondCo/Watcharr',
+    homepage: 'https://github.com/sbondCo/Watcharr',
+  },
   wekan: {
     title: 'ubuntu',
     source: 'https://github.com/wekan/wekan',

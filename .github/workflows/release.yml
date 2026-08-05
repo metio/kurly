@@ -345,6 +345,18 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          # The second layer is everything the catalogue holds that is NOT about
+          # one workload: the closed vocabularies, the library's API model, and
+          # the exclusions. Per-workload metadata rides on each workload's own
+          # artifact and cannot drift from it; those 64KB have nowhere to ride,
+          # and `excluded` least of all — a workload kurly refuses to carry has no
+          # artifact to attach anything to, which is exactly why the list has to
+          # be published somewhere.
+          #
+          # Shipped as a second titled layer of the same artifact rather than a
+          # new repository: one pin, one signature, and a consumer that wants only
+          # the vocabularies pulls a 100KB blob instead of 1.9MB.
+          nix develop --command gen-library catalog/library.json
           nix develop --command oras login ghcr.io --username "$ACTOR" --password "$GH_TOKEN"
           # Pushed from inside catalog/, because oras takes the layer title from
           # the path it is given and a consumer should get `catalog.json` rather
@@ -353,7 +365,7 @@ jobs:
           nix develop --command oras push \
             "ghcr.io/metio/kurly/catalog:${VERSION},latest" \
             --artifact-type application/vnd.metio.kurly.catalog.v1+json \
-            catalog.json:application/json
+            catalog.json:application/json library.json:application/json
           digest="$(nix develop --command oras resolve "ghcr.io/metio/kurly/catalog:${VERSION}")"
           echo "digest=${digest}" >> "$GITHUB_OUTPUT"
           echo "pushed ghcr.io/metio/kurly/catalog@${digest}"
@@ -381,7 +393,13 @@ jobs:
           (cd "$out" && nix develop --command oras pull "ghcr.io/metio/kurly/catalog@${DIGEST}")
           [ -f "${out}/catalog.json" ] || { echo "::error::oras pull wrote no catalog.json"; exit 1; }
           diff -q "${out}/catalog.json" catalog/catalog.json
-          echo "oras pull yields catalog.json, byte-identical to the published file"
+          # The second layer, checked the same way rather than assumed: a titled
+          # layer that does not come back is exactly the failure the single-layer
+          # rewrite was meant to end, and it would be invisible until a consumer
+          # went looking for the vocabularies.
+          [ -f "${out}/library.json" ] || { echo "::error::oras pull wrote no library.json"; exit 1; }
+          diff -q "${out}/library.json" catalog/library.json
+          echo "oras pull yields catalog.json and library.json, byte-identical to what was published"
       - id: prev
         name: Find this unit's previous tag
         run: echo "prev=$(git tag --list 'catalog-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"

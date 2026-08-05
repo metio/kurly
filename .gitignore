@@ -35,3 +35,7 @@ catalog/*.gen.libsonnet.partial
 # the same file, so concurrent dependency updates conflicted; and the gate that
 # regenerated and pushed it left pull requests with an unchecked head commit.
 catalog/catalog.json
+
+# library.json is derived from catalog.json by gen-library and published beside
+# it; like the catalogue itself it is a build artifact, never committed.
+catalog/library.json

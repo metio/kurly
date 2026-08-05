@@ -340,6 +340,7 @@ local stageImports = {
   'matchering/server': import 'github.com/metio/kurly/workloads/matchering/server.libsonnet',
   'otterwiki/server': import 'github.com/metio/kurly/workloads/otterwiki/server.libsonnet',
   'warracker/server': import 'github.com/metio/kurly/workloads/warracker/server.libsonnet',
+  'watcharr/server': import 'github.com/metio/kurly/workloads/watcharr/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
@@ -1651,10 +1652,38 @@ local workloadEntries =
   assert std.all([std.objectHasAll(main, helper) for helper in std.objectFields(ann.helpers)]) :
          'helpers: main.libsonnet must expose every annotated helper',
 
+  // The shape of ONE workload entry, carried by both the aggregate and the
+  // per-workload metadata document published beside each workload's artifact.
+  //
+  // IT MOVES ON ADDITIVE CHANGES TOO, which is not the usual rule and is the
+  // whole reason it is worth reading this comment. Adding a field normally breaks
+  // nobody, so normally a version does not move for it. That reasoning held while
+  // the catalogue was ONE aggregate: an aggregate is regenerated whole, so every
+  // entry in it is as new as its newest field, and a missing field could only ever
+  // mean "this workload has nothing to say".
+  //
+  // Per-workload documents are published per RELEASE, so absence acquired a second
+  // meaning: "this document predates the field". The two are indistinguishable
+  // without a version, and the failure is silent.
+  //
+  // It is not a hypothetical. 35 workloads carry `trademark.posture: restricted` —
+  // nextcloud, drupal, jenkins, wordpress among them — and a consumer that reads
+  // absent trademark as "no restriction stated" is right under an aggregate and
+  // dangerously wrong against a stale document: it would name a product after a
+  // mark whose owner restricts exactly that use. A prettier page and a licence
+  // violation, from a change of data source alone.
+  //
+  // So: ADD A FIELD A CONSUMER MAY READ, MOVE THIS NUMBER. A consumer then refuses
+  // any document below the version it needs, at resolve time, deliberately —
+  // rather than rendering a page built on a gap it could not see.
+  //
+  // 3: `description` and `trademark` are carried per workload. Both existed in the
+  //    aggregate before this; neither reached a published metadata document, and
+  //    nothing distinguished such a document from a complete one.
   // 2: `requires` became a list of { kind, required, engine?, extensions? }. A
-  // workload can need two dependencies of the same kind, which the v1 object keyed
-  // by kind could not express — and a consumer priced the difference.
-  schemaVersion: 2,
+  //    workload can need two dependencies of the same kind, which the v1 object
+  //    keyed by kind could not express — and a consumer priced the difference.
+  schemaVersion: 3,
   // The closed set of dependency kinds `requires[].kind` may take. Published so a
   // consumer validates against it and fails loudly on a term it does not know,
   // rather than carrying an unpriced dependency it silently ignored.

@@ -344,6 +344,17 @@
             ++ securityTools;
             text = builtins.readFile ./scripts/check-security.sh;
           };
+          # Everything the catalogue holds that is not about one workload: the
+          # closed vocabularies, the library's API model, and the exclusions —
+          # which have no artifact to ride on, being defined by absence.
+          gen-library = pkgs.writeShellApplication {
+            name = "gen-library";
+            runtimeInputs = with pkgs; [
+              jq
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-library.sh;
+          };
           # Renders catalog/catalog.json, which is a build artifact rather than
           # source: generated wherever it is needed, gitignored, never committed.
           gen-catalog = pkgs.writeShellApplication {
@@ -454,6 +465,7 @@
             check-coverage
             check-security
             gen-catalog
+            gen-library
             gen-maturity
             gen-spdx
             stamp-catalog
@@ -497,6 +509,7 @@
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
               echo "  gen-catalog      render catalog/catalog.json (a build artifact, never committed)"
+              echo "  gen-library      the vocabularies, API model and exclusions — everything not per-workload"
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
               echo "  gen-spdx         write the SPDX licence register (checked by check-catalog)"
               echo "  gen-architectures  derive each image's CPU architectures from the registry"

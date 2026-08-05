@@ -6846,6 +6846,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    watcharr: {
+      name: 'Watcharr',
+      upstream: { repo: 'https://github.com/sbondCo/Watcharr' },
+      license: 'GPL-3.0-only',
+      description: 'Track what you have watched, what you are part-way through and what is next.',
+      summary: 'A Watcharr server (a watchlist for films and television: what you have seen, what you are part-way through and what you mean to watch, with ratings and progress). A plain composable http workload keeping its SQLite database on a PersistentVolume. It looks metadata up from TMDB at runtime, so the pod needs internet egress even though nothing else about it does — a NetworkPolicy that forgets this leaves the catalogue simply empty. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3080.',
+      category: 'application',
+      stages: {
+        server: d.fn('The Watcharr server. SQLite at /data on the volume. secretName holds JWT_SECRET, which signs the tokens users hold — Watcharr generates one into its data directory when unset, so it survives a restart here but not a move to a fresh volume; supplying it makes sessions outlive the volume. Needs egress to TMDB for metadata. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='watcharr'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='watcharr'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

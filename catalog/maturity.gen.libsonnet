@@ -258,6 +258,7 @@
     'wallos',
     'warpgate',
     'warracker',
+    'watcharr',
     'webtrees',
     'wetty',
     'wger',
