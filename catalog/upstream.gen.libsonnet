@@ -785,6 +785,12 @@
     source: 'https://github.com/spegel-org/spegel',
     homepage: 'https://github.com/spegel-org/spegel',
   },
+  spoolman: {
+    license: 'MIT',
+    title: 'Spoolman',
+    source: 'https://github.com/Donkie/Spoolman',
+    homepage: 'https://github.com/Donkie/Spoolman',
+  },
   'stirling-pdf': {
     license: 'NOASSERTION',
     title: 'Stirling-PDF',

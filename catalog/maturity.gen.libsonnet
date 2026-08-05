@@ -225,6 +225,7 @@
     'snipe-it',
     'sonarr',
     'speedtest-tracker',
+    'spoolman',
     'srs',
     'status-responder',
     'stirling-pdf',

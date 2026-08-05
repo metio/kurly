@@ -228,6 +228,7 @@
   sonarr: '2026-07-28',
   srs: '2026-08-04',
   'speedtest-tracker': '2026-08-04',
+  spoolman: '2026-08-04',
   'status-responder': '2026-07-28',
   'stirling-pdf': '2026-07-28',
   synapse: '2026-07-28',

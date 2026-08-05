@@ -6663,6 +6663,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    spoolman: {
+      name: 'Spoolman',
+      upstream: { repo: 'https://github.com/Donkie/Spoolman' },
+      license: 'MIT',
+      description: 'Track which filament spools you own and how much is left on each.',
+      summary: 'A Spoolman server (keeps track of 3D-printing filament: which spools you own, what is left on each, and what got used by which print). A plain composable http workload keeping its SQLite database on a PersistentVolume — no external database. It has no authentication of its own, which is what makes the printer integration simple and what makes exposing it a decision. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web UI and REST API on :8000.',
+      category: 'application',
+      stages: {
+        server: d.fn("The Spoolman server. SPOOLMAN_DIR_DATA points the SQLite database at /data on the volume, rather than the image default under the app account's home directory — a sensible place for a desktop install and an awkward one to mount a volume over. Printers talk to the REST API with no credential, so keep it on the network the printers are on or authenticate in front of it. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='spoolman'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

@@ -245,6 +245,7 @@
   'sonarr/server': { digest: 'sha256:24acea2956a0ccb11f103877d9f4f8576600fb34bff34820ed749c2256dab89f', signed: false },
   'speedtest-tracker/server': { digest: 'sha256:19abfdb836bcf5b3d15d65dde992efcfafd44454e378476340a5aa0351a01a32', signed: false },
   'spegel/mirror': { digest: 'sha256:26c60b05e08ac738e8442bc389c5780bff0e1d8153956e45d810a2f1008cf56f', identity: 'https://github.com/spegel-org/spegel/.github/workflows/release.yaml@refs/tags/v0.7.4', issuer: 'https://token.actions.githubusercontent.com', signed: true, sourceRepository: 'https://github.com/spegel-org/spegel' },
+  'spoolman/server': { digest: 'sha256:f17489666719c1a6e12bf0616e9865e3ee8609ef0ac2608d67c1528ceeb609e8', signed: true, identity: 'https://github.com/Donkie/Spoolman/.github/workflows/ci.yml@refs/tags/v0.26.0', issuer: 'https://token.actions.githubusercontent.com', sourceRepository: 'https://github.com/Donkie/Spoolman' },
   'srs/server': { digest: 'sha256:b740a82a7daeb28a35e30ce4cf2c08f295c411879d59d18aa2d9a5eb6a12f687', signed: false },
   'status-responder/responder': { digest: 'sha256:fcb75f691c8b0414d670ae570240cbf95502cc18a9ba57e982ecac589760a186', signed: false },
   'stirling-pdf/server': { digest: 'sha256:7ed4d9681d18e4fbc3aa6a63647c4b5c2bcc4b75841df7c05d7e3d2320f5c9a1', signed: false },
