@@ -35910,6 +35910,160 @@
          }
       },
       {
+         "category": "application",
+         "description": "Upload a file, get a link, optionally one that expires.",
+         "id": "picoshare",
+         "license": "AGPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "PicoShare",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "picoshare",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "20Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "picoshare",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "50m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "picoshare"
+                  }
+               ],
+               "help": "The PicoShare server. Everything lives in SQLite at /data/store.db on the volume, uploaded file contents included — size storageSize for the files themselves. secretName holds PS_SHARED_SECRET, the single passphrase granting upload and administration; PicoShare has one account and this is it. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/picoshare/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:053fee7cbdc64894e924733d5405158a9baadbecd231bfe97ae69d16fd2c2639",
+                  "image": "docker.io/mtlynch/picoshare:v1.5.4@sha256:053fee7cbdc64894e924733d5405158a9baadbecd231bfe97ae69d16fd2c2639",
+                  "tag": "v1.5.4"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "PS_SHARED_SECRET",
+                     "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "picoshare"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A PicoShare server (a minimal file-sharing app: upload a file, get a link, optionally with an expiry). A plain composable http workload whose files AND metadata live in one SQLite database on a PersistentVolume — uploaded content is stored as blobs inside the database rather than beside it, so the volume must be sized for everything hosted, not for an index. One shared passphrase grants upload and administration. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4001.",
+         "upstream": {
+            "repo": "https://github.com/mtlynch/picoshare"
+         }
+      },
+      {
          "category": "networking",
          "description": "Block ads and trackers for your whole network, with a dashboard showing what it stopped.",
          "id": "pihole",

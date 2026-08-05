@@ -6622,6 +6622,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    picoshare: {
+      name: 'PicoShare',
+      upstream: { repo: 'https://github.com/mtlynch/picoshare' },
+      license: 'AGPL-3.0-only',
+      description: 'Upload a file, get a link, optionally one that expires.',
+      summary: 'A PicoShare server (a minimal file-sharing app: upload a file, get a link, optionally with an expiry). A plain composable http workload whose files AND metadata live in one SQLite database on a PersistentVolume — uploaded content is stored as blobs inside the database rather than beside it, so the volume must be sized for everything hosted, not for an index. One shared passphrase grants upload and administration. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4001.',
+      category: 'application',
+      stages: {
+        server: d.fn('The PicoShare server. Everything lives in SQLite at /data/store.db on the volume, uploaded file contents included — size storageSize for the files themselves. secretName holds PS_SHARED_SECRET, the single passphrase granting upload and administration; PicoShare has one account and this is it. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='picoshare'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, default='picoshare'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'PS_SHARED_SECRET', generate: 'password', length: 32 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

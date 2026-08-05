@@ -194,6 +194,7 @@
   'photoprism/server': { digest: 'sha256:650c6ad5a6517ea95671eedb0f2a9c49f05729a1d95809fcf01533b96149582e', architectures: ['amd64', 'arm64'] },
   'photoview/server': { digest: 'sha256:f914c44b202fc8175e09bd56f35bb1a4a7c04dc451652306f240aabc3eea133e', architectures: ['amd64', 'arm', 'arm64'] },
   'phpmyadmin/server': { digest: 'sha256:b68f318c5fd85541795ed8eb4ced28ea6908a89910871783b3e479cc6c6d1e1b', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
+  'picoshare/server': { digest: 'sha256:053fee7cbdc64894e924733d5405158a9baadbecd231bfe97ae69d16fd2c2639', architectures: ['amd64', 'arm', 'arm64'] },
   'pihole/server': { digest: 'sha256:f7d1be836e3bc608b56d82fc9904f5a831cdfbc0dc9c6d58f94e4c985c70038b', architectures: ['386', 'amd64', 'arm', 'arm64', 'riscv64'] },
   'pilos/server': { digest: 'sha256:363568ef0c1b0e4a3af93ab97bdfb3d4d2f345bce961002af1de317cba135c49', architectures: ['amd64'] },
   'pinchflat/server': { digest: 'sha256:4e975edf58f0861a5cbfe8fc6aac4851ff5a02dfc3f05ffeea4982e3084a5a4a', architectures: ['amd64', 'arm64'] },

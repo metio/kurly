@@ -183,6 +183,7 @@
     'photoprism',
     'photoview',
     'phpmyadmin',
+    'picoshare',
     'pihole',
     'pilos',
     'pinchflat',

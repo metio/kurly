@@ -185,6 +185,7 @@
   photoprism: '2026-07-28',
   photoview: '2026-07-28',
   phpmyadmin: '2026-07-28',
+  picoshare: '2026-08-04',
   pihole: '2026-07-28',
   pilos: '2026-07-28',
   pinchflat: '2026-08-04',

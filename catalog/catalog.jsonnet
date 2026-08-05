@@ -330,6 +330,7 @@ local stageImports = {
   'restreamer/server': import 'github.com/metio/kurly/workloads/restreamer/server.libsonnet',
   'speedtest-tracker/server': import 'github.com/metio/kurly/workloads/speedtest-tracker/server.libsonnet',
   'wetty/server': import 'github.com/metio/kurly/workloads/wetty/server.libsonnet',
+  'picoshare/server': import 'github.com/metio/kurly/workloads/picoshare/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
