@@ -270,6 +270,7 @@
   'traccar/server': { digest: 'sha256:b7a19c3aa641dd775897173ac21ba6ca410a72047736d065fe63ab344f62eaac', signed: false },
   'transmission/server': { digest: 'sha256:6b78970a0cb00709d3817fcb47b7cf74da56a43384bbd50d03955ca87e38c5f0', signed: false },
   'trilium/server': { digest: 'sha256:8e053aa58a90c1690106a324a4692690ba0491c21ae40485b4051e2911df9489', signed: false },
+  'tubesync/server': { digest: 'sha256:f41658ebc890fa7aba037e3e1f113b5a2af81581799e23c59534b9faff258092', signed: false },
   'tvheadend/server': { digest: 'sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067', signed: false },
   'uptime-kuma/server': { digest: 'sha256:91e963bfda569ba115206e843febb446f473ab525add4e08b2b9e3beffa16985', signed: false },
   'valkey/cache': { digest: 'sha256:3acc0687f2a2e1091fae6450d7842dd658c941338cf0a873ddd9e14b9e4ea4dd', signed: false },
@@ -289,6 +290,6 @@
   'wordpress/server': { digest: 'sha256:9fac4d47b61186131ffefb5d966f0045d0eea94bfd7bd40cafae29b78a709d1b', signed: false },
   'xwiki/server': { digest: 'sha256:57417773ff8b7985a3117f52cf13891aa050692eed8eec070106caa0e00a6b89', signed: false },
   'yourls/server': { digest: 'sha256:533c5023b94dd951b9a21cb239facfdeea8b6e867352167fe963fd0f220a35e2', signed: false },
-  'yt-dlp-web-ui/server': { digest: 'sha256:00cf11c10dee570aded552d24738df1669afcca3ca4944b0168378feb6f03bda', signed: true, identity: 'https://github.com/marcopeocchi/yt-dlp-web-ui/.github/workflows/docker-publish.yml@refs/tags/v3.0.0', issuer: 'https://token.actions.githubusercontent.com', sourceRepository: 'https://github.com/marcopeocchi/yt-dlp-web-ui' },
+  'yt-dlp-web-ui/server': { digest: 'sha256:00cf11c10dee570aded552d24738df1669afcca3ca4944b0168378feb6f03bda', identity: 'https://github.com/marcopeocchi/yt-dlp-web-ui/.github/workflows/docker-publish.yml@refs/tags/v3.0.0', issuer: 'https://token.actions.githubusercontent.com', signed: true, sourceRepository: 'https://github.com/marcopeocchi/yt-dlp-web-ui' },
   'znc/server': { digest: 'sha256:040a38a8a146e28f9b17182827f3e37c4ca22d9a489e0aea4816bf8aabb405b5', signed: false },
 }

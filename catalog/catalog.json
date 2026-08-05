@@ -47830,6 +47830,163 @@
       },
       {
          "category": "application",
+         "description": "Subscribe to channels and have new uploads waiting in your media library.",
+         "id": "tubesync",
+         "license": "AGPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "TubeSync",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "tubesync",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "200Gi",
+                     "name": "mediaSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "puid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 1000,
+                     "name": "pgid",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "250m",
+                     "kind": "regular",
+                     "memory": "512Mi",
+                     "name": "tubesync"
+                  }
+               ],
+               "help": "The TubeSync server. Database and configuration at /config, media at /downloads — sized separately, since the media half grows without limit. puid/pgid are the ownership the media is written with, so a media server sharing the volume can read it. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/tubesync/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "baseline",
+                  "violates": [
+                     "allowPrivilegeEscalation",
+                     "runAsNonRoot",
+                     "capabilities"
+                  ]
+               },
+               "runs": {
+                  "digest": "sha256:f41658ebc890fa7aba037e3e1f113b5a2af81581799e23c59534b9faff258092",
+                  "image": "ghcr.io/meeb/tubesync:v0.18.3@sha256:f41658ebc890fa7aba037e3e1f113b5a2af81581799e23c59534b9faff258092",
+                  "tag": "v0.18.3"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 2
+               }
+            }
+         ],
+         "summary": "A TubeSync server (subscribe to YouTube channels and playlists and it downloads new uploads on a schedule, named and tagged so Plex or Jellyfin picks them up as a library). A plain composable http workload with two PersistentVolumes — a small one for the database and configuration, a large one for media. An s6-overlay image, so deliberately less hardened. Single writer over ReadWriteOnce volumes: one replica, recreated, which also keeps two schedulers from fetching the same videos twice. Serves on :4848.",
+         "upstream": {
+            "repo": "https://github.com/meeb/tubesync"
+         }
+      },
+      {
+         "category": "application",
          "description": "Watch and record live TV from your tuners on any device.",
          "id": "tvheadend",
          "image": {

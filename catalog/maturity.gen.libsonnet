@@ -246,6 +246,7 @@
     'traccar',
     'transmission',
     'trilium',
+    'tubesync',
     'tvheadend',
     'uptime-kuma',
     'valkey',

@@ -268,6 +268,7 @@
   'traccar/server': { digest: 'sha256:b7a19c3aa641dd775897173ac21ba6ca410a72047736d065fe63ab344f62eaac', architectures: ['amd64', 'arm64'] },
   'transmission/server': { digest: 'sha256:6b78970a0cb00709d3817fcb47b7cf74da56a43384bbd50d03955ca87e38c5f0', architectures: ['amd64', 'arm64'] },
   'trilium/server': { digest: 'sha256:8e053aa58a90c1690106a324a4692690ba0491c21ae40485b4051e2911df9489', architectures: ['amd64', 'arm', 'arm64'] },
+  'tubesync/server': { digest: 'sha256:f41658ebc890fa7aba037e3e1f113b5a2af81581799e23c59534b9faff258092', architectures: ['amd64', 'arm64'] },
   'tvheadend/server': { digest: 'sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067', architectures: ['amd64', 'arm64'] },
   'uptime-kuma/server': { digest: 'sha256:91e963bfda569ba115206e843febb446f473ab525add4e08b2b9e3beffa16985', architectures: ['amd64', 'arm', 'arm64'] },
   'valkey/cache': { digest: 'sha256:3acc0687f2a2e1091fae6450d7842dd658c941338cf0a873ddd9e14b9e4ea4dd', architectures: ['amd64', 'arm', 'arm64', 'ppc64le'] },

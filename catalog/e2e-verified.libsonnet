@@ -249,6 +249,7 @@
   transmission: '2026-07-28',
   trilium: '2026-07-28',
   tvheadend: '2026-07-28',
+  tubesync: '2026-08-04',
   'uptime-kuma': '2026-07-28',
   valkey: '2026-07-28',
   vaultwarden: '2026-07-28',

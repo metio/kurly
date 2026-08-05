@@ -6764,6 +6764,29 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    tubesync: {
+      name: 'TubeSync',
+      upstream: { repo: 'https://github.com/meeb/tubesync' },
+      license: 'AGPL-3.0-only',
+      description: 'Subscribe to channels and have new uploads waiting in your media library.',
+      summary: 'A TubeSync server (subscribe to YouTube channels and playlists and it downloads new uploads on a schedule, named and tagged so Plex or Jellyfin picks them up as a library). A plain composable http workload with two PersistentVolumes — a small one for the database and configuration, a large one for media. An s6-overlay image, so deliberately less hardened. Single writer over ReadWriteOnce volumes: one replica, recreated, which also keeps two schedulers from fetching the same videos twice. Serves on :4848.',
+      category: 'application',
+      stages: {
+        server: d.fn('The TubeSync server. Database and configuration at /config, media at /downloads — sized separately, since the media half grows without limit. puid/pgid are the ownership the media is written with, so a media server sharing the volume can read it. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='tubesync'),
+          d.arg('image', d.T.string),
+          d.arg('mediaSize', d.T.quantity, default='200Gi'),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('puid', d.T.int, default=1000),
+          d.arg('pgid', d.T.int, default=1000),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
