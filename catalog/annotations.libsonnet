@@ -6422,6 +6422,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'WARPGATE_ADMIN_PASSWORD', generate: 'password', length: 32 }] },
       },
     },
+    screego: {
+      name: 'screego',
+      upstream: { repo: 'https://github.com/screego/server' },
+      license: 'GPL-3.0-only',
+      description: 'Share your screen with a few people from a browser, with no account or plugin.',
+      summary: 'A screego server (screen sharing over WebRTC: a room link and a browser, no account and no plugin). A plain composable http workload and a stateless one — rooms live in memory only, so it claims no PersistentVolume and relaxes nothing. It carries its own TURN server on :3478 (TCP and UDP) beside the app on :5050, and REFUSES TO START without externalIp, the address TURN hands out to participants.',
+      category: 'application',
+      stages: {
+        server: d.fn('The screego server. Stateless: no volume, nothing to back up. externalIp is the publicly reachable address of its TURN server and is required — screego exits without it, and a wrong value is worse than none, since participants on different networks then join a room and see a blank screen rather than an error. secretName holds SCREEGO_SECRET, which signs sessions; unset, screego mints one per start and logs everybody out on restart. Compose an exposure onto the HTTP port; the TURN ports are not HTTP and need their own routes.', [
+          d.arg('name', d.T.string, default='screego'),
+          d.arg('image', d.T.string),
+          d.arg('externalIp', d.T.string, required=true, example='198.51.100.10'),
+          d.arg('secretName', d.T.string, default='screego'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'SCREEGO_SECRET', generate: 'hex', length: 64 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

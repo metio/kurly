@@ -207,6 +207,7 @@
   'rss-bridge': '2026-07-28',
   rundeck: '2026-07-28',
   sabnzbd: '2026-07-28',
+  screego: '2026-08-04',
   searxng: '2026-07-28',
   seatsurfing: '2026-07-28',
   seaweedfs: '2026-07-28',

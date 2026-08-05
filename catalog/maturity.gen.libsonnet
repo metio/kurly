@@ -205,6 +205,7 @@
     'rss-bridge',
     'rundeck',
     'sabnzbd',
+    'screego',
     'searxng',
     'seatsurfing',
     'seaweedfs',

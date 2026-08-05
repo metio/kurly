@@ -699,6 +699,9 @@
     source: 'https://github.com/linuxserver/docker-sabnzbd',
     homepage: 'https://github.com/linuxserver/docker-sabnzbd/packages',
   },
+  screego: {
+    title: 'screego',
+  },
   searxng: {
     license: 'AGPL-3.0-or-later',
     title: 'SearXNG',

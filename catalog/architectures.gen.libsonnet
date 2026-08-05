@@ -218,6 +218,7 @@
   'rss-bridge/server': { digest: 'sha256:569f01f3faecd0d34d702e01b34eb0a769f7bedb84caf6dff29821d18b46f971', architectures: ['amd64', 'arm', 'arm64'] },
   'rundeck/server': { digest: 'sha256:0d0713199f08e0e78f9647e03acd8fc4f9ca562343338a8e85bbcb66dbbe22af', architectures: ['amd64'] },
   'sabnzbd/server': { digest: 'sha256:302be8972d4627222a0701634f2f9025826d760d856414aa6e67c0a66833e5be', architectures: ['amd64', 'arm64'] },
+  'screego/server': { digest: 'sha256:16afc9c8d0ab26af7e440dd42ebdce0ac9dc631668fb6a2724d61db8c070f997', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64'] },
   'searxng/server': { digest: 'sha256:a1a04679fe6a4fa6bfe9efb82adfbe7bee4eaef8d77b2392562ca5bfe032c4be', architectures: ['amd64', 'arm', 'arm64'] },
   'seatsurfing/server': { digest: 'sha256:9b54054166803140426d3d4fb36a1ef2f49935bc4ef7e3d5cc2fe17b6a6f9d04', architectures: ['amd64', 'arm64'] },
   'seaweedfs/filer': { digest: 'sha256:52194fba4fecd0083c842158b3a902ba6e04a63619b2b0efcd08007bdb6a4602', architectures: ['386', 'amd64', 'arm', 'arm64'] },

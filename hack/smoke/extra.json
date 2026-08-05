@@ -45,6 +45,9 @@
     "compose": "+ k.env({ PS_INSTALL_AUTO: '1', PS_DOMAIN: 'prestashop', PS_HANDLE_DYNAMIC_DOMAIN: '0', PS_ERASE_DB: '0' })",
     "dbEngine": "mysql"
   },
+  "screego": {
+    "compose": "+ k.env({ SCREEGO_EXTERNAL_IP: '127.0.0.1' })"
+  },
   "seaweedfs": {
     "stageOrder": "master volume filer server"
   },
