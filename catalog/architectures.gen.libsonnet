@@ -65,6 +65,7 @@
   'etherpad/server': { digest: 'sha256:044e5b58686f22e2c8b792ed0a7c35a83986458e1ee91f12119276c1e2572bce', architectures: ['amd64', 'arm64'] },
   'excalidraw/server': { digest: 'sha256:3d243e15afde6c6511be36b14cef3d095b9d91bcd35ba98aca3b546f4b477df9', architectures: ['amd64'] },
   'expenseowl/server': { digest: 'sha256:f9097cf2890b45e6bbf39311bf0fccaf58c3c7c06ec39dc39d8b013e176391b5', architectures: ['amd64', 'arm64'] },
+  'ezbookkeeping/server': { digest: 'sha256:6d71a0d0f62806f609634886d0cbe9133e8177e1cb76b569d8dcc0587f734f0a', architectures: ['amd64', 'arm', 'arm64'] },
   'ferretdb/server': { digest: 'sha256:5706414241eb84f0515512c37b46db0f1b1eac9e5ceb7e4c2523211c184b1985', architectures: ['amd64', 'arm64'] },
   'fider/server': { digest: 'sha256:466669b3c932158d7fc082d4037ad881fce6c5cd49cf973e15d9bcaedc27889a', architectures: ['amd64', 'arm64'] },
   'filebrowser/server': { digest: 'sha256:b1d9980d79d6d0ad334e327eea3501324a07fe2bce94a4cd84187bccbcfbe3f8', architectures: ['amd64', 'arm', 'arm64'] },

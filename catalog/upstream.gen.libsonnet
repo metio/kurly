@@ -204,6 +204,12 @@
     source: 'https://github.com/ether/etherpad',
     homepage: 'https://github.com/ether/etherpad',
   },
+  ezbookkeeping: {
+    license: 'MIT',
+    title: 'ezbookkeeping',
+    source: 'https://github.com/mayswind/ezbookkeeping',
+    homepage: 'https://github.com/mayswind/ezbookkeeping',
+  },
   ferretdb: {
     title: 'FerretDB',
     source: 'https://github.com/FerretDB/FerretDB',

@@ -66,6 +66,7 @@
     'etherpad',
     'excalidraw',
     'expenseowl',
+    'ezbookkeeping',
     'ferretdb',
     'fider',
     'filebrowser',

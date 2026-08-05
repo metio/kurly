@@ -13504,6 +13504,165 @@
          }
       },
       {
+         "category": "application",
+         "description": "Track accounts and transactions in a personal ledger you host yourself.",
+         "id": "ezbookkeeping",
+         "image": {
+            "homepage": "https://github.com/mayswind/ezbookkeeping",
+            "source": "https://github.com/mayswind/ezbookkeeping",
+            "title": "ezbookkeeping"
+         },
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "ezBookkeeping",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "ezbookkeeping",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "ezbookkeeping",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "50m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "ezbookkeeping"
+                  }
+               ],
+               "help": "The ezBookkeeping server. Keeps its SQLite database at /ezbookkeeping/data on the volume; point the EBK_DATABASE_* settings at MySQL or PostgreSQL through env to move it off. secretName holds EBK_SECURITY_SECRET_KEY, which signs the tokens users hold — supply it, because the image ships a PUBLISHED default and an instance running with it accepts tokens anybody can mint. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/ezbookkeeping/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:6d71a0d0f62806f609634886d0cbe9133e8177e1cb76b569d8dcc0587f734f0a",
+                  "image": "docker.io/mayswind/ezbookkeeping:1.6.1@sha256:6d71a0d0f62806f609634886d0cbe9133e8177e1cb76b569d8dcc0587f734f0a",
+                  "tag": "1.6.1"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "EBK_SECURITY_SECRET_KEY",
+                     "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "ezbookkeeping"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "An ezBookkeeping server (a lightweight personal finance and accounting app: accounts, transactions, categories and reports, with a mobile-friendly UI). A plain composable http workload keeping its SQLite database on a PersistentVolume — no external database. The image already runs unprivileged, so nothing is relaxed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
+         "upstream": {
+            "repo": "https://github.com/mayswind/ezbookkeeping"
+         }
+      },
+      {
          "category": "database",
          "description": "Talk MongoDB to your applications while the data lives in PostgreSQL.",
          "id": "ferretdb",

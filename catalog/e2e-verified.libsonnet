@@ -68,6 +68,7 @@
   etherpad: '2026-07-28',
   excalidraw: '2026-07-28',
   expenseowl: '2026-07-28',
+  ezbookkeeping: '2026-08-04',
   ferretdb: '2026-07-28',
   fider: '2026-07-28',
   filebrowser: '2026-07-28',
