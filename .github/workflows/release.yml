@@ -288,9 +288,19 @@ jobs:
           layout; register it as a JsonnetLibrary (Flux OCIRepository source)
           or mount it as an image volume. Signed with cosign keyless.
           EOF
-          git tag "$tag" "$SHA"
-          git push origin "$tag"
-          gh release create "$tag" --title "$tag" --notes-file "$NOTES"
+          # The tag is created by the RELEASE API, not by pushing a ref. A
+          # GitHub App may not push a ref whose commits touch
+          # .github/workflows/ without a `workflows` permission that
+          # GITHUB_TOKEN cannot be granted at all — so `git push origin <tag>`
+          # is refused, intermittently, whenever the release commit happens to
+          # carry a workflow change. It rejected one workload out of 275 in one
+          # run and a whole unit in the next, which is the worst shape for a
+          # failure: rare enough to look like an accident, frequent enough to
+          # keep costing a re-release.
+          #
+          # --target creates the tag server-side as part of creating the
+          # release, so there is no ref push to refuse.
+          gh release create "$tag" --target "$SHA" --title "$tag" --notes-file "$NOTES"
   vocabularies:
     name: Release vocabularies
     # This unit publishes what the catalogue holds that is NOT about one
@@ -486,9 +496,19 @@ jobs:
           OCI referrer, pinned by the same digest as the bits they describe.
           There is no aggregate \`catalog.json\`.
           EOF
-          git tag "$tag" "$SHA"
-          git push origin "$tag"
-          gh release create "$tag" --title "$tag" --notes-file "$NOTES"
+          # The tag is created by the RELEASE API, not by pushing a ref. A
+          # GitHub App may not push a ref whose commits touch
+          # .github/workflows/ without a `workflows` permission that
+          # GITHUB_TOKEN cannot be granted at all — so `git push origin <tag>`
+          # is refused, intermittently, whenever the release commit happens to
+          # carry a workflow change. It rejected one workload out of 275 in one
+          # run and a whole unit in the next, which is the worst shape for a
+          # failure: rare enough to look like an accident, frequent enough to
+          # keep costing a re-release.
+          #
+          # --target creates the tag server-side as part of creating the
+          # release, so there is no ref push to refuse.
+          gh release create "$tag" --target "$SHA" --title "$tag" --notes-file "$NOTES"
   # The workload units, sharded. GitHub caps a JOB's matrix at 256
   # configurations and the fleet is past that, so the list is split and each
   # shard carries its own matrix — the cap then applies per shard rather than

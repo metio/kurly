@@ -104,7 +104,6 @@ jobs:
           nix develop --command gen-catalog >/dev/null
           nix develop --command gen-workload-metadata "$WORKLOAD" metadata.json
           nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
-          nix develop --command oras attach \
           # Both registry writes retry with backoff. A fleet-wide release makes
           # hundreds of manifest PUTs against ghcr.io within a few minutes and
           # trips its SECONDARY rate limit, which answers 403 permission_denied —
@@ -176,6 +175,16 @@ jobs:
           \`+\` features, and feed the result into a stageset StageSet — see the
           workload's README. Signed with cosign keyless.
           EOF
-          git tag "$tag" "$SHA"
-          git push origin "$tag"
-          gh release create "$tag" --title "$tag" --notes-file "$NOTES"
+          # The tag is created by the RELEASE API, not by pushing a ref. A
+          # GitHub App may not push a ref whose commits touch
+          # .github/workflows/ without a `workflows` permission that
+          # GITHUB_TOKEN cannot be granted at all — so `git push origin <tag>`
+          # is refused, intermittently, whenever the release commit happens to
+          # carry a workflow change. It rejected one workload out of 275 in one
+          # run and a whole unit in the next, which is the worst shape for a
+          # failure: rare enough to look like an accident, frequent enough to
+          # keep costing a re-release.
+          #
+          # --target creates the tag server-side as part of creating the
+          # release, so there is no ref push to refuse.
+          gh release create "$tag" --target "$SHA" --title "$tag" --notes-file "$NOTES"
