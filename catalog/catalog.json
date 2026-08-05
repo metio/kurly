@@ -355,6 +355,10 @@
          "note": "upstream sells hosting (Hoppscotch Organization, $6/user/mo) — https://hoppscotch.com/pricing",
          "reason": "upstream-sells-hosting"
       },
+      "ihatemoney": {
+         "note": "upstream runs a free hosted instance for general use, funded by donations — https://ihatemoney.org",
+         "reason": "upstream-hosts-it-free"
+      },
       "influxdb": {
          "note": "upstream sells hosting (InfluxDB Cloud) — https://www.influxdata.com/products/influxdb-cloud/",
          "reason": "upstream-sells-hosting"
@@ -537,6 +541,7 @@
       "no-published-source",
       "undeployable",
       "upstream-archived",
+      "upstream-hosts-it-free",
       "upstream-sells-hosting"
    ],
    "expose": [

@@ -140,6 +140,12 @@
   'tileserver-gl': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (MapTiler Cloud, the maps API by the same company that maintains tileserver-gl) — https://www.maptiler.com/cloud/' },
   onetimesecret: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Onetime Secret Identity Plus, EUR 35/mo) — https://onetimesecret.com/en/pricing' },
 
+  // Projects that run a FREE instance of their own software. Not a criticism of
+  // any of them — the opposite: they have already given away what a hosting
+  // offer would sell, at a price nothing undercuts. Carrying these would cost an
+  // operator real work and hand a user nothing they cannot already have.
+  ihatemoney: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free hosted instance for general use, funded by donations — https://ihatemoney.org' },
+
   // Upstream is no longer maintained. A catalogue that keeps offering an archived
   // project is selling something nobody will fix — every future CVE in it stays
   // open, and the operator who deployed it from here has no upstream to go to.

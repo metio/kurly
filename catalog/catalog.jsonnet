@@ -1267,11 +1267,22 @@ local bsiOf(key, fn) =
 // switches on the reason rather than reading the sentence beside it — rendering
 // all of them as "not offered" says the same thing about a proprietary media
 // server and about a project whose authors sell their own hosting.
+//
+// `upstream-hosts-it-free` is the newest and the least obvious, so it is worth
+// stating plainly: it is NOT a judgement about the software or its authors. A
+// project that runs a free instance of itself has already answered the question a
+// paid hosting offer asks, and answered it at a price nothing can undercut. There
+// is no version of this catalogue that competes with free, so carrying such a
+// workload would cost the operator work and offer the user nothing they cannot
+// already have. It sits beside `upstream-sells-hosting` rather than inside it
+// because the two are different facts and a consumer may reasonably treat them
+// differently — one is a business conflict, the other simply an absent need.
 local excludedReasons = [
   'licence-forbids-saas',
   'no-published-source',
   'undeployable',
   'upstream-archived',
+  'upstream-hosts-it-free',
   'upstream-sells-hosting',
 ];
 
