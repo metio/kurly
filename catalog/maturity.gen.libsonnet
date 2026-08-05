@@ -184,6 +184,7 @@
     'phpmyadmin',
     'pihole',
     'pilos',
+    'pinchflat',
     'piwigo',
     'pocket-id',
     'pocketbase',

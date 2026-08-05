@@ -136,6 +136,7 @@
   discourse: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Discourse hosting, $100-500/mo) — https://www.discourse.org/pricing' },
   hoppscotch: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Hoppscotch Organization, $6/user/mo) — https://hoppscotch.com/pricing' },
   strapi: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Strapi Cloud, $35-450/project/mo) — https://strapi.io/pricing-cloud' },
+  flipt: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Flipt Pro cloud, $200/mo) — https://flipt.io/pricing' },
 
   // Upstream is no longer maintained. A catalogue that keeps offering an archived
   // project is selling something nobody will fix — every future CVE in it stays

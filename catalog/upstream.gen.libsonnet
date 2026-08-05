@@ -621,6 +621,12 @@
     source: 'https://github.com/THM-Health/PILOS',
     homepage: 'https://github.com/THM-Health/PILOS',
   },
+  pinchflat: {
+    license: 'AGPL-3.0',
+    title: 'pinchflat',
+    source: 'https://github.com/kieraneglin/pinchflat',
+    homepage: 'https://github.com/kieraneglin/pinchflat',
+  },
   piwigo: {
     license: 'GPL-3.0-only',
     title: 'Piwigo',

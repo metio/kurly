@@ -319,6 +319,10 @@
          "note": "BUSL-1.1; forbids offering the software as a service for the licence term",
          "reason": "licence-forbids-saas"
       },
+      "flipt": {
+         "note": "upstream sells hosting (Flipt Pro cloud, $200/mo) — https://flipt.io/pricing",
+         "reason": "upstream-sells-hosting"
+      },
       "formbricks": {
          "note": "upstream sells hosting (Formbricks Cloud) — https://formbricks.com/pricing",
          "reason": "upstream-sells-hosting"
@@ -36121,6 +36125,152 @@
          "upstream": {
             "homepage": "https://thm-health.github.io/PILOS/",
             "repo": "https://github.com/THM-Health/PILOS"
+         }
+      },
+      {
+         "category": "application",
+         "description": "Keep your own copies of the channels you follow, downloaded automatically.",
+         "id": "pinchflat",
+         "image": {
+            "homepage": "https://github.com/kieraneglin/pinchflat",
+            "source": "https://github.com/kieraneglin/pinchflat",
+            "title": "pinchflat"
+         },
+         "license": "AGPL-3.0-only",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Pinchflat",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "pinchflat",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "100Gi",
+                     "name": "mediaSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "2Gi"
+                        },
+                        "requests": {
+                           "cpu": "250m",
+                           "memory": "512Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "250m",
+                     "kind": "regular",
+                     "memory": "512Mi",
+                     "name": "pinchflat"
+                  }
+               ],
+               "help": "The Pinchflat server. SQLite and configuration at /config, downloaded media at /downloads — sized separately because a few subscribed channels fill tens of gigabytes. It checks every path it uses at startup and exits on the first read-only one, which is why /etc/yt-dlp is scratch as well as /tmp. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/pinchflat/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:4e975edf58f0861a5cbfe8fc6aac4851ff5a02dfc3f05ffeea4982e3084a5a4a",
+                  "image": "ghcr.io/kieraneglin/pinchflat:v2025.6.6@sha256:4e975edf58f0861a5cbfe8fc6aac4851ff5a02dfc3f05ffeea4982e3084a5a4a",
+                  "tag": "v2025.6.6"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 2
+               }
+            }
+         ],
+         "summary": "A Pinchflat server (an automated YouTube archiver built on yt-dlp: point it at channels or playlists and it downloads new uploads on a schedule, named and tagged for a media server to pick up). A plain composable http workload with two PersistentVolumes — a small one for its SQLite database and a large one for media, which grows without limit. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves the web UI on :8945.",
+         "upstream": {
+            "repo": "https://github.com/kieraneglin/pinchflat"
          }
       },
       {

@@ -186,6 +186,7 @@
   phpmyadmin: '2026-07-28',
   pihole: '2026-07-28',
   pilos: '2026-07-28',
+  pinchflat: '2026-08-04',
   piwigo: '2026-07-28',
   'pocket-id': '2026-07-28',
   pocketbase: '2026-07-28',

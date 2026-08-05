@@ -6506,6 +6506,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'SECRET', generate: 'hex', length: 64 }] },
       },
     },
+    pinchflat: {
+      name: 'Pinchflat',
+      upstream: { repo: 'https://github.com/kieraneglin/pinchflat' },
+      license: 'AGPL-3.0-only',
+      description: 'Keep your own copies of the channels you follow, downloaded automatically.',
+      summary: 'A Pinchflat server (an automated YouTube archiver built on yt-dlp: point it at channels or playlists and it downloads new uploads on a schedule, named and tagged for a media server to pick up). A plain composable http workload with two PersistentVolumes — a small one for its SQLite database and a large one for media, which grows without limit. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves the web UI on :8945.',
+      category: 'application',
+      stages: {
+        server: d.fn('The Pinchflat server. SQLite and configuration at /config, downloaded media at /downloads — sized separately because a few subscribed channels fill tens of gigabytes. It checks every path it uses at startup and exits on the first read-only one, which is why /etc/yt-dlp is scratch as well as /tmp. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='pinchflat'),
+          d.arg('image', d.T.string),
+          d.arg('mediaSize', d.T.quantity, default='100Gi'),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

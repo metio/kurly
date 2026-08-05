@@ -197,6 +197,7 @@
   'phpmyadmin/server': { digest: 'sha256:b68f318c5fd85541795ed8eb4ced28ea6908a89910871783b3e479cc6c6d1e1b', signed: false },
   'pihole/server': { digest: 'sha256:f7d1be836e3bc608b56d82fc9904f5a831cdfbc0dc9c6d58f94e4c985c70038b', signed: false },
   'pilos/server': { digest: 'sha256:363568ef0c1b0e4a3af93ab97bdfb3d4d2f345bce961002af1de317cba135c49', signed: false },
+  'pinchflat/server': { digest: 'sha256:4e975edf58f0861a5cbfe8fc6aac4851ff5a02dfc3f05ffeea4982e3084a5a4a', signed: false },
   'piwigo/server': { digest: 'sha256:82155338f6cd8a009809daff87af5901075b683b2670204c7dbbe20c630b0ecf', signed: false },
   'pocket-id/server': { digest: 'sha256:bb4b1debee6fa1245a36a0d8a0bd23794033028b803d7639c898bc11697f155f', signed: false },
   'pocketbase/server': { digest: 'sha256:dfebd2550d6b5176d67afd3e859f9b642096e624c7f6ada1b5a5bc70a5d21be1', signed: false },
