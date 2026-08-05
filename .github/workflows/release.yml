@@ -58,6 +58,10 @@ jobs:
       library: ${{ steps.changed.outputs.library }}
       catalog: ${{ steps.changed.outputs.catalog }}
       workloads: ${{ steps.changed.outputs.workloads }}
+      shard0: ${{ steps.changed.outputs.shard0 }}
+      shard1: ${{ steps.changed.outputs.shard1 }}
+      shard2: ${{ steps.changed.outputs.shard2 }}
+      shard3: ${{ steps.changed.outputs.shard3 }}
       any: ${{ steps.changed.outputs.any }}
       version: ${{ steps.version.outputs.version }}
     steps:
@@ -139,6 +143,15 @@ jobs:
             echo "library=$library"
             echo "catalog=$catalog"
             echo "workloads=$(printf '%s\n' "$workloads" | grep -v '^$' | jq --raw-input . | jq --slurp --compact-output .)"
+            # The same list split across four shards, because GitHub refuses a
+            # job whose matrix exceeds 256 configurations and the fleet is past
+            # that — a full release failed before running a single job. Sharded
+            # round-robin (NR % 4) rather than in contiguous blocks, so the
+            # shards stay balanced at any fleet size.
+            for s in 0 1 2 3; do
+              echo "shard${s}=$(printf '%s\n' "$workloads" | grep -v '^$' \
+                | awk -v s="$s" 'NR % 4 == s' | jq --raw-input . | jq --slurp --compact-output .)"
+            done
             if [ "$library" = "true" ] || [ "$catalog" = "true" ] || [ -n "$workloads" ]; then echo "any=true"; else echo "any=false"; fi
           } >> "$GITHUB_OUTPUT"
       - id: version
@@ -258,12 +271,15 @@ jobs:
     # unit that genuinely FAILED still blocks it: a catalogue that names an
     # artifact whose push did not finish is the specific lie this ordering
     # exists to prevent.
-    needs: [discover, validate, library, workload]
+    needs: [discover, validate, library, workload-0, workload-1, workload-2, workload-3]
     if: >-
       always() && needs.discover.outputs.catalog == 'true'
       && needs.validate.result == 'success'
       && needs.library.result != 'failure'
-      && needs.workload.result != 'failure'
+      && needs.workload-0.result != 'failure'
+      && needs.workload-1.result != 'failure'
+      && needs.workload-2.result != 'failure'
+      && needs.workload-3.result != 'failure'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -435,140 +451,68 @@ jobs:
           git tag "$tag" "$SHA"
           git push origin "$tag"
           gh release create "$tag" --title "$tag" --notes-file "$NOTES"
-  workload:
-    name: Release workload ${{ matrix.workload }}
+  # The workload units, sharded. GitHub caps a JOB's matrix at 256
+  # configurations and the fleet is past that, so the list is split and each
+  # shard carries its own matrix — the cap then applies per shard rather than
+  # to the fleet. Four shards carry 1024 workloads; a fifth is one more caller,
+  # not a redesign. The steps live once in release-workload.yml.
+  #
+  # Sharded round-robin rather than in contiguous blocks, so the shards stay
+  # balanced whatever the fleet size — and a run releasing three workloads does
+  # not put all three in one shard while the other three jobs sit idle.
+  workload-0:
+    name: Release workloads 1/4
     needs: [discover, validate]
-    if: needs.discover.outputs.workloads != '[]'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    if: needs.discover.outputs.shard0 != '[]'
     strategy:
       # One workload's failure must not block another's release.
       fail-fast: false
       matrix:
-        workload: ${{ fromJSON(needs.discover.outputs.workloads) }}
-    permissions:
-      contents: write # push the <workload>-<version> tag + GitHub Release
-      packages: write # push to GHCR
-      id-token: write # cosign keyless image signing
-    env:
-      WORKLOAD: ${{ matrix.workload }}
-      VERSION: ${{ needs.discover.outputs.version }}
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          fetch-depth: 0
-      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
-      - name: Stamp the release version into the workload's version.txt
-        # The image ships SOURCE, and a stage reads its version with
-        # `importstr './version.txt'`, so the release version has to be in that
-        # file before the build — nothing renders here to inject it later. It is a
-        # data file (no SPDX header, or the header would land inside the version
-        # string), covered by REUSE.toml. Writing it whole keeps the build a plain
-        # COPY.
-        run: |
-          set -euo pipefail
-          printf '%s\n' "$VERSION" > "workloads/$WORKLOAD/version.txt"
-      - name: Assert single layer and the version stamped in
-        # container-release builds and pushes the multi-arch image; do a local
-        # single-arch build first to check the contract cheaply: one COPY of one
-        # directory is one layer (a selector-less OCIRepository and JaaS's
-        # vendor-tree search both depend on it), and the shipped version.txt must
-        # carry this run's version — proof the stamp above reached the image.
-        run: |
-          set -euo pipefail
-          docker buildx build --load --file workload.Containerfile --build-arg "WORKLOAD=$WORKLOAD" --tag kurly-wl-verify:latest .
-          n="$(docker image inspect kurly-wl-verify:latest --format '{{ len .RootFS.Layers }}')"
-          [ "$n" = "1" ] || { echo "::error::workload image has $n layers, expected 1"; exit 1; }
-          tree="$(mktemp -d)"
-          # A FROM-scratch image has no command; `docker create` needs one named
-          # (never run — the container only exists to export its filesystem).
-          cid="$(docker create kurly-wl-verify:latest /nonexistent)"
-          docker export "$cid" | tar -xf - -C "$tree"
-          docker rm "$cid" >/dev/null
-          stamped="$(tr -d '[:space:]' < "$tree/github.com/metio/kurly/workloads/$WORKLOAD/version.txt")"
-          [ "$stamped" = "$VERSION" ] || { echo "::error::workload image version.txt is '$stamped', expected '$VERSION'"; exit 1; }
-      - id: build
-        name: Build, push and sign the image
-        uses: metio/ci/container-release@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
-        with:
-          image: ghcr.io/metio/kurly/workloads/${{ matrix.workload }}
-          version: ${{ needs.discover.outputs.version }}
-          file: ./workload.Containerfile
-          build-args: WORKLOAD=${{ matrix.workload }}
-      - name: Publish the workload's metadata beside the image it describes
-        # The catalogue and the artifacts it describes are published separately
-        # today, so they can disagree: catalog.json can say version N while a
-        # workload image is already N+1, for as long as the two publications take
-        # to converge. Attached to the image, that state cannot be represented.
-        #
-        # It is also 1.7MB describing 301 workloads, which a consumer downloads in
-        # full to read one of them. This document is ~1.6KB.
-        #
-        # Published as an OCI REFERRER — a small artifact whose manifest names the
-        # image as its `subject` — so it is fetched from a manifest request with no
-        # layer pull, and can be signed independently. ghcr.io does NOT serve the
-        # Referrers API (asked for a manifest it had just served, by the digest it
-        # reported itself, it answers MANIFEST_UNKNOWN), so oras falls back to the
-        # spec's tag scheme and pushes it under `sha256-<hex>` of the subject.
-        # Nothing here depends on which of the two a registry supports.
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ACTOR: ${{ github.actor }}
-        run: |
-          set -euo pipefail
-          # catalog.json is a build artifact and is not in the checkout, so the
-          # document this derives from has to be rendered first.
-          nix develop --command gen-catalog >/dev/null
-          nix develop --command gen-workload-metadata "$WORKLOAD" metadata.json
-          nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
-          nix develop --command oras attach \
-            --artifact-type application/vnd.metio.kurly.workload.v1+json \
-            --format json \
-            "ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}" \
-            metadata.json:application/json > attached.json
-          # Signed like the image it describes, rather than left as the one
-          # published thing here nobody can verify. A consumer pinning the
-          # referrer by digest already has integrity; a signature is what says
-          # this repository published it.
-          ref="$(jq -r '.reference' attached.json)"
-          nix develop --command cosign sign --yes "$ref"
-      - id: prev
-        name: Find this unit's previous tag
-        run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
-      - id: notes
-        name: Generate Release Notes
-        uses: metio/ci/release-notes@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
-        env:
-          # The org cliff config renders the unit name into the notes header.
-          CHART: ${{ matrix.workload }}
-        with:
-          version: ${{ matrix.workload }}-${{ needs.discover.outputs.version }}
-          previous: ${{ steps.prev.outputs.prev }}
-          # Path-scoped notes since this unit's last tag; tag-pattern keeps
-          # another unit's tag inside the range from splitting the notes.
-          include-paths: workloads/${{ matrix.workload }}/**
-          tag-pattern: ^${{ matrix.workload }}-
-      - name: Tag and publish the GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SHA: ${{ github.sha }}
-          NOTES: ${{ steps.notes.outputs.file }}
-        run: |
-          set -euo pipefail
-          tag="${WORKLOAD}-${VERSION}"
-          cat >> "$NOTES" <<EOF
-
-          ## Artifacts
-
-          \`ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}\` — the
-          workload's jsonnet SOURCE (single-layer, vendor-tree layout, this
-          version stamped into it), rendered by JaaS with your own parameters.
-          Pull it with a selector-less Flux OCIRepository (it is single-layer,
-          like the library image), reference it from a JaaS JsonnetSnippet
-          (importing the kurly JsonnetLibrary), compose your environment with
-          \`+\` features, and feed the result into a stageset StageSet — see the
-          workload's README. Signed with cosign keyless.
-          EOF
-          git tag "$tag" "$SHA"
-          git push origin "$tag"
-          gh release create "$tag" --title "$tag" --notes-file "$NOTES"
+        workload: ${{ fromJSON(needs.discover.outputs.shard0) }}
+    uses: ./.github/workflows/release-workload.yml
+    with:
+      workload: ${{ matrix.workload }}
+      version: ${{ needs.discover.outputs.version }}
+    secrets: inherit
+  workload-1:
+    name: Release workloads 2/4
+    needs: [discover, validate]
+    if: needs.discover.outputs.shard1 != '[]'
+    strategy:
+      # One workload's failure must not block another's release.
+      fail-fast: false
+      matrix:
+        workload: ${{ fromJSON(needs.discover.outputs.shard1) }}
+    uses: ./.github/workflows/release-workload.yml
+    with:
+      workload: ${{ matrix.workload }}
+      version: ${{ needs.discover.outputs.version }}
+    secrets: inherit
+  workload-2:
+    name: Release workloads 3/4
+    needs: [discover, validate]
+    if: needs.discover.outputs.shard2 != '[]'
+    strategy:
+      # One workload's failure must not block another's release.
+      fail-fast: false
+      matrix:
+        workload: ${{ fromJSON(needs.discover.outputs.shard2) }}
+    uses: ./.github/workflows/release-workload.yml
+    with:
+      workload: ${{ matrix.workload }}
+      version: ${{ needs.discover.outputs.version }}
+    secrets: inherit
+  workload-3:
+    name: Release workloads 4/4
+    needs: [discover, validate]
+    if: needs.discover.outputs.shard3 != '[]'
+    strategy:
+      # One workload's failure must not block another's release.
+      fail-fast: false
+      matrix:
+        workload: ${{ fromJSON(needs.discover.outputs.shard3) }}
+    uses: ./.github/workflows/release-workload.yml
+    with:
+      workload: ${{ matrix.workload }}
+      version: ${{ needs.discover.outputs.version }}
+    secrets: inherit

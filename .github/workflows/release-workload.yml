@@ -1,0 +1,157 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+
+# Releasing ONE workload: stamp its version, assert the single-layer contract,
+# push and sign the image, attach its metadata document, and cut its tag and
+# GitHub Release.
+#
+# A reusable workflow rather than a job in release.yml, because GitHub caps a
+# single job's matrix at 256 configurations and the fleet is past that. The
+# callers shard the workload list and each shard gets its own matrix, so the cap
+# applies per shard instead of to the fleet — with the release steps written
+# once here rather than copied per shard. Batching several workloads into one
+# job would have been the other way out, but the release steps include `uses:`
+# actions, which cannot be looped over in a shell.
+name: Release workload
+on:
+  workflow_call:
+    inputs:
+      workload:
+        description: The directory name under workloads/ to release.
+        required: true
+        type: string
+      version:
+        description: The shared calver every unit in this run is released as.
+        required: true
+        type: string
+jobs:
+  release:
+    name: ${{ inputs.workload }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write # push the <workload>-<version> tag + GitHub Release
+      packages: write # push to GHCR
+      id-token: write # cosign keyless image signing
+    env:
+      WORKLOAD: ${{ inputs.workload }}
+      VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Stamp the release version into the workload's version.txt
+        # The image ships SOURCE, and a stage reads its version with
+        # `importstr './version.txt'`, so the release version has to be in that
+        # file before the build — nothing renders here to inject it later. It is a
+        # data file (no SPDX header, or the header would land inside the version
+        # string), covered by REUSE.toml. Writing it whole keeps the build a plain
+        # COPY.
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$VERSION" > "workloads/$WORKLOAD/version.txt"
+      - name: Assert single layer and the version stamped in
+        # container-release builds and pushes the multi-arch image; do a local
+        # single-arch build first to check the contract cheaply: one COPY of one
+        # directory is one layer (a selector-less OCIRepository and JaaS's
+        # vendor-tree search both depend on it), and the shipped version.txt must
+        # carry this run's version — proof the stamp above reached the image.
+        run: |
+          set -euo pipefail
+          docker buildx build --load --file workload.Containerfile --build-arg "WORKLOAD=$WORKLOAD" --tag kurly-wl-verify:latest .
+          n="$(docker image inspect kurly-wl-verify:latest --format '{{ len .RootFS.Layers }}')"
+          [ "$n" = "1" ] || { echo "::error::workload image has $n layers, expected 1"; exit 1; }
+          tree="$(mktemp -d)"
+          # A FROM-scratch image has no command; `docker create` needs one named
+          # (never run — the container only exists to export its filesystem).
+          cid="$(docker create kurly-wl-verify:latest /nonexistent)"
+          docker export "$cid" | tar -xf - -C "$tree"
+          docker rm "$cid" >/dev/null
+          stamped="$(tr -d '[:space:]' < "$tree/github.com/metio/kurly/workloads/$WORKLOAD/version.txt")"
+          [ "$stamped" = "$VERSION" ] || { echo "::error::workload image version.txt is '$stamped', expected '$VERSION'"; exit 1; }
+      - id: build
+        name: Build, push and sign the image
+        uses: metio/ci/container-release@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        with:
+          image: ghcr.io/metio/kurly/workloads/${{ inputs.workload }}
+          version: ${{ inputs.version }}
+          file: ./workload.Containerfile
+          build-args: WORKLOAD=${{ inputs.workload }}
+      - name: Publish the workload's metadata beside the image it describes
+        # The catalogue and the artifacts it describes are published separately
+        # today, so they can disagree: catalog.json can say version N while a
+        # workload image is already N+1, for as long as the two publications take
+        # to converge. Attached to the image, that state cannot be represented.
+        #
+        # It is also 1.7MB describing 301 workloads, which a consumer downloads in
+        # full to read one of them. This document is ~1.6KB.
+        #
+        # Published as an OCI REFERRER — a small artifact whose manifest names the
+        # image as its `subject` — so it is fetched from a manifest request with no
+        # layer pull, and can be signed independently. ghcr.io does NOT serve the
+        # Referrers API (asked for a manifest it had just served, by the digest it
+        # reported itself, it answers MANIFEST_UNKNOWN), so oras falls back to the
+        # spec's tag scheme and pushes it under `sha256-<hex>` of the subject.
+        # Nothing here depends on which of the two a registry supports.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          # catalog.json is a build artifact and is not in the checkout, so the
+          # document this derives from has to be rendered first.
+          nix develop --command gen-catalog >/dev/null
+          nix develop --command gen-workload-metadata "$WORKLOAD" metadata.json
+          nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
+          nix develop --command oras attach \
+            --artifact-type application/vnd.metio.kurly.workload.v1+json \
+            --format json \
+            "ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}" \
+            metadata.json:application/json > attached.json
+          # Signed like the image it describes, rather than left as the one
+          # published thing here nobody can verify. A consumer pinning the
+          # referrer by digest already has integrity; a signature is what says
+          # this repository published it.
+          ref="$(jq -r '.reference' attached.json)"
+          nix develop --command cosign sign --yes "$ref"
+      - id: prev
+        name: Find this unit's previous tag
+        run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
+      - id: notes
+        name: Generate Release Notes
+        uses: metio/ci/release-notes@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        env:
+          # The org cliff config renders the unit name into the notes header.
+          CHART: ${{ inputs.workload }}
+        with:
+          version: ${{ inputs.workload }}-${{ inputs.version }}
+          previous: ${{ steps.prev.outputs.prev }}
+          # Path-scoped notes since this unit's last tag; tag-pattern keeps
+          # another unit's tag inside the range from splitting the notes.
+          include-paths: workloads/${{ inputs.workload }}/**
+          tag-pattern: ^${{ inputs.workload }}-
+      - name: Tag and publish the GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHA: ${{ github.sha }}
+          NOTES: ${{ steps.notes.outputs.file }}
+        run: |
+          set -euo pipefail
+          tag="${WORKLOAD}-${VERSION}"
+          cat >> "$NOTES" <<EOF
+
+          ## Artifacts
+
+          \`ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}\` — the
+          workload's jsonnet SOURCE (single-layer, vendor-tree layout, this
+          version stamped into it), rendered by JaaS with your own parameters.
+          Pull it with a selector-less Flux OCIRepository (it is single-layer,
+          like the library image), reference it from a JaaS JsonnetSnippet
+          (importing the kurly JsonnetLibrary), compose your environment with
+          \`+\` features, and feed the result into a stageset StageSet — see the
+          workload's README. Signed with cosign keyless.
+          EOF
+          git tag "$tag" "$SHA"
+          git push origin "$tag"
+          gh release create "$tag" --title "$tag" --notes-file "$NOTES"
