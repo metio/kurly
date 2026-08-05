@@ -335,6 +335,10 @@
     source: 'https://github.com/InvoiceShelf/InvoiceShelf',
     homepage: 'https://github.com/InvoiceShelf/InvoiceShelf',
   },
+  isso: {
+    license: 'MIT',
+    source: 'https://github.com/isso-comments/isso',
+  },
   jackett: {
     license: 'GPL-3.0-only',
     title: 'Jackett',

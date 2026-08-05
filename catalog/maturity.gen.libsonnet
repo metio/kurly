@@ -103,6 +103,7 @@
     'immich',
     'inspircd',
     'invoiceshelf',
+    'isso',
     'it-tools',
     'jackett',
     'jellyfin',

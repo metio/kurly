@@ -19731,6 +19731,155 @@
          }
       },
       {
+         "category": "application",
+         "description": "Let readers comment on a static site without accounts or a third party.",
+         "id": "isso",
+         "image": {
+            "source": "https://github.com/isso-comments/isso"
+         },
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Isso",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "isso",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://example.com",
+                     "name": "host",
+                     "required": true,
+                     "type": "string"
+                  },
+                  {
+                     "name": "config",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "256Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "50m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "isso"
+                  }
+               ],
+               "help": "The Isso server. Comments live in SQLite at /db on the volume. host is the site whose pages may embed the widget and is required — Isso rejects requests from any other origin, so a wrong value gives a widget that loads and then refuses every comment. config replaces the starter isso.cfg wholesale; it mounts as a single file, so the rest of /config is untouched. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/isso/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:8e813ff52004f39c2c08237994450d3760515c4c6fa32faf61431bb280578e4e",
+                  "image": "ghcr.io/isso-comments/isso:0.14.0@sha256:8e813ff52004f39c2c08237994450d3760515c4c6fa32faf61431bb280578e4e",
+                  "tag": "0.14.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "An Isso server (a small comment server for static sites: a script tag on the page, comments in SQLite, no accounts and no third party). A plain composable http workload with a starter configuration whose `host` cannot be defaulted — Isso serves comments only for the origins listed there. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and widget on :8080.",
+         "upstream": {
+            "repo": "https://github.com/isso-comments/isso"
+         }
+      },
+      {
          "category": "tool",
          "description": "Reach for a hundred small developer utilities without pasting your data into a stranger.",
          "id": "it-tools",

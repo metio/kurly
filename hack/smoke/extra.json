@@ -17,6 +17,9 @@
   "gotosocial": {
     "compose": "+ k.env({ GTS_HOST: 'social.example.com' })"
   },
+  "isso": {
+    "params": "host='http://isso:8080'"
+  },
   "leantime": {
     "dbEngine": "mysql"
   },

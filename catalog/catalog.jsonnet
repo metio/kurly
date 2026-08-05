@@ -326,6 +326,7 @@ local stageImports = {
   'ezbookkeeping/server': import 'github.com/metio/kurly/workloads/ezbookkeeping/server.libsonnet',
   'remark42/server': import 'github.com/metio/kurly/workloads/remark42/server.libsonnet',
   'pinchflat/server': import 'github.com/metio/kurly/workloads/pinchflat/server.libsonnet',
+  'isso/server': import 'github.com/metio/kurly/workloads/isso/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

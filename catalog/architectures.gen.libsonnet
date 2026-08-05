@@ -103,6 +103,7 @@
   'immich/server': { digest: 'sha256:761a60e899bcc00e86018085babf21f8dd68e38f5b48d3e817271f1f74705a16', architectures: ['amd64', 'arm64'] },
   'inspircd/server': { digest: 'sha256:2d3970aec5faabe2912fe310ff0f2f66d7caef23dc9b18523ff6a4c5cce713e8', architectures: ['amd64', 'arm64'] },
   'invoiceshelf/server': { digest: 'sha256:76f13fbf45f4bad494bb360ec062c7268c71ad6d91f96ae1319de414a9959080', architectures: ['amd64', 'arm64'] },
+  'isso/server': { digest: 'sha256:8e813ff52004f39c2c08237994450d3760515c4c6fa32faf61431bb280578e4e', architectures: ['amd64', 'arm64'] },
   'it-tools/server': { digest: 'sha256:8b8128748339583ca951af03dfe02a9a4d7363f61a216226fc28030731a5a61f', architectures: ['amd64', 'arm64'] },
   'jackett/server': { digest: 'sha256:c22f9973da49011099966492fda8d5f6846144bc9eab3aecafdb2701308fd304', architectures: ['amd64', 'arm64'] },
   'jellyfin/server': { digest: 'sha256:b8dcc7b71d0ea872b74314da4b995c0cf282b1778438c295996e7be88c70fdda', architectures: ['amd64', 'arm64'] },

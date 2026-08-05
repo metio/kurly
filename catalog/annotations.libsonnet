@@ -6527,6 +6527,28 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    isso: {
+      name: 'Isso',
+      upstream: { repo: 'https://github.com/isso-comments/isso' },
+      license: 'MIT',
+      description: 'Let readers comment on a static site without accounts or a third party.',
+      summary: 'An Isso server (a small comment server for static sites: a script tag on the page, comments in SQLite, no accounts and no third party). A plain composable http workload with a starter configuration whose `host` cannot be defaulted — Isso serves comments only for the origins listed there. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and widget on :8080.',
+      category: 'application',
+      stages: {
+        server: d.fn('The Isso server. Comments live in SQLite at /db on the volume. host is the site whose pages may embed the widget and is required — Isso rejects requests from any other origin, so a wrong value gives a widget that loads and then refuses every comment. config replaces the starter isso.cfg wholesale; it mounts as a single file, so the rest of /config is untouched. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='isso'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('host', d.T.string, required=true, example='https://example.com'),
+          d.arg('config', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
