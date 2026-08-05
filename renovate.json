@@ -36,7 +36,7 @@
       "automergeStrategy": "squash"
     },
     {
-      "description": "A workload's image reference is written ONCE, in workloads/<name>/<stage>.image, and catalog.json is REGENERATED from it by CI. Grouping by dependency still keeps a bump to the same image across a stage file and its README example in one branch.",
+      "description": "A workload's image reference is written ONCE, in workloads/<name>/<stage>.image. Grouping by dependency keeps a bump to the same image across a stage file and its README example in one branch. Nothing derived is touched: catalog.json is a build artifact, gitignored, regenerated wherever it is needed.",
       "matchDatasources": [
         "docker"
       ],
@@ -67,7 +67,7 @@
   ],
   "customManagers": [
     {
-      "description": "Every workload's default image. The PRIMARY image of each stage lives in its own dedicated file (workloads/<name>/<stage>.image), and any secondary image (a sidecar's, a README deploy example's) in that workload's own .libsonnet or README. catalog.json carries the SAME reference under each stage's `runs.image`, derived by rendering the stage \u2014 so it is matched here too and a bump updates both in ONE pull request, since Renovate branches per dependency and version. Regenerating the catalog is not needed: the value is the same string, not a computation over it. The placeholder registries are disabled in packageRules above.",
+      "description": "Every workload's default image. The PRIMARY image of each stage lives in its own dedicated file (workloads/<name>/<stage>.image), and any secondary image (a sidecar's, a README deploy example's) in that workload's own .libsonnet or README. catalog.json carries the same reference under each stage's `runs.image`, but it is DERIVED and no longer committed \u2014 so nothing here matches it, and a bump touches only the files a person wrote. The placeholder registries are disabled in packageRules above.",
       "customType": "regex",
       "datasourceTemplate": "docker",
       "managerFilePatterns": [

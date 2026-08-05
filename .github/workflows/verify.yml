@@ -19,48 +19,29 @@ jobs:
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - run: nix develop --command check-fmt
   catalog:
-    # Regenerates catalog/catalog.json from the library annotations, commits it if
-    # it moved, and only then fails on drift — which also runs the drift asserts
-    # that fail when a feature and its annotation fall out of step.
+    # Regenerates catalog/catalog.json and then fails on drift — which also runs
+    # the drift asserts that fail when a feature and its annotation fall out of
+    # step, or when a generated ledger names a stage that no longer exists.
     #
-    # It commits because catalog.json is DERIVED. Renovate used to edit it through
-    # eight custom managers so the committed copy tracked the image references it
-    # copies, and a regex can copy a string but cannot recompute a resolution: a
-    # meilisearch bump put the new TAG in catalog.json and left the OLD DIGEST
-    # beside it, because several managers extracted the same dependency from the
-    # same file and only one anchor was repaired. Every such bump then failed this
-    # gate and waited for somebody to regenerate by hand.
+    # It does NOT commit the result, and that is the point. catalog.json is a
+    # build artifact: an aggregate of every workload, so every image bump moves
+    # it. Committing it meant each Renovate pull request rewrote the same 1.9MB
+    # file and they conflicted with one another; and this job pushing that commit
+    # back to the pull-request branch was worse than untidy — the push
+    # authenticates with GITHUB_TOKEN, GitHub does not trigger workflows from
+    # GITHUB_TOKEN events, so the commit it had just pushed received no CI run.
+    # The head commit ended up with no checks and the pull request could not be
+    # merged by anyone.
     #
-    # So the reference is written once, in workloads/<name>/<stage>.image, and the
-    # derived file is regenerated here rather than transcribed by pattern.
+    # What is committed is what the catalogue is derived FROM: the annotations,
+    # the stages, and the ledgers the network-bound generators write. The file
+    # itself is gitignored and regenerated wherever it is needed.
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          ref: ${{ github.head_ref }}
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
-      - name: Regenerate the derived catalog, and commit it if it moved
-        run: |
-          set -euo pipefail
-          # catalog.jsonnet imports every stage through the vendor tree
-          # (github.com/metio/kurly/workloads/…), the same path a consumer uses,
-          # so the tree has to exist before it renders. check-catalog builds it
-          # too — but that runs after this step, which is why this one failed on
-          # the first import while the gate after it passed.
-          nix develop --command jb install
-          mkdir -p vendor/github.com/metio
-          ln -sfn ../../.. vendor/github.com/metio/kurly
-          nix develop --command bash -c 'jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json'
-          if ! git diff --quiet -- catalog/catalog.json; then
-            git config user.name 'github-actions[bot]'
-            git config user.email 'github-actions[bot]@users.noreply.github.com'
-            git add catalog/catalog.json
-            git commit -m 'chore(catalog): regenerate from the workload sources'
-            git push
-          fi
+      - run: nix develop --command gen-catalog
       - run: nix develop --command check-catalog
   test:
     runs-on: ubuntu-latest

@@ -344,6 +344,18 @@
             ++ securityTools;
             text = builtins.readFile ./scripts/check-security.sh;
           };
+          # Renders catalog/catalog.json, which is a build artifact rather than
+          # source: generated wherever it is needed, gitignored, never committed.
+          gen-catalog = pkgs.writeShellApplication {
+            name = "gen-catalog";
+            runtimeInputs = with pkgs; [
+              go-jsonnet
+              jsonnet-bundler
+              jq
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-catalog.sh;
+          };
           # Splices the maturity badge and JaaS/stageset deploy walkthrough into
           # every workload README from the catalog.
           gen-readme = pkgs.writeShellApplication {
@@ -412,6 +424,7 @@
             runtimeInputs = [
               check-tests
               check-catalog
+              gen-catalog
               gen-architectures
               gen-upstream
               gen-signatures
@@ -440,6 +453,7 @@
             check-readme-examples
             check-coverage
             check-security
+            gen-catalog
             gen-maturity
             gen-spdx
             stamp-catalog
@@ -482,6 +496,7 @@
               echo "  check-readme-examples  render workload README examples, validate with kubeconform"
               echo "  check-coverage   render every catalog composition, validate with kubeconform"
               echo "  check-security   conftest Rego policy + pluto (deprecated APIs) + kubesec"
+              echo "  gen-catalog      render catalog/catalog.json (a build artifact, never committed)"
               echo "  gen-maturity     derive workload maturity tiers (checked by check-catalog)"
               echo "  gen-spdx         write the SPDX licence register (checked by check-catalog)"
               echo "  gen-architectures  derive each image's CPU architectures from the registry"

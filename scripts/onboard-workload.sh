@@ -95,25 +95,11 @@ preflight() {
   return "$ok"
 }
 
-# catalog.json, regenerated from the annotations and every ledger. Guarded rather
-# than redirected: `jsonnet > catalog.json` truncates the file before it knows
-# whether the render succeeds, so one broken annotation replaces the catalogue
-# with an empty file and every gate downstream then measures nothing.
+# catalog.json, regenerated from the annotations and every ledger. Delegated to
+# gen-catalog rather than repeated here: it is the one place that knows how to
+# render the file safely, and a second copy of that logic is a second place to fix.
 regen_catalog() {
-  local tmp
-  tmp="$(mktemp)"
-  if ! jsonnet -J vendor catalog/catalog.jsonnet >"$tmp" 2>/dev/null; then
-    echo "::error::catalog/catalog.jsonnet does not render — catalog.json left untouched" >&2
-    jsonnet -J vendor catalog/catalog.jsonnet >/dev/null || true
-    rm -f "$tmp"
-    return 1
-  fi
-  if ! jq -e '.workloads | length > 0' "$tmp" >/dev/null 2>&1; then
-    echo "::error::the regenerated catalogue holds no workloads — catalog.json left untouched" >&2
-    rm -f "$tmp"
-    return 1
-  fi
-  mv "$tmp" "$catalog"
+  gen-catalog >/dev/null
 }
 
 [ -d vendor ] || jb install >/dev/null 2>&1

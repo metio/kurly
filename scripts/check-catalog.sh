@@ -67,16 +67,22 @@ fi
 mkdir -p vendor/github.com/metio
 ln -sfn ../../.. vendor/github.com/metio/kurly
 
-generated="$(jsonnet -J vendor catalog/catalog.jsonnet)"
-
-if ! diff -u catalog/catalog.json <(printf '%s\n' "$generated") >/dev/null; then
-  echo "catalog/catalog.json is stale — regenerate it:" >&2
-  echo "  jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json" >&2
-  echo >&2
-  diff -u catalog/catalog.json <(printf '%s\n' "$generated") >&2 || true
+# Rendering it IS the gate. catalog.jsonnet is dense with asserts — a feature
+# exported without an annotation, a stage whose import and key disagree, a
+# generated ledger naming a stage that no longer exists — and every one of them
+# fails here.
+#
+# What this no longer does is compare the result against a committed copy. The
+# file is a build artifact now, gitignored and regenerated wherever it is needed,
+# so there is nothing to be stale against: a diff would only ever report that
+# somebody had not run the generator, which is not a fact about the library.
+if ! jsonnet -J vendor catalog/catalog.jsonnet > catalog/catalog.json.check; then
+  rm -f catalog/catalog.json.check
+  echo "::error::catalog/catalog.jsonnet does not render" >&2
   exit 1
 fi
-echo "catalog is in sync with the library"
+mv catalog/catalog.json.check catalog/catalog.json
+echo "catalog renders, and its asserts hold"
 
 # The catalog claims to be the machine-readable model of kurly's public API — the
 # Assembler builds snippets from it and the Reference site renders it — and

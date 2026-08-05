@@ -29,9 +29,13 @@ jobs:
           fetch-depth: 0
           submodules: recursive
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - name: Render the catalog the site is built from
+        # catalog.json is a build artifact rather than committed source, so the
+        # site generates it here before staging it.
+        run: nix develop --command gen-catalog
       - name: Stage catalog into the site
-        # Copies the committed catalog/catalog.json into docs/assets/ (gitignored);
-        # the assembler embeds it. Keeps the site generated from committed source.
+        # Copies catalog/catalog.json into docs/assets/ (gitignored); the
+        # assembler embeds it.
         run: nix develop --command gen-docs-data
       - name: Build Website
         run: nix develop --command hugo --minify --printI18nWarnings --printPathWarnings --source docs

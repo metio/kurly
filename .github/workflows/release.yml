@@ -289,22 +289,27 @@ jobs:
         run: |
           set -euo pipefail
           nix develop --command jb install >/dev/null
+          # The unstamped rendering, kept for the comparison below. catalog.json is
+          # not committed, so "what you can read in git" is the SOURCE it renders
+          # from — this is that rendering, made before the stamp touches it.
+          nix develop --command gen-catalog
+          cp catalog/catalog.json /tmp/catalog.unstamped.json
           nix develop --command stamp-catalog
-      # What you can read in git is what ships, with one enumerated exception.
+      # What the source renders to is what ships, with one enumerated exception.
       # The stamped keys are the only fields allowed to differ, and they are
       # removed before the comparison rather than the comparison being relaxed —
       # a release job that changed anything else fails here.
-      - name: The published catalog is the committed one plus the stamp
+      - name: The published catalog is the rendered one plus the stamp
         run: |
           set -euo pipefail
           stripped="$(mktemp)"
           jq 'del(.library, .k8sLibsonnet) | .workloads |= map(del(.artifact))' catalog/catalog.json > "$stripped"
-          git show HEAD:catalog/catalog.json | jq . > "${stripped}.committed"
-          diff -u "${stripped}.committed" "$stripped" || {
+          jq . /tmp/catalog.unstamped.json > "${stripped}.unstamped"
+          diff -u "${stripped}.unstamped" "$stripped" || {
             echo "::error::the release changed the catalog beyond the artifact stamp"
             exit 1
           }
-          echo "the published catalog is the committed one plus the artifacts it names"
+          echo "the published catalog is the rendered one plus the artifacts it names"
       - name: The catalog a consumer will read
         # The published artifact is the file itself, so this checks the file: the
         # schema version a consumer refuses to boot on, and a non-empty workload
@@ -494,6 +499,9 @@ jobs:
           ACTOR: ${{ github.actor }}
         run: |
           set -euo pipefail
+          # catalog.json is a build artifact and is not in the checkout, so the
+          # document this derives from has to be rendered first.
+          nix develop --command gen-catalog >/dev/null
           nix develop --command gen-workload-metadata "$WORKLOAD" metadata.json
           nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
           nix develop --command oras attach \
