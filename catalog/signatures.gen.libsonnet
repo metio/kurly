@@ -242,6 +242,7 @@
   'snappymail/server': { digest: 'sha256:5e3d990438809a8a49f8ac5758db03e858e6e9fc0e369e1f9e474f7664079905', signed: false },
   'snipe-it/server': { digest: 'sha256:6476be7cca765880374a6d489d22ad43d3edba965ab3cb862bf828f5fc856e50', signed: false },
   'sonarr/server': { digest: 'sha256:24acea2956a0ccb11f103877d9f4f8576600fb34bff34820ed749c2256dab89f', signed: false },
+  'speedtest-tracker/server': { digest: 'sha256:19abfdb836bcf5b3d15d65dde992efcfafd44454e378476340a5aa0351a01a32', signed: false },
   'spegel/mirror': { digest: 'sha256:26c60b05e08ac738e8442bc389c5780bff0e1d8153956e45d810a2f1008cf56f', identity: 'https://github.com/spegel-org/spegel/.github/workflows/release.yaml@refs/tags/v0.7.4', issuer: 'https://token.actions.githubusercontent.com', signed: true, sourceRepository: 'https://github.com/spegel-org/spegel' },
   'srs/server': { digest: 'sha256:b740a82a7daeb28a35e30ce4cf2c08f295c411879d59d18aa2d9a5eb6a12f687', signed: false },
   'status-responder/responder': { digest: 'sha256:fcb75f691c8b0414d670ae570240cbf95502cc18a9ba57e982ecac589760a186', signed: false },

@@ -6577,6 +6577,28 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'speedtest-tracker': {
+      name: 'Speedtest Tracker',
+      upstream: { repo: 'https://github.com/alexjustesen/speedtest-tracker' },
+      license: 'MIT',
+      description: 'Watch how download, upload and latency change over time.',
+      summary: "A Speedtest Tracker server (runs internet speed tests on a schedule and keeps the history, with charts and alerting). A plain composable http workload keeping its SQLite database on a PersistentVolume — no external database. An init container creates the database file, which neither Laravel nor the image does. Run from a cluster it measures the NODE'S uplink, not a home connection. s6-overlay image, so it is deliberately less hardened. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+      category: 'observability',
+      stages: {
+        server: d.fn('The Speedtest Tracker server. SQLite at /config/database.sqlite on the volume, created by an init container because Laravel opens that file and does not create it, and neither does the image — on a fresh volume the container otherwise starts, migrates nothing, and is torn down by its own supervisor with the real reason well above the line that stops it. appUrl is the public URL; secretName holds APP_KEY, which must be stable or stored values become unreadable. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='speedtest-tracker'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('appUrl', d.T.string, example='https://speedtest.example.com'),
+          d.arg('secretName', d.T.string, default='speedtest-tracker'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 32 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

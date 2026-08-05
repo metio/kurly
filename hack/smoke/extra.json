@@ -60,6 +60,9 @@
   "shlink": {
     "compose": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })"
   },
+  "speedtest-tracker": {
+    "compose": "+ k.env({ APP_URL: 'http://speedtest-tracker' })"
+  },
   "synapse/server": {
     "params": "serverName='synapse.example.com'"
   },

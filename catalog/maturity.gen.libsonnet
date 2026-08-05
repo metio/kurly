@@ -223,6 +223,7 @@
     'snappymail',
     'snipe-it',
     'sonarr',
+    'speedtest-tracker',
     'srs',
     'status-responder',
     'stirling-pdf',

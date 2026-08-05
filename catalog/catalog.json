@@ -43351,6 +43351,181 @@
          }
       },
       {
+         "category": "observability",
+         "description": "Watch how download, upload and latency change over time.",
+         "id": "speedtest-tracker",
+         "image": {
+            "homepage": "https://github.com/alexjustesen/speedtest-tracker",
+            "source": "https://github.com/alexjustesen/speedtest-tracker",
+            "title": "speedtest-tracker"
+         },
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Speedtest Tracker",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "speedtest-tracker",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "2Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://speedtest.example.com",
+                     "name": "appUrl",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "speedtest-tracker",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "256Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "256Mi",
+                     "name": "speedtest-tracker"
+                  },
+                  {
+                     "cpu": "100m",
+                     "kind": "init",
+                     "memory": "256Mi",
+                     "name": "create-database"
+                  }
+               ],
+               "help": "The Speedtest Tracker server. SQLite at /config/database.sqlite on the volume, created by an init container because Laravel opens that file and does not create it, and neither does the image — on a fresh volume the container otherwise starts, migrates nothing, and is torn down by its own supervisor with the real reason well above the line that stops it. appUrl is the public URL; secretName holds APP_KEY, which must be stable or stored values become unreadable. Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/speedtest-tracker/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": false,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": true,
+                  "writableRootFilesystem": true
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "baseline",
+                  "violates": [
+                     "allowPrivilegeEscalation",
+                     "runAsNonRoot",
+                     "capabilities"
+                  ]
+               },
+               "runs": {
+                  "digest": "sha256:19abfdb836bcf5b3d15d65dde992efcfafd44454e378476340a5aa0351a01a32",
+                  "image": "ghcr.io/alexjustesen/speedtest-tracker:v0.19.0@sha256:19abfdb836bcf5b3d15d65dde992efcfafd44454e378476340a5aa0351a01a32",
+                  "tag": "v0.19.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "APP_KEY",
+                     "length": 32
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "speedtest-tracker"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A Speedtest Tracker server (runs internet speed tests on a schedule and keeps the history, with charts and alerting). A plain composable http workload keeping its SQLite database on a PersistentVolume — no external database. An init container creates the database file, which neither Laravel nor the image does. Run from a cluster it measures the NODE'S uplink, not a home connection. s6-overlay image, so it is deliberately less hardened. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+         "upstream": {
+            "repo": "https://github.com/alexjustesen/speedtest-tracker"
+         }
+      },
+      {
          "category": "networking",
          "description": "Let your nodes pull images from each other instead of the internet.",
          "id": "spegel",

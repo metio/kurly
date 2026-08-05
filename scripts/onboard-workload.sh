@@ -85,7 +85,10 @@ preflight() {
       ok=1
     }
   done < <(stages_of "$w")
-  grep -q "^    ${w}: {" catalog/annotations.libsonnet || {
+  # Both spellings, because jsonnetfmt quotes a key only when it must: a workload
+  # whose id contains a hyphen is written 'speedtest-tracker', and matching only the
+  # bare form reports a perfectly good annotation as missing.
+  grep -qE "^    '?${w}'?: \{" catalog/annotations.libsonnet || {
     echo "::error::catalog/annotations.libsonnet has no entry for ${w} (category is mandatory)" >&2
     ok=1
   }

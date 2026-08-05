@@ -773,6 +773,12 @@
     source: 'https://github.com/linuxserver/docker-sonarr',
     homepage: 'https://github.com/linuxserver/docker-sonarr/packages',
   },
+  'speedtest-tracker': {
+    license: 'MIT',
+    title: 'speedtest-tracker',
+    source: 'https://github.com/alexjustesen/speedtest-tracker',
+    homepage: 'https://github.com/alexjustesen/speedtest-tracker',
+  },
   spegel: {
     license: 'MIT',
     title: 'spegel',
