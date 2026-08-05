@@ -6643,6 +6643,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'PS_SHARED_SECRET', generate: 'password', length: 32 }] },
       },
     },
+    wbo: {
+      name: 'WBO',
+      upstream: { repo: 'https://github.com/lovasoa/whitebophir' },
+      license: 'AGPL-3.0-only',
+      description: 'Draw on a shared whiteboard with other people in real time.',
+      summary: 'A WBO server (a collaborative whiteboard: open a board URL, draw, and everyone else on that URL sees it as you draw). A plain composable http workload saving boards as files on a PersistentVolume. It has NO ACCOUNTS and no per-board permissions — the URL is the credential and board names are guessable, so an instance on the internet is a whiteboard for the internet. Binds :80 as an unprivileged user by taking back NET_BIND_SERVICE rather than running as root. Single writer over a ReadWriteOnce volume: one replica, recreated.',
+      category: 'application',
+      stages: {
+        server: d.fn('The WBO server. Boards are files at /opt/app/server-data on the volume. One replica, both because the volume is ReadWriteOnce and because two pods would each hold half of a live drawing session. Compose an exposure that does not cut long-lived connections — drawing is streamed over a socket, so a short idle timeout gives a board that stops updating while still looking connected.', [
+          d.arg('name', d.T.string, default='wbo'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

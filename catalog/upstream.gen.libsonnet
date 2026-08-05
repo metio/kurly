@@ -898,6 +898,9 @@
     source: 'https://github.com/warp-tech/warpgate',
     homepage: 'https://github.com/warp-tech/warpgate',
   },
+  wbo: {
+    source: 'https://github.com/lovasoa/whitebophir',
+  },
   wekan: {
     title: 'ubuntu',
     source: 'https://github.com/wekan/wekan',
