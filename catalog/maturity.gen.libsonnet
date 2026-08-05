@@ -203,6 +203,7 @@
     'redis-commander',
     'redmine',
     'registry',
+    'remark42',
     'roundcube',
     'rss-bridge',
     'rundeck',

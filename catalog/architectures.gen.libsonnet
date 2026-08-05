@@ -215,6 +215,7 @@
   'redis-commander/server': { digest: 'sha256:1ad484c1fc0a3b4072dfa2bb10d44f0eba8ecb342c8c0f9e17cb21a6557e4b7e', architectures: ['amd64', 'arm', 'arm64'] },
   'redmine/server': { digest: 'sha256:49e5c5aeda67a7adb8edd6f4ed64ade7313d56dc4683f9be0ca5b2a6d05d652e', architectures: ['386', 'amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
   'registry/server': { digest: 'sha256:1be55279f18a2fe1a74edf2664cac61c1bea305b7b4642dab412e7affdcb3e33', architectures: ['amd64', 'arm', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
+  'remark42/server': { digest: 'sha256:246e0d2ec21feb293481c63da15a9eac8536e49d875b3525566af1656c35f617', architectures: ['amd64', 'arm', 'arm64'] },
   'rocketchat/server': { digest: 'sha256:c8ee1044c2c0503eddc1abc212240012ec9ba73e2cfa80d001cd23d582ec7c51', architectures: ['amd64', 'arm64'] },
   'roundcube/server': { digest: 'sha256:aed1b9b5dc34f8db7cf107a5092f04fd84170d42e7e25ac378c32418ab303185', architectures: ['386', 'amd64', 'arm', 'arm64'] },
   'rss-bridge/server': { digest: 'sha256:569f01f3faecd0d34d702e01b34eb0a769f7bedb84caf6dff29821d18b46f971', architectures: ['amd64', 'arm', 'arm64'] },

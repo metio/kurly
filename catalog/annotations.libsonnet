@@ -6483,6 +6483,29 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'EBK_SECURITY_SECRET_KEY', generate: 'hex', length: 32 }] },
       },
     },
+    remark42: {
+      name: 'Remark42',
+      upstream: { repo: 'https://github.com/umputun/remark42' },
+      license: 'MIT',
+      description: 'Add comments to a static site without handing readers to a third party.',
+      summary: "A Remark42 server (a lightweight comment engine for static sites and blogs: a script tag on the page, and readers comment with a social login or anonymously). A plain composable http workload keeping comments in an embedded BoltDB on a PersistentVolume — no external database. Runs unprivileged: its entrypoint drops privileges only when started as root, so naming the image's own uid takes the other path. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and widget on :8080.",
+      category: 'application',
+      stages: {
+        server: d.fn('The Remark42 server. Comments live in BoltDB at /srv/var on the volume. siteUrl is required — it is baked into the widget script and every OAuth callback, so a wrong value loads comments nowhere and returns logins to the wrong host. secretName holds SECRET, which signs reader JWTs; remark42 refuses to start without it. Auth providers are configured through env (REMARK_AUTH_*) and none is set by default, which the log reports as "no auth providers defined". Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='remark42'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('siteUrl', d.T.string, required=true, example='https://comments.example.com'),
+          d.arg('site', d.T.string, default='remark'),
+          d.arg('secretName', d.T.string, default='remark42'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'SECRET', generate: 'hex', length: 64 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

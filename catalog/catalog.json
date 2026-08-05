@@ -39475,6 +39475,172 @@
       },
       {
          "category": "application",
+         "description": "Add comments to a static site without handing readers to a third party.",
+         "id": "remark42",
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Remark42",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "remark42",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "5Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "https://comments.example.com",
+                     "name": "siteUrl",
+                     "required": true,
+                     "type": "string"
+                  },
+                  {
+                     "default": "remark",
+                     "name": "site",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "remark42",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "50m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "remark42"
+                  }
+               ],
+               "help": "The Remark42 server. Comments live in BoltDB at /srv/var on the volume. siteUrl is required — it is baked into the widget script and every OAuth callback, so a wrong value loads comments nowhere and returns logins to the wrong host. secretName holds SECRET, which signs reader JWTs; remark42 refuses to start without it. Auth providers are configured through env (REMARK_AUTH_*) and none is set by default, which the log reports as \"no auth providers defined\". Compose an exposure onto the HTTP port.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/remark42/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:246e0d2ec21feb293481c63da15a9eac8536e49d875b3525566af1656c35f617",
+                  "image": "docker.io/umputun/remark42:v1.9.0@sha256:246e0d2ec21feb293481c63da15a9eac8536e49d875b3525566af1656c35f617",
+                  "tag": "v1.9.0"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "hex",
+                     "key": "SECRET",
+                     "length": 64
+                  }
+               ],
+               "secrets": [
+                  {
+                     "as": "environment",
+                     "name": "remark42"
+                  }
+               ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A Remark42 server (a lightweight comment engine for static sites and blogs: a script tag on the page, and readers comment with a social login or anonymously). A plain composable http workload keeping comments in an embedded BoltDB on a PersistentVolume — no external database. Runs unprivileged: its entrypoint drops privileges only when started as root, so naming the image's own uid takes the other path. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and widget on :8080.",
+         "upstream": {
+            "repo": "https://github.com/umputun/remark42"
+         }
+      },
+      {
+         "category": "application",
          "description": "Give your team a chat platform you host yourself.",
          "id": "rocketchat",
          "image": {
