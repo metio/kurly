@@ -861,6 +861,12 @@
     source: 'https://github.com/ellite/Wallos',
     homepage: 'https://github.com/ellite/Wallos',
   },
+  warpgate: {
+    license: 'Apache-2.0',
+    title: 'warpgate',
+    source: 'https://github.com/warp-tech/warpgate',
+    homepage: 'https://github.com/warp-tech/warpgate',
+  },
   wekan: {
     title: 'ubuntu',
     source: 'https://github.com/wekan/wekan',

@@ -265,6 +265,7 @@
   'vikunja/server': { digest: 'sha256:1a5dd2d410b5359f689c77bbd1c66742cde1993f82d4adfe9aefa400ff1dd833', signed: false },
   'wallabag/server': { digest: 'sha256:4a527e027e0d59e87c14225ef11e005af3d4890374202ad319ce5e63dfc66709', signed: false },
   'wallos/server': { digest: 'sha256:3f0238f4017d3eb649fb88c9308822b8080f12fe6ae0059e8dcf4aea46460252', signed: false },
+  'warpgate/server': { digest: 'sha256:ce461c8b06381c57ba2a56793fb114d7b9c03f78c3360cf2ab4250aba74e3dfe', signed: true, identity: 'https://github.com/warp-tech/warpgate/.github/workflows/docker.yml@refs/tags/v0.27.2', issuer: 'https://token.actions.githubusercontent.com', sourceRepository: 'https://github.com/warp-tech/warpgate' },
   'webtrees/server': { digest: 'sha256:7a4449a9c73994f11d51df3fbbc5d254e1c14083bcfcfae273971439a858c8a1', signed: false },
   'wekan/server': { digest: 'sha256:28b8e8bf7a1d8a178f9d9dbcb2a25613707aa15db9efef277e58dc1ea2d9f1f6', signed: false },
   'wger/server': { digest: 'sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01', signed: false },

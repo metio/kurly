@@ -240,6 +240,7 @@
     'vikunja',
     'wallabag',
     'wallos',
+    'warpgate',
     'webtrees',
     'wger',
     'whoogle',

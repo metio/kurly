@@ -47424,6 +47424,187 @@
          }
       },
       {
+         "category": "networking",
+         "description": "Reach internal SSH, HTTPS and database targets through one audited door.",
+         "id": "warpgate",
+         "image": {
+            "homepage": "https://github.com/warp-tech/warpgate",
+            "source": "https://github.com/warp-tech/warpgate",
+            "title": "warpgate"
+         },
+         "license": "Apache-2.0",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "Warpgate",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "warpgate",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "10Gi",
+                     "name": "storageSize",
+                     "required": false,
+                     "type": "quantity"
+                  },
+                  {
+                     "name": "storageClass",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 8888,
+                     "name": "httpPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": 2222,
+                     "name": "sshPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "default": "warpgate",
+                     "name": "secretName",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": false,
+                     "name": "recordSessions",
+                     "required": false,
+                     "type": "bool"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "100m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "100m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "warpgate"
+                  },
+                  {
+                     "cpu": "100m",
+                     "kind": "init",
+                     "memory": "128Mi",
+                     "name": "setup"
+                  }
+               ],
+               "help": "The Warpgate server. Configuration, database, host keys and recordings live at /data on the volume. secretName holds WARPGATE_ADMIN_PASSWORD, read ONCE by the setup step — changing it later does not change the password, which by then lives hashed in Warpgate's own database. recordSessions writes the contents of every proxied session to the volume and is off by default, being a storage and a privacy decision rather than kurly's. Probes run the image's own healthcheck subcommand. Compose an exposure onto the HTTP port; the SSH port is not HTTP and needs its own route.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/warpgate/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [
+                     "podDisruptionBudget",
+                     "replicas",
+                     "topologySpreadConstraints"
+                  ],
+                  "got": {
+                     "podDisruptionBudget": 1,
+                     "replicas": 1,
+                     "topologySpreadConstraints": 0
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:ce461c8b06381c57ba2a56793fb114d7b9c03f78c3360cf2ab4250aba74e3dfe",
+                  "image": "ghcr.io/warp-tech/warpgate:0.27.2@sha256:ce461c8b06381c57ba2a56793fb114d7b9c03f78c3360cf2ab4250aba74e3dfe",
+                  "tag": "0.27.2"
+               },
+               "scaling": {
+                  "horizontal": false,
+                  "replicas": 1,
+                  "topology": "singleWriter"
+               },
+               "secretKeys": [
+                  {
+                     "generate": "password",
+                     "key": "WARPGATE_ADMIN_PASSWORD",
+                     "length": 32
+                  }
+               ],
+               "secrets": [ ],
+               "signature": {
+                  "identity": "https://github.com/warp-tech/warpgate/.github/workflows/docker.yml@refs/tags/v0.27.2",
+                  "issuer": "https://token.actions.githubusercontent.com",
+                  "signed": true,
+                  "signedByUpstream": true,
+                  "sourceRepository": "https://github.com/warp-tech/warpgate"
+               },
+               "storage": {
+                  "pvcs": 1
+               }
+            }
+         ],
+         "summary": "A Warpgate server (a smart SSH, HTTPS and database bastion: users connect with an ordinary client, authenticate once, and it proxies them to the targets they are allowed while recording the session). A plain composable http workload whose configuration, SQLite database, SSH host keys and recordings live on one PersistentVolume. An init container runs the unattended setup exactly once, because rerunning it would mint new host keys and break every client that already trusts the old ones. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin UI and HTTPS proxy on :8888, SSH on :2222.",
+         "upstream": {
+            "repo": "https://github.com/warp-tech/warpgate"
+         }
+      },
+      {
          "category": "application",
          "description": "Build your family tree with your relatives, online.",
          "id": "webtrees",

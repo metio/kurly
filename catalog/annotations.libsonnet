@@ -6398,6 +6398,30 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    warpgate: {
+      name: 'Warpgate',
+      upstream: { repo: 'https://github.com/warp-tech/warpgate' },
+      license: 'Apache-2.0',
+      description: 'Reach internal SSH, HTTPS and database targets through one audited door.',
+      summary: 'A Warpgate server (a smart SSH, HTTPS and database bastion: users connect with an ordinary client, authenticate once, and it proxies them to the targets they are allowed while recording the session). A plain composable http workload whose configuration, SQLite database, SSH host keys and recordings live on one PersistentVolume. An init container runs the unattended setup exactly once, because rerunning it would mint new host keys and break every client that already trusts the old ones. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the admin UI and HTTPS proxy on :8888, SSH on :2222.',
+      category: 'networking',
+      stages: {
+        server: d.fn("The Warpgate server. Configuration, database, host keys and recordings live at /data on the volume. secretName holds WARPGATE_ADMIN_PASSWORD, read ONCE by the setup step — changing it later does not change the password, which by then lives hashed in Warpgate's own database. recordSessions writes the contents of every proxied session to the volume and is off by default, being a storage and a privacy decision rather than kurly's. Probes run the image's own healthcheck subcommand. Compose an exposure onto the HTTP port; the SSH port is not HTTP and needs its own route.", [
+          d.arg('name', d.T.string, default='warpgate'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('httpPort', d.T.int, default=8888),
+          d.arg('sshPort', d.T.int, default=2222),
+          d.arg('secretName', d.T.string, default='warpgate'),
+          d.arg('recordSessions', d.T.bool, default=false),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http', secretKeys: [{ key: 'WARPGATE_ADMIN_PASSWORD', generate: 'password', length: 32 }] },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
