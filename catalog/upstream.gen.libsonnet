@@ -902,4 +902,10 @@
     title: 'ubuntu',
     source: 'https://github.com/wekan/wekan',
   },
+  wetty: {
+    license: 'MIT',
+    title: 'wetty',
+    source: 'https://github.com/butlerx/wetty',
+    homepage: 'https://github.com/butlerx/wetty',
+  },
 }

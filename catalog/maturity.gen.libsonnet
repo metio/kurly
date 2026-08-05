@@ -250,6 +250,7 @@
     'wallos',
     'warpgate',
     'webtrees',
+    'wetty',
     'wger',
     'whoogle',
     'wikijs',

@@ -276,6 +276,7 @@
   'warpgate/server': { digest: 'sha256:ce461c8b06381c57ba2a56793fb114d7b9c03f78c3360cf2ab4250aba74e3dfe', identity: 'https://github.com/warp-tech/warpgate/.github/workflows/docker.yml@refs/tags/v0.27.2', issuer: 'https://token.actions.githubusercontent.com', signed: true, sourceRepository: 'https://github.com/warp-tech/warpgate' },
   'webtrees/server': { digest: 'sha256:7a4449a9c73994f11d51df3fbbc5d254e1c14083bcfcfae273971439a858c8a1', signed: false },
   'wekan/server': { digest: 'sha256:28b8e8bf7a1d8a178f9d9dbcb2a25613707aa15db9efef277e58dc1ea2d9f1f6', signed: false },
+  'wetty/server': { digest: 'sha256:12a446f24fa765fd8bb95e61d4dcca2117b9a3abaaf711a964cb33d93e2a46dc', signed: false },
   'wger/server': { digest: 'sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01', signed: false },
   'whoogle/server': { digest: 'sha256:e9a1616cc3234cfe25f42c10d18316d60e555c248f8d46861738e44a4f50fe3a', signed: false },
   'wikijs/server': { digest: 'sha256:68f0d1848261ae76492ba358e30a96a76fed5d97a3fff381656082bf90f70d7e', signed: false },

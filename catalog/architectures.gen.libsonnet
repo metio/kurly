@@ -274,6 +274,7 @@
   'warpgate/server': { digest: 'sha256:ce461c8b06381c57ba2a56793fb114d7b9c03f78c3360cf2ab4250aba74e3dfe', architectures: ['amd64', 'arm64'] },
   'webtrees/server': { digest: 'sha256:7a4449a9c73994f11d51df3fbbc5d254e1c14083bcfcfae273971439a858c8a1', architectures: ['amd64', 'arm', 'arm64'] },
   'wekan/server': { digest: 'sha256:28b8e8bf7a1d8a178f9d9dbcb2a25613707aa15db9efef277e58dc1ea2d9f1f6', architectures: ['amd64', 'arm64', 'ppc64le', 'riscv64', 's390x'] },
+  'wetty/server': { digest: 'sha256:12a446f24fa765fd8bb95e61d4dcca2117b9a3abaaf711a964cb33d93e2a46dc', architectures: ['amd64', 'arm', 'arm64'] },
   'wger/server': { digest: 'sha256:e7f58e15d380d8f5edc055c8a1ed11199e7eb5649138670703401b0c9c407c01', architectures: ['amd64', 'arm64'] },
   'whoogle/server': { digest: 'sha256:e9a1616cc3234cfe25f42c10d18316d60e555c248f8d46861738e44a4f50fe3a', architectures: ['amd64', 'arm', 'arm64'] },
   'wikijs/server': { digest: 'sha256:68f0d1848261ae76492ba358e30a96a76fed5d97a3fff381656082bf90f70d7e', architectures: ['amd64', 'arm64'] },

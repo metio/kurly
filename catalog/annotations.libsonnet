@@ -6599,6 +6599,29 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http', secretKeys: [{ key: 'APP_KEY', generate: 'hex', length: 32 }] },
       },
     },
+    wetty: {
+      name: 'WeTTY',
+      upstream: { repo: 'https://github.com/butlerx/wetty' },
+      license: 'MIT',
+      description: 'Open a terminal on a remote host from a browser tab.',
+      summary: 'A WeTTY server (a terminal in the browser: it opens an SSH connection to a host you name and renders it as a web page). A plain composable http workload and a stateless one — it stores nothing and claims no volume, so replicas is an ordinary knob. It performs NO AUTHENTICATION of its own: anyone who reaches the page gets the SSH login prompt of sshHost, so it belongs behind an authenticating proxy or on an internal route. Serves on :3000.',
+      category: 'tool',
+      stages: {
+        server: d.fn('The WeTTY server. sshHost is required — unset it defaults to localhost, which inside a container is the WeTTY pod itself, a terminal connecting to a machine with no sshd. sshUser left unset makes the visitor type their own name, which is usually right for a shared bastion terminal. base is the path it is served under. Stateless, so nothing to back up. Compose an exposure onto the HTTP port, and read the summary about authentication first.', [
+          d.arg('name', d.T.string, default='wetty'),
+          d.arg('image', d.T.string),
+          d.arg('sshHost', d.T.string, required=true, example='bastion.internal'),
+          d.arg('sshPort', d.T.int, default=22),
+          d.arg('sshUser', d.T.string),
+          d.arg('base', d.T.string, default='/wetty/'),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

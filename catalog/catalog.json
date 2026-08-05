@@ -49238,6 +49238,161 @@
          }
       },
       {
+         "category": "tool",
+         "description": "Open a terminal on a remote host from a browser tab.",
+         "id": "wetty",
+         "image": {
+            "homepage": "https://github.com/butlerx/wetty",
+            "source": "https://github.com/butlerx/wetty",
+            "title": "wetty"
+         },
+         "license": "MIT",
+         "licenseOsiApproved": true,
+         "maturity": {
+            "tier": "e2e"
+         },
+         "name": "WeTTY",
+         "requires": [ ],
+         "stages": [
+            {
+               "architectures": [
+                  "amd64",
+                  "arm",
+                  "arm64"
+               ],
+               "args": [
+                  {
+                     "default": "wetty",
+                     "name": "name",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "name": "image",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "example": "bastion.internal",
+                     "name": "sshHost",
+                     "required": true,
+                     "type": "string"
+                  },
+                  {
+                     "default": 22,
+                     "name": "sshPort",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "sshUser",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": "/wetty/",
+                     "name": "base",
+                     "required": false,
+                     "type": "string"
+                  },
+                  {
+                     "default": 1,
+                     "name": "replicas",
+                     "required": false,
+                     "type": "int"
+                  },
+                  {
+                     "name": "env",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "default": {
+                        "limits": {
+                           "memory": "512Mi"
+                        },
+                        "requests": {
+                           "cpu": "50m",
+                           "memory": "128Mi"
+                        }
+                     },
+                     "name": "resources",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "labels",
+                     "required": false,
+                     "type": "object"
+                  },
+                  {
+                     "name": "annotations",
+                     "required": false,
+                     "type": "object"
+                  }
+               ],
+               "bsi": null,
+               "clusterScoped": false,
+               "declaredRequests": [
+                  {
+                     "cpu": "50m",
+                     "kind": "regular",
+                     "memory": "128Mi",
+                     "name": "wetty"
+                  }
+               ],
+               "help": "The WeTTY server. sshHost is required — unset it defaults to localhost, which inside a container is the WeTTY pod itself, a terminal connecting to a machine with no sshd. sshUser left unset makes the visitor type their own name, which is usually right for a shared bastion terminal. base is the path it is served under. Stateless, so nothing to back up. Compose an exposure onto the HTTP port, and read the summary about authentication first.",
+               "id": "server",
+               "importPath": "github.com/metio/kurly/workloads/wetty/server.libsonnet",
+               "kind": "http",
+               "posture": {
+                  "multiTenantSafe": true,
+                  "ownUserNamespace": true,
+                  "runsAsRoot": false,
+                  "writableRootFilesystem": false
+               },
+               "profile": {
+                  "asked": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  },
+                  "clamped": [ ],
+                  "got": {
+                     "podDisruptionBudget": 2,
+                     "replicas": 3,
+                     "topologySpreadConstraints": 1
+                  }
+               },
+               "pss": {
+                  "level": "restricted",
+                  "violates": [ ]
+               },
+               "runs": {
+                  "digest": "sha256:12a446f24fa765fd8bb95e61d4dcca2117b9a3abaaf711a964cb33d93e2a46dc",
+                  "image": "docker.io/wettyoss/wetty:3.0.0@sha256:12a446f24fa765fd8bb95e61d4dcca2117b9a3abaaf711a964cb33d93e2a46dc",
+                  "tag": "3.0.0"
+               },
+               "scaling": {
+                  "horizontal": true,
+                  "replicas": 1,
+                  "topology": "stateless"
+               },
+               "secrets": [ ],
+               "signature": {
+                  "signed": false
+               },
+               "storage": {
+                  "pvcs": 0
+               }
+            }
+         ],
+         "summary": "A WeTTY server (a terminal in the browser: it opens an SSH connection to a host you name and renders it as a web page). A plain composable http workload and a stateless one — it stores nothing and claims no volume, so replicas is an ordinary knob. It performs NO AUTHENTICATION of its own: anyone who reaches the page gets the SSH login prompt of sshHost, so it belongs behind an authenticating proxy or on an internal route. Serves on :3000.",
+         "upstream": {
+            "repo": "https://github.com/butlerx/wetty"
+         }
+      },
+      {
          "category": "application",
          "description": "Plan your workouts, log your lifts and track your body weight.",
          "id": "wger",
