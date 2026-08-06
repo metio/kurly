@@ -407,6 +407,15 @@ local stageImports = {
   'hortusfox/server': import 'github.com/metio/kurly/workloads/hortusfox/server.libsonnet',
   'slink/server': import 'github.com/metio/kurly/workloads/slink/server.libsonnet',
   'traggo/server': import 'github.com/metio/kurly/workloads/traggo/server.libsonnet',
+  'accent/server': import 'github.com/metio/kurly/workloads/accent/server.libsonnet',
+  'airtrail/server': import 'github.com/metio/kurly/workloads/airtrail/server.libsonnet',
+  'gerbera/server': import 'github.com/metio/kurly/workloads/gerbera/server.libsonnet',
+  'koillection/server': import 'github.com/metio/kurly/workloads/koillection/server.libsonnet',
+  'fossbilling/server': import 'github.com/metio/kurly/workloads/fossbilling/server.libsonnet',
+  'hister/server': import 'github.com/metio/kurly/workloads/hister/server.libsonnet',
+  'numa/server': import 'github.com/metio/kurly/workloads/numa/server.libsonnet',
+  'sync-in/server': import 'github.com/metio/kurly/workloads/sync-in/server.libsonnet',
+  'transmute/server': import 'github.com/metio/kurly/workloads/transmute/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
