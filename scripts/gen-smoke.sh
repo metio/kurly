@@ -161,6 +161,11 @@ while IFS=$'\t' read -r id stages db cache; do
         # VectorChord only works when the server preloads it, and immich pins the
         # extension version range it supports.
         *vchord*) pgimage=" ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 '\"-c\", \"shared_preload_libraries=vchord.so\"'" ;;
+        # PostGIS ships the `geometry` type as an extension the stock image does
+        # not carry: a workload that stores coordinates fails its FIRST migration
+        # with `type "geometry" does not exist`, which reads as a broken schema
+        # rather than a missing server feature.
+        *postgis*) pgimage=" docker.io/postgis/postgis:17-3.5" ;;
       esac
       prov+="kurly::postgres \"\$ns\" ${dbHost} ${dbName} ${dbUser}${pgimage}"$'\n'
     fi
