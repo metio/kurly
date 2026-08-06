@@ -57,7 +57,15 @@ function(
     // LIVEBOOK_DATA_PATH otherwise lands under HOME, which is scratch here and
     // would take every configured hub with it on a restart.
     LIVEBOOK_HOME: '/data',
-    LIVEBOOK_DATA_PATH: '/data/.livebook',
+    // The VOLUME ROOT, not a subdirectory of it. Livebook checks that
+    // LIVEBOOK_DATA_PATH is a writable directory and refuses to start if it is
+    // not — it does not create one. A fresh PersistentVolume contains nothing,
+    // so `/data/.livebook` is absent on first boot and the container exits with
+    // "expected LIVEBOOK_DATA_PATH to be a writable directory", which reads like
+    // a permissions problem and is an absent-directory one. The mount point
+    // itself is created by Kubernetes and made group-writable by fsGroup, so it
+    // is the one path guaranteed to be there.
+    LIVEBOOK_DATA_PATH: '/data',
     // An Elixir release writes its runtime vm.args and cookie into the release
     // tree unless RELEASE_TMP names somewhere else; the root filesystem is
     // read-only, so name the scratch.
