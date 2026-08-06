@@ -12,6 +12,12 @@
     source: 'https://github.com/Bubka/2FAuth',
     homepage: 'https://github.com/Bubka/2FAuth',
   },
+  accent: {
+    license: 'BSD-3-Clause',
+    title: 'accent',
+    source: 'https://github.com/mirego/accent',
+    homepage: 'https://github.com/mirego/accent',
+  },
   adguardhome: {
     license: 'GPL-3.0',
     title: 'AdGuard Home',
@@ -23,6 +29,12 @@
     title: 'Airsonic-advanced',
     source: 'https://github.com/linuxserver/docker-airsonic-advanced',
     homepage: 'https://github.com/linuxserver/docker-airsonic-advanced/packages',
+  },
+  airtrail: {
+    license: 'GPL-3.0',
+    title: 'AirTrail',
+    source: 'https://github.com/johanohly/AirTrail',
+    homepage: 'https://github.com/johanohly/AirTrail',
   },
   alertmanager: {
     source: 'https://github.com/prometheus/alertmanager',
@@ -301,6 +313,12 @@
     source: 'https://codeberg.org/forgejo/forgejo',
     homepage: 'https://forgejo.org',
   },
+  fossbilling: {
+    license: 'Apache-2.0',
+    title: 'FOSSBilling',
+    source: 'https://github.com/FOSSBilling/FOSSBilling',
+    homepage: 'https://github.com/FOSSBilling/FOSSBilling',
+  },
   freshrss: {
     license: 'AGPL-3.0',
     title: 'FreshRSS',
@@ -318,6 +336,12 @@
     title: 'gatus',
     source: 'https://github.com/TwiN/gatus',
     homepage: 'https://github.com/TwiN/gatus',
+  },
+  gerbera: {
+    license: 'NOASSERTION',
+    title: 'gerbera',
+    source: 'https://github.com/gerbera/gerbera',
+    homepage: 'https://github.com/gerbera/gerbera',
   },
   ghostfolio: {
     source: 'https://github.com/ghostfolio/ghostfolio',
@@ -361,6 +385,12 @@
     title: 'Heimdall',
     source: 'https://github.com/linuxserver/docker-heimdall',
     homepage: 'https://github.com/linuxserver/docker-heimdall/packages',
+  },
+  hister: {
+    license: 'AGPL-3.0',
+    title: 'hister',
+    source: 'https://github.com/asciimoo/hister',
+    homepage: 'https://github.com/asciimoo/hister',
   },
   homarr: {
     license: 'Apache-2.0',
@@ -625,6 +655,12 @@
   },
   'node-red': {
     source: 'https://github.com/node-red/node-red-docker',
+  },
+  numa: {
+    license: 'MIT',
+    title: 'numa',
+    source: 'https://github.com/razvandimescu/numa',
+    homepage: 'https://github.com/razvandimescu/numa',
   },
   nzbget: {
     license: 'GPL-3.0-only',
@@ -1025,6 +1061,12 @@
     title: 'Transmission',
     source: 'https://github.com/linuxserver/docker-transmission',
     homepage: 'https://github.com/linuxserver/docker-transmission/packages',
+  },
+  transmute: {
+    license: 'MIT',
+    title: 'transmute',
+    source: 'https://github.com/transmute-app/transmute',
+    homepage: 'https://github.com/transmute-app/transmute',
   },
   trilium: {
     license: 'AGPL-3.0',

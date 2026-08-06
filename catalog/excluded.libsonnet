@@ -193,4 +193,10 @@
   'personal-management-system': { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Volmarg/personal-management-system' },
   'speed-test-by-openspeedtest': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://openspeedtest.com/' },
   globaleaks: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://www.globaleaks.org/' },
+  farmos: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (farmOS.host, by the project) — https://farmos.org/hosting/' },
+  // The declared licence is Apache-2.0 — in the OCI label AND in package.json
+  // — and the LICENSE file appends a Commons Clause forbidding paid hosted or
+  // managed services. Every source header says so; only the metadata does not.
+  fredy: { reason: 'licence-forbids-saas', note: 'Apache-2.0 plus a Commons Clause forbidding paid hosted or managed services — https://github.com/orangecoding/fredy/blob/master/LICENSE' },
+  aptabase: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Aptabase Cloud) — https://aptabase.com/pricing' },
 }
