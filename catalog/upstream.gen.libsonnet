@@ -36,11 +36,22 @@
   answer: {
     source: 'https://github.com/apache/answer',
   },
+  anubis: {
+    title: 'static',
+    source: 'https://github.com/chainguard-images/images/tree/main/images/static',
+    homepage: 'https://images.chainguard.dev/directory/image/static/overview',
+  },
   apprise: {
     license: 'MIT',
     title: 'apprise-api',
     source: 'https://github.com/caronc/apprise-api',
     homepage: 'https://github.com/caronc/apprise-api',
+  },
+  artalk: {
+    license: 'MIT',
+    title: 'Artalk',
+    source: 'https://github.com/ArtalkJS/Artalk',
+    homepage: 'https://github.com/ArtalkJS/Artalk',
   },
   audiobookshelf: {
     license: 'GPL-3.0',
@@ -93,6 +104,12 @@
     title: 'Bookstack',
     source: 'https://github.com/linuxserver/docker-bookstack',
     homepage: 'https://github.com/linuxserver/docker-bookstack/packages',
+  },
+  caddy: {
+    license: 'Apache-2.0',
+    title: 'Caddy',
+    source: 'https://github.com/caddyserver/caddy-docker',
+    homepage: 'https://caddyserver.com',
   },
   'calibre-web-automated': {
     license: 'GPL-3.0-only',
@@ -259,6 +276,12 @@
     title: 'FreshRSS',
     source: 'https://github.com/FreshRSS/FreshRSS',
     homepage: 'https://freshrss.org/',
+  },
+  fusio: {
+    license: 'Apache-2.0',
+    title: 'fusio-docker',
+    source: 'https://github.com/apioo/fusio-docker',
+    homepage: 'https://github.com/apioo/fusio-docker',
   },
   gatus: {
     license: 'Apache-2.0',
@@ -469,6 +492,12 @@
     source: 'https://github.com/axllent/mailpit',
     homepage: 'https://mailpit.axllent.org',
   },
+  mainsail: {
+    license: 'GPL-3.0',
+    title: 'mainsail',
+    source: 'https://github.com/mainsail-crew/mainsail',
+    homepage: 'https://github.com/mainsail-crew/mainsail',
+  },
   maloja: {
     license: 'GPL-3.0',
     title: 'maloja',
@@ -591,6 +620,12 @@
     source: 'https://github.com/open-webui/open-webui',
     homepage: 'https://github.com/open-webui/open-webui',
   },
+  opencloud: {
+    license: 'Apache-2.0',
+    title: 'OpenCloud',
+    source: 'https://github.com/opencloud-eu/opencloud',
+    homepage: 'https://github.com/opencloud-eu/opencloud',
+  },
   opencost: {
     license: 'Apache-2.0',
     title: 'kubecost-cost-model',
@@ -641,6 +676,12 @@
     title: 'PasswordPusher',
     source: 'https://github.com/pglombardo/PasswordPusher',
     homepage: 'https://github.com/pglombardo/PasswordPusher',
+  },
+  'pelican-panel': {
+    license: 'AGPL-3.0',
+    title: 'panel',
+    source: 'https://github.com/pelican-dev/panel',
+    homepage: 'https://github.com/pelican-dev/panel',
   },
   photoprism: {
     title: 'PhotoPrism® Plus (Ubuntu 26.04 LTS)',
@@ -849,6 +890,16 @@
     title: 'SQLPage',
     source: 'https://github.com/sqlpage/SQLPage',
     homepage: 'https://github.com/sqlpage/SQLPage',
+  },
+  stash: {
+    license: 'AGPL-3.0',
+    title: 'Stash',
+    source: 'https://github.com/stashapp/stash',
+    homepage: 'https://stashapp.cc',
+  },
+  'static-web-server': {
+    title: 'Static Web Server',
+    homepage: 'https://github.com/static-web-server/static-web-server',
   },
   'stirling-pdf': {
     license: 'NOASSERTION',

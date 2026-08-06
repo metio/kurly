@@ -164,4 +164,30 @@
   // Undeployable as packaged: an image it needs does not exist. Not a licence or a
   // maintenance judgement — the thing simply cannot start.
   bigcapital: { reason: 'undeployable', note: 'docker.io/bigcapitalhq/gateway does not exist (siblings server and webapp do); the workload cannot run without its gateway' },
+
+  // Triaged from the awesome-selfhosted list. Each was rejected at gate 0,
+  // before anything was authored, and the URL is the page the decision was
+  // read from rather than an inference from the licence or the repository.
+  aleph: { reason: 'upstream-archived', note: 'upstream archived — https://www.occrp.org/en/announcement/aleph-pro-frequently-asked-questions-on-the-future-of-occrps-investigative-data-platform' },
+  asciinema: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://asciinema.org/' },
+  bentopdf: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://www.bentopdf.com/' },
+  chartdb: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://chartdb.io/pricing' },
+  dawarich: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://dawarich.app/' },
+  donetick: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://donetick.com' },
+  languagetool: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://languagetool.org/premium' },
+  'libre-translate': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://portal.libretranslate.com' },
+  linkace: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://hosting.linkace.org/' },
+  misago: { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/rafalp/misago_docker/blob/master/docker-compose.yaml' },
+  movim: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://movim.eu/' },
+  myip: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://github.com/jason5ng32/MyIP' },
+  octoprint: { reason: 'undeployable', note: 'needs hardware a cluster cannot give it — https://github.com/OctoPrint/octoprint-docker' },
+  openemr: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://www.open-emr.org/blog/openemr-offers-panel-of-turn-key-solutions-with-amazons-cloud-services/' },
+  'reactive-resume': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://rxresu.me/' },
+  rsshub: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://docs.rsshub.app' },
+  ryot: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://ryot.io/terms/' },
+  saltcorn: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://saltcorn.com/tenant/create' },
+  wakapi: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://wakapi.dev' },
+  hasura: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Hasura Cloud) — https://hasura.io/pricing' },
+  manyfold: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://manyfold.app/' },
+  tolgee: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://tolgee.io/pricing' },
 }

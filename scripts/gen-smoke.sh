@@ -139,6 +139,14 @@ while IFS=$'\t' read -r id stages db cache; do
     if [ "$engine" = "mongodb" ]; then
       dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
       prov+="kurly::mongodb \"\$ns\" ${dbHost}"$'\n'
+    elif [ "$engine" = "elasticsearch" ]; then
+      # The host comes from the stage's own URL parameter where it has one: an
+      # app that takes `esUrl` names the scheme and port too, and provisioning at
+      # some other name would leave it pointing at nothing.
+      esHost="$(param "$primary" esHost)"
+      [ -n "$esHost" ] || esHost="$(param "$primary" esUrl | sed -E 's#^https?://##; s#:[0-9]+.*$##')"
+      [ -n "$esHost" ] || esHost="${id}-search"
+      prov+="kurly::elasticsearch \"\$ns\" ${esHost}"$'\n'
     # MySQL/MariaDB apps read port 3306 (postgres apps 5432); provision the engine
     # the app connects to, at the host it defaults to.
     elif grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then

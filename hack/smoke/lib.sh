@@ -499,6 +499,71 @@ EOF
   kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
 }
 
+# A throwaway single-node Elasticsearch, for the workloads that index into one.
+#
+# security.enabled=false, which a production cluster must never do: the point
+# here is that a scenario proves the WORKLOAD starts and talks to its search
+# backend, and making it also negotiate TLS and a bootstrap password proves
+# something about Elasticsearch instead. A stage that needs credentials still
+# gets them from its own Secret.
+#
+# discovery.type=single-node, or the node waits for peers that will never come
+# and never reports ready. -Xms/-Xmx are pinned low because the default heap is
+# half of the NODE's memory, which on a laptop-sized kind node is enough to get
+# the pod OOM-killed while it is still starting.
+kurly::elasticsearch() {
+  local ns="$1" svc="$2"
+  # The probe authenticates like any client would; base64 of elastic:<password>.
+  local esauth
+  esauth="$(printf 'elastic:%s' "$KURLY_E2E_PASSWORD" | base64 -w0)"
+  echo "== provision elasticsearch ${svc} =="
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ${svc}, labels: { app: ${svc} } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ${svc} } }
+  template:
+    metadata: { labels: { app: ${svc} } }
+    spec:
+      containers:
+        - name: elasticsearch
+          image: docker.io/library/elasticsearch:8.19.7
+          env:
+            - { name: discovery.type, value: single-node }
+            # Security ON, with the password every other provisioner here mints.
+            # A workload that indexes into Elasticsearch sends credentials —
+            # ELASTIC_PASSWORD is in its Secret — and against a server with
+            # security disabled those credentials are not rejected so much as
+            # unanswerable: the app retries "waiting for ES" while the cluster
+            # sits green, which reads as unreachable and is a disagreement about
+            # authentication.
+            - { name: xpack.security.enabled, value: "true" }
+            - { name: ELASTIC_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
+            - { name: ES_JAVA_OPTS, value: "-Xms512m -Xmx512m" }
+          ports: [{ containerPort: 9200 }]
+          readinessProbe:
+            httpGet:
+              path: /_cluster/health
+              port: 9200
+              httpHeaders:
+                - { name: Authorization, value: "Basic ${esauth}" }
+            periodSeconds: 5
+            failureThreshold: 60
+          volumeMounts: [{ name: data, mountPath: /usr/share/elasticsearch/data }]
+      volumes: [{ name: data, emptyDir: {} }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ${svc} }
+spec:
+  selector: { app: ${svc} }
+  ports: [{ port: 9200, targetPort: 9200 }]
+EOF
+  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=300s
+}
+
 kurly::mysql() {
   local ns="$1" svc="$2" db="$3" user="$4"
   echo "== provision mariadb ${svc} (db=${db}, user=${user}) =="
