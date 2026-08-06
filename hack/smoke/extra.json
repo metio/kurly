@@ -75,6 +75,9 @@
   "wordpress": {
     "dbEngine": "mysql"
   },
+  "your-spotify": {
+    "compose": "+ k.env({ API_ENDPOINT: 'http://your-spotify:8080', CLIENT_ENDPOINT: 'http://your-spotify:3000' })"
+  },
   "yourls": {
     "compose": "+ k.env({ YOURLS_SITE: 'http://yourls' })"
   }

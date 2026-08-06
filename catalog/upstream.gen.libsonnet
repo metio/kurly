@@ -263,6 +263,9 @@
   ghostfolio: {
     source: 'https://github.com/ghostfolio/ghostfolio',
   },
+  gonic: {
+    source: 'https://github.com/sentriz/gonic',
+  },
   gotenberg: {
     title: 'Gotenberg',
     source: 'https://github.com/gotenberg/gotenberg',
@@ -334,6 +337,12 @@
     title: 'immich',
     source: 'https://github.com/immich-app/immich',
     homepage: 'https://github.com/immich-app/immich',
+  },
+  invidious: {
+    license: 'AGPL-3.0',
+    title: 'invidious',
+    source: 'https://github.com/iv-org/invidious',
+    homepage: 'https://github.com/iv-org/invidious',
   },
   invoiceshelf: {
     license: 'AGPL-3.0',
@@ -775,6 +784,12 @@
     source: 'https://github.com/silverbulletmd/silverbullet',
     homepage: 'https://github.com/silverbulletmd/silverbullet',
   },
+  slskd: {
+    license: 'AGPL-3.0',
+    title: 'slskd',
+    source: 'https://github.com/slskd/slskd',
+    homepage: 'https://slskd.org',
+  },
   snappymail: {
     license: 'AGPLv3',
     title: 'snappymail',
@@ -856,6 +871,12 @@
     title: 'Technitium DNS Server',
     source: 'https://github.com/TechnitiumSoftware/DnsServer',
     homepage: 'https://technitium.com/dns/',
+  },
+  teslamate: {
+    license: 'AGPL-3.0',
+    title: 'teslamate',
+    source: 'https://github.com/teslamate-org/teslamate',
+    homepage: 'https://github.com/teslamate-org/teslamate',
   },
   thelounge: {
     license: 'MIT',
@@ -948,6 +969,12 @@
     title: 'wetty',
     source: 'https://github.com/butlerx/wetty',
     homepage: 'https://github.com/butlerx/wetty',
+  },
+  'your-spotify': {
+    license: 'GPL-3.0',
+    title: 'your_spotify',
+    source: 'https://github.com/Yooooomi/your_spotify',
+    homepage: 'https://github.com/Yooooomi/your_spotify',
   },
   'yt-dlp-web-ui': {
     license: 'MPL-2.0',
