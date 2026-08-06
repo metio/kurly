@@ -427,6 +427,10 @@ local stageImports = {
   'gameyfin/server': import 'github.com/metio/kurly/workloads/gameyfin/server.libsonnet',
   'kapowarr/server': import 'github.com/metio/kurly/workloads/kapowarr/server.libsonnet',
   'offen/server': import 'github.com/metio/kurly/workloads/offen/server.libsonnet',
+  'chhoto-url/server': import 'github.com/metio/kurly/workloads/chhoto-url/server.libsonnet',
+  'libretime/server': import 'github.com/metio/kurly/workloads/libretime/server.libsonnet',
+  'pictshare/server': import 'github.com/metio/kurly/workloads/pictshare/server.libsonnet',
+  'pinepods/server': import 'github.com/metio/kurly/workloads/pinepods/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

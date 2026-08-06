@@ -57,11 +57,29 @@ function(
   // The image declares uid 10000 / gid 10001; pin them so the fsGroup makes the
   // data volume writable by the user the binary actually runs as.
   + kurly.runAs(10000, gid=10001, fsGroup=10001)
+  // The binary carries cap_net_bind_service as a FILE capability. Under
+  // no_new_privs the kernel refuses to exec a file with capabilities at all —
+  // not "starts without the capability", but `exec offen failed: Operation not
+  // permitted` before a single line is logged. Moving the listener to an
+  // unprivileged port does not help: the capability is on the file whether or
+  // not the process needs it. The bounding set still drops every capability, so
+  // this permits the exec. The capability must ALSO be in the bounding set: with
+  // every capability dropped the kernel cannot honour the one on the file, and
+  // refuses the exec rather than starting without it. Granting the single named
+  // capability keeps everything else dropped.
+  + kurly.allowPrivilegeEscalation()
+  + kurly.addCapabilities(['NET_BIND_SERVICE'])
   + kurly.store('/var/opt/offen', storageSize, storageClass=storageClass)
   // Offen keeps its ACME cache beside its own tree even when TLS is terminated
   // elsewhere, and writes temporary files while it exports.
   + kurly.scratch('/var/www/.cache', '32Mi')
   + kurly.scratch('/tmp', '32Mi')
+  // The first start creates the SQLite schema before anything answers, and a
+  // liveness probe with no startup budget restarts the container in the middle
+  // of doing it — forever, because each restart begins the migration again. The
+  // budget belongs here rather than in a longer liveness delay, which would also
+  // slow down noticing a genuine hang later.
+  + kurly.startupProbe({ httpGet: { path: '/healthz', port: 'http' }, periodSeconds: 5, failureThreshold: 60 })
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.resources(

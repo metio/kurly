@@ -168,6 +168,12 @@
     source: 'https://github.com/dgtlmoon/changedetection.io',
     homepage: 'https://changedetection.io',
   },
+  'chhoto-url': {
+    license: 'MIT',
+    title: 'chhoto-url',
+    source: 'https://github.com/SinTan1729/chhoto-url',
+    homepage: 'https://github.com/SinTan1729/chhoto-url',
+  },
   cobalt: {
     license: 'AGPL-3.0',
     title: 'cobalt',
@@ -526,6 +532,12 @@
     source: 'https://github.com/linuxserver/docker-librespeed',
     homepage: 'https://github.com/linuxserver/docker-librespeed/packages',
   },
+  libretime: {
+    license: 'AGPL-3.0',
+    title: 'libretime',
+    source: 'https://github.com/libretime/libretime',
+    homepage: 'https://github.com/libretime/libretime',
+  },
   lidarr: {
     license: 'GPL-3.0-only',
     title: 'Lidarr',
@@ -795,6 +807,12 @@
     title: 'Official phpMyAdmin Docker image',
     source: 'https://github.com/phpmyadmin/docker',
     homepage: 'https://github.com/phpmyadmin/docker#readme',
+  },
+  pictshare: {
+    license: 'NOASSERTION',
+    title: 'pictshare',
+    source: 'https://github.com/HaschekSolutions/pictshare',
+    homepage: 'https://github.com/HaschekSolutions/pictshare',
   },
   pihole: {
     license: 'NOASSERTION',
