@@ -192,4 +192,5 @@
   tolgee: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://tolgee.io/pricing' },
   'personal-management-system': { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Volmarg/personal-management-system' },
   'speed-test-by-openspeedtest': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://openspeedtest.com/' },
+  globaleaks: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://www.globaleaks.org/' },
 }
