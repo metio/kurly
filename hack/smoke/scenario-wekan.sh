@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-wekan
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" wekan-db-rw wekan wekan
+kurly::mongodb "$ns" wekan-db
 
 kurly::secret "$ns" wekan workloads/wekan/server.libsonnet
 kurly::boot workloads/wekan/server.libsonnet "$ns"

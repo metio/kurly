@@ -3,46 +3,55 @@ SPDX-FileCopyrightText: The kurly Authors
 SPDX-License-Identifier: 0BSD
 -->
 
-# your-spotify
+# yacy
 
-[Your Spotify](https://github.com/Yooooomi/your_spotify) — a self-hosted dashboard of
-your own Spotify listening history and statistics. A plain composable `kurly.http`
-workload on the official server image, backed by an external MongoDB.
+[YaCy](https://yacy.net/) — a peer-to-peer web search engine. It crawls and
+indexes on its own and, unless you tell it otherwise, joins the public network of
+peers and answers their queries as well as yours. A plain composable `kurly.http`
+workload; the crawler queues, the Solr index and the peer's identity live in one
+`DATA` directory on a PersistentVolume.
 
 ## Compose
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local yourSpotify = import 'github.com/metio/kurly/workloads/your-spotify/server.libsonnet';
+local yacy = import 'github.com/metio/kurly/workloads/yacy/server.libsonnet';
 
-kurly.list(yourSpotify(
-  apiEndpoint='https://spotify-api.example.com',
-  clientEndpoint='https://spotify.example.com',
-))
+kurly.list(yacy())
 ```
 
 | Parameter | Default | Notes |
 |---|---|---|
-| `name` | `your-spotify` | |
-| `image` | `docker.io/yooooomi/your_spotify_server` | |
-| `replicas` | `2` | stateless — scale freely |
-| `apiEndpoint` | unset | the public URL of this server |
-| `clientEndpoint` | unset | the public URL of the web client |
-| `secretName` | `your-spotify` | Secret with `MONGO_ENDPOINT`, `SPOTIFY_PUBLIC`, `SPOTIFY_SECRET` (envFrom) |
+| `name` | `yacy` | |
+| `image` | `yacy/yacy_search_server:latest` | |
+| `storageSize` / `storageClass` | `20Gi` / cluster default | `/opt/yacy_search_server/DATA` |
 | `env` / `resources` / `labels` / `annotations` | | |
 
-Serves the API on `:8080` — compose an exposure onto it. It needs a MongoDB you
-provide; `MONGO_ENDPOINT` in the Secret is the whole connection string.
+## Set the administrator password before you expose it
 
-Both endpoints are public URLs a browser resolves: the Spotify OAuth redirect is built
-from `apiEndpoint`, so it must match the redirect URI registered on the Spotify
-application whose id and secret the Secret carries. The web client is a separate image
-and is not carried here.
+YaCy ships an `admin` account with **an empty password**, and its only protection
+is a restriction to local access — which in a pod means anything that can reach
+the container. Log in, set the password from `/ConfigAccounts_p.html`, and only
+then compose an exposure. Nothing in this workload can decide it for you.
 
-## Persistence
+The same page decides whether the peer runs in **junior/senior** mode on the
+public network or stays private to your intranet. That is a choice about what you
+publish, so it is left where the software makes it, not baked into a default here.
 
-Every scrobble the server records lands in MongoDB, so this is **stateless** — a plain
-rolling Deployment.
+## Storage
+
+One index directory on a ReadWriteOnce volume, so this is **one replica,
+recreated** (never rolled): two JVMs writing one Solr index corrupt it. The index
+grows with everything you crawl and does not shrink, so `20Gi` is a starting
+point rather than a size.
+
+## Startup
+
+A JVM unpacking its cores on a fresh volume takes minutes, so the workload carries
+a startup probe with a ten-minute budget instead of a liveness probe that stays
+lenient forever. The readiness probe asks for the search page; liveness only asks
+whether the port answers, because a busy crawler can be slow to render a page
+while being perfectly alive.
 
 <!-- BEGIN generated: jaas-deploy -->
 
@@ -67,38 +76,38 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 # retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly, namespace: your-spotify }
+metadata: { name: kurly, namespace: yacy }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-your-spotify, namespace: your-spotify }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/your-spotify, ref: { tag: 2026.7.29 } }
+metadata: { name: kurly-yacy, namespace: yacy }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/yacy, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly, namespace: your-spotify }
+metadata: { name: kurly, namespace: yacy }
 spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-your-spotify, namespace: your-spotify }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-your-spotify } }
+metadata: { name: kurly-yacy, namespace: yacy }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-yacy } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: your-spotify, namespace: your-spotify }
+metadata: { name: yacy, namespace: yacy }
 spec:
-  serviceAccountName: your-spotify-renderer
+  serviceAccountName: yacy-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local server = import 'github.com/metio/kurly/workloads/your-spotify/server.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/yacy/server.libsonnet';
       // Compose your exposure and any + features here, then render.
       kurly.list(server())
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-your-spotify, importPath: github.com/metio/kurly/workloads/your-spotify }
+    - { kind: JsonnetLibrary, name: kurly-yacy, importPath: github.com/metio/kurly/workloads/yacy }
 ```
 
 A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
@@ -107,9 +116,9 @@ the run and gating each stage before the next.
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: your-spotify, namespace: your-spotify }
+metadata: { name: yacy, namespace: yacy }
 spec:
-  serviceAccountName: your-spotify-deployer
+  serviceAccountName: yacy-deployer
   rollbackOnFailure: true
   # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
   # than a first deploy takes for anything that migrates a database before it
@@ -122,10 +131,10 @@ spec:
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: your-spotify
+        name: yacy
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: your-spotify }
+          - { apiVersion: apps/v1, kind: Deployment, name: yacy }
 ```
 
 <!-- END generated: jaas-deploy -->

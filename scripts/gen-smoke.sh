@@ -125,9 +125,23 @@ while IFS=$'\t' read -r id stages db cache; do
   if [ "$db" = "1" ]; then
     dbName="$(param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
     dbUser="$(param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
+    # MongoDB first, because it is the one engine the two tests below cannot tell
+    # apart: a Mongo-backed stage mentions neither 3306 nor 5432, so it fell
+    # through to the PostgreSQL branch and was handed a server speaking the wrong
+    # protocol. The workload then failed to connect, which reads as the
+    # workload's defect and is the harness having provisioned the wrong database.
+    #
+    # Asked of the CATALOGUE rather than of the file, because the engine is
+    # derived there in a documented precedence — and ferretdb speaks the MongoDB
+    # protocol while storing in PostgreSQL, so grepping the source for "mongo"
+    # would take its database away.
+    engine="$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.requires[]?|select(.kind=="database")|.engine//empty]|first//""' "$catalog")"
+    if [ "$engine" = "mongodb" ]; then
+      dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
+      prov+="kurly::mongodb \"\$ns\" ${dbHost}"$'\n'
     # MySQL/MariaDB apps read port 3306 (postgres apps 5432); provision the engine
     # the app connects to, at the host it defaults to.
-    if grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
+    elif grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
       dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
       prov+="kurly::mysql \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
     else

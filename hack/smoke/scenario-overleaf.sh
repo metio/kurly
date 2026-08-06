@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-overleaf
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" overleaf-db-rw overleaf overleaf
+kurly::mongodb "$ns" overleaf-db
 kurly::cache "$ns" overleaf-cache ""
 
 kurly::secret "$ns" overleaf workloads/overleaf/server.libsonnet
