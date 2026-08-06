@@ -416,6 +416,17 @@ local stageImports = {
   'numa/server': import 'github.com/metio/kurly/workloads/numa/server.libsonnet',
   'sync-in/server': import 'github.com/metio/kurly/workloads/sync-in/server.libsonnet',
   'transmute/server': import 'github.com/metio/kurly/workloads/transmute/server.libsonnet',
+  'gerrit/server': import 'github.com/metio/kurly/workloads/gerrit/server.libsonnet',
+  'homegallery/server': import 'github.com/metio/kurly/workloads/homegallery/server.libsonnet',
+  'multi-scrobbler/server': import 'github.com/metio/kurly/workloads/multi-scrobbler/server.libsonnet',
+  'vvveb-cms/server': import 'github.com/metio/kurly/workloads/vvveb-cms/server.libsonnet',
+  'xbackbone/server': import 'github.com/metio/kurly/workloads/xbackbone/server.libsonnet',
+  'bitcart/server': import 'github.com/metio/kurly/workloads/bitcart/server.libsonnet',
+  'docassemble/server': import 'github.com/metio/kurly/workloads/docassemble/server.libsonnet',
+  'fittrackee/server': import 'github.com/metio/kurly/workloads/fittrackee/server.libsonnet',
+  'gameyfin/server': import 'github.com/metio/kurly/workloads/gameyfin/server.libsonnet',
+  'kapowarr/server': import 'github.com/metio/kurly/workloads/kapowarr/server.libsonnet',
+  'offen/server': import 'github.com/metio/kurly/workloads/offen/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: The kurly Authors
 // SPDX-License-Identifier: 0BSD
 
-// gerbera — a Gerbera server (a DLNA media server streaming a personal
+// gerbera — a Gerbera server (a UPnP/DLNA media server streaming a personal
 // library to televisions, players and phones on the same network). A plain
 // composable kurly.http workload on the official image: it keeps its config.xml
 // and SQLite database on a PersistentVolume and reads the library from it, so it
@@ -10,11 +10,11 @@
 //   local gerbera = import 'github.com/metio/kurly/workloads/gerbera/server.libsonnet';
 //   kurly.list(gerbera())
 //
-// Serves the web UI and the DLNA HTTP endpoints on :49494 — compose an exposure
+// Serves the web UI and the UPnP HTTP endpoints on :49494 — compose an exposure
 // onto it. Put your media under /content on the volume; the generated config
 // autoscans it with inotify.
 //
-// DLNA discovery is SSDP multicast on 1900/udp, which does not cross a pod
+// UPnP discovery is SSDP multicast on 1900/udp, which does not cross a pod
 // network: players on the LAN will not find this by themselves. Point them at the
 // exposed address, or run it on the host network, which is a decision for the
 // consumer and not something a workload should assume.

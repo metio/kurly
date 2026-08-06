@@ -22,3 +22,13 @@ ND = "ND"
 # `searchd` is the name of Manticore Search's server binary — the daemon suffix,
 # as in `httpd`, rather than a misspelling of `searched`.
 searchd = "searchd"
+# `offen` is the analytics project's name — German for `open`, and the name it
+# publishes under — not a typo of `often`.
+offen = "offen"
+Offen = "Offen"
+# `Pn` is the middle of UPnP — Universal Plug and Play, the protocol gerbera
+# implements. The checker splits the name and reads that fragment as a misspelt
+# `On`, so the FRAGMENT is what has to be allowed; listing `UPnP` does nothing
+# because the whole word is never what it compares.
+Pn = "Pn"
+
