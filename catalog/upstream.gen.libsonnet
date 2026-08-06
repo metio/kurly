@@ -41,6 +41,12 @@
     source: 'https://github.com/chainguard-images/images/tree/main/images/static',
     homepage: 'https://images.chainguard.dev/directory/image/static/overview',
   },
+  'apache-solr': {
+    license: 'Apache-2.0',
+    title: 'Apache Solr',
+    source: 'https://github.com/apache/solr',
+    homepage: 'https://solr.apache.org',
+  },
   apprise: {
     license: 'MIT',
     title: 'apprise-api',
@@ -110,6 +116,12 @@
     title: 'Bookstack',
     source: 'https://github.com/linuxserver/docker-bookstack',
     homepage: 'https://github.com/linuxserver/docker-bookstack/packages',
+  },
+  bracket: {
+    license: 'AGPL-3.0',
+    title: 'bracket',
+    source: 'https://github.com/evroon/bracket',
+    homepage: 'https://github.com/evroon/bracket',
   },
   caddy: {
     license: 'Apache-2.0',
@@ -192,6 +204,12 @@
     source: 'https://github.com/dexidp/dex',
     homepage: 'https://github.com/dexidp/dex',
   },
+  'directory-lister': {
+    license: 'MIT',
+    title: 'DirectoryLister',
+    source: 'https://github.com/DirectoryLister/DirectoryLister',
+    homepage: 'https://github.com/DirectoryLister/DirectoryLister',
+  },
   docmost: {
     source: 'https://github.com/docmost/docmost',
   },
@@ -264,6 +282,12 @@
     title: 'FlareSolverr',
     source: 'https://github.com/FlareSolverr/FlareSolverr',
     homepage: 'https://github.com/FlareSolverr/FlareSolverr',
+  },
+  fluidd: {
+    license: 'GPL-3.0',
+    title: 'fluidd',
+    source: 'https://github.com/fluidd-core/fluidd',
+    homepage: 'https://github.com/fluidd-core/fluidd',
   },
   foldingathome: {
     license: 'GPL-3.0-only',
@@ -416,6 +440,12 @@
     title: 'Joplin Server',
     source: 'https://github.com/laurent22/joplin',
     homepage: 'https://joplinapp.org/',
+  },
+  jotty: {
+    license: 'AGPL-3.0',
+    title: 'jotty',
+    source: 'https://github.com/fccview/jotty',
+    homepage: 'https://github.com/fccview/jotty',
   },
   kanboard: {
     license: 'MIT',
@@ -677,6 +707,12 @@
     source: 'https://github.com/paperless-ngx/paperless-ngx',
     homepage: 'https://github.com/paperless-ngx/paperless-ngx',
   },
+  'part-db': {
+    license: 'AGPL-3.0',
+    title: 'Part-DB',
+    source: 'https://github.com/Part-DB/Part-DB-symfony',
+    homepage: 'https://github.com/Part-DB/Part-DB-symfony',
+  },
   passwordpusher: {
     license: 'Apache-2.0',
     title: 'PasswordPusher',
@@ -849,6 +885,12 @@
     source: 'https://github.com/silverbulletmd/silverbullet',
     homepage: 'https://github.com/silverbulletmd/silverbullet',
   },
+  slink: {
+    license: 'MIT',
+    title: 'slink',
+    source: 'https://github.com/php/frankenphp',
+    homepage: 'https://frankenphp.dev',
+  },
   slskd: {
     license: 'AGPL-3.0',
     title: 'slskd',
@@ -974,6 +1016,10 @@
     source: 'https://github.com/traccar/traccar',
     homepage: 'https://github.com/traccar/traccar',
   },
+  traggo: {
+    title: 'traggo',
+    source: 'https://github.com/traggo/server',
+  },
   transmission: {
     license: 'GPL-3.0-only',
     title: 'Transmission',
@@ -985,6 +1031,12 @@
     title: 'Trilium',
     source: 'https://github.com/TriliumNext/Trilium',
     homepage: 'https://github.com/TriliumNext/Trilium',
+  },
+  trip: {
+    license: 'MIT',
+    title: 'trip',
+    source: 'https://github.com/itskovacs/trip',
+    homepage: 'https://github.com/itskovacs/trip',
   },
   tvheadend: {
     license: 'GPL-3.0-only',
@@ -1008,6 +1060,11 @@
     title: 'vikunja',
     source: 'https://github.com/go-vikunja/vikunja',
     homepage: 'https://github.com/go-vikunja/vikunja',
+  },
+  vince: {
+    license: 'AGPL-3.0',
+    title: 'vince',
+    source: 'https://github.com/vinceanalytics/vince',
   },
   wallabag: {
     title: 'docker',
