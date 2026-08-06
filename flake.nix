@@ -110,6 +110,7 @@
           check-assembler = pkgs.writeShellApplication {
             name = "check-assembler";
             runtimeInputs = with pkgs; [
+              gen-catalog
               nodejs-slim
               go-jsonnet
               yq-go
@@ -207,6 +208,7 @@
           stamp-catalog = pkgs.writeShellApplication {
             name = "stamp-catalog";
             runtimeInputs = with pkgs; [
+              gen-catalog
               jq
               skopeo
               git
@@ -251,6 +253,7 @@
           gen-forge = pkgs.writeShellApplication {
             name = "gen-forge";
             runtimeInputs = with pkgs; [
+              gen-catalog
               curl
               jq
               go-jsonnet
@@ -322,6 +325,7 @@
           check-coverage = pkgs.writeShellApplication {
             name = "check-coverage";
             runtimeInputs = with pkgs; [
+              gen-catalog
               go-jsonnet
               jsonnet-bundler
               jq
@@ -403,6 +407,7 @@
           gen-workload-metadata = pkgs.writeShellApplication {
             name = "gen-workload-metadata";
             runtimeInputs = with pkgs; [
+              gen-catalog
               jq
               coreutils
             ];
@@ -415,6 +420,7 @@
           gen-docs-data = pkgs.writeShellApplication {
             name = "gen-docs-data";
             runtimeInputs = with pkgs; [
+              gen-catalog
               coreutils
               curl
               cacert

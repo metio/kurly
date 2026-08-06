@@ -24,6 +24,21 @@ on:
         description: The shared calver every unit in this run is released as.
         required: true
         type: string
+# Least privilege at the top, widened per job. A called workflow's token can
+# never exceed what the CALLING job grants, so this is a ceiling rather than a
+# grant — but it has to be stated: a workflow with no top-level permissions
+# block inherits whatever the repository default happens to be, which is not a
+# decision anybody made.
+permissions:
+  contents: read
+# Serialize with the calling workflow's runs. Release notes are scoped to the
+# range since a unit's previous tag, so two runs releasing the same unit would
+# read the same previous tag and emit overlapping notes. The caller queues on
+# the same group name, which is what makes this one queue behind it rather than
+# forming a second, independent queue.
+concurrency:
+  group: Release
+  cancel-in-progress: false
 jobs:
   release:
     name: ${{ inputs.workload }}

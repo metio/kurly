@@ -8,6 +8,13 @@
 
 # Alpine.js drives the assembler page. It is fetched here rather than vendored so
 # a version bump is a one-line Renovate PR, not a hand-committed binary blob.
+# .build/catalog.json is a BUILD ARTIFACT with no committed copy, so a fresh
+# checkout does not have one — CI included. Producing it here rather than
+# failing means a gate depends on the DATA it needs instead of on somebody
+# having remembered to render it first, which is exactly the step a CI job
+# forgot.
+[ -f .build/catalog.json ] || gen-catalog >/dev/null
+
 ALPINE_VERSION=3.15.12
 
 mkdir -p docs/assets docs/static docs/static/js

@@ -27,6 +27,13 @@
 # derived for the rest.
 set -euo pipefail
 
+# .build/catalog.json is a BUILD ARTIFACT with no committed copy, so a fresh
+# checkout does not have one — CI included. Producing it here rather than
+# failing means a gate depends on the DATA it needs instead of on somebody
+# having remembered to render it first, which is exactly the step a CI job
+# forgot.
+[ -f .build/catalog.json ] || gen-catalog >/dev/null
+
 only="${WORKLOADS:-}"
 out=catalog/forge.gen.libsonnet
 # Written progressively next to the output: a rate-limited sweep is measured in

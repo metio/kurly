@@ -27,6 +27,13 @@
 # "$0" is a store path and its parent is not this repository.
 set -euo pipefail
 
+# .build/catalog.json is a BUILD ARTIFACT with no committed copy, so a fresh
+# checkout does not have one — CI included. Producing it here rather than
+# failing means a gate depends on the DATA it needs instead of on somebody
+# having remembered to render it first, which is exactly the step a CI job
+# forgot.
+[ -f .build/catalog.json ] || gen-catalog >/dev/null
+
 workload="${1:?usage: gen-workload-metadata <workload> [outfile]}"
 out="${2:-}"
 

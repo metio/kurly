@@ -9,6 +9,13 @@
 # authoring, and a generator gap is caught by the count assertion. check-catalog
 # keeps the catalog itself honest against the library.
 
+# .build/catalog.json is a BUILD ARTIFACT with no committed copy, so a fresh
+# checkout does not have one — CI included. Producing it here rather than
+# failing means a gate depends on the DATA it needs instead of on somebody
+# having remembered to render it first, which is exactly the step a CI job
+# forgot.
+[ -f .build/catalog.json ] || gen-catalog >/dev/null
+
 [ "${KURLY_VENDORED:-}" = "1" ] || jb install
 
 # The compositions import kurly by its canonical path; resolve it via the vendor
