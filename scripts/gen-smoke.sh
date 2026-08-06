@@ -114,7 +114,7 @@ done < <(jq -r '
 # stage in the shared namespace. The connection defaults follow kurly's naming
 # convention (<name>-db-rw, <name>-cache-headless); the throwaway postgres/valkey
 # are created under exactly those names.
-while IFS=$'\t' read -r id stages db cache; do
+while IFS=$'\t' read -r id stages db cache objstore; do
   [ -n "$id" ] || continue
   if is_hand_written "$id"; then skipped_hand=$((skipped_hand + 1)); continue; fi
   scenario="hack/smoke/scenario-${id}.sh"
@@ -170,6 +170,15 @@ while IFS=$'\t' read -r id stages db cache; do
       prov+="kurly::postgres \"\$ns\" ${dbHost} ${dbName} ${dbUser}${pgimage}"$'\n'
     fi
   fi
+  # A workload declaring objectStorage gets a real S3 gateway, because there is
+  # nothing to fake: it signs requests and reads back what it wrote. seaweedfs is
+  # already carried here, so the smoke uses the same server a consumer would.
+  # Without this an S3-backed workload cannot be proven at all — it starts, finds
+  # no endpoint, and dies in a way that reads as its own defect.
+  if [ "$objstore" = "1" ]; then
+    bucket="$(param "$primary" bucket)"; [ -n "$bucket" ] || bucket="$id"
+    prov+="kurly::objectstorage \"\$ns\" ${bucket}"$'\n'
+  fi
   if [ "$cache" = "1" ]; then
     redisHost="$(param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
     # Provision the cache the way the workload connects to it. Most take a host and
@@ -217,7 +226,7 @@ done < <(jq -r '
   .workloads[]
   | select((.requires // [] | length) > 0)
   | select([.stages[].architectures] | any(. != null))
-  | "\(.id)\t\([.stages[].id] | join(","))\t\(if ((.requires//[])|map(select(.kind=="database"))|length)>0 then 1 else 0 end)\t\(if ((.requires//[])|map(select(.kind=="cache"))|length)>0 then 1 else 0 end)"
+  | "\(.id)\t\([.stages[].id] | join(","))\t\(if ((.requires//[])|map(select(.kind=="database"))|length)>0 then 1 else 0 end)\t\(if ((.requires//[])|map(select(.kind=="cache"))|length)>0 then 1 else 0 end)\t\(if ((.requires//[])|map(select(.kind=="objectStorage"))|length)>0 then 1 else 0 end)"
 ' "$catalog")
 
 # A durable coverage ledger, regenerated every run so it never drifts and stays

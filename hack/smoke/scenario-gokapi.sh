@@ -14,6 +14,7 @@ kurly::vendor
 ns=kurly-gokapi
 kurly::namespace "$ns"
 
+kurly::objectstorage "$ns" gokapi
 
 kurly::secret "$ns" gokapi workloads/gokapi/server.libsonnet
 kurly::boot workloads/gokapi/server.libsonnet "$ns"

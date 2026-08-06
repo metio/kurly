@@ -14,6 +14,7 @@ kurly::vendor
 ns=kurly-alist
 kurly::namespace "$ns"
 
+kurly::objectstorage "$ns" alist
 
 kurly::secret "$ns" alist workloads/alist/server.libsonnet
 kurly::boot workloads/alist/server.libsonnet "$ns"

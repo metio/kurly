@@ -14,6 +14,7 @@ kurly::vendor
 ns=kurly-duplicati
 kurly::namespace "$ns"
 
+kurly::objectstorage "$ns" duplicati
 
 kurly::secret "$ns" duplicati workloads/duplicati/server.libsonnet
 kurly::boot workloads/duplicati/server.libsonnet "$ns"

@@ -14,6 +14,7 @@ kurly::vendor
 ns=kurly-registry
 kurly::namespace "$ns"
 
+kurly::objectstorage "$ns" registry
 
 kurly::secret "$ns" registry workloads/registry/server.libsonnet
 kurly::boot workloads/registry/server.libsonnet "$ns"

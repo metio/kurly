@@ -15,6 +15,7 @@ ns=kurly-peertube
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" peertube-db-rw peertube peertube
+kurly::objectstorage "$ns" peertube
 kurly::cache "$ns" peertube-cache ""
 
 kurly::secret "$ns" peertube workloads/peertube/server.libsonnet

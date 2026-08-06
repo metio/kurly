@@ -15,6 +15,7 @@ ns=kurly-docmost
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" docmost-db-rw docmost docmost
+kurly::objectstorage "$ns" docmost
 kurly::cache "$ns" docmost-cache-headless
 
 kurly::secret "$ns" docmost workloads/docmost/server.libsonnet

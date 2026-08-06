@@ -228,6 +228,12 @@
     source: 'https://github.com/DirectoryLister/DirectoryLister',
     homepage: 'https://github.com/DirectoryLister/DirectoryLister',
   },
+  'discount-bandit': {
+    license: 'MIT',
+    title: 'FrankenPHP',
+    source: 'https://github.com/php/frankenphp',
+    homepage: 'https://frankenphp.dev',
+  },
   docassemble: {
     title: 'ubuntu',
   },
@@ -241,6 +247,11 @@
   drawio: {
     source: 'https://github.com/jgraph/docker-drawio',
     homepage: 'https://www.drawio.com',
+  },
+  drop: {
+    title: 'drop',
+    source: 'https://github.com/Drop-OSS/drop',
+    homepage: 'https://github.com/Drop-OSS/drop',
   },
   duplicati: {
     license: 'GPL-3.0-only',
@@ -520,6 +531,12 @@
     source: 'https://github.com/LemmyNet/lemmy',
     homepage: 'https://github.com/LemmyNet/lemmy',
   },
+  librebooking: {
+    license: 'GPL-3.0',
+    title: 'LibreBooking',
+    source: 'https://github.com/librebooking/docker',
+    homepage: 'https://github.com/librebooking/docker',
+  },
   libredesk: {
     license: 'AGPL-3.0',
     title: 'libredesk',
@@ -577,6 +594,12 @@
     source: 'https://github.com/LycheeOrg/Lychee',
     homepage: 'https://github.com/LycheeOrg/Lychee',
   },
+  mafl: {
+    license: 'MIT',
+    title: 'Mafl',
+    source: 'https://github.com/hywax/mafl',
+    homepage: 'https://mafl.hywax.space',
+  },
   mailpit: {
     license: 'MIT',
     title: 'Mailpit',
@@ -601,11 +624,23 @@
     source: 'https://github.com/mastodon/mastodon',
     homepage: 'https://github.com/mastodon/mastodon',
   },
+  'mayan-edms': {
+    license: 'GPL-2.0-only',
+    title: 'Mayan EDMS',
+    source: 'https://gitlab.com/mayan-edms/mayan-edms/-/blob/master/mayan/apps/platform/templates/platform/docker/dockerfile.tmpl',
+    homepage: 'https://hub.docker.com/r/mayanedms/mayanedms',
+  },
   mealie: {
     license: 'AGPL-3.0',
     title: 'mealie',
     source: 'https://github.com/mealie-recipes/mealie',
     homepage: 'https://github.com/mealie-recipes/mealie',
+  },
+  'medama-analytics': {
+    license: 'Apache-2.0',
+    title: 'medama',
+    source: 'https://github.com/medama-io/medama',
+    homepage: 'https://github.com/medama-io/medama',
   },
   'mermaid-live-editor': {
     license: 'MIT',
@@ -686,6 +721,12 @@
   },
   'node-red': {
     source: 'https://github.com/node-red/node-red-docker',
+  },
+  'note-mark': {
+    license: 'AGPL-3.0',
+    title: 'note-mark',
+    source: 'https://github.com/enchant97/note-mark',
+    homepage: 'https://github.com/enchant97/note-mark',
   },
   numa: {
     license: 'MIT',
@@ -1083,6 +1124,12 @@
   tika: {
     title: 'ubuntu',
   },
+  'tiny-tiny-rss': {
+    license: 'GPL-3.0',
+    title: 'tt-rss',
+    source: 'https://github.com/tt-rss/tt-rss',
+    homepage: 'https://github.com/tt-rss/tt-rss',
+  },
   traccar: {
     license: 'Apache-2.0',
     title: 'traccar',
@@ -1180,6 +1227,12 @@
     title: 'wetty',
     source: 'https://github.com/butlerx/wetty',
     homepage: 'https://github.com/butlerx/wetty',
+  },
+  'wiki-go': {
+    license: 'GPL-3.0',
+    title: 'Wiki-Go',
+    source: 'https://github.com/leomoon-studios/wiki-go',
+    homepage: 'https://wikigo.leomoon.com',
   },
   xbackbone: {
     license: 'GPL-3.0-only',
