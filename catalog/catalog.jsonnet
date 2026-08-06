@@ -350,6 +350,17 @@ local stageImports = {
   'halo/server': import 'github.com/metio/kurly/workloads/halo/server.libsonnet',
   'jupyterlab/server': import 'github.com/metio/kurly/workloads/jupyterlab/server.libsonnet',
   'livebook/server': import 'github.com/metio/kurly/workloads/livebook/server.libsonnet',
+  'teslamate/server': import 'github.com/metio/kurly/workloads/teslamate/server.libsonnet',
+  'your-spotify/server': import 'github.com/metio/kurly/workloads/your-spotify/server.libsonnet',
+  'gonic/server': import 'github.com/metio/kurly/workloads/gonic/server.libsonnet',
+  'invidious/server': import 'github.com/metio/kurly/workloads/invidious/server.libsonnet',
+  'kyoo/server': import 'github.com/metio/kurly/workloads/kyoo/server.libsonnet',
+  'librephotos/backend': import 'github.com/metio/kurly/workloads/librephotos/backend.libsonnet',
+  'librephotos/frontend': import 'github.com/metio/kurly/workloads/librephotos/frontend.libsonnet',
+  'librephotos/proxy': import 'github.com/metio/kurly/workloads/librephotos/proxy.libsonnet',
+  'polaris/server': import 'github.com/metio/kurly/workloads/polaris/server.libsonnet',
+  'slskd/server': import 'github.com/metio/kurly/workloads/slskd/server.libsonnet',
+  'yopass/server': import 'github.com/metio/kurly/workloads/yopass/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
