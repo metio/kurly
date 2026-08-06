@@ -66,6 +66,9 @@
   "synapse/server": {
     "params": "serverName='synapse.example.com'"
   },
+  "tube-archivist": {
+    "compose": "+ k.env({ TA_HOST: 'http://tube-archivist:8000' })"
+  },
   "vikunja": {
     "compose": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"
   },
