@@ -62,6 +62,14 @@ function(
       // a reader can see where the data goes.
       ATOMIC_DATA_DIR: '/atomic-storage/data',
       ATOMIC_CONFIG_DIR: '/atomic-storage/config',
+      // The search index is NOT placed under the data directory and has no
+      // setting of its own: it goes to the XDG cache directory, which with no
+      // HOME resolves to `/.cache` — a read-only root filesystem, so the server
+      // exits during startup with "Failed to start search service: Read-only
+      // file system". Pointing the cache root at the volume is the only way to
+      // move it, and it belongs there anyway: rebuilding the index means
+      // reparsing every resource in the store.
+      XDG_CACHE_HOME: '/atomic-storage/cache',
       ATOMIC_PORT: std.toString(port),
       // Every interface: a pod that binds one address is a pod nothing outside it
       // can reach.
