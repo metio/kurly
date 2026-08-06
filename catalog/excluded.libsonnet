@@ -199,4 +199,5 @@
   // managed services. Every source header says so; only the metadata does not.
   fredy: { reason: 'licence-forbids-saas', note: 'Apache-2.0 plus a Commons Clause forbidding paid hosted or managed services — https://github.com/orangecoding/fredy/blob/master/LICENSE' },
   aptabase: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Aptabase Cloud) — https://aptabase.com/pricing' },
+  hemmelig: { reason: 'licence-forbids-saas', note: 'the licence forbids offering it as a service — https://github.com/HemmeligOrg/Hemmelig.app' },
 }

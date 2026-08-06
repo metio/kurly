@@ -222,6 +222,9 @@
     source: 'https://github.com/DirectoryLister/DirectoryLister',
     homepage: 'https://github.com/DirectoryLister/DirectoryLister',
   },
+  docassemble: {
+    title: 'ubuntu',
+  },
   docmost: {
     source: 'https://github.com/docmost/docmost',
   },
@@ -288,6 +291,12 @@
     title: 'Firefly III',
     source: 'https://dev.azure.com/Firefly-III/_git/MainImage',
     homepage: 'https://github.com/firefly-iii/docker',
+  },
+  fittrackee: {
+    license: 'AGPL-3.0',
+    title: 'FitTrackee',
+    source: 'https://github.com/SamR1/FitTrackee',
+    homepage: 'https://github.com/SamR1/FitTrackee',
   },
   flaresolverr: {
     license: 'MIT',
@@ -409,6 +418,10 @@
     title: 'homebox',
     source: 'https://github.com/sysadminsmedia/homebox',
     homepage: 'https://github.com/sysadminsmedia/homebox',
+  },
+  homegallery: {
+    source: 'https://github.com/xemle/home-gallery',
+    homepage: 'https://home-gallery.org',
   },
   homepage: {
     license: 'GPL-3.0',
@@ -610,6 +623,12 @@
     title: 'eclipse-mosquitto',
     source: 'https://github.com/eclipse-mosquitto/mosquitto',
     homepage: 'https://mosquitto.org/',
+  },
+  'multi-scrobbler': {
+    license: 'MIT',
+    title: 'Multi-Scrobbler',
+    source: 'https://github.com/FoxxMD/multi-scrobbler',
+    homepage: 'https://docs.multi-scrobbler.app',
   },
   mylar3: {
     license: 'GPL-3.0-only',
@@ -1143,6 +1162,12 @@
     title: 'wetty',
     source: 'https://github.com/butlerx/wetty',
     homepage: 'https://github.com/butlerx/wetty',
+  },
+  xbackbone: {
+    license: 'GPL-3.0-only',
+    title: 'Xbackbone',
+    source: 'https://github.com/linuxserver/docker-xbackbone',
+    homepage: 'https://github.com/linuxserver/docker-xbackbone/packages',
   },
   yacy: {
     license: 'NOASSERTION',

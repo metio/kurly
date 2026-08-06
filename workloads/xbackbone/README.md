@@ -3,54 +3,47 @@ SPDX-FileCopyrightText: The kurly Authors
 SPDX-License-Identifier: 0BSD
 -->
 
-# gerbera
+# xbackbone
 
-[Gerbera](https://github.com/gerbera/gerbera) — a UPnP/DLNA media server that
-streams a personal library to televisions, players and phones. A plain composable
-`kurly.http` workload on the official image: it keeps `config.xml` and its SQLite
-database on a PersistentVolume and reads the library from the same volume, so it
-needs no external database.
+[XBackBone](https://github.com/SergiX44/XBackBone) — a lightweight file and screenshot
+host with ShareX support. A plain composable `kurly.http` workload on the maintained
+[LinuxServer](https://docs.linuxserver.io/images/docker-xbackbone/) image, with
+uploads, the SQLite database and the generated configuration on a PersistentVolume.
 
 ## Compose
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local gerbera = import 'github.com/metio/kurly/workloads/gerbera/server.libsonnet';
+local xbackbone = import 'github.com/metio/kurly/workloads/xbackbone/server.libsonnet';
 
-kurly.list(gerbera())
+kurly.list(xbackbone())
 ```
 
 | Parameter | Default | Notes |
 |---|---|---|
-| `name` | `gerbera` | |
-| `image` | `docker.io/gerbera/gerbera:3.2.1` | |
-| `storageSize` / `storageClass` | `50Gi` / cluster default | config and database (`/var/run/gerbera`) and media (`/content`) |
-| `env` | `{}` | extra settings for the entrypoint |
-| `resources` / `labels` / `annotations` | | |
+| `name` | `xbackbone` | |
+| `image` | `lscr.io/linuxserver/xbackbone:3.8.2-ls235` | |
+| `storageSize` / `storageClass` | `20Gi` / cluster default | uploads, database and config (`/config`) |
+| `puid` / `pgid` | `1000` / `1000` | own the mounted files |
+| `timezone` | `UTC` | `TZ` |
+| `env` / `resources` / `labels` / `annotations` | | |
 
-Serves the web UI and the DLNA HTTP endpoints on `:49494` — compose an exposure
-onto it. Put your media under `/content` on the volume; the config the entrypoint
-generates on first start autoscans that directory with inotify.
+Serves the web app on `:80` — compose an exposure onto it.
 
-## Discovery
+## Storage
 
-Gerbera announces itself with SSDP, which is multicast on `1900/udp` and does not
-cross a pod network: players on the LAN will not find this instance by themselves.
-Point them at the exposed address instead, or run the pod on the host network —
-that is a deployment decision, so the workload does not make it for you.
+XBackBone stores uploads, its SQLite database and its generated configuration under
+`/config`, so it needs **no external database**. The volume is ReadWriteOnce and holds
+the uploads, so this is **one replica, recreated** — never rolled, to keep two pods off
+the files. Point it at a MySQL server through the first-run installer if you would
+rather keep the metadata elsewhere; the uploads stay on the volume either way.
 
-## Privileges
+## Security
 
-The image's entrypoint writes the initial config, chowns the volume and then drops
-to its own account with `su-exec`, so the container starts as root with `CHOWN`,
-`FOWNER`, `SETGID` and `SETUID` granted back on top of the dropped-all default.
-The server process itself does not run as root.
-
-## Persistence
-
-Config and database live on a ReadWriteOnce volume, so this is **one replica,
-recreated** — the same single-writer discipline as
-[navidrome](../navidrome/).
+The LinuxServer image runs its s6-overlay init as **root** and drops to the
+`puid`/`pgid` user, so this workload relaxes kurly's non-root and read-only-rootfs
+defaults while keeping the rest of the hardening — dropped capabilities (a named set
+granted back), seccomp, no privilege escalation and resource limits.
 
 <!-- BEGIN generated: jaas-deploy -->
 
@@ -75,38 +68,38 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 # retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly, namespace: gerbera }
+metadata: { name: kurly, namespace: xbackbone }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-gerbera, namespace: gerbera }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/gerbera, ref: { tag: 2026.7.29 } }
+metadata: { name: kurly-xbackbone, namespace: xbackbone }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/xbackbone, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly, namespace: gerbera }
+metadata: { name: kurly, namespace: xbackbone }
 spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-gerbera, namespace: gerbera }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-gerbera } }
+metadata: { name: kurly-xbackbone, namespace: xbackbone }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-xbackbone } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: gerbera, namespace: gerbera }
+metadata: { name: xbackbone, namespace: xbackbone }
 spec:
-  serviceAccountName: gerbera-renderer
+  serviceAccountName: xbackbone-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local server = import 'github.com/metio/kurly/workloads/gerbera/server.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/xbackbone/server.libsonnet';
       // Compose your exposure and any + features here, then render.
       kurly.list(server())
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-gerbera, importPath: github.com/metio/kurly/workloads/gerbera }
+    - { kind: JsonnetLibrary, name: kurly-xbackbone, importPath: github.com/metio/kurly/workloads/xbackbone }
 ```
 
 A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
@@ -115,9 +108,9 @@ the run and gating each stage before the next.
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: gerbera, namespace: gerbera }
+metadata: { name: xbackbone, namespace: xbackbone }
 spec:
-  serviceAccountName: gerbera-deployer
+  serviceAccountName: xbackbone-deployer
   rollbackOnFailure: true
   # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
   # than a first deploy takes for anything that migrates a database before it
@@ -130,10 +123,10 @@ spec:
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: gerbera
+        name: xbackbone
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: gerbera }
+          - { apiVersion: apps/v1, kind: Deployment, name: xbackbone }
 ```
 
 <!-- END generated: jaas-deploy -->
