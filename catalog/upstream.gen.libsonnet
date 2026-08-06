@@ -69,6 +69,12 @@
     source: 'https://github.com/goauthentik/authentik',
     homepage: 'https://goauthentik.io',
   },
+  azuracast: {
+    license: 'AGPL-3.0',
+    title: 'AzuraCast',
+    source: 'https://github.com/AzuraCast/AzuraCast',
+    homepage: 'https://github.com/AzuraCast/AzuraCast',
+  },
   baikal: {
     license: 'MIT',
     title: 'Baikal',

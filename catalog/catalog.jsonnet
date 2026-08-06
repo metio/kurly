@@ -386,6 +386,10 @@ local stageImports = {
   'chibisafe/server': import 'github.com/metio/kurly/workloads/chibisafe/server.libsonnet',
   'evershop/server': import 'github.com/metio/kurly/workloads/evershop/server.libsonnet',
   'opencloud/server': import 'github.com/metio/kurly/workloads/opencloud/server.libsonnet',
+  'azuracast/server': import 'github.com/metio/kurly/workloads/azuracast/server.libsonnet',
+  'domoticz/server': import 'github.com/metio/kurly/workloads/domoticz/server.libsonnet',
+  'trailbase/server': import 'github.com/metio/kurly/workloads/trailbase/server.libsonnet',
+  'zoraxy/server': import 'github.com/metio/kurly/workloads/zoraxy/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
