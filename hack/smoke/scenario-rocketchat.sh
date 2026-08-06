@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-rocketchat
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" rocketchat-db-rw rocketchat rocketchat
+kurly::mongodb "$ns" rocketchat-db
 
 kurly::secret "$ns" rocketchat workloads/rocketchat/server.libsonnet
 kurly::boot workloads/rocketchat/server.libsonnet "$ns"

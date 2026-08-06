@@ -466,6 +466,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   // stage ids, so catalog.jsonnet computes it and there is no second copy to
   // disagree with the first.
   workloads: {
+    ergo: {
+      name: 'Ergo',
+      upstream: { repo: 'https://github.com/ergochat/ergo' },
+      homepage: 'https://ergo.chat/',
+      license: 'MIT',
+      description: 'Run an IRC network where accounts, history and bouncing come with the server.',
+      summary: 'An Ergo server (a modern IRCv3 daemon written in Go, with account services, a bouncer and message history built into the server rather than bolted on beside it) on the official image. A plain composable http workload needing nothing else: configuration, database and TLS material all live in /ircd on a PersistentVolume. First boot writes ircd.yaml there and prints a generated admin oper password to the log ONCE, then never touches the file again — read the password out of the first pod and edit the file on the volume afterwards; the :6697 certificate it makes itself is self-signed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves plaintext IRC on :6667 and IRC-over-TLS on :6697 — route both as TCP.',
+      category: 'messaging',
+      stages: {
+        server: d.fn('The Ergo server. Configuration, database and TLS material live at /ircd on the volume, which is also the working directory the shipped configuration resolves its relative paths against. /tmp is a scratch because the entrypoint builds the first configuration there before moving it onto the volume. Route :6667 and :6697 as TCP.', [
+          d.arg('name', d.T.string, default='ergo'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
     gonic: {
       upstream: { repo: 'https://github.com/sentriz/gonic' },
       name: 'gonic',
@@ -597,6 +618,56 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('dataRoot', d.T.string, default='/librephotos'),
           d.arg('maxBodySize', d.T.string, default='500m'),
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
+    neko: {
+      name: 'neko',
+      upstream: { repo: 'https://github.com/m1k1o/neko' },
+      license: 'Apache-2.0',
+      homepage: 'https://neko.m1k1o.net',
+      description: 'Share one browser with a room full of people and let anyone take the controls.',
+      summary: "A neko server (a virtual browser running inside the container, its screen and sound streamed to a room over WebRTC with shared mouse and keyboard) on the official Firefox image. A plain composable http workload and a STATELESS one: a room is a browser session, so it claims no PersistentVolume and runs a single replica — a second would be a second, unrelated room behind one address. Deliberately less hardened than most here: supervisord starts as root to bring up X, D-Bus and PulseAudio before dropping to an unprivileged account, and the browser profile lives among the image's own files, so the root filesystem is writable. Serves the room UI and signalling on :8080; the media itself is WebRTC on one multiplexed TCP+UDP port, which must be reachable from the client.",
+      category: 'application',
+      stages: {
+        server: d.fn('The neko server. secretName holds the two multiuser passwords (envFrom); kurly mints none. webrtcPort is the single port both WebRTC transports are multiplexed onto, and nat1to1 the address clients reach it on — without it the room loads and the screen never arrives, since the pod address WebRTC would otherwise advertise is unroutable from a browser. Firefox and GStreamer share decoded frames through a /dev/shm scratch sized by shmSize. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='neko'),
+          d.arg('image', d.T.string),
+          d.arg('secretName', d.T.string, default='neko'),
+          d.arg('webrtcPort', d.T.int, default=59000),
+          d.arg('nat1to1', d.T.string, example='203.0.113.10'),
+          d.arg('screen', d.T.string, default='1280x720@30'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '3Gi' } }),
+          d.arg('shmSize', d.T.quantity, default='1Gi'),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'NEKO_MEMBER_MULTIUSER_USER_PASSWORD', generate: 'password', length: 24 },
+            { key: 'NEKO_MEMBER_MULTIUSER_ADMIN_PASSWORD', generate: 'password', length: 32 },
+          ],
+        },
+      },
+    },
+    netalertx: {
+      name: 'NetAlertX',
+      upstream: { repo: 'https://github.com/jokob-sk/NetAlertX' },
+      license: 'GPL-3.0',
+      description: 'Watch who joins the network, keep an inventory of the devices, and hear about the ones you did not expect.',
+      summary: 'A NetAlertX server (scans a network, keeps an inventory of the devices it finds, and notifies when one appears, disappears or changes). A plain composable http workload keeping its configuration and SQLite database under /data on a PersistentVolume. What it can see is the POD network: on a CNI overlay arp-scan reaches the pod subnet and nothing behind it, so a default deployment inventories other pods rather than the LAN — reaching real devices means host networking with NET_RAW/NET_ADMIN, which leaves the restricted posture behind. The entrypoint prepares /data as root and drops to its own account with su-exec, so root, escalation and the default capability set are all required; everything outside /data is written under /tmp, so the root filesystem stays read-only. Service links are off because the injected NETALERTX_PORT collides with the image own NETALERTX_* environment. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :20211.',
+      category: 'networking',
+      stages: {
+        server: d.fn('The NetAlertX server. Configuration and SQLite under /data on the volume; logs, the rendered nginx configuration and the API snapshots under /tmp. Scans whatever network the pod sits on, which on an overlay CNI is the pod subnet. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='netalertx'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='2Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http' },
@@ -944,6 +1015,44 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('storageClass', d.T.string),
         ]) + {
           kind: 'http',
+        },
+      },
+    },
+    'tube-archivist': {
+      name: 'Tube Archivist',
+      upstream: { repo: 'https://github.com/tubearchivist/tubearchivist' },
+      homepage: 'https://www.tubearchivist.com/',
+      license: 'GPL-3.0-only',
+      description: 'Keep your own copies of the YouTube channels you follow, as a searchable media library.',
+      summary: 'A Tube Archivist server (subscribe to YouTube channels and playlists, download what they publish and serve the result as a searchable media library with metadata, artwork and playback progress). A composable http workload with two PersistentVolumes — artwork and yt-dlp state at /cache, the videos at /youtube — and two external dependencies it cannot supply itself: everything indexed lives in Elasticsearch 8, every download and scan runs through a Redis task queue. The opensearch-cluster workload does NOT substitute, since the official Elasticsearch client refuses a server that does not identify as Elasticsearch. taHost is the public origin Django validates every request against and answers a mismatch with a bare 400; it is left unset rather than defaulted to a placeholder that would be wrong everywhere. The image selects no account and its nginx is configured to run as root, so it runs as root with a writable root filesystem, though nothing escalates. Probed by connection, because every path redirects or answers 403 unauthenticated. Needs egress to YouTube, which a NetworkPolicy written from the manifest silently blocks. Single writer over ReadWriteOnce volumes: one replica, recreated, which also keeps two schedulers from downloading the same videos twice. Serves on :8000.',
+      category: 'application',
+      requires: [
+        { kind: 'database', engine: 'elasticsearch', required: true },
+        { kind: 'cache', engine: 'redis', required: true },
+      ],
+      stages: {
+        server: d.fn('The Tube Archivist server: nginx and the Django backend behind it, the celery workers and the scheduler, in one pod. taHost is the public origin, protocol included — without it the application refuses to start, and with the wrong one every request is a bare 400. esUrl points at an Elasticsearch 8 and redisCon at a Redis; neither is rendered here. Artwork and yt-dlp state at /cache, the downloaded videos at /youtube, sized separately since the media half grows without limit. secretName holds TA_USERNAME and TA_PASSWORD (the first administrator, read once when the account is created) and ELASTIC_PASSWORD, which must match the Elasticsearch it is pointed at. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='tube-archivist'),
+          d.arg('image', d.T.string),
+          d.arg('taHost', d.T.string, example='https://tube.example.com'),
+          d.arg('mediaSize', d.T.quantity, default='500Gi'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('esUrl', d.T.string, default='http://tube-archivist-es:9200'),
+          d.arg('redisCon', d.T.string, default='redis://tube-archivist-cache-headless:6379'),
+          d.arg('timezone', d.T.string, default='UTC'),
+          d.arg('secretName', d.T.string, default='tube-archivist'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '4Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'TA_USERNAME', generate: 'literal', value: 'admin' },
+            { key: 'TA_PASSWORD', generate: 'password', length: 32 },
+            { key: 'ELASTIC_PASSWORD', generate: 'external' },
+          ],
         },
       },
     },
@@ -2268,6 +2377,28 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    yacy: {
+      name: 'YaCy',
+      upstream: { repo: 'https://github.com/yacy/yacy_search_server' },
+      license: 'GPL-2.0-or-later',
+      description: 'Run your own web search, crawling what you care about and sharing an index with other peers.',
+      summary: "A YaCy search server (a peer-to-peer web search engine that crawls and indexes on its own and, by default, joins the public network of peers). A plain composable http workload with the crawler queues, the Solr index and the peer identity in one DATA directory on a PersistentVolume. The admin account ships with an EMPTY password, protected only by a restriction to local access that a pod does not provide — set it before composing an exposure. The image's yacy account is a named system user kubelet cannot check against runAsNonRoot, so uid 100 is pinned numerically. A JVM on a fresh volume starts slowly, hence a startup probe rather than a lenient liveness probe. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8090.",
+      category: 'search',
+      stages: {
+        server: d.fn('The YaCy search server. All state — index, crawl queues, peer identity, the settings written from the web interface — lives at /opt/yacy_search_server/DATA on the volume, which only grows. The administration interface is unauthenticated until you set a password from /ConfigAccounts_p.html, and the same page decides whether the peer joins the public network or stays private. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='yacy'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+        },
+      },
+    },
     yopass: {
       license: 'Apache-2.0',
       name: 'Yopass',
@@ -2317,7 +2448,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           // Spotify application credentials are issued by Spotify — nothing here
           // can be generated.
           secretKeys: [
-            { key: 'MONGO_ENDPOINT', generate: 'literal' },
+            // mongoUrl rather than literal: it is what the scenario mints the
+            // connection string from, and it is also what the catalogue derives
+            // the database ENGINE from — declaring it is how the harness knows to
+            // provision a MongoDB rather than the PostgreSQL it defaults to.
+            { key: 'MONGO_ENDPOINT', generate: 'mongoUrl' },
             { key: 'SPOTIFY_PUBLIC', generate: 'external' },
             { key: 'SPOTIFY_SECRET', generate: 'external' },
           ],
@@ -7378,6 +7513,31 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http', secretKeys: [{ key: 'JWT_SECRET', generate: 'hex', length: 64 }] },
+      },
+    },
+    'zot-oci-registry': {
+      name: 'zot',
+      upstream: { repo: 'https://github.com/project-zot/zot' },
+      homepage: 'https://zotregistry.dev',
+      license: 'Apache-2.0',
+      description: 'Keep your own images in a registry that follows the OCI standard.',
+      summary: "A zot server (a vendor-neutral, OCI-native container image registry that stores images in the OCI image layout on disk rather than in a layout only it can read) on the official image; its image store lives on a PersistentVolume. Configuration is one JSON document rendered into a ConfigMap at /etc/zot, and the config parameter merges over it verbatim — that is where authentication, access control, sync and the S3 storage driver go, none of which kurly models. Unauthenticated and plaintext until you configure otherwise, so keep it in-cluster or put TLS and auth in front; the probes ask /v2/ and must become connection probes once auth is on. The CVE scanner the image's own config enables is off here, because its vulnerability database costs hundreds of megabytes and far more memory than the workload requests. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :5000.",
+      category: 'storage',
+      stages: {
+        server: d.fn('The zot registry server. Images at /var/lib/registry in the OCI layout. logLevel replaces the image default of debug; ui enables the web UI with the search and mgmt extensions it reads; cve enables the vulnerability scanner (raise the limits with it); config merges verbatim over the rendered zot configuration. Usually reached in-cluster. Compose an exposure onto the HTTP port only if pulled from outside (with TLS/auth in front).', [
+          d.arg('name', d.T.string, default='zot-oci-registry'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('logLevel', d.T.string, default='info'),
+          d.arg('ui', d.T.bool, default=true),
+          d.arg('cve', d.T.bool, default=false),
+          d.arg('config', d.T.object, default={}),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
       },
     },
   },

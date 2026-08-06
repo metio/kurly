@@ -212,6 +212,16 @@ kurly::secret() {
       redisUrl) val="redis://:${KURLY_E2E_PASSWORD}@${id}-cache-headless:6379" ;;
       # The MySQL equivalent, for apps that take one connection string.
       mysqlUrl) val="mysql://${id}:${KURLY_E2E_PASSWORD}@${id}-db:3306/${id}" ;;
+      # The MongoDB equivalent. NO CREDENTIALS in it, deliberately: the throwaway
+      # mongo above starts without MONGO_INITDB_ROOT_USERNAME, so it enforces no
+      # authentication and a URL carrying a user and password would be refused by
+      # the very server this mints against. A real deployment supplies its own.
+      #
+      # Without this a MongoDB-backed workload cannot be proven at all — its
+      # endpoint falls back to the bare password, the app reads that as a
+      # connection string, and it fails with something like "connect to database
+      # at null" that says nothing about the missing generator.
+      mongoUrl) val="mongodb://${id}-db:27017/${id}" ;;
       *) val="$KURLY_E2E_PASSWORD" ;;
     esac
     args+=("--from-literal=${k}=${val}")

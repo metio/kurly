@@ -198,6 +198,12 @@
     source: 'https://github.com/element-hq/element-web',
     homepage: 'https://github.com/element-hq/element-web',
   },
+  ergo: {
+    license: 'MIT',
+    title: 'ergo',
+    source: 'https://github.com/ergochat/ergo',
+    homepage: 'https://github.com/ergochat/ergo',
+  },
   esphome: {
     license: 'ESPHome',
     title: 'ESPHome',
@@ -527,6 +533,18 @@
     title: 'navidrome',
     source: 'https://github.com/navidrome/navidrome',
     homepage: 'https://github.com/navidrome/navidrome',
+  },
+  neko: {
+    license: 'Apache-2.0',
+    title: 'neko',
+    source: 'https://github.com/m1k1o/neko',
+    homepage: 'https://github.com/m1k1o/neko',
+  },
+  netalertx: {
+    license: 'GPL-3.0',
+    title: 'NetAlertX',
+    source: 'https://github.com/netalertx/NetAlertX',
+    homepage: 'https://github.com/netalertx/NetAlertX',
   },
   netbootxyz: {
     license: 'GPL-3.0-only',
@@ -969,6 +987,12 @@
     title: 'wetty',
     source: 'https://github.com/butlerx/wetty',
     homepage: 'https://github.com/butlerx/wetty',
+  },
+  yacy: {
+    license: 'NOASSERTION',
+    title: 'yacy_search_server',
+    source: 'https://github.com/yacy/yacy_search_server',
+    homepage: 'https://github.com/yacy/yacy_search_server',
   },
   'your-spotify': {
     license: 'GPL-3.0',

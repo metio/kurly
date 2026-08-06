@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-mongo-express
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" mongo-express-db-rw mongo-express mongo-express
+kurly::mongodb "$ns" mongo-express-db
 
 kurly::secret "$ns" mongo-express workloads/mongo-express/server.libsonnet
 kurly::boot workloads/mongo-express/server.libsonnet "$ns"

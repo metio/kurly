@@ -361,6 +361,12 @@ local stageImports = {
   'polaris/server': import 'github.com/metio/kurly/workloads/polaris/server.libsonnet',
   'slskd/server': import 'github.com/metio/kurly/workloads/slskd/server.libsonnet',
   'yopass/server': import 'github.com/metio/kurly/workloads/yopass/server.libsonnet',
+  'neko/server': import 'github.com/metio/kurly/workloads/neko/server.libsonnet',
+  'netalertx/server': import 'github.com/metio/kurly/workloads/netalertx/server.libsonnet',
+  'tube-archivist/server': import 'github.com/metio/kurly/workloads/tube-archivist/server.libsonnet',
+  'ergo/server': import 'github.com/metio/kurly/workloads/ergo/server.libsonnet',
+  'yacy/server': import 'github.com/metio/kurly/workloads/yacy/server.libsonnet',
+  'zot-oci-registry/server': import 'github.com/metio/kurly/workloads/zot-oci-registry/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
