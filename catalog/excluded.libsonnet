@@ -202,4 +202,12 @@
   hemmelig: { reason: 'licence-forbids-saas', note: 'the licence forbids offering it as a service — https://github.com/HemmeligOrg/Hemmelig.app' },
   automad: { reason: 'licence-forbids-saas', note: 'the licence forbids offering it as a service — https://github.com/marcantondahmen/automad/blob/v2/LICENSE.md' },
   osem: { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/openSUSE/osem' },
+  claper: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://claper.co/en/' },
+  superdesk: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://www.superdesk.org/offer/managed-services' },
+  dpaste: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://dpaste.org/' },
+  cloudlog: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://github.com/magicbug/Cloudlog#want-cloudlog-hosting' },
+  para: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://paraio.org' },
+  paaster: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://paaster.io' },
+  papermerge: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://papermerge.com/join' },
+  wingfit: { reason: 'licence-forbids-saas', note: 'the licence forbids offering it as a service — https://github.com/itskovacs/wingfit/blob/main/license.txt' },
 }

@@ -15,6 +15,7 @@ ns=kurly-mastodon
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" mastodon-db-rw mastodon mastodon
+kurly::objectstorage "$ns" mastodon
 kurly::cache "$ns" mastodon-cache-headless ""
 
 kurly::secret "$ns" mastodon workloads/mastodon/sidekiq.libsonnet

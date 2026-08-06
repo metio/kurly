@@ -54,6 +54,9 @@
   "remark42": {
     "compose": "+ k.env({ REMARK_URL: 'http://remark42:8080' })"
   },
+  "safebucket": {
+    "compose": "+ k.env({ DATABASE__POSTGRES__SSLMODE: 'disable', STORAGE__S3__ENDPOINT: 'seaweedfs-headless:8333' })"
+  },
   "seaweedfs": {
     "stageOrder": "master volume filer server"
   },

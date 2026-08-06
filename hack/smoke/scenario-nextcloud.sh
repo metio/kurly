@@ -15,6 +15,7 @@ ns=kurly-nextcloud
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" nextcloud-db-rw nextcloud nextcloud
+kurly::objectstorage "$ns" nextcloud
 
 kurly::secret "$ns" nextcloud workloads/nextcloud/server.libsonnet
 kurly::boot workloads/nextcloud/server.libsonnet "$ns"
