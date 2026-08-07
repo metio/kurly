@@ -18,4 +18,4 @@ kurly::mysql "$ns" azuracast-db azuracast azuracast
 kurly::cache "$ns" azuracast-cache ""
 
 kurly::secret "$ns" azuracast workloads/azuracast/server.libsonnet
-kurly::boot workloads/azuracast/server.libsonnet "$ns"
+kurly::boot workloads/azuracast/server.libsonnet "$ns" "" ""

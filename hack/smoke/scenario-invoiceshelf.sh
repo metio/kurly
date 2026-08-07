@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" invoiceshelf-db-rw invoiceshelf invoiceshelf
 
 kurly::secret "$ns" invoiceshelf workloads/invoiceshelf/server.libsonnet
-kurly::boot workloads/invoiceshelf/server.libsonnet "$ns"
+kurly::boot workloads/invoiceshelf/server.libsonnet "$ns" "" ""

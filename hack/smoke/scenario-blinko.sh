@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" blinko-db-rw blinko blinko
 
 kurly::secret "$ns" blinko workloads/blinko/server.libsonnet
-kurly::boot workloads/blinko/server.libsonnet "$ns"
+kurly::boot workloads/blinko/server.libsonnet "$ns" "" ""

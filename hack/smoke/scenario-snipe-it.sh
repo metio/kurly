@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" snipe-it-db snipeit snipeit
 
 kurly::secret "$ns" snipe-it workloads/snipe-it/server.libsonnet
-kurly::boot workloads/snipe-it/server.libsonnet "$ns"
+kurly::boot workloads/snipe-it/server.libsonnet "$ns" "" ""

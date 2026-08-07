@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-numa
 kurly::secret kurly-numa numa workloads/numa/server.libsonnet
-kurly::boot workloads/numa/server.libsonnet kurly-numa
+kurly::boot workloads/numa/server.libsonnet kurly-numa "" ""

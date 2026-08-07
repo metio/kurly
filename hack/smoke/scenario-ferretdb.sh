@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" ferretdb-db-rw ferretdb ferretdb
 
 kurly::secret "$ns" ferretdb workloads/ferretdb/server.libsonnet
-kurly::boot workloads/ferretdb/server.libsonnet "$ns"
+kurly::boot workloads/ferretdb/server.libsonnet "$ns" "" ""

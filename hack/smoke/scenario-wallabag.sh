@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" wallabag-db-rw wallabag wallabag
 
 kurly::secret "$ns" wallabag workloads/wallabag/server.libsonnet
-kurly::boot workloads/wallabag/server.libsonnet "$ns"
+kurly::boot workloads/wallabag/server.libsonnet "$ns" "" ""

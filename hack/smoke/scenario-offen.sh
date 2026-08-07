@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-offen
 kurly::secret kurly-offen offen workloads/offen/server.libsonnet
-kurly::boot workloads/offen/server.libsonnet kurly-offen
+kurly::boot workloads/offen/server.libsonnet kurly-offen "" ""

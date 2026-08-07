@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" romm-db romm romm
 
 kurly::secret "$ns" romm workloads/romm/server.libsonnet
-kurly::boot workloads/romm/server.libsonnet "$ns"
+kurly::boot workloads/romm/server.libsonnet "$ns" "" ""

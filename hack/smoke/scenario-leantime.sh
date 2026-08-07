@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" leantime-db-rw leantime leantime
 
 kurly::secret "$ns" leantime workloads/leantime/server.libsonnet
-kurly::boot workloads/leantime/server.libsonnet "$ns"
+kurly::boot workloads/leantime/server.libsonnet "$ns" "" ""

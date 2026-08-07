@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/matrix-conduit/server.libsonnet kurly-matrix-conduit "+ k.env({ CONDUIT_SERVER_NAME: 'matrix.example.com' })"
+kurly::boot workloads/matrix-conduit/server.libsonnet kurly-matrix-conduit "+ k.env({ CONDUIT_SERVER_NAME: 'matrix.example.com' })" ""

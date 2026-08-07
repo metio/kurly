@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-note-mark
 kurly::secret kurly-note-mark note-mark workloads/note-mark/server.libsonnet
-kurly::boot workloads/note-mark/server.libsonnet kurly-note-mark
+kurly::boot workloads/note-mark/server.libsonnet kurly-note-mark "" ""

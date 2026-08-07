@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" mautic-db mautic mautic
 
 kurly::secret "$ns" mautic workloads/mautic/server.libsonnet
-kurly::boot workloads/mautic/server.libsonnet "$ns"
+kurly::boot workloads/mautic/server.libsonnet "$ns" "" ""

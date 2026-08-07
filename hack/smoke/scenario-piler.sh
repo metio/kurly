@@ -18,4 +18,4 @@ kurly::postgres "$ns" piler-db piler piler
 kurly::cache "$ns" piler-cache-headless ""
 
 kurly::secret "$ns" piler workloads/piler/server.libsonnet
-kurly::boot workloads/piler/server.libsonnet "$ns"
+kurly::boot workloads/piler/server.libsonnet "$ns" "" ""

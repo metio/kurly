@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-traggo
 kurly::secret kurly-traggo traggo workloads/traggo/server.libsonnet
-kurly::boot workloads/traggo/server.libsonnet kurly-traggo
+kurly::boot workloads/traggo/server.libsonnet kurly-traggo "" ""

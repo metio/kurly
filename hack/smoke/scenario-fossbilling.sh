@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" fossbilling-db fossbilling fossbilling
 
 kurly::secret "$ns" fossbilling workloads/fossbilling/server.libsonnet
-kurly::boot workloads/fossbilling/server.libsonnet "$ns"
+kurly::boot workloads/fossbilling/server.libsonnet "$ns" "" ""

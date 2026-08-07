@@ -18,4 +18,4 @@ kurly::postgres "$ns" kutt-db-rw kutt kutt
 kurly::cache "$ns" kutt-cache-headless ""
 
 kurly::secret "$ns" kutt workloads/kutt/server.libsonnet
-kurly::boot workloads/kutt/server.libsonnet "$ns"
+kurly::boot workloads/kutt/server.libsonnet "$ns" "" ""

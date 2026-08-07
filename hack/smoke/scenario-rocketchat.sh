@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mongodb "$ns" rocketchat-db
 
 kurly::secret "$ns" rocketchat workloads/rocketchat/server.libsonnet
-kurly::boot workloads/rocketchat/server.libsonnet "$ns"
+kurly::boot workloads/rocketchat/server.libsonnet "$ns" "" ""

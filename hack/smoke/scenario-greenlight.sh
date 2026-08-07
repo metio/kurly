@@ -18,4 +18,4 @@ kurly::postgres "$ns" greenlight-db-rw greenlight greenlight
 kurly::cache "$ns" greenlight-cache-headless
 
 kurly::secret "$ns" greenlight workloads/greenlight/server.libsonnet
-kurly::boot workloads/greenlight/server.libsonnet "$ns"
+kurly::boot workloads/greenlight/server.libsonnet "$ns" "" ""

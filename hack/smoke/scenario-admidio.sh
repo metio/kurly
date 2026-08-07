@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" admidio-db admidio admidio
 
 kurly::secret "$ns" admidio workloads/admidio/server.libsonnet
-kurly::boot workloads/admidio/server.libsonnet "$ns"
+kurly::boot workloads/admidio/server.libsonnet "$ns" "" ""

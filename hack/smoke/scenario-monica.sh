@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" monica-db monica monica
 
 kurly::secret "$ns" monica workloads/monica/server.libsonnet
-kurly::boot workloads/monica/server.libsonnet "$ns"
+kurly::boot workloads/monica/server.libsonnet "$ns" "" ""

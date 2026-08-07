@@ -18,4 +18,4 @@ kurly::postgres "$ns" activepieces-db-rw activepieces activepieces
 kurly::cache "$ns" activepieces-cache-headless ""
 
 kurly::secret "$ns" activepieces workloads/activepieces/server.libsonnet
-kurly::boot workloads/activepieces/server.libsonnet "$ns"
+kurly::boot workloads/activepieces/server.libsonnet "$ns" "" ""

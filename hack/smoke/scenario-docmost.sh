@@ -19,4 +19,4 @@ kurly::objectstorage "$ns" docmost
 kurly::cache "$ns" docmost-cache-headless
 
 kurly::secret "$ns" docmost workloads/docmost/server.libsonnet
-kurly::boot workloads/docmost/server.libsonnet "$ns" "+ k.env({ APP_URL: 'http://docmost:3000' })"
+kurly::boot workloads/docmost/server.libsonnet "$ns" "+ k.env({ APP_URL: 'http://docmost:3000' })" ""

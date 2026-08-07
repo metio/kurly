@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" mealie-db-rw mealie mealie
 
 kurly::secret "$ns" mealie workloads/mealie/server.libsonnet
-kurly::boot workloads/mealie/server.libsonnet "$ns"
+kurly::boot workloads/mealie/server.libsonnet "$ns" "" ""

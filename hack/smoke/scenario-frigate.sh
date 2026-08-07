@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-frigate
 kurly::secret kurly-frigate frigate workloads/frigate/server.libsonnet
-kurly::boot workloads/frigate/server.libsonnet kurly-frigate
+kurly::boot workloads/frigate/server.libsonnet kurly-frigate "" ""

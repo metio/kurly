@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/otel-collector/agent.libsonnet kurly-otel-collector
+kurly::boot workloads/otel-collector/agent.libsonnet kurly-otel-collector "" ""

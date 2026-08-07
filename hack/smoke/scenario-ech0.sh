@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-ech0
 kurly::secret kurly-ech0 ech0 workloads/ech0/server.libsonnet
-kurly::boot workloads/ech0/server.libsonnet kurly-ech0
+kurly::boot workloads/ech0/server.libsonnet kurly-ech0 "" ""

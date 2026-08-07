@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" webtrees-db webtrees webtrees
 
 kurly::secret "$ns" webtrees workloads/webtrees/server.libsonnet
-kurly::boot workloads/webtrees/server.libsonnet "$ns"
+kurly::boot workloads/webtrees/server.libsonnet "$ns" "" ""

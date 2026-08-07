@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" drupal-db-rw drupal drupal
 
 kurly::secret "$ns" drupal workloads/drupal/server.libsonnet
-kurly::boot workloads/drupal/server.libsonnet "$ns"
+kurly::boot workloads/drupal/server.libsonnet "$ns" "" ""

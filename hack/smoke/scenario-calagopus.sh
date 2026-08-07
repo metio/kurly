@@ -18,4 +18,4 @@ kurly::postgres "$ns" calagopus-db-rw calagopus calagopus
 kurly::cache "$ns" calagopus-cache-headless
 
 kurly::secret "$ns" calagopus workloads/calagopus/server.libsonnet
-kurly::boot workloads/calagopus/server.libsonnet "$ns"
+kurly::boot workloads/calagopus/server.libsonnet "$ns" "" ""

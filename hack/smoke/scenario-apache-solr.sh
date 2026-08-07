@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/apache-solr/server.libsonnet kurly-apache-solr
+kurly::boot workloads/apache-solr/server.libsonnet kurly-apache-solr "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-flatnotes
 kurly::secret kurly-flatnotes flatnotes workloads/flatnotes/server.libsonnet
-kurly::boot workloads/flatnotes/server.libsonnet kurly-flatnotes
+kurly::boot workloads/flatnotes/server.libsonnet kurly-flatnotes "" ""

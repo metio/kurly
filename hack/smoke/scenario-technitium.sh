@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-technitium
 kurly::secret kurly-technitium technitium workloads/technitium/server.libsonnet
-kurly::boot workloads/technitium/server.libsonnet kurly-technitium
+kurly::boot workloads/technitium/server.libsonnet kurly-technitium "" ""

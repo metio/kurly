@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" flowctl-db-rw flowctl flowctl
 
 kurly::secret "$ns" flowctl workloads/flowctl/server.libsonnet
-kurly::boot workloads/flowctl/server.libsonnet "$ns"
+kurly::boot workloads/flowctl/server.libsonnet "$ns" "" ""

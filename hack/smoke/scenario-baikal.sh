@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" baikal-db-rw baikal baikal
 
 kurly::secret "$ns" baikal workloads/baikal/server.libsonnet
-kurly::boot workloads/baikal/server.libsonnet "$ns"
+kurly::boot workloads/baikal/server.libsonnet "$ns" "" ""

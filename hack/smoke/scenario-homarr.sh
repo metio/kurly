@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-homarr
 kurly::secret kurly-homarr homarr workloads/homarr/server.libsonnet
-kurly::boot workloads/homarr/server.libsonnet kurly-homarr
+kurly::boot workloads/homarr/server.libsonnet kurly-homarr "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" projectsend-db projectsend projectsend
 
 kurly::secret "$ns" projectsend workloads/projectsend/server.libsonnet
-kurly::boot workloads/projectsend/server.libsonnet "$ns"
+kurly::boot workloads/projectsend/server.libsonnet "$ns" "" ""

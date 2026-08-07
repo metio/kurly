@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" joplin-db-rw joplin joplin
 
 kurly::secret "$ns" joplin workloads/joplin/server.libsonnet
-kurly::boot workloads/joplin/server.libsonnet "$ns"
+kurly::boot workloads/joplin/server.libsonnet "$ns" "" ""

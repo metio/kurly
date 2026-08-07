@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-openhabittracker
 kurly::secret kurly-openhabittracker openhabittracker workloads/openhabittracker/server.libsonnet
-kurly::boot workloads/openhabittracker/server.libsonnet kurly-openhabittracker
+kurly::boot workloads/openhabittracker/server.libsonnet kurly-openhabittracker "" ""

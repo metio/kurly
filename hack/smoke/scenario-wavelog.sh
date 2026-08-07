@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" wavelog-db wavelog wavelog
 
 kurly::secret "$ns" wavelog workloads/wavelog/server.libsonnet
-kurly::boot workloads/wavelog/server.libsonnet "$ns"
+kurly::boot workloads/wavelog/server.libsonnet "$ns" "" ""

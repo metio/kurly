@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" kimai-db kimai kimai
 
 kurly::secret "$ns" kimai workloads/kimai/server.libsonnet
-kurly::boot workloads/kimai/server.libsonnet "$ns"
+kurly::boot workloads/kimai/server.libsonnet "$ns" "" ""

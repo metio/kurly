@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-flame
 kurly::secret kurly-flame flame workloads/flame/server.libsonnet
-kurly::boot workloads/flame/server.libsonnet kurly-flame
+kurly::boot workloads/flame/server.libsonnet kurly-flame "" ""

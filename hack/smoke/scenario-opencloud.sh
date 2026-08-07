@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-opencloud
 kurly::secret kurly-opencloud opencloud workloads/opencloud/server.libsonnet
-kurly::boot workloads/opencloud/server.libsonnet kurly-opencloud
+kurly::boot workloads/opencloud/server.libsonnet kurly-opencloud "" ""

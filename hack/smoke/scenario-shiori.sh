@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" shiori-db-rw shiori shiori
 
 kurly::secret "$ns" shiori workloads/shiori/server.libsonnet
-kurly::boot workloads/shiori/server.libsonnet "$ns"
+kurly::boot workloads/shiori/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mongodb "$ns" your-spotify-db
 
 kurly::secret "$ns" your-spotify workloads/your-spotify/server.libsonnet
-kurly::boot workloads/your-spotify/server.libsonnet "$ns" "+ k.env({ API_ENDPOINT: 'http://your-spotify:8080', CLIENT_ENDPOINT: 'http://your-spotify:3000' })"
+kurly::boot workloads/your-spotify/server.libsonnet "$ns" "+ k.env({ API_ENDPOINT: 'http://your-spotify:8080', CLIENT_ENDPOINT: 'http://your-spotify:3000' })" ""

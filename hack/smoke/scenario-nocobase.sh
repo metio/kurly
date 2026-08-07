@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" nocobase-db-rw nocobase nocobase
 
 kurly::secret "$ns" nocobase workloads/nocobase/server.libsonnet
-kurly::boot workloads/nocobase/server.libsonnet "$ns"
+kurly::boot workloads/nocobase/server.libsonnet "$ns" "" ""

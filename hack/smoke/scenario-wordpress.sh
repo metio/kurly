@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" wordpress-db wordpress wordpress
 
 kurly::secret "$ns" wordpress workloads/wordpress/server.libsonnet
-kurly::boot workloads/wordpress/server.libsonnet "$ns"
+kurly::boot workloads/wordpress/server.libsonnet "$ns" "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-anubis
 kurly::secret kurly-anubis anubis workloads/anubis/server.libsonnet
-kurly::boot workloads/anubis/server.libsonnet kurly-anubis
+kurly::boot workloads/anubis/server.libsonnet kurly-anubis "" ""

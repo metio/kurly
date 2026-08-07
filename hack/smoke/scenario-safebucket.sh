@@ -18,4 +18,4 @@ kurly::postgres "$ns" safebucket-db-rw safebucket safebucket
 kurly::objectstorage "$ns" safebucket
 
 kurly::secret "$ns" safebucket workloads/safebucket/server.libsonnet
-kurly::boot workloads/safebucket/server.libsonnet "$ns" "+ k.env({ DATABASE__POSTGRES__SSLMODE: 'disable', STORAGE__S3__ENDPOINT: 'seaweedfs-headless:8333' })"
+kurly::boot workloads/safebucket/server.libsonnet "$ns" "+ k.env({ DATABASE__POSTGRES__SSLMODE: 'disable', STORAGE__S3__ENDPOINT: 'seaweedfs-headless:8333' })" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::cache "$ns" yopass-cache ""
 
 kurly::secret "$ns" yopass workloads/yopass/server.libsonnet
-kurly::boot workloads/yopass/server.libsonnet "$ns"
+kurly::boot workloads/yopass/server.libsonnet "$ns" "" ""

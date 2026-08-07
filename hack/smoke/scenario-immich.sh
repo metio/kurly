@@ -18,6 +18,6 @@ kurly::postgres "$ns" immich-db-rw immich immich ghcr.io/immich-app/postgres:17-
 kurly::cache "$ns" immich-cache-headless ""
 
 kurly::secret "$ns" immich workloads/immich/machine-learning.libsonnet
-kurly::boot workloads/immich/machine-learning.libsonnet "$ns"
+kurly::boot workloads/immich/machine-learning.libsonnet "$ns" "" ""
 kurly::secret "$ns" immich workloads/immich/server.libsonnet
-kurly::boot workloads/immich/server.libsonnet "$ns"
+kurly::boot workloads/immich/server.libsonnet "$ns" "" ""

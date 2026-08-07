@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-chronoframe
 kurly::secret kurly-chronoframe chronoframe workloads/chronoframe/server.libsonnet
-kurly::boot workloads/chronoframe/server.libsonnet kurly-chronoframe
+kurly::boot workloads/chronoframe/server.libsonnet kurly-chronoframe "" ""

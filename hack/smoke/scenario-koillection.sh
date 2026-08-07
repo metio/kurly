@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" koillection-db-rw koillection koillection
 
 kurly::secret "$ns" koillection workloads/koillection/server.libsonnet
-kurly::boot workloads/koillection/server.libsonnet "$ns"
+kurly::boot workloads/koillection/server.libsonnet "$ns" "" ""

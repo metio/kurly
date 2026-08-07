@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" traduora-db-rw traduora traduora
 
 kurly::secret "$ns" traduora workloads/traduora/server.libsonnet
-kurly::boot workloads/traduora/server.libsonnet "$ns"
+kurly::boot workloads/traduora/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" open-webui-db-rw open-webui open-webui
 
 kurly::secret "$ns" open-webui workloads/open-webui/server.libsonnet
-kurly::boot workloads/open-webui/server.libsonnet "$ns"
+kurly::boot workloads/open-webui/server.libsonnet "$ns" "" ""

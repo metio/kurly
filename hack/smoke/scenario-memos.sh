@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" memos-db-rw memos memos
 
 kurly::secret "$ns" memos workloads/memos/server.libsonnet
-kurly::boot workloads/memos/server.libsonnet "$ns"
+kurly::boot workloads/memos/server.libsonnet "$ns" "" ""

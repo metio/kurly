@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" pdfding-db-rw pdfding pdfding
 
 kurly::secret "$ns" pdfding workloads/pdfding/server.libsonnet
-kurly::boot workloads/pdfding/server.libsonnet "$ns"
+kurly::boot workloads/pdfding/server.libsonnet "$ns" "" ""

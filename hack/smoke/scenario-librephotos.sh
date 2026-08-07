@@ -17,8 +17,8 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" librephotos-db-rw librephotos librephotos
 
 kurly::secret "$ns" librephotos workloads/librephotos/backend.libsonnet
-kurly::boot workloads/librephotos/backend.libsonnet "$ns"
+kurly::boot workloads/librephotos/backend.libsonnet "$ns" "" ""
 kurly::secret "$ns" librephotos workloads/librephotos/frontend.libsonnet
-kurly::boot workloads/librephotos/frontend.libsonnet "$ns"
+kurly::boot workloads/librephotos/frontend.libsonnet "$ns" "" ""
 kurly::secret "$ns" librephotos workloads/librephotos/proxy.libsonnet
-kurly::boot workloads/librephotos/proxy.libsonnet "$ns"
+kurly::boot workloads/librephotos/proxy.libsonnet "$ns" "" ""

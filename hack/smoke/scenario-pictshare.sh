@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-pictshare
 kurly::secret kurly-pictshare pictshare workloads/pictshare/server.libsonnet
-kurly::boot workloads/pictshare/server.libsonnet kurly-pictshare
+kurly::boot workloads/pictshare/server.libsonnet kurly-pictshare "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-picoshare
 kurly::secret kurly-picoshare picoshare workloads/picoshare/server.libsonnet
-kurly::boot workloads/picoshare/server.libsonnet kurly-picoshare
+kurly::boot workloads/picoshare/server.libsonnet kurly-picoshare "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-matchering
 kurly::secret kurly-matchering matchering workloads/matchering/server.libsonnet
-kurly::boot workloads/matchering/server.libsonnet kurly-matchering
+kurly::boot workloads/matchering/server.libsonnet kurly-matchering "" ""

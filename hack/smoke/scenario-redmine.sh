@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" redmine-db redmine redmine
 
 kurly::secret "$ns" redmine workloads/redmine/server.libsonnet
-kurly::boot workloads/redmine/server.libsonnet "$ns"
+kurly::boot workloads/redmine/server.libsonnet "$ns" "" ""

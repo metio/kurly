@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-silverbullet
 kurly::secret kurly-silverbullet silverbullet workloads/silverbullet/server.libsonnet
-kurly::boot workloads/silverbullet/server.libsonnet kurly-silverbullet
+kurly::boot workloads/silverbullet/server.libsonnet kurly-silverbullet "" ""

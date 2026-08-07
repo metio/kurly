@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-slskd
 kurly::secret kurly-slskd slskd workloads/slskd/server.libsonnet
-kurly::boot workloads/slskd/server.libsonnet kurly-slskd
+kurly::boot workloads/slskd/server.libsonnet kurly-slskd "" ""

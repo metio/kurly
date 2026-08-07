@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" accent-db-rw accent accent
 
 kurly::secret "$ns" accent workloads/accent/server.libsonnet
-kurly::boot workloads/accent/server.libsonnet "$ns"
+kurly::boot workloads/accent/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" freshrss-db-rw freshrss freshrss
 
 kurly::secret "$ns" freshrss workloads/freshrss/server.libsonnet
-kurly::boot workloads/freshrss/server.libsonnet "$ns"
+kurly::boot workloads/freshrss/server.libsonnet "$ns" "" ""

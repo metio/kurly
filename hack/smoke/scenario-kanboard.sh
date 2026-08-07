@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" kanboard-db-rw kanboard kanboard
 
 kurly::secret "$ns" kanboard workloads/kanboard/server.libsonnet
-kurly::boot workloads/kanboard/server.libsonnet "$ns"
+kurly::boot workloads/kanboard/server.libsonnet "$ns" "" ""

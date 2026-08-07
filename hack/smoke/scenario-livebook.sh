@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-livebook
 kurly::secret kurly-livebook livebook workloads/livebook/server.libsonnet
-kurly::boot workloads/livebook/server.libsonnet kurly-livebook
+kurly::boot workloads/livebook/server.libsonnet kurly-livebook "" ""

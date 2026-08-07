@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" vvveb-cms-db vvveb-cms vvveb-cms
 
 kurly::secret "$ns" vvveb-cms workloads/vvveb-cms/server.libsonnet
-kurly::boot workloads/vvveb-cms/server.libsonnet "$ns"
+kurly::boot workloads/vvveb-cms/server.libsonnet "$ns" "" ""

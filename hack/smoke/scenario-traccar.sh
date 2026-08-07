@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" traccar-db-rw traccar traccar
 
 kurly::secret "$ns" traccar workloads/traccar/server.libsonnet
-kurly::boot workloads/traccar/server.libsonnet "$ns"
+kurly::boot workloads/traccar/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" bookstack-db bookstack bookstack
 
 kurly::secret "$ns" bookstack workloads/bookstack/server.libsonnet
-kurly::boot workloads/bookstack/server.libsonnet "$ns"
+kurly::boot workloads/bookstack/server.libsonnet "$ns" "" ""

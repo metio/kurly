@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" guacamole-db-rw guacamole guacamole
 
 kurly::secret "$ns" guacamole workloads/guacamole/server.libsonnet
-kurly::boot workloads/guacamole/server.libsonnet "$ns"
+kurly::boot workloads/guacamole/server.libsonnet "$ns" "" ""

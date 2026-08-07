@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" onlyoffice-db-rw onlyoffice onlyoffice
 
 kurly::secret "$ns" onlyoffice workloads/onlyoffice/server.libsonnet
-kurly::boot workloads/onlyoffice/server.libsonnet "$ns"
+kurly::boot workloads/onlyoffice/server.libsonnet "$ns" "" ""

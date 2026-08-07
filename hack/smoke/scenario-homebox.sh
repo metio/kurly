@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-homebox
 kurly::secret kurly-homebox homebox workloads/homebox/server.libsonnet
-kurly::boot workloads/homebox/server.libsonnet kurly-homebox
+kurly::boot workloads/homebox/server.libsonnet kurly-homebox "" ""

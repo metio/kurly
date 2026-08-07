@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-speedtest-tracker
 kurly::secret kurly-speedtest-tracker speedtest-tracker workloads/speedtest-tracker/server.libsonnet
-kurly::boot workloads/speedtest-tracker/server.libsonnet kurly-speedtest-tracker "+ k.env({ APP_URL: 'http://speedtest-tracker' })"
+kurly::boot workloads/speedtest-tracker/server.libsonnet kurly-speedtest-tracker "+ k.env({ APP_URL: 'http://speedtest-tracker' })" ""

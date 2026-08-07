@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/qbittorrent/server.libsonnet kurly-qbittorrent
+kurly::boot workloads/qbittorrent/server.libsonnet kurly-qbittorrent "" ""

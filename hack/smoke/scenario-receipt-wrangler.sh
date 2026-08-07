@@ -18,4 +18,4 @@ kurly::postgres "$ns" receipt-wrangler-db-rw receipt-wrangler receipt-wrangler
 kurly::cache "$ns" receipt-wrangler-cache-headless ""
 
 kurly::secret "$ns" receipt-wrangler workloads/receipt-wrangler/server.libsonnet
-kurly::boot workloads/receipt-wrangler/server.libsonnet "$ns"
+kurly::boot workloads/receipt-wrangler/server.libsonnet "$ns" "" ""

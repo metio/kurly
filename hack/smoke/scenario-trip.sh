@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-trip
 kurly::secret kurly-trip trip workloads/trip/server.libsonnet
-kurly::boot workloads/trip/server.libsonnet kurly-trip
+kurly::boot workloads/trip/server.libsonnet kurly-trip "" ""

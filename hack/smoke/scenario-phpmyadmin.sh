@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" phpmyadmin-db phpmyadmin phpmyadmin
 
 kurly::secret "$ns" phpmyadmin workloads/phpmyadmin/server.libsonnet
-kurly::boot workloads/phpmyadmin/server.libsonnet "$ns"
+kurly::boot workloads/phpmyadmin/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" photoprism-db photoprism photoprism
 
 kurly::secret "$ns" photoprism workloads/photoprism/server.libsonnet
-kurly::boot workloads/photoprism/server.libsonnet "$ns"
+kurly::boot workloads/photoprism/server.libsonnet "$ns" "" ""

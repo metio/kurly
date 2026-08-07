@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" tandoor-db-rw tandoor tandoor
 
 kurly::secret "$ns" tandoor workloads/tandoor/server.libsonnet
-kurly::boot workloads/tandoor/server.libsonnet "$ns"
+kurly::boot workloads/tandoor/server.libsonnet "$ns" "" ""

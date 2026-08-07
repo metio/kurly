@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/blackbox-exporter/server.libsonnet kurly-blackbox-exporter
+kurly::boot workloads/blackbox-exporter/server.libsonnet kurly-blackbox-exporter "" ""

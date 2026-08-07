@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" etherpad-db-rw etherpad etherpad
 
 kurly::secret "$ns" etherpad workloads/etherpad/server.libsonnet
-kurly::boot workloads/etherpad/server.libsonnet "$ns"
+kurly::boot workloads/etherpad/server.libsonnet "$ns" "" ""

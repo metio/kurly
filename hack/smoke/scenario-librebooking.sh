@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" librebooking-db librebooking librebooking
 
 kurly::secret "$ns" librebooking workloads/librebooking/server.libsonnet
-kurly::boot workloads/librebooking/server.libsonnet "$ns"
+kurly::boot workloads/librebooking/server.libsonnet "$ns" "" ""

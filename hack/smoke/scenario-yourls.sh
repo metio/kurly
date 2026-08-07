@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" yourls-db yourls yourls
 
 kurly::secret "$ns" yourls workloads/yourls/server.libsonnet
-kurly::boot workloads/yourls/server.libsonnet "$ns" "+ k.env({ YOURLS_SITE: 'http://yourls' })"
+kurly::boot workloads/yourls/server.libsonnet "$ns" "+ k.env({ YOURLS_SITE: 'http://yourls' })" ""

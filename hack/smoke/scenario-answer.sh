@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" answer-db-rw answer answer
 
 kurly::secret "$ns" answer workloads/answer/server.libsonnet
-kurly::boot workloads/answer/server.libsonnet "$ns"
+kurly::boot workloads/answer/server.libsonnet "$ns" "" ""

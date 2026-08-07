@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-warpgate
 kurly::secret kurly-warpgate warpgate workloads/warpgate/server.libsonnet
-kurly::boot workloads/warpgate/server.libsonnet kurly-warpgate
+kurly::boot workloads/warpgate/server.libsonnet kurly-warpgate "" ""

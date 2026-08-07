@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" linkding-db-rw linkding linkding
 
 kurly::secret "$ns" linkding workloads/linkding/server.libsonnet
-kurly::boot workloads/linkding/server.libsonnet "$ns"
+kurly::boot workloads/linkding/server.libsonnet "$ns" "" ""

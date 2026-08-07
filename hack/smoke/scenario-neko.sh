@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-neko
 kurly::secret kurly-neko neko workloads/neko/server.libsonnet
-kurly::boot workloads/neko/server.libsonnet kurly-neko
+kurly::boot workloads/neko/server.libsonnet kurly-neko "" ""
