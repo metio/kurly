@@ -22,7 +22,7 @@ kurly.list(photoprism(siteUrl='https://photos.example.com/'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `photoprism` | |
-| `image` | `docker.io/photoprism/photoprism:260601` | |
+| `image` | `docker.io/photoprism/photoprism:260728` | |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | database, cache (`/photoprism/storage`) and originals |
 | `siteUrl` | inferred | the public URL (keep the trailing `/`) |
 | `adminUser` | `admin` | the admin username |
