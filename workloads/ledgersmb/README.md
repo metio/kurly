@@ -22,7 +22,7 @@ kurly.list(ledgersmb())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `ledgersmb` | |
-| `image` | `docker.io/ledgersmb/ledgersmb:1.12` | |
+| `image` | `docker.io/ledgersmb/ledgersmb:1.13` | |
 | `dbHost` / `dbPort` | `ledgersmb-db-rw` / `5432` | pairs with a `cnpg-cluster` named `ledgersmb-db` |
 | `database` | `lsmb` | the company database offered on the login screen |
 | `proxyIp` | `10.0.0.0/8` | which clients may set `X-Forwarded-For` |
