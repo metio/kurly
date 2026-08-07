@@ -68,6 +68,10 @@ function(
   + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/uploads', storageSize, storageClass=storageClass)
+  // Lychee runs its migrations and builds its caches before Apache binds, which
+  // takes longer than a liveness probe will wait — without this the container is
+  // killed mid-migration and restarts into the same work forever.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 90 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

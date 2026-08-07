@@ -67,10 +67,13 @@ function(
   + kurly.scratch('/tmp')
   // huey keeps its task queue in a SQLite file under the application's HOME,
   // which is on the read-only root filesystem: it cannot create the file and
-  // exits with "unable to open database file" before serving anything. This is
-  // scratch rather than the store because the queue is work-in-flight, not data
-  // worth surviving the pod.
-  + kurly.scratch('/home/nonroot')
+  // exits with "unable to open database file" before serving anything. HOME is
+  // MOVED to the scratch rather than a volume being mounted over /home/nonroot —
+  // that directory is also the working directory the entrypoint runs
+  // ./bootstrap.sh from, and an empty volume on top of it hides the script, so
+  // the container never starts at all. The queue is work-in-flight, not data
+  // worth surviving the pod, so a scratch is the right home for it.
+  + kurly.env({ HOME: '/tmp' })
   + kurly.store(dataDir, storageSize, storageClass=storageClass)
   // Migrations and the first-run setup happen before the socket is bound.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, failureThreshold: 30, periodSeconds: 5 })

@@ -453,6 +453,60 @@ EOF
   kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
 }
 
+# A throwaway InfluxDB 2.x for an app's e2e, at the service name the app defaults
+# to, with its organization, bucket and an admin token already set up by the
+# image's own setup mode — an app that writes metrics on startup cannot wait for
+# a human to click through the onboarding form.
+#
+# NOT a carried workload, and deliberately so: influxdb is in
+# catalog/excluded.libsonnet because its upstream sells hosting, which is a rule
+# about what this catalogue offers to HOST for somebody. It says nothing about
+# standing one up for ninety seconds to prove that an application which needs one
+# actually starts.
+#   kurly::influxdb <ns> <service> <org> <bucket> <token>
+kurly::influxdb() {
+  local ns="$1" svc="$2" org="$3" bucket="$4" token="$5"
+  echo "== provision influxdb ${svc} (org=${org}, bucket=${bucket}) =="
+  kubectl apply --namespace="$ns" --filename=- <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: ${svc}, labels: { app: ${svc} } }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: ${svc} } }
+  template:
+    metadata: { labels: { app: ${svc} } }
+    spec:
+      containers:
+        - name: influxdb
+          image: docker.io/library/influxdb:2.7
+          env:
+            - { name: DOCKER_INFLUXDB_INIT_MODE, value: setup }
+            - { name: DOCKER_INFLUXDB_INIT_USERNAME, value: kurly }
+            - { name: DOCKER_INFLUXDB_INIT_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
+            - { name: DOCKER_INFLUXDB_INIT_ORG, value: "${org}" }
+            - { name: DOCKER_INFLUXDB_INIT_BUCKET, value: "${bucket}" }
+            - { name: DOCKER_INFLUXDB_INIT_ADMIN_TOKEN, value: "${token}" }
+          ports: [{ containerPort: 8086 }]
+          # Setup runs before the HTTP listener answers, and an app that writes
+          # its first point immediately would otherwise meet a closed port.
+          readinessProbe:
+            httpGet: { path: /health, port: 8086 }
+            periodSeconds: 3
+            failureThreshold: 40
+          volumeMounts: [{ name: data, mountPath: /var/lib/influxdb2 }]
+      volumes: [{ name: data, emptyDir: {} }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: ${svc} }
+spec:
+  selector: { app: ${svc} }
+  ports: [{ port: 8086, targetPort: 8086 }]
+EOF
+  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
+}
+
 # A throwaway MariaDB for an app's e2e, at the service name the app defaults to,
 # seeded with the app's database, user, and the shared test password (and the
 # same password for root). Many self-hosted apps need MySQL/MariaDB rather than

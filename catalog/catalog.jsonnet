@@ -485,6 +485,9 @@ local stageImports = {
   'habitat/server': import 'github.com/metio/kurly/workloads/habitat/server.libsonnet',
   'vanilla-cookbook/server': import 'github.com/metio/kurly/workloads/vanilla-cookbook/server.libsonnet',
   'sama/server': import 'github.com/metio/kurly/workloads/sama/server.libsonnet',
+  'mindwendel/server': import 'github.com/metio/kurly/workloads/mindwendel/server.libsonnet',
+  'plumio/server': import 'github.com/metio/kurly/workloads/plumio/server.libsonnet',
+  'libredb-studio/server': import 'github.com/metio/kurly/workloads/libredb-studio/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
