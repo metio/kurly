@@ -480,6 +480,11 @@ local stageImports = {
   'memtly/server': import 'github.com/metio/kurly/workloads/memtly/server.libsonnet',
   'youtube-dl-nas/server': import 'github.com/metio/kurly/workloads/youtube-dl-nas/server.libsonnet',
   'llmkube/controller': import 'github.com/metio/kurly/workloads/llmkube/controller.libsonnet',
+  'scm-manager/server': import 'github.com/metio/kurly/workloads/scm-manager/server.libsonnet',
+  'solectrus/server': import 'github.com/metio/kurly/workloads/solectrus/server.libsonnet',
+  'habitat/server': import 'github.com/metio/kurly/workloads/habitat/server.libsonnet',
+  'vanilla-cookbook/server': import 'github.com/metio/kurly/workloads/vanilla-cookbook/server.libsonnet',
+  'sama/server': import 'github.com/metio/kurly/workloads/sama/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

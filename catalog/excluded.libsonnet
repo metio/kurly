@@ -231,4 +231,5 @@
   inginious: { reason: 'undeployable', note: 'needs a Docker socket to run student code in sibling containers — https://github.com/INGInious/INGInious/blob/master/docker-compose.yml' },
   hiccup: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://test.designedbyashw.in/hiccup' },
   flexisip: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Linphone services) — https://www.linphone.org/en/services/' },
+  homebutler: { reason: 'undeployable', note: 'needs host access for Wake-on-LAN and a Docker socket to manage services — https://github.com/Higangssh/homebutler' },
 }

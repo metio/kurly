@@ -397,4 +397,9 @@
   memtly: '2026-08-07',
   'mongo-express': '2026-08-07',
   opencost: '2026-08-07',
+  chibisafe: '2026-08-07',
+  'scm-manager': '2026-08-07',
+  'vanilla-cookbook': '2026-08-07',
+  sama: '2026-08-07',
+  habitat: '2026-08-07',
 }
