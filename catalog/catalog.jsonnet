@@ -454,6 +454,14 @@ local stageImports = {
   'calagopus/server': import 'github.com/metio/kurly/workloads/calagopus/server.libsonnet',
   'ledgersmb/server': import 'github.com/metio/kurly/workloads/ledgersmb/server.libsonnet',
   'ocular/server': import 'github.com/metio/kurly/workloads/ocular/server.libsonnet',
+  'podfetch/server': import 'github.com/metio/kurly/workloads/podfetch/server.libsonnet',
+  'wavelog/server': import 'github.com/metio/kurly/workloads/wavelog/server.libsonnet',
+  'wikidocs/server': import 'github.com/metio/kurly/workloads/wikidocs/server.libsonnet',
+  'admidio/server': import 'github.com/metio/kurly/workloads/admidio/server.libsonnet',
+  'openreader/server': import 'github.com/metio/kurly/workloads/openreader/server.libsonnet',
+  'upvote-rss/server': import 'github.com/metio/kurly/workloads/upvote-rss/server.libsonnet',
+  'downtify/server': import 'github.com/metio/kurly/workloads/downtify/server.libsonnet',
+  'recipya/server': import 'github.com/metio/kurly/workloads/recipya/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
