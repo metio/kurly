@@ -17,6 +17,9 @@
   "gotosocial": {
     "compose": "+ k.env({ GTS_HOST: 'social.example.com' })"
   },
+  "habitat": {
+    "compose": "+ k.env({ DATABASE_URL: 'postgresql://habitat:Kurly-e2e-Passw0rd@habitat-db-rw:5432/habitat?serverVersion=17&sslmode=disable' })"
+  },
   "hatsu": {
     "compose": "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })"
   },
