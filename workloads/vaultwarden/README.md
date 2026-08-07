@@ -22,7 +22,7 @@ kurly.list(vaultwarden(domain='https://vault.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `vaultwarden` | |
-| `image` | `docker.io/vaultwarden/server:1.37.0` | |
+| `image` | `docker.io/vaultwarden/server:1.37.1` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the SQLite DB, attachments, and JWT key |
 | `domain` | inferred | **the public URL** — WebAuthn, attachments, and email need it |
 | `signupsAllowed` | `false` | new-user registration |
