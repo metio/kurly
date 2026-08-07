@@ -402,4 +402,8 @@
   'vanilla-cookbook': '2026-08-07',
   sama: '2026-08-07',
   habitat: '2026-08-07',
+  mindwendel: '2026-08-07',
+  plumio: '2026-08-07',
+  'libredb-studio': '2026-08-07',
+  solectrus: '2026-08-07',
 }

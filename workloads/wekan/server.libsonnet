@@ -52,6 +52,9 @@ function(
   // read-only root filesystem works. Its attempt produced no read-only error, so
   // this likely comes off — on a host that can run MongoDB.
   + kurly.writableRootFilesystem()
+  // A Meteor bundle spends minutes building its client and applying migrations
+  // before it listens, which is a startup budget rather than a liveness delay.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 60 })
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
