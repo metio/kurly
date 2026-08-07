@@ -142,6 +142,87 @@ kurly::await_ready() {
 }
 
 #   kurly::boot workloads/adguardhome/server.libsonnet kurly-adguardhome
+# --- the long-lived cluster and the space it leaks ---------------------------
+#
+# The fleet runs on ONE cluster that stays up, with the delivery stack installed
+# once. Standing Flux, JaaS and stageset up per workload cost minutes each and
+# pulled their images again every time; keeping them is what makes a walk of four
+# hundred workloads finish.
+#
+# Idempotent by CHECKING FIRST, not by re-applying: `helm upgrade --install` and
+# `kubectl apply` are safe to repeat but not free, and repeating them four
+# hundred times is most of a run.
+kurly::infrastructure_ready() {
+  kubectl get deployment source-controller --namespace=flux-system >/dev/null 2>&1 &&
+    kubectl get deployment --namespace=jaas-system >/dev/null 2>&1 &&
+    kubectl get deployment --namespace=stageset-system >/dev/null 2>&1
+}
+
+kurly::ensure_infrastructure() {
+  if kurly::infrastructure_ready; then
+    echo "== delivery stack already installed — keeping it =="
+    return 0
+  fi
+  echo "== installing the delivery stack (once, for the whole walk) =="
+  kurly::install_flux
+  kurly::install_jaas
+  kurly::install_stageset
+}
+
+# THE DISK IS THE THING THAT ENDS A FLEET RUN, and a deleted namespace is not
+# enough on its own. Deleting a PersistentVolumeClaim releases its volume, and
+# local-path only removes the directory when it observes the delete — a
+# provisioner that is behind, a PV left Released, or a claim whose namespace went
+# away underneath it all leave gigabytes on the node with nothing pointing at
+# them. Three kind clusters holding those directories filled 114GB of this host.
+#
+# So after each workload the node's provisioner directory is reconciled against
+# the PersistentVolumes that actually exist, and anything else is removed.
+#
+# Done through a POD rather than `podman exec`: the node is reachable with
+# kubectl alone, which is true in CI and on a host whose rootless podman needs a
+# corrected storage configuration before it can see its own containers.
+kurly::purge_pv_data() {
+  local keep
+  # The PVs that still exist are the directories worth keeping. Everything the
+  # provisioner has on disk beyond this list is backing nothing.
+  keep="$(kubectl get pv -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null | tr '\n' ' ')"
+  kubectl delete job kurly-purge-pv --namespace=default --ignore-not-found >/dev/null 2>&1 || true
+  kubectl apply --namespace=default --filename=- >/dev/null <<EOF
+apiVersion: batch/v1
+kind: Job
+metadata: { name: kurly-purge-pv }
+spec:
+  ttlSecondsAfterFinished: 60
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: purge
+          image: docker.io/library/busybox:1.37
+          env: [{ name: KEEP, value: "${keep}" }]
+          command:
+            - /bin/sh
+            - -c
+            - |
+              cd /data 2>/dev/null || exit 0
+              for dir in *; do
+                [ -e "\$dir" ] || continue
+                case " \$KEEP " in
+                  *" \$dir "*) ;;
+                  *) rm -rf "\$dir" ;;
+                esac
+              done
+          volumeMounts: [{ name: data, mountPath: /data }]
+      volumes:
+        - name: data
+          hostPath: { path: /var/local-path-provisioner, type: DirectoryOrCreate }
+EOF
+  kubectl wait --namespace=default --for=condition=complete job/kurly-purge-pv --timeout=120s >/dev/null 2>&1 || true
+  kubectl delete job kurly-purge-pv --namespace=default --ignore-not-found >/dev/null 2>&1 || true
+}
+
 # --- measuring what a workload actually costs to start -----------------------
 #
 # Every scenario already boots its workload on a live cluster and watches it
@@ -209,6 +290,13 @@ kurly::_sample_memory() {
 # at the end — a fleet walk that is killed half way keeps everything it measured.
 kurly::_record_measurement() {
   local stage="$1" seconds="$2" peak="$3" steady="$4" key file
+  # A workload that is Ready in nine seconds can finish before the kubelet
+  # publishes a single sample, leaving a peak of zero beside a steady reading
+  # that is plainly larger. The peak is the highest reading TAKEN, and the
+  # settled one is a reading — so it is the floor. Without this the catalogue
+  # would publish "needs 0Mi to start" for the fastest workloads, which is the
+  # most confident possible way to be wrong.
+  [ "${peak:-0}" -ge "${steady:-0}" ] 2>/dev/null || peak="$steady"
   key="$(printf '%s' "$stage" | sed -E 's#workloads/([^/]+)/([^/]+)\.libsonnet#\1/\2#')"
   mkdir -p .build/measurements
   file=".build/measurements/$(printf '%s' "$key" | tr '/' '__').json"
