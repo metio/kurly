@@ -18,4 +18,4 @@ kurly::postgres "$ns" mayan-edms-db-rw mayan mayan
 kurly::cache "$ns" mayan-edms-cache-headless
 
 kurly::secret "$ns" mayan-edms workloads/mayan-edms/server.libsonnet
-kurly::boot workloads/mayan-edms/server.libsonnet "$ns"
+kurly::boot workloads/mayan-edms/server.libsonnet "$ns" "" ""

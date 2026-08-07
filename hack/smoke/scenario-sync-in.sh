@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" sync-in-db sync-in sync-in
 
 kurly::secret "$ns" sync-in workloads/sync-in/server.libsonnet
-kurly::boot workloads/sync-in/server.libsonnet "$ns"
+kurly::boot workloads/sync-in/server.libsonnet "$ns" "" ""

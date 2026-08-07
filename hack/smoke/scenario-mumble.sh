@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-mumble
 kurly::secret kurly-mumble mumble workloads/mumble/server.libsonnet
-kurly::boot workloads/mumble/server.libsonnet kurly-mumble
+kurly::boot workloads/mumble/server.libsonnet kurly-mumble "" ""

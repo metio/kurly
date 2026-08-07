@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-vince
 kurly::secret kurly-vince vince workloads/vince/server.libsonnet
-kurly::boot workloads/vince/server.libsonnet kurly-vince
+kurly::boot workloads/vince/server.libsonnet kurly-vince "" ""

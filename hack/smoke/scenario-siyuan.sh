@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-siyuan
 kurly::secret kurly-siyuan siyuan workloads/siyuan/server.libsonnet
-kurly::boot workloads/siyuan/server.libsonnet kurly-siyuan
+kurly::boot workloads/siyuan/server.libsonnet kurly-siyuan "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-restreamer
 kurly::secret kurly-restreamer restreamer workloads/restreamer/server.libsonnet
-kurly::boot workloads/restreamer/server.libsonnet kurly-restreamer
+kurly::boot workloads/restreamer/server.libsonnet kurly-restreamer "" ""

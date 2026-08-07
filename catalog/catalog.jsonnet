@@ -476,6 +476,10 @@ local stageImports = {
   'crafty-controller/server': import 'github.com/metio/kurly/workloads/crafty-controller/server.libsonnet',
   'liwan/server': import 'github.com/metio/kurly/workloads/liwan/server.libsonnet',
   'gitproxy/server': import 'github.com/metio/kurly/workloads/gitproxy/server.libsonnet',
+  'atsumeru/server': import 'github.com/metio/kurly/workloads/atsumeru/server.libsonnet',
+  'memtly/server': import 'github.com/metio/kurly/workloads/memtly/server.libsonnet',
+  'youtube-dl-nas/server': import 'github.com/metio/kurly/workloads/youtube-dl-nas/server.libsonnet',
+  'llmkube/controller': import 'github.com/metio/kurly/workloads/llmkube/controller.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

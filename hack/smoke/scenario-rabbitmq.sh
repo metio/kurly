@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-rabbitmq
 kurly::secret kurly-rabbitmq rabbitmq workloads/rabbitmq/server.libsonnet
-kurly::boot workloads/rabbitmq/server.libsonnet kurly-rabbitmq
+kurly::boot workloads/rabbitmq/server.libsonnet kurly-rabbitmq "" ""

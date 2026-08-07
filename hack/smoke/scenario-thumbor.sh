@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-thumbor
 kurly::secret kurly-thumbor thumbor workloads/thumbor/server.libsonnet
-kurly::boot workloads/thumbor/server.libsonnet kurly-thumbor
+kurly::boot workloads/thumbor/server.libsonnet kurly-thumbor "" ""

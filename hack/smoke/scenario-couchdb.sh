@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-couchdb
 kurly::secret kurly-couchdb couchdb workloads/couchdb/server.libsonnet
-kurly::boot workloads/couchdb/server.libsonnet kurly-couchdb
+kurly::boot workloads/couchdb/server.libsonnet kurly-couchdb "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" hortusfox-db hortusfox hortusfox
 
 kurly::secret "$ns" hortusfox workloads/hortusfox/server.libsonnet
-kurly::boot workloads/hortusfox/server.libsonnet "$ns"
+kurly::boot workloads/hortusfox/server.libsonnet "$ns" "" ""

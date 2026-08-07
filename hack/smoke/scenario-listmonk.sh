@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" listmonk-db-rw listmonk listmonk
 
 kurly::secret "$ns" listmonk workloads/listmonk/server.libsonnet
-kurly::boot workloads/listmonk/server.libsonnet "$ns"
+kurly::boot workloads/listmonk/server.libsonnet "$ns" "" ""

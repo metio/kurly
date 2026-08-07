@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" libretime-db-rw libretime libretime
 
 kurly::secret "$ns" libretime workloads/libretime/server.libsonnet
-kurly::boot workloads/libretime/server.libsonnet "$ns"
+kurly::boot workloads/libretime/server.libsonnet "$ns" "" ""

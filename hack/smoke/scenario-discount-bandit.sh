@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" discount-bandit-db discount-bandit discount-bandit
 
 kurly::secret "$ns" discount-bandit workloads/discount-bandit/server.libsonnet
-kurly::boot workloads/discount-bandit/server.libsonnet "$ns"
+kurly::boot workloads/discount-bandit/server.libsonnet "$ns" "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-authelia
 kurly::secret kurly-authelia authelia workloads/authelia/server.libsonnet
-kurly::boot workloads/authelia/server.libsonnet kurly-authelia
+kurly::boot workloads/authelia/server.libsonnet kurly-authelia "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" seatsurfing-db-rw seatsurfing seatsurfing
 
 kurly::secret "$ns" seatsurfing workloads/seatsurfing/server.libsonnet
-kurly::boot workloads/seatsurfing/server.libsonnet "$ns"
+kurly::boot workloads/seatsurfing/server.libsonnet "$ns" "" ""

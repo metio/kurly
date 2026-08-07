@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-chhoto-url
 kurly::secret kurly-chhoto-url chhoto-url workloads/chhoto-url/server.libsonnet
-kurly::boot workloads/chhoto-url/server.libsonnet kurly-chhoto-url
+kurly::boot workloads/chhoto-url/server.libsonnet kurly-chhoto-url "" ""

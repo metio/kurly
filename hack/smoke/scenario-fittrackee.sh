@@ -18,4 +18,4 @@ kurly::postgres "$ns" fittrackee-db-rw fittrackee fittrackee docker.io/postgis/p
 kurly::cache "$ns" fittrackee-cache-headless ""
 
 kurly::secret "$ns" fittrackee workloads/fittrackee/server.libsonnet
-kurly::boot workloads/fittrackee/server.libsonnet "$ns"
+kurly::boot workloads/fittrackee/server.libsonnet "$ns" "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-jupyterlab
 kurly::secret kurly-jupyterlab jupyterlab workloads/jupyterlab/server.libsonnet
-kurly::boot workloads/jupyterlab/server.libsonnet kurly-jupyterlab
+kurly::boot workloads/jupyterlab/server.libsonnet kurly-jupyterlab "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" warracker-db-rw warracker warracker
 
 kurly::secret "$ns" warracker workloads/warracker/server.libsonnet
-kurly::boot workloads/warracker/server.libsonnet "$ns"
+kurly::boot workloads/warracker/server.libsonnet "$ns" "" ""

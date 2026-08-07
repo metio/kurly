@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" xwiki-db-rw xwiki xwiki
 
 kurly::secret "$ns" xwiki workloads/xwiki/server.libsonnet
-kurly::boot workloads/xwiki/server.libsonnet "$ns"
+kurly::boot workloads/xwiki/server.libsonnet "$ns" "" ""

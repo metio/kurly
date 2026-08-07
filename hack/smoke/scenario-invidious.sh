@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" invidious-db-rw invidious invidious
 
 kurly::secret "$ns" invidious workloads/invidious/server.libsonnet
-kurly::boot workloads/invidious/server.libsonnet "$ns"
+kurly::boot workloads/invidious/server.libsonnet "$ns" "" ""

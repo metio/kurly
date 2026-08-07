@@ -37,7 +37,10 @@ function(
   + kurly.env(env)
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.writableRootFilesystem()
-  + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
+  // By CONNECTION, not by path: mongo-express guards every route with basic auth,
+  // so an httpGet probe reads the 401 as a failure and the kubelet restarts a
+  // container that is serving correctly — forever.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)

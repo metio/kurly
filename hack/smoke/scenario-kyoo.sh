@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" kyoo-db-rw kyoo kyoo
 
 kurly::secret "$ns" kyoo workloads/kyoo/server.libsonnet
-kurly::boot workloads/kyoo/server.libsonnet "$ns"
+kurly::boot workloads/kyoo/server.libsonnet "$ns" "" ""

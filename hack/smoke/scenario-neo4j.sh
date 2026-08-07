@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-neo4j
 kurly::secret kurly-neo4j neo4j workloads/neo4j/server.libsonnet
-kurly::boot workloads/neo4j/server.libsonnet kurly-neo4j
+kurly::boot workloads/neo4j/server.libsonnet kurly-neo4j "" ""

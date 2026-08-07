@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-postgres
 kurly::secret kurly-postgres postgres workloads/postgres/server.libsonnet
-kurly::boot workloads/postgres/server.libsonnet kurly-postgres
+kurly::boot workloads/postgres/server.libsonnet kurly-postgres "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-artalk
 kurly::secret kurly-artalk artalk workloads/artalk/server.libsonnet
-kurly::boot workloads/artalk/server.libsonnet kurly-artalk
+kurly::boot workloads/artalk/server.libsonnet kurly-artalk "" ""

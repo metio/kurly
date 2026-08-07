@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-pihole
 kurly::secret kurly-pihole pihole workloads/pihole/server.libsonnet
-kurly::boot workloads/pihole/server.libsonnet kurly-pihole
+kurly::boot workloads/pihole/server.libsonnet kurly-pihole "" ""

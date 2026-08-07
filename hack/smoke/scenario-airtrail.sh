@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" airtrail-db-rw airtrail airtrail
 
 kurly::secret "$ns" airtrail workloads/airtrail/server.libsonnet
-kurly::boot workloads/airtrail/server.libsonnet "$ns"
+kurly::boot workloads/airtrail/server.libsonnet "$ns" "" ""

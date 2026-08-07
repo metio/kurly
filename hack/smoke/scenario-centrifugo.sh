@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-centrifugo
 kurly::secret kurly-centrifugo centrifugo workloads/centrifugo/server.libsonnet
-kurly::boot workloads/centrifugo/server.libsonnet kurly-centrifugo
+kurly::boot workloads/centrifugo/server.libsonnet kurly-centrifugo "" ""

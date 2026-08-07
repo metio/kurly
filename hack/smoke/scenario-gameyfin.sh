@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-gameyfin
 kurly::secret kurly-gameyfin gameyfin workloads/gameyfin/server.libsonnet
-kurly::boot workloads/gameyfin/server.libsonnet kurly-gameyfin
+kurly::boot workloads/gameyfin/server.libsonnet kurly-gameyfin "" ""

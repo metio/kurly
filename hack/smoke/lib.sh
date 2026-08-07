@@ -25,9 +25,15 @@ kurly::vendor() {
 # $2 (e.g. "+ k.hostUsers()") — kind inside GitHub Actions cannot nest user
 # namespaces, so kurly-pod workloads relax that one knob for the smoke.
 kurly::render() {
-  local stage="$1" extra="${2:-}"
+  local stage="$1" extra="${2:-}" params="${3:-}"
+  # `extra` composes onto an already-built app with `+`; `params` is passed when
+  # the stage function is CALLED, which is the only way to reach an argument.
+  # metrics-server cannot scrape a kind kubelet without kubeletInsecureTLS, and
+  # no amount of composing reaches that — the deep walk has always passed both,
+  # and a fast scenario that silently dropped one booted a stage configured
+  # differently from the one it claimed to prove.
   jsonnet -J vendor -e \
-    "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')() ${extra})"
+    "local k = import 'github.com/metio/kurly/main.libsonnet'; k.list((import '${stage}')(${params}) ${extra})"
 }
 
 # Whether composed features apply to a stage, as `yes` or `no` on stdout.
@@ -137,10 +143,22 @@ kurly::await_ready() {
 
 #   kurly::boot workloads/adguardhome/server.libsonnet kurly-adguardhome
 kurly::boot() {
-  local stage="$1" ns="$2" extra="${3:-}"
+  local stage="$1" ns="$2" extra="${3:-}" params="${4:-}" manifests own
+  manifests="$(kurly::render "$stage" "+ k.hostUsers() ${extra}" "$params")"
+  # A CLUSTER ADD-ON names the namespace it belongs in, and `kubectl apply
+  # --namespace` REFUSES an object that already declares a different one — the
+  # whole apply fails with "does not match the namespace", before anything is
+  # created. Its RBAC and its controller are written for that namespace, so the
+  # answer is to boot it where it says, not to strip the field and relocate a
+  # component whose ClusterRoleBinding still points at the original.
+  own="$(printf '%s' "$manifests" | jq -r '[.items[].metadata.namespace // empty] | first // empty')"
+  if [ -n "$own" ]; then
+    echo "== ${stage} is a cluster add-on: booting in its own namespace ${own} =="
+    ns="$own"
+  fi
   kurly::namespace "$ns" >/dev/null
   echo "== boot ${stage} in ${ns} =="
-  kurly::render "$stage" "+ k.hostUsers() ${extra}" | kubectl apply --namespace="$ns" --filename=-
+  printf '%s' "$manifests" | kubectl apply --namespace="$ns" --filename=-
   local ctrl found=0
   for ctrl in $(kubectl --namespace="$ns" get deployment,statefulset,daemonset --output=name 2>/dev/null); do
     found=1

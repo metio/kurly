@@ -48,6 +48,15 @@ extra_for() {
   jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).compose // ""' "$extra"
 }
 
+# The same file's other facet, and it must be emitted too: `compose` is added to
+# a built app with `+`, while `params` is passed when the stage function is
+# CALLED — the only way to reach an argument. A generator that read only
+# `compose` dropped the other silently, and the scenario then booted a stage
+# configured differently from the one the entry describes.
+params_for() {
+  jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).params // ""' "$extra"
+}
+
 # A generated scenario is regenerated in place; a hand-written one is left alone.
 is_hand_written() {
   local scenario="hack/smoke/scenario-$1.sh"
@@ -86,7 +95,8 @@ while IFS=$'\t' read -r id stages; do
       boot_lines+="kurly::secret ${ns} ${secretName} ${file}"$'\n'
     fi
     ex="$(extra_for "${id}/${stage}")"
-    boot_lines+="kurly::boot ${file} ${ns}${ex:+ \"${ex}\"}"$'\n'
+    pa="$(params_for "${id}/${stage}")"
+    boot_lines+="kurly::boot ${file} ${ns} \"${ex}\" \"${pa}\""$'\n'
   done
 
   {
@@ -203,7 +213,8 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     secretName="$(param "$file" secretName)"; [ -n "$secretName" ] || secretName="$id"
     boot_lines+="kurly::secret \"\$ns\" ${secretName} ${file}"$'\n'
     ex="$(extra_for "${id}/${stage}")"
-    boot_lines+="kurly::boot ${file} \"\$ns\"${ex:+ \"${ex}\"}"$'\n'
+    pa="$(params_for "${id}/${stage}")"
+    boot_lines+="kurly::boot ${file} \"\$ns\" \"${ex}\" \"${pa}\""$'\n'
   done
 
   {

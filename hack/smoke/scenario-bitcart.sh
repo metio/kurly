@@ -18,4 +18,4 @@ kurly::postgres "$ns" bitcart-db-rw bitcart bitcart
 kurly::cache "$ns" bitcart-cache-headless ""
 
 kurly::secret "$ns" bitcart workloads/bitcart/server.libsonnet
-kurly::boot workloads/bitcart/server.libsonnet "$ns"
+kurly::boot workloads/bitcart/server.libsonnet "$ns" "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-hatsu
 kurly::secret kurly-hatsu hatsu workloads/hatsu/server.libsonnet
-kurly::boot workloads/hatsu/server.libsonnet kurly-hatsu "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })"
+kurly::boot workloads/hatsu/server.libsonnet kurly-hatsu "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })" ""

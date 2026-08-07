@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" hedgedoc-db-rw hedgedoc hedgedoc
 
 kurly::secret "$ns" hedgedoc workloads/hedgedoc/server.libsonnet
-kurly::boot workloads/hedgedoc/server.libsonnet "$ns"
+kurly::boot workloads/hedgedoc/server.libsonnet "$ns" "" ""

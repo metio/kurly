@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mongodb "$ns" librechat-db
 
 kurly::secret "$ns" librechat workloads/librechat/server.libsonnet
-kurly::boot workloads/librechat/server.libsonnet "$ns"
+kurly::boot workloads/librechat/server.libsonnet "$ns" "" ""

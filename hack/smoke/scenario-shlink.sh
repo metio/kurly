@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" shlink-db-rw shlink shlink
 
 kurly::secret "$ns" shlink workloads/shlink/server.libsonnet
-kurly::boot workloads/shlink/server.libsonnet "$ns" "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })"
+kurly::boot workloads/shlink/server.libsonnet "$ns" "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })" ""

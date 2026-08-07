@@ -18,4 +18,4 @@ kurly::postgres "$ns" forgejo-db-rw forgejo forgejo
 kurly::cache "$ns" forgejo-cache-headless ""
 
 kurly::secret "$ns" forgejo workloads/forgejo/server.libsonnet
-kurly::boot workloads/forgejo/server.libsonnet "$ns"
+kurly::boot workloads/forgejo/server.libsonnet "$ns" "" ""

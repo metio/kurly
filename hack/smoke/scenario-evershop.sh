@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" evershop-db-rw evershop evershop
 
 kurly::secret "$ns" evershop workloads/evershop/server.libsonnet
-kurly::boot workloads/evershop/server.libsonnet "$ns"
+kurly::boot workloads/evershop/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" commafeed-db-rw commafeed commafeed
 
 kurly::secret "$ns" commafeed workloads/commafeed/server.libsonnet
-kurly::boot workloads/commafeed/server.libsonnet "$ns"
+kurly::boot workloads/commafeed/server.libsonnet "$ns" "" ""

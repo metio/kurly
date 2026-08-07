@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" joomla-db joomla joomla
 
 kurly::secret "$ns" joomla workloads/joomla/server.libsonnet
-kurly::boot workloads/joomla/server.libsonnet "$ns"
+kurly::boot workloads/joomla/server.libsonnet "$ns" "" ""

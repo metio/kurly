@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" vikunja-db-rw vikunja vikunja
 
 kurly::secret "$ns" vikunja workloads/vikunja/server.libsonnet
-kurly::boot workloads/vikunja/server.libsonnet "$ns" "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"
+kurly::boot workloads/vikunja/server.libsonnet "$ns" "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })" ""

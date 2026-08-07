@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" passwordpusher-db-rw passwordpusher passwordpusher
 
 kurly::secret "$ns" passwordpusher workloads/passwordpusher/server.libsonnet
-kurly::boot workloads/passwordpusher/server.libsonnet "$ns"
+kurly::boot workloads/passwordpusher/server.libsonnet "$ns" "" ""

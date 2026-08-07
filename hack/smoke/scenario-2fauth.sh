@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-2fauth
 kurly::secret kurly-2fauth twofauth workloads/2fauth/server.libsonnet
-kurly::boot workloads/2fauth/server.libsonnet kurly-2fauth
+kurly::boot workloads/2fauth/server.libsonnet kurly-2fauth "" ""

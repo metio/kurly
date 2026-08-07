@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" tiny-tiny-rss-db-rw tinytinyrss tinytinyrss
 
 kurly::secret "$ns" tiny-tiny-rss workloads/tiny-tiny-rss/server.libsonnet
-kurly::boot workloads/tiny-tiny-rss/server.libsonnet "$ns"
+kurly::boot workloads/tiny-tiny-rss/server.libsonnet "$ns" "" ""

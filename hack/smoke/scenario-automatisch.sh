@@ -18,6 +18,6 @@ kurly::postgres "$ns" automatisch-db-rw automatisch automatisch
 kurly::cache "$ns" automatisch-cache-headless ""
 
 kurly::secret "$ns" automatisch workloads/automatisch/server.libsonnet
-kurly::boot workloads/automatisch/server.libsonnet "$ns"
+kurly::boot workloads/automatisch/server.libsonnet "$ns" "" ""
 kurly::secret "$ns" automatisch workloads/automatisch/worker.libsonnet
-kurly::boot workloads/automatisch/worker.libsonnet "$ns"
+kurly::boot workloads/automatisch/worker.libsonnet "$ns" "" ""

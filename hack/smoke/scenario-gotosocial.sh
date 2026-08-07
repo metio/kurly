@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" gotosocial-db-rw gotosocial gotosocial
 
 kurly::secret "$ns" gotosocial workloads/gotosocial/server.libsonnet
-kurly::boot workloads/gotosocial/server.libsonnet "$ns" "+ k.env({ GTS_HOST: 'social.example.com' })"
+kurly::boot workloads/gotosocial/server.libsonnet "$ns" "+ k.env({ GTS_HOST: 'social.example.com' })" ""

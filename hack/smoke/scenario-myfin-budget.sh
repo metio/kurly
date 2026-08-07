@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" myfin-budget-db myfin-budget myfin-budget
 
 kurly::secret "$ns" myfin-budget workloads/myfin-budget/server.libsonnet
-kurly::boot workloads/myfin-budget/server.libsonnet "$ns"
+kurly::boot workloads/myfin-budget/server.libsonnet "$ns" "" ""

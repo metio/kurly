@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-karakeep
 kurly::secret kurly-karakeep karakeep workloads/karakeep/server.libsonnet
-kurly::boot workloads/karakeep/server.libsonnet kurly-karakeep
+kurly::boot workloads/karakeep/server.libsonnet kurly-karakeep "" ""

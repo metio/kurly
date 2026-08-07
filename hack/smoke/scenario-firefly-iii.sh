@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" firefly-iii-db-rw firefly firefly
 
 kurly::secret "$ns" firefly-iii workloads/firefly-iii/server.libsonnet
-kurly::boot workloads/firefly-iii/server.libsonnet "$ns"
+kurly::boot workloads/firefly-iii/server.libsonnet "$ns" "" ""

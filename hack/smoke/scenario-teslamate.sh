@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" teslamate-db-rw teslamate teslamate
 
 kurly::secret "$ns" teslamate workloads/teslamate/server.libsonnet
-kurly::boot workloads/teslamate/server.libsonnet "$ns"
+kurly::boot workloads/teslamate/server.libsonnet "$ns" "" ""

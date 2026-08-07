@@ -390,4 +390,11 @@
   imgcompress: '2026-08-07',
   liwan: '2026-08-07',
   gitproxy: '2026-08-07',
+  shlink: '2026-08-07',
+  atsumeru: '2026-08-07',
+  'youtube-dl-nas': '2026-08-07',
+  llmkube: '2026-08-07',
+  memtly: '2026-08-07',
+  'mongo-express': '2026-08-07',
+  opencost: '2026-08-07',
 }

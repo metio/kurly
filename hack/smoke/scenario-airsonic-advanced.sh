@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/airsonic-advanced/server.libsonnet kurly-airsonic-advanced
+kurly::boot workloads/airsonic-advanced/server.libsonnet kurly-airsonic-advanced "" ""

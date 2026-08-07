@@ -17,6 +17,6 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" docspell-db-rw docspell docspell
 
 kurly::secret "$ns" docspell workloads/docspell/joex.libsonnet
-kurly::boot workloads/docspell/joex.libsonnet "$ns"
+kurly::boot workloads/docspell/joex.libsonnet "$ns" "" ""
 kurly::secret "$ns" docspell workloads/docspell/server.libsonnet
-kurly::boot workloads/docspell/server.libsonnet "$ns"
+kurly::boot workloads/docspell/server.libsonnet "$ns" "" ""

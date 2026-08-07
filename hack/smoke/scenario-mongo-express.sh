@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mongodb "$ns" mongo-express-db
 
 kurly::secret "$ns" mongo-express workloads/mongo-express/server.libsonnet
-kurly::boot workloads/mongo-express/server.libsonnet "$ns"
+kurly::boot workloads/mongo-express/server.libsonnet "$ns" "" ""

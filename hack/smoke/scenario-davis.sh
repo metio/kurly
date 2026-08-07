@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" davis-db-rw davis davis
 
 kurly::secret "$ns" davis workloads/davis/server.libsonnet
-kurly::boot workloads/davis/server.libsonnet "$ns"
+kurly::boot workloads/davis/server.libsonnet "$ns" "" ""

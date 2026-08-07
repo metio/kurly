@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" mediawiki-db-rw mediawiki mediawiki
 
 kurly::secret "$ns" mediawiki workloads/mediawiki/server.libsonnet
-kurly::boot workloads/mediawiki/server.libsonnet "$ns"
+kurly::boot workloads/mediawiki/server.libsonnet "$ns" "" ""

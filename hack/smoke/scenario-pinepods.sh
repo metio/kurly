@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" pinepods-db-rw pinepods pinepods
 
 kurly::secret "$ns" pinepods workloads/pinepods/server.libsonnet
-kurly::boot workloads/pinepods/server.libsonnet "$ns"
+kurly::boot workloads/pinepods/server.libsonnet "$ns" "" ""

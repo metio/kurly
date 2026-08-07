@@ -19,8 +19,8 @@ kurly::objectstorage "$ns" mastodon
 kurly::cache "$ns" mastodon-cache-headless ""
 
 kurly::secret "$ns" mastodon workloads/mastodon/sidekiq.libsonnet
-kurly::boot workloads/mastodon/sidekiq.libsonnet "$ns"
+kurly::boot workloads/mastodon/sidekiq.libsonnet "$ns" "" ""
 kurly::secret "$ns" mastodon workloads/mastodon/streaming.libsonnet
-kurly::boot workloads/mastodon/streaming.libsonnet "$ns"
+kurly::boot workloads/mastodon/streaming.libsonnet "$ns" "" ""
 kurly::secret "$ns" mastodon workloads/mastodon/web.libsonnet
-kurly::boot workloads/mastodon/web.libsonnet "$ns"
+kurly::boot workloads/mastodon/web.libsonnet "$ns" "" ""

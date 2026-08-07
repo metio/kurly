@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" lldap-db-rw lldap lldap
 
 kurly::secret "$ns" lldap workloads/lldap/server.libsonnet
-kurly::boot workloads/lldap/server.libsonnet "$ns"
+kurly::boot workloads/lldap/server.libsonnet "$ns" "" ""

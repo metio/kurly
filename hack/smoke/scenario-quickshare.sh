@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-quickshare
 kurly::secret kurly-quickshare quickshare workloads/quickshare/server.libsonnet
-kurly::boot workloads/quickshare/server.libsonnet kurly-quickshare
+kurly::boot workloads/quickshare/server.libsonnet kurly-quickshare "" ""

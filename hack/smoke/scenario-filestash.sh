@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::objectstorage "$ns" filestash
 
 kurly::secret "$ns" filestash workloads/filestash/server.libsonnet
-kurly::boot workloads/filestash/server.libsonnet "$ns"
+kurly::boot workloads/filestash/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" vaultwarden-db-rw vaultwarden vaultwarden
 
 kurly::secret "$ns" vaultwarden workloads/vaultwarden/server.libsonnet
-kurly::boot workloads/vaultwarden/server.libsonnet "$ns"
+kurly::boot workloads/vaultwarden/server.libsonnet "$ns" "" ""

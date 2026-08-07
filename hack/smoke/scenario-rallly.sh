@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" rallly-db-rw rallly rallly
 
 kurly::secret "$ns" rallly workloads/rallly/server.libsonnet
-kurly::boot workloads/rallly/server.libsonnet "$ns"
+kurly::boot workloads/rallly/server.libsonnet "$ns" "" ""

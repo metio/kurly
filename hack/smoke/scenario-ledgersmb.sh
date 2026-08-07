@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" ledgersmb-db-rw lsmb ledgersmb
 
 kurly::secret "$ns" ledgersmb workloads/ledgersmb/server.libsonnet
-kurly::boot workloads/ledgersmb/server.libsonnet "$ns"
+kurly::boot workloads/ledgersmb/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mysql "$ns" manage-my-damn-life-db-rw mmdl mmdl
 
 kurly::secret "$ns" manage-my-damn-life workloads/manage-my-damn-life/server.libsonnet
-kurly::boot workloads/manage-my-damn-life/server.libsonnet "$ns"
+kurly::boot workloads/manage-my-damn-life/server.libsonnet "$ns" "" ""

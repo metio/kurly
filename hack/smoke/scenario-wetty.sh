@@ -10,4 +10,4 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/wetty/server.libsonnet kurly-wetty
+kurly::boot workloads/wetty/server.libsonnet kurly-wetty "" "sshHost='example.internal'"

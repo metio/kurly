@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" wikijs-db-rw wikijs wikijs
 
 kurly::secret "$ns" wikijs workloads/wikijs/server.libsonnet
-kurly::boot workloads/wikijs/server.libsonnet "$ns"
+kurly::boot workloads/wikijs/server.libsonnet "$ns" "" ""

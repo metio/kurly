@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" pgadmin-db-rw pgadmin pgadmin
 
 kurly::secret "$ns" pgadmin workloads/pgadmin/server.libsonnet
-kurly::boot workloads/pgadmin/server.libsonnet "$ns"
+kurly::boot workloads/pgadmin/server.libsonnet "$ns" "" ""

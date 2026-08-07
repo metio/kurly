@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" docuseal-db-rw docuseal docuseal
 
 kurly::secret "$ns" docuseal workloads/docuseal/server.libsonnet
-kurly::boot workloads/docuseal/server.libsonnet "$ns"
+kurly::boot workloads/docuseal/server.libsonnet "$ns" "" ""

@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-watcharr
 kurly::secret kurly-watcharr watcharr workloads/watcharr/server.libsonnet
-kurly::boot workloads/watcharr/server.libsonnet kurly-watcharr
+kurly::boot workloads/watcharr/server.libsonnet kurly-watcharr "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" libredesk-db-rw libredesk libredesk
 
 kurly::secret "$ns" libredesk workloads/libredesk/server.libsonnet
-kurly::boot workloads/libredesk/server.libsonnet "$ns" "+ k.env({ LIBREDESK_APP__ROOT_URL: 'http://libredesk:9000' })"
+kurly::boot workloads/libredesk/server.libsonnet "$ns" "+ k.env({ LIBREDESK_APP__ROOT_URL: 'http://libredesk:9000' })" ""

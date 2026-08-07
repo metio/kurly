@@ -229,4 +229,6 @@
   'fmd-server': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://fmd-foss.org/docs/fmd-server/overview/' },
   amusewiki: { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/melmothx/amusewiki' },
   inginious: { reason: 'undeployable', note: 'needs a Docker socket to run student code in sibling containers — https://github.com/INGInious/INGInious/blob/master/docker-compose.yml' },
+  hiccup: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://test.designedbyashw.in/hiccup' },
+  flexisip: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Linphone services) — https://www.linphone.org/en/services/' },
 }

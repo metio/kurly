@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-remark42
 kurly::secret kurly-remark42 remark42 workloads/remark42/server.libsonnet
-kurly::boot workloads/remark42/server.libsonnet kurly-remark42 "+ k.env({ REMARK_URL: 'http://remark42:8080' })"
+kurly::boot workloads/remark42/server.libsonnet kurly-remark42 "+ k.env({ REMARK_URL: 'http://remark42:8080' })" ""

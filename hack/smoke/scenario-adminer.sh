@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" adminer-db-rw adminer adminer
 
 kurly::secret "$ns" adminer workloads/adminer/server.libsonnet
-kurly::boot workloads/adminer/server.libsonnet "$ns"
+kurly::boot workloads/adminer/server.libsonnet "$ns" "" ""

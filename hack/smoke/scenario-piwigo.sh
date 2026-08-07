@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" piwigo-db-rw piwigo piwigo
 
 kurly::secret "$ns" piwigo workloads/piwigo/server.libsonnet
-kurly::boot workloads/piwigo/server.libsonnet "$ns"
+kurly::boot workloads/piwigo/server.libsonnet "$ns" "" ""

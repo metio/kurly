@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" kresus-db-rw kresus kresus
 
 kurly::secret "$ns" kresus workloads/kresus/server.libsonnet
-kurly::boot workloads/kresus/server.libsonnet "$ns"
+kurly::boot workloads/kresus/server.libsonnet "$ns" "" ""

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" rundeck-db-rw rundeck rundeck
 
 kurly::secret "$ns" rundeck workloads/rundeck/server.libsonnet
-kurly::boot workloads/rundeck/server.libsonnet "$ns"
+kurly::boot workloads/rundeck/server.libsonnet "$ns" "" ""

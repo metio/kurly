@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" bracket-db-rw bracket bracket
 
 kurly::secret "$ns" bracket workloads/bracket/server.libsonnet
-kurly::boot workloads/bracket/server.libsonnet "$ns"
+kurly::boot workloads/bracket/server.libsonnet "$ns" "" ""

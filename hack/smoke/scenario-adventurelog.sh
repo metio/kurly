@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" adventurelog-db-rw adventurelog adventurelog docker.io/postgis/postgis:17-3.5
 
 kurly::secret "$ns" adventurelog workloads/adventurelog/server.libsonnet
-kurly::boot workloads/adventurelog/server.libsonnet "$ns"
+kurly::boot workloads/adventurelog/server.libsonnet "$ns" "" ""

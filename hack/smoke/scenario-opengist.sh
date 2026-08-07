@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" opengist-db-rw opengist opengist
 
 kurly::secret "$ns" opengist workloads/opengist/server.libsonnet
-kurly::boot workloads/opengist/server.libsonnet "$ns"
+kurly::boot workloads/opengist/server.libsonnet "$ns" "" ""

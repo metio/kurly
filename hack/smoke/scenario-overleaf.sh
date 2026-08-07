@@ -18,4 +18,4 @@ kurly::mongodb "$ns" overleaf-db
 kurly::cache "$ns" overleaf-cache ""
 
 kurly::secret "$ns" overleaf workloads/overleaf/server.libsonnet
-kurly::boot workloads/overleaf/server.libsonnet "$ns"
+kurly::boot workloads/overleaf/server.libsonnet "$ns" "" ""

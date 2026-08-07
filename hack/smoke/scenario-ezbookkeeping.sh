@@ -12,4 +12,4 @@ kurly::vendor
 
 kurly::namespace kurly-ezbookkeeping
 kurly::secret kurly-ezbookkeeping ezbookkeeping workloads/ezbookkeeping/server.libsonnet
-kurly::boot workloads/ezbookkeeping/server.libsonnet kurly-ezbookkeeping
+kurly::boot workloads/ezbookkeeping/server.libsonnet kurly-ezbookkeeping "" ""
