@@ -22,7 +22,7 @@ kurly.list(vikunja(publicUrl='https://tasks.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `vikunja` | |
-| `image` | `docker.io/vikunja/vikunja:v2.4.0` | |
+| `image` | `docker.io/vikunja/vikunja:2.5.0` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | database (`/db`) and attachments (`/files`) |
 | `publicUrl` | inferred | the public URL |
 | `secretName` | `vikunja-secrets` | Secret with `VIKUNJA_SERVICE_JWTSECRET` (envFrom) |
