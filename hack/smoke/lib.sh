@@ -465,9 +465,23 @@ kurly::objectstorage() {
     curl -sf -X PUT "http://seaweedfs-0.seaweedfs-headless.${ns}.svc:8333/${bucket}" >/dev/null
 }
 
+# ALWAYS A REPLICA SET, even of one member. An application that reads the oplog —
+# Rocket.Chat is the one here, and it is not unusual — cannot use a standalone
+# server at all: the oplog is a replication artefact and a standalone mongod does
+# not keep one. Such an app fails at startup against a server that is otherwise
+# working perfectly, which reads as the application being broken.
+#
+# A single-member set costs nothing for the applications that do not care: the
+# connection string works unchanged with or without `?replicaSet=`, so there is
+# no reason to offer two shapes and pick between them.
+#
+# The set has to be INITIATED before mongod serves anything, and `rs.initiate()`
+# is what turns a started process into a usable one — a probe that only checks
+# the port is open reports ready while every query still fails with
+# NotYetInitialized.
 kurly::mongodb() {
   local ns="$1" svc="$2"
-  echo "== provision mongodb ${svc} =="
+  echo "== provision mongodb ${svc} (replica set rs0) =="
   kubectl apply --namespace="$ns" --filename=- <<EOF
 apiVersion: apps/v1
 kind: Deployment
@@ -481,11 +495,19 @@ spec:
       containers:
         - name: mongodb
           image: docker.io/library/mongo:8
+          # --bind_ip_all because a replica-set member advertises the host it was
+          # initiated with, and the default binding would refuse the connection
+          # that arrives on the Service address.
+          args: ["--replSet", "rs0", "--bind_ip_all"]
           ports: [{ containerPort: 27017 }]
           readinessProbe:
-            tcpSocket: { port: 27017 }
-            periodSeconds: 2
-            failureThreshold: 30
+            # The set must ANSWER, not merely listen: hello().isWritablePrimary
+            # is false until the member has been initiated and elected itself, so
+            # this is what distinguishes a usable server from a started one.
+            exec:
+              command: ["mongosh", "--quiet", "--eval", "db.hello().isWritablePrimary"]
+            periodSeconds: 3
+            failureThreshold: 40
           volumeMounts: [{ name: data, mountPath: /data/db }]
       volumes: [{ name: data, emptyDir: {} }]
 ---
@@ -496,7 +518,19 @@ spec:
   selector: { app: ${svc} }
   ports: [{ port: 27017, targetPort: 27017 }]
 EOF
-  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=180s
+  # Initiate BEFORE waiting for the rollout: the readiness probe above only
+  # passes once the set is live, so waiting first would time out every time.
+  # `host` names the member as the Service, which is the address every client
+  # reaches it at — a member initiated as its pod IP hands that IP back to the
+  # client on connect, and the pod IP changes on every restart.
+  local pod
+  for _ in $(seq 1 60); do
+    pod="$(kubectl --namespace="$ns" get pod -l "app=${svc}" -o name 2>/dev/null | head -1)"
+    [ -n "$pod" ] && kubectl --namespace="$ns" exec "$pod" -- mongosh --quiet --eval \
+      "try { rs.status().ok } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'${svc}:27017'}]}) }" >/dev/null 2>&1 && break
+    sleep 2
+  done
+  kubectl --namespace="$ns" rollout status "deployment/${svc}" --timeout=240s
 }
 
 # A throwaway single-node Elasticsearch, for the workloads that index into one.

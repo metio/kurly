@@ -240,6 +240,12 @@
   docmost: {
     source: 'https://github.com/docmost/docmost',
   },
+  downtify: {
+    license: 'GPL-3.0',
+    title: 'Downtify',
+    source: 'https://github.com/henriquesebastiao/downtify',
+    homepage: 'https://github.com/henriquesebastiao/downtify',
+  },
   'draw-io': {
     source: 'https://github.com/jgraph/docker-drawio',
     homepage: 'https://www.drawio.com',
@@ -526,6 +532,9 @@
     title: 'ubuntu',
     source: 'https://github.com/gotson/komga',
   },
+  ledgersmb: {
+    title: 'LedgerSMB double-entry accounting web-application',
+  },
   lemmy: {
     license: 'AGPL-3.0-or-later',
     source: 'https://github.com/LemmyNet/lemmy',
@@ -746,6 +755,12 @@
     source: 'https://github.com/linuxserver/docker-nzbhydra2',
     homepage: 'https://github.com/linuxserver/docker-nzbhydra2/packages',
   },
+  ocular: {
+    license: 'MIT',
+    title: 'ocular',
+    source: 'https://github.com/simonwep/ocular',
+    homepage: 'https://github.com/simonwep/ocular',
+  },
   ombi: {
     license: 'GPL-3.0-only',
     title: 'Ombi',
@@ -889,6 +904,9 @@
     title: 'pocketbase-docker',
     source: 'https://github.com/muchobien/pocketbase-docker',
     homepage: 'https://github.com/muchobien/pocketbase-docker',
+  },
+  podfetch: {
+    source: 'https://github.com/SamTV12345/PodFetch',
   },
   portainer: {
     title: 'Portainer CE',
@@ -1173,6 +1191,12 @@
   'uptime-kuma': {
     source: 'https://github.com/louislam/uptime-kuma',
   },
+  'upvote-rss': {
+    license: 'MIT',
+    title: 'FrankenPHP',
+    source: 'https://github.com/php/frankenphp',
+    homepage: 'https://frankenphp.dev',
+  },
   valkey: {
     source: 'https://github.com/valkey-io/valkey',
   },
@@ -1218,6 +1242,12 @@
     source: 'https://github.com/sbondCo/Watcharr',
     homepage: 'https://github.com/sbondCo/Watcharr',
   },
+  wavelog: {
+    license: 'MIT',
+    title: 'wavelog',
+    source: 'https://github.com/wavelog/wavelog',
+    homepage: 'https://github.com/wavelog/wavelog',
+  },
   wekan: {
     title: 'ubuntu',
     source: 'https://github.com/wekan/wekan',
@@ -1233,6 +1263,12 @@
     title: 'Wiki-Go',
     source: 'https://github.com/leomoon-studios/wiki-go',
     homepage: 'https://wikigo.leomoon.com',
+  },
+  wikidocs: {
+    license: 'MIT',
+    title: 'WikiDocs',
+    source: 'https://github.com/Zavy86/WikiDocs',
+    homepage: 'https://github.com/Zavy86/WikiDocs',
   },
   xbackbone: {
     license: 'GPL-3.0-only',

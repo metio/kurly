@@ -32,7 +32,11 @@ function(
   // The Secret holding MONGO_URL and MONGO_OPLOG_URL (kurly mints none), via envFrom.
   secretName='rocketchat',
   env={},
-  resources={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } },
+  // 2Gi, because 1Gi does not start. Rocket.Chat is a Meteor application and
+  // its Node process is past a gigabyte before it finishes loading, so the
+  // container is OOM-killed during startup — exit 137, no log line, and a pod
+  // that reads as crash-looping for reasons of its own.
+  resources={ requests: { cpu: '250m', memory: '1Gi' }, limits: { memory: '2Gi' } },
   labels={},
   annotations={},
 )

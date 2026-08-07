@@ -210,4 +210,13 @@
   paaster: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://paaster.io' },
   papermerge: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://papermerge.com/join' },
   wingfit: { reason: 'licence-forbids-saas', note: 'the licence forbids offering it as a service — https://github.com/itskovacs/wingfit/blob/main/license.txt' },
+  titra: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://titra.io/' },
+  plugnmeet: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://www.plugnmeet.cloud' },
+  'mirotalk-c2c': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://c2c.mirotalk.com' },
+  readflow: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://about.readflow.app/terms' },
+  gathio: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://gath.io/' },
+  pastefy: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://github.com/interaapps/pastefy' },
+  snikket: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://snikket.org/start/' },
+  'f-droid': { reason: 'undeployable', note: 'needs something a cluster cannot give it — https://f-droid.org/docs/Installing_the_Server_and_Repo_Tools/' },
+  'daily-stars-explorer': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://emanuelef.github.io/daily-stars-explorer' },
 }
