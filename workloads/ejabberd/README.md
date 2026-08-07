@@ -22,7 +22,7 @@ kurly.list(ejabberd())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `ejabberd` | |
-| `image` | `docker.io/ejabberd/ecs:26.04` | |
+| `image` | `docker.io/ejabberd/ecs:26.07` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the Mnesia database volume |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
