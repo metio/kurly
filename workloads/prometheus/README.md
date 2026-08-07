@@ -28,7 +28,7 @@ kurly.list(prometheus(namespace='monitoring', retention='30d', storageSize='100G
 |---|---|---|
 | `name` | `prometheus` | |
 | `namespace` | `monitoring` | **must match where you deploy** — see below |
-| `image` | `docker.io/prom/prometheus:v3.13.1` | |
+| `image` | `docker.io/prom/prometheus:v3.13.2` | |
 | `replicas` | `1` | |
 | `retention` | `15d` | |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | the data volume |
