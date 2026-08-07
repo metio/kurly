@@ -145,6 +145,20 @@
             ];
             text = builtins.readFile ./scripts/gen-maturity.sh;
           };
+          # Folds what the e2e scenarios measured — time to Ready, memory at
+          # startup and once settled — into catalog/measurements.gen.libsonnet.
+          # Reads files the scenarios wrote, so it needs no cluster of its own.
+          gen-measurements = pkgs.writeShellApplication {
+            name = "gen-measurements";
+            runtimeInputs = with pkgs; [
+              findutils
+              jq
+              go-jsonnet
+              gnugrep
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-measurements.sh;
+          };
           # Derives each stage's image architectures from the registry manifest
           # lists into catalog/architectures.gen.libsonnet. Hits the network, so
           # it is run on demand / on a schedule, not in the per-PR gate.
@@ -459,6 +473,7 @@
               gen-upstream
               gen-signatures
               gen-maturity
+              gen-measurements
               gen-smoke
               gen-readme
               verify
@@ -486,6 +501,7 @@
             gen-catalog
             gen-library
             gen-maturity
+            gen-measurements
             gen-spdx
             stamp-catalog
             gen-architectures

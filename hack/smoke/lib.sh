@@ -142,6 +142,91 @@ kurly::await_ready() {
 }
 
 #   kurly::boot workloads/adguardhome/server.libsonnet kurly-adguardhome
+# --- measuring what a workload actually costs to start -----------------------
+#
+# Every scenario already boots its workload on a live cluster and watches it
+# become Ready, so the two numbers a consumer most wants — how long that took and
+# how much memory it needed — are being produced and thrown away. These helpers
+# keep them.
+#
+# Memory comes from the kubelet's own resource-metrics endpoint rather than
+# `kubectl top`, which needs metrics-server installed: a measurement that only
+# works on a cluster carrying an add-on would be missing for exactly the runs
+# nobody set up specially. It is the same endpoint metrics-server itself scrapes.
+# NOT /stats/summary, which looks like the obvious choice and returns 500 here —
+# it collects image-filesystem statistics first, and that fails outright under
+# the fuse-overlayfs snapshotter this host's rootless podman requires, taking
+# every pod's memory down with it.
+#
+# PEAK-AT-STARTUP AND STEADY-STATE ARE SEPARATE NUMBERS and both are recorded,
+# because most of the resource defaults in this catalogue are wrong in the same
+# direction: sized for the migration rather than the service, or the reverse.
+# Publishing one number would repeat that mistake in a field that looks measured.
+kurly::_pod_memory() {
+  local ns="$1" name="$2" node pods
+  node="$(kubectl --namespace="$ns" get pods -o jsonpath='{.items[0].spec.nodeName}' 2>/dev/null)"
+  [ -n "$node" ] || { printf 0; return 0; }
+  # ONLY THE WORKLOAD'S OWN PODS, selected by ITS NAME. The namespace also holds
+  # whatever throwaway postgres, valkey, mongodb or object store the scenario
+  # provisioned, and summing the namespace measures the harness instead: 433Mi
+  # for an application that uses 348Mi and dependencies that use the rest.
+  #
+  # managed-by=kurly is NOT enough on its own, which is only visible from the
+  # object-storage case: that provisioner stands up kurly's own seaweedfs
+  # workload, so it carries the same managed-by label and was counted as the
+  # application's memory. The name label is what separates one kurly workload
+  # from another in a shared namespace.
+  #
+  # A sidecar the workload declares itself lives in the pod and is still counted,
+  # which is right — it is part of what the workload costs to run.
+  pods="$(kubectl --namespace="$ns" get pods \
+    -l "app.kubernetes.io/managed-by=kurly,app.kubernetes.io/name=${name}" \
+    -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null)"
+  [ -n "$pods" ] || { printf 0; return 0; }
+  kubectl get --raw "/api/v1/nodes/${node}/proxy/metrics/resource" 2>/dev/null \
+    | awk -v ns="$ns" -v pods="$pods" '
+        BEGIN { n = split(pods, list, "\n"); for (i = 1; i <= n; i++) if (list[i] != "") want[list[i]] = 1 }
+        $0 ~ /^container_memory_working_set_bytes/ && index($0, "namespace=\"" ns "\"") {
+          if (match($0, /pod="[^"]+"/)) {
+            pod = substr($0, RSTART + 5, RLENGTH - 6)
+            if (pod in want) total += $2
+          }
+        }
+        END { printf "%d", total + 0 }'
+}
+
+kurly::_sample_memory() {
+  local ns="$1" name="$2" out="$3" stop="$4" peak=0 now
+  while [ ! -f "$stop" ]; do
+    now="$(kurly::_pod_memory "$ns" "$name")"
+    [ -n "$now" ] && [ "$now" -gt "$peak" ] 2>/dev/null && peak="$now"
+    sleep 2
+  done
+  printf '%s' "$peak" >"$out"
+}
+
+# One record per stage, written the moment it is produced rather than collected
+# at the end — a fleet walk that is killed half way keeps everything it measured.
+kurly::_record_measurement() {
+  local stage="$1" seconds="$2" peak="$3" steady="$4" key file
+  key="$(printf '%s' "$stage" | sed -E 's#workloads/([^/]+)/([^/]+)\.libsonnet#\1/\2#')"
+  mkdir -p .build/measurements
+  file=".build/measurements/$(printf '%s' "$key" | tr '/' '__').json"
+  # The digest these numbers are ABOUT, recorded alongside them. A measurement
+  # describes specific bits: the next image bump can change what a workload needs
+  # to start, and carrying the old figure forward onto bits nobody ran would be
+  # publishing a guess in a field whose whole claim is that it was measured.
+  local digest=""
+  if [ -f "${stage%.libsonnet}.image" ]; then
+    digest="$(sed -E 's/.*@(sha256:[0-9a-f]+).*/\1/' "${stage%.libsonnet}.image")"
+    case "$digest" in sha256:*) ;; *) digest="" ;; esac
+  fi
+  jq -n --arg key "$key" --arg d "$digest" --argjson s "$seconds" \
+    --argjson p "${peak:-0}" --argjson st "${steady:-0}" \
+    '{key: $key, digest: $d, secondsToReady: $s, peakStartupBytes: $p, steadyBytes: $st}' >"$file"
+  echo "measured: ${key} ready in ${seconds}s, peak $((${peak:-0} / 1048576))Mi, steady $((${steady:-0} / 1048576))Mi"
+}
+
 kurly::boot() {
   local stage="$1" ns="$2" extra="${3:-}" params="${4:-}" manifests own
   manifests="$(kurly::render "$stage" "+ k.hostUsers() ${extra}" "$params")"
@@ -158,13 +243,39 @@ kurly::boot() {
   fi
   kurly::namespace "$ns" >/dev/null
   echo "== boot ${stage} in ${ns} =="
+  # The clock starts at the apply, not at the first Ready check: pulling the
+  # image and provisioning the volume are part of what a workload costs to start,
+  # and a number that excluded them would flatter every large image in the set.
+  local started=$SECONDS
   printf '%s' "$manifests" | kubectl apply --namespace="$ns" --filename=-
+  # The name label the workload stamps on its own objects, read off the render
+  # rather than guessed from the directory: a stage may be called with a
+  # different name, and measuring by a guessed label silently measures nothing.
+  local own_name
+  own_name="$(printf '%s' "$manifests" | jq -r '[.items[]
+    | select(.kind == "Deployment" or .kind == "StatefulSet" or .kind == "DaemonSet")
+    | .metadata.labels["app.kubernetes.io/name"]] | map(select(. != null)) | first // empty')"
+  local stopfile peakfile sampler
+  stopfile="$(mktemp -u)"; peakfile="$(mktemp)"
+  kurly::_sample_memory "$ns" "$own_name" "$peakfile" "$stopfile" &
+  sampler=$!
   local ctrl found=0
   for ctrl in $(kubectl --namespace="$ns" get deployment,statefulset,daemonset --output=name 2>/dev/null); do
     found=1
-    kurly::await_ready "$ns" "$ctrl" \
-      || { echo "::error::${stage}: ${ctrl} never became Ready"; kurly::diagnose "$ns"; return 1; }
+    if ! kurly::await_ready "$ns" "$ctrl"; then
+      touch "$stopfile"; wait "$sampler" 2>/dev/null || true; rm -f "$stopfile" "$peakfile"
+      echo "::error::${stage}: ${ctrl} never became Ready"; kurly::diagnose "$ns"; return 1
+    fi
   done
+  local seconds=$((SECONDS - started)) peak steady
+  touch "$stopfile"; wait "$sampler" 2>/dev/null || true
+  peak="$(cat "$peakfile" 2>/dev/null || printf 0)"
+  # Settle before reading steady state: a process that has just finished its
+  # migrations is still holding what the migration needed, so a reading taken at
+  # the moment of Ready is the startup peak under another name.
+  sleep "${KURLY_MEASURE_SETTLE:-15}"
+  steady="$(kurly::_pod_memory "$ns" "$own_name")"
+  rm -f "$stopfile" "$peakfile"
   local cj
   for cj in $(kubectl --namespace="$ns" get cronjob --output=name 2>/dev/null); do
     found=1
@@ -174,6 +285,7 @@ kurly::boot() {
       || { echo "::error::${stage}: ${cj} test job did not complete"; kurly::diagnose "$ns"; return 1; }
   done
   [ "$found" = 1 ] || { echo "::error::${stage}: rendered no runnable controller"; return 1; }
+  kurly::_record_measurement "$stage" "$seconds" "$peak" "$steady"
   echo "ok: ${stage} is healthy on a live cluster"
 }
 
