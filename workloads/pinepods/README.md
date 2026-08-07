@@ -23,7 +23,7 @@ kurly.list(pinepods())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `pinepods` | |
-| `image` | `docker.io/madeofpendletonwool/pinepods:v0.6.0` | |
+| `image` | `docker.io/madeofpendletonwool/pinepods:0.9.0` | |
 | `storageSize` / `storageClass` | `20Gi` / cluster default | `/opt/pinepods` |
 | `dbHost` / `dbPort` / `database` / `dbUser` | `pinepods-db-rw` … | pairs with a `cnpg-cluster` named `pinepods-db` |
 | `serverHost` | unset | the host clients reach it on |
