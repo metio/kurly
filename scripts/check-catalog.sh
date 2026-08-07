@@ -76,6 +76,23 @@ ln -sfn ../../.. vendor/github.com/metio/kurly
 # file is a build artifact now, gitignored and regenerated wherever it is needed,
 # so there is nothing to be stale against: a diff would only ever report that
 # somebody had not run the generator, which is not a fact about the library.
+# Every d.T.<name> must be a type docs.libsonnet actually defines. Jsonnet does
+# catch an invented one — but as `Field does not exist: number`, pointing at
+# docs.libsonnet rather than at the annotation that wrote it, which is a slow way
+# to find a typo in a nine-thousand-line file. `number` has been written three
+# times where the type is `int`.
+# From the T:: block ALONE — docs.libsonnet has other objects whose fields would
+# otherwise be offered as types (`help`, `required`, `default`), which is worse
+# than no suggestion because each one parses and none is a type.
+known="$(sed -n '/^  T:: {/,/^  },/p' catalog/docs.libsonnet | grep -oE '^    [a-z]+:' | tr -d ' :' | sort -u)"
+bad=0
+while IFS=: read -r file line type; do
+  grep -qx "$type" <<<"$known" && continue
+  echo "::error::${file}:${line}: d.T.${type} is not a docsonnet type — one of: $(tr '\n' ' ' <<<"$known")" >&2
+  bad=1
+done < <(grep -noE 'd\.T\.[a-zA-Z]+' catalog/annotations.libsonnet | sed 's/^\([0-9]*\):d\.T\./catalog\/annotations.libsonnet:\1:/')
+[ "$bad" = 0 ] || exit 1
+
 mkdir -p .build
 if ! jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json.check; then
   rm -f .build/catalog.json.check

@@ -462,6 +462,9 @@ local stageImports = {
   'upvote-rss/server': import 'github.com/metio/kurly/workloads/upvote-rss/server.libsonnet',
   'downtify/server': import 'github.com/metio/kurly/workloads/downtify/server.libsonnet',
   'recipya/server': import 'github.com/metio/kurly/workloads/recipya/server.libsonnet',
+  'kresus/server': import 'github.com/metio/kurly/workloads/kresus/server.libsonnet',
+  'redaxo/server': import 'github.com/metio/kurly/workloads/redaxo/server.libsonnet',
+  'tinyfeed/generator': import 'github.com/metio/kurly/workloads/tinyfeed/generator.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

@@ -219,4 +219,7 @@
   snikket: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://snikket.org/start/' },
   'f-droid': { reason: 'undeployable', note: 'needs something a cluster cannot give it — https://f-droid.org/docs/Installing_the_Server_and_Repo_Tools/' },
   'daily-stars-explorer': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://emanuelef.github.io/daily-stars-explorer' },
+  foodsoft: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://foodcoops.net/foodsoft-hosting/' },
+  socialhome: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://socialhome.network/nodeinfo/1.0' },
+  '015': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://send.fudaoyuan.icu' },
 }
