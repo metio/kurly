@@ -28,7 +28,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `peertube` | |
-| `image` | `docker.io/chocobozzz/peertube:v8.2.2-trixie` | |
+| `image` | `docker.io/chocobozzz/peertube:v8.2.3-trixie` | |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | videos, uploads, config |
 | `dbHost` / `dbName` / `dbUser` | `peertube-db-rw` / `peertube` / `peertube` | the PostgreSQL database |
 | `redisHost` | `peertube-cache` | the Redis/valkey Service |
