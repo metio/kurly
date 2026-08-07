@@ -22,7 +22,7 @@ kurly.list(bitcart(apiHost='api.example.com', adminHost='admin.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `bitcart` | |
-| `image` | `docker.io/bitcart/bitcart:0.9.1.0` | |
+| `image` | `docker.io/bitcart/bitcart:0.10.3.0` | |
 | `apiHost` / `adminHost` | `localhost:8000` / `localhost:3000` | the public hosts absolute links are built from |
 | `cryptos` | `btc` | `BITCART_CRYPTOS`; each coin needs its own daemon |
 | `workers` | `4` | gunicorn workers — its own default counts the node's CPUs, not the container's |
