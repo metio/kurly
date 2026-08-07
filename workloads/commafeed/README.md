@@ -22,7 +22,7 @@ kurly.list(commafeed())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `commafeed` | |
-| `image` | `docker.io/athou/commafeed:7.2.0-h2` | the H2 (embedded-DB) variant |
+| `image` | `docker.io/athou/commafeed:7.2.1-h2` | the H2 (embedded-DB) variant |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the embedded database (`/commafeed/data`) |
 | `env` | `{}` | extra `CF_APP_*` settings |
 | `resources` / `labels` / `annotations` | | |
