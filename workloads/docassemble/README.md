@@ -23,7 +23,7 @@ kurly.list(docassemble(hostname='forms.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `docassemble` | |
-| `image` | `docker.io/jhpyle/docassemble:1.9.13` | |
+| `image` | `docker.io/jhpyle/docassemble:1.10.7` | |
 | `storageSize` / `storageClass` | `20Gi` / cluster default | `/usr/share/docassemble/backup` |
 | `hostname` | unset | the name browsers reach it by |
 | `behindHttpsLoadBalancer` | `true` | TLS terminated in front of the pod |
