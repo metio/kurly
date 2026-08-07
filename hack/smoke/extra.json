@@ -17,6 +17,9 @@
   "gotosocial": {
     "compose": "+ k.env({ GTS_HOST: 'social.example.com' })"
   },
+  "hatsu": {
+    "compose": "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })"
+  },
   "isso": {
     "params": "host='http://isso:8080'"
   },

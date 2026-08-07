@@ -327,6 +327,9 @@
     source: 'https://github.com/FlareSolverr/FlareSolverr',
     homepage: 'https://github.com/FlareSolverr/FlareSolverr',
   },
+  flowctl: {
+    title: 'flowctl',
+  },
   fluidd: {
     license: 'GPL-3.0',
     title: 'fluidd',
@@ -405,6 +408,12 @@
     title: 'Grocy',
     source: 'https://github.com/linuxserver/docker-grocy',
     homepage: 'https://github.com/linuxserver/docker-grocy/packages',
+  },
+  halo: {
+    license: 'GPL-3.0',
+    title: 'halo',
+    source: 'https://github.com/halo-dev/halo',
+    homepage: 'https://github.com/halo-dev/halo',
   },
   hedgedoc: {
     license: 'AGPL-3.0',
@@ -686,6 +695,12 @@
     source: 'https://github.com/FoxxMD/multi-scrobbler',
     homepage: 'https://docs.multi-scrobbler.app',
   },
+  'myfin-budget': {
+    license: 'GPL-3.0',
+    title: 'myfin-api',
+    source: 'https://github.com/afaneca/myfin-api',
+    homepage: 'https://github.com/afaneca/myfin-api',
+  },
   mylar3: {
     license: 'GPL-3.0-only',
     title: 'Mylar3',
@@ -875,6 +890,9 @@
     title: 'docker-pi-hole',
     source: 'https://github.com/pi-hole/docker-pi-hole',
     homepage: 'https://github.com/pi-hole/docker-pi-hole',
+  },
+  piler: {
+    title: 'ubuntu',
   },
   pilos: {
     license: 'LGPL-2.1',
@@ -1258,6 +1276,12 @@
     source: 'https://github.com/butlerx/wetty',
     homepage: 'https://github.com/butlerx/wetty',
   },
+  wger: {
+    license: 'AGPL-3.0',
+    title: 'wger',
+    source: 'https://github.com/wger-project/wger',
+    homepage: 'https://github.com/wger-project/wger',
+  },
   'wiki-go': {
     license: 'GPL-3.0',
     title: 'Wiki-Go',
@@ -1275,6 +1299,11 @@
     title: 'Xbackbone',
     source: 'https://github.com/linuxserver/docker-xbackbone',
     homepage: 'https://github.com/linuxserver/docker-xbackbone/packages',
+  },
+  xwiki: {
+    license: 'LGPL-2.1',
+    source: 'https://github.com/xwiki/xwiki-docker',
+    homepage: 'https://hub.docker.com/_/xwiki',
   },
   yacy: {
     license: 'NOASSERTION',
