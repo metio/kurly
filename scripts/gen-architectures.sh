@@ -93,7 +93,13 @@ inspect_one() {
   elif printf '%s' "$raw" | jq -e '.manifests' >/dev/null 2>&1; then
     arches="$(printf '%s' "$raw" | jq -c '[.manifests[].platform | select(.os=="linux") | .architecture] | unique')"
   else
-    arches="$(skopeo inspect --retry-times 3 "docker://${inspectRef}" 2>/dev/null | jq -c '[.Architecture]' 2>/dev/null || printf '["amd64"]')"
+    # A single-manifest image states its architecture only in the config, which
+    # needs a second inspect. An unreachable registry makes skopeo fail while jq
+    # reads the empty pipe, succeeds, and prints nothing — so the fallback has to
+    # test the VALUE, not the exit status, or the entry is written with an empty
+    # field and the generated file no longer parses.
+    arches="$(skopeo inspect --retry-times 3 "docker://${inspectRef}" 2>/dev/null | jq -c '[.Architecture]' 2>/dev/null || true)"
+    case "$arches" in '' | '[null]' | '[]') arches='["amd64"]' ;; esac
   fi
   # The digest this answer is ABOUT, alongside the answer. The reference states
   # its own digest, but that is the reference as it stands now — and Renovate

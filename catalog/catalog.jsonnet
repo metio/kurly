@@ -465,6 +465,17 @@ local stageImports = {
   'kresus/server': import 'github.com/metio/kurly/workloads/kresus/server.libsonnet',
   'redaxo/server': import 'github.com/metio/kurly/workloads/redaxo/server.libsonnet',
   'tinyfeed/generator': import 'github.com/metio/kurly/workloads/tinyfeed/generator.libsonnet',
+  'flowctl/server': import 'github.com/metio/kurly/workloads/flowctl/server.libsonnet',
+  'myfin-budget/server': import 'github.com/metio/kurly/workloads/myfin-budget/server.libsonnet',
+  'piler/server': import 'github.com/metio/kurly/workloads/piler/server.libsonnet',
+  'shipshipship/server': import 'github.com/metio/kurly/workloads/shipshipship/server.libsonnet',
+  'openhabittracker/server': import 'github.com/metio/kurly/workloads/openhabittracker/server.libsonnet',
+  'imgcompress/server': import 'github.com/metio/kurly/workloads/imgcompress/server.libsonnet',
+  'receipt-wrangler/server': import 'github.com/metio/kurly/workloads/receipt-wrangler/server.libsonnet',
+  'hatsu/server': import 'github.com/metio/kurly/workloads/hatsu/server.libsonnet',
+  'crafty-controller/server': import 'github.com/metio/kurly/workloads/crafty-controller/server.libsonnet',
+  'liwan/server': import 'github.com/metio/kurly/workloads/liwan/server.libsonnet',
+  'gitproxy/server': import 'github.com/metio/kurly/workloads/gitproxy/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

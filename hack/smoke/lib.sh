@@ -620,6 +620,18 @@ spec:
             - { name: MARIADB_USER, value: "${user}" }
             - { name: MARIADB_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
           ports: [{ containerPort: 3306 }]
+          # The entrypoint initializes the data directory behind a TEMPORARY
+          # server bound to a socket, then restarts for real — so a pod that is
+          # Running is not a database that answers, and rollout status alone
+          # returns while it still refuses connections. An app that connects
+          # once at startup and exits on failure loses that race and crashloops
+          # for a reason that has nothing to do with the app. The probe is
+          # mariadb's own, and --innodb_initialized is what distinguishes the
+          # real server from the init-time one.
+          readinessProbe:
+            exec: { command: ["healthcheck.sh", "--connect", "--innodb_initialized"] }
+            periodSeconds: 3
+            failureThreshold: 40
           volumeMounts: [{ name: data, mountPath: /var/lib/mysql }]
       volumes: [{ name: data, emptyDir: {} }]
 ---

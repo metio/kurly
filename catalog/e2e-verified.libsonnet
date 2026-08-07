@@ -381,4 +381,13 @@
   znc: '2026-07-28',
   zoraxy: '2026-08-06',
   'zot-oci-registry': '2026-08-06',
+  flowctl: '2026-08-07',
+  'myfin-budget': '2026-08-07',
+  shipshipship: '2026-08-07',
+  openhabittracker: '2026-08-07',
+  'receipt-wrangler': '2026-08-07',
+  'crafty-controller': '2026-08-07',
+  imgcompress: '2026-08-07',
+  liwan: '2026-08-07',
+  gitproxy: '2026-08-07',
 }

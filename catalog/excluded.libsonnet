@@ -222,4 +222,11 @@
   foodsoft: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://foodcoops.net/foodsoft-hosting/' },
   socialhome: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://socialhome.network/nodeinfo/1.0' },
   '015': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://send.fudaoyuan.icu' },
+  surmai: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://surmai.app/documentation/surmai-go' },
+  'mere-medical': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://meremedical.co/' },
+  ziit: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://github.com/0pandadev/ziit#how-to-use-ziit' },
+  'gramps-web': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Gramps Web hosted plans) — https://www.grampsweb.org/install_setup/setup/' },
+  'fmd-server': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://fmd-foss.org/docs/fmd-server/overview/' },
+  amusewiki: { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/melmothx/amusewiki' },
+  inginious: { reason: 'undeployable', note: 'needs a Docker socket to run student code in sibling containers — https://github.com/INGInious/INGInious/blob/master/docker-compose.yml' },
 }
