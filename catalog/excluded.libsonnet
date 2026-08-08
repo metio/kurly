@@ -252,4 +252,7 @@
   haproxy: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (HAProxy Edge) — https://www.haproxy.com/products/haproxy-edge' },
   geeftlist: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://www.geeftlist.com/' },
   'kasm-workspaces': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://kasm.com/pricing' },
+  lighttpd: { reason: 'no-published-source', note: 'no image built from the published source — https://www.lighttpd.net/' },
+  piefed: { reason: 'no-published-source', note: 'no image built from the published source — https://codeberg.org/rimu/pyfedi/src/branch/main/INSTALL-docker.md' },
+  pagure: { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Pagure/pagure' },
 }

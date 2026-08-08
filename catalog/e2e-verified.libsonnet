@@ -415,4 +415,7 @@
   garagehq: '2026-08-08',
   continuwuity: '2026-08-08',
   godoxy: '2026-08-08',
+  memex: '2026-08-08',
+  'our-shopping-list': '2026-08-08',
+  plone: '2026-08-08',
 }
