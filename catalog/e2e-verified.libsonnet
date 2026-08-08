@@ -408,4 +408,8 @@
   eonvelope: '2026-08-08',
   onloc: '2026-08-08',
   mirumoji: '2026-08-08',
+  'apache-http-server': '2026-08-08',
+  cannery: '2026-08-08',
+  sosse: '2026-08-08',
+  citadel: '2026-08-08',
 }

@@ -495,6 +495,10 @@ local stageImports = {
   'eonvelope/server': import 'github.com/metio/kurly/workloads/eonvelope/server.libsonnet',
   'onloc/server': import 'github.com/metio/kurly/workloads/onloc/server.libsonnet',
   'mirumoji/server': import 'github.com/metio/kurly/workloads/mirumoji/server.libsonnet',
+  'apache-http-server/server': import 'github.com/metio/kurly/workloads/apache-http-server/server.libsonnet',
+  'cannery/server': import 'github.com/metio/kurly/workloads/cannery/server.libsonnet',
+  'sosse/server': import 'github.com/metio/kurly/workloads/sosse/server.libsonnet',
+  'citadel/server': import 'github.com/metio/kurly/workloads/citadel/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
