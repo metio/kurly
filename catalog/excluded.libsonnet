@@ -255,4 +255,6 @@
   lighttpd: { reason: 'no-published-source', note: 'no image built from the published source — https://www.lighttpd.net/' },
   piefed: { reason: 'no-published-source', note: 'no image built from the published source — https://codeberg.org/rimu/pyfedi/src/branch/main/INSTALL-docker.md' },
   pagure: { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Pagure/pagure' },
+  mobilizon: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://mobilizon.org' },
+  passit: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://passit.io/pricing/' },
 }

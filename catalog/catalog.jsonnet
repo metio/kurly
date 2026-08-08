@@ -505,6 +505,10 @@ local stageImports = {
   'memex/server': import 'github.com/metio/kurly/workloads/memex/server.libsonnet',
   'our-shopping-list/server': import 'github.com/metio/kurly/workloads/our-shopping-list/server.libsonnet',
   'plone/server': import 'github.com/metio/kurly/workloads/plone/server.libsonnet',
+  'vinyl-cache/server': import 'github.com/metio/kurly/workloads/vinyl-cache/server.libsonnet',
+  'roundup-issue-tracker/server': import 'github.com/metio/kurly/workloads/roundup-issue-tracker/server.libsonnet',
+  'snypy/server': import 'github.com/metio/kurly/workloads/snypy/server.libsonnet',
+  'sentryshot/server': import 'github.com/metio/kurly/workloads/sentryshot/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

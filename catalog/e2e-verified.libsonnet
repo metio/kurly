@@ -418,4 +418,8 @@
   memex: '2026-08-08',
   'our-shopping-list': '2026-08-08',
   plone: '2026-08-08',
+  'vinyl-cache': '2026-08-08',
+  'roundup-issue-tracker': '2026-08-08',
+  snypy: '2026-08-08',
+  sentryshot: '2026-08-08',
 }
