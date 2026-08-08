@@ -1,1 +1,1 @@
-docker.io/apache/airflow:3.1.3@sha256:94096e4d3f8819f96b2f37c182d734cc45b6a096080015d6b5978c8a4d3295ba
+docker.io/apache/airflow:3.3.0@sha256:fb2c895e33395e4224c3de041e1751b095ee2c214cdf2d330bbaf62fcce0f54b
