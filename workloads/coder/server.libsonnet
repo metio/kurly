@@ -74,6 +74,12 @@ function(
   // beside the binaries in the image; a scratch there keeps the root filesystem
   // read-only.
   + kurly.scratch('/home/coder/.cache')
+  // Coder also writes its own configuration — the tunnel key it generates on
+  // first start — into ~/.config, and creating that directory is the FIRST thing
+  // `coder server` does. On a read-only root it exits before anything else with
+  // a mkdir error, so the directory is a scratch too. It holds generated state
+  // rather than anything worth keeping across a restart.
+  + kurly.scratch('/home/coder/.config')
   + kurly.scratch('/tmp')
   // The first boot migrates the database before it serves.
   + kurly.startupProbe({ httpGet: { path: '/healthz', port: 'http' }, failureThreshold: 30, periodSeconds: 10 })

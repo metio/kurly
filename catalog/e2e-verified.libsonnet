@@ -423,4 +423,9 @@
   snypy: '2026-08-08',
   sentryshot: '2026-08-08',
   'matrix-alertmanager-receiver': '2026-08-08',
+  bitmagnet: '2026-08-09',
+  mediamtx: '2026-08-09',
+  routr: '2026-08-09',
+  'docker-mailserver': '2026-08-09',
+  coder: '2026-08-09',
 }

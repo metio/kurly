@@ -270,4 +270,11 @@
   bitwarden: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://bitwarden.com/pricing/' },
   gitlab: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (GitLab.com) — https://about.gitlab.com/pricing/' },
   teleport: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Teleport Cloud) — https://goteleport.com/docs/get-started/deploy-cloud/' },
+  pomerium: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Pomerium Zero) — https://www.pomerium.com/pricing' },
+  puter: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (puter.com paid plans) — https://puter.com/' },
+  mailcow: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (mailcow: hosted) — https://mailcow.email/' },
+  habitica: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://habitica.com' },
+  'countly-community-edition': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Countly Enterprise) — https://count.ly/' },
+  'sipcapture-homer': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (QXIP/HOMER cloud) — https://www.sipcapture.org/' },
+  'uusec-waf': { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Safe3/uusec-waf' },
 }
