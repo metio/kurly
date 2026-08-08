@@ -405,4 +405,7 @@
   'open-quartermaster': '2026-08-08',
   gameap: '2026-08-08',
   aastro: '2026-08-08',
+  eonvelope: '2026-08-08',
+  onloc: '2026-08-08',
+  mirumoji: '2026-08-08',
 }

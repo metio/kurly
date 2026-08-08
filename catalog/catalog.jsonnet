@@ -492,6 +492,9 @@ local stageImports = {
   'open-quartermaster/server': import 'github.com/metio/kurly/workloads/open-quartermaster/server.libsonnet',
   'gameap/server': import 'github.com/metio/kurly/workloads/gameap/server.libsonnet',
   'aastro/server': import 'github.com/metio/kurly/workloads/aastro/server.libsonnet',
+  'eonvelope/server': import 'github.com/metio/kurly/workloads/eonvelope/server.libsonnet',
+  'onloc/server': import 'github.com/metio/kurly/workloads/onloc/server.libsonnet',
+  'mirumoji/server': import 'github.com/metio/kurly/workloads/mirumoji/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,
@@ -1603,6 +1606,22 @@ local workloadEntries =
   // documented, because a guard that only exists in prose is one nobody runs:
   // one sentence, never opening with the software's own name (the card already
   // carries it as a heading), no deployment mechanics, and no marketing.
+  // Matched as WHOLE WORDS, not as substrings. `port` is inside "report",
+  // "portal", "support" and "important", and a substring test rejected a
+  // perfectly good sentence about devices reporting their position — a guard
+  // that fires on innocent prose gets worked around rather than obeyed. The
+  // terms may be phrases ('official image'), so the text is normalised to
+  // space-separated words and each term is looked for with a space on each side.
+  local wordsOf(text) =
+    local flattened = std.join('', [
+      if std.member(['.', ',', ';', ':', '(', ')', '"', "'", '/', '-'], c) then ' ' else c
+      for c in std.stringChars(text)
+    ]);
+    ' ' + std.join(' ', std.filter(function(w) w != '', std.split(flattened, ' '))) + ' ';
+  local namesAny(text, terms) =
+    local padded = wordsOf(text);
+    std.any([std.length(std.findSubstr(' ' + t + ' ', padded)) > 0 for t in terms]);
+
   local mechanicsWords = [
     'configmap',
     'persistentvolume',
@@ -1650,9 +1669,9 @@ local workloadEntries =
              'workloads.%s.description must be ONE sentence ending in a full stop' % workload;
       assert !std.startsWith(lower, std.asciiLower(displayName) + ' ') :
              'workloads.%s.description must not open with the software name — the card already shows it' % workload;
-      assert std.all([std.length(std.findSubstr(t, lower)) == 0 for t in mechanicsWords]) :
+      assert !namesAny(lower, mechanicsWords) :
              'workloads.%s.description names deployment mechanics — that belongs in summary' % workload;
-      assert std.all([std.length(std.findSubstr(t, lower)) == 0 for t in marketingWords]) :
+      assert !namesAny(lower, marketingWords) :
              'workloads.%s.description reads as marketing — plain is the register' % workload;
       { description: d };
 

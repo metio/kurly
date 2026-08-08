@@ -244,4 +244,7 @@
   trackwatch: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://trackwatch.emlopezr.com/' },
   'zero-totp': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://zero-totp.com' },
   plugnpin: { reason: 'undeployable', note: 'needs a Docker socket to read container labels — https://github.com/deepspace2/plugnpin' },
+  lesma: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://lesma.eu' },
+  'request-inbox': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://request-inbox.com/' },
+  helium: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://www.heliumedu.com' },
 }
