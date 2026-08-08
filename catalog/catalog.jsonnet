@@ -499,6 +499,9 @@ local stageImports = {
   'cannery/server': import 'github.com/metio/kurly/workloads/cannery/server.libsonnet',
   'sosse/server': import 'github.com/metio/kurly/workloads/sosse/server.libsonnet',
   'citadel/server': import 'github.com/metio/kurly/workloads/citadel/server.libsonnet',
+  'garagehq/server': import 'github.com/metio/kurly/workloads/garagehq/server.libsonnet',
+  'continuwuity/server': import 'github.com/metio/kurly/workloads/continuwuity/server.libsonnet',
+  'godoxy/server': import 'github.com/metio/kurly/workloads/godoxy/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

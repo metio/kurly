@@ -249,4 +249,7 @@
   helium: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://www.heliumedu.com' },
   castopod: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Castopod Host) — https://castopod.com/en' },
   akkoma: { reason: 'no-published-source', note: 'no image built from the published source — https://docs.akkoma.dev/stable/installation/docker_en/' },
+  haproxy: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (HAProxy Edge) — https://www.haproxy.com/products/haproxy-edge' },
+  geeftlist: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://www.geeftlist.com/' },
+  'kasm-workspaces': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://kasm.com/pricing' },
 }

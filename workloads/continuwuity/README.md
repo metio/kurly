@@ -3,29 +3,25 @@ SPDX-FileCopyrightText: The kurly Authors
 SPDX-License-Identifier: 0BSD
 -->
 
-# apache-http-server
+# continuwuity
 
-[Apache HTTP Server](https://github.com/apache/httpd) — httpd: static files, rewriting, proxying and authentication through its module system. A **stateless** `kurly.http` workload on the official image.
+[Continuwuity](https://continuwuity.org/) — a Matrix homeserver written in Rust, the community-driven continuation of conduwuit and Conduit. A `kurly.http` workload on the official image; its embedded RocksDB on a PersistentVolume.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local httpd = import 'github.com/metio/kurly/workloads/apache-http-server/server.libsonnet';
-kurly.list(httpd())
+local continuwuity = import 'github.com/metio/kurly/workloads/continuwuity/server.libsonnet';
+kurly.list(continuwuity(serverName='matrix.example.com'))
 ```
 
-`config` is httpd's own configuration language, mounted verbatim at `/etc/httpd/httpd.conf` and named on the command line with `-f` — kurly does not model it. It is mounted *beside* the image's `/usr/local/apache2/conf`, never over it, so `TypesConfig conf/mime.types` and any `Include conf/extra/…` still resolve.
+The `serverName` is **baked into every user and room id at first start and cannot be changed** — set it deliberately, and make it reachable per the Matrix well-known/SRV rules. Settings come from the environment under the `CONDUWUIT_` prefix the fork inherited, so `env` takes those names. Service links are off: the injected `CONTINUWUITY_PORT` is a `tcp://` URL the binary would read as its listen port.
 
-The configuration the image ships cannot be used as it stands: it listens on `:80`, which an unprivileged uid cannot bind, and it writes the pid file, the scoreboard and both logs under `/usr/local/apache2/logs`, which the read-only root filesystem refuses. The default here is a complete minimal configuration instead — `:8080`, `DefaultRuntimeDir` and the pid file on the scratch at `/tmp`, both logs to the container's own stdout and stderr.
-
-The served directory is the image's `htdocs`, so the workload keeps nothing and scales horizontally. To serve your own site, compose a `kurly.config` or a `kurly.store` onto it and point `documentRoot` at the mount.
-
-Serves on `:8080`.
+Data at `/var/lib/conduwuit` on a ReadWriteOnce volume, so **one replica, recreated**. Serves on `:8008`.
 
 <!-- BEGIN generated: jaas-deploy -->
 
 ## Maturity
 
-**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
+**rendered** — this workload renders and validates against the Kubernetes schemas with its defaults.
 
 ## Deploy with JaaS
 
@@ -44,38 +40,38 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 # retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly, namespace: apache-http-server }
+metadata: { name: kurly, namespace: continuwuity }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-apache-http-server, namespace: apache-http-server }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/apache-http-server, ref: { tag: 2026.7.29 } }
+metadata: { name: kurly-continuwuity, namespace: continuwuity }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/continuwuity, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly, namespace: apache-http-server }
+metadata: { name: kurly, namespace: continuwuity }
 spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-apache-http-server, namespace: apache-http-server }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-apache-http-server } }
+metadata: { name: kurly-continuwuity, namespace: continuwuity }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-continuwuity } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: apache-http-server, namespace: apache-http-server }
+metadata: { name: continuwuity, namespace: continuwuity }
 spec:
-  serviceAccountName: apache-http-server-renderer
+  serviceAccountName: continuwuity-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local server = import 'github.com/metio/kurly/workloads/apache-http-server/server.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/continuwuity/server.libsonnet';
       // Compose your exposure and any + features here, then render.
       kurly.list(server())
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-apache-http-server, importPath: github.com/metio/kurly/workloads/apache-http-server }
+    - { kind: JsonnetLibrary, name: kurly-continuwuity, importPath: github.com/metio/kurly/workloads/continuwuity }
 ```
 
 A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
@@ -84,9 +80,9 @@ the run and gating each stage before the next.
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: apache-http-server, namespace: apache-http-server }
+metadata: { name: continuwuity, namespace: continuwuity }
 spec:
-  serviceAccountName: apache-http-server-deployer
+  serviceAccountName: continuwuity-deployer
   rollbackOnFailure: true
   # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
   # than a first deploy takes for anything that migrates a database before it
@@ -99,10 +95,10 @@ spec:
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: apache-http-server
+        name: continuwuity
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: apache-http-server }
+          - { apiVersion: apps/v1, kind: Deployment, name: continuwuity }
 ```
 
 <!-- END generated: jaas-deploy -->

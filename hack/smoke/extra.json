@@ -8,6 +8,9 @@
   "cobalt": {
     "compose": "+ k.env({ API_URL: 'http://cobalt:9000/' })"
   },
+  "continuwuity": {
+    "params": "serverName='matrix.example.com'"
+  },
   "docmost": {
     "compose": "+ k.env({ APP_URL: 'http://docmost:3000' })"
   },
