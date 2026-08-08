@@ -147,11 +147,21 @@ function(
   // A single static Go binary that writes nowhere and binds an unprivileged
   // port: the hardened default needs no relaxation at all.
   + kurly.runAs(1000, gid=1000)
-  // BY CONNECTION, not by path. Every HTTP route this serves either expects an
-  // Alertmanager payload or is the metrics endpoint, which basic auth may guard
-  // — a probe against either reads a rejection as the service being unhealthy.
-  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
-  + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
+  // THE METRICS PATH, NOT THE SOCKET, when metrics are on. The process binds
+  // its listener BEFORE it configures handlers, so a connection probe reports
+  // Ready during a window in which every request still fails — and a Service
+  // sends a real Alertmanager straight into it. The metrics endpoint answers
+  // only once the handlers exist, and basic auth guards the alerts endpoint
+  // rather than this one, so it stays reachable to the kubelet.
+  //
+  // With metrics off there is no unguarded path left to ask, and the connection
+  // probe is the honest fallback rather than a probe against a route that would
+  // read an authentication failure as ill health.
+  + (
+    local check = if metricsEnabled then { httpGet: { path: metricsPath, port: 'http' } }
+    else { tcpSocket: { port: 'http' } };
+    kurly.readinessProbe(check) + kurly.livenessProbe(check)
+  )
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
     limits=std.get(resources, 'limits', {}),

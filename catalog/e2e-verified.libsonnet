@@ -422,4 +422,5 @@
   'roundup-issue-tracker': '2026-08-08',
   snypy: '2026-08-08',
   sentryshot: '2026-08-08',
+  'matrix-alertmanager-receiver': '2026-08-08',
 }

@@ -39,6 +39,23 @@ proves a seam the generic walk cannot see — a migration ladder delivered throu
 Flux → JaaS → stageset-controller, a CNPG cluster backing up into a SeaweedFS S3
 gateway, a distributed SeaweedFS topology.
 
+One of them, `matrix-alerts.sh`, proves a seam between **two workloads** that the
+fast tier cannot reach at all. matrix-alertmanager-receiver fetches the rooms its
+account has joined before it serves, so a scenario with no homeserver watches it
+exit and learns nothing: everything interesting about it is the pairing. The
+scenario stands up continuwuity, registers an account against it, creates a room,
+builds the receiver's Secret from the real access token, posts an
+Alertmanager-shaped payload, and then **reads the room back through the
+homeserver's own client API**. That last assertion is the point — accepting a
+webhook and delivering a message are different things, and the receiver answers
+the POST before the message reaches Matrix, so a green POST with a silent room is
+exactly the failure nobody notices until nobody is paged.
+
+It also found a defect no render gate could: the receiver binds its listener
+before it configures handlers, so a connection probe reported Ready during a
+window in which every request still failed. The probe now asks the metrics path,
+which answers only once the handlers exist.
+
 Two of them prove a **restore**, which is the half of a backup that matters:
 `volsync-restore.sh` and `k8up-restore.sh` each write a known file into a
 PersistentVolume, back it up to a SeaweedFS S3 gateway through the workload's

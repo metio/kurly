@@ -215,6 +215,7 @@
     'maloja',
     'manage-my-damn-life',
     'matchering',
+    'matrix-alertmanager-receiver',
     'matrix-conduit',
     'mautic',
     'mayan-edms',
