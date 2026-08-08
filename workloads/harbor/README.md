@@ -73,7 +73,7 @@ address it (`core(registryName=…)`, `jobservice(coreName=…)`).
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `harbor-jobservice` | |
-| `image` | `docker.io/goharbor/harbor-jobservice:v2.15.0` | |
+| `image` | `docker.io/goharbor/harbor-jobservice:v2.15.2` | |
 | `coreName` / `registryName` | `harbor-core` / `harbor-registry` | |
 | `jobLogs` | `file` | `file` claims a volume for `/var/log/jobs`; `database` keeps the logs in PostgreSQL and claims none |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the job-log volume |
