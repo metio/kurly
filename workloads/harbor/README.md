@@ -39,7 +39,7 @@ address it (`core(registryName=…)`, `jobservice(coreName=…)`).
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `harbor-core` | |
-| `image` | `docker.io/goharbor/harbor-core:v2.15.0` | |
+| `image` | `docker.io/goharbor/harbor-core:v2.15.2` | |
 | `externalUrl` | `https://harbor.example.com` | the address clients reach Harbor at — see below |
 | `portalName` / `registryName` / `jobserviceName` | `harbor-portal` / `harbor-registry` / `harbor-jobservice` | the other stages, by Service name |
 | `dbHost` / `dbPort` / `dbName` / `dbUser` / `dbSslMode` | `harbor-db-rw` / `5432` / `registry` / `harbor` / `disable` | |
