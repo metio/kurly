@@ -509,6 +509,7 @@ local stageImports = {
   'roundup-issue-tracker/server': import 'github.com/metio/kurly/workloads/roundup-issue-tracker/server.libsonnet',
   'snypy/server': import 'github.com/metio/kurly/workloads/snypy/server.libsonnet',
   'sentryshot/server': import 'github.com/metio/kurly/workloads/sentryshot/server.libsonnet',
+  'matrix-alertmanager-receiver/server': import 'github.com/metio/kurly/workloads/matrix-alertmanager-receiver/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

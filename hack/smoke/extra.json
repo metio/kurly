@@ -44,6 +44,9 @@
   "lychee": {
     "compose": "+ k.env({ APP_URL: 'http://lychee:80', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2', FRANKENPHP_WORKER: '0' })"
   },
+  "matrix-alertmanager-receiver": {
+    "params": "homeserverUrl='https://matrix.example.com', userId='@alerts:matrix.example.com'"
+  },
   "matrix-conduit": {
     "compose": "+ k.env({ CONDUIT_SERVER_NAME: 'matrix.example.com' })"
   },
