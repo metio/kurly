@@ -1,4 +1,7 @@
 {
+  "aastro": {
+    "params": "flows=[{ path: '/smoke', method: 'GET', aggregation: { strategy: 'array', best_effort: false }, upstreams: [{ name: 'admin', hosts: 'http://127.0.0.1:7806', path: '/health', method: 'GET', timeout: '3s' }] }]"
+  },
   "baikal": {
     "dbEngine": "mysql"
   },

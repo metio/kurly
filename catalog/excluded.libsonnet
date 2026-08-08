@@ -235,4 +235,13 @@
   tamari: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://tamariapp.com' },
   jarr: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://github.com/jaesivsm/JARR' },
   privydrop: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://www.privydrop.app' },
+  localess: { reason: 'undeployable', note: 'needs Firebase (Auth, Firestore, Cloud Functions), which a cluster cannot supply — https://localess.org/docs/setup/docker' },
+  'fork-recipes': { reason: 'no-published-source', note: 'no image built from the published source — https://hub.docker.com/u/mikebgrep' },
+  nimbus: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://nimbus.turboot.com/' },
+  foodcoopshop: { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/foodcoopshop/foodcoopshop-docker' },
+  'rero-ils': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (RERO ILS as a service) — https://www.rero.ch/en/products/ils' },
+  tine: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://www.tine-groupware.de/shop' },
+  trackwatch: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://trackwatch.emlopezr.com/' },
+  'zero-totp': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://zero-totp.com' },
+  plugnpin: { reason: 'undeployable', note: 'needs a Docker socket to read container labels — https://github.com/deepspace2/plugnpin' },
 }

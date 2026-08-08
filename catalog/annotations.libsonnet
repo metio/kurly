@@ -466,6 +466,30 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
   // stage ids, so catalog.jsonnet computes it and there is no second copy to
   // disagree with the first.
   workloads: {
+    aastro: {
+      name: 'Aastro',
+      upstream: { repo: 'https://github.com/starwalkn/aastro' },
+      license: 'Apache-2.0',
+      description: 'Put one endpoint in front of several services and let it fan a request out and merge the answers.',
+      summary: 'An Aastro API gateway (it matches an incoming request against a flow, fans it out to the upstreams that flow names and aggregates their answers into one response) on the official image; its config.yaml is its only state, rendered as a ConfigMap. Flows are passed through VERBATIM — kurly does not model the flow schema — and default to none, so an unconfigured gateway answers its probes and routes nothing. Two listeners: the data port :7805 and an ADMIN port :7806 carrying health, readiness and Prometheus metrics, bound to 0.0.0.0 explicitly because Aastro binds it to loopback by default, where a kubelet probe never arrives and the pod never turns ready. Probes read the admin port, since a request to the data port is answered by an upstream. kurly authors no Secret; nothing in the configuration is a credential. Stateless, so any replica count is safe.',
+      category: 'networking',
+      stages: {
+        server: d.fn('The Aastro gateway. flows is passed through verbatim into gateway.routing.flows and gateway merges over the rest of the generated configuration (observability, rate limiter, trusted proxies, TLS). adminBindAddr keeps the admin listener reachable by the kubelet; keep the admin port off any exposure unless the diagnostics are meant to be public. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='aastro'),
+          d.arg('image', d.T.string),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('flows', d.T.array, default=[]),
+          d.arg('timeout', d.T.string, default='10s'),
+          d.arg('headerTimeout', d.T.string, default='5s'),
+          d.arg('adminBindAddr', d.T.string, default='0.0.0.0'),
+          d.arg('gateway', d.T.object, default={}),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
     accent: {
       name: 'Accent',
       upstream: { repo: 'https://github.com/mirego/accent' },
@@ -1541,6 +1565,37 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http', secretKeys: [{ key: 'FUSIO_CONNECTION', generate: 'mysqlUrl' }, { key: 'FUSIO_PROJECT_KEY', generate: 'hex', length: 32 }, { key: 'FUSIO_BACKEND_PW', generate: 'password', length: 24 }] },
+      },
+    },
+    gameap: {
+      name: 'GameAP',
+      upstream: { repo: 'https://github.com/gameap/gameap' },
+      homepage: 'https://gameap.com/',
+      license: 'MIT',
+      description: 'Administer the game servers running across your Linux and Windows hosts from one panel.',
+      summary: "A GameAP panel (the web UI, REST API and WebSocket endpoint that administer game servers, talking to a GameAP daemon on every node over gRPC) on the project's own image — a single static binary running as the unprivileged user the image ships, with its database and uploaded files on a PersistentVolume. It speaks SQLite, PostgreSQL or MySQL/MariaDB and defaults to SQLite on that volume, so it starts with nothing external; databaseDriver switches engine and the connection URL then comes from the Secret, because it carries the password. kurly authors no Secret; ENCRYPTION_KEY (which encrypts the credentials stored for managed nodes) and AUTH_SECRET (which signs session tokens) come from a provided one via envFrom. Nothing is relaxed: non-root, read-only rootfs, no privilege escalation and all capabilities dropped. Service links are disabled, since every variable it reads is unprefixed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8025.",
+      category: 'application',
+      requires: [],
+      stages: {
+        server: d.fn('The GameAP panel. databaseDriver is sqlite (the default, on the volume at /var/lib/gameap), postgres or mysql; databaseUrl is the connection URL and is left to the Secret for an external server, since it carries the password. secretName holds ENCRYPTION_KEY and AUTH_SECRET (envFrom). Uploaded files live under the same volume. Probed on /api/health, which answers unauthenticated; the first start creates the schema, which the startup probe waits out. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='gameap'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('databaseDriver', d.T.string, default='sqlite'),
+          d.arg('databaseUrl', d.T.string, example='postgres://gameap:secret@gameap-db-rw:5432/gameap?sslmode=disable'),
+          d.arg('secretName', d.T.string, default='gameap'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'ENCRYPTION_KEY', generate: 'hex', length: 64 },
+            { key: 'AUTH_SECRET', generate: 'hex', length: 64 },
+          ],
+        },
       },
     },
     gameyfin: {
@@ -2770,6 +2825,38 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http', secretKeys: [{ key: 'OFFEN_SECRET', generate: 'base64', length: 32 }] },
+      },
+    },
+    'open-quartermaster': {
+      name: 'Open QuarterMaster',
+      upstream: { repo: 'https://github.com/Epic-Breakfast-Productions/OpenQuarterMaster' },
+      homepage: 'https://openquartermaster.com/',
+      license: 'GPL-3.0-only',
+      description: 'Keep track of what you have, where it is stored and who took it.',
+      summary: "The Open QuarterMaster core API (items, storage blocks, checkouts and labels; the base station web interface and the plugins are separate images and are not carried here) on the official image, backed by an external MongoDB. Pairs with a mongodb-cluster named open-quartermaster-db. kurly authors no Secret; QUARKUS_MONGODB_CONNECTION_STRING carries the credentials and comes from a provided Secret via envFrom. Every write is behind a bearer token verified against an OIDC provider's public keys (Keycloak upstream, with an oqm realm), named by jwtKeyLocation — kurly carries no identity provider, and unset the API starts and refuses every authenticated call. The Quarkus port is set from the declared port rather than left to the image: the project's own compose file publishes :80 while the image's health check asks :8080. Outgoing Kafka events are off unless a broker is provided. Stateless (files and history live in MongoDB): a plain rolling Deployment. Serves on :8080.",
+      category: 'application',
+      requires: { database: 'required' },
+      stages: {
+        server: d.fn('The Open QuarterMaster core API. database is the MongoDB database name; jwtKeyLocation is the OIDC provider JWKS URL bearer tokens are verified against; events turns on the outgoing Kafka messaging that is off without a broker. secretName holds QUARKUS_MONGODB_CONNECTION_STRING (envFrom). Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='open-quartermaster'),
+          d.arg('image', d.T.string),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('port', d.T.int, default=8080),
+          d.arg('database', d.T.string, default='oqm'),
+          d.arg('jwtKeyLocation', d.T.string, example='https://sso.example.com/realms/oqm/protocol/openid-connect/certs'),
+          d.arg('events', d.T.bool, default=false),
+          d.arg('secretName', d.T.string, default='open-quartermaster'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          // The connection string carries the MongoDB credentials, so the Secret holds a URL rather than parts.
+          secretKeys: [
+            { key: 'QUARKUS_MONGODB_CONNECTION_STRING', generate: 'mongoUrl' },
+          ],
+        },
       },
     },
     opencloud: {

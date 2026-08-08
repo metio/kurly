@@ -17,6 +17,7 @@
 // bits nobody ran is a guess in a field whose whole point is that it is not.
 {
   '2fauth/server': { digest: 'sha256:4a1f329e42b9bdfb625db3094bd6f79a2f44640b6259d4cdb9f336c676bf120e', secondsToReady: 37, peakStartupBytes: 80060416, steadyBytes: 73039872 },
+  'aastro/server': { digest: 'sha256:eefa7a7d94a61035902febe352f3d37d06c8c6ee8333228abf5c4f6ea40e3af6', secondsToReady: 9, peakStartupBytes: 27701248, steadyBytes: 54837248 },
   'accent/server': { digest: 'sha256:13ba20bb667e1b2c891e489a01a75feff30abfb9ef70f2528f178f0d18b61951', secondsToReady: 21, peakStartupBytes: 258179072, steadyBytes: 315494400 },
   'activepieces/server': { digest: 'sha256:208517c4f0d798a477a0c594bf432dd0f4918433f4b6f5b5f188a6e10e638c6c', secondsToReady: 167, peakStartupBytes: 1307115520, steadyBytes: 1502883840 },
   'actualbudget/server': { digest: 'sha256:0b300f370dba85a74998a953736a831bd931cc8cb76c0d8ceac3d3fd288dfd4d', secondsToReady: 44, peakStartupBytes: 116015104, steadyBytes: 112451584 },
@@ -132,6 +133,7 @@
   'freshrss/server': { digest: 'sha256:ab6b363102ccdbc39f6a62db926f567c61a5289bf25ba460f1c34423d8cc1a4d', secondsToReady: 17, peakStartupBytes: 61870080, steadyBytes: 63340544 },
   'frigate/server': { digest: 'sha256:dc77295ccc5a7258510ab6b1d9d5b7a339027305e2d29224338534febc4d1e89', secondsToReady: 75, peakStartupBytes: 470818816, steadyBytes: 470159360 },
   'fusio/server': { digest: 'sha256:413a9ad881f5ce8af420b46d075b8bbb0d45a730bcd5b5777b86717a5c657a53', secondsToReady: 190, peakStartupBytes: 94625792, steadyBytes: 136376320 },
+  'gameap/server': { digest: 'sha256:ee726c8fa41f877fd1f5bfe718d40da06b717b5715229b21e14234ee2a0883b8', secondsToReady: 19, peakStartupBytes: 61423616, steadyBytes: 61456384 },
   'gameyfin/server': { digest: 'sha256:ddc99c9f7568f7640bb8d032f03786f0131756ea94964ebe8004176a493801ab', secondsToReady: 70, peakStartupBytes: 662917120, steadyBytes: 738549760 },
   'gatus/server': { digest: 'sha256:c5f210d095fa78e6efaa20ffeb14803f2ba4f10615e16a6d12087697149617f0', secondsToReady: 11, peakStartupBytes: 36593664, steadyBytes: 36593664 },
   'gerbera/server': { digest: 'sha256:70cc52bfb71cf1d443fc7debcc5f035292af55adc7df2d7ee040d50f53bbf288', secondsToReady: 17, peakStartupBytes: 75980800, steadyBytes: 74821632 },
@@ -267,6 +269,7 @@
   'ombi/server': { digest: 'sha256:be76ec2c9376186b37354e5e2bbe62d6d7776d509aeb00223eb5024e36a8615c', secondsToReady: 27, peakStartupBytes: 226938880, steadyBytes: 227831808 },
   'omnitools/server': { digest: 'sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69', secondsToReady: 8, peakStartupBytes: 19648512, steadyBytes: 19750912 },
   'onlyoffice/server': { digest: 'sha256:e3da62a847b9a5d51a11f73cfea1d9c13c3be3809614490d4edddcf01dcf919b', secondsToReady: 82, peakStartupBytes: 966979584, steadyBytes: 938807296 },
+  'open-quartermaster/server': { digest: 'sha256:b346269801e93b202ef468210af43efaad3f3f01f8034468e66b320fe3297146', secondsToReady: 36, peakStartupBytes: 610635776, steadyBytes: 638300160 },
   'open-webui/server': { digest: 'sha256:fe7a6870ec6b2fd540c0f2007e6aa812dc4bf04a2d0a305bb344eeb10de0a7b7', secondsToReady: 115, peakStartupBytes: 488484864, steadyBytes: 495714304 },
   'opencloud/server': { digest: 'sha256:01574d21811882390679e78aa2b2147d03779a5d486f6f2fd62a28463a485f3d', secondsToReady: 18, peakStartupBytes: 386650112, steadyBytes: 382214144 },
   'opengist/server': { digest: 'sha256:038d47937d3ba4b49ec28a76d3966383e0a46acf7ee1f19b1bae4ac0758c694c', secondsToReady: 17, peakStartupBytes: 67354624, steadyBytes: 67350528 },

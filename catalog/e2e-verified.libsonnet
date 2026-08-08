@@ -402,4 +402,7 @@
   'libredb-studio': '2026-08-07',
   solectrus: '2026-08-07',
   rocketchat: '2026-08-08',
+  'open-quartermaster': '2026-08-08',
+  gameap: '2026-08-08',
+  aastro: '2026-08-08',
 }

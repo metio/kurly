@@ -10,6 +10,7 @@
 {
   e2e: [
     '2fauth',
+    'aastro',
     'accent',
     'activepieces',
     'actualbudget',
@@ -121,6 +122,7 @@
     'freshrss',
     'frigate',
     'fusio',
+    'gameap',
     'gameyfin',
     'gatus',
     'gerbera',
@@ -252,6 +254,7 @@
     'ombi',
     'omnitools',
     'onlyoffice',
+    'open-quartermaster',
     'open-webui',
     'opencloud',
     'opencost',
