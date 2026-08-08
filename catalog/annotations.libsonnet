@@ -1202,6 +1202,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'Continuwuity',
       upstream: { repo: 'https://forgejo.ellis.link/continuwuation/continuwuity' },
       homepage: 'https://continuwuity.org/',
+      license: 'Apache-2.0',
       description: 'Host your own Matrix chat that federates with the rest of the network.',
       summary: 'A Continuwuity server (a Matrix homeserver written in Rust, the community-driven continuation of conduwuit and Conduit) on the official image; its embedded RocksDB lives on a PersistentVolume. Settings come from the environment under the CONDUWUIT_ prefix the fork inherited, and CONDUWUIT_CONFIG is set empty because the binary insists on a config path. The serverName is baked into every user and room id at first start and cannot be changed. Service links are off: the injected CONTINUWUITY_PORT is a tcp:// URL the binary would read as its listen port. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8008.',
       category: 'application',
@@ -1246,6 +1247,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     damselfly: {
       name: 'Damselfly',
       upstream: { repo: 'https://github.com/Webreaper/Damselfly' },
+      license: 'GPL-3.0',
       description: 'Index a folder of photographs and search them by the people and objects found in them.',
       summary: 'A Damselfly server (server-based photo management that indexes a picture library and recognises faces and objects with local ML models) on the official image. Three PersistentVolumes, because the entrypoint runs the server against three fixed paths: /pictures (the library it indexes), /config (its SQLite database, logs and settings) and /thumbs (the generated thumbnail cache) — kurly.store composed three times. The image declares no USER, so the stage pins a non-root uid with a matching fsGroup (which is what gives the app ownership of the volumes) and adds a scratch at /tmp for the .NET runtime. Indexing runs in-process on start, so a startup probe carries the slow first boot. No external database. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :6363.',
       category: 'application',
@@ -1805,6 +1807,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       upstream: { repo: 'https://github.com/gerbera/gerbera' },
       homepage: 'https://gerbera.io/',
       name: 'Gerbera',
+      license: 'GPL-2.0-only',
       description: 'Stream a personal media library to the televisions and players already on the network.',
       summary: 'A Gerbera server (a UPnP/DLNA media server) on the official image. A plain composable http workload that keeps config.xml and its SQLite database on a PersistentVolume and reads the library from /content on the same volume — no external database. The entrypoint generates the config, chowns the volume and drops to the image account with su-exec, so the container starts as root with CHOWN/FOWNER/SETGID/SETUID granted back. SSDP discovery is multicast on 1900/udp and does not cross a pod network, so players must be pointed at the exposed address. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :49494.',
       category: 'application',
@@ -1899,6 +1902,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     gonic: {
       upstream: { repo: 'https://github.com/sentriz/gonic' },
       name: 'gonic',
+      license: 'GPL-3.0',
       description: 'Stream your own music library over the Subsonic API to the clients you already use.',
       summary: 'A gonic server (a music streaming server speaking the Subsonic API) on the official image. A plain composable http workload that keeps its SQLite database at /data and reads the music library, cache, podcasts and playlists from the same volume — no external database. The image listens on :80, so the stage moves the listener to :8080 (GONIC_LISTEN_ADDR) and runs as an ordinary user instead of granting NET_BIND_SERVICE; service links are off because gonic reads every setting from a GONIC_-prefixed variable. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',
@@ -2104,6 +2108,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     jelu: {
       name: 'Jelu',
       upstream: { repo: 'https://github.com/bayang/jelu' },
+      license: 'MIT',
       description: 'Track the books you have read, are reading and want to read, with your own shelves and reading history.',
       summary: 'A Jelu server (a self-hosted book tracker) on the official image. A plain composable http workload keeping its SQLite database, Lucene search index and uploaded files on a PersistentVolume — no external database. The search index is pointed off the read-only root filesystem through the environment, and service links are disabled so an injected JELU_PORT cannot be read as configuration. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :11111.',
       category: 'application',
@@ -2269,6 +2274,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     kyoo: {
       name: 'Kyoo',
       upstream: { repo: 'https://github.com/zoriya/kyoo' },
+      license: 'GPL-3.0',
       description: 'Browse and stream your own films and television from any device.',
       summary: "Kyoo's API (a media browser and streaming server for films and television) on the official image, backed by an external PostgreSQL, with downloaded artwork on a PersistentVolume. Pairs with a cnpg-cluster named kyoo-db; the database needs the pg_trgm extension a stock PostgreSQL ships, and the API creates its own kyoo schema on first start. kurly authors no Secret; PGPASSWORD comes from a provided Secret via envFrom. Kyoo's front, auth and transcoder services are separate images: point authServer at the auth service and publicUrl at the issuer it stamps. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3567.",
       category: 'application',
@@ -4604,6 +4610,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'Traggo',
       upstream: { repo: 'https://github.com/traggo/server' },
       homepage: 'https://traggo.net/',
+      license: 'GPL-3.0',
       description: 'Track time with tags instead of a fixed tree of projects.',
       summary: 'A Traggo server (tag-based time tracking with a web interface). A plain composable http workload that keeps its SQLite database on a PersistentVolume — no external database. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app and GraphQL API on :3030.',
       category: 'application',
