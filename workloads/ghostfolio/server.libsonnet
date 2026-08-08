@@ -49,6 +49,11 @@ function(
   // error, so this may well come off — but only once the workload can be booted to
   // show it.
   + kurly.writableRootFilesystem()
+  // Migrations and the Nest bootstrap run before the health endpoint answers,
+  // and the probe's own timeout expires against a socket that is listening but
+  // not yet serving — so the budget belongs in a startup probe rather than in a
+  // longer readiness delay.
+  + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 90 })
   + kurly.readinessProbe({ httpGet: { path: '/api/v1/health', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

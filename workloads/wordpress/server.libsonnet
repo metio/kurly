@@ -64,6 +64,11 @@ function(
   // smallest set this image was observed to boot with.
   + kurly.addCapabilities(['AUDIT_WRITE', 'CHOWN', 'DAC_OVERRIDE', 'FOWNER', 'FSETID', 'KILL', 'MKNOD', 'NET_BIND_SERVICE', 'SETFCAP', 'SETGID', 'SETPCAP', 'SETUID', 'SYS_CHROOT'])
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
+  // Apache writes its pid file into /var/run/apache2 before it binds anything,
+  // and on a read-only root that write fails and the process exits — with a
+  // "could not log pid to file" line that says nothing about the filesystem
+  // being the reason. The directory is runtime state, so it is a scratch.
+  + kurly.scratch('/var/run/apache2')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(

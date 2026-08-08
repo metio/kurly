@@ -291,12 +291,16 @@ kurly::_sample_memory() {
 kurly::_record_measurement() {
   local stage="$1" seconds="$2" peak="$3" steady="$4" key file
   # A workload that is Ready in nine seconds can finish before the kubelet
-  # publishes a single sample, leaving a peak of zero beside a steady reading
-  # that is plainly larger. The peak is the highest reading TAKEN, and the
-  # settled one is a reading — so it is the floor. Without this the catalogue
-  # would publish "needs 0Mi to start" for the fastest workloads, which is the
-  # most confident possible way to be wrong.
-  [ "${peak:-0}" -ge "${steady:-0}" ] 2>/dev/null || peak="$steady"
+  # publishes a single sample, and the startup peak comes back as zero — the
+  # catalogue would then say "needs 0Mi to start", which is the most confident
+  # possible way to be wrong. The settled reading is a real reading of the same
+  # containers, so it stands in when nothing was captured.
+  #
+  # ONLY WHEN NOTHING WAS CAPTURED. A peak BELOW the settled figure is a genuine
+  # and common result — an application that is Ready before it has filled its
+  # caches uses more once it is running than it did to start — and clamping the
+  # two together would erase exactly the gap these two fields exist to show.
+  [ "${peak:-0}" -gt 0 ] 2>/dev/null || peak="$steady"
   key="$(printf '%s' "$stage" | sed -E 's#workloads/([^/]+)/([^/]+)\.libsonnet#\1/\2#')"
   mkdir -p .build/measurements
   file=".build/measurements/$(printf '%s' "$key" | tr '/' '__').json"
