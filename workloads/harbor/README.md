@@ -61,7 +61,7 @@ address it (`core(registryName=…)`, `jobservice(coreName=…)`).
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `harbor-registry` | |
-| `image` / `controllerImage` | `docker.io/goharbor/registry-photon:v2.15.0` / `docker.io/goharbor/harbor-registryctl:v2.15.0` | the controller runs as a sidecar |
+| `image` / `controllerImage` | `docker.io/goharbor/registry-photon:v2.15.2` / `docker.io/goharbor/harbor-registryctl:v2.15.0` | the controller runs as a sidecar |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | the image data volume |
 | `storage` | `null` | a distribution `storage` stanza (s3, azure, gcs, …), passed through verbatim; replaces the volume |
 | `redisHost` / `redisPort` | `harbor-cache` / `6379` | the registry uses Redis DB 2 |
