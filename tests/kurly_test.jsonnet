@@ -388,6 +388,15 @@ local podOf(app) = app.deployment.spec.template.spec;
     (shop + kurly.reserve('250m', '256Mi')).deployment.spec.template.spec.containers[0].resources,
     { requests: { cpu: '250m', memory: '256Mi' }, limits: { memory: '256Mi' } }
   ),
+  // Given a disk budget, it lands as both request and limit — the container is
+  // evicted for exceeding its own, and the scheduler counts it against the node.
+  reserve_with_disk: std.assertEqual(
+    (shop + kurly.reserve('250m', '256Mi', '1Gi')).deployment.spec.template.spec.containers[0].resources,
+    {
+      requests: { cpu: '250m', memory: '256Mi', 'ephemeral-storage': '1Gi' },
+      limits: { memory: '256Mi', 'ephemeral-storage': '1Gi' },
+    }
+  ),
   // The placement features land on the pod template verbatim.
   node_selector: std.assertEqual(podOf(shop + kurly.nodeSelector({ disktype: 'ssd' })).nodeSelector, { disktype: 'ssd' }),
   tolerations_set: std.assertEqual(

@@ -95,11 +95,22 @@
   // resources() tweak. Applies to the workload's container; a stage
   // running more than one has no defined answer here, and splitting a total between
   // containers is a question for whoever knows how the work divides.
-  reserve(cpu, memory):: {
+  //
+  // ephemeralStorage is optional and defaults to unbounded, which is what every
+  // caller had before it existed. Given, it becomes both request and limit, for
+  // the same reason memory does: a container that exceeds its own budget is
+  // evicted, which is a statement about that workload, while one inside its
+  // budget cannot be evicted for a neighbour filling the node. Unbounded is the
+  // dangerous state — the kubelet ranks pods for disk eviction by what they are
+  // using rather than by what they promised, so the tenant who wrote the most
+  // wins the argument, whatever anybody agreed. Setting it also lets the
+  // scheduler count disk, so it stops packing a node past what its disk holds.
+  reserve(cpu, memory, ephemeralStorage=null):: {
+    local disk = if ephemeralStorage == null then {} else { 'ephemeral-storage': ephemeralStorage },
     config+:: {
       resources: {
-        requests: { cpu: cpu, memory: memory },
-        limits: { memory: memory },
+        requests: { cpu: cpu, memory: memory } + disk,
+        limits: { memory: memory } + disk,
       },
     },
   },
