@@ -25,7 +25,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `activepieces` | |
-| `image` | `docker.io/activepieces/activepieces:0.86.3` | |
+| `image` | `docker.io/activepieces/activepieces:0.87.0` | |
 | `replicas` | `2` | stateless — scale freely |
 | `frontendUrl` | inferred | the public URL (webhook URLs derive from it) |
 | `secretName` | `activepieces-secrets` | `AP_POSTGRES_*`, `AP_REDIS_*`, `AP_ENCRYPTION_KEY`, `AP_JWT_SECRET` (envFrom) |
