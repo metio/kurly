@@ -38,8 +38,65 @@
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 export KUBERC=/dev/null
+
+# RUN UNDER A CEILING, OR DO NOT RUN. An unbounded walk has taken this host to
+# the point of being unusable more than once. The harness re-executes itself
+# inside kurly.slice, whose limits are declared in hack/smoke/kurly.slice; the
+# node carries its own budget from the kube-cluster wrapper. Set KURLY_NO_SLICE=1
+# to opt out, which is for debugging the harness and not for a walk.
+if [ "${KURLY_IN_SLICE:-0}" != 1 ] && [ "${KURLY_NO_SLICE:-0}" != 1 ]; then
+  units="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
+  mkdir -p "${units}/kurly.slice.d"
+  cp hack/smoke/kurly.slice "${units}/kurly.slice"
+  # The write cap names the WHOLE DISK behind the store. The io controller
+  # accounts per block device, so a cap written against the partition the store
+  # happens to sit on is accepted in silence and throttles nothing.
+  disk="$(findmnt -no SOURCE --target "${HOME}/.local/share" 2>/dev/null || true)"; disk="${disk%%\[*}"
+  parent="$(lsblk -no PKNAME "$disk" 2>/dev/null | head -1)"
+  [ -n "$parent" ] && disk="/dev/${parent}"
+  if [ -b "$disk" ]; then
+    printf '[Slice]\nIOReadBandwidthMax=%s 300M\nIOWriteBandwidthMax=%s 150M\n' "$disk" "$disk" \
+      > "${units}/kurly.slice.d/disk.conf"
+  else
+    echo "note: cannot resolve the disk behind the store; the slice carries no bandwidth cap" >&2
+    rm -f "${units}/kurly.slice.d/disk.conf"
+  fi
+  systemctl --user daemon-reload
+  echo "== re-executing inside kurly.slice =="
+  # PATH and the podman/kube settings are passed explicitly: a transient unit does
+  # not necessarily inherit the caller's environment, and a walk that loses the
+  # flake tools renders nothing while reporting that it ran.
+  exec systemd-run --user --quiet --scope --collect --slice=kurly.slice \
+    env KURLY_IN_SLICE=1 HOME="$HOME" PATH="$PATH" KUBERC=/dev/null \
+      ${KUBECONFIG:+KUBECONFIG="$KUBECONFIG"} \
+      ${CONTAINERS_STORAGE_CONF:+CONTAINERS_STORAGE_CONF="$CONTAINERS_STORAGE_CONF"} \
+      ${CONTAINERS_CONF:+CONTAINERS_CONF="$CONTAINERS_CONF"} \
+      ${CLUSTER:+CLUSTER="$CLUSTER"} ${WORKLOADS:+WORKLOADS="$WORKLOADS"} \
+      ${REMEASURE:+REMEASURE="$REMEASURE"} ${DEEP:+DEEP="$DEEP"} \
+      bash "$0" "$@"
+fi
+
 # shellcheck source=hack/smoke/lib.sh
 source hack/smoke/lib.sh
+
+# The ceiling must be REAL before anything runs. systemd accepts a property it
+# cannot enforce (an undelegated controller) without complaint, so the run asks
+# the kernel what is actually in force rather than trusting that the unit loaded.
+assert_bounded() {
+  local cg base miss=""
+  cg="/sys/fs/cgroup$(sed -n 's/^0:://p' /proc/self/cgroup 2>/dev/null)"
+  base="$(dirname "$cg")"
+  [ -f "${base}/cpu.max" ] && [ "$(cut -d' ' -f1 "${base}/cpu.max")" != max ] || miss="${miss} cpu"
+  [ -f "${base}/memory.max" ] && [ "$(cat "${base}/memory.max")" != max ] || miss="${miss} memory"
+  if [ -n "$miss" ]; then
+    echo "::error::the walk is NOT bounded (no ceiling on:${miss}) — refusing to start" >&2
+    echo "the controllers must be delegated to the user manager; check:" >&2
+    echo "  cat /sys/fs/cgroup/user.slice/user-\$(id -u).slice/cgroup.controllers" >&2
+    exit 1
+  fi
+  echo "== bounded: cpu.max=$(cat "${base}/cpu.max") memory.max=$(cat "${base}/memory.max") =="
+}
+assert_bounded
 
 cluster="${CLUSTER:-kurly}"
 recorded=catalog/measurements.gen.libsonnet
@@ -58,7 +115,12 @@ ensure_cluster() {
     exit 1
   }
   echo "== starting kind cluster ${cluster} =="
-  kube-cluster up "$cluster"
+  # The node's own budget. The wrapper writes these into the container's cgroup
+  # and REFUSES to hand over a cluster whose limits did not take effect, so a
+  # walk cannot proceed against an unbounded node.
+  KUBE_CLUSTER_CPUS=8 KUBE_CLUSTER_MEMORY=14G \
+  KUBE_CLUSTER_RBPS=400M KUBE_CLUSTER_WBPS=200M \
+    kube-cluster up "$cluster"
   KUBECONFIG="$(kube-cluster kubeconfig "$cluster")"
   export KUBECONFIG
 }

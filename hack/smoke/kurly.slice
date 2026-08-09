@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: The kurly Authors
+# SPDX-License-Identifier: 0BSD
+#
+# The ceiling the fleet walk runs under. This bounds the HARNESS — the renders,
+# the image pulls into the podman store, kubectl, the generators — which run on
+# the host, outside the kind node, and so are not covered by the node's own
+# budget.
+#
+# The node is bounded separately, by `cgroup_conf` in the kube-cluster wrapper's
+# containers.conf, because a rootless container does NOT inherit the slice that
+# launched it: podman creates it in its own transient scope under `user.slice`.
+# Placing the harness here and the node there is what makes the two ceilings add
+# up to a known total rather than to whatever the machine has.
+#
+# Budget on a 16-CPU / 30G host: harness 2 CPUs + 4G, node 8 CPUs + 14G, leaving
+# 6 CPUs and roughly 12G for the desktop — which is the point, since the failure
+# being prevented is the machine becoming unusable rather than the run being slow.
+
+[Unit]
+Description=kurly fleet walk (bounded)
+
+[Slice]
+CPUQuota=200%
+CPUWeight=20
+
+MemoryHigh=3G
+MemoryMax=4G
+MemorySwapMax=2G
+
+# Disk bandwidth is a SOFT control here, not a guarantee. On btrfs a large share
+# of the writes are issued by the filesystem's own kernel threads, which are not
+# attributed to the cgroup that caused them, so a cap throttles by roughly half
+# rather than to its stated value (measured: a 50M cap yielded 114 MB/s where the
+# device does 285). It is set because approximate throttling still keeps the
+# desktop responsive; it is not relied upon as the only defence, which is why the
+# memory and CPU ceilings above — both of which bind exactly — carry the weight.
+IOWeight=20
