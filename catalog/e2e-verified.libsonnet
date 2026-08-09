@@ -432,4 +432,6 @@
   wekan: '2026-08-09',
   viseron: '2026-08-09',
   'lyrion-music-server': '2026-08-09',
+  piler: '2026-08-09',
+  traduora: '2026-08-09',
 }

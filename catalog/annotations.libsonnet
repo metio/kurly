@@ -528,7 +528,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Keep track of the members of a club, the roles they hold and the events they turn up to.',
       summary: "An Admidio server (member management for clubs and organisations: people, the roles they hold, events and the mailings that go with them) on the project's own image, backed by an external MySQL/MariaDB or PostgreSQL — dbType selects which dialect the generated config.php speaks and must match the server it points at. Configuration and uploaded files live on a PersistentVolume. The entrypoint provisions the application tree, chowns it to www-data, rewrites the Apache port configuration and starts cron and postfix before Apache drops privileges, so root, capabilities and a writable image tree are all relaxed deliberately. Every variable it reads is ADMIDIO_*, so service links are disabled. kurly authors no Secret; ADMIDIO_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The Admidio server. dbType is mysql (also MariaDB) or pgsql; dbHost/dbPort/database/dbUser point at it and secretName holds ADMIDIO_DB_PASSWORD (envFrom). rootPath is the public URL Admidio builds links against — left unset it keeps the placeholder from the shipped example configuration and every generated link points elsewhere. mailRelayHost gives the bundled postfix somewhere to deliver. Config and uploads at /opt/app-root/src/adm_my_files. The first request lands on the installation wizard, so probes are by connection. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='admidio'),
@@ -1388,7 +1390,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Watch the price and stock of a product across several shops and hear about it when it drops.',
       summary: "A Discount Bandit server (a multi-user price tracker for Amazon, eBay, AliExpress and custom stores, notifying when a price meets the criteria a user set). A composable http workload backed by an external MySQL/MariaDB: the image ships SQLite as Laravel's default and creates no database file, so this stage runs it on MySQL instead. FRANKEN_HOST is set to 0.0.0.0 — the image bakes localhost, which Octane passes to FrankenPHP as its listen address, so the default serves the loopback interface only and every request through the Service is refused by a pod that looks healthy. The entrypoint copies .env into the app tree, migrates, and writes Laravel's compiled caches beside the code, and supervisord then runs Octane, the scheduler and the queue worker as root, so it runs as root with a writable root filesystem while dropping all capabilities. The first start migrates, seeds and warms the caches before anything listens, so it carries a startup probe rather than a stretched liveness delay. kurly authors no Secret; APP_KEY and DB_PASSWORD come from a provided Secret via envFrom. The pod also runs the scheduler and the queue worker, so a second replica would scrape every product twice: one replica, recreated. Serves on :80.",
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn("The Discount Bandit server. dbHost/dbPort/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL links and assets are built against. cron is how often the scheduler re-checks every tracked product. secretName holds APP_KEY — Laravel's 32-character encryption key, under which stored credentials are unreadable once it changes — and DB_PASSWORD, both via envFrom. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='discount-bandit'),
@@ -1952,7 +1956,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Bill hosting clients, take orders and manage their services from one panel.',
       summary: 'A FOSSBilling server (hosting and billing automation with a client area, an admin panel and a full API) on the official Apache/PHP image, which also runs the five-minute cron inside the container. Needs an external MySQL/MariaDB — the mysql-cluster workload provides one — whose coordinates are entered in the web installer on first visit and written into config.php inside the install tree, so kurly authors no Secret and the stage reads none. The whole install tree lives on a PersistentVolume, seeded from the image by an init container because a PersistentVolume arrives empty and would hide the application. Apache starts as root to bind :80 and drops its workers to www-data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the web app on :80.',
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The FOSSBilling server. The install tree — application, config.php and uploads — lives at /var/www/html on the volume, seeded from the image on first boot. Point it at a MySQL/MariaDB in the web installer. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='fossbilling'),
@@ -2430,7 +2436,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Keep track of every plant you look after, when it was last watered and how it is doing.',
       summary: 'A HortusFox server (collaborative plant management with watering schedules and a photo log) on the official image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with plant photos and attachments on PersistentVolumes. The Apache + PHP image starts as root, binds :80 and chowns the mounted directories before dropping to www-data, relaxing non-root and read-only-rootfs; logs, backups and migration state are written beside the code inside the image tree. kurly authors no Secret; DB_PASSWORD and APP_ADMIN_PASSWORD (the administrator seeded on first boot) come from a provided Secret via envFrom. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :80.',
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The HortusFox server. dbHost/dbPort/database/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). Plant photos live at /var/www/html/public/img and attachments at /var/www/html/public/attachments, each on its own volume. secretName holds DB_PASSWORD and APP_ADMIN_PASSWORD, the password of the administrator account the first boot seeds. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='hortusfox'),
@@ -2798,7 +2806,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Book the rooms, desks and equipment an organisation shares, from a calendar anyone can read.',
       summary: "A LibreBooking server (resource and room scheduling: who booked which room, meeting space or piece of equipment, and when). A composable http workload backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with the generated configuration and the uploaded images and attachments on PersistentVolumes. The schema is created by the application's OWN installer at /Web/install/, guarded by LB_INSTALL_PASSWORD, so a fresh deployment is not finished when the pod is Ready. Apache listens on 8080 as www-data, and the entrypoint links the configuration and every plugin's config back into the install tree, so the root filesystem is writable while non-root, dropped capabilities and no privilege escalation stand. scriptUrl has no sane default: every link and every e-mail is built against it. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :8080.",
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The LibreBooking server. Configuration at /config and uploads at /var/www/html/Web/uploads, each on its own volume. dbHost/database/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). secretName holds LB_DATABASE_PASSWORD and LB_INSTALL_PASSWORD (envFrom) — the install password guards the installer that creates and upgrades the schema, so it is as load-bearing as the database credential. scriptUrl is the absolute URL of the Web directory. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='librebooking'),
@@ -5096,7 +5106,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Scan, enrich and browse a retro game collection, and play it in the browser.',
       summary: 'A RomM server (scans a ROM library, enriches it with metadata from the games databases, and browses or plays it in the browser). A composable http workload backed by an external MariaDB/MySQL, with the library, scraped resources and uploaded assets on a PersistentVolume. The image bundles its own Valkey and runs nginx plus the Python backend under s6, which starts as root and drops privileges, so the hardened defaults are relaxed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.',
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The RomM server. The ROM library, the scraped resources, the uploaded assets and the config file all live under /romm on the volume; everything indexed is in MariaDB/MySQL. secretName holds DB_PASSWD and ROMM_AUTH_SECRET_KEY, which signs sessions, alongside whichever metadata provider credentials are used (IGDB, MobyGames, SteamGridDB) — without those the library still imports, it simply arrives without cover art. s6 starts as root and drops privileges and the entrypoint chowns the volume, so this workload is deliberately less hardened. Probed by connection, because the application redirects to a login page. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='romm'),
@@ -5295,7 +5307,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Manage the translations of an application in one place, with an API a build can call.',
       summary: "An ever-traduora server (a translation management platform: teams edit their locales in a web UI, and an import/export API moves the same strings in and out of a build) on the official image, backed by an external PostgreSQL and holding no state of its own. kurly authors no Secret; the database login and TR_SECRET come from a provided Secret via envFrom, and TR_SECRET signs every access token while shipping upstream as the literal string `secret`. The schema is migrated at startup (TR_DB_AUTOMIGRATE), so the first boot takes a while — the startup probe covers it. The image sets no USER, so this runs explicitly as uid 1000 to keep the hardened default. PostgreSQL is the default engine because an early traduora migration alters a column another table's foreign key depends on, which MariaDB refuses. Pairs with a cnpg-cluster named traduora-db. Stateless: a plain rolling Deployment. Serves on :8080.",
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'postgresql', required: true },
+      ],
       stages: {
         server: d.fn("The traduora server. dbType is traduora's own vocabulary (postgres or mysql); the credentials live in the Secret. secretName holds TR_DB_USER, TR_DB_PASSWORD and TR_SECRET (envFrom). virtualHost is the URL invitation and password-reset mails link to, so the default points at localhost and must be set. Compose an exposure onto the HTTP port.", [
           d.arg('name', d.T.string, default='traduora'),
@@ -5624,7 +5638,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Build and edit website pages by dragging blocks around instead of writing markup.',
       summary: "A Vvveb CMS server (a content management system whose pages are edited with a drag-and-drop builder) on the project's own nginx + php-fpm image. The image ships only the runtime: the CMS itself is downloaded as a zip from DOWNLOAD_URL and unpacked into /var/www/html the first time that directory is empty, so the first boot needs egress to the download host and takes minutes rather than seconds (a ten-minute startup budget covers it), and the volume is mounted at the application root because code, configuration, themes, uploads and the page cache all live there together; downloadUrl points it at a mirror where there is no egress. It needs a MySQL/MariaDB or PostgreSQL, but the engine and its credentials are entered in the web installer on first visit and written to the volume rather than read from env, so kurly passes no database coordinates and authors no Secret. supervisord runs nginx and php-fpm and drops both to www-data, which it can only do from root, so non-root and read-only-rootfs are relaxed while the probes stay connection probes, since every path redirects to the installer until it has been walked through. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The Vvveb CMS server. The whole application tree lives at /var/www/html on the volume, fetched on first boot from downloadUrl (the image default is the project download endpoint). The database is chosen and credentialed in the web installer, not here. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='vvveb-cms'),
@@ -6781,7 +6797,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Run marketing campaigns and nurture contacts without a per-seat bill.',
       summary: 'A Mautic server (open-source marketing automation) on the official Apache image, backed by an external MySQL/MariaDB, with configuration and media on a PersistentVolume. kurly ships no MySQL recipe — bring your own. The Apache + PHP image starts as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; MAUTIC_DB_PASSWORD comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The Mautic server. dbHost/dbName/dbUser point at a MySQL/MariaDB you provide. siteUrl is the public URL; runCronJobs runs Mautic background jobs in-container. secretName holds MAUTIC_DB_PASSWORD (envFrom). Config at /var/www/html/config, media on the volume. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='mautic'),
@@ -8814,7 +8832,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Send files to specific clients, privately, without a public link.',
       summary: 'A ProjectSend server — a self-hosted, private file-sharing app that assigns uploads to specific clients (backed by MySQL/MariaDB). On the LinuxServer.io image; its config lives on a PersistentVolume. The s6-overlay init runs as root and drops to the PUID/PGID user, so this runs as root with a writable root filesystem (kurly keeps the rest of the hardening). Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The A ProjectSend server. puid/pgid own the mounted files; timezone sets TZ. Config at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='projectsend'),
@@ -9224,7 +9244,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Build your family tree with your relatives, online.',
       summary: 'A webtrees server (a self-hosted, collaborative online genealogy application) on the community image, backed by an external MySQL/MariaDB, with its data on a PersistentVolume. kurly authors no Secret; the DB_* credentials come from a provided Secret via envFrom. Pairs with a mysql-cluster named webtrees-db. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The webtrees server. baseUrl is the public URL; secretName holds the DB_* credentials (envFrom). Data at /var/www/webtrees/data. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='webtrees'),
@@ -10724,7 +10746,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Organise your documentation into books and chapters that people actually read.',
       summary: 'A BookStack server (a simple, self-hosted platform for organising and storing documentation) on the maintained LinuxServer image, backed by an external MySQL/MariaDB (the mysql-cluster workload provides one), with config and uploads on a PersistentVolume. The LinuxServer s6 image runs as root and binds :80, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; DB_PASS and APP_KEY come from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
-      requires: { database: 'required' },
+      requires: [
+        { kind: 'database', engine: 'mysql', required: true },
+      ],
       stages: {
         server: d.fn('The BookStack server. dbHost/dbName/dbUser point at a MySQL/MariaDB (e.g. mysql-cluster). appUrl is the public URL. secretName holds DB_PASS and APP_KEY (envFrom). Config/uploads at /config. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='bookstack'),

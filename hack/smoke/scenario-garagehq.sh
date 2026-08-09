@@ -11,5 +11,5 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 kurly::namespace kurly-garagehq
-kurly::secret kurly-garagehq garage workloads/garagehq/server.libsonnet
+kurly::secret kurly-garagehq garagehq workloads/garagehq/server.libsonnet
 kurly::boot workloads/garagehq/server.libsonnet kurly-garagehq "" ""

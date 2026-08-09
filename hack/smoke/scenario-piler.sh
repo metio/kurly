@@ -14,7 +14,7 @@ kurly::vendor
 ns=kurly-piler
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" piler-db piler piler
+kurly::mysql "$ns" piler-db piler piler
 kurly::cache "$ns" piler-cache-headless ""
 
 kurly::secret "$ns" piler workloads/piler/server.libsonnet

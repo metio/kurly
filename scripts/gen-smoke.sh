@@ -36,7 +36,25 @@ generated=0 generated_dep=0 skipped_hand=0
 
 # Extracts a stage parameter's simple quoted default (dbHost='x' -> x); empty when
 # the default is a computed expression rather than a literal.
-param() { grep -oE "^[[:space:]]*$2='[^']*'" "$1" 2>/dev/null | head -1 | sed -E "s/.*='([^']*)'.*/\1/" || true; }
+# ALWAYS ASK THE CATALOGUE, NEVER THE SOURCE. A stage's parameter defaults are
+# published per stage as `args`, and check-catalog fails when an annotated
+# default disagrees with the real one — so the catalogue is both authoritative
+# and verified, while a grep over the jsonnet is neither. It reads only what is
+# spelled the way the pattern expects and answers "absent" for everything else,
+# which is indistinguishable from a parameter that genuinely has no default.
+#
+# That difference provisioned the wrong database for piler: it declares
+# engine: mysql in the catalogue and takes its connection details from a Secret,
+# so a grep of its source for 3306 found nothing and the harness handed it a
+# PostgreSQL. The workload then reported that it could not reach its database,
+# which reads as the workload's defect.
+#
+#   param <workload>/<stage> <argument>
+param() {
+  jq -r --arg k "$1" --arg n "$2" '
+    .workloads[].stages[] | select(.importPath == "github.com/metio/kurly/workloads/\($k).libsonnet")
+    | .args[]? | select(.name == $n) | .default // empty' "$catalog" 2>/dev/null | head -1 || true
+}
 
 # Extra Jsonnet composed onto a stage before it boots, from hack/smoke/extra.json —
 # how an app that refuses to start without a deployment-specific value (its own
@@ -130,11 +148,12 @@ while IFS=$'\t' read -r id stages db cache objstore; do
   scenario="hack/smoke/scenario-${id}.sh"
   IFS=',' read -ra arr <<<"$stages"
   primary="workloads/${id}/${arr[0]}.libsonnet"
+  primaryKey="${id}/${arr[0]}"
 
   prov=""
   if [ "$db" = "1" ]; then
-    dbName="$(param "$primary" dbName)"; [ -n "$dbName" ] || dbName="$(param "$primary" database)"; [ -n "$dbName" ] || dbName="$id"
-    dbUser="$(param "$primary" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
+    dbName="$(param "$primaryKey" dbName)"; [ -n "$dbName" ] || dbName="$(param "$primaryKey" database)"; [ -n "$dbName" ] || dbName="$id"
+    dbUser="$(param "$primaryKey" dbUser)"; [ -n "$dbUser" ] || dbUser="$id"
     # MongoDB first, because it is the one engine the two tests below cannot tell
     # apart: a Mongo-backed stage mentions neither 3306 nor 5432, so it fell
     # through to the PostgreSQL branch and was handed a server speaking the wrong
@@ -147,23 +166,42 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     # would take its database away.
     engine="$(jq -r --arg id "$id" '[.workloads[]|select(.id==$id)|.requires[]?|select(.kind=="database")|.engine//empty]|first//""' "$catalog")"
     if [ "$engine" = "mongodb" ]; then
-      dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
+      dbHost="$(param "$primaryKey" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
       prov+="kurly::mongodb \"\$ns\" ${dbHost}"$'\n'
     elif [ "$engine" = "elasticsearch" ]; then
       # The host comes from the stage's own URL parameter where it has one: an
       # app that takes `esUrl` names the scheme and port too, and provisioning at
       # some other name would leave it pointing at nothing.
-      esHost="$(param "$primary" esHost)"
-      [ -n "$esHost" ] || esHost="$(param "$primary" esUrl | sed -E 's#^https?://##; s#:[0-9]+.*$##')"
+      esHost="$(param "$primaryKey" esHost)"
+      [ -n "$esHost" ] || esHost="$(param "$primaryKey" esUrl | sed -E 's#^https?://##; s#:[0-9]+.*$##')"
       [ -n "$esHost" ] || esHost="${id}-search"
       prov+="kurly::elasticsearch \"\$ns\" ${esHost}"$'\n'
-    # MySQL/MariaDB apps read port 3306 (postgres apps 5432); provision the engine
-    # the app connects to, at the host it defaults to.
-    elif grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
-      dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
+    # THE CATALOGUE FIRST, the file only as a fallback. The two branches above ask
+    # the catalogue and this one used to grep the stage's source for 3306 or
+    # mysql, so a workload that DECLARES engine: mysql while taking its
+    # connection details from a Secret matched nothing and fell through to
+    # PostgreSQL — piler did, and then reported that it could not reach its
+    # database, which reads as the workload's defect and is the harness having
+    # provisioned a server speaking the wrong protocol.
+    #
+    # The grep survives for stages the catalogue states no engine for: it is a
+    # guess, but a guess from the file is better than defaulting every one of
+    # them to PostgreSQL.
+    elif [ "$engine" = "mysql" ] || [ "$engine" = "mariadb" ]; then
+      dbHost="$(param "$primaryKey" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
+      prov+="kurly::mysql \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
+    # THE LAST RESORT, and it announces itself. The catalogue states an engine for
+    # only part of the fleet, and a stage without one would otherwise be handed a
+    # PostgreSQL in silence. Guessing from the file is better than that, but the
+    # FIX is to record the engine in the catalogue — so every guess is printed
+    # with the stage that needs annotating rather than left to be discovered by a
+    # workload failing to connect.
+    elif [ -z "$engine" ] && grep -qE "3306|mariadb|mysql" "$primary" 2>/dev/null; then
+      echo "gen-smoke: ${id}: engine guessed from the source as mysql — annotate requires[].engine in the catalogue" >&2
+      dbHost="$(param "$primaryKey" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db"
       prov+="kurly::mysql \"\$ns\" ${dbHost} ${dbName} ${dbUser}"$'\n'
     else
-      dbHost="$(param "$primary" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
+      dbHost="$(param "$primaryKey" dbHost)"; [ -n "$dbHost" ] || dbHost="${id}-db-rw"
       # A workload that needs a PostgreSQL extension gets a server image carrying
       # it — the stock image would fail its first CREATE EXTENSION.
       pgimage=""
@@ -186,11 +224,11 @@ while IFS=$'\t' read -r id stages db cache objstore; do
   # Without this an S3-backed workload cannot be proven at all — it starts, finds
   # no endpoint, and dies in a way that reads as its own defect.
   if [ "$objstore" = "1" ]; then
-    bucket="$(param "$primary" bucket)"; [ -n "$bucket" ] || bucket="$id"
+    bucket="$(param "$primaryKey" bucket)"; [ -n "$bucket" ] || bucket="$id"
     prov+="kurly::objectstorage \"\$ns\" ${bucket}"$'\n'
   fi
   if [ "$cache" = "1" ]; then
-    redisHost="$(param "$primary" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
+    redisHost="$(param "$primaryKey" redisHost)"; [ -n "$redisHost" ] || redisHost="${id}-cache-headless"
     # Provision the cache the way the workload connects to it. Most take a host and
     # no credential — which is how a cache in the workload's OWN namespace is
     # normally run, reachable only from that namespace and kept that way by a
