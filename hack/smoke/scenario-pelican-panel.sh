@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-pelican-panel
+ns="$(kurly::namespace_unique kurly-pelican-panel)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" pelican-panel-db-rw pelican-panel pelican-panel

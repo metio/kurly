@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-jupyterlab
-kurly::secret kurly-jupyterlab jupyterlab workloads/jupyterlab/server.libsonnet
-kurly::boot workloads/jupyterlab/server.libsonnet kurly-jupyterlab "" ""
+ns="$(kurly::namespace_unique kurly-jupyterlab)"
+kurly::secret "$ns" jupyterlab workloads/jupyterlab/server.libsonnet
+kurly::boot workloads/jupyterlab/server.libsonnet "$ns" "" ""

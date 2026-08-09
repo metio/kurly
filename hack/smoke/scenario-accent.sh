@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-accent
+ns="$(kurly::namespace_unique kurly-accent)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" accent-db-rw accent accent

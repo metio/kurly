@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-ghostfolio
+ns="$(kurly::namespace_unique kurly-ghostfolio)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" ghostfolio-db-rw ghostfolio ghostfolio

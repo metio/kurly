@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-memex
+ns="$(kurly::namespace_unique kurly-memex)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" memex-db-rw memex memex

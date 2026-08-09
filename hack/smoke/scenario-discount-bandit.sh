@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-discount-bandit
+ns="$(kurly::namespace_unique kurly-discount-bandit)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" discount-bandit-db discount-bandit discount-bandit

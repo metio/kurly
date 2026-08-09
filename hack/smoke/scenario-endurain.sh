@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-endurain
+ns="$(kurly::namespace_unique kurly-endurain)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" endurain-db-rw endurain endurain

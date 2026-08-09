@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-searxng
+ns="$(kurly::namespace_unique kurly-searxng)"
 kurly::namespace "$ns"
 
 kurly::cache "$ns" searxng-cache-headless ""

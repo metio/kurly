@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/xbackbone/server.libsonnet kurly-xbackbone "" ""
+ns="$(kurly::namespace_unique kurly-xbackbone)"
+kurly::boot workloads/xbackbone/server.libsonnet "$ns" "" ""

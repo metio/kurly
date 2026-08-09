@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/medama-analytics/server.libsonnet kurly-medama-analytics "" ""
+ns="$(kurly::namespace_unique kurly-medama-analytics)"
+kurly::boot workloads/medama-analytics/server.libsonnet "$ns" "" ""

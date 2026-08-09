@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-mongo-express
+ns="$(kurly::namespace_unique kurly-mongo-express)"
 kurly::namespace "$ns"
 
 kurly::mongodb "$ns" mongo-express-db

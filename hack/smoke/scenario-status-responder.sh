@@ -108,6 +108,18 @@ kubectl --namespace=envoy-gateway-system rollout status deployment/envoy-gateway
   || fail "Envoy Gateway did not start"
 
 echo "== a GatewayClass and a shared Gateway with an HTTP listener =="
+# THIS SCENARIO'S NAMESPACES ARE NOT kurly-PREFIXED — gateway-infra,
+# shared-http-services and apps are the point of it, since what is being proven
+# is routing ACROSS namespaces. kurly::cleanup_workload matches `kurly-<id>` and
+# so has never removed them, which left the client pod behind and failed every
+# re-run with "pods client already exists" — a collision with the previous run
+# rather than anything about the workload. Removing them first makes the scenario
+# repeatable; the wait matters because a namespace still draining accepts a
+# create and refuses everything put into it.
+for stale in "$gw_ns" "$shared_ns" "$app_ns"; do
+  kubectl delete namespace "$stale" --ignore-not-found --timeout=180s >/dev/null 2>&1 || true
+done
+
 kubectl create namespace "$gw_ns" --dry-run=client -o yaml | kubectl apply -f -
 # kind has no load balancer, so the default LoadBalancer data-plane Service stays
 # <pending> forever and Envoy Gateway never assigns the Gateway an address —

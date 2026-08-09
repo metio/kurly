@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-opengist
+ns="$(kurly::namespace_unique kurly-opengist)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" opengist-db-rw opengist opengist

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-azuracast
+ns="$(kurly::namespace_unique kurly-azuracast)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" azuracast-db azuracast azuracast

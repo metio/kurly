@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-rundeck
+ns="$(kurly::namespace_unique kurly-rundeck)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" rundeck-db-rw rundeck rundeck

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-onlyoffice
+ns="$(kurly::namespace_unique kurly-onlyoffice)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" onlyoffice-db-rw onlyoffice onlyoffice

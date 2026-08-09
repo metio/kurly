@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-kanboard
+ns="$(kurly::namespace_unique kurly-kanboard)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" kanboard-db-rw kanboard kanboard

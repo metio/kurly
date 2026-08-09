@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-alist
+ns="$(kurly::namespace_unique kurly-alist)"
 kurly::namespace "$ns"
 
 kurly::objectstorage "$ns" alist

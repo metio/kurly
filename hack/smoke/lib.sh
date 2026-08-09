@@ -62,7 +62,40 @@ kurly::composes_features() {
 }
 
 # Creates a namespace idempotently.
+# A FRESH NAMESPACE PER RUN, echoed back for the caller to use. Re-running a
+# workload shortly after its own cleanup is the case that breaks a fixed name:
+# deleting a namespace is not instant, and one still draining accepts a create
+# while refusing everything put into it — pods come back "already exists" from
+# the dying generation, or never schedule. A walk that re-ran eight healthy
+# workloads minutes after cleaning them up failed all eight for that reason.
+#
+# The suffix makes the collision impossible rather than survivable.
+# kurly::cleanup_workload already matches `kurly-<id>(-…)`, so these are removed
+# by the same call that removed the fixed-name ones.
+#
+#   ns="$(kurly::namespace_unique kurly-<id>)"
+kurly::namespace_unique() {
+  local ns="$1-$(tr -dc a-z0-9 </dev/urandom | head -c 6)"
+  kubectl create namespace "$ns" --dry-run=client --output=yaml | kubectl apply --filename=- >/dev/null
+  printf '%s' "$ns"
+}
+
 kurly::namespace() {
+  # WAIT OUT A TERMINATING NAMESPACE FIRST. Deleting one is not instant — the
+  # cleanup that precedes a re-run gives it 180 seconds and then moves on — and a
+  # namespace still draining accepts the create without complaint while refusing
+  # everything put INTO it: pods come back "already exists" from the dying
+  # generation, or never schedule at all. The workload then looks broken, and a
+  # walk that re-ran eight healthy workloads minutes after their own cleanup
+  # failed all eight for exactly this.
+  local deadline=$((SECONDS + 300))
+  while kubectl get namespace "$1" -o jsonpath='{.status.phase}' 2>/dev/null | grep -q Terminating; do
+    if [ "$SECONDS" -ge "$deadline" ]; then
+      echo "::error::namespace $1 is still Terminating after 300s — refusing to boot into it" >&2
+      return 1
+    fi
+    sleep 3
+  done
   kubectl create namespace "$1" --dry-run=client --output=yaml | kubectl apply --filename=-
 }
 

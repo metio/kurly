@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-note-mark
-kurly::secret kurly-note-mark note-mark workloads/note-mark/server.libsonnet
-kurly::boot workloads/note-mark/server.libsonnet kurly-note-mark "" ""
+ns="$(kurly::namespace_unique kurly-note-mark)"
+kurly::secret "$ns" note-mark workloads/note-mark/server.libsonnet
+kurly::boot workloads/note-mark/server.libsonnet "$ns" "" ""

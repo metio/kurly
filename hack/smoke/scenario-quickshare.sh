@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-quickshare
-kurly::secret kurly-quickshare quickshare workloads/quickshare/server.libsonnet
-kurly::boot workloads/quickshare/server.libsonnet kurly-quickshare "" ""
+ns="$(kurly::namespace_unique kurly-quickshare)"
+kurly::secret "$ns" quickshare workloads/quickshare/server.libsonnet
+kurly::boot workloads/quickshare/server.libsonnet "$ns" "" ""

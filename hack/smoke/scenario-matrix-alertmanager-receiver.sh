@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-matrix-alertmanager-receiver
-kurly::secret kurly-matrix-alertmanager-receiver matrix-alertmanager-receiver workloads/matrix-alertmanager-receiver/server.libsonnet
-kurly::boot workloads/matrix-alertmanager-receiver/server.libsonnet kurly-matrix-alertmanager-receiver "" "homeserverUrl='https://matrix.example.com', userId='@alerts:matrix.example.com'"
+ns="$(kurly::namespace_unique kurly-matrix-alertmanager-receiver)"
+kurly::secret "$ns" matrix-alertmanager-receiver workloads/matrix-alertmanager-receiver/server.libsonnet
+kurly::boot workloads/matrix-alertmanager-receiver/server.libsonnet "$ns" "" "homeserverUrl='https://matrix.example.com', userId='@alerts:matrix.example.com'"

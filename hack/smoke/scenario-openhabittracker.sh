@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-openhabittracker
-kurly::secret kurly-openhabittracker openhabittracker workloads/openhabittracker/server.libsonnet
-kurly::boot workloads/openhabittracker/server.libsonnet kurly-openhabittracker "" ""
+ns="$(kurly::namespace_unique kurly-openhabittracker)"
+kurly::secret "$ns" openhabittracker workloads/openhabittracker/server.libsonnet
+kurly::boot workloads/openhabittracker/server.libsonnet "$ns" "" ""

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-open-quartermaster
+ns="$(kurly::namespace_unique kurly-open-quartermaster)"
 kurly::namespace "$ns"
 
 kurly::mongodb "$ns" open-quartermaster-db

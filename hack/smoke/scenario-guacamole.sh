@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-guacamole
+ns="$(kurly::namespace_unique kurly-guacamole)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" guacamole-db-rw guacamole guacamole

@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-hatsu
-kurly::secret kurly-hatsu hatsu workloads/hatsu/server.libsonnet
-kurly::boot workloads/hatsu/server.libsonnet kurly-hatsu "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })" ""
+ns="$(kurly::namespace_unique kurly-hatsu)"
+kurly::secret "$ns" hatsu workloads/hatsu/server.libsonnet
+kurly::boot workloads/hatsu/server.libsonnet "$ns" "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })" ""

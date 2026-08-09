@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-librephotos
+ns="$(kurly::namespace_unique kurly-librephotos)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" librephotos-db-rw librephotos librephotos

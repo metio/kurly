@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-immich
+ns="$(kurly::namespace_unique kurly-immich)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" immich-db-rw immich immich ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 '"-c", "shared_preload_libraries=vchord.so"'

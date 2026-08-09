@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-safebucket
+ns="$(kurly::namespace_unique kurly-safebucket)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" safebucket-db-rw safebucket safebucket

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-mindwendel
+ns="$(kurly::namespace_unique kurly-mindwendel)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" mindwendel-db-rw mindwendel mindwendel

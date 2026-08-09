@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-firefly-iii
+ns="$(kurly::namespace_unique kurly-firefly-iii)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" firefly-iii-db-rw firefly firefly

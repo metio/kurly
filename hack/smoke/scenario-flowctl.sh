@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-flowctl
+ns="$(kurly::namespace_unique kurly-flowctl)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" flowctl-db-rw flowctl flowctl

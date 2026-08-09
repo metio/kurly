@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/aastro/server.libsonnet kurly-aastro "" "flows=[{ path: '/smoke', method: 'GET', aggregation: { strategy: 'array', best_effort: false }, upstreams: [{ name: 'admin', hosts: 'http://127.0.0.1:7806', path: '/health', method: 'GET', timeout: '3s' }] }]"
+ns="$(kurly::namespace_unique kurly-aastro)"
+kurly::boot workloads/aastro/server.libsonnet "$ns" "" "flows=[{ path: '/smoke', method: 'GET', aggregation: { strategy: 'array', best_effort: false }, upstreams: [{ name: 'admin', hosts: 'http://127.0.0.1:7806', path: '/health', method: 'GET', timeout: '3s' }] }]"

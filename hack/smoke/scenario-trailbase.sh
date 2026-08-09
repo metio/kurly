@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/trailbase/server.libsonnet kurly-trailbase "" ""
+ns="$(kurly::namespace_unique kurly-trailbase)"
+kurly::boot workloads/trailbase/server.libsonnet "$ns" "" ""

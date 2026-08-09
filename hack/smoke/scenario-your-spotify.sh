@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-your-spotify
+ns="$(kurly::namespace_unique kurly-your-spotify)"
 kurly::namespace "$ns"
 
 kurly::mongodb "$ns" your-spotify-db

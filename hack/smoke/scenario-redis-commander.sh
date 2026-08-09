@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-redis-commander
+ns="$(kurly::namespace_unique kurly-redis-commander)"
 kurly::namespace "$ns"
 
 kurly::cache "$ns" redis-commander-cache-headless ""

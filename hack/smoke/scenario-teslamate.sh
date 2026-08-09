@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-teslamate
+ns="$(kurly::namespace_unique kurly-teslamate)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" teslamate-db-rw teslamate teslamate

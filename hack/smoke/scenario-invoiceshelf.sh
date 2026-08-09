@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-invoiceshelf
+ns="$(kurly::namespace_unique kurly-invoiceshelf)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" invoiceshelf-db-rw invoiceshelf invoiceshelf

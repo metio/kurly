@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-tube-archivist
+ns="$(kurly::namespace_unique kurly-tube-archivist)"
 kurly::namespace "$ns"
 
 kurly::elasticsearch "$ns" tube-archivist-es

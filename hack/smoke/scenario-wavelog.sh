@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-wavelog
+ns="$(kurly::namespace_unique kurly-wavelog)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" wavelog-db wavelog wavelog

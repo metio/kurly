@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-pdfding
+ns="$(kurly::namespace_unique kurly-pdfding)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" pdfding-db-rw pdfding pdfding

@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-speedtest-tracker
-kurly::secret kurly-speedtest-tracker speedtest-tracker workloads/speedtest-tracker/server.libsonnet
-kurly::boot workloads/speedtest-tracker/server.libsonnet kurly-speedtest-tracker "+ k.env({ APP_URL: 'http://speedtest-tracker' })" ""
+ns="$(kurly::namespace_unique kurly-speedtest-tracker)"
+kurly::secret "$ns" speedtest-tracker workloads/speedtest-tracker/server.libsonnet
+kurly::boot workloads/speedtest-tracker/server.libsonnet "$ns" "+ k.env({ APP_URL: 'http://speedtest-tracker' })" ""

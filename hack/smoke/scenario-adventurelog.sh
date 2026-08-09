@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-adventurelog
+ns="$(kurly::namespace_unique kurly-adventurelog)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" adventurelog-db-rw adventurelog adventurelog docker.io/postgis/postgis:17-3.5

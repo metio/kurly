@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-forgejo
+ns="$(kurly::namespace_unique kurly-forgejo)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" forgejo-db-rw forgejo forgejo

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-fossbilling
+ns="$(kurly::namespace_unique kurly-fossbilling)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" fossbilling-db fossbilling fossbilling

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-mastodon
+ns="$(kurly::namespace_unique kurly-mastodon)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" mastodon-db-rw mastodon mastodon

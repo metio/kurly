@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-webtrees
+ns="$(kurly::namespace_unique kurly-webtrees)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" webtrees-db webtrees webtrees

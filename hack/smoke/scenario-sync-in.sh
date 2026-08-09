@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-sync-in
+ns="$(kurly::namespace_unique kurly-sync-in)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" sync-in-db sync-in sync-in

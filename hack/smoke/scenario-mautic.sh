@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-mautic
+ns="$(kurly::namespace_unique kurly-mautic)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" mautic-db mautic mautic

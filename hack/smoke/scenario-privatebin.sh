@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/privatebin/server.libsonnet kurly-privatebin "" ""
+ns="$(kurly::namespace_unique kurly-privatebin)"
+kurly::boot workloads/privatebin/server.libsonnet "$ns" "" ""

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-onloc
+ns="$(kurly::namespace_unique kurly-onloc)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" onloc-db-rw onloc onloc

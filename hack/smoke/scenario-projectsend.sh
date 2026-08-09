@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-projectsend
+ns="$(kurly::namespace_unique kurly-projectsend)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" projectsend-db projectsend projectsend

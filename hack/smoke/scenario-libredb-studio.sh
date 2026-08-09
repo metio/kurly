@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-libredb-studio
+ns="$(kurly::namespace_unique kurly-libredb-studio)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" libredb-studio-db-rw libredb-studio libredb-studio

@@ -102,19 +102,24 @@ while IFS=$'\t' read -r id stages; do
     file="workloads/${id}/${stage}.libsonnet"
     [ -f "$file" ] || { echo "::error::${file} referenced by the catalog does not exist"; exit 1; }
     if [ "${#arr[@]}" -eq 1 ]; then ns="kurly-${id}"; else ns="kurly-${id}-${stage}"; fi
+    primaryKey="${id}/${stage}"
+    # A stage that reads a Secret (envFromSecret) declares secretKeys in the
+    # catalog even without a database/cache dependency; mint that Secret before
+    # booting or the container fails with "secret not found".
+    # A FRESH NAMESPACE PER STAGE, named after it but never reused: a re-run
+    # minutes after the last cleanup would otherwise create into a namespace
+    # still draining, which accepts the create and refuses everything in it.
+    boot_lines+="ns=\"\$(kurly::namespace_unique ${ns})\""$'\n'
     # A stage that reads a Secret (envFromSecret) declares secretKeys in the
     # catalog even without a database/cache dependency; mint that Secret before
     # booting or the container fails with "secret not found".
     if [ "$(jq -r --arg ip "github.com/metio/kurly/${file}" '[.workloads[].stages[] | select(.importPath==$ip) | .secretKeys // []] | add | length' "$catalog")" != 0 ]; then
-      secretName="$(param "$file" secretName)"; [ -n "$secretName" ] || secretName="$id"
-      # The namespace must exist before the Secret is applied; kurly::boot also
-      # ensures it (idempotent), so creating it here first is safe.
-      boot_lines+="kurly::namespace ${ns}"$'\n'
-      boot_lines+="kurly::secret ${ns} ${secretName} ${file}"$'\n'
+      secretName="$(param "$primaryKey" secretName)"; [ -n "$secretName" ] || secretName="$id"
+      boot_lines+="kurly::secret \"\$ns\" ${secretName} ${file}"$'\n'
     fi
     ex="$(extra_for "${id}/${stage}")"
     pa="$(params_for "${id}/${stage}")"
-    boot_lines+="kurly::boot ${file} ${ns} \"${ex}\" \"${pa}\""$'\n'
+    boot_lines+="kurly::boot ${file} \"\$ns\" \"${ex}\" \"${pa}\""$'\n'
   done
 
   {
@@ -264,7 +269,12 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     printf '# shellcheck source=hack/smoke/lib.sh\n'
     printf 'source hack/smoke/lib.sh\n'
     printf 'kurly::vendor\n\n'
-    printf 'ns=kurly-%s\n' "$id"
+    # A FRESH NAMESPACE PER RUN, for the same reason the standalone branch takes
+    # one: a re-run shortly after the last cleanup would otherwise create into a
+    # namespace still draining, which accepts the create and refuses everything
+    # inside it. The dependency provisioners below all take "$ns", so they land
+    # in the same fresh namespace as the workload.
+    printf 'ns="$(kurly::namespace_unique kurly-%s)"\n' "$id"
     printf 'kurly::namespace "$ns"\n\n'
     printf '%s\n' "$prov"
     printf '%s' "$boot_lines"

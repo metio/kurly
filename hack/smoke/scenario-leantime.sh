@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-leantime
+ns="$(kurly::namespace_unique kurly-leantime)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" leantime-db-rw leantime leantime

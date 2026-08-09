@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/mermaid-live-editor/server.libsonnet kurly-mermaid-live-editor "" ""
+ns="$(kurly::namespace_unique kurly-mermaid-live-editor)"
+kurly::boot workloads/mermaid-live-editor/server.libsonnet "$ns" "" ""

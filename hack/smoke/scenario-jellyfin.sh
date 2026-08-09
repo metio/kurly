@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/jellyfin/server.libsonnet kurly-jellyfin "" ""
+ns="$(kurly::namespace_unique kurly-jellyfin)"
+kurly::boot workloads/jellyfin/server.libsonnet "$ns" "" ""

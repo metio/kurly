@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/pyload-ng/server.libsonnet kurly-pyload-ng "" ""
+ns="$(kurly::namespace_unique kurly-pyload-ng)"
+kurly::boot workloads/pyload-ng/server.libsonnet "$ns" "" ""

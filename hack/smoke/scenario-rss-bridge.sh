@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/rss-bridge/server.libsonnet kurly-rss-bridge "" ""
+ns="$(kurly::namespace_unique kurly-rss-bridge)"
+kurly::boot workloads/rss-bridge/server.libsonnet "$ns" "" ""

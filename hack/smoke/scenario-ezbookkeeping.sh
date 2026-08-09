@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-ezbookkeeping
-kurly::secret kurly-ezbookkeeping ezbookkeeping workloads/ezbookkeeping/server.libsonnet
-kurly::boot workloads/ezbookkeeping/server.libsonnet kurly-ezbookkeeping "" ""
+ns="$(kurly::namespace_unique kurly-ezbookkeeping)"
+kurly::secret "$ns" ezbookkeeping workloads/ezbookkeeping/server.libsonnet
+kurly::boot workloads/ezbookkeeping/server.libsonnet "$ns" "" ""

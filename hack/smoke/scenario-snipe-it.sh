@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-snipe-it
+ns="$(kurly::namespace_unique kurly-snipe-it)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" snipe-it-db snipeit snipeit

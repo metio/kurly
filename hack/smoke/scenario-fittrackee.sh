@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-fittrackee
+ns="$(kurly::namespace_unique kurly-fittrackee)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" fittrackee-db-rw fittrackee fittrackee docker.io/postgis/postgis:17-3.5

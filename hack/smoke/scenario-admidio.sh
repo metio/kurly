@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-admidio
+ns="$(kurly::namespace_unique kurly-admidio)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" admidio-db admidio admidio

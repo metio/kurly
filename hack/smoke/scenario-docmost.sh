@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-docmost
+ns="$(kurly::namespace_unique kurly-docmost)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" docmost-db-rw docmost docmost

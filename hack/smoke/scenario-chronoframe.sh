@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-chronoframe
-kurly::secret kurly-chronoframe chronoframe workloads/chronoframe/server.libsonnet
-kurly::boot workloads/chronoframe/server.libsonnet kurly-chronoframe "" ""
+ns="$(kurly::namespace_unique kurly-chronoframe)"
+kurly::secret "$ns" chronoframe workloads/chronoframe/server.libsonnet
+kurly::boot workloads/chronoframe/server.libsonnet "$ns" "" ""

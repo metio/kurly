@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-librebooking
+ns="$(kurly::namespace_unique kurly-librebooking)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" librebooking-db librebooking librebooking

@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-youtube-dl-nas
-kurly::secret kurly-youtube-dl-nas youtube-dl-nas workloads/youtube-dl-nas/server.libsonnet
-kurly::boot workloads/youtube-dl-nas/server.libsonnet kurly-youtube-dl-nas "" ""
+ns="$(kurly::namespace_unique kurly-youtube-dl-nas)"
+kurly::secret "$ns" youtube-dl-nas workloads/youtube-dl-nas/server.libsonnet
+kurly::boot workloads/youtube-dl-nas/server.libsonnet "$ns" "" ""

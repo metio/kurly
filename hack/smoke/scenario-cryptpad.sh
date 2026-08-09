@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/cryptpad/server.libsonnet kurly-cryptpad "" ""
+ns="$(kurly::namespace_unique kurly-cryptpad)"
+kurly::boot workloads/cryptpad/server.libsonnet "$ns" "" ""

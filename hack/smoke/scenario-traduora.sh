@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-traduora
+ns="$(kurly::namespace_unique kurly-traduora)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" traduora-db-rw traduora traduora

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-airtrail
+ns="$(kurly::namespace_unique kurly-airtrail)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" airtrail-db-rw airtrail airtrail

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-mayan-edms
+ns="$(kurly::namespace_unique kurly-mayan-edms)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" mayan-edms-db-rw mayan mayan

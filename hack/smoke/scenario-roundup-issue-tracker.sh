@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-roundup-issue-tracker
-kurly::secret kurly-roundup-issue-tracker roundup-issue-tracker workloads/roundup-issue-tracker/server.libsonnet
-kurly::boot workloads/roundup-issue-tracker/server.libsonnet kurly-roundup-issue-tracker "" ""
+ns="$(kurly::namespace_unique kurly-roundup-issue-tracker)"
+kurly::secret "$ns" roundup-issue-tracker workloads/roundup-issue-tracker/server.libsonnet
+kurly::boot workloads/roundup-issue-tracker/server.libsonnet "$ns" "" ""

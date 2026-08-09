@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-bitmagnet
+ns="$(kurly::namespace_unique kurly-bitmagnet)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" bitmagnet-db-rw bitmagnet bitmagnet

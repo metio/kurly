@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-seatsurfing
+ns="$(kurly::namespace_unique kurly-seatsurfing)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" seatsurfing-db-rw seatsurfing seatsurfing

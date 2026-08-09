@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-open-webui
+ns="$(kurly::namespace_unique kurly-open-webui)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" open-webui-db-rw open-webui open-webui

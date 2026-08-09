@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-greenlight
+ns="$(kurly::namespace_unique kurly-greenlight)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" greenlight-db-rw greenlight greenlight

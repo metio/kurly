@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/zot-oci-registry/server.libsonnet kurly-zot-oci-registry "" ""
+ns="$(kurly::namespace_unique kurly-zot-oci-registry)"
+kurly::boot workloads/zot-oci-registry/server.libsonnet "$ns" "" ""

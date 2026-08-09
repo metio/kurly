@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-eonvelope
+ns="$(kurly::namespace_unique kurly-eonvelope)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" eonvelope-db email_archive_django eonvelope

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-receipt-wrangler
+ns="$(kurly::namespace_unique kurly-receipt-wrangler)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" receipt-wrangler-db-rw receipt-wrangler receipt-wrangler

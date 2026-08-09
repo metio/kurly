@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-wikijs
+ns="$(kurly::namespace_unique kurly-wikijs)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" wikijs-db-rw wikijs wikijs

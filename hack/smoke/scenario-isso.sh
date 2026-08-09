@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/isso/server.libsonnet kurly-isso "" "host='http://isso:8080'"
+ns="$(kurly::namespace_unique kurly-isso)"
+kurly::boot workloads/isso/server.libsonnet "$ns" "" "host='http://isso:8080'"

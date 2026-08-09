@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/podfetch/server.libsonnet kurly-podfetch "" ""
+ns="$(kurly::namespace_unique kurly-podfetch)"
+kurly::boot workloads/podfetch/server.libsonnet "$ns" "" ""

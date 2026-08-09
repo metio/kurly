@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/tachidesk/server.libsonnet kurly-tachidesk "" ""
+ns="$(kurly::namespace_unique kurly-tachidesk)"
+kurly::boot workloads/tachidesk/server.libsonnet "$ns" "" ""

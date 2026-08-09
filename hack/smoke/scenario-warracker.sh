@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-warracker
+ns="$(kurly::namespace_unique kurly-warracker)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" warracker-db-rw warracker warracker

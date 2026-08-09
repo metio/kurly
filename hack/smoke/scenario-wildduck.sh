@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-wildduck
+ns="$(kurly::namespace_unique kurly-wildduck)"
 kurly::namespace "$ns"
 
 kurly::mongodb "$ns" wildduck-db

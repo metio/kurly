@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-ferretdb
+ns="$(kurly::namespace_unique kurly-ferretdb)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" ferretdb-db-rw ferretdb ferretdb

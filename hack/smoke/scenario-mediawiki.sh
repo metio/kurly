@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-mediawiki
+ns="$(kurly::namespace_unique kurly-mediawiki)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" mediawiki-db-rw mediawiki mediawiki

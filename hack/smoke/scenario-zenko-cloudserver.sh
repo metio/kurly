@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-zenko-cloudserver
-kurly::secret kurly-zenko-cloudserver zenko-cloudserver workloads/zenko-cloudserver/server.libsonnet
-kurly::boot workloads/zenko-cloudserver/server.libsonnet kurly-zenko-cloudserver "" ""
+ns="$(kurly::namespace_unique kurly-zenko-cloudserver)"
+kurly::secret "$ns" zenko-cloudserver workloads/zenko-cloudserver/server.libsonnet
+kurly::boot workloads/zenko-cloudserver/server.libsonnet "$ns" "" ""

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-bookstack
+ns="$(kurly::namespace_unique kurly-bookstack)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" bookstack-db bookstack bookstack

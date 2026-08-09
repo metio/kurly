@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-libredesk
+ns="$(kurly::namespace_unique kurly-libredesk)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" libredesk-db-rw libredesk libredesk

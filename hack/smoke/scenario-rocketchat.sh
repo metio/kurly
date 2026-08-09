@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-rocketchat
+ns="$(kurly::namespace_unique kurly-rocketchat)"
 kurly::namespace "$ns"
 
 kurly::mongodb "$ns" rocketchat-db
