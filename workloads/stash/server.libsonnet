@@ -63,7 +63,13 @@ function(
   // A Service named stash makes Kubernetes inject STASH_PORT as a tcp:// URL,
   // which is the variable the server reads for its listen port.
   + kurly.disableServiceLinks()
-  + kurly.runAs(1000, gid=1000, fsGroup=1000)
+  // ROOT, because the image declares no user and carries no /etc/passwd entry for
+  // any other uid. Stash resolves its home directory through the C library's
+  // user lookup rather than $HOME, so an unlisted uid makes that lookup fail and
+  // the process PANICS during startup — with a Go stack trace that says nothing
+  // about the user it could not find. Everything else in the hardened default
+  // stays on.
+  + kurly.rootUser()
   + kurly.store('/data', storageSize, storageClass=storageClass)
   // ffmpeg and the Python scrapers both write scratch files outside the volume.
   + kurly.scratch('/tmp')

@@ -93,6 +93,9 @@
   "vikunja": {
     "compose": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"
   },
+  "wekan": {
+    "params": "rootUrl='http://wekan:8080'"
+  },
   "wetty": {
     "params": "sshHost='example.internal'"
   },

@@ -428,4 +428,8 @@
   routr: '2026-08-09',
   'docker-mailserver': '2026-08-09',
   coder: '2026-08-09',
+  stash: '2026-08-09',
+  wekan: '2026-08-09',
+  viseron: '2026-08-09',
+  'lyrion-music-server': '2026-08-09',
 }

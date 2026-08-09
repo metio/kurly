@@ -277,4 +277,8 @@
   'countly-community-edition': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Countly Enterprise) — https://count.ly/' },
   'sipcapture-homer': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (QXIP/HOMER cloud) — https://www.sipcapture.org/' },
   'uusec-waf': { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Safe3/uusec-waf' },
+  'mirotalk-p2p': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://p2p.mirotalk.com' },
+  'canary-tokens': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://canarytokens.org' },
+  openttd: { reason: 'no-published-source', note: 'no image built from the published source — https://wiki.openttd.org/en/Manual/Dedicated%20server' },
+  sunshine: { reason: 'undeployable', note: 'streams a desktop session and needs a GPU and a display server — https://docs.lizardbyte.dev/projects/sunshine/latest/md_docs_2getting__started.html' },
 }

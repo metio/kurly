@@ -537,6 +537,8 @@ local stageImports = {
   'bitmagnet/server': import 'github.com/metio/kurly/workloads/bitmagnet/server.libsonnet',
   'mediamtx/server': import 'github.com/metio/kurly/workloads/mediamtx/server.libsonnet',
   'routr/server': import 'github.com/metio/kurly/workloads/routr/server.libsonnet',
+  'viseron/server': import 'github.com/metio/kurly/workloads/viseron/server.libsonnet',
+  'lyrion-music-server/server': import 'github.com/metio/kurly/workloads/lyrion-music-server/server.libsonnet',
 };
 
 // Fails if the annotated names and the exported names are not the same set,

@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::mongodb "$ns" wekan-db
 
 kurly::secret "$ns" wekan workloads/wekan/server.libsonnet
-kurly::boot workloads/wekan/server.libsonnet "$ns" "" ""
+kurly::boot workloads/wekan/server.libsonnet "$ns" "" "rootUrl='http://wekan:8080'"
