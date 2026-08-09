@@ -132,6 +132,33 @@ Check these first when a pod misbehaves:
 - a slow first start (migrations, asset builds, plugin relinking) needs
   `kurly.startupProbe`, not a longer liveness delay
 
+### Logging
+
+Set the workload to log **warnings and errors only**, through whatever control
+the application itself has. Most images default to info, and info is where the
+volume comes from. Volume is not only a bill: logs land on the node's disk, and
+under disk pressure the kubelet ranks pods by *total disk usage* and ignores QoS
+class entirely — so one chatty workload gets a paying neighbour evicted.
+
+There is no common knob. Look up what this application actually reads —
+`LOG_LEVEL`, `LOGLEVEL`, `RUST_LOG`, `<APP>_LOG_LEVEL`, a config file key, a CLI
+flag — and set that. Do not set an env var the image ignores: it costs nothing to
+write, it looks configured in review, and it leaves the workload as loud as it
+was.
+
+Make it a **stage parameter defaulting to warn**, not a hard-coded value. An
+operator looking into a customer's fault has to be able to turn it back up for
+one namespace without cutting a release, and a level nobody can raise turns "it
+is slow" into an incident nobody can investigate.
+
+Check where the application's **access log** sits before turning info off. Where
+that log is the only record of who reached the workload, losing it is a decision
+to take deliberately rather than as a side effect of a volume measure.
+
+Where an application has no level control, or has one and ignores it, write that
+in the workload's README. Absent beats guessed here as everywhere else, and the
+next person should not have to rediscover it.
+
 ---
 
 ## 3. The catalogue entry
