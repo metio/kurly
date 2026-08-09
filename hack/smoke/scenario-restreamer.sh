@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-restreamer
-kurly::secret kurly-restreamer restreamer workloads/restreamer/server.libsonnet
-kurly::boot workloads/restreamer/server.libsonnet kurly-restreamer "" ""
+ns="$(kurly::namespace_unique kurly-restreamer)"
+kurly::secret "$ns" restreamer workloads/restreamer/server.libsonnet
+kurly::boot workloads/restreamer/server.libsonnet "$ns" "" ""

@@ -46,11 +46,15 @@ function(
   + kurly.port(7000)
   + kurly.servicePort(7000)
   + kurly.env({ TZ: timezone, LOG_LEVEL: logLevel } + env)
-  // The image ships USER abc (uid 911 in the LinuxServer base image) and its s6
-  // service execs the application as that account, so nothing here needs root. The
-  // uid is pinned so the volume is group-owned by it and the app can write its
-  // database — the s6 init cannot chown it from an unprivileged user.
-  + kurly.runAs(911, 911)
+  // s6-overlay's preinit takes ownership of /run and the service tree before it
+  // drops to the application's own account (uid 911), and it cannot do either
+  // from an unprivileged user: it refuses to start with "/run belongs to uid 0
+  // instead of 911, and we're lacking the privileges to fix it". The init needs
+  // root and the ability to keep it across the exec; the application itself is
+  // still run as 911, by s6, not by the pod's securityContext.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   // s6-overlay assembles its service tree under /run and /var/run at every start,
   // and the .NET runtime keeps its temporary files in /tmp.
   + kurly.scratch('/run')

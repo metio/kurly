@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-neo4j
-kurly::secret kurly-neo4j neo4j workloads/neo4j/server.libsonnet
-kurly::boot workloads/neo4j/server.libsonnet kurly-neo4j "" ""
+ns="$(kurly::namespace_unique kurly-neo4j)"
+kurly::secret "$ns" neo4j workloads/neo4j/server.libsonnet
+kurly::boot workloads/neo4j/server.libsonnet "$ns" "" ""

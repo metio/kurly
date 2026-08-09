@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-nextcloud
+ns="$(kurly::namespace_unique kurly-nextcloud)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" nextcloud-db-rw nextcloud nextcloud

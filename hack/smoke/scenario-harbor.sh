@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-harbor
+ns="$(kurly::namespace_unique kurly-harbor)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" harbor-db-rw registry harbor

@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-joomla
+ns="$(kurly::namespace_unique kurly-joomla)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" joomla-db joomla joomla

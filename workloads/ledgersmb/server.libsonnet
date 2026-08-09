@@ -70,20 +70,32 @@ function(
       LSMB_MAIL_SMTPHOST: '',
     } + env
   )
-  // The image's USER is the NAME www-data, which kubelet cannot check against
-  // runAsNonRoot — it refuses to start the container rather than guess. Debian's
-  // www-data is uid/gid 33, and the application's own tree is chowned to it.
-  + kurly.runAs(33, gid=33, fsGroup=33)
+  // s6-overlay's preinit takes ownership of /run and assembles the service tree
+  // before it drops to the application's account (Debian's www-data, uid 33), and
+  // it cannot do either unprivileged: it refuses to start with "/run belongs to
+  // uid 0 instead of 33 and we're lacking the privileges to fix it". The init
+  // needs root and the ability to keep it across the exec; s6 still runs the
+  // application itself as 33, which is also what makes its own tree writable.
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   // A Service named `postgres` in the same namespace would otherwise inject
   // POSTGRES_PORT=tcp://…, which the entrypoint copies straight into the
   // database port of the generated configuration.
   + kurly.disableServiceLinks()
+  // s6-overlay rebuilds its service tree under /run at every start, and the
+  // application writes INTO ITS OWN INSTALL TREE: uploaded and generated
+  // documents, per-company configuration overrides and the template cache all
+  // land under /srv/ledgersmb/local. That path is also a local::lib prefix on
+  // @INC, so covering it with an empty volume takes the image's own Perl modules
+  // away with it — the container then dies on "Can't locate
+  // DateTime/Format/Duration/ISO8601.pm in @INC", which reads as an incomplete
+  // image rather than as a mount hiding what the image ships. The writable root
+  // filesystem is what lets it write beside its code without hiding any of it.
+  + kurly.writableRootFilesystem()
   // The entrypoint generates /tmp/ledgersmb.conf, and starman and the LaTeX
   // rendering path both write temporary files there.
   + kurly.scratch('/tmp', '256Mi')
-  // The application's own writable tree: uploaded and generated documents,
-  // per-company configuration overrides and the template cache.
-  + kurly.scratch('/srv/ledgersmb/local', '256Mi')
   // Perl loads the whole application before starman binds, and an unconfigured
   // instance answers 302/401 on every path, so both probes ask for a connection
   // rather than a status.

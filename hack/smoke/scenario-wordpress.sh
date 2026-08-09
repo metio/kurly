@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-wordpress
+ns="$(kurly::namespace_unique kurly-wordpress)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" wordpress-db wordpress wordpress

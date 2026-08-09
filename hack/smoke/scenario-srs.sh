@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/srs/server.libsonnet kurly-srs "" ""
+ns="$(kurly::namespace_unique kurly-srs)"
+kurly::boot workloads/srs/server.libsonnet "$ns" "" ""

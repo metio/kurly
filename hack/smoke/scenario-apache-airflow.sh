@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-apache-airflow
+ns="$(kurly::namespace_unique kurly-apache-airflow)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" apache-airflow-db-rw apache-airflow apache-airflow

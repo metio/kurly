@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-drupal
+ns="$(kurly::namespace_unique kurly-drupal)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" drupal-db-rw drupal drupal

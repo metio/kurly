@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-phpmyadmin
+ns="$(kurly::namespace_unique kurly-phpmyadmin)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" phpmyadmin-db phpmyadmin phpmyadmin

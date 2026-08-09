@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-nocobase
+ns="$(kurly::namespace_unique kurly-nocobase)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" nocobase-db-rw nocobase nocobase

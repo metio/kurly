@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-peertube
+ns="$(kurly::namespace_unique kurly-peertube)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" peertube-db-rw peertube peertube

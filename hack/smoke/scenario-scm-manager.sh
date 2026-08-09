@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/scm-manager/server.libsonnet kurly-scm-manager "" ""
+ns="$(kurly::namespace_unique kurly-scm-manager)"
+kurly::boot workloads/scm-manager/server.libsonnet "$ns" "" ""

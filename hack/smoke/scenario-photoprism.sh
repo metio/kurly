@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-photoprism
+ns="$(kurly::namespace_unique kurly-photoprism)"
 kurly::namespace "$ns"
 
 kurly::mysql "$ns" photoprism-db photoprism photoprism

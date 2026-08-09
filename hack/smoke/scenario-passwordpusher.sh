@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-passwordpusher
+ns="$(kurly::namespace_unique kurly-passwordpusher)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" passwordpusher-db-rw passwordpusher passwordpusher

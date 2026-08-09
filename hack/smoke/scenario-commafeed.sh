@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-commafeed
+ns="$(kurly::namespace_unique kurly-commafeed)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" commafeed-db-rw commafeed commafeed

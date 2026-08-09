@@ -31,7 +31,8 @@ done
 # live cluster — long after the change looked green.
 #
 # The ignored tokens are not API references: a docs URL
-# (kurly.projects.metio.wtf), the policy file (policy/kurly.rego), the
+# (kurly.projects.metio.wtf), the policy file (policy/kurly.rego), the systemd
+# unit the fleet walk runs under (hack/smoke/kurly.slice), the
 # kurly.test/* and kurly.metio.wtf/* label keys the gates and workloads use, and
 # and the artifact media types (application/vnd.metio.kurly.workload.v1+json,
 # …kurly.library.v1+json, and …kurly.catalog.v1+json, which the library type
@@ -42,7 +43,7 @@ done
 exports="$(jsonnet -J vendor -e "std.objectFieldsAll(import 'main.libsonnet')" | jq -r '.[]' | sort -u)"
 # -d skip steps over the theme submodule, which git ls-files reports as a path.
 referenced="$(git ls-files -z | xargs -0 grep -IhoE -d skip 'kurly\.[a-zA-Z_][a-zA-Z0-9_]*' \
-  | sed 's/^kurly\.//' | sort -u | grep -vxE 'projects|rego|test|metio|workload|catalog|library' || true)"
+  | sed 's/^kurly\.//' | sort -u | grep -vxE 'projects|rego|slice|test|metio|workload|catalog|library' || true)"
 unknown="$(comm -23 <(printf '%s\n' "$referenced") <(printf '%s\n' "$exports"))"
 if [ -n "$unknown" ]; then
   echo "::error::these kurly.<name> references are not exported by main.libsonnet:" >&2

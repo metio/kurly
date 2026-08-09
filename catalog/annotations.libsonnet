@@ -4029,9 +4029,12 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       homepage: 'https://www.pinepods.online',
       license: 'GPL-3.0-or-later',
       description: 'Keep one podcast library for a household, with play positions that follow whoever picks it up.',
-      summary: "A PinePods server (a podcast manager several people share: subscriptions, play positions and downloads live in one database, so an episode paused on a phone resumes on a laptop). A composable http workload backed by an external PostgreSQL, with downloaded episodes and backups on a PersistentVolume. Coordinates are env from dbHost/database/dbUser; a provided Secret holds DB_PASSWORD and the first administrator's PASSWORD (kurly authors none) — left out, the container invents that password and prints it to the log. supervisord runs nginx, the FastAPI process and cron together as root and the entrypoint chowns the mail spool, so root, capabilities and a writable root filesystem are relaxed. The Service shares the workload name, which would inject PINEPODS_PORT as a tcp:// URL over the value the API builds its links from, so service links are off. The first boot waits for the database, creates the schema and the administrator before anything answers, and is startup-probed. Podcast search is resolved through the project's own API over the internet. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8040.",
+      summary: "A PinePods server (a podcast manager several people share: subscriptions, play positions and downloads live in one database, so an episode paused on a phone resumes on a laptop). A composable http workload backed by an external PostgreSQL, with downloaded episodes and backups on a PersistentVolume. It also needs a Redis the background workers coordinate through (redisHost/redisPort): the API process exits on a cache it cannot resolve and nginx then answers every request 502, which reads as a slow start rather than a missing dependency. Coordinates are env from dbHost/database/dbUser; a provided Secret holds DB_PASSWORD and the first administrator's PASSWORD (kurly authors none) — left out, the container invents that password and prints it to the log. supervisord runs nginx, the FastAPI process and cron together as root and the entrypoint chowns the mail spool, so root, capabilities and a writable root filesystem are relaxed. The Service shares the workload name, which would inject PINEPODS_PORT as a tcp:// URL over the value the API builds its links from, so service links are off. The first boot waits for the database, creates the schema and the administrator before anything answers, and is startup-probed. Podcast search is resolved through the project's own API over the internet. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8040.",
       category: 'application',
-      requires: [{ kind: 'database', required: true, engine: 'postgresql' }],
+      requires: [
+        { kind: 'database', required: true, engine: 'postgresql' },
+        { kind: 'cache', required: true },
+      ],
       stages: {
         server: d.fn('The PinePods server, serving the web app on :8040 — nginx serves the compiled front end and proxies /api to the FastAPI process on :8032, which is never exposed. Downloads, backups and certificates live at /opt/pinepods on the volume; everything else is in PostgreSQL. dbHost/database/dbUser default to a cnpg-cluster named pinepods-db, and the database itself must already exist. serverHost is the host clients reach this instance on, which the API builds the links it hands out from — unset, the container falls back to the pod name. Set proxyProtocol/reverseProxy when an exposure terminates TLS in front of it, or the generated links stay http:// and a browser refuses them. adminFullname/adminUsername/adminEmail describe the first administrator, whose PASSWORD is in the Secret alongside DB_PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='pinepods'),
@@ -4042,6 +4045,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('dbPort', d.T.int, default=5432),
           d.arg('database', d.T.string, default='pinepods'),
           d.arg('dbUser', d.T.string, default='pinepods'),
+          d.arg('redisHost', d.T.string, default='pinepods-cache-headless'),
+          d.arg('redisPort', d.T.int, default=6379),
           d.arg('serverHost', d.T.string, example='pinepods.example.com'),
           d.arg('proxyProtocol', d.T.string, default='http'),
           d.arg('reverseProxy', d.T.bool, default=false),

@@ -10,6 +10,6 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::namespace kurly-remark42
-kurly::secret kurly-remark42 remark42 workloads/remark42/server.libsonnet
-kurly::boot workloads/remark42/server.libsonnet kurly-remark42 "+ k.env({ REMARK_URL: 'http://remark42:8080' })" ""
+ns="$(kurly::namespace_unique kurly-remark42)"
+kurly::secret "$ns" remark42 workloads/remark42/server.libsonnet
+kurly::boot workloads/remark42/server.libsonnet "$ns" "+ k.env({ REMARK_URL: 'http://remark42:8080' })" ""

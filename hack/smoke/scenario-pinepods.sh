@@ -11,10 +11,11 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-pinepods
+ns="$(kurly::namespace_unique kurly-pinepods)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" pinepods-db-rw pinepods pinepods
+kurly::cache "$ns" pinepods-cache-headless ""
 
 kurly::secret "$ns" pinepods workloads/pinepods/server.libsonnet
 kurly::boot workloads/pinepods/server.libsonnet "$ns" "" ""

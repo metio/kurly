@@ -45,6 +45,12 @@ function(
   dbPort=5432,
   database='pinepods',
   dbUser='pinepods',
+  // The cache the background workers coordinate through. It is NOT optional: the
+  // API process exits on a Redis it cannot resolve, leaving nginx up and every
+  // request answered 502 — which reads as a slow first start rather than as a
+  // missing dependency.
+  redisHost='pinepods-cache-headless',
+  redisPort=6379,
   // The host clients reach this instance on, which the API builds the links it
   // hands out from. Null leaves it to the container's own HOSTNAME, which here
   // is the pod name — every generated link then points at something only the
@@ -86,6 +92,16 @@ function(
       DB_PORT: std.toString(dbPort),
       DB_NAME: database,
       DB_USER: dbUser,
+      // BOTH names, deliberately: the Python start-up path reads REDIS_HOST while
+      // the Rust API reads VALKEY_HOST, whose default is upstream's compose
+      // service name `valkey`. Setting only REDIS_HOST gets the database
+      // migrated and the front end served, and leaves the API exiting on a name
+      // that does not resolve — nginx then answers 502 on every request, which
+      // reads as a slow first start rather than an unset variable.
+      REDIS_HOST: redisHost,
+      REDIS_PORT: std.toString(redisPort),
+      VALKEY_HOST: redisHost,
+      VALKEY_PORT: std.toString(redisPort),
       SEARCH_API_URL: searchApiUrl,
       PINEPODS_PORT: '8040',
       PROXY_PROTOCOL: proxyProtocol,

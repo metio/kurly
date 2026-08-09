@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/uptime-kuma/server.libsonnet kurly-uptime-kuma "" ""
+ns="$(kurly::namespace_unique kurly-uptime-kuma)"
+kurly::boot workloads/uptime-kuma/server.libsonnet "$ns" "" ""

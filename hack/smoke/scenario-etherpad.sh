@@ -11,7 +11,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-etherpad
+ns="$(kurly::namespace_unique kurly-etherpad)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" etherpad-db-rw etherpad etherpad

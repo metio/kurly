@@ -10,4 +10,5 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-kurly::boot workloads/portainer/server.libsonnet kurly-portainer "" ""
+ns="$(kurly::namespace_unique kurly-portainer)"
+kurly::boot workloads/portainer/server.libsonnet "$ns" "" ""
