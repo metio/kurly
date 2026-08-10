@@ -282,6 +282,7 @@
   postgres: '2026-07-28',
   privatebin: '2026-07-28',
   projectsend: '2026-07-28',
+  prometheus: '2026-08-10',
   prowlarr: '2026-07-28',
   'pyload-ng': '2026-07-28',
   qbittorrent: '2026-07-28',

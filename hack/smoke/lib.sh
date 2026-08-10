@@ -242,8 +242,17 @@ spec:
               cd /data 2>/dev/null || exit 0
               for dir in *; do
                 [ -e "\$dir" ] || continue
+                # THE DIRECTORY IS NOT NAMED AFTER THE VOLUME ALONE. local-path
+                # names it <pv>_<namespace>_<claim>, while the keep-list holds bare
+                # PV names, so comparing the whole directory matched NOTHING and
+                # deleted every volume on the node — including live ones. It went
+                # unnoticed because a walk purges just after deleting the
+                # namespace, when the data is worthless anyway; the damage lands
+                # on a volume that OUTLIVES its workload, whose pod then cannot
+                # start with "no such file or directory" for its own mount.
+                pv="\${dir%%_*}"
                 case " \$KEEP " in
-                  *" \$dir "*) ;;
+                  *" \$pv "*) ;;
                   *) rm -rf "\$dir" ;;
                 esac
               done

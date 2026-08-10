@@ -192,6 +192,29 @@ check_host() {
 
   free="$(df --output=avail --block-size=G "${KURLY_STORE_PATH:-$HOME/.local/share}" 2>/dev/null | tail -1 | tr -dc '0-9')"
   echo "== disk: ${free:-?}G free =="
+
+  # INOTIFY INSTANCES, WHICH FAIL AS SOMEBODY ELSE'S BUG. Every pod that watches
+  # files takes from one host-wide budget (fs.inotify.max_user_instances), and a
+  # walk that leaves namespaces behind consumes it steadily. Exhaustion does not
+  # report itself: the NEXT workload dies with a file-watcher error of its own —
+  # prometheus's config-reloader exits "couldn't initialize inotify: too many open
+  # files" and the pod never initializes — which reads exactly like a defect in
+  # that workload, and cost a withdrawn e2e claim before it was recognised.
+  local inuse limit
+  limit="$(sysctl -n fs.inotify.max_user_instances 2>/dev/null || echo 0)"
+  inuse="$(find /proc/*/fd -lname 'anon_inode:inotify' 2>/dev/null | wc -l)"
+  if [ "${limit:-0}" -gt 0 ]; then
+    echo "== inotify: ${inuse}/${limit} instances in use =="
+    if [ "$inuse" -gt $(( limit * 85 / 100 )) ]; then
+      echo "::error::inotify instances are nearly exhausted — the next workloads will fail" >&2
+      echo "the failure looks like the workload's own file-watcher bug, so stop rather than" >&2
+      echo "record false verdicts. Free them by deleting leftover namespaces:" >&2
+      echo "  kubectl get ns -o name | grep kurly- | xargs -r -n1 kubectl delete" >&2
+      echo "or raise the ceiling on the host (needs root):" >&2
+      echo "  sudo sysctl -w fs.inotify.max_user_instances=512" >&2
+      exit 1
+    fi
+  fi
   # Below this a walk cannot finish, and continuing risks the host rather than
   # the run. Stopping leaves everything measured so far on disk, and the walk is
   # resumable, so this costs nothing but the images somebody has to clear.

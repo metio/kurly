@@ -319,6 +319,7 @@
     'postgres',
     'privatebin',
     'projectsend',
+    'prometheus',
     'prowlarr',
     'pyload-ng',
     'qbittorrent',
