@@ -149,24 +149,40 @@ kurly::verify_min_resources() {
 # full rollout timeout. Faster feedback that a version/manifest is broken, and it
 # keeps the single-cluster e2e walk moving. Timeout via KURLY_ROLLOUT_TIMEOUT
 # (seconds, default 300).
+# The restart ceiling is a heuristic, and a MULTI-COMPONENT app can exceed it while
+# starting correctly: the check looks at every pod in the namespace, so a sibling
+# waiting for another to finish its migrations fails the controller being waited
+# on. Mastodon's sidekiq restarts three times against a schema its web pod has not
+# created yet, then settles with every pod Ready. Raise it per workload
+# (extra.json's maxRestarts) rather than globally, which would blunt the fast
+# feedback that a genuinely broken image gives.
 kurly::await_ready() {
-  local ns="$1" ctrl="$2" timeout="${KURLY_ROLLOUT_TIMEOUT:-300}" deadline waitreason restarts
+  local ns="$1" ctrl="$2" timeout="${KURLY_ROLLOUT_TIMEOUT:-300}" maxRestarts="${KURLY_MAX_RESTARTS:-3}" deadline waitreason restarts
   deadline=$((SECONDS + timeout))
   while [ "$SECONDS" -lt "$deadline" ]; do
     if kubectl --namespace="$ns" rollout status "$ctrl" --timeout=4s >/dev/null 2>&1; then
       return 0
     fi
-    # A pod stuck waiting on its image or crashing will never roll out — bail now.
+    # TERMINAL states only. A pod that cannot get its image or its configuration
+    # will never roll out however long it is given, so bail immediately.
+    #
+    # CrashLoopBackOff is NOT in that list, because it is not terminal: it is also
+    # what a correct multi-component app looks like while it waits for a sibling —
+    # mastodon's web pod crash-loops against a schema its own migration has not
+    # finished writing, and then serves. Treating it as broken failed the workload
+    # for doing the only thing it can do. It is caught by the restart ceiling
+    # below instead, which a workload can raise when restarts are part of its
+    # start-up, and which still fails a genuinely broken image within seconds.
     waitreason="$(kubectl --namespace="$ns" get pods \
       -o jsonpath='{range .items[*]}{range .status.containerStatuses[*]}{.state.waiting.reason}{"\n"}{end}{end}' 2>/dev/null \
-      | grep -E 'CrashLoopBackOff|ImagePullBackOff|ErrImagePull|CreateContainerConfigError|InvalidImageName' | head -1 || true)"
+      | grep -E 'ImagePullBackOff|ErrImagePull|CreateContainerConfigError|InvalidImageName' | head -1 || true)"
     if [ -n "$waitreason" ]; then
       echo "::error::${ctrl}: pod broken (${waitreason})"; return 1
     fi
     restarts="$(kubectl --namespace="$ns" get pods \
       -o jsonpath='{range .items[*]}{range .status.containerStatuses[*]}{.restartCount}{"\n"}{end}{end}' 2>/dev/null \
       | sort -rn | head -1 || true)"
-    if [ "${restarts:-0}" -ge 3 ]; then
+    if [ "${restarts:-0}" -ge "$maxRestarts" ]; then
       echo "::error::${ctrl}: pod restarting repeatedly (restarts=${restarts})"; return 1
     fi
     sleep 4

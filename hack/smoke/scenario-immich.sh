@@ -15,7 +15,7 @@ ns="$(kurly::namespace_unique kurly-immich)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" immich-db-rw immich immich ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 '"-c", "shared_preload_libraries=vchord.so"'
-kurly::cache "$ns" immich-cache-headless ""
+kurly::cache "$ns" immich-cache-headless
 
 kurly::secret "$ns" immich workloads/immich/machine-learning.libsonnet
 kurly::boot workloads/immich/machine-learning.libsonnet "$ns" "" ""

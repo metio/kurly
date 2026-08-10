@@ -16,11 +16,17 @@ kurly::namespace "$ns"
 
 kurly::postgres "$ns" mastodon-db-rw mastodon mastodon
 kurly::objectstorage "$ns" mastodon
-kurly::cache "$ns" mastodon-cache-headless ""
+kurly::cache "$ns" mastodon-cache-headless
 
 kurly::secret "$ns" mastodon workloads/mastodon/sidekiq.libsonnet
+export KURLY_ROLLOUT_TIMEOUT=900
+export KURLY_MAX_RESTARTS=8
 kurly::boot workloads/mastodon/sidekiq.libsonnet "$ns" "" ""
 kurly::secret "$ns" mastodon workloads/mastodon/streaming.libsonnet
+export KURLY_ROLLOUT_TIMEOUT=900
+export KURLY_MAX_RESTARTS=8
 kurly::boot workloads/mastodon/streaming.libsonnet "$ns" "" ""
 kurly::secret "$ns" mastodon workloads/mastodon/web.libsonnet
+export KURLY_ROLLOUT_TIMEOUT=900
+export KURLY_MAX_RESTARTS=8
 kurly::boot workloads/mastodon/web.libsonnet "$ns" "" ""

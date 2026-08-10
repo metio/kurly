@@ -47,6 +47,10 @@
   "lychee": {
     "compose": "+ k.env({ APP_URL: 'http://lychee:80', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2', FRANKENPHP_WORKER: '0' })"
   },
+  "mastodon": {
+    "rolloutTimeout": 900,
+    "maxRestarts": 8
+  },
   "matrix-alertmanager-receiver": {
     "params": "homeserverUrl='https://matrix.example.com', userId='@alerts:matrix.example.com'"
   },

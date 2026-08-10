@@ -103,6 +103,14 @@ timeout_for() {
   jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).rolloutTimeout // ""' "$extra"
 }
 
+# And the fourth: how many restarts are normal for this workload while it starts.
+# A multi-component app can exceed the default while starting correctly, because
+# the check reads every pod in the namespace — a sibling waiting on another's
+# migrations fails the controller being waited on.
+restarts_for() {
+  jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).maxRestarts // ""' "$extra"
+}
+
 # A generated scenario is regenerated in place; a hand-written one is left alone.
 is_hand_written() {
   local scenario="hack/smoke/scenario-$1.sh"
@@ -149,6 +157,8 @@ while IFS=$'\t' read -r id stages; do
     pa="$(params_for "${id}/${stage}")"
     to="$(timeout_for "${id}/${stage}")"
     [ -z "$to" ] || boot_lines+="export KURLY_ROLLOUT_TIMEOUT=${to}"$'\n'
+    mr="$(restarts_for "${id}/${stage}")"
+    [ -z "$mr" ] || boot_lines+="export KURLY_MAX_RESTARTS=${mr}"$'\n'
     boot_lines+="kurly::boot ${file} \"\$ns\" \"${ex}\" \"${pa}\""$'\n'
   done
 
@@ -272,7 +282,16 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     # so those need a server that expects one. Guessing either way fails: an app
     # with no credential meets NOAUTH, an app sending one meets "Client sent AUTH,
     # but no password is set".
-    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]|select(.generate=="redisUrl")' "$catalog" >/dev/null 2>&1; then
+    #
+    # A DISCRETE PASSWORD KEY COUNTS TOO, and asking only about redisUrl missed it:
+    # ghostfolio takes REDIS_HOST/REDIS_PORT as env and REDIS_PASSWORD from its
+    # Secret, so it sends AUTH to a server this provisioned open, and died on
+    # "ERR AUTH <password> called without any password configured for the default
+    # user" — a message about the SERVER's configuration, which reads as the
+    # harness having mis-provisioned nothing at all. Both mint the same
+    # KURLY_E2E_PASSWORD, so the server and the client agree either way.
+    if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]
+         |select(.generate=="redisUrl" or (.key|test("^(REDIS|VALKEY)_PASSWORD$")))' "$catalog" >/dev/null 2>&1; then
       prov+="kurly::cache \"\$ns\" ${redisHost}"$'\n'
     else
       prov+="kurly::cache \"\$ns\" ${redisHost} \"\""$'\n'
@@ -289,6 +308,8 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     pa="$(params_for "${id}/${stage}")"
     to="$(timeout_for "${id}/${stage}")"
     [ -z "$to" ] || boot_lines+="export KURLY_ROLLOUT_TIMEOUT=${to}"$'\n'
+    mr="$(restarts_for "${id}/${stage}")"
+    [ -z "$mr" ] || boot_lines+="export KURLY_MAX_RESTARTS=${mr}"$'\n'
     boot_lines+="kurly::boot ${file} \"\$ns\" \"${ex}\" \"${pa}\""$'\n'
   done
 
