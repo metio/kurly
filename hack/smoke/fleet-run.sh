@@ -202,7 +202,13 @@ check_host() {
   # that workload, and cost a withdrawn e2e claim before it was recognised.
   local inuse limit
   limit="$(sysctl -n fs.inotify.max_user_instances 2>/dev/null || echo 0)"
-  inuse="$(find /proc/*/fd -lname 'anon_inode:inotify' 2>/dev/null | wc -l)"
+  # `|| true` is load-bearing under `set -euo pipefail`: find walks other users'
+  # /proc entries, cannot read them, and exits non-zero even though it printed
+  # every answer we asked for. pipefail then propagates that through `wc`, the
+  # assignment inherits it, and `set -e` ends the walk here — silently, before
+  # this check can report anything. A guard against a silent failure is worth
+  # nothing if it fails silently itself.
+  inuse="$( (find /proc/*/fd -lname 'anon_inode:inotify' 2>/dev/null || true) | wc -l)"
   if [ "${limit:-0}" -gt 0 ]; then
     echo "== inotify: ${inuse}/${limit} instances in use =="
     if [ "$inuse" -gt $(( limit * 85 / 100 )) ]; then

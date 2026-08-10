@@ -63,6 +63,11 @@ function(
   + kurly.scratch('/var/run/mysqld')
   + kurly.scratch('/var/run/manticore')
   + kurly.scratch('/var/log/manticore')
+  // The entrypoint also links the CA bundle into place — `ln -s … /etc/ssl/cert.pem`
+  // — and dies on a read-only filesystem before searchd is reached. A scratch over
+  // /etc/ssl would satisfy the write and take every trusted certificate with it,
+  // so the filesystem is made writable instead of the directory being emptied.
+  + kurly.writableRootFilesystem()
   // The JSON port answers /sql without authentication, so readiness is a
   // connection check rather than a query that would need one.
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })

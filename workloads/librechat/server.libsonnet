@@ -78,6 +78,10 @@ function(
   // logs under api/logs, and npm — which is what the image's CMD runs — puts its
   // cache and its own error logs under $HOME.
   + kurly.scratch('/app/api/logs', '256Mi')
+  // The winston transport writes under /app/logs, NOT the api/ subdirectory the
+  // sources sit in, so covering only that one leaves the container dying on
+  // "EROFS: read-only file system, open '/app/logs/error-<date>.log'".
+  + kurly.scratch('/app/logs', '256Mi')
   + kurly.scratch('/home/node/.npm', '128Mi')
   + kurly.scratch('/tmp', '128Mi')
   // Probe by connection: the app answers a redirect to the login page at / and
