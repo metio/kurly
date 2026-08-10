@@ -372,6 +372,7 @@
     'sonarr',
     'sosse',
     'speedtest-tracker',
+    'spegel',
     'spoolman',
     'sqlpage',
     'stash',

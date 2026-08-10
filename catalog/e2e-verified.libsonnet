@@ -323,6 +323,7 @@
   'snipe-it': '2026-07-28',
   sonarr: '2026-07-28',
   'speedtest-tracker': '2026-08-04',
+  spegel: '2026-08-10',
   spoolman: '2026-08-04',
   sqlpage: '2026-08-04',
   'static-web-server': '2026-08-06',
