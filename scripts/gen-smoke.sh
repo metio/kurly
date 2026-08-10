@@ -93,6 +93,16 @@ params_for() {
   jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).params // ""' "$extra"
 }
 
+# The same file's third facet: how long this workload's first start legitimately
+# takes. The default rollout ceiling suits a workload that starts in seconds and
+# is simply WRONG for one that builds assets or migrates a large schema before it
+# answers — docassemble and netbox both become healthy, in around seven minutes.
+# Declared per workload rather than raised globally, because a global raise would
+# make every genuinely broken workload cost that long before it failed.
+timeout_for() {
+  jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).rolloutTimeout // ""' "$extra"
+}
+
 # A generated scenario is regenerated in place; a hand-written one is left alone.
 is_hand_written() {
   local scenario="hack/smoke/scenario-$1.sh"
@@ -137,6 +147,8 @@ while IFS=$'\t' read -r id stages; do
     fi
     ex="$(extra_for "${id}/${stage}")"
     pa="$(params_for "${id}/${stage}")"
+    to="$(timeout_for "${id}/${stage}")"
+    [ -z "$to" ] || boot_lines+="export KURLY_ROLLOUT_TIMEOUT=${to}"$'\n'
     boot_lines+="kurly::boot ${file} \"\$ns\" \"${ex}\" \"${pa}\""$'\n'
   done
 
@@ -275,6 +287,8 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     boot_lines+="kurly::secret \"\$ns\" ${secretName} ${file}"$'\n'
     ex="$(extra_for "${id}/${stage}")"
     pa="$(params_for "${id}/${stage}")"
+    to="$(timeout_for "${id}/${stage}")"
+    [ -z "$to" ] || boot_lines+="export KURLY_ROLLOUT_TIMEOUT=${to}"$'\n'
     boot_lines+="kurly::boot ${file} \"\$ns\" \"${ex}\" \"${pa}\""$'\n'
   done
 

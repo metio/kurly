@@ -10,7 +10,11 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-netbox
+# NetBox migrates a large schema and builds its static assets before it answers,
+# which takes around seven minutes here — well past the default rollout ceiling.
+export KURLY_ROLLOUT_TIMEOUT=900
+
+ns="$(kurly::namespace_unique kurly-netbox)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" netbox-db-rw netbox netbox

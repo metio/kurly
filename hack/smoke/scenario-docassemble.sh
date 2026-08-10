@@ -11,4 +11,5 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 ns="$(kurly::namespace_unique kurly-docassemble)"
+export KURLY_ROLLOUT_TIMEOUT=900
 kurly::boot workloads/docassemble/server.libsonnet "$ns" "" ""

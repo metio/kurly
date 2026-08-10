@@ -11,6 +11,9 @@
   "continuwuity": {
     "params": "serverName='matrix.example.com'"
   },
+  "docassemble": {
+    "rolloutTimeout": 900
+  },
   "docmost": {
     "compose": "+ k.env({ APP_URL: 'http://docmost:3000' })"
   },
@@ -52,6 +55,9 @@
   },
   "metrics-server/server": {
     "params": "kubeletInsecureTLS=true"
+  },
+  "netbox": {
+    "rolloutTimeout": 900
   },
   "opencost/server": {
     "params": "prometheusEndpoint='http://prometheus:9090'"
