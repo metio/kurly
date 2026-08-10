@@ -95,7 +95,8 @@
     "params": "serverName='synapse.example.com'"
   },
   "tube-archivist": {
-    "compose": "+ k.env({ TA_HOST: 'http://tube-archivist:8000' })"
+    "compose": "+ k.env({ TA_HOST: 'http://tube-archivist:8000' })",
+    "rolloutTimeout": 900
   },
   "tuwunel": {
     "params": "serverName='matrix.example.com'"

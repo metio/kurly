@@ -10029,7 +10029,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', secretKeys: [{ key: 'OAUTH2_PROXY_PROVIDER', generate: 'literal', value: 'oidc' }, { key: 'OAUTH2_PROXY_OIDC_ISSUER_URL', generate: 'literal', value: 'https://accounts.google.com' }, { key: 'OAUTH2_PROXY_CLIENT_ID', generate: 'literal', value: 'kurly-smoke' }, { key: 'OAUTH2_PROXY_CLIENT_SECRET', generate: 'password', length: 32 }, { key: 'OAUTH2_PROXY_COOKIE_SECRET', generate: 'base64', length: 32 }, { key: 'OAUTH2_PROXY_EMAIL_DOMAINS', generate: 'literal', value: '*' }, { key: 'OAUTH2_PROXY_UPSTREAMS', generate: 'literal', value: 'static://200' }] },
+        ]) + { kind: 'http', secretKeys: [{ key: 'OAUTH2_PROXY_PROVIDER', generate: 'literal', value: 'oidc' }, { key: 'OAUTH2_PROXY_OIDC_ISSUER_URL', generate: 'literal', value: 'https://accounts.google.com' }, { key: 'OAUTH2_PROXY_CLIENT_ID', generate: 'literal', value: 'kurly-smoke' }, { key: 'OAUTH2_PROXY_CLIENT_SECRET', generate: 'password', length: 32 }, { key: 'OAUTH2_PROXY_COOKIE_SECRET', generate: 'base64url', length: 32 }, { key: 'OAUTH2_PROXY_EMAIL_DOMAINS', generate: 'literal', value: '*' }, { key: 'OAUTH2_PROXY_UPSTREAMS', generate: 'literal', value: 'static://200' }] },
       },
     },
     nats: {

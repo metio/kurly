@@ -293,7 +293,7 @@
   'numa/server': { digest: 'sha256:d0be0ca78806a0bc98cb719b150dd457dc8da3859653bf097b63b043071904ca', secondsToReady: 4, peakStartupBytes: 10924032, steadyBytes: 10924032 },
   'nzbget/server': { digest: 'sha256:87eba87ec46982b003ab1f54cfabd962c5c5e95cb9eb2069cbec7b6370d0784b', secondsToReady: 17, peakStartupBytes: 26005504, steadyBytes: 23793664 },
   'nzbhydra2/server': { digest: 'sha256:9ba095a9aae0d709df87c90b371c9212e23d68ac4605add3371d3f7a343eae60', secondsToReady: 25, peakStartupBytes: 699609088, steadyBytes: 698916864 },
-  'oauth2-proxy/server': { digest: 'sha256:f6a4aa83a27e316114bf79664302b1ffb2cc8ce697fb479273af4feb3fb16fe3', secondsToReady: 9, peakStartupBytes: 51466240, steadyBytes: 52187136 },
+  'oauth2-proxy/server': { digest: 'sha256:f6a4aa83a27e316114bf79664302b1ffb2cc8ce697fb479273af4feb3fb16fe3', secondsToReady: 9, peakStartupBytes: 51662848, steadyBytes: 51924992 },
   'offen/server': { digest: 'sha256:4a69f8cbcdbff26505e728ad803a9b8ff6752bd10330749633bc507276e52c5d', secondsToReady: 17, peakStartupBytes: 26038272, steadyBytes: 26038272 },
   'ollama/server': { digest: 'sha256:b88c73ace3e115f8ec53dc8761ae1c0aabfa675406e3681786b98757ce050f42', secondsToReady: 92, peakStartupBytes: 158253056, steadyBytes: 151171072 },
   'ombi/server': { digest: 'sha256:be76ec2c9376186b37354e5e2bbe62d6d7776d509aeb00223eb5024e36a8615c', secondsToReady: 27, peakStartupBytes: 226938880, steadyBytes: 227831808 },

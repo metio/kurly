@@ -273,6 +273,7 @@
     'numa',
     'nzbget',
     'nzbhydra2',
+    'oauth2-proxy',
     'offen',
     'ollama',
     'ombi',

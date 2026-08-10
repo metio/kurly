@@ -909,6 +909,14 @@ spec:
             # authentication.
             - { name: xpack.security.enabled, value: "true" }
             - { name: ELASTIC_PASSWORD, value: "${KURLY_E2E_PASSWORD}" }
+            # A snapshot repository path, which Elasticsearch refuses to register
+            # one without. An app that backs its index up checks for it at start
+            # and stops: tube-archivist prints "path.repo env var not found. set
+            # the following env var to the ES container" and exits — a complaint
+            # about THIS server, phrased as if the reader were configuring it,
+            # which reads as the workload's own misconfiguration. It points at the
+            # data directory, so a snapshot lands on the same throwaway volume.
+            - { name: path.repo, value: /usr/share/elasticsearch/data/snapshot }
             - { name: ES_JAVA_OPTS, value: "-Xms512m -Xmx512m" }
           ports: [{ containerPort: 9200 }]
           readinessProbe:

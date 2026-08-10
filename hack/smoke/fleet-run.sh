@@ -212,11 +212,28 @@ check_host() {
   if [ "${limit:-0}" -gt 0 ]; then
     echo "== inotify: ${inuse}/${limit} instances in use =="
     if [ "$inuse" -gt $(( limit * 85 / 100 )) ]; then
-      echo "::error::inotify instances are nearly exhausted — the next workloads will fail" >&2
+      # RECLAIM BEFORE GIVING UP. The instances are held by namespaces a previous
+      # run — or a scenario run by hand, which cleans up nothing — left behind, and
+      # deleting those is exactly the remedy this would otherwise print and exit
+      # over. A walk of hundreds of workloads that stops on the first crowded
+      # moment finishes nothing.
+      echo "== inotify nearly exhausted; reclaiming leftover namespaces =="
+      kubectl get ns -o name 2>/dev/null | grep 'namespace/kurly-' | cut -d/ -f2 \
+        | xargs -r -n1 -I{} kubectl delete ns {} --wait=false >/dev/null 2>&1 || true
+      local waited=0
+      while [ "$(kubectl get ns --no-headers 2>/dev/null | grep -c 'kurly-')" -gt 0 ] && [ "$waited" -lt 300 ]; do
+        sleep 10; waited=$(( waited + 10 ))
+      done
+      inuse="$( (find /proc/*/fd -lname 'anon_inode:inotify' 2>/dev/null || true) | wc -l)"
+      echo "== inotify after reclaim: ${inuse}/${limit} =="
+    fi
+    # Still over after reclaiming: the instances belong to something this walk does
+    # not own, and continuing would blame the next workloads for a host limit.
+    if [ "$inuse" -gt $(( limit * 85 / 100 )) ]; then
+      echo "::error::inotify instances are exhausted and reclaiming did not free enough" >&2
       echo "the failure looks like the workload's own file-watcher bug, so stop rather than" >&2
-      echo "record false verdicts. Free them by deleting leftover namespaces:" >&2
-      echo "  kubectl get ns -o name | grep kurly- | xargs -r -n1 kubectl delete" >&2
-      echo "or raise the ceiling on the host (needs root):" >&2
+      echo "record false verdicts. Something outside this walk holds them; raise the" >&2
+      echo "ceiling on the host (needs root):" >&2
       echo "  sudo sysctl -w fs.inotify.max_user_instances=512" >&2
       exit 1
     fi
