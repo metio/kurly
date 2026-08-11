@@ -15,7 +15,7 @@ ns="$(kurly::namespace_unique kurly-authentik)"
 kurly::namespace "$ns"
 
 kurly::postgres "$ns" authentik-db-rw authentik authentik
-kurly::cache "$ns" authentik-cache-headless ""
+kurly::cache "$ns" authentik-cache-headless
 
 kurly::secret "$ns" authentik workloads/authentik/server.libsonnet
 kurly::boot workloads/authentik/server.libsonnet "$ns" "" ""

@@ -35,6 +35,7 @@
   'atomic-server': '2026-08-06',
   audiobookshelf: '2026-07-28',
   authelia: '2026-07-28',
+  authentik: '2026-08-11',
   automatisch: '2026-07-28',
   azuracast: '2026-08-06',
   baikal: '2026-07-28',

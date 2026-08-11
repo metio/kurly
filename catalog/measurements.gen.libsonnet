@@ -42,6 +42,8 @@
   'atsumeru/server': { digest: 'sha256:18d8b8cbad76cad77faa847f5e4927306ed4fcc7e147d36c85d10631743da494', secondsToReady: 36, peakStartupBytes: 367280128, steadyBytes: 355844096 },
   'audiobookshelf/server': { digest: 'sha256:1eef6716183c52abafe5405e7d6be8390248ecd59c7488c44af871757ac8fc4d', secondsToReady: 35, peakStartupBytes: 103813120, steadyBytes: 95268864 },
   'authelia/server': { digest: 'sha256:023e02e5203dfa0ebaee7a48b5bae34f393d1f9cada4a9df7fbf87eb1759c671', secondsToReady: 18, peakStartupBytes: 83329024, steadyBytes: 83324928 },
+  'authentik/server': { digest: 'sha256:c4aa2113d0c2379faa9e8a28f4ab13816b4e6f2847b272e37d68e518fdf76880', secondsToReady: 148, peakStartupBytes: 498556928, steadyBytes: 769572864 },
+  'authentik/worker': { digest: 'sha256:c4aa2113d0c2379faa9e8a28f4ab13816b4e6f2847b272e37d68e518fdf76880', secondsToReady: 2, peakStartupBytes: 255709184, steadyBytes: 255709184 },
   'automatisch/server': { digest: 'sha256:3bace7a12d5fb3f5b1305a6a52232270e0e0abd8465a8b78baacb07f6ea89594', secondsToReady: 390, peakStartupBytes: 485957632, steadyBytes: 486342656 },
   'automatisch/worker': { digest: 'sha256:3bace7a12d5fb3f5b1305a6a52232270e0e0abd8465a8b78baacb07f6ea89594', secondsToReady: 2, peakStartupBytes: 208539648, steadyBytes: 208539648 },
   'azuracast/server': { digest: 'sha256:e218aac57733359a314b80d46de73cf036f6cbe59d36e6e44d5cd94b80214f8f', secondsToReady: 99, peakStartupBytes: 135516160, steadyBytes: 798437376 },

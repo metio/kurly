@@ -36,6 +36,7 @@
     'atsumeru',
     'audiobookshelf',
     'authelia',
+    'authentik',
     'automatisch',
     'azuracast',
     'baikal',

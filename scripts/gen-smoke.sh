@@ -288,7 +288,8 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     # with no credential meets NOAUTH, an app sending one meets "Client sent AUTH,
     # but no password is set".
     #
-    # A DISCRETE PASSWORD KEY COUNTS TOO, and asking only about redisUrl missed it:
+    # A DISCRETE PASSWORD KEY COUNTS TOO, whatever it is NAMESPACED as — authentik
+    # calls it AUTHENTIK_REDIS__PASSWORD — and asking only about redisUrl missed it:
     # ghostfolio takes REDIS_HOST/REDIS_PORT as env and REDIS_PASSWORD from its
     # Secret, so it sends AUTH to a server this provisioned open, and died on
     # "ERR AUTH <password> called without any password configured for the default
@@ -296,7 +297,7 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     # harness having mis-provisioned nothing at all. Both mint the same
     # KURLY_E2E_PASSWORD, so the server and the client agree either way.
     if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]
-         |select(.generate=="redisUrl" or (.key|test("^(REDIS|VALKEY)_PASSWORD$")))' "$catalog" >/dev/null 2>&1; then
+         |select(.generate=="redisUrl" or (.key|test("(REDIS|VALKEY)_+PASSWORD$")))' "$catalog" >/dev/null 2>&1; then
       prov+="kurly::cache \"\$ns\" ${redisHost}"$'\n'
     else
       prov+="kurly::cache \"\$ns\" ${redisHost} \"\""$'\n'
