@@ -281,6 +281,15 @@ for id in "${ids[@]}"; do
   [ $(( (n - 1) % 20 )) -ne 0 ] || [ "$n" -eq 1 ] || check_host
   prune_images
   if bash "$scenario" >"/tmp/fleet-${id}.log" 2>&1; then
+    # A SCENARIO THAT DECLINED IS NOT ONE THAT BOOTED. A workload the harness
+    # cannot prove says so and exits 0 — spegel without a second node, a workload
+    # needing something off this cluster — and counting that as a boot reports
+    # coverage the run did not obtain, which is the failure this whole walk exists
+    # to avoid. It is announced with its reason instead.
+    if grep -qE '^skip: ' "/tmp/fleet-${id}.log"; then
+      sed -n 's/^skip: /  skipped — /p' "/tmp/fleet-${id}.log" | head -1
+      skipped=$((skipped + 1)); continue
+    fi
     grep -E '^measured:' "/tmp/fleet-${id}.log" || true
     booted=$((booted + 1))
     if [ "${DEEP:-0}" = 1 ]; then
