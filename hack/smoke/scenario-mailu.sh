@@ -12,24 +12,36 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 kurly::vendor
 
-ns=kurly-mailu
+ns="$(kurly::namespace_unique kurly-mailu)"
 kurly::namespace "$ns"
 
 # Mailu addresses Redis without credentials, so the cache is left open.
 kurly::cache "$ns" mailu-cache ""
 
-# The shared claim every stage mounts.
+# The shared claim every stage mounts, and the DNSSEC-validating resolver.
 kurly::prereq mailu "$ns"
 
+# Every stage is told where that resolver is. Mailu takes an ADDRESS, not a name,
+# so the Service's ClusterIP is read back rather than assumed.
+resolver="$(kubectl --namespace="$ns" get service mailu-resolver -o jsonpath='{.spec.clusterIP}')"
+echo "== mailu resolver at ${resolver} =="
+# RESOLVER_ADDRESS configures nginx; it is NOT what the admin validates. That
+# check reads /etc/resolv.conf, so the POD has to resolve through unbound —
+# otherwise it keeps testing the cluster's DNS, finds no DNSSEC, and terminates
+# itself however the parameter is set. dnsPolicy None replaces the resolver
+# outright, which is why the resolver above also answers cluster.local.
+params="resolverAddress='${resolver}'"
+compose="+ k.dns('None', { nameservers: ['${resolver}'], searches: ['${ns}.svc.cluster.local', 'svc.cluster.local', 'cluster.local'], options: [{ name: 'ndots', value: '5' }] })"
+
 kurly::secret "$ns" mailu workloads/mailu/admin.libsonnet
-kurly::boot workloads/mailu/admin.libsonnet "$ns"
+kurly::boot workloads/mailu/admin.libsonnet "$ns" "$compose" "$params"
 kurly::secret "$ns" mailu workloads/mailu/antispam.libsonnet
-kurly::boot workloads/mailu/antispam.libsonnet "$ns"
+kurly::boot workloads/mailu/antispam.libsonnet "$ns" "$compose" "$params"
 kurly::secret "$ns" mailu workloads/mailu/front.libsonnet
-kurly::boot workloads/mailu/front.libsonnet "$ns"
+kurly::boot workloads/mailu/front.libsonnet "$ns" "$compose" "$params"
 kurly::secret "$ns" mailu workloads/mailu/imap.libsonnet
-kurly::boot workloads/mailu/imap.libsonnet "$ns"
+kurly::boot workloads/mailu/imap.libsonnet "$ns" "$compose" "$params"
 kurly::secret "$ns" mailu workloads/mailu/smtp.libsonnet
-kurly::boot workloads/mailu/smtp.libsonnet "$ns"
+kurly::boot workloads/mailu/smtp.libsonnet "$ns" "$compose" "$params"
 kurly::secret "$ns" mailu workloads/mailu/webmail.libsonnet
-kurly::boot workloads/mailu/webmail.libsonnet "$ns"
+kurly::boot workloads/mailu/webmail.libsonnet "$ns" "$compose" "$params"
