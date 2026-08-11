@@ -306,8 +306,8 @@ while IFS=$'\t' read -r id stages db cache objstore; do
     # ghostfolio takes REDIS_HOST/REDIS_PORT as env and REDIS_PASSWORD from its
     # Secret, so it sends AUTH to a server this provisioned open, and died on
     # "ERR AUTH <password> called without any password configured for the default
-    # user" — a message about the SERVER's configuration, which reads as the
-    # harness having mis-provisioned nothing at all. Both mint the same
+    # user" — a message about the SERVER's configuration, which reads as though
+    # the harness had provisioned nothing wrongly at all. Both mint the same
     # KURLY_E2E_PASSWORD, so the server and the client agree either way.
     if jq -e --arg id "$id" '.workloads[]|select(.id==$id)|.stages[]|.secretKeys//[]|.[]
          |select(.generate=="redisUrl" or (.key|test("(REDIS|VALKEY)_+PASSWORD$")))' "$catalog" >/dev/null 2>&1; then
