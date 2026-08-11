@@ -479,6 +479,17 @@ kurly::secret() {
         len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 32' <<<"$keys")"
         val="$(head -c "$len" /dev/urandom | base64 | tr -d '\n')"
         ;;
+      # Laravel's APP_KEY, which is base64 WITH the marker its own tooling writes
+      # (`php artisan key:generate` produces base64:...). The prefix is what tells
+      # Laravel to decode rather than take the string as raw key bytes, so a bare
+      # base64 string of the right length is rejected — lychee's entrypoint says
+      # "APP_KEY contains invalid base64 data" and Laravel itself, in frankenphp
+      # worker mode, simply never reaches a request, which surfaces as the worker
+      # failing to start rather than as anything about a key.
+      laravelKey)
+        len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 32' <<<"$keys")"
+        val="base64:$(head -c "$len" /dev/urandom | base64 | tr -d '\n')"
+        ;;
       base64url)
         len="$(jq -r --arg k "$k" '.[] | select(.key==$k) | .length // 32' <<<"$keys")"
         val="$(head -c "$len" /dev/urandom | base64 | tr '+/' '-_' | tr -d '\n')"
