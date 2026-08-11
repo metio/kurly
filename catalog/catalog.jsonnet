@@ -40,6 +40,21 @@ local upstream = import './upstream.gen.libsonnet';
 // A stage that is renamed or removed fails the import here; the reconcile below
 // fails if this map and the annotations fall out of step.
 local stageImports = {
+  'krakend/server': import 'github.com/metio/kurly/workloads/krakend/server.libsonnet',
+  'scraparr/server': import 'github.com/metio/kurly/workloads/scraparr/server.libsonnet',
+  'mcp-context-forge/server': import 'github.com/metio/kurly/workloads/mcp-context-forge/server.libsonnet',
+  'semaphore-ui/server': import 'github.com/metio/kurly/workloads/semaphore-ui/server.libsonnet',
+  'quickwit/server': import 'github.com/metio/kurly/workloads/quickwit/server.libsonnet',
+  'jaeger/server': import 'github.com/metio/kurly/workloads/jaeger/server.libsonnet',
+  'docling-serve/server': import 'github.com/metio/kurly/workloads/docling-serve/server.libsonnet',
+  'imgproxy/server': import 'github.com/metio/kurly/workloads/imgproxy/server.libsonnet',
+  'plik/server': import 'github.com/metio/kurly/workloads/plik/server.libsonnet',
+  'peer-calls/server': import 'github.com/metio/kurly/workloads/peer-calls/server.libsonnet',
+  'dagu/server': import 'github.com/metio/kurly/workloads/dagu/server.libsonnet',
+  'olivetin/server': import 'github.com/metio/kurly/workloads/olivetin/server.libsonnet',
+  'gitea-mirror/server': import 'github.com/metio/kurly/workloads/gitea-mirror/server.libsonnet',
+  'zigbee2mqtt/server': import 'github.com/metio/kurly/workloads/zigbee2mqtt/server.libsonnet',
+  'openbao/server': import 'github.com/metio/kurly/workloads/openbao/server.libsonnet',
   'tik/backend': import 'github.com/metio/kurly/workloads/tik/backend.libsonnet',
   'forgejo/server': import 'github.com/metio/kurly/workloads/forgejo/server.libsonnet',
   'vaultwarden/server': import 'github.com/metio/kurly/workloads/vaultwarden/server.libsonnet',
