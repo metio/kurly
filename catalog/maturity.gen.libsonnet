@@ -219,6 +219,7 @@
     'localai',
     'loki',
     'lubelogger',
+    'lychee',
     'lyrion-music-server',
     'mafl',
     'mailhog',

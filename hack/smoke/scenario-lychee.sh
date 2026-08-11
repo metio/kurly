@@ -17,4 +17,4 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" lychee-db-rw lychee lychee
 
 kurly::secret "$ns" lychee workloads/lychee/server.libsonnet
-kurly::boot workloads/lychee/server.libsonnet "$ns" "+ k.env({ APP_URL: 'http://lychee:80', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2', FRANKENPHP_WORKER: '0' })" ""
+kurly::boot workloads/lychee/server.libsonnet "$ns" "+ k.env({ APP_URL: 'http://lychee:8000', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2' })" ""

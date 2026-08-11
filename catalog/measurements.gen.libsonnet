@@ -241,6 +241,7 @@
   'lobe-chat/server': { digest: 'sha256:b2d2454525523d9f0a19c79661f83ec45f13363dbadd5c1180887e77af35d872', secondsToReady: 12, peakStartupBytes: 126734336, steadyBytes: 890720256 },
   'localai/server': { digest: 'sha256:df291906485305415f359bc59ec7ad8402ad3331daaac1cddf0475ddceb527f0', secondsToReady: 42, peakStartupBytes: 179384320, steadyBytes: 220061696 },
   'lubelogger/server': { digest: 'sha256:01bdb486af71e641c3ae41499e0412a21f2e04fa31b25c5c6531b42c112938e5', secondsToReady: 17, peakStartupBytes: 126926848, steadyBytes: 126926848 },
+  'lychee/server': { digest: 'sha256:daacbba4876b3b73e4d46be1f4858f43cb2256c9c506c0ab7f333a8d9c993c00', secondsToReady: 25, peakStartupBytes: 533798912, steadyBytes: 533135360 },
   'lyrion-music-server/server': { digest: 'sha256:d83558c0a5de068a88d457b11785c83a8fa61a6a118a8270bd0a1010133591cd', secondsToReady: 42, peakStartupBytes: 163028992, steadyBytes: 161021952 },
   'mafl/server': { digest: 'sha256:2c89020be334b341da41a6b95830b1b52b1b9f43c9f16d09c0ab4e9dad3ea4ad', secondsToReady: 17, peakStartupBytes: 70709248, steadyBytes: 67108864 },
   'mailhog/server': { digest: 'sha256:8d76a3d4ffa32a3661311944007a415332c4bb855657f4f6c57996405c009bea', secondsToReady: 16, peakStartupBytes: 11059200, steadyBytes: 11415552 },

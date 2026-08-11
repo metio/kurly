@@ -9,9 +9,9 @@
 //   local lychee = import 'github.com/metio/kurly/workloads/lychee/server.libsonnet';
 //   kurly.list(lychee(appUrl='https://photos.example.com'))
 //
-// Serves the gallery and API on :80 — compose an exposure onto it.
+// Serves the gallery and API on :8000 — compose an exposure onto it.
 //
-// The nginx + PHP-FPM image starts as root and binds :80, so this relaxes kurly's
+// The image starts as root and runs Laravel Octane behind frankenphp, so this relaxes kurly's
 // non-root and read-only-rootfs defaults while keeping dropped capabilities and no
 // privilege escalation.
 //
@@ -59,8 +59,13 @@ function(
   + kurly.version(version)
   + kurly.replicas(1)
   + kurly.recreate()
-  + kurly.port(80)
-  + kurly.servicePort(80)
+  // 8000, WHICH IS WHERE THE IMAGE SERVES. Its command is `php artisan
+  // octane:start --server=frankenphp --host=0.0.0.0 --port=8000`, and nothing in
+  // the entrypoint reads a port variable — so a workload declaring :80 has a probe
+  // and a Service pointing at a port nothing ever binds, while Octane starts
+  // perfectly and says so on 8000.
+  + kurly.port(8000)
+  + kurly.servicePort(8000)
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
