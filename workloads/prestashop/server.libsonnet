@@ -38,6 +38,15 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env({} + env)
   + kurly.rootUser()
+  // ROOT IS NOT ENOUGH WITHOUT CHOWN. The entrypoint copies the whole shop into
+  // the volume preserving ownership, and with every capability dropped that fails
+  // — "cp: failed to preserve ownership for '/var/www/html/...': Operation not
+  // permitted", hundreds of times, and the install dies partway. What is seen
+  // afterwards is not that failure: the installer had already written its
+  // install.lock onto the volume, so every later start takes the "Another setup is
+  // currently running" branch and says nothing about ownership at all. The lock
+  // outlives the pod, so the first start is the only one that can be diagnosed.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/www/html', storageSize, storageClass=storageClass)
   // The first start installs the shop into its volume and database, which takes

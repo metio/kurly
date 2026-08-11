@@ -344,6 +344,7 @@
   'polaris/server': { digest: 'sha256:2d29b66af8a555f8789203b55c81c1a5da6312357e18357a88acb6d49e55d75e', secondsToReady: 10, peakStartupBytes: 28938240, steadyBytes: 29274112 },
   'portainer/server': { digest: 'sha256:f49255cd9378827fadfde46062ad0395050237c51d03a93a3dc1dbc6050dda3e', secondsToReady: 16, peakStartupBytes: 91570176, steadyBytes: 91570176 },
   'postgres/server': { digest: 'sha256:3a82e1f56c8f0f5616a11103ac3d47e632c3938698946a7ad26da0df1334744a', secondsToReady: 35, peakStartupBytes: 66113536, steadyBytes: 66109440 },
+  'prestashop/server': { digest: 'sha256:2f339136154feddf679f9dd6868542466e760f54865a95ae2d0fb065efb14a1f', secondsToReady: 189, peakStartupBytes: 517464064, steadyBytes: 124657664 },
   'privatebin/server': { digest: 'sha256:91e3adf17da1c9e2715cb57ff22940a6644252a5488d9819a64eebbaf64cc58a', secondsToReady: 35, peakStartupBytes: 93360128, steadyBytes: 97431552 },
   'projectsend/server': { digest: 'sha256:db84505b03d252dae254353c86a1fd04aef91cd68a8aed3f2882d7a4a413d976', secondsToReady: 59, peakStartupBytes: 52461568, steadyBytes: 52461568 },
   'prowlarr/server': { digest: 'sha256:4fd7a166c8f46dd3370a871c250ee577d6c2ae97a0dbe0e3614b5ef736205620', secondsToReady: 27, peakStartupBytes: 187117568, steadyBytes: 183844864 },

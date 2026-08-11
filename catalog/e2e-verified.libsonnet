@@ -288,6 +288,7 @@
   polaris: '2026-08-06',
   portainer: '2026-08-10',
   postgres: '2026-07-28',
+  prestashop: '2026-08-11',
   privatebin: '2026-07-28',
   projectsend: '2026-07-28',
   prometheus: '2026-08-10',

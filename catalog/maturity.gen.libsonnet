@@ -325,6 +325,7 @@
     'polaris',
     'portainer',
     'postgres',
+    'prestashop',
     'privatebin',
     'projectsend',
     'prometheus',
