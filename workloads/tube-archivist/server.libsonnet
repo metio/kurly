@@ -79,6 +79,16 @@ function(
   // self-update installs into /root/.local. None of that is data worth a volume,
   // and all of it is outside the two mounts.
   + kurly.writableRootFilesystem()
+  // NGINX'S LOG DIRECTORY, and a writable root filesystem is not enough for it.
+  // The image ships /var/log/nginx/{access,error}.log owned by www-data with mode
+  // 0640, while this runs as root with every capability dropped — and root without
+  // DAC_OVERRIDE may not write another user's file, though it may still create new
+  // ones in the directory, which is why the directory itself looks fine. nginx
+  // exits on "open() /var/log/nginx/error.log failed (13: Permission denied)"
+  // while the same run.sh goes on to start celery, so the pod reports a healthy
+  // worker and nothing ever listens on the HTTP port. An empty volume gives nginx
+  // its own directory rather than handing the capability back.
+  + kurly.scratch('/var/log/nginx', '64Mi')
   // Artwork, thumbnails and yt-dlp's own state.
   + kurly.store('/cache', storageSize, storageClass=storageClass)
   // The downloaded videos.

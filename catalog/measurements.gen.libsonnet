@@ -433,6 +433,7 @@
   'transmute/server': { digest: 'sha256:51a32b28e0cb84cde624ca41570f069d91ee7e83fac5c9d0b970e7a583b3abde', secondsToReady: 107, peakStartupBytes: 942940160, steadyBytes: 943509504 },
   'trilium/server': { digest: 'sha256:8e053aa58a90c1690106a324a4692690ba0491c21ae40485b4051e2911df9489', secondsToReady: 25, peakStartupBytes: 170328064, steadyBytes: 170729472 },
   'trip/server': { digest: 'sha256:4094594c95a66fd89892ecc2f483b027691631cc50a47a0744397816a5e7ce82', secondsToReady: 26, peakStartupBytes: 148672512, steadyBytes: 149655552 },
+  'tube-archivist/server': { digest: 'sha256:dfe723cf008520e1758ecc3e59e6ea8761dd10d5bb099cd87289e80f5bd66567', secondsToReady: 26, peakStartupBytes: 117891072, steadyBytes: 654868480 },
   'tubesync/server': { digest: 'sha256:f41658ebc890fa7aba037e3e1f113b5a2af81581799e23c59534b9faff258092', secondsToReady: 36, peakStartupBytes: 610705408, steadyBytes: 610246656 },
   'tuwunel/server': { digest: 'sha256:699fa9971c174e01c884abad8d1a3cfb2fe518e1a71f1fa16ea9dedf11873d74', secondsToReady: 10, peakStartupBytes: 159367168, steadyBytes: 159367168 },
   'tvheadend/server': { digest: 'sha256:ccd9f055f0eb5c78c43b40397e35ff30a884a40389222ef04f2e33efecbd3067', secondsToReady: 107, peakStartupBytes: 108711936, steadyBytes: 57753600 },

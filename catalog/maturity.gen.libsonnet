@@ -413,6 +413,7 @@
     'transmute',
     'trilium',
     'trip',
+    'tube-archivist',
     'tubesync',
     'tuwunel',
     'tvheadend',

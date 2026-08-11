@@ -18,5 +18,4 @@ kurly::elasticsearch "$ns" tube-archivist-es
 kurly::cache "$ns" tube-archivist-cache-headless ""
 
 kurly::secret "$ns" tube-archivist workloads/tube-archivist/server.libsonnet
-export KURLY_ROLLOUT_TIMEOUT=900
 kurly::boot workloads/tube-archivist/server.libsonnet "$ns" "+ k.env({ TA_HOST: 'http://tube-archivist:8000' })" ""

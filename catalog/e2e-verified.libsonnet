@@ -362,6 +362,7 @@
   transmute: '2026-08-06',
   trilium: '2026-07-28',
   trip: '2026-08-06',
+  'tube-archivist': '2026-08-11',
   tuwunel: '2026-08-10',
   tvheadend: '2026-07-28',
   tubesync: '2026-08-04',
