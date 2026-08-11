@@ -267,6 +267,7 @@
   'part-db': '2026-08-06',
   passwordpusher: '2026-08-10',
   peertube: '2026-08-10',
+  'pelican-panel': '2026-08-11',
   pgadmin: '2026-08-10',
   photoprism: '2026-08-10',
   photoview: '2026-07-28',

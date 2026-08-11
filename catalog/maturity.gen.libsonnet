@@ -301,6 +301,7 @@
     'part-db',
     'passwordpusher',
     'peertube',
+    'pelican-panel',
     'pgadmin',
     'photoprism',
     'photoview',

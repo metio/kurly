@@ -3929,6 +3929,8 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('appUrl', d.T.string, example='https://panel.example.com'),
           d.arg('behindProxy', d.T.bool, default=true),
           d.arg('trustedProxies', d.T.string, default='0.0.0.0/0 ::/0'),
+          d.arg('dbConnection', d.T.string, default='sqlite'),
+          d.arg('databasePath', d.T.path, default='/pelican-data/database/database.sqlite'),
           d.arg('secretName', d.T.string),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '256Mi' }, limits: { memory: '1Gi' } }),

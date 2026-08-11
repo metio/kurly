@@ -52,6 +52,12 @@ function(
   // in-cluster ingress needs; narrow it to the proxy's own range where the pod is
   // reachable by anything else.
   trustedProxies='0.0.0.0/0 ::/0',
+  // The database. SQLite on the volume needs nothing else and is the default;
+  // point dbConnection at 'pgsql' or 'mysql' and supply the DB_* variables through
+  // env or the Secret to move it to an external server, which also skips the
+  // init container that creates the SQLite file.
+  dbConnection='sqlite',
+  databasePath='/pelican-data/database/database.sqlite',
   // An optional Secret holding APP_KEY and any database credentials, via envFrom.
   secretName=null,
   env={},
@@ -64,14 +70,14 @@ function(
   local baseEnv = {
     APP_ENV: 'production',
     APP_INSTALLED: 'false',
-    DB_CONNECTION: 'sqlite',
+    DB_CONNECTION: dbConnection,
     // ON THE VOLUME, AND NAMED. Laravel resolves an unset DB_DATABASE to its own
     // default inside the install tree, so the database was neither on the volume
     // nor present: every request ended "Database file at path
     // [/var/www/html/database/database.sqlite] does not exist" and the readiness
     // probe read 500, while the container itself looked healthy. The entrypoint
     // creates this directory on the volume but never the file.
-    DB_DATABASE: '/pelican-data/database/database.sqlite',
+    DB_DATABASE: databasePath,
     CACHE_STORE: 'file',
     QUEUE_CONNECTION: 'database',
     SESSION_DRIVER: 'file',
@@ -106,10 +112,30 @@ function(
   + kurly.allowPrivilegeEscalation()
   + kurly.writableRootFilesystem()
   + kurly.store('/pelican-data', storageSize, storageClass=storageClass)
+  // THE DATABASE FILE HAS TO EXIST BEFORE LARAVEL OPENS IT. Nothing else creates
+  // it: the image's entrypoint makes /pelican-data/database and stops there, and
+  // Laravel refuses a missing SQLite file rather than creating one — every request
+  // then ends "Database file at path [...] does not exist" and the readiness probe
+  // reads 500 while the container itself looks healthy. Creating it is idempotent,
+  // so this runs before every start and brings a fresh volume up with no manual
+  // step; an existing database is left exactly as it is.
+  + (if dbConnection != 'sqlite' then {} else kurly.initContainer({
+       name: 'create-database',
+       image: image,
+       command: ['/bin/sh', '-c', 'mkdir -p "$(dirname "$DB_DATABASE")" && touch "$DB_DATABASE"'],
+       env: [{ name: 'DB_DATABASE', value: databasePath }],
+       volumeMounts: [{ name: 'store', mountPath: '/pelican-data' }],
+     }))
   // Migrations, the Filament optimize pass and the first asset cache make the first
   // start slow — that is a startup budget, not a liveness delay.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, periodSeconds: 10, failureThreshold: 60 })
-  + kurly.readinessProbe({ httpGet: { path: '/up', port: 'http' } })
+  // A CONNECTION CHECK, NOT /up. Laravel's health endpoint touches the database,
+  // and a fresh panel has no schema: the entrypoint runs its migrations only when
+  // APP_INSTALLED is true, because the first run is meant to be completed in the
+  // browser installer. Probing /up therefore answers 500 until a human finishes
+  // the install, so a correctly deployed panel would never become Ready and the
+  // rollout would fail waiting for the one step it cannot take by itself.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(
     requests=std.get(resources, 'requests', {}),
