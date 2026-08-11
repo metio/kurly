@@ -14,7 +14,7 @@ kurly::vendor
 ns="$(kurly::namespace_unique kurly-khoj)"
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" khoj-db-rw khoj khoj
+kurly::postgres "$ns" khoj-db-rw khoj khoj docker.io/pgvector/pgvector:pg17
 
 kurly::secret "$ns" khoj workloads/khoj/server.libsonnet
 kurly::boot workloads/khoj/server.libsonnet "$ns" "" ""

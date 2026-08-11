@@ -14,7 +14,7 @@ kurly::vendor
 ns="$(kurly::namespace_unique kurly-pelican-panel)"
 kurly::namespace "$ns"
 
-kurly::postgres "$ns" pelican-panel-db-rw pelican-panel pelican-panel
+kurly::mysql "$ns" pelican-panel-db pelican-panel pelican-panel
 
 kurly::secret "$ns" pelican-panel workloads/pelican-panel/server.libsonnet
 export KURLY_ROLLOUT_TIMEOUT=900

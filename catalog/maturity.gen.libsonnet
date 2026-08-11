@@ -188,6 +188,7 @@
     'karaoke-eternal',
     'kavita',
     'keycloak',
+    'khoj',
     'kimai',
     'koillection',
     'komga',

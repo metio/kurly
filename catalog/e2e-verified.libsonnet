@@ -171,6 +171,7 @@
   'karaoke-eternal': '2026-08-06',
   kavita: '2026-07-28',
   keycloak: '2026-08-10',
+  khoj: '2026-08-11',
   kimai: '2026-07-28',
   koillection: '2026-08-06',
   komga: '2026-07-28',

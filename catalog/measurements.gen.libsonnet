@@ -206,6 +206,7 @@
   'karakeep/server': { digest: 'sha256:64d6a9bbf2d37b5c808cf06b5d87f1f1c7846fdd3844724145a9741aeb06fd31', secondsToReady: 69, peakStartupBytes: 217391104, steadyBytes: 633327616 },
   'karaoke-eternal/server': { digest: 'sha256:96a4ff5f14657aaa0e7308f1455fedab7065756e1e3e163522619ee3aa9f5c5f', secondsToReady: 19, peakStartupBytes: 93609984, steadyBytes: 100388864 },
   'kavita/server': { digest: 'sha256:ca6af7a18d7124d014702983c2364e485294f808c1552e9555f2595b7cda7982', secondsToReady: 45, peakStartupBytes: 382640128, steadyBytes: 437997568 },
+  'khoj/server': { digest: 'sha256:eb2e44669df44b51cb206b394dc0a00c782ac152dda02c97c9e3dac3d643dbb4', secondsToReady: 135, peakStartupBytes: 746053632, steadyBytes: 1360654336 },
   'kimai/server': { digest: 'sha256:6504f7187f2e2b748ee6dae04fc82ae08bbf61cc0b403c09e90feb5b44ecb32d', secondsToReady: 41, peakStartupBytes: 150974464, steadyBytes: 126119936 },
   'koillection/server': { digest: 'sha256:81f2a540cac3057ad2285d3b07650c3808dc376935d1d00d7c1b04134e21aa74', secondsToReady: 43, peakStartupBytes: 118861824, steadyBytes: 115437568 },
   'komga/server': { digest: 'sha256:c4f9885fc077e2e9cd684dc95e8f6cfa5e33b100b46712b2de7f5cc2ff59e6fb', secondsToReady: 52, peakStartupBytes: 665858048, steadyBytes: 668422144 },

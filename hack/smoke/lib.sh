@@ -1214,6 +1214,9 @@ kurly::provision_deps() {
             ghcr.io/immich-app/postgres:17-vectorchord0.4.3-pgvector0.8.1-pgvectors0.3.0 \
             '"-c", "shared_preload_libraries=vchord.so"'
           ;;
+        # pgvector, after vchord because that image already carries it.
+        *vector*) kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" docker.io/pgvector/pgvector:pg17 ;;
+        *postgis*) kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" docker.io/postgis/postgis:17-3.5 ;;
         *) kurly::postgres "$ns" "$dbHost" "$dbName" "$dbUser" ;;
       esac
     fi

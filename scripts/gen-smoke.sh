@@ -259,6 +259,11 @@ while IFS=$'\t' read -r id stages db cache objstore; do
         # with `type "geometry" does not exist`, which reads as a broken schema
         # rather than a missing server feature.
         *postgis*) pgimage=" docker.io/postgis/postgis:17-3.5" ;;
+        # pgvector, matched AFTER vchord because that image already carries it.
+        # The stock server reports `extension "vector" is not available`, which
+        # names the extension but reads as the workload asking for something
+        # exotic rather than the server being the plain one.
+        *vector*) pgimage=" docker.io/pgvector/pgvector:pg17" ;;
       esac
       prov+="kurly::postgres \"\$ns\" ${dbHost} ${dbName} ${dbUser}${pgimage}"$'\n'
     fi
