@@ -28,6 +28,13 @@ function(
   // state under the same XDG_DATA_HOME.
   storageSize='1Gi',
   storageClass=null,
+  // How long an issued session token stays valid, in HOURS. The image sets no
+  // default for it and the backend parses it unconditionally, so leaving it out
+  // is fatal rather than merely unconfigured (see below).
+  tokenExpiration=720,
+  // The Secret holding GENESIS_JWT_SECRET, which signs those tokens. Rotating it
+  // signs everybody out; sharing it lets somebody else mint a session.
+  secretName='ocular',
   env={},
   resources={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } },
   labels={},
@@ -39,7 +46,15 @@ function(
   + kurly.recreate()
   + kurly.port(80)
   + kurly.servicePort(80)
-  + kurly.env(env)
+  // GENESIS_JWT_TOKEN_EXPIRATION IS REQUIRED AND UNSET IN THE IMAGE. The backend
+  // parses it during package initialisation, before anything is configured, so an
+  // absent value is not defaulted — it panics with "strconv.ParseInt: parsing \"\":
+  // invalid syntax" and a stack in core/config.go, naming no variable at all. Every
+  // OTHER integer the image documents is set in its own environment, which is what
+  // makes the empty one so hard to find: the answer is the one name that is missing
+  // rather than any of the ones present.
+  + kurly.env({ GENESIS_JWT_TOKEN_EXPIRATION: std.toString(tokenExpiration) } + env)
+  + kurly.envFromSecret(secretName)
   // The image declares root and the entrypoint drops nothing, so the user is pinned here;
   // fsGroup is what makes the volume writable for the backend's database.
   + kurly.runAs(1000, gid=1000, fsGroup=1000)

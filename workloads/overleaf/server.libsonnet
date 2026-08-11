@@ -60,6 +60,13 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.env(baseEnv + env)
   + kurly.rootUser()
+  // Root without CHOWN cannot take ownership of its own volume. The image's
+  // 100_make_overleaf_data_dirs.sh chowns /var/lib/overleaf to the account the
+  // services run as and, with every capability dropped, fails with "chown:
+  // changing ownership of '/var/lib/overleaf': Operation not permitted"; my_init
+  // then kills every process, so the container dies during setup rather than
+  // reporting anything about Overleaf.
+  + kurly.keepCapabilities()
   + kurly.writableRootFilesystem()
   + kurly.store('/var/lib/overleaf', storageSize, storageClass=storageClass)
   + kurly.readinessProbe({ httpGet: { path: '/status', port: 'http' }, initialDelaySeconds: 30, periodSeconds: 15, failureThreshold: 20 })

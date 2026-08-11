@@ -11,4 +11,5 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 ns="$(kurly::namespace_unique kurly-ocular)"
+kurly::secret "$ns" ocular workloads/ocular/server.libsonnet
 kurly::boot workloads/ocular/server.libsonnet "$ns" "" ""
