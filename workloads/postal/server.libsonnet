@@ -97,6 +97,16 @@ function(
   + kurly.secretMount(secretName, '/secrets')
   // The image's own account, uid 999.
   + kurly.runAs(999, gid=999, fsGroup=999)
+  // The ruby the image ships carries FILE CAPABILITIES, and execve refuses a
+  // binary whose file capabilities the bounding set does not cover: dropping ALL
+  // makes running it impossible rather than unprivileged. What is reported is
+  // "/usr/bin/env: 'ruby': Operation not permitted", naming the interpreter as if
+  // it were missing from the image, and it happens in the INIT container, so the
+  // pod shows Init:Error and never reaches anything that logs about Postal.
+  // no_new_privs has to go too, or the exec cannot keep what the file grants. The
+  // application still runs as 999.
+  + kurly.keepCapabilities()
+  + kurly.allowPrivilegeEscalation()
   // Rails keeps its pidfile, caches and uploaded bodies inside its own tree, and
   // the root filesystem stays read-only.
   + kurly.scratch('/opt/postal/app/tmp', '256Mi')

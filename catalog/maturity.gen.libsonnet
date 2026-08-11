@@ -324,6 +324,7 @@
     'podfetch',
     'polaris',
     'portainer',
+    'postal',
     'postgres',
     'prestashop',
     'privatebin',

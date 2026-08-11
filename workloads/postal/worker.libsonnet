@@ -68,6 +68,14 @@ function(
   + kurly.envFromSecret(secretName)
   + kurly.secretMount(secretName, '/secrets')
   + kurly.runAs(999, gid=999, fsGroup=999)
+  // The ruby the image ships carries FILE CAPABILITIES, and execve refuses a
+  // binary whose file capabilities the bounding set does not cover: dropping ALL
+  // makes running it impossible rather than unprivileged, and the report is
+  // "/usr/bin/env: 'ruby': Operation not permitted" — the interpreter named as if
+  // it were missing from the image. no_new_privs has to go too, or the exec cannot
+  // keep what the file grants. The process still runs as 999.
+  + kurly.keepCapabilities()
+  + kurly.allowPrivilegeEscalation()
   + kurly.scratch('/opt/postal/app/tmp', '256Mi')
   + kurly.scratch('/opt/postal/app/log', '128Mi')
   + kurly.scratch('/tmp', '128Mi')

@@ -287,6 +287,7 @@
   podfetch: '2026-08-07',
   polaris: '2026-08-06',
   portainer: '2026-08-10',
+  postal: '2026-08-11',
   postgres: '2026-07-28',
   prestashop: '2026-08-11',
   privatebin: '2026-07-28',
