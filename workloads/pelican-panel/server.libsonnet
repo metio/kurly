@@ -44,8 +44,14 @@ function(
   appUrl=null,
   // Let the proxy in front terminate TLS and keep Caddy on plain :80.
   behindProxy=true,
-  // The proxies whose forwarded headers Caddy and Laravel trust.
-  trustedProxies='*',
+  // The proxies whose forwarded headers Caddy and Laravel trust, as CIDR ranges.
+  // NOT '*': Caddy's trusted_proxies parses each entry as an address or prefix and
+  // refuses to start on a glob — "invalid IP address: '*': ParseAddr("*")" — which
+  // stops the whole server over a value that reads like the obvious way to say
+  // "any". The default trusts everything, which is what a workload behind an
+  // in-cluster ingress needs; narrow it to the proxy's own range where the pod is
+  // reachable by anything else.
+  trustedProxies='0.0.0.0/0 ::/0',
   // An optional Secret holding APP_KEY and any database credentials, via envFrom.
   secretName=null,
   env={},
@@ -59,6 +65,13 @@ function(
     APP_ENV: 'production',
     APP_INSTALLED: 'false',
     DB_CONNECTION: 'sqlite',
+    // ON THE VOLUME, AND NAMED. Laravel resolves an unset DB_DATABASE to its own
+    // default inside the install tree, so the database was neither on the volume
+    // nor present: every request ended "Database file at path
+    // [/var/www/html/database/database.sqlite] does not exist" and the readiness
+    // probe read 500, while the container itself looked healthy. The entrypoint
+    // creates this directory on the volume but never the file.
+    DB_DATABASE: '/pelican-data/database/database.sqlite',
     CACHE_STORE: 'file',
     QUEUE_CONNECTION: 'database',
     SESSION_DRIVER: 'file',
@@ -80,7 +93,15 @@ function(
   // non-numeric user", before it is ever started, which surfaces as a
   // CreateContainerConfigError rather than anything about the application. The
   // numeric equivalent is stated here so the hardened default still applies.
-  + kurly.runAs(33, gid=33, fsGroup=33)
+  //
+  // THE NUMBER IS ALPINE'S 82, NOT DEBIAN'S 33. This image is Alpine-based, where
+  // www-data is 82; running it as 33 leaves the process a stranger to its own
+  // tree, which is mode drwxrwx--- and grants nothing to others. The entrypoint's
+  // `mkdir -p … /var/www/html/storage/logs/supervisord` then fails — silently,
+  // because that line redirects its errors away — and supervisord dies on "The
+  // directory named as part of the path …/supervisord.log does not exist", which
+  // names a missing directory rather than the identity that could not create it.
+  + kurly.runAs(82, gid=82, fsGroup=82)
   + kurly.addCapabilities(['NET_BIND_SERVICE'])
   + kurly.allowPrivilegeEscalation()
   + kurly.writableRootFilesystem()

@@ -17,4 +17,5 @@ kurly::namespace "$ns"
 kurly::postgres "$ns" pelican-panel-db-rw pelican-panel pelican-panel
 
 kurly::secret "$ns" pelican-panel workloads/pelican-panel/server.libsonnet
-kurly::boot workloads/pelican-panel/server.libsonnet "$ns" "" ""
+export KURLY_ROLLOUT_TIMEOUT=900
+kurly::boot workloads/pelican-panel/server.libsonnet "$ns" "" "secretName='pelican-panel'"

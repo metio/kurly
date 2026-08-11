@@ -3928,13 +3928,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('storageClass', d.T.string),
           d.arg('appUrl', d.T.string, example='https://panel.example.com'),
           d.arg('behindProxy', d.T.bool, default=true),
-          d.arg('trustedProxies', d.T.string, default='*'),
+          d.arg('trustedProxies', d.T.string, default='0.0.0.0/0 ::/0'),
           d.arg('secretName', d.T.string),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
+        ]) + { kind: 'http', secretKeys: [{ key: 'APP_KEY', generate: 'password', length: 32 }] },
       },
     },
     pictshare: {
@@ -6749,11 +6749,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'Overleaf',
       upstream: { repo: 'https://github.com/overleaf/overleaf' },
       description: 'Write LaTeX papers together in the browser.',
-      summary: 'An Overleaf server (the Community Edition of the collaborative LaTeX editor) on the official monolith image, backed by an external MongoDB (a replica set — it uses transactions) and Redis, with projects and compiles on a PersistentVolume. kurly ships no MongoDB recipe; bring your own (Redis can be the valkey workload). The image spawns TeX compiles and writes across the root filesystem, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; OVERLEAF_MONGO_URL comes from a provided Secret via envFrom. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
+      summary: 'An Overleaf server (the Community Edition of the collaborative LaTeX editor) on the official monolith image, backed by an external MongoDB (a replica set — it uses transactions) and Redis, with projects and compiles on a PersistentVolume. kurly ships no MongoDB recipe; bring your own (Redis can be the valkey workload). The image spawns TeX compiles and writes across the root filesystem, relaxing non-root and read-only-rootfs while keeping dropped capabilities. kurly authors no Secret; OVERLEAF_MONGO_URL and OVERLEAF_INVITE_TOKEN_SECRET come from a provided Secret via envFrom — the container refuses to start without the latter, and regenerating it invalidates every invitation token already issued. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
       category: 'application',
       requires: { database: 'required', cache: 'required' },
       stages: {
-        server: d.fn('The Overleaf server. redisHost defaults to a valkey named overleaf-cache; siteUrl is the public URL; appName the instance name. secretName holds OVERLEAF_MONGO_URL, pointing at a MongoDB replica set you provide (envFrom). Projects and compiles at /var/lib/overleaf. Compose an exposure onto the HTTP port.', [
+        server: d.fn('The Overleaf server. redisHost defaults to a valkey named overleaf-cache; siteUrl is the public URL; appName the instance name. secretName holds OVERLEAF_MONGO_URL, pointing at a MongoDB replica set you provide, and OVERLEAF_INVITE_TOKEN_SECRET, which must stay stable across restarts (envFrom). Projects and compiles at /var/lib/overleaf. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='overleaf'),
           d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='10Gi'),
@@ -6766,7 +6766,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '2Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http', secretKeys: [{ key: 'OVERLEAF_MONGO_URL', generate: 'mongoUrl', value: 'mongodb://overleaf-mongo:27017/sharelatex' }] },
+        ]) + { kind: 'http', secretKeys: [{ key: 'OVERLEAF_MONGO_URL', generate: 'mongoUrl', value: 'mongodb://overleaf-mongo:27017/sharelatex' }, { key: 'OVERLEAF_INVITE_TOKEN_SECRET', generate: 'hex', length: 64 }] },
       },
     },
     peertube: {

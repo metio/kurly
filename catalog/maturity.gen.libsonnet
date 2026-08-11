@@ -378,6 +378,7 @@
     'spegel',
     'spoolman',
     'sqlpage',
+    'srs',
     'stash',
     'static-web-server',
     'status-responder',

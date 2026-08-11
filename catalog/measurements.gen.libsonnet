@@ -395,6 +395,7 @@
   'speedtest-tracker/server': { digest: 'sha256:19abfdb836bcf5b3d15d65dde992efcfafd44454e378476340a5aa0351a01a32', secondsToReady: 42, peakStartupBytes: 170766336, steadyBytes: 178237440 },
   'spoolman/server': { digest: 'sha256:f17489666719c1a6e12bf0616e9865e3ee8609ef0ac2608d67c1528ceeb609e8', secondsToReady: 33, peakStartupBytes: 160497664, steadyBytes: 121892864 },
   'sqlpage/server': { digest: 'sha256:ed0adba603cc0945e728d7b894ce5340d006c737354d252361c25878679e34a6', secondsToReady: 10, peakStartupBytes: 28131328, steadyBytes: 28131328 },
+  'srs/server': { digest: 'sha256:4e293846ad2448ff1a0157aa2c694e7c451fff5046c93b5bc6da0fa0384ef998', secondsToReady: 9, peakStartupBytes: 28327936, steadyBytes: 28610560 },
   'stash/server': { digest: 'sha256:df744af5a0c976e2ec671052ecc1f8a9aa757fa12b8f9930b59910b7295f0da6', secondsToReady: 26, peakStartupBytes: 57012224, steadyBytes: 15966208 },
   'static-web-server/server': { digest: 'sha256:2c1a7c3e0feaea5859307403b74e1c575f3ec1499094fc077344173d11abaae2', secondsToReady: 9, peakStartupBytes: 14163968, steadyBytes: 14438400 },
   'stirling-pdf/server': { digest: 'sha256:7ed4d9681d18e4fbc3aa6a63647c4b5c2bcc4b75841df7c05d7e3d2320f5c9a1', secondsToReady: 102, peakStartupBytes: 1406504960, steadyBytes: 1410174976 },

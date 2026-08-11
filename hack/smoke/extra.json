@@ -69,6 +69,10 @@
   "peertube": {
     "compose": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })"
   },
+  "pelican-panel": {
+    "rolloutTimeout": 900,
+    "params": "secretName='pelican-panel'"
+  },
   "piwigo": {
     "dbEngine": "mysql"
   },

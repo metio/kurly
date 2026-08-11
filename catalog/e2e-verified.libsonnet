@@ -329,6 +329,7 @@
   spegel: '2026-08-10',
   spoolman: '2026-08-04',
   sqlpage: '2026-08-04',
+  srs: '2026-08-11',
   'static-web-server': '2026-08-06',
   'status-responder': '2026-08-10',
   'stirling-pdf': '2026-07-28',

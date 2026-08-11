@@ -111,9 +111,17 @@ function(
   + kurly.extraPort('webrtc', 8000, protocol='UDP')
   + kurly.extraPort('srt', 10080, protocol='UDP')
   // Mounted as a single file over the shipped conf/srs.conf, which leaves the rest
-  // of conf/ in place — the image's own command already names that path, so
-  // nothing has to override the command to be read.
+  // of conf/ in place.
   + kurly.config({ 'srs.conf': config }, mountPath='/usr/local/srs/conf', subPath=true)
+  // AND NAMED ON THE COMMAND LINE, because the image does not read it otherwise:
+  // its Cmd is ["./objs/srs","-c","conf/docker.conf"] with no entrypoint, so the
+  // configuration written above sat unread while SRS ran the shipped docker.conf.
+  // That conf keeps its pid file at ./objs/srs.pid, inside the read-only install
+  // tree, and SRS exits with "acquire pid file ... (Read-only file system)" —
+  // which reads as a missing writable path, and is really a configuration file
+  // that was never opened. The whole command is restated because there is no
+  // ENTRYPOINT to inherit: args alone would replace the binary with its flags.
+  + kurly.args(['./objs/srs', '-c', 'conf/srs.conf'])
   + (if candidate == null then {} else kurly.env({ CANDIDATE: candidate }))
   + (if env == {} then {} else kurly.env(env))
   // The image runs as root and needs nothing that requires it: every port it binds
