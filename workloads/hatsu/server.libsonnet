@@ -15,7 +15,15 @@
 //
 // DOMAIN AND PRIMARYACCOUNT ARE REQUIRED, and the process REFUSES TO START without
 // them: Hatsu panics on a missing HATSU_DOMAIN or HATSU_PRIMARY_ACCOUNT rather than
-// picking something. Neither has a sane default — the domain is the one in every
+// picking something.
+//
+// PRIMARYACCOUNT MUST BE REACHABLE OVER HTTPS BEFORE THE POD WILL START. Hatsu
+// fetches https://<primaryAccount>/ during start-up to discover the site's JSON
+// feed, and a site it cannot reach — or one that has no discoverable feed — is
+// fatal: it exits with `Unable to find Feed Url named <domain>` or `error sending
+// request for url (https://<domain>/)` and the container restarts forever. The
+// scheme is not negotiable, so a plain-HTTP site cannot be bridged, and neither
+// can one that is not published yet. Deploy the site first. Neither has a sane default — the domain is the one in every
 // @handle this instance mints, and the primary account is the static site being
 // bridged — so both are unset here and a pod without them crash-loops by design.
 //
