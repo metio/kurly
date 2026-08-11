@@ -30,7 +30,8 @@
     "compose": "+ k.env({ DATABASE_URL: 'postgresql://habitat:Kurly-e2e-Passw0rd@habitat-db-rw:5432/habitat?serverVersion=17&sslmode=disable' })"
   },
   "hatsu": {
-    "compose": "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })"
+    "compose": "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })",
+    "skip": "Hatsu fetches https://<primaryAccount>/ at start-up to discover the site's JSON feed and exits when it cannot, so it needs a real site already published on the public internet — an in-cluster feed over plain HTTP clears the discovery error and then fails the HTTPS fetch."
   },
   "isso": {
     "params": "host='http://isso:8080'"

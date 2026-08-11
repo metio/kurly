@@ -111,6 +111,15 @@ restarts_for() {
   jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).maxRestarts // ""' "$extra"
 }
 
+# And the fifth: a workload this harness cannot prove, and why. A scenario that
+# CANNOT pass must say so and stop, rather than run and fail — a walk reporting a
+# failure for a workload nothing is wrong with spends every future run
+# rediscovering the same external requirement, and buries the real failures among
+# expected ones. The reason is printed, so the skip is never silent.
+skip_for() {
+  jq -r --arg k "$1" --arg id "${1%%/*}" '(.[$k] // .[$id] // {}).skip // ""' "$extra"
+}
+
 # A generated scenario is regenerated in place; a hand-written one is left alone.
 is_hand_written() {
   local scenario="hack/smoke/scenario-$1.sh"
@@ -133,6 +142,10 @@ while IFS=$'\t' read -r id stages; do
   # Boot each stage in its own namespace; a single-stage workload gets the bare
   # kurly-<id> namespace, multi-stage workloads suffix the stage.
   boot_lines=""
+  sk="$(skip_for "$id")"
+  # The reason is prose and may contain an apostrophe, which would end the quoted
+  # string it is emitted into and leave an unparsable scenario.
+  [ -z "$sk" ] || boot_lines+="echo 'skip: ${sk//\'/\'\\\'\'}'"$'\n'"exit 0"$'\n' 
   IFS=',' read -ra arr <<<"$stages"
   for stage in "${arr[@]}"; do
     file="workloads/${id}/${stage}.libsonnet"
@@ -305,6 +318,10 @@ while IFS=$'\t' read -r id stages db cache objstore; do
   fi
 
   boot_lines=""
+  sk="$(skip_for "$id")"
+  # The reason is prose and may contain an apostrophe, which would end the quoted
+  # string it is emitted into and leave an unparsable scenario.
+  [ -z "$sk" ] || boot_lines+="echo 'skip: ${sk//\'/\'\\\'\'}'"$'\n'"exit 0"$'\n' 
   for stage in "${arr[@]}"; do
     file="workloads/${id}/${stage}.libsonnet"
     [ -f "$file" ] || { echo "::error::${file} referenced by the catalog does not exist"; exit 1; }
