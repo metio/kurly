@@ -12715,6 +12715,26 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    sablier: {
+      name: 'Sablier',
+      upstream: { repo: 'https://github.com/sablierapp/sablier' },
+      homepage: 'https://sablierapp.dev/',
+      license: 'AGPL-3.0',
+      description: 'Let rarely-used workloads sleep, and wake them on the first request.',
+      summary: "A Sablier server (it scales workloads to zero and starts them again on the first request, showing a waiting page while they come up). A plain composable http workload on the project's own image: it watches and scales other workloads through the Kubernetes API and keeps nothing of its own. It does NOT proxy traffic — a middleware in Traefik, Caddy, Nginx, Envoy, Istio or APISIX asks it whether the workload is up, holds the request while it starts, and only then forwards. The grant is the interesting part: reading and changing the replica count is namespace-wide on deployments and statefulsets, since RBAC resourceNames cannot express 'whichever carry the sablier label'; apiServerClient declares that Role and the egress to the apiserver together, so a consumer's own rbac() or networkPolicy() composes with it rather than firewalling the scaler off from what it scales. Sessions are in-process, so a restart forgets which workloads are awake — a slow first request rather than an error, and the reason for one replica. Serves its API on :10000.",
+      category: 'tool',
+      stages: {
+        server: d.fn('The Sablier server. sessionDuration is how long a workload stays awake after the last request reaches it. kurly renders the ServiceAccount, Role and RoleBinding the Kubernetes provider needs. The reverse proxy in front of the scaled workloads calls this Service; expose it only if that proxy is outside the cluster.', [
+          d.arg('name', d.T.string, default='sablier'),
+          d.arg('image', d.T.string),
+          d.arg('sessionDuration', d.T.string, default='5m'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

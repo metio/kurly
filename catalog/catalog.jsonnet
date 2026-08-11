@@ -40,6 +40,7 @@ local upstream = import './upstream.gen.libsonnet';
 // A stage that is renamed or removed fails the import here; the reconcile below
 // fails if this map and the annotations fall out of step.
 local stageImports = {
+  'sablier/server': import 'github.com/metio/kurly/workloads/sablier/server.libsonnet',
   'krakend/server': import 'github.com/metio/kurly/workloads/krakend/server.libsonnet',
   'scraparr/server': import 'github.com/metio/kurly/workloads/scraparr/server.libsonnet',
   'mcp-context-forge/server': import 'github.com/metio/kurly/workloads/mcp-context-forge/server.libsonnet',
