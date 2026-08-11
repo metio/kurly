@@ -79,7 +79,7 @@ cluster's own version if a migration must fire on a PostgreSQL bump.
 
 ## Maturity
 
-**tested** — this workload has workload-specific assertions in the test suite, on top of rendering cleanly.
+**e2e** — this workload is deployed to a live cluster by a smoke scenario and observed reaching readiness, on top of its test coverage.
 
 ## Deploy with JaaS
 
