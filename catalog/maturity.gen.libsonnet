@@ -302,6 +302,7 @@
     'paperless-ngx',
     'part-db',
     'passwordpusher',
+    'pdfding',
     'peertube',
     'pelican-panel',
     'pgadmin',

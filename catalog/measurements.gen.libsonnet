@@ -321,6 +321,7 @@
   'paperless-ngx/server': { digest: 'sha256:6c86cad803970ea782683a8e80e7403444c5bf3cf70de63b4d3c8e87500db92f', secondsToReady: 141, peakStartupBytes: 467595264, steadyBytes: 629280768 },
   'part-db/server': { digest: 'sha256:5c3264106425d43790d22e7959c2749ad06e9dcdf014e8176ebdb2cb903e94e4', secondsToReady: 76, peakStartupBytes: 67690496, steadyBytes: 67969024 },
   'passwordpusher/server': { digest: 'sha256:1cb29ca9badcd5cacd77aee62c3530d5691a3e84fdd3824a1b1a75d56ef9f00c', secondsToReady: 41, peakStartupBytes: 469270528, steadyBytes: 470994944 },
+  'pdfding/server': { digest: 'sha256:88d509978b66eb2cd7371150f7b0ce035bd43b7c519591c437b51220da948529', secondsToReady: 20, peakStartupBytes: 121901056, steadyBytes: 202235904 },
   'peertube/server': { digest: 'sha256:8c8086e68159b4578d566e08b4b1d6506afaffed756d8b07455824d4eab66d0d', secondsToReady: 91, peakStartupBytes: 347676672, steadyBytes: 311541760 },
   'pelican-panel/server': { digest: 'sha256:45cecf27176630ac628ebc9badc0ad273bdaa9bf441648c363dd8daeb9cc3bff', secondsToReady: 17, peakStartupBytes: 237666304, steadyBytes: 237948928 },
   'pgadmin/server': { digest: 'sha256:2f4ce946ddf8360680d7eff4eaba1d91859eb6b4003e6623bad5c63a322c2f4d', secondsToReady: 120, peakStartupBytes: 200495104, steadyBytes: 318222336 },

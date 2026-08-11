@@ -268,6 +268,7 @@
   'paperless-ngx': '2026-07-28',
   'part-db': '2026-08-06',
   passwordpusher: '2026-08-10',
+  pdfding: '2026-08-11',
   peertube: '2026-08-10',
   'pelican-panel': '2026-08-11',
   pgadmin: '2026-08-10',

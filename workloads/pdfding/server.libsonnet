@@ -75,6 +75,19 @@ function(
   // worth surviving the pod, so a scratch is the right home for it.
   + kurly.env({ HOME: '/tmp' })
   + kurly.store(dataDir, storageSize, storageClass=storageClass)
+  // THE db/ SUBDIRECTORY OF THE VOLUME, which nothing else creates. Both SQLite
+  // files live under DATA_DIR/db — Django's own and huey's tasks.sqlite3 — and
+  // bootstrap.sh does not make the directory, so on a fresh volume sqlite3 cannot
+  // create either file. What it reports is "unable to open database file", which
+  // names no path at all and reads as a permission problem on a directory that is
+  // in fact absent. Creating it is idempotent, so it runs before every start.
+  + kurly.initContainer({
+    name: 'create-data-dirs',
+    image: image,
+    command: ['/bin/sh', '-c', 'mkdir -p "$DATA_DIR/db"'],
+    env: [{ name: 'DATA_DIR', value: dataDir }],
+    volumeMounts: [{ name: 'store', mountPath: dataDir }],
+  })
   // Migrations and the first-run setup happen before the socket is bound.
   + kurly.startupProbe({ tcpSocket: { port: 'http' }, failureThreshold: 30, periodSeconds: 5 })
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
