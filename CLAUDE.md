@@ -80,7 +80,7 @@ namespace, while kurly's `restricted` default gives every pod its own — so eve
 render carries `hostUsers: false` and no such pod can start here. The error names
 neither:
 
-```
+```text
 failed to create network namespace for sandbox "…": failed to start noop process
 for unshare: fork/exec /proc/self/exe: operation not permitted
 ```
