@@ -40,6 +40,9 @@ local upstream = import './upstream.gen.libsonnet';
 // A stage that is renamed or removed fails the import here; the reconcile below
 // fails if this map and the annotations fall out of step.
 local stageImports = {
+  'pydio-cells/server': import 'github.com/metio/kurly/workloads/pydio-cells/server.libsonnet',
+  'dreamfactory/server': import 'github.com/metio/kurly/workloads/dreamfactory/server.libsonnet',
+  'portabase/server': import 'github.com/metio/kurly/workloads/portabase/server.libsonnet',
   'authorizer/server': import 'github.com/metio/kurly/workloads/authorizer/server.libsonnet',
   'questdb/server': import 'github.com/metio/kurly/workloads/questdb/server.libsonnet',
   'oxicloud/server': import 'github.com/metio/kurly/workloads/oxicloud/server.libsonnet',

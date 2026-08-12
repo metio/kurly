@@ -46,6 +46,10 @@ local stateful = kurly.http('vault', 'ghcr.io/example/vault:1.0.0')
 
 local containerOf(app) = app.deployment.spec.template.spec.containers[0];
 local podOf(app) = app.deployment.spec.template.spec;
+// The daemon kind renders a DaemonSet, which is where host access is usually
+// composed, so the host-namespace and hostPath assertions read it instead.
+local daemonPodOf(app) = app.daemonset.spec.template.spec;
+local daemonContainerOf(app) = app.daemonset.spec.template.spec.containers[0];
 
 {
   // --- http ------------------------------------------------------------------
@@ -471,6 +475,79 @@ local podOf(app) = app.deployment.spec.template.spec;
       'agent',
       [{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }],
     ]
+  ),
+  // clusterRbac mints a ClusterRole and ClusterRoleBinding NAMED for the workload
+  // and its namespace, because cluster-scoped names are global: two tenants
+  // deploying the same workload must not share one object.
+  cluster_rbac_names_objects_per_namespace: std.assertEqual(
+    local a = kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.clusterRbac([{ apiGroups: [''], resources: ['nodes'], verbs: ['list'] }], namespace='observability');
+    local items = kurly.list(a).items;
+    [
+      std.sort([m.kind for m in items]),
+      [m.metadata.name for m in items if m.kind == 'ClusterRole'],
+      [m.roleRef for m in items if m.kind == 'ClusterRoleBinding'],
+    ],
+    [
+      ['ClusterRole', 'ClusterRoleBinding', 'DaemonSet', 'ServiceAccount'],
+      ['agent-observability'],
+      [{ apiGroup: 'rbac.authorization.k8s.io', kind: 'ClusterRole', name: 'agent-observability' }],
+    ]
+  ),
+  // The binding's subject carries the namespace. Without it the grant resolves
+  // against nothing and silently applies to no one.
+  cluster_rbac_binding_subject_is_namespaced: std.assertEqual(
+    local a = kurly.worker('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.clusterRbac([{ apiGroups: [''], resources: ['nodes'], verbs: ['list'] }], namespace='observability');
+    [m for m in kurly.list(a).items if m.kind == 'ClusterRoleBinding'][0].subjects,
+    [{ kind: 'ServiceAccount', name: 'agent', namespace: 'observability' }]
+  ),
+  // A cluster grant mounts the token, the same as a namespaced one: the workload
+  // holds rules, so it talks to the apiserver.
+  cluster_rbac_mounts_token: std.assertEqual(
+    podOf(
+      kurly.worker('agent', 'ghcr.io/example/agent:1.0.0')
+      + kurly.clusterRbac([{ apiGroups: [''], resources: ['nodes'], verbs: ['list'] }], namespace='obs')
+    ).automountServiceAccountToken,
+    true
+  ),
+  // Sharing a host namespace forbids the pod's own user namespace, so hostUsers
+  // is dropped rather than left for the kubelet to reject after admission.
+  host_namespaces_drop_host_users: std.assertEqual(
+    local pod = daemonPodOf(kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0') + kurly.hostPID());
+    [std.get(pod, 'hostPID', false), std.objectHas(pod, 'hostUsers')],
+    [true, false]
+  ),
+  // A host-network pod that keeps the node's resolver cannot reach one in-cluster
+  // Service, so the policy is set with it — unless the consumer states their own.
+  host_network_sets_cluster_dns: std.assertEqual(
+    local auto = daemonPodOf(kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0') + kurly.hostNetwork());
+    local explicit = daemonPodOf(
+      kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0') + kurly.hostNetwork() + kurly.dns(policy='Default')
+    );
+    [auto.hostNetwork, auto.dnsPolicy, explicit.dnsPolicy],
+    [true, 'ClusterFirstWithHostNet', 'Default']
+  ),
+  // hostPath mounts the node's own filesystem, and the type is written so the
+  // kubelet checks the path rather than creating whatever is missing.
+  host_path_mounts_node_directory: std.assertEqual(
+    local a = kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0')
+              + kurly.hostPath('/var/run/containerd/containerd.sock', type='Socket');
+    [
+      [v for v in daemonPodOf(a).volumes if std.objectHas(v, 'hostPath')],
+      [m for m in daemonContainerOf(a).volumeMounts],
+    ],
+    [
+      [{ name: 'var-run-containerd-containerd-sock', hostPath: { path: '/var/run/containerd/containerd.sock', type: 'Socket' } }],
+      [{ name: 'var-run-containerd-containerd-sock', mountPath: '/var/run/containerd/containerd.sock', readOnly: true }],
+    ]
+  ),
+  // A privileged container already holds every capability and every escalation,
+  // so the fields claiming otherwise are suppressed rather than left to contradict
+  // it in the rendered manifest.
+  privileged_suppresses_contradicting_fields: std.assertEqual(
+    daemonContainerOf(kurly.daemon('agent', 'ghcr.io/example/agent:1.0.0') + kurly.privileged() + kurly.rootUser()).securityContext,
+    { privileged: true, readOnlyRootFilesystem: true }
   ),
   // A consumer's own rbac() and a capability's requiredRbac union into one Role —
   // neither clobbers the other, regardless of compose order.

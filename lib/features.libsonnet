@@ -414,6 +414,82 @@
       requiredEgress+: [{ ports: [{ protocol: 'TCP', port: port } for port in ports] }],
     },
   },
+  // A CLUSTER-WIDE grant: a ClusterRole and the ClusterRoleBinding tying it to the
+  // workload's ServiceAccount. What an admission controller, a node agent, a
+  // cluster dashboard or a scale-to-zero proxy needs, and what an ordinary tenant
+  // workload must never ask for — the catalogue publishes `clusterScoped` off the
+  // objects this renders, so a consumer can refuse it without reading the rules.
+  //
+  // `namespace` is REQUIRED and kurly refuses to guess it. A ClusterRoleBinding's
+  // subject is not resolved against the object it sits beside — the binding has no
+  // namespace of its own — so a subject without one grants nothing at all while
+  // looking perfectly correct, which is a failure nobody notices until the
+  // workload's first API call is denied.
+  //
+  // The objects are named `<workload>-<namespace>`, because cluster-scoped names
+  // are global: two tenants deploying the same workload would otherwise share one
+  // ClusterRole, and whichever applied last would quietly redefine the other's
+  // permissions.
+  clusterRbac(rules, namespace):: {
+    config+:: { clusterRbac: { rules: rules }, clusterRbacNamespaces+: [namespace] },
+  },
+  // The cluster-wide counterpart of apiServerClient: a grant a CAPABILITY needs,
+  // travelling as a cross-cutting requirement so a consumer's own clusterRbac()
+  // composes with it instead of replacing it. It names the namespace for the same
+  // reason clusterRbac() does — a capability that cannot render on its own is one
+  // a workload author has to work around — and the namespaces every cluster grant
+  // contributes are checked against each other rather than silently overwritten.
+  clusterApiServerClient(rules, namespace, ports=[443, 6443]):: {
+    config+:: {
+      requiredClusterRbac+: rules,
+      clusterRbacNamespaces+: [namespace],
+      requiredEgress+: [{ ports: [{ protocol: 'TCP', port: port } for port in ports] }],
+    },
+  },
+
+  // Host access. Each of these takes a workload out of the isolation a pod
+  // normally has, and each is its own decision rather than a bundle: a runtime
+  // security agent reads the node's processes but wants nothing to do with its
+  // network, and a CNI is the other way round.
+  //
+  // A pod sharing any host namespace cannot also have its own user namespace, so
+  // kurly drops hostUsers automatically rather than making a consumer discover
+  // that the kubelet refuses the pod it accepted.
+  //
+  // hostNetwork additionally sets dnsPolicy to ClusterFirstWithHostNet unless the
+  // consumer states one: without it the pod inherits the node's resolver and
+  // cannot resolve a single in-cluster Service, while starting and running
+  // perfectly.
+  hostNetwork():: { config+:: { hostNetwork: true } },
+  hostPID():: { config+:: { hostPID: true } },
+  hostIPC():: { config+:: { hostIPC: true } },
+  // Mounts a directory or file from the NODE. `type` is not decoration and
+  // defaults to a checked one: left empty the kubelet creates whatever is
+  // missing, so a mistyped path yields an empty directory and an agent that
+  // reads nothing instead of a pod that fails. Use 'Directory', 'File',
+  // 'Socket', or the 'OrCreate' variants when the workload genuinely means to
+  // create it.
+  hostPath(mountPath, path=null, type='Directory', readOnly=true):: {
+    config+:: {
+      hostPaths+: [{
+        mountPath: mountPath,
+        path: if path == null then mountPath else path,
+        type: type,
+        readOnly: readOnly,
+      }],
+    },
+  },
+  // Removes the container's isolation entirely: every capability, every device,
+  // and the ability to reconfigure the node it runs on. A container that holds
+  // this can take over the cluster, so it belongs only to software that cannot do
+  // its job without it — a CNI programming the dataplane, a security agent
+  // reading kernel events — and never to an application. kurly renders it rather
+  // than leaving such workloads outside the library, because a hand-written
+  // DaemonSet gets no policy check, no PSS verdict and no catalogue entry saying
+  // what it holds; this way `pss` reports `privileged` and `clusterScoped` says
+  // why. The drop-ALL and no-escalation fields are suppressed alongside it, since
+  // a privileged container has neither.
+  privileged():: { config+:: { privileged: true } },
 
   // Security escape hatches — each downgrades one default for a workload that
   // genuinely needs it. The kurly.security.* mixins relax whole PSS profiles.

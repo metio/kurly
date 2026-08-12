@@ -281,6 +281,31 @@ local roleManifests(name, rules, labels, account) = [
   },
 ];
 
+// The cluster-wide counterpart. The BINDING NAMES THE NAMESPACE, which a
+// RoleBinding does not have to: a ClusterRoleBinding's subject is not resolved
+// against the object's own namespace, because the binding has none — a subject
+// without one silently grants nothing, or worse, matches an account of the same
+// name in whichever namespace the apiserver defaults to. `namespace` is
+// therefore required rather than optional, and kurly takes it from the render
+// rather than guessing.
+//
+// The objects are named `<workload>-<namespace>` rather than after the workload
+// alone. Cluster-scoped names are global: two tenants each deploying the same
+// workload would otherwise write to one ClusterRole, and the second apply would
+// silently take the first one's grant away.
+local clusterRoleManifests(name, namespace, rules, labels, account) =
+  local objectName = name + '-' + namespace;
+  [
+    { apiVersion: 'rbac.authorization.k8s.io/v1', kind: 'ClusterRole', metadata: { name: objectName, labels: labels }, rules: rules },
+    {
+      apiVersion: 'rbac.authorization.k8s.io/v1',
+      kind: 'ClusterRoleBinding',
+      metadata: { name: objectName, labels: labels },
+      roleRef: { apiGroup: 'rbac.authorization.k8s.io', kind: 'ClusterRole', name: objectName },
+      subjects: [{ kind: 'ServiceAccount', name: account, namespace: namespace }],
+    },
+  ];
+
 // Keeps the LAST entry per key, dropping earlier ones — the list form of kurly's
 // late binding, where a later compose wins. Kubernetes constrains these lists
 // itself (a pod's volumes are unique by name, a container's mounts unique by
@@ -481,6 +506,18 @@ local exclusionConflicts(exclusive) = [
       alerts: null,
       serviceMonitor: null,  // { port, path, interval }
       rbac: null,  // { rules }
+      // A CLUSTER-WIDE grant, for a workload that reads or acts on objects in
+      // every namespace: an admission controller, a node agent, a dashboard, a
+      // scale-to-zero proxy. Kept apart from `rbac` because the two are not
+      // degrees of the same thing — a Role is scoped to the tenant that owns the
+      // workload, and a ClusterRole is a decision about the cluster, which is
+      // exactly the kind of fact `clusterScoped` publishes so a consumer can
+      // refuse it.
+      clusterRbac: null,  // { rules }
+      // The namespace a cluster-wide binding's subject lives in. Accumulated
+      // rather than assigned, so two features that both need a cluster grant are
+      // caught disagreeing instead of one silently winning.
+      clusterRbacNamespaces: [],  // [ 'namespace', … ]
       // Cross-cutting requirements a capability declares so the manifest that
       // owns the concern honors them without the capabilities reaching into each
       // other — they meet here in config. requiredRbac accumulates Role rules the
@@ -490,7 +527,18 @@ local exclusionConflicts(exclusive) = [
       // sidecar's apiserver access). A non-empty requiredRbac also mints the
       // ServiceAccount even when the consumer never calls rbac().
       requiredRbac: [],  // [ {apiGroups, resources, verbs}, … ]
+      requiredClusterRbac: [],  // [ {apiGroups, resources, verbs}, … ]
       requiredEgress: [],  // [ egress rule, … ]
+      // Host access. Each of these takes the workload out of the isolation a pod
+      // normally has, so each is off by default and named for what it opens:
+      // hostNetwork puts the pod on the node's network stack (its ports ARE node
+      // ports and there is no Service in the path), hostPID and hostIPC drop the
+      // walls around the node's processes and shared memory, and hostPaths mounts
+      // directories from the node itself.
+      hostNetwork: false,
+      hostPID: false,
+      hostIPC: false,
+      hostPaths: [],  // [ { mountPath, path, type, readOnly }, … ]
       // Security knobs, defaulting to the Pod Security Standards `restricted`
       // profile plus extra hardening (read-only root filesystem, user
       // namespaces). Feature functions relax them (one knob, or a whole profile
@@ -510,6 +558,14 @@ local exclusionConflicts(exclusive) = [
       addCapabilities: [],  // named capabilities granted back on top of the drop
       readOnlyRootFilesystem: true,
       hostUsers: false,
+      // The one knob that is not a knob: `privileged` does not relax a control,
+      // it removes the container's isolation entirely — every capability, every
+      // device, and the ability to reconfigure the node. It is here because some
+      // software genuinely cannot do its job without it (a CNI, a runtime
+      // security agent reading kernel events), and the honest way to package
+      // those is to say so where a consumer can see it rather than to leave them
+      // outside the library.
+      privileged: false,
     },
 
     // Selector labels feed immutable matchLabels fields, so they stay minimal
@@ -591,7 +647,15 @@ local exclusionConflicts(exclusive) = [
           })
           for m in cfg.secretMounts
         ]
-        + [{ name: volumeName(s.mountPath), mountPath: s.mountPath } for s in cfg.scratch],
+        + [{ name: volumeName(s.mountPath), mountPath: s.mountPath } for s in cfg.scratch]
+        + [
+          std.prune({
+            name: volumeName(h.mountPath),
+            mountPath: h.mountPath,
+            readOnly: if h.readOnly then true else null,
+          })
+          for h in cfg.hostPaths
+        ],
         function(m) m.mountPath
       ),
 
@@ -612,6 +676,13 @@ local exclusionConflicts(exclusive) = [
         + [
           { name: volumeName(s.mountPath), emptyDir: (if s.sizeLimit == null then {} else { sizeLimit: s.sizeLimit }) }
           for s in cfg.scratch
+        ]
+        + [
+          // `type` is not decoration: without it the kubelet creates whatever is
+          // missing, so a typo in the path silently produces an empty directory
+          // and the agent reads nothing rather than failing.
+          { name: volumeName(h.mountPath), hostPath: std.prune({ path: h.path, type: h.type }) }
+          for h in cfg.hostPaths
         ],
         function(v) v.name
       ),
@@ -719,11 +790,14 @@ local exclusionConflicts(exclusive) = [
     // consumer calling rbac() and neither clobbers the other.
     rbacRules::
       (if this.config.rbac == null then [] else this.config.rbac.rules) + this.config.requiredRbac,
+    // The same union, one scope up.
+    clusterRbacRules::
+      (if this.config.clusterRbac == null then [] else this.config.clusterRbac.rules) + this.config.requiredClusterRbac,
     // Whether the pod needs its ServiceAccount token mounted: only when it holds
     // RBAC rules (it talks to the apiserver) or the consumer brought their own
     // account (usually to carry a workload-identity annotation they mean to use).
     // A kurly-minted identity-only account keeps the token off.
-    needsToken:: this.config.serviceAccountName != null || this.rbacRules != [],
+    needsToken:: this.config.serviceAccountName != null || this.rbacRules != [] || this.clusterRbacRules != [],
 
     // The ServiceAccount kurly mints for the workload, unless the consumer brought
     // their own (then the account is theirs to own and annotate).
@@ -742,6 +816,27 @@ local exclusionConflicts(exclusive) = [
       if this.rbacRules == [] then []
       else roleManifests(this.config.name, this.rbacRules, this.labels, this.podServiceAccount),
 
+    // The ClusterRole and ClusterRoleBinding. A cluster-wide grant has to name
+    // the namespace its subject lives in, and kurly does not know it — the
+    // manifests it renders carry no namespace, by design, so the consumer's
+    // tooling can place them. So this is the one capability that REFUSES rather
+    // than guesses: kurly.clusterRbac() takes the namespace, and a wrong or
+    // missing one produces a binding that grants nothing while looking correct,
+    // which is the worst failure available here.
+    clusterRbacManifests::
+      if this.clusterRbacRules == [] then []
+      else
+        local namespaces = std.set(this.config.clusterRbacNamespaces);
+        assert namespaces != [] : this.config.name
+                                  + ': a cluster-wide grant must name the namespace its ServiceAccount lives in — '
+                                  + 'a ClusterRoleBinding subject is not resolved against the object it is written beside, '
+                                  + 'so a subject without a namespace silently grants nothing. Pass namespace= to kurly.clusterRbac().';
+        assert std.length(namespaces) == 1 : this.config.name
+                                             + ': two cluster-wide grants name different namespaces ('
+                                             + std.join(', ', namespaces)
+                                             + '). One pod runs in one namespace, so one of them would grant nothing.';
+        clusterRoleManifests(this.config.name, namespaces[0], this.clusterRbacRules, this.labels, this.podServiceAccount),
+
     // The owned manifests as a list, hidden so it stays out of
     // std.objectValues(app); list() appends it explicitly.
     ownedManifests::
@@ -756,7 +851,7 @@ local exclusionConflicts(exclusive) = [
         this.serviceMonitor,
         this.headlessService,
         this.serviceAccount,
-      ]) + this.rbacManifests + this.backupSources,
+      ]) + this.rbacManifests + this.clusterRbacManifests + this.backupSources,
 
     // The pod-level half of the security posture; each workload kind merges
     // this into its pod template spec. The container-level half lives in
@@ -783,7 +878,14 @@ local exclusionConflicts(exclusive) = [
         + (if cfg.supplementalGroups == [] then {} else { supplementalGroups: cfg.supplementalGroups });
       (if securityContext == {} then {} else { securityContext: securityContext })
       + { automountServiceAccountToken: this.needsToken }
-      + (if cfg.hostUsers then {} else { hostUsers: false }),
+      // A pod sharing ANY host namespace cannot also have its own user
+      // namespace — the kubelet rejects the combination — so hostUsers follows
+      // the others rather than having to be relaxed separately. Getting this
+      // wrong renders a pod the apiserver accepts and the node refuses.
+      + (if cfg.hostUsers || cfg.hostNetwork || cfg.hostPID || cfg.hostIPC then {} else { hostUsers: false })
+      + (if cfg.hostNetwork then { hostNetwork: true } else {})
+      + (if cfg.hostPID then { hostPID: true } else {})
+      + (if cfg.hostIPC then { hostIPC: true } else {}),
 
     // The ServiceAccount the pod runs under. A consumer's explicit choice wins:
     // they are usually bringing an account that carries an annotation kurly
@@ -843,7 +945,16 @@ local exclusionConflicts(exclusive) = [
         }
       )
       + (if cfg.terminationGracePeriodSeconds == null then {} else { terminationGracePeriodSeconds: cfg.terminationGracePeriodSeconds })
-      + (if cfg.dnsPolicy == null then {} else { dnsPolicy: cfg.dnsPolicy })
+      // A pod on the host's network keeps the NODE's resolver unless it is told
+      // otherwise, so every in-cluster name it looks up fails — a workload that
+      // starts, runs, and cannot reach one Service. ClusterFirstWithHostNet is
+      // the fix, applied here rather than left to be rediscovered; a consumer
+      // who states a policy of their own still wins.
+      + (
+        if cfg.dnsPolicy != null then { dnsPolicy: cfg.dnsPolicy }
+        else if cfg.hostNetwork then { dnsPolicy: 'ClusterFirstWithHostNet' }
+        else {}
+      )
       + (if cfg.dnsConfig == null then {} else { dnsConfig: cfg.dnsConfig })
       + (if cfg.hostAliases == [] then {} else { hostAliases: cfg.hostAliases })
       + (if cfg.enableServiceLinks == null then {} else { enableServiceLinks: cfg.enableServiceLinks })
@@ -903,10 +1014,15 @@ local exclusionConflicts(exclusive) = [
     containerSecurity::
       local cfg = self.config;
       std.prune({
-        allowPrivilegeEscalation: if cfg.allowPrivilegeEscalation then null else false,
+        // Written only when true. A container that is privileged already has
+        // every capability and every escalation, so the drop-ALL and
+        // no-escalation fields beside it would describe a posture it does not
+        // have — they are suppressed rather than left to contradict it.
+        privileged: if cfg.privileged then true else null,
+        allowPrivilegeEscalation: if cfg.allowPrivilegeEscalation || cfg.privileged then null else false,
         readOnlyRootFilesystem: if cfg.readOnlyRootFilesystem then true else null,
         capabilities:
-          local dropped = if cfg.dropAllCapabilities then { drop: ['ALL'] } else {};
+          local dropped = if cfg.dropAllCapabilities && !cfg.privileged then { drop: ['ALL'] } else {};
           local added = if std.length(cfg.addCapabilities) > 0 then { add: cfg.addCapabilities } else {};
           if dropped == {} && added == {} then null else dropped + added,
         runAsUser: cfg.runAsUser,
