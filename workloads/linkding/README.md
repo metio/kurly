@@ -21,7 +21,7 @@ kurly.list(linkding())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `linkding` | |
-| `image` | `docker.io/sissbruecker/linkding:1.45.0` | |
+| `image` | `docker.io/sissbruecker/linkding:1.46.0` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the SQLite data volume (`/etc/linkding/data`) |
 | `env` | `{}` | extra `LD_*` settings |
 | `resources` / `labels` / `annotations` | | |
