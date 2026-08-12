@@ -476,6 +476,21 @@ local daemonContainerOf(app) = app.daemonset.spec.template.spec.containers[0];
       [{ apiGroups: [''], resources: ['pods'], verbs: ['patch'] }],
     ]
   ),
+  // envField declares a variable from the pod's own metadata. Without the
+  // DECLARATION Kubernetes leaves $(POD_NAME) in args as literal text, so a
+  // StatefulSet member advertises a hostname that does not exist — which starts
+  // cleanly and never forms a cluster.
+  env_field_declares_pod_metadata: std.assertEqual(
+    containerOf(
+      kurly.worker('w', 'img:1')
+      + kurly.envField('POD_NAME', 'metadata.name')
+      + kurly.env({ PLAIN: 'value' })
+    ).env,
+    [
+      { name: 'PLAIN', value: 'value' },
+      { name: 'POD_NAME', valueFrom: { fieldRef: { fieldPath: 'metadata.name' } } },
+    ]
+  ),
   // clusterRbac mints a ClusterRole and ClusterRoleBinding NAMED for the workload
   // and its namespace, because cluster-scoped names are global: two tenants
   // deploying the same workload must not share one object.

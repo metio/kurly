@@ -42,6 +42,14 @@
   args(args):: { config+:: { args: args } },
   command(command):: { config+:: { command: command } },
   env(env):: { config+:: { env+: env } },
+  // An environment variable read from the pod's OWN metadata — its name,
+  // namespace, node or IP — rather than from a literal. Kubernetes expands
+  // $(VAR) in `command` and `args` from the container's declared environment and
+  // leaves an UNDECLARED one as the literal text `$(VAR)`, so a stage that
+  // advertises itself as `$(POD_NAME).<service>` without this starts, runs, and
+  // tells its peers to connect to a hostname that does not exist. Composable
+  // several times; each call appends.
+  envField(name, fieldPath):: { config+:: { envFields+: [{ name: name, fieldPath: fieldPath }] } },
   // Pull every key of a Secret into the container environment as env vars — for
   // apps that read their configuration, secrets included, from the environment
   // (envFrom secretRef) rather than files. kurly mints no Secret; the consumer

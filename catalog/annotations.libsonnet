@@ -79,6 +79,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     env: d.fn('Environment variables as a name→value map, appended to the container.', [
       d.arg('env', d.T.object, required=true, example={ LOG_LEVEL: 'info' }),
     ]) + { kinds: allKinds, group: 'container' },
+    envField: d.fn("An environment variable read from the pod's OWN metadata (its name, namespace, node or IP) rather than from a literal. Kubernetes expands $(VAR) in command and args from the container's DECLARED environment and leaves an undeclared one as the literal text, so a stage advertising itself as $(POD_NAME).<service> without this starts, runs, and tells its peers to reach a hostname that does not exist. Composable several times.", [
+      d.arg('name', d.T.string, required=true, example='POD_NAME'),
+      d.arg('fieldPath', d.T.string, required=true, example='metadata.name'),
+    ]) + { kinds: allKinds, group: 'container' },
     envFromSecret: d.fn('Pull every key of an EXISTING Secret into the environment (envFrom secretRef); kurly mints no Secret. An optional prefix is prepended to each variable name.', [
       d.arg('secretName', d.T.string, required=true, example='mailu'),
       d.arg('prefix', d.T.string),

@@ -372,6 +372,11 @@ local exclusionConflicts(exclusive) = [
       command: [],
       args: [],
       env: {},
+      // Environment variables whose value comes from the pod's own metadata
+      // rather than from a literal — the only way a container learns its own
+      // name, namespace or node, and the only way a StatefulSet member can
+      // advertise the address its peers reach it at.
+      envFields: [],  // [ { name, fieldPath }, … ]
       // envFrom sources — Secret/ConfigMap references whose keys become container
       // environment variables, for apps that read their configuration (secrets
       // included) from the environment rather than files or explicit env().
@@ -1061,6 +1066,14 @@ local exclusionConflicts(exclusive) = [
         else k.core.v1.container.withEnv([
           k.core.v1.envVar.new(variable, cfg.env[variable])
           for variable in std.objectFields(cfg.env)
+        ])
+      )
+      + (
+        if cfg.envFields == []
+        then {}
+        else k.core.v1.container.withEnvMixin([
+          { name: f.name, valueFrom: { fieldRef: { fieldPath: f.fieldPath } } }
+          for f in cfg.envFields
         ])
       )
       + (if cfg.envFrom == [] then {} else { envFrom: cfg.envFrom })
