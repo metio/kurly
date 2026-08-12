@@ -13353,6 +13353,30 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    vector: {
+      name: 'Vector',
+      upstream: { repo: 'https://github.com/vectordotdev/vector' },
+      homepage: 'https://vector.dev',
+      license: 'MPL-2.0',
+      description: 'Collect logs and metrics, reshape them, and send them where they belong.',
+      summary: "A Vector agent (a pipeline for logs, metrics and traces: it collects them, reshapes them with a transform language, and sends them wherever they are meant to go). A composable daemon workload, because collecting a node's container logs means reading them off that node. THE DEFAULT SINK PRINTS TO STDOUT, WHICH IS NOT A PIPELINE — where the data goes is the decision only the deployment can make and there is no honest default, so the agent starts with what it collects visibly going nowhere useful, which is a better failure than buffering into a void; an empty sinks map is refused outright. It reads every container's logs on the node from /var/log, mounted READ-ONLY because an agent that could write them could rewrite the record it exists to ship, and takes a cluster-wide read grant on pods and namespaces to label the lines. State is the checkpoint file: on the pod it survives a container restart but not a reschedule, and dataDir moves it to the node when that matters.",
+      category: 'observability',
+      stages: {
+        agent: d.fn('The Vector agent, one pod per node. sinks is where the collected data goes (the default prints to stdout); sources adds to the kubernetes_logs source this configures; transforms are Vector Remap Language stages between them. namespace is where the ServiceAccount lives and is required. dataDir puts the read checkpoints on the node so they survive a reschedule, at the cost of writing to it.', [
+          d.arg('name', d.T.string, default='vector'),
+          d.arg('image', d.T.string),
+          d.arg('namespace', d.T.string, default='vector'),
+          d.arg('sinks', d.T.object, default={ console: { type: 'console', inputs: ['kubernetes_logs'], encoding: { codec: 'json' } } }),
+          d.arg('sources', d.T.object, default={}),
+          d.arg('transforms', d.T.object, default={}),
+          d.arg('dataDir', d.T.string, example='/var/lib/vector'),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('env', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'daemon' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
