@@ -12979,16 +12979,18 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       upstream: { repo: 'https://github.com/codex-team/codex.docs' },
       license: 'Apache-2.0',
       description: 'Write a documentation site in the browser, block by block.',
-      summary: "A CodeX Docs server (a documentation site written in the browser on the Editor.js block editor). A plain composable http workload on the project's own image: pages go to a local file database and uploads to a directory beside it, each on its own PersistentVolume, so no external database is needed. THE CONFIGURATION FILE CARRIES THE ADMIN PASSWORD, so it comes from a Secret and kurly renders no ConfigMap for it — secretName names a Secret with a docs-config.yaml key, mounted over the image's copy; splitting the file so the harmless half could be a ConfigMap would mean parsing and reassembling somebody's configuration. Anybody who knows that password can edit every page: there are no user accounts, no roles and no audit, which suits a small team's handbook and does not suit a public wiki. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :3000.",
+      summary: "A CodeX Docs server (a documentation site written in the browser on the Editor.js block editor). A plain composable http workload on the project's own image: pages go to a local file database and uploads to a directory beside it, each on its own PersistentVolume, so no external database is needed. THE CONFIGURATION FILE IS MANDATORY AND THE IMAGE SHIPS NONE — the loader opens docs-config.yaml before merging its built-in defaults, so a pod that mounts nothing exits with ENOENT rather than running on defaults; kurly always renders one carrying the site settings. Authentication is not in it, and until it is supplied the editor is open on the password printed in the upstream source: secretName names a Secret with a docs-config.yaml key holding the WHOLE file, mounted instead of the rendered one, because splitting the settings from the credentials would mean parsing and reassembling somebody's configuration. Anybody who knows that password can edit every page: there are no user accounts, no roles and no audit, which suits a small team's handbook and does not suit a public wiki. Single writer over ReadWriteOnce volumes: one replica, recreated. Serves on :3000.",
       category: 'application',
       stages: {
-        server: d.fn('The CodeX Docs server. Two claims, because the file database at db/ and the uploads at uploads/ are siblings inside the read-only image tree rather than one directory — storageSize sizes the first and uploadsSize the second. secretName holds the whole docs-config.yaml. Compose an exposure onto the HTTP port.', [
+        server: d.fn('The CodeX Docs server. Two claims, because the file database at db/ and the uploads at uploads/ are siblings inside the read-only image tree rather than one directory — storageSize sizes the first and uploadsSize the second. title and description set the site settings in the rendered configuration; secretName replaces that file entirely with one holding the credentials too. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='codex-docs'),
           d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='2Gi'),
           d.arg('uploadsSize', d.T.quantity, default='10Gi'),
           d.arg('storageClass', d.T.string),
           d.arg('secretName', d.T.string),
+          d.arg('title', d.T.string, default='CodeX Docs'),
+          d.arg('description', d.T.string, default='Documentation powered by Editor.js'),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
           d.arg('labels', d.T.object, default={}),

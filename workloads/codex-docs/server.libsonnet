@@ -12,14 +12,20 @@
 //
 // Serves the site and the editor on :3000 — compose an exposure onto it.
 //
-// THE CONFIGURATION FILE CARRIES THE ADMIN PASSWORD, SO IT COMES FROM A SECRET,
-// NOT A CONFIGMAP. codex.docs takes one docs-config.yaml holding the site
-// settings AND the `auth.password` that gates editing along with the session
-// secret. kurly renders no ConfigMap for it: `secretName` names a Secret with a
-// docs-config.yaml key, which is mounted over the image's own copy. Splitting the
-// file so the harmless half could be a ConfigMap would mean parsing and
-// reassembling somebody's configuration, and the whole file in a Secret is
-// simpler and leaks nothing.
+// THE CONFIGURATION FILE IS MANDATORY AND THE IMAGE DOES NOT SHIP ONE. codex.docs
+// merges its built-in defaults over one docs-config.yaml, but the loader OPENS
+// that file before merging anything: without it the process throws ENOENT and
+// exits, so a workload that mounts nothing crash-loops rather than running on
+// defaults. kurly therefore always renders one, carrying the site settings.
+//
+// AUTHENTICATION IS NOT IN IT, AND UNTIL YOU SUPPLY IT THE EDITOR IS OPEN ON THE
+// IMAGE'S OWN PUBLISHED PASSWORD. The same file holds `auth.password` (the single
+// password gating every edit) and `auth.secret` (the session key), and both fall
+// back to the values printed in the upstream source when the file omits them.
+// kurly will not write a credential, so `secretName` names a Secret with a
+// docs-config.yaml key holding the WHOLE file, which is mounted instead of the
+// rendered one — the settings and the credentials travel together because
+// splitting them would mean parsing and reassembling somebody's configuration.
 //
 // ANYBODY WHO KNOWS THE PASSWORD CAN EDIT EVERY PAGE. There are no user accounts
 // — one password, no roles, no audit. That suits a small team's handbook and does
@@ -41,8 +47,11 @@ function(
   storageSize='2Gi',
   uploadsSize='10Gi',
   storageClass=null,
-  // A Secret with a docs-config.yaml key — the whole configuration file.
+  // A Secret with a docs-config.yaml key — the whole configuration file,
+  // credentials included. Given, it replaces the rendered one entirely.
   secretName=null,
+  title='CodeX Docs',
+  description='Documentation powered by Editor.js',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } },
   labels={},
@@ -64,7 +73,24 @@ function(
   + kurly.store('/usr/src/app/db', storageSize, storageClass=storageClass)
   + kurly.store('/usr/src/app/uploads', uploadsSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '128Mi')
-  + (if secretName != null then kurly.secretMount(secretName, '/usr/src/app/docs-config.yaml', subPath='docs-config.yaml') else {})
+  // Mounted as a single FILE, never as a directory: the path sits inside the
+  // application's own install tree, and shadowing that directory would hide the
+  // code beside it.
+  + (
+    if secretName != null
+    then kurly.secretMount(secretName, '/usr/src/app/docs-config.yaml', subPath='docs-config.yaml')
+    else kurly.config({
+      'docs-config.yaml': std.manifestYamlDoc({
+        port: 3000,
+        uploads: { driver: 'local', 'local': { path: './uploads' } },
+        database: { driver: 'local', 'local': { path: './db' } },
+        frontend: { title: title, description: description },
+      }, quote_keys=false),
+      // subPath names the DIRECTORY and mounts each file into it individually —
+      // the install tree stays visible, which mounting a volume over
+      // /usr/src/app would not.
+    }, mountPath='/usr/src/app', subPath=true)
+  )
   + kurly.readinessProbe({ httpGet: { path: '/', port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
