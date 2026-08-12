@@ -62,11 +62,20 @@ function(
 
   kurly.daemon(name, image)
   + kurly.version(version)
-  + kurly.env({ VECTOR_SELF_NODE_NAME: '', VECTOR_LOG: 'info' } + env)
+  + kurly.env({ VECTOR_LOG: 'info' } + env)
+  // The kubernetes_logs source asks the apiserver for the pods on THIS node, and
+  // it reads the node's name out of the environment. A literal empty value is not
+  // "unset" to it: it reports the node name as "" and then filters the pod list
+  // against that, which collects nothing while starting cleanly.
+  + kurly.envField('VECTOR_SELF_NODE_NAME', 'spec.nodeName')
   + kurly.args(['--config=/etc/vector/vector.yaml'])
   + kurly.config({
     'vector.yaml': std.manifestYamlDoc({
-      data_dir: if dataDir != null then '/vector-data' else '/tmp/vector',
+      // Vector REFUSES to start when data_dir is missing rather than creating it,
+      // so this names the scratch mount itself and never a path below it: a
+      // subdirectory of an emptyDir does not exist until somebody makes it, and
+      // nothing in the image does.
+      data_dir: if dataDir != null then '/vector-data' else '/tmp',
       sources: { kubernetes_logs: { type: 'kubernetes_logs' } } + sources,
       [if std.length(std.objectFields(transforms)) > 0 then 'transforms']: transforms,
       sinks: sinks,

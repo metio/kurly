@@ -16,8 +16,19 @@ kurly::vendor() {
   ln -sfn ../../.. vendor/github.com/metio/kurly
   # Idempotent: skip the (slow, and parallel-unsafe) jb install once the vendor
   # tree is populated, so many scenarios can share one pre-vendored checkout.
-  [ -f vendor/.kurly-vendored ] && return 0
-  jb install >/dev/null && touch vendor/.kurly-vendored
+  [ -f vendor/.kurly-vendored ] || { jb install >/dev/null && touch vendor/.kurly-vendored; }
+  kurly::catalog
+}
+
+# .build/catalog.json is a BUILD ARTIFACT with no committed copy, so a checkout
+# that has not run a catalog gate does not have one. Everything here asks the
+# catalogue for a stage's facts — the resource floor, the secret keys, the
+# dependencies to provision — and jq answering "no such file" makes every one of
+# those reads empty, which is indistinguishable from a stage that genuinely
+# declares nothing: the workload boots without its database and reports a defect
+# of its own.
+kurly::catalog() {
+  [ -f .build/catalog.json ] || gen-catalog >/dev/null
 }
 
 # Renders a workload stage (a function(params) app) to a kind: List, the way a
