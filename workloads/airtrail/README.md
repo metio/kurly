@@ -23,7 +23,7 @@ kurly.list(airtrail(origin='https://flights.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `airtrail` | |
-| `image` | `docker.io/johly/airtrail:v3.11.1` | |
+| `image` | `docker.io/johly/airtrail:v3.12.0` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | `/app/uploads` |
 | `origin` | unset | the URL people visit — see below |
 | `secretName` | `airtrail` | holds `DB_URL` |
