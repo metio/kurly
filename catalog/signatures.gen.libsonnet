@@ -57,7 +57,6 @@
   'docspell/server': { digest: 'sha256:7184e723dcdd5241f02372748ad0aab6caca0722478abc892dc63c663e399f2d', signed: false },
   'docuseal/server': { digest: 'sha256:d20b62c1eac8719d2ffa31188d83866cf1b0d41c1aeea01c37bd850ef32cb517', signed: false },
   'dokuwiki/server': { digest: 'sha256:f5c089e2ace97a5c16cf1cd80af7514a85e3fc405bc25d6aa6bbf5a1dd20924b', signed: false },
-  'draw-io/server': { digest: 'sha256:9dfa053d1fe2724f824c61eac8b8bb2e93acc8ecb23dea58b8c11028127c572c', signed: false },
   'drawio/server': { digest: 'sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b', signed: false },
   'drupal/server': { digest: 'sha256:7a93ee9c8bec6a780cc25ec4e1610ae6dde483368db3d5aa0ac477567a645d6b', signed: false },
   'duplicati/server': { digest: 'sha256:93902cefee39f7c35214eb63312b7685c4b223b12adf6ede4ecddb9711210f85', signed: false },

@@ -50,8 +50,9 @@ def drop_object(path, keys):
     if s != orig: open(path, 'w').write(s); print(f"   pruned {path}")
 
 for indent in ('    ', '  '):
-    drop_object('catalog/annotations.libsonnet', (f"{indent}{wid}: {{", f"{indent}'{wid}': {{"))
-    drop_object('catalog/upstream.gen.libsonnet', (f"{indent}{wid}: {{", f"{indent}'{wid}': {{"))
+    for path in ('catalog/annotations.libsonnet', 'catalog/upstream.gen.libsonnet',
+                 'catalog/forge.gen.libsonnet'):
+        drop_object(path, (f"{indent}{wid}: {{", f"{indent}'{wid}': {{"))
 
 # Everything else is one line per workload (or per workload/stage).
 line_keyed = [
@@ -59,10 +60,14 @@ line_keyed = [
     'catalog/e2e-verified.libsonnet', 'catalog/production.libsonnet',
     'catalog/database-use.libsonnet', 'catalog/resource-floors.libsonnet',
     'catalog/architectures.gen.libsonnet', 'catalog/bsi.gen.libsonnet',
-    'catalog/maturity.gen.libsonnet', 'hack/smoke/known-failures.txt',
+    'catalog/maturity.gen.libsonnet', 'catalog/measurements.gen.libsonnet',
+    'catalog/signatures.gen.libsonnet', 'hack/smoke/known-failures.txt',
     'hack/smoke/extra.json',
 ]
-key = re.compile(rf"""^\s*'?{re.escape(wid)}(/[a-z0-9-]+)?'?\s*:""")
+# A ledger keyed by workload writes `id:` or `id/stage:`; the derived tier lists
+# name a workload as a bare array element, so both shapes have to match or the
+# tier keeps a workload the catalogue no longer has and the render fails on it.
+key = re.compile(rf"""^\s*'?{re.escape(wid)}(/[a-z0-9-]+)?'?\s*[:,]""")
 for path in line_keyed:
     try: s = open(path).read()
     except FileNotFoundError: continue

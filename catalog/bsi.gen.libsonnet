@@ -66,7 +66,6 @@
   'docuseal/server': [],
   'dokuwiki/server': [],
   'domoticz/server': ['require-ro-rootfs'],
-  'draw-io/server': [],
   'drawio/server': [],
   'drupal/server': [],
   'duplicati/server': [],

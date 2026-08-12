@@ -104,7 +104,6 @@
   'dokuwiki/server': { digest: 'sha256:f5c089e2ace97a5c16cf1cd80af7514a85e3fc405bc25d6aa6bbf5a1dd20924b', secondsToReady: 26, peakStartupBytes: 54730752, steadyBytes: 54513664 },
   'domoticz/server': { digest: 'sha256:03f29721d212189ca29bffa8b72b719fcb6155c1e6aff90eaba4160480fe9186', secondsToReady: 28, peakStartupBytes: 46571520, steadyBytes: 46665728 },
   'downtify/server': { digest: 'sha256:4b03e99a179e9e501a5785d3a9ab74a5bac0d077d62ee1f676d4855b788cd341', secondsToReady: 25, peakStartupBytes: 75739136, steadyBytes: 76066816 },
-  'draw-io/server': { digest: 'sha256:9dfa053d1fe2724f824c61eac8b8bb2e93acc8ecb23dea58b8c11028127c572c', secondsToReady: 29, peakStartupBytes: 163389440, steadyBytes: 271196160 },
   'drawio/server': { digest: 'sha256:0c8910ea14dfbccb17c784ee17d995317a8d753479f5ec0f21b2ab2213153100', secondsToReady: 26, peakStartupBytes: 267866112, steadyBytes: 268472320 },
   'drop/server': { digest: 'sha256:e481e33acc593667621ae0b37ee723b9f65a05e48be4f134903f8fe41f57c031', secondsToReady: 50, peakStartupBytes: 266358784, steadyBytes: 266387456 },
   'druid/broker': { digest: 'sha256:0116fb802786649fc3635d6d4ab5be4da8abee3edafbe95c7f358a564d4c82e8', secondsToReady: 17, peakStartupBytes: 641200128, steadyBytes: 619139072 },

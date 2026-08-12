@@ -94,7 +94,6 @@
   'dokuwiki/server': { digest: 'sha256:f5c089e2ace97a5c16cf1cd80af7514a85e3fc405bc25d6aa6bbf5a1dd20924b', architectures: ['amd64', 'arm64'] },
   'domoticz/server': { digest: 'sha256:ddb77ad45f169f823c75093ffab8a31b7c59c504970a30d3fa8f69ad651def38', architectures: ['amd64', 'arm', 'arm64'] },
   'downtify/server': { digest: 'sha256:4b03e99a179e9e501a5785d3a9ab74a5bac0d077d62ee1f676d4855b788cd341', architectures: ['amd64', 'arm64'] },
-  'draw-io/server': { digest: 'sha256:9dfa053d1fe2724f824c61eac8b8bb2e93acc8ecb23dea58b8c11028127c572c', architectures: ['amd64', 'arm64'] },
   'drawio/server': { digest: 'sha256:a3384902221ca45e14678b64b1026154331bf498000d37215b5bb0cf0b2c222b', architectures: ['amd64', 'arm64'] },
   'drop/server': { digest: 'sha256:e481e33acc593667621ae0b37ee723b9f65a05e48be4f134903f8fe41f57c031', architectures: ['amd64', 'arm64'] },
   'druid/broker': { digest: 'sha256:0116fb802786649fc3635d6d4ab5be4da8abee3edafbe95c7f358a564d4c82e8', architectures: ['amd64'] },

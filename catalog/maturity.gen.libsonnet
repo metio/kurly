@@ -95,7 +95,6 @@
     'dokuwiki',
     'domoticz',
     'downtify',
-    'draw-io',
     'drawio',
     'drop',
     'druid',

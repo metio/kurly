@@ -246,10 +246,6 @@
     source: 'https://github.com/henriquesebastiao/downtify',
     homepage: 'https://github.com/henriquesebastiao/downtify',
   },
-  'draw-io': {
-    source: 'https://github.com/jgraph/docker-drawio',
-    homepage: 'https://www.drawio.com',
-  },
   drawio: {
     source: 'https://github.com/jgraph/docker-drawio',
     homepage: 'https://www.drawio.com',

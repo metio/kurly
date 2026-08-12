@@ -116,7 +116,6 @@ local stageImports = {
   'chatpad/server': import 'github.com/metio/kurly/workloads/chatpad/server.libsonnet',
   'cobalt/server': import 'github.com/metio/kurly/workloads/cobalt/server.libsonnet',
   'davis/server': import 'github.com/metio/kurly/workloads/davis/server.libsonnet',
-  'draw-io/server': import 'github.com/metio/kurly/workloads/draw-io/server.libsonnet',
   'ghostfolio/server': import 'github.com/metio/kurly/workloads/ghostfolio/server.libsonnet',
   'hollama/server': import 'github.com/metio/kurly/workloads/hollama/server.libsonnet',
   'lobe-chat/server': import 'github.com/metio/kurly/workloads/lobe-chat/server.libsonnet',

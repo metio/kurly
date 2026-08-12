@@ -222,11 +222,6 @@
     license: 'GPL-2.0',
     name: 'dokuwiki',
   },
-  'draw-io': {
-    homepage: 'https://www.drawio.com',
-    license: 'Apache-2.0',
-    name: 'drawio',
-  },
   drawio: {
     homepage: 'https://www.drawio.com',
     license: 'Apache-2.0',

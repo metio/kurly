@@ -6115,24 +6115,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
-    'draw-io': {
-      upstream: { repo: 'https://github.com/jgraph/drawio' },
-      name: 'draw.io',
-      description: 'Draw flowcharts, UML and network diagrams entirely in the browser.',
-      summary: 'A draw.io / diagrams.net server (a self-hosted, client-side diagram editor) on the official image. A plain composable http workload. The editor runs entirely in the browser; the server only serves static assets and a stateless export/proxy endpoint, so it holds no data — a plain, horizontally scalable Deployment. Serves on :8080.',
-      category: 'tool',
-      stages: {
-        server: d.fn('The draw.io server. Stateless; compose an exposure onto the HTTP port.', [
-          d.arg('name', d.T.string, default='draw-io'),
-          d.arg('image', d.T.string),
-          d.arg('replicas', d.T.int, default=2),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
-      },
-    },
     pocketbase: {
       name: 'PocketBase',
       upstream: { repo: 'https://github.com/pocketbase/pocketbase' },
