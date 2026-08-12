@@ -13516,6 +13516,34 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'daemon' },
       },
     },
+    pmm: {
+      name: 'Percona Monitoring and Management',
+      upstream: { repo: 'https://github.com/percona/pmm' },
+      homepage: 'https://www.percona.com/software/database-tools/percona-monitoring-and-management',
+      license: 'AGPL-3.0',
+      description: 'Watch how your databases are performing and which queries are slow.',
+      summary: "A PMM server — the server half of Percona Monitoring and Management, collecting metrics and query analytics from agents beside MySQL, PostgreSQL and MongoDB instances and showing them in dashboards built for those databases. IT IS THE SERVER AND THE AGENTS ARE SOMEWHERE ELSE: PMM sees nothing until a pmm-agent is installed beside each database and registered against it, which happens from the database's side, so a PMM with no agents is a working set of empty dashboards. EVERYTHING LIVES IN ONE DIRECTORY, INCLUDING THE DATABASES IT RUNS — the image bundles VictoriaMetrics for metrics, PostgreSQL for its inventory and ClickHouse for query analytics and puts all of them under /srv on one volume, so the volume is the whole deployment and its size is a retention decision. The admin password is read once at first start and lives in PMM's own database from then on. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
+      category: 'observability',
+      stages: {
+        server: d.fn("The PMM server. Metrics, query analytics and PMM's own inventory all live under /srv on the volume. secretName holds PMM_ADMIN_PASSWORD through envFrom, read once at first start; retention is how long metrics are kept. The startup budget is long because several bundled databases are initialised on the first start. Compose an exposure onto the HTTP port.", [
+          d.arg('name', d.T.string, default='pmm'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='100Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string),
+          d.arg('retention', d.T.string, example='30d'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '1', memory: '4Gi' }, limits: { memory: '8Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'PMM_ADMIN_PASSWORD', generate: 'password', length: 24 },
+          ],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
