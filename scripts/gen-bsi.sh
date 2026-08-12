@@ -192,4 +192,54 @@ echo "wrote ${out}: ${judged} stages judged against $(jq 'length' "${work}/names
 [ -n "$unevaluated" ] && {
   echo "not judged (no CRD here, or no default render): $(printf '%s\n' "$unevaluated" | tr ' ' '\n' | grep -v '^$' | sort | paste -sd' ' -)"
 }
+
+# With KURLY_BSI_CHECK=1 this is the pull-request gate rather than the generator,
+# and it compares ASYMMETRICALLY. The distinction is the whole point:
+#
+#   a verdict that MOVED for a stage already recorded is a regression — somebody
+#   relaxed a security knob, or edited a policy — and the published claim would
+#   otherwise stay behind. That is what this gate is for, and it fails.
+#
+#   a stage the committed file has never held is NOT a failure. Recording one
+#   needs a cluster with all the policies installed, which the author of a pull
+#   request adding a workload has no way to produce; making that a gate meant
+#   every such pull request failed on infrastructure rather than on its content.
+#   The file's own header already says an absent entry means "not measured", so
+#   an absence is exactly what the format promises rather than a false claim, and
+#   bsi-refresh.yml fills it in weekly.
+#
+# A stage that WAS recorded and can no longer be judged is reported and does not
+# fail either: a CRD missing from one run is a fact about that cluster, and
+# retracting the ledger over it would lose a measurement nobody disputed.
+if [ "${KURLY_BSI_CHECK:-}" = "1" ]; then
+  git show "HEAD:${out}" > "${work}/committed.libsonnet" 2>/dev/null || echo '{}' > "${work}/committed.libsonnet"
+  jsonnet "${work}/committed.libsonnet" > "${work}/committed.json"
+  jsonnet "$out" > "${work}/fresh.json"
+  # Leave the tree as the gate found it; this mode reports, it does not rewrite.
+  git checkout -- "$out" 2>/dev/null || true
+  python3 - "${work}/committed.json" "${work}/fresh.json" <<'PY'
+import json, sys
+
+committed = json.load(open(sys.argv[1]))
+fresh = json.load(open(sys.argv[2]))
+
+moved = sorted(k for k in committed.keys() & fresh.keys() if committed[k] != fresh[k])
+added = sorted(fresh.keys() - committed.keys())
+gone = sorted(committed.keys() - fresh.keys())
+
+if added:
+    print(f"new, not yet recorded ({len(added)}) — bsi-refresh will add them: "
+          + " ".join(added[:12]) + (" …" if len(added) > 12 else ""))
+if gone:
+    print(f"recorded but unjudged in this run ({len(gone)}) — keeping the committed verdict: "
+          + " ".join(gone[:12]) + (" …" if len(gone) > 12 else ""))
+if moved:
+    print("::error::a BSI verdict MOVED for a stage already recorded — a security "
+          "knob or a policy changed, and the published claim must not stay behind")
+    for k in moved:
+        print(f"  {k}: {committed[k]} -> {fresh[k]}")
+    sys.exit(1)
+print("no recorded verdict moved")
+PY
+fi
 exit 0
