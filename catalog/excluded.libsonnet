@@ -257,6 +257,25 @@
   // Passes the hosting test and fails the licence one: Arize sells AX, a separate
   // product, and says Phoenix stays local — but Phoenix itself is Elastic-2.0,
   // which forbids providing the software to others as a managed service.
+  // The container is MIT and the thing it runs is not: each of these packages a
+  // proprietary payload it downloads or expects you to supply, so the source a
+  // consumer would read, audit or fund is the wrapper rather than the software.
+  // Same reasoning as emby and plex, one layer further out.
+  macos: { reason: 'no-published-source', note: 'the image is a wrapper; the operating system it runs is proprietary Apple software — https://github.com/dockur/macos' },
+  'virtual-dsm': { reason: 'no-published-source', note: 'the image is a wrapper; the DSM it runs is proprietary Synology software — https://github.com/vdsm/virtual-dsm' },
+  satisfactory: { reason: 'no-published-source', note: 'the image is a wrapper; the Satisfactory dedicated server it runs is proprietary — https://github.com/wolveix/satisfactory-server' },
+  'minecraft-bedrock-server': { reason: 'no-published-source', note: 'the image is a wrapper; the Bedrock dedicated server it runs is proprietary Mojang software — https://github.com/itzg/docker-minecraft-bedrock-server' },
+
+  // Deployable somewhere, but not as a workload in a tenant's namespace.
+  'nextcloud-aio-mastercontainer': { reason: 'undeployable', note: 'the AIO master container drives a Docker socket to start and manage sibling containers, which a cluster does not give it — the nextcloud workload is the one that runs here — https://github.com/nextcloud/all-in-one' },
+  cozystack: { reason: 'undeployable', note: 'a Kubernetes distribution that installs and owns the whole cluster, not a workload inside one — https://cozystack.io' },
+  castsponsorskip: { reason: 'undeployable', note: 'discovers Chromecasts by mDNS on the local network and needs the host network to see them — https://github.com/gabe565/CastSponsorSkip' },
+
+  // Upstream has stopped. rexray's last commit is 2023 and its own README points
+  // users elsewhere; magnetissimo's is 2024. Neither is marked archived on GitHub,
+  // which is why the date is the evidence rather than the flag.
+  rexray: { reason: 'upstream-archived', note: 'no commit since 2023-09-02; the CSI drivers it predates are what a cluster uses now — https://github.com/rexray/rexray' },
+  magnetissimo: { reason: 'upstream-archived', note: 'no commit since 2024-01-19 — https://github.com/sergiotapia/magnetissimo' },
   'quant-ux': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free hosted instance anyone can sign up to — https://quant-ux.com/' },
   openlit: { reason: 'upstream-sells-hosting', note: 'upstream is launching hosting ("OpenLIT Cloud is the fully hosted version"; coming soon, rates unannounced) — https://openlit.io/pricing' },
   semaphore: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Semaphore cloud CI, pay-per-use compute, beside the Community Edition) — https://semaphore.io/pricing' },
