@@ -13402,6 +13402,37 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    'percona-server': {
+      name: 'Percona Server for MySQL',
+      upstream: { repo: 'https://github.com/percona/percona-server' },
+      homepage: 'https://www.percona.com/software/mysql-database/percona-server',
+      license: 'GPL-2.0-only',
+      description: 'Run MySQL with better diagnostics and an audit trail.',
+      summary: 'A Percona Server for MySQL instance — a drop-in MySQL replacement with the instrumentation Percona adds: better diagnostics, an audit plugin and XtraDB. A composable stateful workload, because a database wants a stable identity and a volume that follows it. ONE SERVER, NOT A CLUSTER: no replication, no failover and no automatic backup, so losing the node means restoring from whatever somebody else took — compose a backup axis onto it, and reach for an operator when the database matters more than the simplicity. THE ROOT PASSWORD IS READ ONCE: the entrypoint initialises the data directory on first start from the Secret and never reads it again, so changing MYSQL_ROOT_PASSWORD later changes nothing. Probed by connection with a long startup budget, because a first start that builds the data directory takes minutes. Serves MySQL on :3306 and the X protocol on :33060.',
+      category: 'database',
+      stages: {
+        server: d.fn('The Percona Server instance. database and user are created on first start alongside root; secretName holds MYSQL_ROOT_PASSWORD and MYSQL_PASSWORD through envFrom. config is merged into a my.cnf fragment mounted at /etc/my.cnf.d. The data directory is /var/lib/mysql on the volume. One replica: raising it makes several unrelated databases, not a cluster.', [
+          d.arg('name', d.T.string, default='percona-server'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='20Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('database', d.T.string, example='app'),
+          d.arg('user', d.T.string, example='app'),
+          d.arg('secretName', d.T.string, default='percona-server'),
+          d.arg('config', d.T.object, default={}),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '4Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'stateful',
+          secretKeys: [
+            { key: 'MYSQL_ROOT_PASSWORD', generate: 'password', length: 32 },
+            { key: 'MYSQL_PASSWORD', generate: 'password', length: 32 },
+          ],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.

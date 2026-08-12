@@ -41,6 +41,7 @@ local upstream = import './upstream.gen.libsonnet';
 // fails if this map and the annotations fall out of step.
 local stageImports = {
   'collabora-online/server': import 'github.com/metio/kurly/workloads/collabora-online/server.libsonnet',
+  'percona-server/server': import 'github.com/metio/kurly/workloads/percona-server/server.libsonnet',
   'vector/agent': import 'github.com/metio/kurly/workloads/vector/agent.libsonnet',
   'traefik/ingress': import 'github.com/metio/kurly/workloads/traefik/ingress.libsonnet',
   'kite/server': import 'github.com/metio/kurly/workloads/kite/server.libsonnet',
