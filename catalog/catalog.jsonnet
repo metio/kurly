@@ -41,6 +41,7 @@ local upstream = import './upstream.gen.libsonnet';
 // fails if this map and the annotations fall out of step.
 local stageImports = {
   'gravity/server': import 'github.com/metio/kurly/workloads/gravity/server.libsonnet',
+  'barcodebuddy/server': import 'github.com/metio/kurly/workloads/barcodebuddy/server.libsonnet',
   'alloy/agent': import 'github.com/metio/kurly/workloads/alloy/agent.libsonnet',
   'pmm/server': import 'github.com/metio/kurly/workloads/pmm/server.libsonnet',
   'dgraph/zero': import 'github.com/metio/kurly/workloads/dgraph/zero.libsonnet',

@@ -13568,6 +13568,33 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'stateful' },
       },
     },
+    barcodebuddy: {
+      name: 'Barcode Buddy',
+      upstream: { repo: 'https://github.com/Forceu/barcodebuddy' },
+      license: 'AGPL-3.0',
+      description: 'Scan a barcode to add or use up an item in your household inventory.',
+      summary: "A Barcode Buddy server (scan a barcode and have the item added to, or consumed from, a Grocy inventory). A composable http workload keeping its settings and learned barcodes in a SQLite database on a PersistentVolume, with everything else living in Grocy. IT IS A FRONT END FOR GROCY AND DOES NOTHING WITHOUT ONE — grocyUrl points at a Grocy API and secretName carries the key it authenticates with; kurly carries grocy, so the pair deploys together, and pointed at nothing every scan fails. THE SCANNER IS SOMEWHERE ELSE: a USB reader attaches to a machine rather than a pod, so in a cluster the working arrangements are the web interface, a phone camera, or the project's own script running beside the scanner and posting to this API. The image starts nginx, php-fpm and a websocket server under supervisor as root, so four defaults are relaxed deliberately. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+      category: 'application',
+      stages: {
+        server: d.fn('The Barcode Buddy server. grocyUrl is the Grocy API it drives; secretName holds BBUDDY_API_KEY through envFrom. Its database and settings live at /config on the volume.', [
+          d.arg('name', d.T.string, default='barcodebuddy'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('grocyUrl', d.T.string, example='http://grocy/api'),
+          d.arg('secretName', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'BBUDDY_API_KEY', generate: 'hex', length: 32 },
+          ],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
