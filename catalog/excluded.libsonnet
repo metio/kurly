@@ -188,6 +188,10 @@
   saltcorn: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://saltcorn.com/tenant/create' },
   wakapi: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://wakapi.dev' },
   hasura: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Hasura Cloud) — https://hasura.io/pricing' },
+  // Triaged from selfhost.directory's Kubernetes-platform list. The rest of that
+  // batch passed this gate — a paid SELF-HOSTED licence is not a hosting offer,
+  // and dagu, imgproxy, semaphore-ui, onedev, sablier and krakend all sell one.
+  'kill-bill': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Aviate, "cloud-hosted, auto-scaling, monitoring included", built on the Kill Bill core by the same people) — https://killbill.io/' },
   manyfold: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://manyfold.app/' },
   tolgee: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://tolgee.io/pricing' },
   'personal-management-system': { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Volmarg/personal-management-system' },

@@ -10,6 +10,31 @@ kurly cuts a release on every push, with a calendar version that carries the
 time of day (`library-2026.8.3141650`), so an entry is dated rather than
 numbered and applies from the first release of that day onward.
 
+## 2026-08-12 — `draw-io` removed, use `drawio`
+
+The catalogue carried draw.io twice, as `draw-io` and as `drawio`, from the same
+upstream and the same image repository. `draw-io` is gone; `drawio` stays, and is
+the one pinned to a real version rather than to `latest`.
+
+A deployment importing the old path renders nothing:
+
+```jsonnet
+// was
+local drawio = import 'github.com/metio/kurly/workloads/draw-io/server.libsonnet';
+// now
+local drawio = import 'github.com/metio/kurly/workloads/drawio/server.libsonnet';
+```
+
+Change the `OCIRepository` URL to `oci://ghcr.io/metio/kurly/workloads/drawio`
+alongside it. The rendered objects are named after the `name` parameter, which
+defaults differently between the two stages, so a rename that keeps the old
+object names passes `name='draw-io'` — otherwise the next apply creates a second
+Deployment beside the running one.
+
+`ghcr.io/metio/kurly/workloads/draw-io` is not withdrawn: the images already
+published stay where they are, and anything pinning one by digest keeps working.
+It simply receives no further releases.
+
 ## 2026-08-04 — `kurly.mesh.strictNamespace()` moved
 
 The namespace-wide mTLS floor is now named for the mesh it belongs to, because
