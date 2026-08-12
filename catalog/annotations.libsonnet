@@ -13495,6 +13495,27 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'stateful' },
       },
     },
+    alloy: {
+      name: 'Grafana Alloy',
+      upstream: { repo: 'https://github.com/grafana/alloy' },
+      homepage: 'https://grafana.com/oss/alloy',
+      license: 'Apache-2.0',
+      description: 'Collect metrics, logs and traces and forward them to where they are stored.',
+      summary: "A Grafana Alloy agent — an OpenTelemetry collector distribution that scrapes metrics, tails logs and receives traces, then forwards them on. A composable daemon workload, because collecting a node's logs means being on that node. ALLOY STORES NOTHING: it is the collector half of a stack, so a deployment needs a backend for what it forwards, and one with no destination configured runs happily and drops everything. THE CONFIGURATION IS A PROGRAM, NOT A DOCUMENT — Alloy's own language wires components to each other by reference, so config takes that language verbatim rather than pretending a YAML shape underneath. It asks the apiserver what to scrape, which is a cluster-wide read grant, and reads the node's /var/log READ-ONLY. The storage path is a write-ahead buffer, not a database: on the pod it survives a container restart and not a reschedule, which for a metrics agent is a gap rather than a lost record. Its HTTP server binds every interface so the kubelet can probe it, and a daemon publishes no Service — adding one publishes the component graph and the values flowing through it.",
+      category: 'observability',
+      stages: {
+        agent: d.fn("The Alloy agent, one pod per node. config is Alloy's own configuration language, verbatim; the default logs and watches nothing else. namespace is where the ServiceAccount lives and is required, because a ClusterRoleBinding naming no namespace grants nothing.", [
+          d.arg('name', d.T.string, default='alloy'),
+          d.arg('image', d.T.string),
+          d.arg('namespace', d.T.string, default='alloy'),
+          d.arg('config', d.T.string, example='logging { level = "info" }\n'),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('env', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'daemon' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
