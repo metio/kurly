@@ -13377,6 +13377,31 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'daemon' },
       },
     },
+    'collabora-online': {
+      name: 'Collabora Online',
+      upstream: { repo: 'https://github.com/CollaboraOnline/online' },
+      homepage: 'https://www.collaboraonline.com/',
+      license: 'MPL-2.0',
+      description: 'Edit documents, spreadsheets and slides together in the browser.',
+      summary: 'A Collabora Online server — the editing engine behind a self-hosted office suite, rendering and editing documents for a file application that embeds it over WOPI. A plain composable http workload: the documents live in the application it serves, so it claims no volume. IT IS HALF AN APPLICATION — on its own it offers an admin console and a discovery endpoint and nothing a user wants; Nextcloud, ownCloud or Seafile is where a deployment starts. wopiHosts ARE REGULAR EXPRESSIONS and the dots matter: an unescaped dot matches any character, so `files.example.com` also admits `filesXexample.com`. Empty admits nobody, which is the safe default and not a working deployment. Each document is edited in a forked, chrooted process, so memory scales with documents open rather than users — and building that sandbox is a mount-namespace operation, which is why SYS_ADMIN and MKNOD are granted BY NAME rather than by relaxing the whole posture. Serves on :9980.',
+      category: 'application',
+      stages: {
+        server: d.fn('The Collabora Online engine. wopiHosts is the allow-list of hosts permitted to embed it, matched as regular expressions — escape the dots. serverName is the public URL it builds links against; secretName holds the admin console credentials through envFrom; extraParams passes further coolwsd settings. The sandbox roots and caches are scratch volumes, so the root filesystem stays read-only. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='collabora-online'),
+          d.arg('image', d.T.string),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('wopiHosts', d.T.array, default=[]),
+          d.arg('serverName', d.T.string, example='office.example.com'),
+          d.arg('secretName', d.T.string),
+          d.arg('sandbox', d.T.bool, default=false),
+          d.arg('extraParams', d.T.array, default=[]),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '500m', memory: '1Gi' }, limits: { memory: '4Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
