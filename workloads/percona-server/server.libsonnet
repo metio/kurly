@@ -73,7 +73,7 @@ function(
   + kurly.scratch('/tmp', '1Gi')
   + kurly.config(
     {
-      'kurly.cnf': std.join('\n', ['[mysqld]'] + [
+      'overrides.cnf': std.join('\n', ['[mysqld]'] + [
         '%s = %s' % [k, std.toString(config[k])]
         for k in std.objectFields(config)
       ]) + '\n',
