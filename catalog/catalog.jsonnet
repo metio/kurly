@@ -40,6 +40,9 @@ local upstream = import './upstream.gen.libsonnet';
 // A stage that is renamed or removed fails the import here; the reconcile below
 // fails if this map and the annotations fall out of step.
 local stageImports = {
+  'kubetail/dashboard': import 'github.com/metio/kurly/workloads/kubetail/dashboard.libsonnet',
+  'kubetail/cluster-api': import 'github.com/metio/kurly/workloads/kubetail/cluster-api.libsonnet',
+  'kubetail/cluster-agent': import 'github.com/metio/kurly/workloads/kubetail/cluster-agent.libsonnet',
   'gravity/server': import 'github.com/metio/kurly/workloads/gravity/server.libsonnet',
   'barcodebuddy/server': import 'github.com/metio/kurly/workloads/barcodebuddy/server.libsonnet',
   'alloy/agent': import 'github.com/metio/kurly/workloads/alloy/agent.libsonnet',
