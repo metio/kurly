@@ -193,6 +193,74 @@
   // and dagu, imgproxy, semaphore-ui, onedev, sablier and krakend all sell one.
   'kill-bill': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Aviate, "cloud-hosted, auto-scaling, monitoring included", built on the Kill Bill core by the same people) — https://killbill.io/' },
   azimutt: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (azimutt.app Solo $7/mo, Team $35/user/mo; self-hosting is an Enterprise option) — https://azimutt.app/pricing' },
+
+  // Working selfhost.directory's Kubernetes list downward by score. Every entry
+  // below was read from the project's own pricing page, and every one of them
+  // sells its own managed service — the same pattern the fourth pass found in
+  // awesome-selfhosted, and the reason the top of a popularity ranking is a poor
+  // place to look for software this catalogue can carry.
+  netdata: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Netdata Cloud SaaS, $4.50/node/mo Business) — https://www.netdata.cloud/pricing/' },
+  temporal: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Temporal Cloud, from $100/mo) — https://temporal.io/pricing' },
+  signoz: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (SigNoz Cloud, from $49/mo plus ingest) — https://signoz.io/pricing/' },
+  chatwoot: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Chatwoot cloud, $19-99/agent/mo) — https://www.chatwoot.com/pricing' },
+  posthog: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (PostHog Cloud, usage-based) — https://posthog.com/pricing' },
+  thingsboard: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (ThingsBoard Cloud, $49-749/mo) — https://thingsboard.io/pricing/' },
+  kestra: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Kestra Cloud, the fully managed version; pay-as-you-scale, no published rates) — https://kestra.io/pricing' },
+  livekit: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (LiveKit Cloud, $50-500/mo) — https://livekit.com/pricing' },
+  infisical: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (app.infisical.com, $20-40/identity/mo) — https://infisical.com/pricing' },
+  zitadel: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Zitadel Cloud, $100/mo PRO) — https://zitadel.com/pricing' },
+  windmill: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (app.windmill.dev, from $120/mo plus per-seat) — https://www.windmill.dev/pricing' },
+  trigger: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Trigger.dev cloud, $10-50/mo plus per-run) — https://trigger.dev/pricing' },
+  juicefs: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (JuiceFS Cloud Service, beside the Community and Enterprise editions) — https://juicefs.com/en/' },
+  weaviate: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Weaviate Cloud, $45-400/mo) — https://weaviate.io/pricing' },
+  oneuptime: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (OneUptime cloud, $22-99/mo) — https://oneuptime.com/pricing' },
+  cratedb: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (CrateDB Cloud, from $0.073/hour) — https://cratedb.com/pricing' },
+  memgraph: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Memgraph Cloud, AWS-hosted managed instances) — https://memgraph.com/pricing' },
+  openreplay: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (OpenReplay Dedicated, "fully managed by OpenReplay", from $199/mo) — https://openreplay.com/pricing/' },
+  vendure: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Vendure Cloud, quoted per project) — https://www.vendure.io/pricing' },
+  hatchet: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Hatchet cloud, $500-1000/mo plus per-run) — https://hatchet.run/pricing' },
+  keep: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Keep Cloud at platform.keephq.dev, $199/mo Growth) — https://keephq.dev/pricing' },
+  dify: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Dify Cloud, $590-1590 per workspace/year) — https://dify.ai/pricing' },
+  opik: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Comet runs Opik in the cloud, $19/mo Pro) — https://www.comet.com/site/pricing/' },
+  'flowise-ai': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (cloud.flowiseai.com, $35-65/mo) — https://flowiseai.com/' },
+  'onyx-community-edition': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Onyx cloud, $20/user/mo Business) — https://www.onyx.app/pricing' },
+  timescaledb: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Tiger Cloud, from $30/mo) — https://www.tigerdata.com/pricing' },
+  // The client daemon is free and the coordination plane it cannot work without
+  // is the paid product, so hosting the one means selling a front end for the
+  // other. Recorded under the same reason because the distinction does not change
+  // what a consumer should do with it.
+  tailscale: { reason: 'upstream-sells-hosting', note: 'upstream sells the hosted coordination service the client requires (Personal/Standard/Premium/Enterprise plans); the container here is only the node agent — https://tailscale.com/pricing' },
+  hyperdx: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (HyperDX cloud, $20/mo Starter plus per-GB) — https://www.hyperdx.io/pricing' },
+  parseable: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Parseable Cloud, $0.39/GB ingested) — https://www.parseable.com/pricing' },
+  cerbos: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Cerbos Hub, $25-933/mo) — https://www.cerbos.dev/pricing' },
+  rudderstack: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (RudderStack cloud, $265/mo Growth) — https://www.rudderstack.com/pricing/' },
+  lightdash: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Cloud Pro, $3000/mo) — https://www.lightdash.com/pricing' },
+  openmeter: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (OpenMeter Cloud, now Konnect Metering & Billing; no published rates) — https://openmeter.io/pricing' },
+  meteroid: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Meteroid cloud, 0.5% of managed revenue or EUR 219/mo) — https://meteroid.com/pricing' },
+  bunkerweb: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (BunkerWeb CLOUD, "fully managed BunkerWeb (SaaS)", from EUR 639/mo) — https://www.bunkerweb.io/pricing' },
+  gravitl: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Netmaker SaaS, usage-based per device/network/user) — https://www.netmaker.io/pricing' },
+  terrateam: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Terrateam Pro, $12,000/yr, cloud or self-hosted) — https://www.terrateam.io/pricing' },
+  // OpenFaaS passes the hosting test — the paid tiers are self-hosted — and fails
+  // on the licence instead, which is why both gates exist. The Community Edition
+  // EULA caps commercial use at one installation per company for 60 days and says
+  // the software "cannot be resold, distributed to, or installed for a client for
+  // commercial purposes", which is exactly what a hosting portal does.
+  faas: { reason: 'licence-forbids-saas', note: 'OpenFaaS CE EULA: commercial use limited to one installation per company for 60 days, and no installation for a client for commercial purposes — https://github.com/openfaas/faas/blob/master/EULA.md' },
+  convoy: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Convoy Cloud, "we handle hosting, scaling, and uptime") — https://www.getconvoy.io/pricing' },
+  rivet: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Rivet Cloud, $20-200/mo plus usage) — https://www.rivet.dev/pricing' },
+  // Grafana Cloud sells each of these as a managed service in its own right, the
+  // same test grafana itself already failed. Alloy is deliberately absent: it is
+  // an agent that ships data TO a backend, so running one competes with nothing.
+  grafanamimir: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Grafana Cloud Metrics, "fully-managed... metrics service", from $6.50/1k series) — https://grafana.com/pricing/' },
+  pyroscope: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Grafana Cloud Profiles, "fully-managed continuous profiling", per-GB) — https://grafana.com/pricing/' },
+  automq: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (AutoMQ cloud, $300/mo Pro plus per-GiB) — https://www.automq.com/pricing' },
+  // Passes the hosting test and fails the licence one: Arize sells AX, a separate
+  // product, and says Phoenix stays local — but Phoenix itself is Elastic-2.0,
+  // which forbids providing the software to others as a managed service.
+  'arize-phoenix': { reason: 'licence-forbids-saas', note: 'Elastic License 2.0; forbids providing the software to others as a managed service — https://github.com/Arize-ai/phoenix/blob/main/LICENSE' },
+  bytechef: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (ByteChef cloud, $29-169/mo) — https://www.bytechef.io/pricing' },
+  flowforge: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (FlowFuse Cloud instances; prices on request) — https://flowfuse.com/pricing/' },
+  formance: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Formance Private Cloud, "provisions and manages a dedicated, single-tenant environment"; prices on request) — https://formance.com/pricing' },
   manyfold: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://manyfold.app/' },
   tolgee: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://tolgee.io/pricing' },
   'personal-management-system': { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Volmarg/personal-management-system' },
