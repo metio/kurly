@@ -13327,6 +13327,32 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'daemon' },
       },
     },
+    traefik: {
+      name: 'Traefik',
+      upstream: { repo: 'https://github.com/traefik/traefik' },
+      homepage: 'https://traefik.io',
+      license: 'MIT',
+      description: 'Route incoming traffic to your services and keep their certificates renewed.',
+      summary: "A Traefik edge router that discovers its own configuration from the cluster: it watches Ingress, IngressRoute and Gateway API objects and routes traffic to the Services behind them, obtaining certificates as it goes. UNPRIVILEGED PORTS, DELIBERATELY — Traefik's image listens on :80 and :443, which a container without NET_BIND_SERVICE cannot bind, so the entry points are 8000 and 8443 and the Service maps 80 and 443 onto them; a LoadBalancer in front makes that invisible to clients and the hardened posture stands. The cluster-wide grant covers the Kubernetes Ingress provider and the Gateway API; Traefik's OWN CRDs are deliberately absent, because a cluster that has not installed them would be granted permissions on kinds that do not exist — extraRules is where they go. The dashboard is not exposed and api.insecure is off: it has no authentication of its own, so publishing it publishes the routing table of the whole cluster. acmeEmail turns on a Let's Encrypt resolver storing its account on the volume, and pins the deployment to one replica, because two routers racing for one account produce rate-limit failures rather than certificates.",
+      category: 'networking',
+      stages: {
+        ingress: d.fn("The Traefik router. namespace is where its ServiceAccount lives and is required. acmeEmail enables the Let's Encrypt resolver (and forces a single replica); storageSize sizes the certificate store. extraRules adds to the cluster-wide grant — Traefik's own CRDs belong there on a cluster that has them. extraArgs is appended to its flags. Compose an exposure onto the entry points, usually a LoadBalancer Service.", [
+          d.arg('name', d.T.string, default='traefik'),
+          d.arg('image', d.T.string),
+          d.arg('namespace', d.T.string, default='traefik'),
+          d.arg('replicas', d.T.int, default=2),
+          d.arg('acmeEmail', d.T.string, example='ops@example.com'),
+          d.arg('storageSize', d.T.quantity, default='1Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('extraRules', d.T.array, default=[]),
+          d.arg('extraArgs', d.T.array, default=[]),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('env', d.T.object, default={}),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
