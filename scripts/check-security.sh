@@ -153,14 +153,23 @@ jq -rc "
   | [\$k, (($fingerprint) | @base64), (@base64)] | @tsv
 " "$all" > "$workdir/controllers.tsv"
 
-# Group by posture, honouring the exemptions (the escape-hatch demos and spegel,
-# which is node infrastructure that cannot reach the floor with hostPath present).
+# Group by posture, honouring the exemptions (the escape-hatch demos and the node
+# infrastructure that cannot reach the floor with hostPath or privileged present).
 # For each distinct posture keep one representative manifest and count its members.
+#
+# The exemption is per CONTROLLER, not per workload, and that distinction is the
+# whole point: of the node agents in this catalogue only coroot's genuinely needs
+# to be privileged, and it scores -31. falco and cadvisor touch the node too and
+# clear the floor comfortably — falco because the modern eBPF driver needs four
+# capabilities rather than a privileged container, cadvisor because its hostPaths
+# are read-only. So they are NOT listed here, and if either ever starts asking for
+# more this gate says so.
 declare -A rep_b64 members
 while IFS="$(printf '\t')" read -r key fp mb64; do
   case "$key" in
     examples-legacy | examples-cron) continue ;;
     workloads-spegel-*) continue ;;
+    workloads-coroot-node-agent) continue ;;
   esac
   if [ "${KUBESEC_ALL:-}" = "1" ]; then fp="$key-$fp"; fi  # full sweep: never merge
   members["$fp"]="${members["$fp"]:-0}"
