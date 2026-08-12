@@ -13433,6 +13433,29 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    databasus: {
+      name: 'Databasus',
+      upstream: { repo: 'https://github.com/RostislavDugin/databasus' },
+      homepage: 'https://databasus.com',
+      license: 'Apache-2.0',
+      description: 'Take scheduled backups of your databases and restore one on demand.',
+      summary: "A Databasus server (scheduled backups for the PostgreSQL, MySQL and MongoDB databases you already run, with a web interface, restore, and notifications when a run fails). IT RUNS ITS OWN POSTGRESQL INSIDE THE POD AND THERE IS NO WAY OUT: the image starts an embedded database for its schedules and history on the same volume as the backups it takes, so one PersistentVolume holds both the backups and the only record of what was backed up, in the same cluster as the databases it protects — a defence against a dropped table, not against losing the cluster. The entrypoint needs root: it reconciles the embedded postgres uid, chowns three directories under the data volume and writes the frontend's runtime configuration into the image tree before starting anything, so four defaults are relaxed deliberately. It holds credentials for everything it backs up, so a NetworkPolicy limiting egress to exactly those is worth composing on. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4005.",
+      category: 'tool',
+      stages: {
+        server: d.fn('The Databasus server. Backups, the temporary spool and the embedded PostgreSQL all live under /databasus-data on the volume, because the image puts them there. publicUrl is what the notification mails link to and half of what turns email on; secretName holds the SMTP credentials and any OAuth client secrets through envFrom. The startup budget is long because the embedded database is initialised on first start. Compose an exposure onto the HTTP port, and a backup axis onto this volume if the copies have to survive the cluster.', [
+          d.arg('name', d.T.string, default='databasus'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='100Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('publicUrl', d.T.string, example='https://backups.example.com'),
+          d.arg('secretName', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '250m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
