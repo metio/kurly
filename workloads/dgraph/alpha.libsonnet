@@ -57,9 +57,7 @@ function(
   + kurly.version(version)
   + kurly.replicas(replicas)
   + kurly.port(8080)
-  + kurly.servicePort(8080)
   + kurly.extraPort('grpc', 9080)
-  + kurly.headlessService(port=8080, publishNotReady=true)
   + kurly.env(env)
   // --my= advertises the address peers reach this member at, and it has to be
   // THIS pod's stable name. Kubernetes only expands $(POD_NAME) in args when the

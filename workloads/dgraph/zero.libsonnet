@@ -52,12 +52,15 @@ function(
   kurly.stateful(name, image)
   + kurly.version(version)
   + kurly.replicas(replicas)
-  + kurly.port(5080)
-  + kurly.servicePort(5080)
-  + kurly.extraPort('http', 6080)
-  // A stable DNS name per pod is what lets the peers find each other; a Raft
-  // member that changes address on every restart cannot rejoin its own cluster.
-  + kurly.headlessService(port=5080, publishNotReady=true)
+  // The admin/health endpoint is the primary port, because the probes below name
+  // it and a port name is how they reach one. Raft traffic is :5080, declared
+  // beside it under its own name — two ports called 'http' is a duplicate the API
+  // server rejects, and a probe pointed at the gRPC port never answers.
+  //
+  // kurly.stateful's own Service is the headless one the StatefulSet names, so
+  // the stable per-pod DNS the peers need is already there.
+  + kurly.port(6080)
+  + kurly.extraPort('grpc', 5080)
   + kurly.env(env)
   // --my= advertises the address peers reach this member at, and it has to be
   // THIS pod's stable name. Kubernetes only expands $(POD_NAME) in args when the

@@ -17,6 +17,15 @@ function(name, image)
     local this = self,
     config+:: { replicas: 1 },
 
+    // This kind's own Service IS the headless one the StatefulSet names, so
+    // composing kurly.headlessService renders a SECOND Service under exactly the
+    // same name. Two objects with one name render, validate and even apply — the
+    // later one silently replaces the earlier, so the workload ends up with
+    // whichever set of ports happened to come last.
+    assert self.config.headlessService == null :
+           'kurly.stateful already renders the headless Service ' + headlessName(self.config.name)
+           + '; composing kurly.headlessService would render a second object with that same name. Declare the ports with kurly.port/kurly.extraPort instead.',
+
     // The stores' storage is per-pod via volumeClaimTemplates, so there is no
     // single owned PVC to place — drop both handles.
     storeClaim:: null,

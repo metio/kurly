@@ -275,7 +275,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     headlessService: d.fn('A headless Service (clusterIP: None) selecting the pods, for DNS peer discovery — the discovery a replication hand-off needs.', [
       d.arg('port', d.T.int, example=6379),
       d.arg('publishNotReady', d.T.bool, default=false),
-    ]) + { kinds: ['http', 'worker', 'daemon', 'stateful'], group: 'networking' },
+      // Not stateful: that kind's own Service already IS the headless one the
+      // StatefulSet names, so composing this would render a second Service under
+      // the same name. The kind asserts on it rather than letting the two
+      // silently replace each other.
+    ]) + { kinds: ['http', 'worker', 'daemon'], group: 'networking' },
     alerts: d.fn("A PrometheusRule of alerting rules bound to THIS workload's own objects — its controller, its container, each of its claims. Rules that cannot fire are never emitted (no memory rule without a memory limit, no storage rule without a claim, no availability rule for a controller kind with no ready-versus-desired metric pair), because a rule that cannot fire reads as coverage and is not. Every rule names the gumshoe book that investigates or fixes it; `runbooks` supplies the base URL that turns it into a runbook_url. `namespace` scopes the expressions — without it, or without enforcedNamespaceLabel on the scraping Prometheus, a rule matches this name in every namespace. `for`, `storageFull` and `memoryPressure` are SLO decisions and belong to the caller.", [
       d.arg('namespace', d.T.string, example='apps'),
       d.arg('severity', d.T.string, default='warning'),
