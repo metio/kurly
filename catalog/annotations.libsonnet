@@ -13544,6 +13544,30 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    gravity: {
+      name: 'Gravity',
+      upstream: { repo: 'https://github.com/BeryJu/gravity' },
+      homepage: 'https://gravity.beryju.io',
+      license: 'GPL-3.0',
+      description: 'Run DNS, DHCP and network boot for a local network from one place.',
+      summary: "A Gravity server (replicated DNS, DHCP and TFTP for a local network, backed by an embedded etcd, with a web interface for the zones, records and leases). A composable stateful workload, because each member is an etcd peer with a volume that follows its identity. IT RUNS ON THE NODE'S NETWORK AND IT HAS TO: DHCP is answered from broadcast traffic that never reaches a pod behind a Service, which is why upstream's own compose file uses host networking. Two consequences — the ports it opens ARE the node's ports, so two members cannot share a node, and nothing about it is isolated by a Service. Serving :53 and :67 is the privilege, granted as NET_BIND_SERVICE by name rather than by running as root, so the rest of the hardened posture stands. DNS is useful alone; DHCP wants to be the only server on its segment, which is a fact about the network rather than about this workload, so it is off by default. Serves the web interface on :8008.",
+      category: 'networking',
+      stages: {
+        server: d.fn('The Gravity server. replicas are etcd peers (odd numbers). dhcp and tftp turn on the services that are off by default — a DHCP server turned on by accident breaks a network rather than this workload. Its data lives at /data on the volume. Compose an anti-affinity rule, because host networking means two members cannot share a node.', [
+          d.arg('name', d.T.string, default='gravity'),
+          d.arg('image', d.T.string),
+          d.arg('replicas', d.T.int, default=1),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('dhcp', d.T.bool, default=false),
+          d.arg('tftp', d.T.bool, default=false),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'stateful' },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
