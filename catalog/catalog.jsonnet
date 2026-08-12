@@ -40,6 +40,8 @@ local upstream = import './upstream.gen.libsonnet';
 // A stage that is renamed or removed fails the import here; the reconcile below
 // fails if this map and the annotations fall out of step.
 local stageImports = {
+  'dgraph/zero': import 'github.com/metio/kurly/workloads/dgraph/zero.libsonnet',
+  'dgraph/alpha': import 'github.com/metio/kurly/workloads/dgraph/alpha.libsonnet',
   'databasus/server': import 'github.com/metio/kurly/workloads/databasus/server.libsonnet',
   'collabora-online/server': import 'github.com/metio/kurly/workloads/collabora-online/server.libsonnet',
   'percona-server/server': import 'github.com/metio/kurly/workloads/percona-server/server.libsonnet',
