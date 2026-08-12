@@ -257,6 +257,38 @@
   // Passes the hosting test and fails the licence one: Arize sells AX, a separate
   // product, and says Phoenix stays local — but Phoenix itself is Elastic-2.0,
   // which forbids providing the software to others as a managed service.
+  'quant-ux': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free hosted instance anyone can sign up to — https://quant-ux.com/' },
+  openlit: { reason: 'upstream-sells-hosting', note: 'upstream is launching hosting ("OpenLIT Cloud is the fully hosted version"; coming soon, rates unannounced) — https://openlit.io/pricing' },
+  semaphore: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Semaphore cloud CI, pay-per-use compute, beside the Community Edition) — https://semaphore.io/pricing' },
+  beam: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Beam serverless GPU and sandboxes, per-second billing plus $89/mo Team) — https://www.beam.cloud/pricing' },
+  aisoc: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting ("start free and connect a source in minutes" beside a sovereign self-hosted deployment) — https://tryaisoc.com/' },
+  'llm-gateway': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (llmgateway.io, 5% platform fee on credits) — https://llmgateway.io/pricing' },
+  wundergraph: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Cosmo managed service, $3499/mo Scale) — https://www.wundergraph.com/pricing' },
+  'big-agi': { reason: 'upstream-sells-hosting', note: 'upstream both runs a free hosted tier and sells Pro at $9/mo — https://big-agi.com/' },
+  'domain-locker': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (domain-locker.com cloud, $5-20/mo) — https://domain-locker.com/about/pricing' },
+  distr: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Distr Cloud, $80-160/mo and up) — https://distr.sh/pricing/' },
+  probo: { reason: 'upstream-sells-hosting', note: 'upstream sells a managed programme run by its own compliance officers alongside the self-hosted deployment; no published rates — https://www.probo.com/' },
+  datalens: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Yandex Cloud DataLens, $8.11/seat/mo) — https://yandex.cloud/en/services/datalens' },
+  // Announced rather than running: the hosted tiers are described as coming, not
+  // sold today. Recorded now because the decision does not change when they open,
+  // and re-reading this page later is exactly the work the note exists to save.
+  serviceradar: { reason: 'upstream-sells-hosting', note: 'upstream is launching hosting ("Hosted ServiceRadar Cloud is coming", Standard and Enterprise tiers) — https://serviceradar.cloud/' },
+  'red-hat-quay': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Quay.io, "a fully-managed hosted container image registry", priced per private repository) — https://www.redhat.com/en/technologies/cloud-computing/quay' },
+  boxyhq: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Ory Network, $770-9350/yr; BoxyHQ is now Ory Polis) — https://www.ory.com/pricing' },
+  suna: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Kortix Team, $40/seat/mo with managed models) — https://www.kortix.com/pricing' },
+  latitude: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Latitude Pro, $99/mo) — https://latitude.so/pricing' },
+  traceloop: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Traceloop cloud, free tier plus Enterprise) — https://www.traceloop.com/pricing' },
+  highlight: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Highlight cloud, $50-800/mo) — https://www.highlight.io/pricing' },
+  superplane: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting ("Self-host or use the cloud"; no published rates at time of reading) — https://superplane.com/pricing' },
+  fastgpt: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (cloud.fastgpt.io, CNY 99-599/mo) — https://fastgpt.io/price' },
+  kaneo: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Kaneo Cloud, $40/yr Personal, $50/user/yr Team) — https://kaneo.app/pricing' },
+  bagisto: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Bagisto Hosting, by Webkul who maintain it) — https://bagisto.com/en/cloud-hosting/' },
+  // Weaker evidence than the rest, recorded as such: casdoor.ai links its
+  // enterprise offering to casdoor.com, which is titled "Casdoor Identity Cloud",
+  // and no pricing page was published when this was read. Excluded on what the bar
+  // is FOR — carrying it competes with the people who wrote it — rather than on a
+  // price list, the same way datasette is.
+  casdoor: { reason: 'upstream-sells-hosting', note: "upstream sells hosting (Casdoor Identity Cloud, the project's own hosted offering; no public pricing at time of reading) — https://casdoor.com/" },
   'arize-phoenix': { reason: 'licence-forbids-saas', note: 'Elastic License 2.0; forbids providing the software to others as a managed service — https://github.com/Arize-ai/phoenix/blob/main/LICENSE' },
   bytechef: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (ByteChef cloud, $29-169/mo) — https://www.bytechef.io/pricing' },
   flowforge: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (FlowFuse Cloud instances; prices on request) — https://flowfuse.com/pricing/' },
