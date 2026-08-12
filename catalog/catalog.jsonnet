@@ -40,6 +40,13 @@ local upstream = import './upstream.gen.libsonnet';
 // A stage that is renamed or removed fails the import here; the reconcile below
 // fails if this map and the annotations fall out of step.
 local stageImports = {
+  'parse-server/server': import 'github.com/metio/kurly/workloads/parse-server/server.libsonnet',
+  'apisix/gateway': import 'github.com/metio/kurly/workloads/apisix/gateway.libsonnet',
+  'beelzebub/honeypot': import 'github.com/metio/kurly/workloads/beelzebub/honeypot.libsonnet',
+  'versity-s3-gateway/gateway': import 'github.com/metio/kurly/workloads/versity-s3-gateway/gateway.libsonnet',
+  'onedev/server': import 'github.com/metio/kurly/workloads/onedev/server.libsonnet',
+  'superset/server': import 'github.com/metio/kurly/workloads/superset/server.libsonnet',
+  'superset/worker': import 'github.com/metio/kurly/workloads/superset/worker.libsonnet',
   'sablier/server': import 'github.com/metio/kurly/workloads/sablier/server.libsonnet',
   'krakend/server': import 'github.com/metio/kurly/workloads/krakend/server.libsonnet',
   'scraparr/server': import 'github.com/metio/kurly/workloads/scraparr/server.libsonnet',
