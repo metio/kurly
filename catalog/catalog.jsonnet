@@ -40,6 +40,7 @@ local upstream = import './upstream.gen.libsonnet';
 // A stage that is renamed or removed fails the import here; the reconcile below
 // fails if this map and the annotations fall out of step.
 local stageImports = {
+  'meshmonitor/server': import 'github.com/metio/kurly/workloads/meshmonitor/server.libsonnet',
   'configarr/sync': import 'github.com/metio/kurly/workloads/configarr/sync.libsonnet',
   'codex-docs/server': import 'github.com/metio/kurly/workloads/codex-docs/server.libsonnet',
   'agentgateway/gateway': import 'github.com/metio/kurly/workloads/agentgateway/gateway.libsonnet',

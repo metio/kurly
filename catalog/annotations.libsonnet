@@ -12519,8 +12519,13 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       description: 'Run Ansible playbooks and Terraform from a web interface instead of a laptop.',
       summary: "A Semaphore UI server (a web interface for running Ansible playbooks, Terraform plans and shell scripts, with projects, schedules and an audit trail). A plain composable http workload on the project's own image; the default database is BoltDB in a file on a PersistentVolume, so a single instance needs no external database. secretName carries SEMAPHORE_ACCESS_KEY_ENCRYPTION, the key every stored SSH key and cloud credential is encrypted with — changing it makes them unreadable, so it belongs in a Secret from the first boot. Playbooks execute as child processes IN THIS CONTAINER: the image ships Ansible, and anything else a playbook calls has to be there too. Single writer over a ReadWriteOnce volume: one replica, recreated — dbDialect pointed at PostgreSQL or MySQL is what more than one needs. Serves on :3000.",
       category: 'tool',
+      // Semaphore speaks both PostgreSQL and MySQL, and the engine is a
+      // deployment choice rather than a fact about the software — but a
+      // generator that is told nothing guesses, and guessed mysql here. Stating
+      // postgresql records the one this stage is meant to be run against;
+      // dbDialect still takes either.
       requires: [
-        { kind: 'database', required: false },
+        { kind: 'database', engine: 'postgresql', required: false },
       ],
       stages: {
         server: d.fn('The Semaphore UI server. dbDialect is bolt (the file database on the volume), postgres or mysql; dbHost/dbName/dbUser point at an external server. secretName holds SEMAPHORE_ACCESS_KEY_ENCRYPTION, SEMAPHORE_ADMIN_PASSWORD and, for an external database, SEMAPHORE_DB_PASS, through envFrom. adminName/adminEmail seed the first user. publicUrl is the URL Semaphore builds its links from. The generated configuration and the repository checkouts go to scratch volumes, so the root filesystem stays read-only. Compose an exposure onto the HTTP port.', [
@@ -12982,6 +12987,30 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('config', d.T.object, default={}),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '128Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
+    meshmonitor: {
+      name: 'MeshMonitor',
+      upstream: { repo: 'https://github.com/Yeraze/meshmonitor' },
+      homepage: 'https://meshmonitor.org/',
+      license: 'BSD-3-Clause',
+      description: 'Watch the traffic on a Meshtastic mesh and keep a history of it.',
+      summary: "A MeshMonitor server (a web front end for a Meshtastic mesh: it connects to a node over TCP, records the messages, telemetry and node list it sees, and draws them on a map and a timeline). A plain composable http workload on the project's own image; everything it knows goes into a SQLite database on a PersistentVolume, so no external database is needed. IT NEEDS A NODE IT CAN REACH OVER IP — Meshtastic radios are usually attached by USB or Bluetooth, neither of which a pod can be given, so nodeIp is the address of a node with the TCP API enabled, and egress to it is the first thing to check when the UI comes up empty. The image's supervisord declares user=root and drops to the node user with su-exec, which normally means a root container; it does not here, because the runtime uid is the node user's own 1000, making that call a change to the uid the process already has, and the entrypoint skips its chown when it is not root because fsGroup has done that job. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3001.",
+      category: 'application',
+      stages: {
+        server: d.fn('The MeshMonitor server. nodeIp and nodePort are the Meshtastic node it connects to; the database, backups and notification configuration live under /data on the volume. behindProxy marks the session cookies secure and trusts the forwarded client address, which is what a deployment behind an exposure wants. supervisord writes its pidfile to a scratch /var/run, so the root filesystem stays read-only. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='meshmonitor'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('nodeIp', d.T.string, example='10.0.0.42'),
+          d.arg('nodePort', d.T.int, default=4403),
+          d.arg('behindProxy', d.T.bool, default=true),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '768Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http' },

@@ -14,7 +14,7 @@ kurly::vendor
 ns="$(kurly::namespace_unique kurly-semaphore-ui)"
 kurly::namespace "$ns"
 
-kurly::mysql "$ns" semaphore-ui-db semaphore semaphore
+kurly::postgres "$ns" semaphore-ui-db-rw semaphore semaphore
 
 kurly::secret "$ns" semaphore-ui workloads/semaphore-ui/server.libsonnet
 kurly::boot workloads/semaphore-ui/server.libsonnet "$ns" "" ""
