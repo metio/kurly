@@ -192,6 +192,7 @@
   // batch passed this gate — a paid SELF-HOSTED licence is not a hosting offer,
   // and dagu, imgproxy, semaphore-ui, onedev, sablier and krakend all sell one.
   'kill-bill': { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (Aviate, "cloud-hosted, auto-scaling, monitoring included", built on the Kill Bill core by the same people) — https://killbill.io/' },
+  azimutt: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting (azimutt.app Solo $7/mo, Team $35/user/mo; self-hosting is an Enterprise option) — https://azimutt.app/pricing' },
   manyfold: { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://manyfold.app/' },
   tolgee: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting — https://tolgee.io/pricing' },
   'personal-management-system': { reason: 'no-published-source', note: 'no image built from the published source — https://github.com/Volmarg/personal-management-system' },

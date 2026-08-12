@@ -13016,6 +13016,36 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
+    oxicloud: {
+      name: 'OxiCloud',
+      upstream: { repo: 'https://github.com/AtalayaLabs/OxiCloud' },
+      license: 'MIT',
+      description: 'Keep your files on your own storage and share them from a web page.',
+      summary: "An OxiCloud server (file storage and sharing with a web interface, written in Rust). A plain composable http workload on the project's own image: the files go to a PersistentVolume and the metadata to an external PostgreSQL. baseUrl is what OxiCloud builds share links and OIDC redirects from, so behind a reverse proxy it has to be the address a browser reaches — share links that resolve only inside the cluster are that value left at its default. The image's entrypoint chowns the storage volume and drops privileges with su-exec when it starts as root, and says plainly that an unprivileged start assumes the volume permissions are already right, which is what fsGroup does; the stage runs as the image's own uid 1001 and keeps the hardened posture. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8086.",
+      category: 'application',
+      requires: [
+        { kind: 'database', engine: 'postgresql', required: true },
+      ],
+      stages: {
+        server: d.fn('The OxiCloud server. The blob store lives at /app/storage on the volume. secretName holds OXICLOUD_DB_CONNECTION_STRING through envFrom — the PostgreSQL URL, whose password is why it is a Secret rather than an env value. baseUrl is the URL a browser reaches this at. Everything else OxiCloud reads is OXICLOUD_*, through env. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='oxicloud'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='50Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('baseUrl', d.T.string, example='https://files.example.com'),
+          d.arg('secretName', d.T.string),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'http',
+          secretKeys: [
+            { key: 'OXICLOUD_DB_CONNECTION_STRING', generate: 'postgresUrl' },
+          ],
+        },
+      },
+    },
   },
 
   // The stageset-controller migration-ladder builder.
