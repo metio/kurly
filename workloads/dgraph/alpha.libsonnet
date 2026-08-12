@@ -61,6 +61,12 @@ function(
   + kurly.extraPort('grpc', 9080)
   + kurly.headlessService(port=8080, publishNotReady=true)
   + kurly.env(env)
+  // --my= advertises the address peers reach this member at, and it has to be
+  // THIS pod's stable name. Kubernetes only expands $(POD_NAME) in args when the
+  // container declares it, and leaves an undeclared one as the literal text —
+  // which starts fine and tells every peer to connect to a host that does not
+  // exist.
+  + kurly.envField('POD_NAME', 'metadata.name')
   + kurly.command(['dgraph'])
   + kurly.args([
     'alpha',
