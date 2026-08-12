@@ -269,12 +269,14 @@
   // Deployable somewhere, but not as a workload in a tenant's namespace.
   'nextcloud-aio-mastercontainer': { reason: 'undeployable', note: 'the AIO master container drives a Docker socket to start and manage sibling containers, which a cluster does not give it — the nextcloud workload is the one that runs here — https://github.com/nextcloud/all-in-one' },
   cozystack: { reason: 'undeployable', note: 'a Kubernetes distribution that installs and owns the whole cluster, not a workload inside one — https://cozystack.io' },
+  dockhand: { reason: 'undeployable', note: 'manages Docker hosts through their sockets, which a cluster does not hand a workload; it passes the hosting test ("No SaaS, no cloud dependency, no vendor lock-in") and fails on what it needs — https://dockhand.pro/' },
   castsponsorskip: { reason: 'undeployable', note: 'discovers Chromecasts by mDNS on the local network and needs the host network to see them — https://github.com/gabe565/CastSponsorSkip' },
 
   // Upstream has stopped. rexray's last commit is 2023 and its own README points
   // users elsewhere; magnetissimo's is 2024. Neither is marked archived on GitHub,
   // which is why the date is the evidence rather than the flag.
   rexray: { reason: 'upstream-archived', note: 'no commit since 2023-09-02; the CSI drivers it predates are what a cluster uses now — https://github.com/rexray/rexray' },
+  'llama-gpt': { reason: 'upstream-archived', note: 'no commit since 2024-04-23; an Umbrel app rather than a maintained server — https://github.com/getumbrel/llama-gpt' },
   magnetissimo: { reason: 'upstream-archived', note: 'no commit since 2024-01-19 — https://github.com/sergiotapia/magnetissimo' },
   'quant-ux': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free hosted instance anyone can sign up to — https://quant-ux.com/' },
   openlit: { reason: 'upstream-sells-hosting', note: 'upstream is launching hosting ("OpenLIT Cloud is the fully hosted version"; coming soon, rates unannounced) — https://openlit.io/pricing' },
