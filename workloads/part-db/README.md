@@ -22,7 +22,7 @@ kurly.list(partdb())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `part-db` | |
-| `image` | `docker.io/jbtronics/part-db1:v2.14.1` | |
+| `image` | `docker.io/jbtronics/part-db1:v2.15.0` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | `/var/www/html/uploads` |
 | `mediaStorageSize` | `2Gi` | `/var/www/html/public/media` |
 | `databaseUrl` | unset | a Doctrine DSN; unset keeps SQLite |
