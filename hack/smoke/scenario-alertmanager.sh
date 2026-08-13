@@ -20,7 +20,7 @@ cd "$(dirname "$0")/../.."
 source hack/smoke/lib.sh
 
 # renovate: datasource=github-releases depName=prometheus-operator/prometheus-operator
-OPERATOR_VERSION="v0.93.0"
+OPERATOR_VERSION="v0.93.1"
 
 ns=monitoring
 promql="http://prometheus-operated.${ns}.svc:9090/api/v1"
