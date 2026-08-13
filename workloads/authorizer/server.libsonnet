@@ -62,7 +62,7 @@ function(
   + kurly.args([
     std.join(' ', [
       './authorizer',
-      '--port=8080',
+      '--http-port=8080',
       '--database-type=' + databaseType,
       '--jwt-type=' + jwtType,
       '--database-url="$DATABASE_URL"',

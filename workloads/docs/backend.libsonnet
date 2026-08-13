@@ -79,7 +79,12 @@ function(
   + kurly.scratch('/tmp', '512Mi')
   + kurly.scratch('/data/media', '1Gi')
   + kurly.scratch('/data/static', '512Mi')
-  + kurly.readinessProbe({ httpGet: { path: '/api/v1.0/config/', port: 'http' } })
+  // BY CONNECTION, NOT BY REQUEST. The backend answers every plaintext request
+  // with a 301 to the same URL over HTTPS — correct for an application that
+  // expects TLS to be terminated in front of it, and fatal as a probe: the
+  // kubelet follows the redirect, speaks TLS to a plaintext listener, and marks a
+  // healthy pod unready forever.
+  + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))
   + kurly.labels(labels)

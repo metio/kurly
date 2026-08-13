@@ -93,6 +93,9 @@
   "safebucket": {
     "compose": "+ k.env({ DATABASE__POSTGRES__SSLMODE: 'disable', STORAGE__S3__ENDPOINT: 'seaweedfs-headless:8333' })"
   },
+  "scraparr": {
+    "skip": "Scraparr is an exporter for Sonarr, Radarr, Prowlarr and the rest, and it exits when its configuration names none of them \u2014 an exporter with no target has nothing to scrape, so there is no default render that boots. A scenario would have to stand up one of those applications first, which is a fixture for somebody else's workload rather than a check of this one."
+  },
   "seaweedfs": {
     "stageOrder": "master volume filer server"
   },
@@ -101,6 +104,9 @@
   },
   "speedtest-tracker": {
     "compose": "+ k.env({ APP_URL: 'http://speedtest-tracker' })"
+  },
+  "superset": {
+    "skip": "The published apache/superset image ships no database driver: it exits with ModuleNotFoundError: No module named 'psycopg2' before it reads any configuration, and the read-only root filesystem means nothing can install one at start-up. Upstream's answer is an image derived from theirs with the drivers a deployment needs, which is a build kurly does not do. The stage renders correctly and the image cannot connect to the database the stage declares."
   },
   "synapse/server": {
     "params": "serverName='synapse.example.com'"
