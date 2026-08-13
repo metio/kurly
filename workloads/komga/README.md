@@ -22,7 +22,7 @@ kurly.list(komga())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `komga` | |
-| `image` | `docker.io/gotson/komga:1.26.0` | |
+| `image` | `docker.io/gotson/komga:1.26.1` | |
 | `storageSize` / `storageClass` | `20Gi` / cluster default | database (`/config`) and library (`/books`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
