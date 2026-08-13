@@ -67,6 +67,10 @@ function(
       endpoints: endpoints,
     } + config, '  '),
   }, mountPath='/etc/krakend')
+  // A Service named after the workload makes Kubernetes inject KRAKEND_PORT as
+  // a tcp:// URL, and KrakenD reads that variable as its listen port: it fails to
+  // parse the URL as an integer and refuses to start.
+  + kurly.disableServiceLinks()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

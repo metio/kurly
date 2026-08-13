@@ -70,6 +70,12 @@ function(
   + kurly.config(
     { 'falco.yaml': std.manifestYamlDoc({
       engine: { kind: 'modern_ebpf' },
+      // Falco REFUSES TO START unless a container plugin is loaded — its own
+      // rules reference container fields, and it checks that requirement before
+      // it reads a single event. The plugin ships in the image; naming it here is
+      // what loads it.
+      load_plugins: ['container'],
+      plugins: [{ name: 'container', library_path: 'libcontainer.so' }],
       stdout_output: { enabled: true },
       json_output: true,
       rules_files: ['/etc/falco/falco_rules.yaml', '/etc/falco/rules.d'],

@@ -38,7 +38,18 @@ function(
   kurly.daemon(name, image)
   + kurly.version(version)
   + kurly.port(port)
-  + kurly.env({ KUBETAIL_CLUSTER_AGENT_ADDR: ':' + port } + env)
+  + kurly.env(env)
+  // The binary REQUIRES --config and exits with a usage message without one; the
+  // environment variable alone configures nothing.
+  + kurly.args(['--config', '/etc/kubetail/config.yaml'])
+  + kurly.config({
+    'config.yaml': std.manifestYamlDoc({
+      // `tls` is not optional to the agent: it refuses to start with "missing
+      // configuration field" rather than assuming a default. Off here, because
+      // the certificate is the deployment's to supply.
+      'cluster-agent': { addr: ':' + port, tls: { enabled: false } },
+    }, quote_keys=false),
+  }, mountPath='/etc/kubetail')
   // A DaemonSet publishes no Service of its own, and the cluster-api needs to
   // reach EVERY agent rather than one of them — a headless Service resolves to
   // all their addresses, which is what its dispatch URL expects.

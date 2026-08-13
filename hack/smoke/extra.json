@@ -26,15 +26,21 @@
   "gotosocial": {
     "compose": "+ k.env({ GTS_HOST: 'social.example.com' })"
   },
+  "gravity": {
+    "skip": "Gravity runs on the node's network \u2014 DNS, DHCP and TFTP are the point, so the ports it opens ARE the node's ports \u2014 and its embedded etcd binds :2380 there. A Kubernetes control-plane node already has etcd on that port, so on a single-node test cluster the two collide and gravity exits with 'address already in use'. That is a collision with where the test runs rather than a defect in the stage: a real deployment puts it on a node that is not a control plane."
+  },
   "habitat": {
     "compose": "+ k.env({ DATABASE_URL: 'postgresql://habitat:Kurly-e2e-Passw0rd@habitat-db-rw:5432/habitat?serverVersion=17&sslmode=disable' })"
   },
   "hatsu": {
     "compose": "+ k.env({ HATSU_DOMAIN: 'hatsu.example.com', HATSU_PRIMARY_ACCOUNT: 'example.com' })",
-    "skip": "Hatsu fetches https://<primaryAccount>/ at start-up to discover the site's JSON feed and exits when it cannot, so it needs a real site already published on the public internet — an in-cluster feed over plain HTTP clears the discovery error and then fails the HTTPS fetch."
+    "skip": "Hatsu fetches https://<primaryAccount>/ at start-up to discover the site's JSON feed and exits when it cannot, so it needs a real site already published on the public internet \u2014 an in-cluster feed over plain HTTP clears the discovery error and then fails the HTTPS fetch."
   },
   "isso": {
     "params": "host='http://isso:8080'"
+  },
+  "kubetail": {
+    "skip": "kubetail's cluster-api REQUIRES TLS material and validates it before doing anything else: it exits naming five fields at once \u2014 its own certificate and key, and the certificate, key and CA it presents to the cluster-agent. Configuring the sections with tls disabled does not satisfy that validation, and kurly mints no key material, so there is no default render that boots. The cluster-agent and the dashboard start; the api is what a scenario cannot bring up without certificates somebody issued."
   },
   "leantime": {
     "dbEngine": "mysql"
@@ -49,8 +55,8 @@
     "compose": "+ k.env({ APP_URL: 'http://lychee:8000', APP_ENV: 'production', FRANKENPHP_NUM_THREADS: '2' })"
   },
   "mastodon": {
-    "rolloutTimeout": 900,
-    "maxRestarts": 8
+    "maxRestarts": 8,
+    "rolloutTimeout": 900
   },
   "matrix-alertmanager-receiver": {
     "params": "homeserverUrl='https://matrix.example.com', userId='@alerts:matrix.example.com'"
@@ -71,8 +77,8 @@
     "compose": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })"
   },
   "pelican-panel": {
-    "rolloutTimeout": 900,
-    "params": "secretName='pelican-panel'"
+    "params": "secretName='pelican-panel'",
+    "rolloutTimeout": 900
   },
   "piwigo": {
     "dbEngine": "mysql"

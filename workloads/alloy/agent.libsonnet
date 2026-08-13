@@ -84,7 +84,10 @@ function(
   // The undelivered-data buffer, and the node's container logs for the pipelines
   // that tail them. Read-only: an agent that could write the logs could rewrite
   // the record it exists to ship.
-  + kurly.scratch('/var/lib/alloy/data', '2Gi')
+  // The whole state directory, not just data/ below it: the remotecfg service
+  // creates its own directories beside data/, and a read-only parent refuses that
+  // even to root.
+  + kurly.scratch('/var/lib/alloy', '2Gi')
   + kurly.hostPath('/var/log', type='Directory')
   + kurly.scratch('/tmp', '256Mi')
   // The image runs as root; reading another container's logs off the node needs a

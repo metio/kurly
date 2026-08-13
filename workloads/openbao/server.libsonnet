@@ -61,9 +61,18 @@ function(
   + kurly.port(8200)
   + kurly.servicePort(8200)
   + kurly.args(['server', '-config=/openbao/config/config.json'])
-  // The uid the image's own openbao user carries; fsGroup so the file backend's
-  // directory is writable.
-  + kurly.runAs(100, gid=1000, fsGroup=1000)
+  // THE ENTRYPOINT CHOWNS THE DATA DIRECTORY AND THEN DROPS TO THE openbao USER
+  // ITSELF, which is why the container starts as root rather than as uid 100: a
+  // pod pinned to the unprivileged uid cannot chown, the entrypoint exits, and
+  // nothing ever listens. Root here is the entrypoint's, not the server's — su-exec
+  // hands over before openbao runs — and dropping privileges that way needs both
+  // the escalation the default posture blocks and the capabilities the default
+  // drops. fsGroup keeps the file backend's volume group-writable for the uid it
+  // ends up as.
+  + kurly.runAs(0, gid=0, fsGroup=1000)
+  + kurly.rootUser()
+  + kurly.allowPrivilegeEscalation()
+  + kurly.keepCapabilities()
   + kurly.store('/openbao/file', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '64Mi')
   + kurly.config({

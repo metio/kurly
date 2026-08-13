@@ -59,12 +59,23 @@ function(
   + kurly.port(9080)
   + kurly.servicePort(9080)
   + kurly.env(env)
-  // The uid the image's own apisix user carries.
-  + kurly.runAs(1000, gid=1000)
-  // Access and error logs, the nginx client-body buffers, and the generated
-  // nginx.conf APISIX writes at startup.
+  // APISIX REGENERATES nginx.conf INSIDE ITS OWN INSTALL TREE at every start, and
+  // that directory belongs to root in the image — an unprivileged uid gets
+  // "Permission denied" there however writable the root filesystem is made. The
+  // image's own entrypoint expects to run as root for exactly this reason.
+  + kurly.runAs(0, gid=0)
+  + kurly.rootUser()
+  // nginx's master process starts as root and hands the workers to an
+  // unprivileged user, which means chowning its cache directories — root without
+  // CAP_CHOWN gets "Operation not permitted" and nginx exits. These four are what
+  // that hand-off costs; everything else stays dropped.
+  + kurly.addCapabilities(['CHOWN', 'SETGID', 'SETUID', 'DAC_OVERRIDE'])
+  // Access and error logs and the nginx client-body buffers. The certificate
+  // directory below conf/ is deliberately NOT an emptyDir: the generated
+  // nginx.conf references the image's own placeholder certificate, and a volume
+  // mounted over that directory hides it, so nginx exits on a certificate it was
+  // told about and cannot open.
   + kurly.scratch('/usr/local/apisix/logs', '512Mi')
-  + kurly.scratch('/usr/local/apisix/conf/cert', '8Mi')
   + kurly.scratch('/tmp', '128Mi')
   + kurly.config({
     // The data plane is told to take its configuration from the YAML file rather
@@ -79,6 +90,10 @@ function(
     } + config, quote_keys=false),
     'apisix.yaml': std.manifestYamlDoc({ routes: routes } + objects, quote_keys=false) + '\n#END\n',
   }, mountPath='/usr/local/apisix/conf', subPath=true)
+  // APISIX GENERATES nginx.conf into its own configuration directory at every
+  // start, and that directory is part of the image rather than a mount, so the
+  // read-only root filesystem has to go. Every other hardening knob stays.
+  + kurly.writableRootFilesystem()
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

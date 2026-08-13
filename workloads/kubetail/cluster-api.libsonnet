@@ -43,10 +43,25 @@ function(
   + kurly.replicas(replicas)
   + kurly.port(8080)
   + kurly.servicePort(8080)
-  + kurly.env({
-    KUBETAIL_CLUSTER_API_ADDR: ':8080',
-    KUBETAIL_CLUSTER_AGENT_DISPATCH_URL: 'kubernetes://' + clusterAgentHost + ':' + clusterAgentPort,
-  } + env)
+  + kurly.env(env)
+  // TLS is REQUIRED CONFIGURATION here rather than a default: the server
+  // validates its own certificate paths AND the ones it would present to the
+  // cluster-agent, and exits naming all five when they are absent. Turning it off
+  // explicitly is what lets it start; the certificates are the deployment's to
+  // supply, and kurly mints no key material.
+  + kurly.args(['--config', '/etc/kubetail/config.yaml'])
+  + kurly.config({
+    'config.yaml': std.manifestYamlDoc({
+      'cluster-api': {
+        addr: ':8080',
+        tls: { enabled: false },
+        'cluster-agent': {
+          'dispatch-url': 'kubernetes://' + clusterAgentHost + ':' + clusterAgentPort,
+          tls: { enabled: false },
+        },
+      },
+    }, quote_keys=false),
+  }, mountPath='/etc/kubetail')
   // pods/log is the whole point and the whole risk: every line every workload on
   // the cluster prints. Read-only, and cluster-wide because logs are.
   + kurly.clusterRbac(

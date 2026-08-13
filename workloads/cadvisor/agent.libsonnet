@@ -20,7 +20,9 @@
 //
 // WHAT IT READS. The node's cgroup and container state: the root filesystem to
 // find them, /sys for the cgroup hierarchy, /var/run for the runtime's state, and
-// /dev/disk to name block devices in the I/O metrics. All read-only, and no
+// and, with `diskNames`, /dev/disk to name block devices in the I/O metrics (off
+// by default: a node without a udev-populated /dev/disk cannot start the pod at
+// all). All read-only, and no
 // capability beyond that is asked for — the paths are the privilege here.
 //
 // A CONTAINER RUNTIME'S DATA DIRECTORY is not mounted by default. cAdvisor reads
@@ -41,6 +43,12 @@ function(
   // The container runtime's data directory, for image and layer sizes. Its path
   // differs per runtime and distribution, so there is no default worth guessing.
   runtimeDataDir=null,
+  // /dev/disk names block devices in the I/O metrics. It is a udev-managed
+  // directory of symlinks, and a node whose udev never populated it (a kind node,
+  // a minimal image) does not have it at all — where a hostPath of type Directory
+  // does not exist, the kubelet refuses to mount it and the pod never starts. So
+  // it is asked for rather than assumed.
+  diskNames=false,
   // Appended to cAdvisor's own flags — --housekeeping_interval, --store_container_labels
   // and the rest.
   extraArgs=[],
@@ -60,7 +68,7 @@ function(
   + kurly.hostPath('/rootfs', path='/', type='Directory')
   + kurly.hostPath('/var/run', type='Directory')
   + kurly.hostPath('/sys', type='Directory')
-  + kurly.hostPath('/dev/disk', type='Directory')
+  + (if diskNames then kurly.hostPath('/dev/disk', type='Directory') else {})
   + (if runtimeDataDir != null then kurly.hostPath(runtimeDataDir, type='Directory') else {})
   + kurly.readinessProbe({ httpGet: { path: '/healthz', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/healthz', port: 'http' } })
