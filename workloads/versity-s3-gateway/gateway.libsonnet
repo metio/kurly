@@ -44,7 +44,7 @@ function(
   storageClass=null,
   accessModes=['ReadWriteOnce'],
   // A Secret carrying ROOT_ACCESS_KEY and ROOT_SECRET_KEY.
-  secretName=null,
+  secretName='versity-s3-gateway',
   // The region the gateway reports to clients.
   region='us-east-1',
   env={},

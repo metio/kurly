@@ -41,7 +41,7 @@ function(
   baseUrl=null,
   // A Secret carrying OXICLOUD_DB_CONNECTION_STRING — the PostgreSQL URL, whose
   // password is why it is a Secret rather than an env value here.
-  secretName=null,
+  secretName='oxicloud',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

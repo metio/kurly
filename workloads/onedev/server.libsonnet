@@ -48,7 +48,7 @@ function(
   dbUrl=null,
   dbUser=null,
   // A Secret carrying hibernate_connection_password when dbUrl is set.
-  secretName=null,
+  secretName='onedev',
   env={},
   resources={ requests: { cpu: '500m', memory: '2Gi' }, limits: { memory: '4Gi' } },
   labels={},

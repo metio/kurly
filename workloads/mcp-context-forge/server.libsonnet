@@ -42,7 +42,7 @@ function(
   // A SQLAlchemy URL; the default keeps SQLite on the volume.
   databaseUrl='sqlite:////app/data/mcp.db',
   // A Secret carrying JWT_SECRET_KEY and the platform admin credentials.
-  secretName=null,
+  secretName='mcp-context-forge',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

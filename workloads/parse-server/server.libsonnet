@@ -47,7 +47,7 @@ function(
   // The path the API is served under.
   mountPath='/parse',
   // A Secret carrying PARSE_SERVER_MASTER_KEY and PARSE_SERVER_DATABASE_URI.
-  secretName=null,
+  secretName='parse-server',
   env={},
   resources={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } },
   labels={},

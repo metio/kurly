@@ -45,7 +45,7 @@ function(
   dbUser='semaphore',
   // A Secret carrying SEMAPHORE_ACCESS_KEY_ENCRYPTION, SEMAPHORE_ADMIN_PASSWORD
   // and, for an external database, SEMAPHORE_DB_PASS.
-  secretName=null,
+  secretName='semaphore-ui',
   adminName='admin',
   adminEmail='admin@example.com',
   // The URL a browser reaches this at; Semaphore builds its links from it.

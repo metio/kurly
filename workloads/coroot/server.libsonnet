@@ -46,7 +46,7 @@ function(
   clickhouseUser='default',
   clickhouseDatabase='default',
   // A Secret carrying BOOTSTRAP_CLICKHOUSE_PASSWORD.
-  secretName=null,
+  secretName='coroot',
   // How often Coroot refreshes what it discovered on bootstrap.
   refreshInterval='15s',
   extraArgs=[],

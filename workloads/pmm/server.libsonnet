@@ -43,7 +43,7 @@ function(
   storageSize='100Gi',
   storageClass=null,
   // A Secret carrying PMM_ADMIN_PASSWORD, read once at first start.
-  secretName=null,
+  secretName='pmm',
   // How long metrics are kept, e.g. '30d'.
   retention=null,
   env={},
