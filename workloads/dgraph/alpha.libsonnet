@@ -58,6 +58,9 @@ function(
   + kurly.replicas(replicas)
   + kurly.port(8080)
   + kurly.extraPort('grpc', 9080)
+  // A member resolves its peers through this Service while it is still forming
+  // the cluster that makes it Ready, so the Service must list it before then.
+  + kurly.publishNotReady()
   + kurly.env(env)
   // --my= advertises the address peers reach this member at, and it has to be
   // THIS pod's stable name. Kubernetes only expands $(POD_NAME) in args when the

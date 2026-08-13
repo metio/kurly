@@ -220,6 +220,11 @@
     },
   // A headless Service (clusterIP: None) selecting the pods, for DNS peer
   // discovery. publishNotReady lists pods before they are Ready.
+  // Lists the workload's pods in its own Service before they are Ready. For a
+  // clustering member whose readiness DEPENDS on reaching its peers — it resolves
+  // them by DNS while forming the cluster — a Service that waits for readiness
+  // resolves to nothing and neither pod ever gets there.
+  publishNotReady(enabled=true):: { config+:: { publishNotReadyAddresses: enabled } },
   headlessService(port=null, publishNotReady=false):: {
     config+:: { headlessService: { port: port, publishNotReadyAddresses: publishNotReady } },
   },

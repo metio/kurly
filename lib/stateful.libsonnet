@@ -100,6 +100,7 @@ function(name, image)
       )
       + k.core.v1.service.metadata.withLabels(self.labels)
       + k.core.v1.service.spec.withClusterIP('None')
+      + (if cfg.publishNotReadyAddresses then { spec+: { publishNotReadyAddresses: true } } else {})
       // Every Service kurly renders agrees on its IP families, or a dual-stack
       // consumer fixes one and silently keeps the cluster's default on the rest.
       + { spec+: ipFamilies },

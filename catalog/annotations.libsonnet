@@ -272,6 +272,9 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       d.arg('egress', d.T.array, default=[]),
       d.arg('policyTypes', d.T.array),
     ]) + { kinds: allKinds, exclusiveGroup: 'networkPolicy', group: 'networking' },
+    publishNotReady: d.fn("Lists the workload's pods in its own Service before they are Ready. For a clustering member whose readiness DEPENDS on reaching its peers — it resolves them by DNS while forming the cluster — a Service that waits for readiness resolves to nothing and neither pod ever gets there.", [
+      d.arg('enabled', d.T.bool, default=true),
+    ]) + { kinds: ['stateful'], group: 'networking' },
     headlessService: d.fn('A headless Service (clusterIP: None) selecting the pods, for DNS peer discovery — the discovery a replication hand-off needs.', [
       d.arg('port', d.T.int, example=6379),
       d.arg('publishNotReady', d.T.bool, default=false),
@@ -13275,13 +13278,14 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       upstream: { repo: 'https://github.com/google/cadvisor' },
       license: 'Apache-2.0',
       description: 'Measure the CPU, memory and disk each running application on a node uses.',
-      summary: "A cAdvisor agent (per-container resource usage and performance metrics, read off the node's cgroups and exported for Prometheus). A composable daemon workload. THE KUBELET ALREADY EMBEDS IT — every Kubernetes node exposes cAdvisor's metrics at /metrics/cadvisor, and a cluster scraping those needs nothing here; this stage is for a node whose kubelet metrics are off, a machine outside the cluster, or a deployment that wants cAdvisor's own UI and the detail the kubelet's endpoint trims. What it reads is the node's own state — the root filesystem, /sys, /var/run and /dev/disk — all read-only, and no capability beyond that is asked for: the paths are the privilege. A container runtime's data directory is NOT mounted by default, because its path differs per runtime and distribution, so runtimeDataDir names it rather than guessing wrong and reporting nothing. Serves the UI and /metrics on :8080.",
+      summary: "A cAdvisor agent (per-container resource usage and performance metrics, read off the node's cgroups and exported for Prometheus). A composable daemon workload. THE KUBELET ALREADY EMBEDS IT — every Kubernetes node exposes cAdvisor's metrics at /metrics/cadvisor, and a cluster scraping those needs nothing here; this stage is for a node whose kubelet metrics are off, a machine outside the cluster, or a deployment that wants cAdvisor's own UI and the detail the kubelet's endpoint trims. What it reads is the node's own state — the root filesystem, /sys, /var/run and, with diskNames, /dev/disk — all read-only, and no capability beyond that is asked for: the paths are the privilege. A container runtime's data directory is NOT mounted by default, because its path differs per runtime and distribution, so runtimeDataDir names it rather than guessing wrong and reporting nothing. diskNames is off by default because /dev/disk is populated by udev, and a node without it cannot start the pod at all. Serves the UI and /metrics on :8080.",
       category: 'observability',
       stages: {
         agent: d.fn("The cAdvisor agent, one pod per node. runtimeDataDir mounts the container runtime data directory for image and layer sizes (/var/lib/docker, /var/lib/containerd, or wherever the distribution puts it). extraArgs is appended to cAdvisor's own flags. Compose kurly.serviceMonitor() to have Prometheus scrape it.", [
           d.arg('name', d.T.string, default='cadvisor'),
           d.arg('image', d.T.string),
           d.arg('runtimeDataDir', d.T.string, example='/var/lib/containerd'),
+          d.arg('diskNames', d.T.bool, default=false),
           d.arg('extraArgs', d.T.array, default=[]),
           d.arg('resources', d.T.object, default={ requests: { cpu: '150m', memory: '200Mi' }, limits: { memory: '2Gi' } }),
           d.arg('env', d.T.object, default={}),

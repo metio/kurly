@@ -440,6 +440,11 @@ local exclusionConflicts(exclusive) = [
       // A headless Service ({ port, publishNotReadyAddresses }) selecting the
       // workload's pods, for peer discovery by DNS (clusterIP: None).
       headlessService: null,
+      // Whether the kind's OWN Service lists pods before they are Ready. A
+      // clustering member discovers its peers through DNS while it is still
+      // forming the cluster it needs in order to become Ready, so a Service that
+      // waits for readiness resolves to nothing and the cluster never forms.
+      publishNotReadyAddresses: false,
       // RollingUpdate tuning ({ maxSurge, maxUnavailable }); with strategy
       // 'RollingUpdate' it lets a new pod surge alongside the old.
       rollingUpdate: null,
