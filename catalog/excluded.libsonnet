@@ -51,6 +51,7 @@
   directus: { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids offering the software as a service for the licence term' },
   dragonfly: { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids offering the software as a service for the licence term' },
   emqx: { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids offering the software as a service for the licence term' },
+  'flow-like': { reason: 'licence-forbids-saas', note: 'BUSL-1.1; forbids a competing product for the licence term, and requires a commercial licence above 2,000 employees or EUR 300M revenue — https://github.com/Rheosoph/flow-like' },
   invoiceninja: { reason: 'licence-forbids-saas', note: 'Elastic-2.0; forbids providing the software to others as a managed service' },
   mongo: { reason: 'licence-forbids-saas', note: 'SSPL-1.0; forbids offering the software as a service without releasing the service source' },
   'mongodb-cluster': { reason: 'licence-forbids-saas', note: 'SSPL-1.0; same, via the operator that runs it' },
@@ -413,6 +414,10 @@
   // installs those CRDs installs the controller with them — so a workload recipe
   // carrying the Deployment alone would add nothing a consumer could use.
   'actions-runner-controller': { reason: 'undeployable', note: 'inert without the AutoscalingRunnerSet CRDs it owns, which its own Helm chart installs alongside the controller — https://github.com/actions/actions-runner-controller' },
+  'envoy-ai-gateway': { reason: 'undeployable', note: 'a control plane on top of Envoy Gateway: it needs Envoy Gateway 1.8.1+ installed by Helm first and then installs its own CRDs the same way, so what a consumer deploys is two charts rather than a workload — https://aigateway.envoyproxy.io/docs/getting-started/prerequisites' },
+  element: { reason: 'upstream-hosts-it-free', note: 'Element runs app.element.io, a free hosted instance of this very client, and it works against any homeserver — so self-hosting the client is optional in a way self-hosting the homeserver is not (synapse and matrix-conduit are carried) — https://element.io/pricing' },
+  'drone-ci': { reason: 'upstream-hosts-it-free', note: 'Harness runs a free hosted Drone at cloud.drone.io, linked from the project page as the first way to use it — https://www.drone.io/' },
+  documentdb: { reason: 'undeployable', note: 'the only published image is documentdb-local, tagged with CI run numbers and per-architecture rather than released — a development image, not an artefact to pin a workload to — https://github.com/documentdb/documentdb' },
   bytebot: { reason: 'upstream-archived', note: 'the repository was archived on 2026-03-07 and is read-only — https://github.com/bytebot-ai/bytebot' },
   beats: { reason: 'upstream-sells-hosting', note: 'Elastic sells Elastic Cloud Hosted and Elastic Cloud Serverless for the stack Beats ships into — https://www.elastic.co/pricing/' },
   'argo-cd': { reason: 'undeployable', note: 'installs as one manifest set whose CRDs are so large that upstream documents --server-side because ApplicationSet exceeds the client-side annotation limit; the Application and AppProject CRDs are the interface, and kurly renders no CRDs — https://argo-cd.readthedocs.io/en/stable/getting_started/' },
