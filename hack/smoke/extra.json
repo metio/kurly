@@ -102,6 +102,9 @@
   "seaweedfs": {
     "stageOrder": "master volume filer server"
   },
+  "sglang": {
+    "skip": "SGLang requires an NVIDIA GPU \u2014 the image is built on CUDA with NVIDIA's entrypoint and the pod requests nvidia.com/gpu, so on a node without the device plugin it stays Pending. The image is also 14 GB compressed, which is more than the disk a throwaway test node has. Deployable on a GPU node and not verifiable here."
+  },
   "shlink": {
     "compose": "+ k.env({ SKIP_INITIAL_GEOLITE_DOWNLOAD: 'true' })"
   },
@@ -113,6 +116,9 @@
   },
   "synapse/server": {
     "params": "serverName='synapse.example.com'"
+  },
+  "triton-inference-server": {
+    "skip": "The image is eight gigabytes compressed \u2014 more disk than a throwaway test node has \u2014 and it is NVIDIA's CUDA base whether or not a GPU is requested. The stage boots with an empty model repository by design, so what a scenario would prove is that a very large image starts, at the cost of the node's disk."
   },
   "tube-archivist": {
     "compose": "+ k.env({ TA_HOST: 'http://tube-archivist:8000' })"
