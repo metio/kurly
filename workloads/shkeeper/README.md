@@ -3,43 +3,37 @@ SPDX-FileCopyrightText: The kurly Authors
 SPDX-License-Identifier: 0BSD
 -->
 
-# sglang
+# shkeeper
 
-[SGLang](https://github.com/sgl-project/sglang) — a serving runtime for large language
-models. It loads one model onto the GPUs of the node it lands on and answers an
-OpenAI-compatible API in front of it.
+[SHKeeper](https://github.com/vsys-host/shkeeper.io) — a cryptocurrency payment gateway you
+run yourself. It watches for payments, credits invoices and calls your shop back, with no
+processor between you and the chain.
 
-A plain composable `kurly.http` workload. The model cache lives on one volume, which
-makes it a **single writer**: one replica, recreated rather than rolled.
+A plain composable `kurly.http` workload. The database and wallet state share one volume,
+which makes this a **single writer**: one replica, recreated rather than rolled.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local sglang = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+local shkeeper = import 'github.com/metio/kurly/workloads/shkeeper/server.libsonnet';
 
 kurly.list(
-  sglang(model='meta-llama/Llama-3.1-8B-Instruct', gpus=1)
-  + kurly.expose.gateway('llm.example.com', parent='internal')
+  shkeeper(secretName='shkeeper')
+  + kurly.expose.gateway('pay.example.com', parent='public')
 )
 ```
 
-## It does not run without an NVIDIA GPU
+## It takes no payments until a node answers it
 
-The image is built on CUDA and its entrypoint is NVIDIA's. `gpus` becomes an
-`nvidia.com/gpu` request and limit, so a node without the device plugin leaves the pod
-Pending rather than starting it slowly. There is no CPU fallback worth offering: a model
-that fits in system memory still answers at a speed nobody would put in front of users.
+Every currency needs its own backend — a Bitcoin, Litecoin or Monero daemon with its own
+chain data, which is hundreds of gigabytes and days of initial sync. This recipe carries
+the gateway and none of those. With no backend configured it starts, serves its interface,
+and accepts nothing.
 
-## The model download
+## The credentials are the money
 
-`model` names a Hugging Face repository the server fetches at boot — tens of gigabytes for
-a mid-sized model. `HF_HOME` points at the volume so the download survives a restart; a
-pod without one fetches it all again on every cold start. A gated repository needs
-`HF_TOKEN` from a Secret, and the server exits when the download is refused.
-
-## Scaling
-
-More traffic means more of these, each with its own cache, behind something that spreads
-requests. One pod owns its GPUs for as long as it runs.
+Whatever holds this instance's credentials can move funds. The Secret is the entire
+security boundary, and an exposure with nothing authenticating in front of it is an open
+till.
 
 <!-- BEGIN generated: jaas-deploy -->
 
@@ -64,38 +58,38 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 # retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: shkeeper }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/sglang, ref: { tag: 2026.7.29 } }
+metadata: { name: kurly-shkeeper, namespace: shkeeper }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/shkeeper, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: shkeeper }
 spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-sglang } }
+metadata: { name: kurly-shkeeper, namespace: shkeeper }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-shkeeper } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: shkeeper, namespace: shkeeper }
 spec:
-  serviceAccountName: sglang-renderer
+  serviceAccountName: shkeeper-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local server = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/shkeeper/server.libsonnet';
       // Compose your exposure and any + features here, then render.
       kurly.list(server())
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-sglang, importPath: github.com/metio/kurly/workloads/sglang }
+    - { kind: JsonnetLibrary, name: kurly-shkeeper, importPath: github.com/metio/kurly/workloads/shkeeper }
 ```
 
 A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
@@ -104,9 +98,9 @@ the run and gating each stage before the next.
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: shkeeper, namespace: shkeeper }
 spec:
-  serviceAccountName: sglang-deployer
+  serviceAccountName: shkeeper-deployer
   rollbackOnFailure: true
   # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
   # than a first deploy takes for anything that migrates a database before it
@@ -119,10 +113,10 @@ spec:
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: sglang
+        name: shkeeper
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: sglang }
+          - { apiVersion: apps/v1, kind: Deployment, name: shkeeper }
 ```
 
 <!-- END generated: jaas-deploy -->

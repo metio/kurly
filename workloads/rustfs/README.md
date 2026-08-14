@@ -3,43 +3,42 @@ SPDX-FileCopyrightText: The kurly Authors
 SPDX-License-Identifier: 0BSD
 -->
 
-# sglang
+# rustfs
 
-[SGLang](https://github.com/sgl-project/sglang) — a serving runtime for large language
-models. It loads one model onto the GPUs of the node it lands on and answers an
-OpenAI-compatible API in front of it.
+[RustFS](https://github.com/rustfs/rustfs) — an S3-compatible object store written in
+Rust. Buckets and objects on a PersistentVolume, spoken to over the S3 API by anything
+that already speaks it.
 
-A plain composable `kurly.http` workload. The model cache lives on one volume, which
-makes it a **single writer**: one replica, recreated rather than rolled.
+A plain composable `kurly.http` workload. One volume holds every bucket, which makes this
+a **single writer**: one replica, recreated rather than rolled.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local sglang = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+local rustfs = import 'github.com/metio/kurly/workloads/rustfs/server.libsonnet';
 
 kurly.list(
-  sglang(model='meta-llama/Llama-3.1-8B-Instruct', gpus=1)
-  + kurly.expose.gateway('llm.example.com', parent='internal')
+  rustfs(secretName='rustfs')
+  + kurly.expose.gateway('s3.example.com', parent='internal')
 )
 ```
 
-## It does not run without an NVIDIA GPU
+## The default credentials are published
 
-The image is built on CUDA and its entrypoint is NVIDIA's. `gpus` becomes an
-`nvidia.com/gpu` request and limit, so a node without the device plugin leaves the pod
-Pending rather than starting it slowly. There is no CPU fallback worth offering: a model
-that fits in system memory still answers at a speed nobody would put in front of users.
+Without a Secret the image starts with `rustfsadmin` / `rustfsadmin` — the same pair on
+every deployment anyone has ever run. `secretName` carries `RUSTFS_ACCESS_KEY` and
+`RUSTFS_SECRET_KEY`, and an instance anything else can reach needs them set *before* it is
+reachable.
 
-## The model download
+## It is a release candidate
 
-`model` names a Hugging Face repository the server fetches at boot — tens of gigabytes for
-a mid-sized model. `HF_HOME` points at the volume so the download survives a restart; a
-pod without one fetches it all again on every cold start. A gated repository needs
-`HF_TOKEN` from a Secret, and the server exits when the download is refused.
+Upstream marks distributed mode, lifecycle rules and KMS as under test. What this renders
+is the single-node shape they call ready. Weigh that against what you are storing.
 
-## Scaling
+## Two ports
 
-More traffic means more of these, each with its own cache, behind something that spreads
-requests. One pod owns its GPUs for as long as it runs.
+`:9000` is the S3 API and the Service's `http` port; `:9001` is the console, published as
+the extra port `console`. Clients using virtual-host addressing need a wildcard hostname;
+path-style works behind one name.
 
 <!-- BEGIN generated: jaas-deploy -->
 
@@ -64,38 +63,38 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 # retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: rustfs }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/sglang, ref: { tag: 2026.7.29 } }
+metadata: { name: kurly-rustfs, namespace: rustfs }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/rustfs, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: rustfs }
 spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-sglang } }
+metadata: { name: kurly-rustfs, namespace: rustfs }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-rustfs } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: rustfs, namespace: rustfs }
 spec:
-  serviceAccountName: sglang-renderer
+  serviceAccountName: rustfs-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local server = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/rustfs/server.libsonnet';
       // Compose your exposure and any + features here, then render.
       kurly.list(server())
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-sglang, importPath: github.com/metio/kurly/workloads/sglang }
+    - { kind: JsonnetLibrary, name: kurly-rustfs, importPath: github.com/metio/kurly/workloads/rustfs }
 ```
 
 A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
@@ -104,9 +103,9 @@ the run and gating each stage before the next.
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: rustfs, namespace: rustfs }
 spec:
-  serviceAccountName: sglang-deployer
+  serviceAccountName: rustfs-deployer
   rollbackOnFailure: true
   # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
   # than a first deploy takes for anything that migrates a database before it
@@ -119,10 +118,10 @@ spec:
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: sglang
+        name: rustfs
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: sglang }
+          - { apiVersion: apps/v1, kind: Deployment, name: rustfs }
 ```
 
 <!-- END generated: jaas-deploy -->

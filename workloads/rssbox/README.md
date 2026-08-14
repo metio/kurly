@@ -3,43 +3,40 @@ SPDX-FileCopyrightText: The kurly Authors
 SPDX-License-Identifier: 0BSD
 -->
 
-# sglang
+# rssbox
 
-[SGLang](https://github.com/sgl-project/sglang) — a serving runtime for large language
-models. It loads one model onto the GPUs of the node it lands on and answers an
-OpenAI-compatible API in front of it.
+[RSS Box](https://github.com/stefansundin/rssbox) — turns sites that stopped publishing
+feeds back into RSS. YouTube channels, Twitch streams, SoundCloud, Vimeo, Instagram and a
+dozen more, each as a feed any reader can subscribe to.
 
-A plain composable `kurly.http` workload. The model cache lives on one volume, which
-makes it a **single writer**: one replica, recreated rather than rolled.
+A plain composable `kurly.http` workload holding no state.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local sglang = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+local rssbox = import 'github.com/metio/kurly/workloads/rssbox/server.libsonnet';
 
 kurly.list(
-  sglang(model='meta-llama/Llama-3.1-8B-Instruct', gpus=1)
-  + kurly.expose.gateway('llm.example.com', parent='internal')
+  rssbox(secretName='rssbox')
+  + kurly.expose.gateway('rss.example.com', parent='public')
 )
 ```
 
-## It does not run without an NVIDIA GPU
+## The API keys are yours, not the application's
 
-The image is built on CUDA and its entrypoint is NVIDIA's. `gpus` becomes an
-`nvidia.com/gpu` request and limit, so a node without the device plugin leaves the pod
-Pending rather than starting it slowly. There is no CPU fallback worth offering: a model
-that fits in system memory still answers at a speed nobody would put in front of users.
+YouTube, Vimeo, SoundCloud, Twitch and Imgur each want a credential registered in your
+name; Instagram, Mixcloud, Speedrun and Dailymotion need none. A missing key does not stop
+the server — the feeds for that service fail and the rest keep working — so it can be
+deployed with no Secret at all and grown as credentials are obtained.
 
-## The model download
+## It calls other people's APIs on your quota
 
-`model` names a Hugging Face repository the server fetches at boot — tens of gigabytes for
-a mid-sized model. `HF_HOME` points at the volume so the download survives a restart; a
-pod without one fetches it all again on every cold start. A gated repository needs
-`HF_TOKEN` from a Secret, and the server exits when the download is refused.
+Every feed a reader polls is a request to somebody else's service. A cluster with a
+default-deny egress policy gives this nothing to convert, and an instance left open to the
+internet spends your quota for whoever finds it.
 
-## Scaling
+## Redis
 
-More traffic means more of these, each with its own cache, behind something that spreads
-requests. One pod owns its GPUs for as long as it runs.
+Optional, and only for URL resolution. Everything else works without one.
 
 <!-- BEGIN generated: jaas-deploy -->
 
@@ -64,38 +61,38 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 # retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: rssbox }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/sglang, ref: { tag: 2026.7.29 } }
+metadata: { name: kurly-rssbox, namespace: rssbox }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/rssbox, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: rssbox }
 spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-sglang } }
+metadata: { name: kurly-rssbox, namespace: rssbox }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-rssbox } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: rssbox, namespace: rssbox }
 spec:
-  serviceAccountName: sglang-renderer
+  serviceAccountName: rssbox-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local server = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+      local server = import 'github.com/metio/kurly/workloads/rssbox/server.libsonnet';
       // Compose your exposure and any + features here, then render.
       kurly.list(server())
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-sglang, importPath: github.com/metio/kurly/workloads/sglang }
+    - { kind: JsonnetLibrary, name: kurly-rssbox, importPath: github.com/metio/kurly/workloads/rssbox }
 ```
 
 A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
@@ -104,9 +101,9 @@ the run and gating each stage before the next.
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: rssbox, namespace: rssbox }
 spec:
-  serviceAccountName: sglang-deployer
+  serviceAccountName: rssbox-deployer
   rollbackOnFailure: true
   # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
   # than a first deploy takes for anything that migrates a database before it
@@ -119,10 +116,10 @@ spec:
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: sglang
+        name: rssbox
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: sglang }
+          - { apiVersion: apps/v1, kind: Deployment, name: rssbox }
 ```
 
 <!-- END generated: jaas-deploy -->

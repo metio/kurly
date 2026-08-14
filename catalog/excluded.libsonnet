@@ -160,6 +160,14 @@
   // This is checkable rather than remembered: gen-forge already asks each GitHub
   // repository about itself, and `archived` is one field further. Worth deriving
   // so the next one is caught rather than noticed.
+  vitess: { reason: 'undeployable', note: 'deployed through the Vitess Operator and a VitessCluster custom resource that fans out into vtgate, vttablet, etcd and the MySQL instances behind them — the operator owns the topology, and no component of it is a workload to compose — https://vitess.io/docs/get-started/operator/' },
+  squidex: { reason: 'upstream-sells-hosting', note: 'upstream sells hosting at cloud.squidex.io alongside the MIT self-hosted build — https://github.com/Squidex/squidex' },
+  timescale: { reason: 'upstream-sells-hosting', note: 'the company sells Tiger Cloud, a managed PostgreSQL platform built on this extension; the extension itself is dual-licensed Apache-2.0 and TSL, and the features that make it worth running are on the TSL side — https://github.com/timescale/timescaledb' },
+  parlant: { reason: 'undeployable', note: 'a Python SDK installed with pip and built into an application of your own, not a server with an image to run — what a deployment ships is the application somebody wrote against it — https://github.com/emcie-co/parlant' },
+  openwhisk: { reason: 'undeployable', note: 'a Helm chart installing a platform — controller, invokers, Kafka, ZooKeeper and CouchDB — where the invokers start function containers of their own, so no single unit of it is a workload to compose — https://github.com/apache/openwhisk-deploy-kube' },
+  octelium: { reason: 'undeployable', note: 'installs a cluster-side control plane with its own octeliumctl CLI and a shell installer, and manages what it exposes through its own declarative API — a platform on top of Kubernetes rather than a workload inside it — https://github.com/octelium/octelium' },
+  'pms-docker': { reason: 'no-published-source', note: "Plex Media Server is proprietary — the repository packages a binary nobody can read or build, and the server requires an account on Plex's own service to claim it — https://github.com/plexinc/pms-docker" },
+  'minio-aistor': { reason: 'no-published-source', note: "MinIO's commercial product, licensed and supported through SUBNET; the community edition it grew out of is the archived minio above, and AIStor's own source is not published — https://www.min.io/product/aistor" },
   minio: { reason: 'upstream-archived', note: 'upstream archived on 2026-04-24 — https://github.com/minio/minio (repository is read-only)' },
   maybe: { reason: 'upstream-archived', note: 'upstream archived on 2025-07-24 — https://github.com/maybe-finance/maybe' },
   overseerr: { reason: 'upstream-archived', note: 'upstream archived on 2026-02-15 — https://github.com/sct/overseerr' },

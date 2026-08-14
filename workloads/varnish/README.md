@@ -3,43 +3,42 @@ SPDX-FileCopyrightText: The kurly Authors
 SPDX-License-Identifier: 0BSD
 -->
 
-# sglang
+# varnish
 
-[SGLang](https://github.com/sgl-project/sglang) — a serving runtime for large language
-models. It loads one model onto the GPUs of the node it lands on and answers an
-OpenAI-compatible API in front of it.
+[Varnish Cache](https://varnish-cache.org/) — an HTTP cache that sits in front of
+something slower. It holds responses in memory and serves them without waking the backend,
+with the caching policy written in VCL.
 
-A plain composable `kurly.http` workload. The model cache lives on one volume, which
-makes it a **single writer**: one replica, recreated rather than rolled.
+A plain composable `kurly.http` workload holding nothing that outlives the pod.
 
 ```jsonnet
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
-local sglang = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+local varnish = import 'github.com/metio/kurly/workloads/varnish/cache.libsonnet';
 
 kurly.list(
-  sglang(model='meta-llama/Llama-3.1-8B-Instruct', gpus=1)
-  + kurly.expose.gateway('llm.example.com', parent='internal')
+  varnish(backendHost='app', backendPort=8080)
+  + kurly.expose.gateway('www.example.com', parent='public')
 )
 ```
 
-## It does not run without an NVIDIA GPU
+## Size the cache below the memory limit
 
-The image is built on CUDA and its entrypoint is NVIDIA's. `gpus` becomes an
-`nvidia.com/gpu` request and limit, so a node without the device plugin leaves the pod
-Pending rather than starting it slowly. There is no CPU fallback worth offering: a model
-that fits in system memory still answers at a speed nobody would put in front of users.
+`size` is what Varnish is told it may use for objects. The pod's memory limit has to be
+comfortably larger, because the process needs room for its own working set on top — a
+cache sized at the limit is a pod the kernel kills under load rather than one that evicts.
+The default here is deliberately small.
 
-## The model download
+## VCL is the configuration
 
-`model` names a Hugging Face repository the server fetches at boot — tens of gigabytes for
-a mid-sized model. `HF_HOME` points at the volume so the download survives a restart; a
-pod without one fetches it all again on every cold start. A gated repository needs
-`HF_TOKEN` from a Secret, and the server exits when the download is refused.
+The rendered default does one thing: name the backend. Anything past "cache what the
+backend says is cacheable" means supplying `vcl`, which replaces the file wholesale —
+there is no sensible half-way merge of somebody else's caching policy.
 
-## Scaling
+## A rollout is a cold cache
 
-More traffic means more of these, each with its own cache, behind something that spreads
-requests. One pod owns its GPUs for as long as it runs.
+Nothing is persisted, by design: the volume a cache wants is the memory it already has.
+Restarting empties it, so a rollout sends a burst straight to the backend. Replicas do not
+share a cache either — each fills its own.
 
 <!-- BEGIN generated: jaas-deploy -->
 
@@ -64,38 +63,38 @@ are single-layer, so a plain Flux `OCIRepository` pulls each one directly.
 # retagged registry. The catalog names the version each release published.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: varnish }
 spec: { interval: 12h, url: oci://ghcr.io/metio/kurly, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/sglang, ref: { tag: 2026.7.29 } }
+metadata: { name: kurly-varnish, namespace: varnish }
+spec: { interval: 12h, url: oci://ghcr.io/metio/kurly/workloads/varnish, ref: { tag: 2026.7.29 } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly, namespace: sglang }
+metadata: { name: kurly, namespace: varnish }
 spec: { sourceRef: { kind: OCIRepository, name: kurly } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetLibrary
-metadata: { name: kurly-sglang, namespace: sglang }
-spec: { sourceRef: { kind: OCIRepository, name: kurly-sglang } }
+metadata: { name: kurly-varnish, namespace: varnish }
+spec: { sourceRef: { kind: OCIRepository, name: kurly-varnish } }
 ---
 apiVersion: jaas.metio.wtf/v1
 kind: JsonnetSnippet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: varnish, namespace: varnish }
 spec:
-  serviceAccountName: sglang-renderer
+  serviceAccountName: varnish-renderer
   files:
     main.jsonnet: |
       local kurly = import 'github.com/metio/kurly/main.libsonnet';
-      local server = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet';
+      local cache = import 'github.com/metio/kurly/workloads/varnish/cache.libsonnet';
       // Compose your exposure and any + features here, then render.
-      kurly.list(server())
+      kurly.list(cache())
   libraries:
     - { kind: JsonnetLibrary, name: kurly, importPath: github.com/metio/kurly }
-    - { kind: JsonnetLibrary, name: kurly-sglang, importPath: github.com/metio/kurly/workloads/sglang }
+    - { kind: JsonnetLibrary, name: kurly-varnish, importPath: github.com/metio/kurly/workloads/varnish }
 ```
 
 A `StageSet` deploys the stage in order, pinning artifact revisions at the start of
@@ -104,9 +103,9 @@ the run and gating each stage before the next.
 ```yaml
 apiVersion: stages.metio.wtf/v1
 kind: StageSet
-metadata: { name: sglang, namespace: sglang }
+metadata: { name: varnish, namespace: varnish }
 spec:
-  serviceAccountName: sglang-deployer
+  serviceAccountName: varnish-deployer
   rollbackOnFailure: true
   # stageset gives a stage FIVE MINUTES unless told otherwise, which is shorter
   # than a first deploy takes for anything that migrates a database before it
@@ -115,14 +114,14 @@ spec:
   # converges. Raise it past the startup budget the workload itself allows.
   timeout: 15m
   stages:
-    - name: server
+    - name: cache
       sourceRef:
         apiVersion: jaas.metio.wtf/v1
         kind: JsonnetSnippet
-        name: sglang
+        name: varnish
       readyChecks:
         checks:
-          - { apiVersion: apps/v1, kind: Deployment, name: sglang }
+          - { apiVersion: apps/v1, kind: Deployment, name: varnish }
 ```
 
 <!-- END generated: jaas-deploy -->
