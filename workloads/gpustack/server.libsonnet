@@ -51,6 +51,11 @@ function(
   + kurly.port(80)
   + kurly.servicePort(80)
   + kurly.env(env)
+  // A Service named after the workload makes Kubernetes inject GPUSTACK_PORT as
+  // a tcp:// URL, and the entrypoint reads that variable as its --port flag:
+  // "invalid int value: 'tcp://10.96.48.242:80'", and the supervision tree exits
+  // before anything starts.
+  + kurly.disableServiceLinks()
   + (if extraArgs == [] then {} else kurly.args(extraArgs))
   // THE IMAGE IS AN s6-overlay SUPERVISION TREE: it raises its own file-descriptor
   // limit, writes its runtime configuration under /run/gpustack and starts several

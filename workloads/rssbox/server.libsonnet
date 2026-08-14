@@ -54,15 +54,20 @@ function(
   + kurly.port(3000)
   + kurly.servicePort(3000)
   + kurly.env(
-    { RACK_ENV: 'production', PORT: '3000' }
+    // HOME, because the image's own user has /nonexistent as its home and both
+    // bundler and puma try to write there before anything serves.
+    { RACK_ENV: 'production', PORT: '3000', HOME: '/tmp' }
     + (if redisUrl != null then { REDIS_URL: redisUrl } else {})
     + env
   )
   + (if secretName != null then kurly.envFromSecret(secretName) else {})
   // The uid the image's own nobody user carries.
   + kurly.runAs(65534, gid=65534)
-  // Puma writes its pid and socket state under /tmp.
+  // Puma writes its pid and socket state under /tmp, and bundler insists on a
+  // writable cache INSIDE the application tree — /app/tmp/cache, which it creates
+  // before loading the app and refuses to start without.
   + kurly.scratch('/tmp', '64Mi')
+  + kurly.scratch('/app/tmp', '64Mi')
   + kurly.readinessProbe({ tcpSocket: { port: 'http' } })
   + kurly.livenessProbe({ tcpSocket: { port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

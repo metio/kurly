@@ -12,6 +12,14 @@
 // Serves cached traffic on :80 — compose an exposure onto it and point it at the
 // Service of whatever it is caching.
 //
+// THE BACKEND IS RESOLVED WHEN THE CONFIGURATION IS COMPILED, NOT WHEN A
+// REQUEST ARRIVES. Varnish looks `backendHost` up at start and refuses to
+// compile the VCL when the name does not resolve — "could not be resolved to an
+// IP address", and the pod never listens. So the default here is a placeholder
+// that starts nowhere: point it at a Service that exists before deploying, and
+// expect a cache whose backend is deleted to fail its next restart rather than
+// its next request.
+//
 // THE CACHE IS MEMORY AND MEMORY IS A LIMIT, NOT A SUGGESTION. `size` is what
 // Varnish is told it may use for objects, and the pod's memory limit has to be
 // comfortably larger — the process needs room for its own working set on top, and

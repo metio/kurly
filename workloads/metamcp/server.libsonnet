@@ -13,9 +13,12 @@
 // Serves the interface and the aggregated endpoint on :12008 — compose an
 // exposure onto it.
 //
-// APP_URL IS NOT DECORATION. The application builds its own callback URLs from
-// it and validates request origins against it, so a wrong or missing value gives
-// a working page whose login fails — set it to the URL a browser actually uses.
+// APP_URL IS REQUIRED AND IT IS NOT DECORATION. The application throws
+// "APP_URL environment variable is required" and exits without one, and it
+// builds its callback URLs from it and validates request origins against it — so
+// a wrong value gives a page that loads and a login that fails. The default here
+// is a placeholder that boots and is wrong for every real deployment: set it to
+// the URL a browser actually uses.
 //
 // THE FIRST ACCOUNT IS CREATED BY WHOEVER GETS THERE FIRST unless you bootstrap
 // one. Registration is open until an administrator exists; `bootstrapEmail` and
@@ -40,15 +43,19 @@ function(
   dbName='metamcp',
   dbUser='metamcp',
   // The URL a browser reaches this at. Callback URLs and origin checks are built
-  // from it.
-  appUrl=null,
+  // from it, and the application refuses to start without one — so this defaults
+  // to a placeholder that boots rather than to null, which would not.
+  appUrl='http://localhost:12008',
   // The account created at start, so registration is not left open to whoever
   // arrives first. Its password comes from the Secret.
   bootstrapEmail=null,
   bootstrapName='admin',
   logLevel='info',
-  // A Secret carrying POSTGRES_PASSWORD, BETTER_AUTH_SECRET and — when
-  // bootstrapEmail is set — BOOTSTRAP_USER_PASSWORD.
+  // A Secret carrying DATABASE_URL (the whole connection string, which the
+  // migration step reads), POSTGRES_PASSWORD, BETTER_AUTH_SECRET and — when
+  // bootstrapEmail is set — BOOTSTRAP_USER_PASSWORD. DATABASE_URL is in the
+  // Secret rather than composed here because Kubernetes expands $(VAR) only from
+  // the container's own env list, never from an envFrom source.
   secretName='metamcp',
   env={},
   resources={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '2Gi' } },
@@ -62,6 +69,10 @@ function(
   + kurly.servicePort(12008)
   + kurly.env(
     {
+      // HOME, because the migration step runs pnpm and pnpm writes a tool cache
+      // under it — unset, it resolves to / and the migration fails with ENOENT
+      // before the application has started once.
+      HOME: '/tmp',
       NODE_ENV: 'production',
       LOG_LEVEL: logLevel,
       POSTGRES_HOST: dbHost,
@@ -69,7 +80,7 @@ function(
       POSTGRES_DB: dbName,
       POSTGRES_USER: dbUser,
     }
-    + (if appUrl != null then { APP_URL: appUrl, NEXT_PUBLIC_APP_URL: appUrl } else {})
+    + { APP_URL: appUrl, NEXT_PUBLIC_APP_URL: appUrl }
     + (
       if bootstrapEmail != null
       then {

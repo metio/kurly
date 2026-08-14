@@ -7126,7 +7126,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'GPUStack',
       upstream: { repo: 'https://github.com/gpustack/gpustack' },
       description: 'Pool GPU machines and serve models from them behind one OpenAI-compatible API.',
-      summary: "A GPUStack server (the control plane of a GPU cluster: the model catalogue, the scheduler that places inference on workers, and an OpenAI-compatible API in front of them) on the project's own image. THE SERVER NEEDS NO GPU AND THE WORKERS ARE NOT THIS — upstream starts a worker with --privileged, the host network, the host Docker socket and the NVIDIA runtime, which is a node agent rather than a tenant deployment, so only the server is packaged. The first start writes an initial admin password and a worker join token under /var/lib/gpustack, which a deployment must read out of the volume to use. The image is an s6-overlay supervision tree that raises its own file-descriptor limit and writes runtime configuration under /run, so root, privilege escalation, capabilities and a writable root filesystem are relaxed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
+      summary: "A GPUStack server (the control plane of a GPU cluster: the model catalogue, the scheduler that places inference on workers, and an OpenAI-compatible API in front of them) on the project's own image. THE SERVER NEEDS NO GPU AND THE WORKERS ARE NOT THIS — upstream starts a worker with --privileged, the host network, the host Docker socket and the NVIDIA runtime, which is a node agent rather than a tenant deployment, so only the server is packaged. The first start writes an initial admin password and a worker join token under /var/lib/gpustack, which a deployment must read out of the volume to use. A Service named after the workload makes Kubernetes inject GPUSTACK_PORT as a tcp:// URL, which the entrypoint reads as its --port flag and rejects as an integer, so service links are off. The image is an s6-overlay supervision tree that raises its own file-descriptor limit and writes runtime configuration under /run, so root, privilege escalation, capabilities and a writable root filesystem are relaxed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.",
       category: 'tool',
       stages: {
         server: d.fn('The GPUStack server. storageSize sizes the volume holding the database and the model metadata. extraArgs is appended to the entrypoint verbatim. The supervision tree takes its time coming up, so the wait is a startup probe. Compose an exposure onto the HTTP port.', [
@@ -7172,11 +7172,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'MetaMCP',
       upstream: { repo: 'https://github.com/metatool-ai/metamcp' },
       description: 'Aggregate many Model Context Protocol servers behind a single endpoint.',
-      summary: "A MetaMCP server (an MCP proxy that aggregates several Model Context Protocol servers into one endpoint, groups them into namespaces and applies middleware in front) on the project's own image, backed by an external PostgreSQL. Pairs with a cnpg-cluster named metamcp-db. APP_URL IS NOT DECORATION: callback URLs are built from it and request origins validated against it, so a wrong or missing value gives a page that loads and a login that fails. Registration stays open until an administrator exists, so bootstrapEmail with BOOTSTRAP_USER_PASSWORD in the Secret creates that account at start rather than leaving the first visitor to claim it. The first start applies migrations before listening, so the wait is a startup probe. Stateless: a plain rolling Deployment. Serves on :12008.",
+      summary: "A MetaMCP server (an MCP proxy that aggregates several Model Context Protocol servers into one endpoint, groups them into namespaces and applies middleware in front) on the project's own image, backed by an external PostgreSQL. Pairs with a cnpg-cluster named metamcp-db. APP_URL IS REQUIRED AND NOT DECORATION: the application throws and exits without one, and builds its callback URLs from it while validating request origins against it, so a wrong value gives a page that loads and a login that fails — the default is a placeholder that boots and is wrong for every real deployment. Registration stays open until an administrator exists, so bootstrapEmail with BOOTSTRAP_USER_PASSWORD in the Secret creates that account at start rather than leaving the first visitor to claim it. The first start applies migrations with pnpm, which writes a tool cache under HOME — unset it resolves to / and the migration fails before the application starts once — so HOME points at the scratch, and the wait is a startup probe. Stateless: a plain rolling Deployment. Serves on :12008.",
       category: 'tool',
       requires: [{ kind: 'database', engine: 'postgresql', required: true }],
       stages: {
-        server: d.fn('The MetaMCP server. dbHost/dbPort/dbName/dbUser point at PostgreSQL, defaulting to a cnpg-cluster named metamcp-db. appUrl is the browser-visible URL callbacks and origin checks are built from. bootstrapEmail/bootstrapName create the administrator at start, on the first run only. secretName holds POSTGRES_PASSWORD, BETTER_AUTH_SECRET and BOOTSTRAP_USER_PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
+        server: d.fn('The MetaMCP server. dbHost/dbPort/dbName/dbUser point at PostgreSQL, defaulting to a cnpg-cluster named metamcp-db. appUrl is the browser-visible URL callbacks and origin checks are built from. bootstrapEmail/bootstrapName create the administrator at start, on the first run only. secretName holds DATABASE_URL — the whole connection string, which the migration step reads and which a manifest cannot compose from an envFrom password — plus POSTGRES_PASSWORD, BETTER_AUTH_SECRET and BOOTSTRAP_USER_PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='metamcp'),
           d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),
@@ -7184,7 +7184,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('dbPort', d.T.int, default=5432),
           d.arg('dbName', d.T.string, default='metamcp'),
           d.arg('dbUser', d.T.string, default='metamcp'),
-          d.arg('appUrl', d.T.string, example='https://mcp.example.com'),
+          d.arg('appUrl', d.T.string, default='http://localhost:12008'),
           d.arg('bootstrapEmail', d.T.string, example='admin@example.com'),
           d.arg('bootstrapName', d.T.string, default='admin'),
           d.arg('logLevel', d.T.string, default='info'),
@@ -7196,6 +7196,11 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + {
           kind: 'http',
           secretKeys: [
+            // DATABASE_URL rather than a password the manifest composes: the
+            // migration step reads a whole connection string, and a value built
+            // from an envFrom variable cannot be expanded — Kubernetes only
+            // substitutes $(VAR) from the container's own env list.
+            { key: 'DATABASE_URL', generate: 'postgresUrl' },
             { key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 },
             { key: 'BETTER_AUTH_SECRET', generate: 'hex', length: 64 },
             { key: 'BOOTSTRAP_USER_PASSWORD', generate: 'password', length: 24 },
@@ -7208,7 +7213,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'RSS Box',
       upstream: { repo: 'https://github.com/stefansundin/rssbox' },
       description: 'Follow sites that dropped their feeds by turning them back into RSS.',
-      summary: "An RSS Box server (it turns sites that stopped publishing feeds back into RSS: YouTube channels, Twitch streams, SoundCloud, Vimeo, Instagram and a dozen more) on the project's own image. MOST SERVICES NEED AN API KEY REGISTERED IN YOUR NAME — YouTube, Vimeo, SoundCloud, Twitch and Imgur — supplied through a Secret, while Instagram, Mixcloud, Speedrun and Dailymotion need none; a missing key fails that service's feeds rather than the server, so it can be deployed with no Secret and grown as credentials arrive. Redis is optional and caches URL resolution only. It fetches the public internet on every request, which is the function: a cluster with default-deny egress has nothing to convert, and every feed polled spends somebody else's quota in your name. Stateless: a plain rolling Deployment. Serves on :3000.",
+      summary: "An RSS Box server (it turns sites that stopped publishing feeds back into RSS: YouTube channels, Twitch streams, SoundCloud, Vimeo, Instagram and a dozen more) on the project's own image. MOST SERVICES NEED AN API KEY REGISTERED IN YOUR NAME — YouTube, Vimeo, SoundCloud, Twitch and Imgur — supplied through a Secret, while Instagram, Mixcloud, Speedrun and Dailymotion need none; a missing key fails that service's feeds rather than the server, so it can be deployed with no Secret and grown as credentials arrive. Redis is optional and caches URL resolution only. It fetches the public internet on every request, which is the function: a cluster with default-deny egress has nothing to convert, and every feed polled spends somebody else's quota in your name. Bundler insists on a writable cache inside the application tree and the image's user has /nonexistent as its home, so /app/tmp is an emptyDir and HOME points at the scratch. Stateless: a plain rolling Deployment. Serves on :3000.",
       category: 'application',
       stages: {
         server: d.fn('The RSS Box server. secretName carries the per-service API keys (envFrom) and none of them are required to start. redisUrl wires in a cache for URL resolution, which is the only feature that uses one. Compose an exposure onto the HTTP port.', [
@@ -7278,10 +7283,10 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       name: 'Varnish Cache',
       upstream: { repo: 'https://github.com/varnishcache/varnish-cache' },
       description: 'Put an HTTP cache in front of a slow site and serve most requests from memory.',
-      summary: "A Varnish Cache instance (an HTTP cache in front of something slower: responses held in memory and served without waking the backend, with the policy written in VCL) on the official image. THE CACHE IS MEMORY AND MEMORY IS A LIMIT: size is what Varnish may use for objects and the pod's memory limit must be comfortably larger, since a cache sized at the limit is a pod the kernel kills under load rather than one that evicts. The rendered VCL only names the backend; anything beyond caching what the backend calls cacheable means supplying the whole file, because there is no half-way merge of somebody else's policy. Nothing is persisted by design, so a rollout is a cold cache and a burst straight to the backend, and replicas each fill their own. Stateless: a plain rolling Deployment. Serves on :80.",
+      summary: "A Varnish Cache instance (an HTTP cache in front of something slower: responses held in memory and served without waking the backend, with the policy written in VCL) on the official image. THE BACKEND IS RESOLVED WHEN THE VCL IS COMPILED, NOT WHEN A REQUEST ARRIVES: Varnish refuses to compile a configuration naming a host that does not resolve and the pod never listens, so backendHost must point at a Service that already exists and a cache whose backend is deleted fails its next restart rather than its next request. THE CACHE IS MEMORY AND MEMORY IS A LIMIT: size is what Varnish may use for objects and the pod's memory limit must be comfortably larger, since a cache sized at the limit is a pod the kernel kills under load rather than one that evicts. The rendered VCL only names the backend; anything beyond caching what the backend calls cacheable means supplying the whole file, because there is no half-way merge of somebody else's policy. Nothing is persisted by design, so a rollout is a cold cache and a burst straight to the backend, and replicas each fill their own. Stateless: a plain rolling Deployment. Serves on :80.",
       category: 'networking',
       stages: {
-        cache: d.fn('The Varnish cache. backendHost/backendPort name the Service it caches for. size is VARNISH_SIZE, the object storage it may use — keep the memory limit above it. vcl replaces the rendered configuration entirely. Compose an exposure onto the HTTP port.', [
+        cache: d.fn('The Varnish cache. backendHost/backendPort name the Service it caches for, and it must resolve at start because Varnish resolves it while compiling the VCL. size is VARNISH_SIZE, the object storage it may use — keep the memory limit above it. vcl replaces the rendered configuration entirely. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='varnish'),
           d.arg('image', d.T.string),
           d.arg('replicas', d.T.int, default=1),

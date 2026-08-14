@@ -5,6 +5,9 @@
   "baikal": {
     "dbEngine": "mysql"
   },
+  "cloudflare-tunnel-ingress-controller": {
+    "skip": "The controller reads CLOUDFLARE_API_TOKEN from a Secret and needs a real token, issued in a real Cloudflare account, against a zone somebody owns \u2014 it dials Cloudflare on its first reconcile and exits when the account or the token is not there. Nothing can generate that, so a scenario would either fail on a missing Secret or fail authenticating with a made-up one. What it renders is checked by the render gates."
+  },
   "cobalt": {
     "compose": "+ k.env({ API_URL: 'http://cobalt:9000/' })"
   },
@@ -125,6 +128,9 @@
   },
   "tuwunel": {
     "params": "serverName='matrix.example.com'"
+  },
+  "varnish": {
+    "params": "backendHost='kubernetes.default.svc', backendPort=443"
   },
   "vikunja": {
     "compose": "+ k.env({ VIKUNJA_SERVICE_PUBLICURL: 'http://vikunja:3456' })"
