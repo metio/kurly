@@ -18,7 +18,7 @@ local triton = import 'github.com/metio/kurly/workloads/triton-inference-server/
 
 kurly.list(
   triton(gpus=1)
-  + kurly.expose.gateway('inference.example.com', parent='internal')
+  + kurly.expose.gateway('inference.example.com', 'internal')
 )
 ```
 

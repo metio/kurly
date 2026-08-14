@@ -20,7 +20,7 @@ local bunkerm = import 'github.com/metio/kurly/workloads/bunkerm/server.libsonne
 
 kurly.list(
   bunkerm()
-  + kurly.expose.gateway('mqtt-admin.example.com', parent='public')
+  + kurly.expose.gateway('mqtt-admin.example.com', 'public')
 )
 ```
 

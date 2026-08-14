@@ -19,7 +19,7 @@ local gpustack = import 'github.com/metio/kurly/workloads/gpustack/server.libson
 
 kurly.list(
   gpustack()
-  + kurly.expose.gateway('models.example.com', parent='public')
+  + kurly.expose.gateway('models.example.com', 'public')
 )
 ```
 

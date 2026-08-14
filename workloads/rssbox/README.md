@@ -17,7 +17,7 @@ local rssbox = import 'github.com/metio/kurly/workloads/rssbox/server.libsonnet'
 
 kurly.list(
   rssbox(secretName='rssbox')
-  + kurly.expose.gateway('rss.example.com', parent='public')
+  + kurly.expose.gateway('rss.example.com', 'public')
 )
 ```
 

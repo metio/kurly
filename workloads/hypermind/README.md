@@ -18,7 +18,7 @@ local hypermind = import 'github.com/metio/kurly/workloads/hypermind/server.libs
 
 kurly.list(
   hypermind()
-  + kurly.expose.gateway('hypermind.example.com', parent='public')
+  + kurly.expose.gateway('hypermind.example.com', 'public')
 )
 ```
 

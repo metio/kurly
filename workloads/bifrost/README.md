@@ -20,7 +20,7 @@ local bifrost = import 'github.com/metio/kurly/workloads/bifrost/gateway.libsonn
 
 kurly.list(
   bifrost(secretName='bifrost')
-  + kurly.expose.gateway('ai.example.com', parent='public')
+  + kurly.expose.gateway('ai.example.com', 'public')
 )
 ```
 

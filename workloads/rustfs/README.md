@@ -18,7 +18,7 @@ local rustfs = import 'github.com/metio/kurly/workloads/rustfs/server.libsonnet'
 
 kurly.list(
   rustfs(secretName='rustfs')
-  + kurly.expose.gateway('s3.example.com', parent='internal')
+  + kurly.expose.gateway('s3.example.com', 'internal')
 )
 ```
 

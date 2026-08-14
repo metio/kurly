@@ -18,7 +18,7 @@ local sglang = import 'github.com/metio/kurly/workloads/sglang/server.libsonnet'
 
 kurly.list(
   sglang(model='meta-llama/Llama-3.1-8B-Instruct', gpus=1)
-  + kurly.expose.gateway('llm.example.com', parent='internal')
+  + kurly.expose.gateway('llm.example.com', 'internal')
 )
 ```
 

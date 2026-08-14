@@ -18,7 +18,7 @@ local defguard = import 'github.com/metio/kurly/workloads/defguard/core.libsonne
 
 kurly.list(
   defguard(url='https://vpn.example.com')
-  + kurly.expose.gateway('vpn.example.com', parent='public')
+  + kurly.expose.gateway('vpn.example.com', 'public')
 )
 ```
 

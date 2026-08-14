@@ -19,7 +19,7 @@ local metamcp = import 'github.com/metio/kurly/workloads/metamcp/server.libsonne
 
 kurly.list(
   metamcp(appUrl='https://mcp.example.com', bootstrapEmail='admin@example.com')
-  + kurly.expose.gateway('mcp.example.com', parent='public')
+  + kurly.expose.gateway('mcp.example.com', 'public')
 )
 ```
 

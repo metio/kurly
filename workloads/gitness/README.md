@@ -19,7 +19,7 @@ local gitness = import 'github.com/metio/kurly/workloads/gitness/server.libsonne
 
 kurly.list(
   gitness(url='https://git.example.com')
-  + kurly.expose.gateway('git.example.com', parent='public')
+  + kurly.expose.gateway('git.example.com', 'public')
 )
 ```
 

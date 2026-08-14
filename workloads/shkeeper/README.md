@@ -18,7 +18,7 @@ local shkeeper = import 'github.com/metio/kurly/workloads/shkeeper/server.libson
 
 kurly.list(
   shkeeper(secretName='shkeeper')
-  + kurly.expose.gateway('pay.example.com', parent='public')
+  + kurly.expose.gateway('pay.example.com', 'public')
 )
 ```
 

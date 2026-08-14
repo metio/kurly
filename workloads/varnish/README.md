@@ -17,7 +17,7 @@ local varnish = import 'github.com/metio/kurly/workloads/varnish/cache.libsonnet
 
 kurly.list(
   varnish(backendHost='app', backendPort=8080)
-  + kurly.expose.gateway('www.example.com', parent='public')
+  + kurly.expose.gateway('www.example.com', 'public')
 )
 ```
 
