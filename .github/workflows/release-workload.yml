@@ -31,14 +31,18 @@ on:
 # decision anybody made.
 permissions:
   contents: read
-# Serialize with the calling workflow's runs. Release notes are scoped to the
-# range since a unit's previous tag, so two runs releasing the same unit would
-# read the same previous tag and emit overlapping notes. The caller queues on
-# the same group name, which is what makes this one queue behind it rather than
-# forming a second, independent queue.
-concurrency:
-  group: Release
-  cancel-in-progress: false
+# NO CONCURRENCY GROUP HERE, DELIBERATELY. A called workflow runs INSIDE the
+# caller's run, and the caller already holds `group: Release` for the whole
+# thing — so declaring that same group here makes every workload queue behind
+# the run that is waiting for it, and nothing ever starts. That deadlock stopped
+# every workload release between 2026-08-06 and this fix while the library and
+# the vocabularies, whose jobs are inline in the caller, kept releasing normally.
+#
+# The serialization this was reaching for is already in place: release notes are
+# scoped to the range since a unit's previous tag, and two runs of the RELEASE
+# WORKFLOW cannot overlap because the caller queues them. Within one run, each
+# workload is its own unit with its own tag lineage, so they do not race each
+# other, and the shards' max-parallel is what protects the registry.
 jobs:
   release:
     name: ${{ inputs.workload }}
