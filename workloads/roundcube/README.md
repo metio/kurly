@@ -25,7 +25,7 @@ kurly.list(roundcube(
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `roundcube` | |
-| `image` | `docker.io/roundcube/roundcubemail:1.7.2-apache` | |
+| `image` | `docker.io/roundcube/roundcubemail:1.7.3-apache` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the SQLite data volume (`/var/roundcube/db`) |
 | `imapHost` / `smtpHost` | required | the external IMAP / SMTP servers |
 | `env` / `resources` / `labels` / `annotations` | | |
