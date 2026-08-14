@@ -21,6 +21,7 @@ local security = import '../lib/security.libsonnet';
 local main = import '../main.libsonnet';
 local ann = import './annotations.libsonnet';
 local architectures = import './architectures.gen.libsonnet';
+local scorecard = import './scorecard.gen.libsonnet';
 local bsiViolations = import './bsi.gen.libsonnet';
 local bsiOperatorPods = import './bsi-operator.gen.libsonnet';
 local pssOperatorPods = import './pss-operator.gen.libsonnet';
@@ -1512,6 +1513,24 @@ local softwareFacts(workload) =
     if entries == {} then {} else { upstream: entries }
   )
   + (
+    // What the OpenSSF Scorecard says about the UPSTREAM PROJECT — how the
+    // software is developed, which is a different question from what kurly
+    // renders (posture, pss, bsi) or what the pinned image contains
+    // (signature), and is deliberately not merged with either.
+    //
+    // Anchored to the scan: the date it ran and the commit it ran against
+    // travel with the score, because a score from a year ago is a different
+    // statement from one from last week.
+    //
+    // ABSENT IS THE COMMON ANSWER AND IT MEANS NOT MEASURED. deps.dev reaches a
+    // project through a package in an ecosystem it tracks, so a library is
+    // usually there and a standalone application often is not — roughly two in
+    // five of the catalogue's upstreams answer today. It never means a bad
+    // score, and a consumer must not read it as one.
+    local sc = std.get(scorecard, workload, null);
+    if sc == null then {} else { scorecard: sc }
+  )
+  + (
     // Every workload states one: a consumer presenting this catalogue decides
     // what to show from it, and an absent category would silently read as
     // "unclassified" for something that is simply new.
@@ -1660,6 +1679,12 @@ local workloadEntries =
   // allowed: a new workload reads null until gen-architectures is rerun.)
   assert std.all([std.member(stageKeys, key) for key in std.objectFields(architectures)]) :
          'architectures.gen.libsonnet names a stage that does not exist — rerun gen-architectures';
+  // Scorecard entries are keyed by WORKLOAD rather than by stage, because the
+  // upstream project is a property of the software and not of one way to run
+  // it. Checked for staleness only: an absent entry is the common and honest
+  // answer, so completeness is never asserted.
+  assert std.all([std.objectHas(ann.workloads, key) for key in std.objectFields(scorecard)]) :
+         'scorecard.gen.libsonnet names a workload that does not exist — rerun gen-scorecard';
   // Same discipline for the measurements: a renamed or removed stage must not
   // leave numbers behind that no longer describe anything. Never asserted for
   // COMPLETENESS, because a measurement only exists once a live boot produced it

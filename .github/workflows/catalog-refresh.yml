@@ -56,6 +56,13 @@ jobs:
           # read public repositories and need no permission beyond that.
           GITHUB_TOKEN: ${{ github.token }}
         run: nix develop --command gen-forge
+      - name: Ask deps.dev what the Scorecard says about each upstream project
+        # A different question from every other fact here: how the software is
+        # DEVELOPED, rather than what the image contains or the manifest renders.
+        # deps.dev needs no token and answers in minutes, and roughly two in five
+        # upstreams are indexed there at all — an absent entry is the ordinary
+        # answer, never a bad score.
+        run: nix develop --command gen-scorecard
       - name: Ask every registry which architectures its image publishes
         run: nix develop --command gen-architectures
       - name: Ask every image whether it is signed, and by whom

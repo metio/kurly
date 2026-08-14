@@ -264,6 +264,22 @@
             ];
             text = builtins.readFile ./scripts/check-published.sh;
           };
+          # Asks deps.dev what the OpenSSF Scorecard says about each workload's
+          # UPSTREAM PROJECT into catalog/scorecard.gen.libsonnet — how the
+          # software is developed, which is a different question from what the
+          # manifest renders or what the pinned image contains.
+          gen-scorecard = pkgs.writeShellApplication {
+            name = "gen-scorecard";
+            runtimeInputs = with pkgs; [
+              gen-catalog
+              curl
+              jq
+              go-jsonnet
+              gnugrep
+              coreutils
+            ];
+            text = builtins.readFile ./scripts/gen-scorecard.sh;
+          };
           gen-forge = pkgs.writeShellApplication {
             name = "gen-forge";
             runtimeInputs = with pkgs; [
@@ -508,6 +524,7 @@
             gen-signatures
             check-published
             gen-forge
+            gen-scorecard
             gen-upstream
             gen-bsi
             gen-readme
