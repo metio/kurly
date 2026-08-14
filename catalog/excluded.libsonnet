@@ -407,4 +407,13 @@
   'canary-tokens': { reason: 'upstream-hosts-it-free', note: 'upstream runs a free public instance — https://canarytokens.org' },
   openttd: { reason: 'no-published-source', note: 'no image built from the published source — https://wiki.openttd.org/en/Manual/Dedicated%20server' },
   sunshine: { reason: 'undeployable', note: 'streams a desktop session and needs a GPU and a display server — https://docs.lizardbyte.dev/projects/sunshine/latest/md_docs_2getting__started.html' },
+
+  // Kubernetes controllers whose own CustomResourceDefinitions are the interface
+  // they exist to serve. kurly renders workloads, not CRDs, and the chart that
+  // installs those CRDs installs the controller with them — so a workload recipe
+  // carrying the Deployment alone would add nothing a consumer could use.
+  'actions-runner-controller': { reason: 'undeployable', note: 'inert without the AutoscalingRunnerSet CRDs it owns, which its own Helm chart installs alongside the controller — https://github.com/actions/actions-runner-controller' },
+  bytebot: { reason: 'upstream-archived', note: 'the repository was archived on 2026-03-07 and is read-only — https://github.com/bytebot-ai/bytebot' },
+  beats: { reason: 'upstream-sells-hosting', note: 'Elastic sells Elastic Cloud Hosted and Elastic Cloud Serverless for the stack Beats ships into — https://www.elastic.co/pricing/' },
+  'argo-cd': { reason: 'undeployable', note: 'installs as one manifest set whose CRDs are so large that upstream documents --server-side because ApplicationSet exceeds the client-side annotation limit; the Application and AppProject CRDs are the interface, and kurly renders no CRDs — https://argo-cd.readthedocs.io/en/stable/getting_started/' },
 }

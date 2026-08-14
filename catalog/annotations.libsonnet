@@ -7121,6 +7121,81 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         },
       },
     },
+    'cloudflare-tunnel-ingress-controller': {
+      license: 'MIT',
+      name: 'Cloudflare Tunnel Ingress Controller',
+      upstream: { repo: 'https://github.com/STRRL/cloudflare-tunnel-ingress-controller' },
+      description: 'Reach services behind a firewall through a Cloudflare Tunnel that dials out rather than listens.',
+      summary: "A Cloudflare Tunnel ingress controller (it watches Ingresses of its class, programs the tunnel routes and DNS records to match, and the tunnel dials OUT to Cloudflare, so nothing in the cluster has to be reachable from the internet) on the project's own image. A worker: it serves no traffic itself and renders no Service. Ingresses exist in every namespace, so reading them and writing their status is a ClusterRole — it creates no CustomResource and owns none, the interface being the standard Ingress with this controller's class. accountId must be set: empty renders a controller that exits on its first reconcile, which is deliberate, since an account id is a fact about the deployment and there is no value to guess. The API token needs Zone:Read, DNS:Edit and Tunnel:Edit on the account, so whatever holds it can repoint the zone; it comes from a Secret as CLOUDFLARE_API_TOKEN and reaches the flag through $(CLOUDFLARE_API_TOKEN), which Kubernetes expands from the container's own environment, so the token is never written into the manifest. Stateless: the tunnel configuration lives in the Cloudflare account.",
+      category: 'networking',
+      stages: {
+        controller: d.fn("The controller. accountId names the Cloudflare account and must be set — empty omits the flag and the controller exits; tunnelName is created when it does not exist; ingressClass is the class this controller answers for and controllerClass the value it matches on an IngressClass. namespace must be the namespace it is deployed into, because the ClusterRoleBinding's subject needs one. secretName holds CLOUDFLARE_API_TOKEN (envFrom).", [
+          d.arg('name', d.T.string, default='cloudflare-tunnel-ingress-controller'),
+          d.arg('image', d.T.string),
+          d.arg('namespace', d.T.string, default='cloudflare-tunnel'),
+          d.arg('accountId', d.T.string, default=''),
+          d.arg('tunnelName', d.T.string, default='kubernetes'),
+          d.arg('ingressClass', d.T.string, default='cloudflare-tunnel'),
+          d.arg('controllerClass', d.T.string, default='strrl.dev/cloudflare-tunnel-ingress-controller'),
+          d.arg('secretName', d.T.string, default='cloudflare-tunnel-ingress-controller'),
+          d.arg('extraArgs', d.T.array, default=[]),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '256Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + {
+          kind: 'worker',
+          // A Cloudflare API token is issued in somebody's Cloudflare account
+          // against the zones they own. There is no generator for that, and a
+          // literal placeholder would tell a portal the credential had been
+          // provided when nothing had been.
+          secretKeys: [],
+        },
+      },
+    },
+    bunkerm: {
+      license: 'Apache-2.0',
+      name: 'BunkerM',
+      upstream: { repo: 'https://github.com/bunkeriot/BunkerM' },
+      description: 'Run an MQTT broker with a web interface for its clients, ACLs and roles.',
+      summary: "A BunkerM server (Eclipse Mosquitto and a web dashboard for its clients, ACLs and dynamic-security roles in one image, so the broker is administered without editing configuration files by hand) on the project's own image. TWO PORTS, ONLY ONE OF THEM HTTP: :2000 serves the dashboard and its API and is the Service's http port, while :1900 is the MQTT listener, a raw TCP protocol needing a TCP route rather than an HTTP exposure — publishing the dashboard does not publish the broker. The dashboard authenticates against an API key kept at /nextjs/data/.api_key: supplied through a Secret it is used and persisted, left unset the entrypoint generates a random one on first boot, which the deployment then does not know. The entrypoint chowns its password file and log directories and supervisord runs mosquitto, nginx and the API under their own users, so root, privilege escalation, capabilities and a writable root filesystem are relaxed. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :2000.",
+      category: 'messaging',
+      stages: {
+        server: d.fn('The BunkerM broker and dashboard. secretName carries API_KEY (envFrom); without it the first start generates one onto the volume. storageSize sizes the volume holding the broker persistence, the password file and that key. The MQTT listener is published as the extra port mqtt and needs a TCP route of its own. Compose an exposure onto the HTTP port for the dashboard.', [
+          d.arg('name', d.T.string, default='bunkerm'),
+          d.arg('image', d.T.string),
+          d.arg('storageSize', d.T.quantity, default='5Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('secretName', d.T.string, example='bunkerm'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
+    bifrost: {
+      license: 'Apache-2.0',
+      name: 'Bifrost',
+      upstream: { repo: 'https://github.com/maximhq/bifrost' },
+      description: 'Put one OpenAI-compatible endpoint in front of many model providers, with failover and budgets.',
+      summary: "A Bifrost gateway (one OpenAI-compatible endpoint in front of many model providers, with failover, load balancing and per-key budgets, so an application holds one URL and one key instead of a provider's) on the project's own image. The configuration and the request logs live in a file database on the volume at /app/data. secretName carries the provider API keys the configuration refers to, through envFrom; kurly authors none of them. The gateway requires no client key by default, so reaching it is equivalent to holding every provider key it carries until governance is configured through its interface. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8080.",
+      category: 'tool',
+      stages: {
+        gateway: d.fn('The Bifrost gateway, serving its API and web interface on :8080. secretName holds the provider API keys (envFrom). storageSize sizes the volume at /app/data, which carries the configuration and the request logs. Probes are by connection, because every HTTP route is a gateway route rather than a health endpoint. Compose an exposure onto the HTTP port.', [
+          d.arg('name', d.T.string, default='bifrost'),
+          d.arg('image', d.T.string),
+          d.arg('secretName', d.T.string, example='bifrost'),
+          d.arg('storageSize', d.T.quantity, default='10Gi'),
+          d.arg('storageClass', d.T.string),
+          d.arg('logLevel', d.T.string, default='info'),
+          d.arg('env', d.T.object, default={}),
+          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
+          d.arg('labels', d.T.object, default={}),
+          d.arg('annotations', d.T.object, default={}),
+        ]) + { kind: 'http' },
+      },
+    },
     yopass: {
       license: 'Apache-2.0',
       name: 'Yopass',
