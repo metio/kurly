@@ -68,6 +68,12 @@ function(
   + kurly.runAs(1000, gid=1000)
   // Uploads are buffered here before they reach the file adapter.
   + kurly.scratch('/tmp', '512Mi')
+  // Parse Server writes a rotating log file INSIDE ITS OWN INSTALL TREE and
+  // crashes on the write rather than falling back to stdout: an unhandled EROFS
+  // on the stream takes the process down. The directory is emptyDir rather than a
+  // volume, because these are logs a cluster collects from stdout anyway and
+  // nothing needs them to survive the pod.
+  + kurly.scratch('/parse-server/logs', '256Mi')
   + (if secretName != null then kurly.envFromSecret(secretName) else {})
   + kurly.readinessProbe({ httpGet: { path: mountPath + '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: mountPath + '/health', port: 'http' } })

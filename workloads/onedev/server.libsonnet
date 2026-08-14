@@ -72,6 +72,14 @@ function(
   // See the header: the read-only root filesystem stays.
   + kurly.rootUser()
   + kurly.allowPrivilegeEscalation()
+  // ONEDEV RUNS UNDER THE TANUKI JAVA SERVICE WRAPPER, WHICH WRITES INSIDE ITS
+  // OWN INSTALL TREE: /app/logs/console.log, and /app/boot/wrapper.log when that
+  // fails. It then writes a test file under /app and refuses to start when it
+  // cannot ("Make sure current user owns everything under '/app'"), so the
+  // read-only root filesystem has to go. The DATA still lives on the volume at
+  // /opt/onedev, which is where the application keeps repositories and
+  // attachments; only the wrapper's own scribbling needs /app.
+  + kurly.writableRootFilesystem()
   + kurly.store('/opt/onedev', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '1Gi')
   + (if secretName != null then kurly.envFromSecret(secretName) else {})

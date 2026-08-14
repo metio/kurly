@@ -12555,16 +12555,16 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
       // postgresql records the one this stage is meant to be run against;
       // dbDialect still takes either.
       requires: [
-        { kind: 'database', engine: 'postgresql', required: false },
+        { kind: 'database', engine: 'postgresql', required: true },
       ],
       stages: {
-        server: d.fn('The Semaphore UI server. dbDialect is bolt (the file database on the volume), postgres or mysql; dbHost/dbName/dbUser point at an external server. secretName holds SEMAPHORE_ACCESS_KEY_ENCRYPTION, SEMAPHORE_ADMIN_PASSWORD and, for an external database, SEMAPHORE_DB_PASS, through envFrom. adminName/adminEmail seed the first user. publicUrl is the URL Semaphore builds its links from. The generated configuration and the repository checkouts go to scratch volumes, so the root filesystem stays read-only. Compose an exposure onto the HTTP port.', [
+        server: d.fn('The Semaphore UI server. dbDialect is postgres, mysql, or bolt; dbHost/dbName/dbUser point at the server, defaulting to a cnpg-cluster named semaphore-ui-db. NOT bolt by default, though the file database on the volume would be the simpler shape: this image rejects it with "Unknown database dialect: bolt", so a bolt default would be a workload that cannot start. secretName holds SEMAPHORE_ACCESS_KEY_ENCRYPTION, SEMAPHORE_ADMIN_PASSWORD and, for an external database, SEMAPHORE_DB_PASS, through envFrom. adminName/adminEmail seed the first user. publicUrl is the URL Semaphore builds its links from. The generated configuration and the repository checkouts go to scratch volumes, so the root filesystem stays read-only. Compose an exposure onto the HTTP port.', [
           d.arg('name', d.T.string, default='semaphore-ui'),
           d.arg('image', d.T.string),
           d.arg('storageSize', d.T.quantity, default='5Gi'),
           d.arg('storageClass', d.T.string),
-          d.arg('dbDialect', d.T.string, default='bolt'),
-          d.arg('dbHost', d.T.string),
+          d.arg('dbDialect', d.T.string, default='postgres'),
+          d.arg('dbHost', d.T.string, default='semaphore-ui-db-rw'),
           d.arg('dbName', d.T.string, default='semaphore'),
           d.arg('dbUser', d.T.string, default='semaphore'),
           d.arg('secretName', d.T.string, default='semaphore-ui'),
@@ -12780,7 +12780,12 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           kind: 'http',
           secretKeys: [
             { key: 'PARSE_SERVER_MASTER_KEY', generate: 'hex', length: 64 },
-            { key: 'PARSE_SERVER_DATABASE_URI', generate: 'literal', value: 'mongodb://parse:parse@parse-db:27017/parse' },
+            // The MongoDB this stage is deployed beside, under the name kurly's
+            // own provisioning gives it. A real deployment replaces the whole URI
+            // with its own, credentials included — a literal is the only honest
+            // generator here, because a connection string for a server somebody
+            // else runs cannot be minted.
+            { key: 'PARSE_SERVER_DATABASE_URI', generate: 'literal', value: 'mongodb://parse-server-db:27017/parse' },
           ],
         },
       },

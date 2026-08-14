@@ -38,9 +38,15 @@ function(
   image=defaultImage,
   storageSize='5Gi',
   storageClass=null,
-  // bolt (the file database on the volume), postgres or mysql.
-  dbDialect='bolt',
-  dbHost=null,
+  // postgres, mysql, or bolt. NOT bolt by default, though the file database on
+  // the volume would be the simpler shape: this image rejects it outright with
+  // "Unknown database dialect: bolt" — the strings are in the binary and the
+  // dialect is not built in — so a bolt default would be a workload that cannot
+  // start at all.
+  dbDialect='postgres',
+  // The database server. Defaults to the name kurly's own provisioning gives it
+  // beside this workload.
+  dbHost='semaphore-ui-db-rw',
   dbName='semaphore',
   dbUser='semaphore',
   // A Secret carrying SEMAPHORE_ACCESS_KEY_ENCRYPTION, SEMAPHORE_ADMIN_PASSWORD

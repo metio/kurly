@@ -73,6 +73,9 @@
   "opencost/server": {
     "params": "prometheusEndpoint='http://prometheus:9090'"
   },
+  "oxicloud": {
+    "skip": "The published image binds 127.0.0.1: OxiCloud starts, migrates its database and then listens on loopback, where nothing outside the pod can reach it. The binary carries no bind-address option and ignores HOST, SERVER_HOST and OXICLOUD_HOST, all three measured on a live cluster. No manifest can fix a server that will not listen on an address its Service can route to."
+  },
   "peertube": {
     "compose": "+ k.env({ PEERTUBE_WEBSERVER_HOSTNAME: 'peertube.example.com' })"
   },

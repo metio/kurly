@@ -24,6 +24,15 @@
 //
 // Single writer: the blob store is one directory on a ReadWriteOnce volume, so
 // one replica, recreated (never rolled).
+// THIS IMAGE BINDS LOOPBACK AND CANNOT BE REACHED IN A CLUSTER. OxiCloud v0.8.2
+// logs "Starting OxiCloud server on http://127.0.0.1:8086" and offers no setting
+// that changes it: the binary carries no bind-address option, and HOST,
+// SERVER_HOST and OXICLOUD_HOST are all ignored (measured on a live cluster —
+// the process starts, the database migrates, and every connection to the Service
+// is refused). The stage is kept because it renders correctly and the day the
+// upstream image grows a bind setting it will work unchanged, but as published
+// no Service can reach it.
+//
 local kurly = import 'github.com/metio/kurly/main.libsonnet';
 
 // kurly's own packaging version, stamped as kurly.metio.wtf/version; the release

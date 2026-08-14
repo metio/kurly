@@ -54,13 +54,21 @@ function(
   + kurly.recreate()
   + kurly.port(4444)
   + kurly.servicePort(4444)
-  + kurly.env({ HOST: '0.0.0.0', PORT: '4444', DATABASE_URL: databaseUrl } + env)
+  // GUNICORN_WORKERS, because the image counts the HOST's CPUs and not the
+  // container's: on a 32-core node it computed 33 workers, capped itself at 16,
+  // and each one loads the whole application — minutes of start-up and gigabytes
+  // of memory for a workload whose CPU limit may be a fraction of one core.
+  + kurly.env({ HOST: '0.0.0.0', PORT: '4444', GUNICORN_WORKERS: '4', DATABASE_URL: databaseUrl } + env)
   // The uid and gid the image already runs as; fsGroup so the database is
   // writable.
   + kurly.runAs(10001, gid=10001, fsGroup=10001)
   + kurly.store('/app/data', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '128Mi')
   + (if secretName != null then kurly.envFromSecret(secretName) else {})
+  // Loading the application in every worker before the first one listens takes
+  // longer than a liveness probe should wait, and a liveness probe that fires
+  // during start-up restarts the pod forever without it ever having served.
+  + kurly.startupProbe({ httpGet: { path: '/health', port: 'http' }, periodSeconds: 10, failureThreshold: 60 })
   + kurly.readinessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.livenessProbe({ httpGet: { path: '/health', port: 'http' } })
   + kurly.resources(requests=std.get(resources, 'requests', {}), limits=std.get(resources, 'limits', {}))

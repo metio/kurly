@@ -66,6 +66,20 @@ function(
   + kurly.runAs(1000, gid=1000, fsGroup=1000)
   + kurly.store('/srv', storageSize, storageClass=storageClass)
   + kurly.scratch('/tmp', '1Gi')
+  // PMM WRITES ALL OVER ITS OWN IMAGE and a read-only root filesystem stops it
+  // three times over: nginx cannot write /run/nginx.pid and fails its own
+  // configuration test, supervisord cannot open its socket under /run, and PMM
+  // REWRITES ITS SUPERVISOR CONFIGURATION AT EVERY START — it reads
+  // /etc/supervisord.d/pmm.ini, regenerates it from the environment, and treats a
+  // failed write as fatal. emptyDirs are the wrong tool for every one of those:
+  // a volume over /run or /etc/supervisord.d hides the directories and .ini files
+  // the image ships there, which is a different failure rather than a fix.
+  + kurly.writableRootFilesystem()
+  // A Service named after the workload makes Kubernetes inject PMM_PORT as a
+  // tcp:// URL, and PMM parses every PMM_-prefixed variable as its own
+  // configuration: eight of them arrive as "unknown environment variable"
+  // warnings on every start, one of which is called PORT.
+  + kurly.disableServiceLinks()
   + (if secretName != null then kurly.envFromSecret(secretName) else {})
   // Several databases are initialised on the first start, which takes minutes; a
   // shorter budget restarts the pod in the middle of it.
