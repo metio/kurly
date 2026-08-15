@@ -35,6 +35,12 @@ local signatures = import './signatures.gen.libsonnet';
 local measurements = import './measurements.gen.libsonnet';
 local spdx = import './spdx.gen.libsonnet';
 local upstream = import './upstream.gen.libsonnet';
+// Which engines each project's own documentation says its software runs on,
+// hand-read one project at a time with the source recorded beside it. Published
+// because it decides money: a consumer with a shared PostgreSQL pool can put a
+// dual-engine workload in it, and one that cannot see this quotes a cluster of
+// its own for every database whose engine a recipe did not happen to state.
+local databaseSupport = import './database-support.libsonnet';
 
 // Each workload stage, imported by the canonical path a consumer's snippet uses
 // (resolved via the vendor/github.com/metio/kurly symlink check-catalog creates).
@@ -721,6 +727,11 @@ local requiresV2(workload, stageFns) =
         if kind == 'database' then
           (if engine != null then { engine: engine } else {})
           + (if std.objectHas(v1, 'databaseExtensions') then { extensions: v1.databaseExtensions } else {})
+          // What the project documents it can run on, which is a different
+          // question from what our recipe defaults to. Absent where nobody has
+          // read the docs, and absent reads as unknown rather than as a guess.
+          + (if std.objectHas(databaseSupport, workload)
+             then { supports: databaseSupport[workload].supports } else {})
         else {}
       )
       for kind in requiresKinds
@@ -2093,13 +2104,17 @@ local workloadEntries =
   // any document below the version it needs, at resolve time, deliberately —
   // rather than rendering a page built on a gap it could not see.
   //
+  // 5: a required `database` may carry `supports`, the engines the project's own
+  //    documentation says its software runs on. A consumer with a pool of one
+  //    engine needs it to tell a workload that can share the pool from one that
+  //    genuinely forces a cluster of its own, and priced the difference without it.
   // 3: `description` and `trademark` are carried per workload. Both existed in the
   //    aggregate before this; neither reached a published metadata document, and
   //    nothing distinguished such a document from a complete one.
   // 2: `requires` became a list of { kind, required, engine?, extensions? }. A
   //    workload can need two dependencies of the same kind, which the v1 object
   //    keyed by kind could not express — and a consumer priced the difference.
-  schemaVersion: 4,
+  schemaVersion: 5,
   // The closed set of dependency kinds `requires[].kind` may take. Published so a
   // consumer validates against it and fails loudly on a term it does not know,
   // rather than carrying an unpriced dependency it silently ignored.
