@@ -22,7 +22,7 @@ kurly.list(evershop())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `evershop` | |
-| `image` | `docker.io/evershop/evershop:2.1.2` | |
+| `image` | `docker.io/evershop/evershop:2.2.1` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | `/app/media` |
 | `dbHost` / `dbPort` / `database` / `dbUser` | `evershop-db-rw` … | pairs with a `cnpg-cluster` named `evershop-db` |
 | `dbSslMode` | `disable` | `require`, `verify-full`, `no-verify`, … |
