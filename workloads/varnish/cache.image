@@ -1,1 +1,1 @@
-docker.io/library/varnish:7.7@sha256:3f3df388d03695f4ff1efe75cc69a4311d8c5d44411cd99d2f0707056b056f29
+docker.io/library/varnish:9.0@sha256:dab6ab41664d04cb948ca3441a2effa7a1406cac474094851d83fa7fdceec59a
