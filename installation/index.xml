@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Installation on kurly</title><link>https://kurly.projects.metio.wtf/installation/</link><description>Recent content in Installation on kurly</description><generator>Hugo</generator><language>en</language><atom:link href="https://kurly.projects.metio.wtf/installation/index.xml" rel="self" type="application/rss+xml"/><item><title>Upgrading</title><link>https://kurly.projects.metio.wtf/installation/upgrading/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://kurly.projects.metio.wtf/installation/upgrading/</guid><description>&lt;p&gt;Most releases ask nothing: a workload picks up a new library with its own next
+render. This page carries the ones that need a decision first.&lt;/p&gt;
+&lt;p&gt;kurly cuts a release on every push, with a calendar version that carries the
+time of day (&lt;code&gt;library-2026.8.3141650&lt;/code&gt;), so an entry is dated rather than
+numbered and applies from the first release of that day onward.&lt;/p&gt;
+&lt;h2 id="2026-08-12--draw-io-removed-use-drawio"&gt;2026-08-12 — &lt;code&gt;draw-io&lt;/code&gt; removed, use &lt;code&gt;drawio&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;The catalogue carried draw.io twice, as &lt;code&gt;draw-io&lt;/code&gt; and as &lt;code&gt;drawio&lt;/code&gt;, from the same
+upstream and the same image repository. &lt;code&gt;draw-io&lt;/code&gt; is gone; &lt;code&gt;drawio&lt;/code&gt; stays, and is
+the one pinned to a real version rather than to &lt;code&gt;latest&lt;/code&gt;.&lt;/p&gt;</description></item></channel></rss>
