@@ -29,7 +29,7 @@ kurly.list(
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `apache-airflow` | |
-| `image` | `docker.io/apache/airflow:3.3.0` | |
+| `image` | `docker.io/apache/airflow:3.3.1` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | `AIRFLOW_HOME` — config, DAG files, task logs |
 | `secretName` | `apache-airflow` | read with `envFrom` — see below |
 | `loadExamples` | `false` | Airflow's tutorial DAGs |
