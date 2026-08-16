@@ -1,1 +1,1 @@
-docker.io/library/wordpress:7.0.2-php8.3-apache@sha256:b2d7e3153c8a96f90305a3102fb6439335237fb1a9655b617d15c5168ce2f7a3
+docker.io/library/wordpress:7.0.4-php8.3-apache@sha256:b427cec767f5de2aa649390cb8805aa1fe320e1e0d57fc1f467754edb6cc0a49
