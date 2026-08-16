@@ -26,7 +26,7 @@ kurly.list(oqm(
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `open-quartermaster` | |
-| `image` | `docker.io/ebprod/oqm-core-api:6.2.0` | |
+| `image` | `docker.io/ebprod/oqm-core-api:6.3.0` | |
 | `replicas` | `2` | stateless — scale freely |
 | `port` | `8080` | also written into `QUARKUS_HTTP_PORT` |
 | `database` | `oqm` | the MongoDB database |
