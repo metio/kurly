@@ -21,7 +21,7 @@ kurly.list(codeServer())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `code-server` | |
-| `image` | `docker.io/codercom/code-server:4.132.0` | |
+| `image` | `docker.io/codercom/code-server:4.133.0` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | workspace, extensions, settings (`/home/coder`) |
 | `secretName` | `code-server-secrets` | Secret with `PASSWORD` (envFrom) |
 | `env` / `resources` / `labels` / `annotations` | | |
