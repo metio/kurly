@@ -29,7 +29,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `netbox` | |
-| `image` | `docker.io/netboxcommunity/netbox:v4.6.7` | |
+| `image` | `docker.io/netboxcommunity/netbox:v4.6.8` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the uploaded-media volume |
 | `dbHost` / `dbName` / `dbUser` | `netbox-db-rw` / `netbox` / `netbox` | the PostgreSQL database — see below |
 | `redisHost` | `netbox-cache` | the Redis instance (queue on DB 0, cache on DB 1) |
@@ -44,7 +44,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `netbox-worker` | |
-| `image` | `docker.io/netboxcommunity/netbox:v4.6.7` | same image as the server |
+| `image` | `docker.io/netboxcommunity/netbox:v4.6.8` | same image as the server |
 | `dbHost` / `dbName` / `dbUser` / `redisHost` / `secretName` | as the server | |
 | `replicas` | `1` | scale out freely — workers coordinate through Redis |
 | `env` / `resources` / `labels` / `annotations` | | |
