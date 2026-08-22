@@ -22,7 +22,7 @@ kurly.list(jelu())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `jelu` | |
-| `image` | `docker.io/wabayang/jelu:0.84.4` | |
+| `image` | `docker.io/wabayang/jelu:0.84.5` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | database, search index, uploaded files |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
