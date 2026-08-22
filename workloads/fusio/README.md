@@ -22,7 +22,7 @@ kurly.list(fusio(appUrl='https://api.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `fusio` | |
-| `image` | `docker.io/fusio/fusio:7.1.0` | |
+| `image` | `docker.io/fusio/fusio:7.1.1` | |
 | `replicas` | `1` | stateless, so it scales horizontally |
 | `appUrl` / `appsUrl` | unset | the public URL, and where the apps are served |
 | `backendUser` / `backendEmail` | `admin` / `admin@example.com` | the initial backend user |
