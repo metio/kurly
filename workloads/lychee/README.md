@@ -22,7 +22,7 @@ kurly.list(lychee(appUrl='https://photos.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `lychee` | |
-| `image` | `docker.io/lycheeorg/lychee:v7.7.2` | |
+| `image` | `docker.io/lycheeorg/lychee:v7.7.4` | |
 | `storageSize` / `storageClass` | `20Gi` / cluster default | photos (`/uploads`), config (`/conf`), symlinks (`/sym`) |
 | `appUrl` | inferred | the public URL |
 | `secretName` | `lychee-secrets` | Secret with `APP_KEY` (envFrom) |
