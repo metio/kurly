@@ -21,7 +21,7 @@ kurly.list(snipeit(appUrl='https://assets.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `snipe-it` | |
-| `image` | `docker.io/snipe/snipe-it:v8.6.3` | |
+| `image` | `docker.io/snipe/snipe-it:v8.7.2` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | uploads (`/var/lib/snipeit`) |
 | `dbHost` / `dbName` / `dbUser` | `snipe-it-db` / `snipeit` / `snipeit` | the MySQL/MariaDB database |
 | `appUrl` | inferred | the public URL |
