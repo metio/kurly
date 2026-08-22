@@ -12,7 +12,7 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 # renovate: datasource=github-releases depName=grafana/tempo-operator
-TEMPO_VERSION="0.21.0"
+TEMPO_VERSION="0.22.0"
 
 kurly::validate_cr kurly-tempo workloads/tempo/server.libsonnet \
   "https://raw.githubusercontent.com/grafana/tempo-operator/v${TEMPO_VERSION}/config/crd/bases/tempo.grafana.com_tempostacks.yaml"
