@@ -1,1 +1,1 @@
-docker.io/percona/pmm-server:3.9.0@sha256:ec0391338420a019a45ab33c101a2b62c3e2e0908bf6748056a9793b97c6d094
+docker.io/percona/pmm-server:3.9.1@sha256:003f9c25f84256e53dccbd71975e3aaf98ca06e891bda86a35c262ef21ca58c1
