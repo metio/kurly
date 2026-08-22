@@ -22,7 +22,7 @@ kurly.list(viseron())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `viseron` | |
-| `image` | `docker.io/roflcoopter/viseron:3.5.3` | |
+| `image` | `docker.io/roflcoopter/viseron:3.6.0` | |
 | `storageSize` / `storageClass` | `100Gi` / cluster default | configuration and footage |
 | `puid` / `pgid` | `911` / `911` | own the files on the volume |
 | `timezone` | `UTC` | `TZ` |
