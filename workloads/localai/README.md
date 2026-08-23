@@ -23,7 +23,7 @@ kurly.list(localai())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `localai` | |
-| `image` | `docker.io/localai/localai:v4.8.2` | the CPU image |
+| `image` | `docker.io/localai/localai:v4.9.0` | the CPU image |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | models and backends |
 | `secretName` | `null` | envFrom source for `LOCALAI_API_KEY` and friends |
 | `env` | `{}` | extra environment |
