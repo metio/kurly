@@ -12,7 +12,7 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 # renovate: datasource=github-releases depName=k8ssandra/cass-operator
-CASSANDRA_CLUSTER_VERSION="1.31.0"
+CASSANDRA_CLUSTER_VERSION="1.32.0"
 
 kurly::validate_cr kurly-cassandra-cluster workloads/cassandra-cluster/cluster.libsonnet \
   "https://raw.githubusercontent.com/k8ssandra/cass-operator/v${CASSANDRA_CLUSTER_VERSION}/config/crd/bases/cassandra.datastax.com_cassandradatacenters.yaml"
