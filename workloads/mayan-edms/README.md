@@ -25,7 +25,7 @@ kurly.list(mayan())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `mayan-edms` | |
-| `image` | `docker.io/mayanedms/mayanedms:v4.11.5` | |
+| `image` | `docker.io/mayanedms/mayanedms:v4.12.1` | |
 | `storageSize` / `storageClass` | `20Gi` / cluster default | `/var/lib/mayan` — every document |
 | `dbHost` / `dbPort` / `database` / `dbUser` | `mayan-edms-db-rw` … | pairs with a `cnpg-cluster` named `mayan-edms-db` |
 | `secretName` | `mayan-edms` | the database password and the two Celery URLs |
