@@ -22,7 +22,7 @@ kurly.list(teslamate())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `teslamate` | |
-| `image` | `docker.io/teslamate/teslamate:4.0.1` | |
+| `image` | `docker.io/teslamate/teslamate:4.2.0` | |
 | `dbHost` / `dbPort` / `database` / `dbUser` | `teslamate-db-rw` … | pairs with a `cnpg-cluster` named `teslamate-db` |
 | `secretName` | `teslamate` | two keys, see below |
 | `mqttHost` | `null` | unset publishes nothing and sets `DISABLE_MQTT` |
