@@ -26,7 +26,7 @@ kurly.list(neo4j())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `neo4j` | |
-| `image` | `docker.io/library/neo4j:5.26.29-community` | 5.26 LTS |
+| `image` | `docker.io/library/neo4j:5.26.30-community` | 5.26 LTS |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | the graph store (`/data`) |
 | `secretName` | `neo4j-secrets` | Secret with `NEO4J_AUTH` (`neo4j/<password>`, envFrom) |
 | `env` / `resources` / `labels` / `annotations` | | |
