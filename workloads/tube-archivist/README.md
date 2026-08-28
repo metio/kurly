@@ -23,7 +23,7 @@ kurly.list(tubearchivist(taHost='https://tube.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `tube-archivist` | |
-| `image` | `docker.io/bbilly1/tubearchivist:v0.5.10` | |
+| `image` | `docker.io/bbilly1/tubearchivist:v0.5.12` | |
 | `taHost` | unset | the public origin, protocol included |
 | `mediaSize` / `storageSize` / `storageClass` | `500Gi` / `10Gi` / cluster default | `/youtube`, `/cache` |
 | `esUrl` | `http://tube-archivist-es:9200` | Elasticsearch 8 |
