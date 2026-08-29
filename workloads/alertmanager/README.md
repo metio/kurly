@@ -28,7 +28,7 @@ kurly.list(alertmanager(replicas=3))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `alertmanager` | |
-| `image` | `docker.io/prom/alertmanager:v0.33.1` | |
+| `image` | `docker.io/prom/alertmanager:v0.34.0` | |
 | `replicas` | `1` | 3 for a gossip-clustered, HA Alertmanager |
 | `retention` | `120h` | how long notification/silence state is kept |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | small — silences and state |
