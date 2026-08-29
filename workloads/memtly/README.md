@@ -22,7 +22,7 @@ kurly.list(memtly())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `memtly` | |
-| `image` | `docker.io/memtly/memtly:1.0.5.3` | |
+| `image` | `docker.io/memtly/memtly:1.0.6.1` | |
 | `title` | `Memtly` | header and browser tab |
 | `baseUrl` | none | the public URL put into links and QR codes |
 | `forceHttps` | `false` | see below |
