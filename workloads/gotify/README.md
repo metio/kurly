@@ -22,7 +22,7 @@ kurly.list(gotify())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `gotify` | |
-| `image` | `docker.io/gotify/server:3.0.0` | |
+| `image` | `docker.io/gotify/server:3.1.0` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the SQLite data volume (`/app/data`) |
 | `env` | `{}` | extra `GOTIFY_*` settings |
 | `resources` / `labels` / `annotations` | | |
