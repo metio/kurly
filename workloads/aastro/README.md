@@ -35,7 +35,7 @@ kurly.list(
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `aastro` | |
-| `image` | `docker.io/starwalkn/aastro:0.9.0` | |
+| `image` | `docker.io/starwalkn/aastro:0.10.0` | |
 | `replicas` | `2` | stateless, so any count is safe |
 | `flows` | `[]` | passed through verbatim |
 | `timeout` / `headerTimeout` | `10s` / `5s` | data listener |
