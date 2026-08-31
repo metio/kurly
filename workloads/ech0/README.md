@@ -21,7 +21,7 @@ kurly.list(ech0())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `ech0` | |
-| `image` | `docker.io/sn0wl1n/ech0:v5.5.0` | |
+| `image` | `docker.io/sn0wl1n/ech0:v5.7.0` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | `/app/data` |
 | `secretName` | `ech0` | supplies `JWT_SECRET` |
 | `env` / `resources` / `labels` / `annotations` | | |
