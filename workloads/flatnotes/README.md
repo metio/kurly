@@ -22,7 +22,7 @@ kurly.list(flatnotes())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `flatnotes` | |
-| `image` | `docker.io/dullage/flatnotes:v5.5.4` | |
+| `image` | `docker.io/dullage/flatnotes:v5.5.5` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the markdown files (`/data`) |
 | `secretName` | `flatnotes-secrets` | Secret with `FLATNOTES_USERNAME`, `FLATNOTES_PASSWORD`, `FLATNOTES_SECRET_KEY` (envFrom) |
 | `env` / `resources` / `labels` / `annotations` | | |
