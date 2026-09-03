@@ -15,7 +15,7 @@
 # forgot.
 [ -f .build/catalog.json ] || gen-catalog >/dev/null
 
-ALPINE_VERSION=3.16.0
+ALPINE_VERSION=3.17.1
 
 mkdir -p docs/assets docs/static docs/static/js
 
