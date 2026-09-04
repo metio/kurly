@@ -35,7 +35,7 @@ function(
   // kubectl plus busybox `nc` and `sh` (the role probe needs neither bash nor a
   // Valkey client); overridable. Only this workload's plumbing runs it — the
   // Valkey data container stays the stock image.
-  kubectlImage='docker.io/alpine/k8s:1.36.2',
+  kubectlImage='docker.io/alpine/k8s:1.37.0',
 )
   local headless = name + '-headless';
   local roleLabel = 'kurly.metio.wtf/valkey-role';
