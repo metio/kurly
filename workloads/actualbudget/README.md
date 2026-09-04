@@ -22,7 +22,7 @@ kurly.list(actual())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `actualbudget` | |
-| `image` | `docker.io/actualbudget/actual-server:26.8.1` | |
+| `image` | `docker.io/actualbudget/actual-server:26.9.0` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the SQLite data volume (`/data`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
