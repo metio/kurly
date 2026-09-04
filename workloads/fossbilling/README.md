@@ -23,7 +23,7 @@ kurly.list(fossbilling())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `fossbilling` | |
-| `image` | `docker.io/fossbilling/fossbilling:0.8.5` | |
+| `image` | `docker.io/fossbilling/fossbilling:0.8.7` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | the install tree (`/var/www/html`) |
 | `env` / `resources` / `labels` / `annotations` | | |
 
