@@ -22,7 +22,7 @@ kurly.list(syncin())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `sync-in` | |
-| `image` | `docker.io/syncin/server:2.4.4` | |
+| `image` | `docker.io/syncin/server:2.5.0` | |
 | `storageSize` / `storageClass` | `20Gi` / cluster default | `/app/data` |
 | `secretName` | `sync-in` | four credentials, see below |
 | `env` | `{}` | any `SYNCIN_…` override |
