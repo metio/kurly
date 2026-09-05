@@ -21,7 +21,7 @@ kurly.list(rocketchat(rootUrl='https://chat.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `rocketchat` | |
-| `image` | `docker.io/rocketchat/rocket.chat:8.7.0` | |
+| `image` | `docker.io/rocketchat/rocket.chat:8.8.0` | |
 | `replicas` | `2` | stateless — scale freely |
 | `rootUrl` | inferred | the public URL |
 | `secretName` | `rocketchat-secrets` | Secret with `MONGO_URL` and `MONGO_OPLOG_URL` (envFrom) |
