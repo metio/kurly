@@ -22,7 +22,7 @@ kurly.list(mautic(siteUrl='https://mautic.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `mautic` | |
-| `image` | `docker.io/mautic/mautic:7.1.3-apache` | |
+| `image` | `docker.io/mautic/mautic:7.2.0-apache` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | config + media |
 | `dbHost` / `dbName` / `dbUser` | `mautic-db` / `mautic` / `mautic` | the MySQL/MariaDB database |
 | `siteUrl` | inferred | the public URL |
