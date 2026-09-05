@@ -23,7 +23,7 @@ kurly.list(gameap())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `gameap` | |
-| `image` | `docker.io/gameap/gameap:4.4.1` | |
+| `image` | `docker.io/gameap/gameap:4.5.0` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | `/var/lib/gameap` — database and files |
 | `databaseDriver` | `sqlite` | `sqlite`, `postgres` or `mysql` |
 | `databaseUrl` | unset | the connection URL; from the Secret for an external server |
