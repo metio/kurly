@@ -23,7 +23,7 @@ kurly.list(trailbase())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `trailbase` | |
-| `image` | `docker.io/trailbase/trailbase:v0.32.0` | |
+| `image` | `docker.io/trailbase/trailbase:0.33.8` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | `/app/traildepot` |
 | `env` / `resources` / `labels` / `annotations` | | |
 
