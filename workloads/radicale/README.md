@@ -22,7 +22,7 @@ kurly.list(radicale())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `radicale` | |
-| `image` | `docker.io/tomsquest/docker-radicale:3.7.6.0` | |
+| `image` | `docker.io/tomsquest/docker-radicale:3.8.0.0` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the collections volume (`/data`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
