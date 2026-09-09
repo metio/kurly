@@ -25,7 +25,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `shlink` | |
-| `image` | `docker.io/shlinkio/shlink:5.1.5` | |
+| `image` | `docker.io/shlinkio/shlink:5.1.6` | |
 | `dbHost` / `dbName` / `dbUser` | `shlink-db-rw` / `shlink` / `shlink` | the PostgreSQL database |
 | `defaultDomain` | required | the short-URL domain |
 | `secretName` | `shlink-secrets` | Secret with `DB_PASSWORD` (envFrom) |
