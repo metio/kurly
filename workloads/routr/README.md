@@ -22,7 +22,7 @@ kurly.list(routr())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `routr` | |
-| `image` | `docker.io/fonoster/routr-one:2.15.0` | |
+| `image` | `docker.io/fonoster/routr-one:2.15.1` | |
 | `databaseUrl` | the PostgreSQL inside the image | see below |
 | `externalAddr` | unset | the address other SIP endpoints reach this proxy at |
 
