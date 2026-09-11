@@ -26,7 +26,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `docmost` | |
-| `image` | `docker.io/docmost/docmost:0.95.0` | |
+| `image` | `docker.io/docmost/docmost:0.96.0` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | attachments (`/app/data/storage`) |
 | `appUrl` | inferred | the public URL |
 | `secretName` | `docmost-secrets` | Secret with `DATABASE_URL`, `REDIS_URL`, `APP_SECRET` (envFrom) |
