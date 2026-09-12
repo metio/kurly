@@ -22,7 +22,7 @@ kurly.list(freshrss(baseUrl='https://rss.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `freshrss` | |
-| `image` | `docker.io/freshrss/freshrss:1.29.1` | |
+| `image` | `docker.io/freshrss/freshrss:1.30.0` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | the SQLite data volume (`/var/www/FreshRSS/data`) |
 | `baseUrl` | inferred | the public URL FreshRSS trusts |
 | `env` | `{}` | extra environment (`CRON_MIN`, `TZ`, …) |
