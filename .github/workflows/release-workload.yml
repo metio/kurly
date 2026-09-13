@@ -59,7 +59,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
       - name: Stamp the release version into the workload's version.txt
         # The image ships SOURCE, and a stage reads its version with
         # `importstr './version.txt'`, so the release version has to be in that
@@ -91,7 +91,7 @@ jobs:
           [ "$stamped" = "$VERSION" ] || { echo "::error::workload image version.txt is '$stamped', expected '$VERSION'"; exit 1; }
       - id: build
         name: Build, push and sign the image
-        uses: metio/ci/container-release@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        uses: metio/ci/container-release@96bf8d0cc30bda8d32ca6e3fd036eb966ffab90f # 2026.9.12223213
         with:
           image: ghcr.io/metio/kurly/workloads/${{ inputs.workload }}
           version: ${{ inputs.version }}
@@ -162,7 +162,7 @@ jobs:
         run: echo "prev=$(git tag --list "${WORKLOAD}-*" --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        uses: metio/ci/release-notes@96bf8d0cc30bda8d32ca6e3fd036eb966ffab90f # 2026.9.12223213
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: ${{ inputs.workload }}

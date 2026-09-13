@@ -190,7 +190,7 @@ jobs:
       - id: version
         name: Compute the shared version for this run
         if: steps.changed.outputs.any == 'true'
-        uses: metio/ci/calver@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        uses: metio/ci/calver@96bf8d0cc30bda8d32ca6e3fd036eb966ffab90f # 2026.9.12223213
   validate:
     name: Test the library and workloads
     needs: discover
@@ -199,7 +199,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
       - run: nix develop --command check-tests
       - run: nix develop --command check-examples
       - run: nix develop --command check-security
@@ -217,7 +217,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
       - name: Assert single layer and render from the built image
         # Single layer is the library-image contract: it serves as both an
         # image-volume mount and a Flux OCIRepository source without a
@@ -250,7 +250,7 @@ jobs:
           [ "$kind" = '"Deployment"' ] || { echo "::error::library image did not render kurly.http (got: $kind) — the layer is missing lib/"; exit 1; }
           echo "library image renders kurly.http from its own tree"
       - name: Build, push and sign the image
-        uses: metio/ci/container-release@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        uses: metio/ci/container-release@96bf8d0cc30bda8d32ca6e3fd036eb966ffab90f # 2026.9.12223213
         with:
           image: ghcr.io/metio/kurly
           version: ${{ needs.discover.outputs.version }}
@@ -260,7 +260,7 @@ jobs:
         run: echo "prev=$(git tag --list 'library-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        uses: metio/ci/release-notes@96bf8d0cc30bda8d32ca6e3fd036eb966ffab90f # 2026.9.12223213
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: library
@@ -334,7 +334,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
-      - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
+      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
       # The catalogue names the artifacts its facts came from. Nothing before the
       # release can do this: those artifacts do not exist yet. Everything the
       # stamp adds is derived from this run's version, the repository's release
@@ -462,7 +462,7 @@ jobs:
         run: echo "prev=$(git tag --list 'vocabularies-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@8470d3176f66a800c48c79697518042b66146450 # 2026.7.30140746
+        uses: metio/ci/release-notes@96bf8d0cc30bda8d32ca6e3fd036eb966ffab90f # 2026.9.12223213
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: vocabularies
