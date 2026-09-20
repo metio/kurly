@@ -23,7 +23,7 @@ kurly.list(mmdl(baseUrl='https://tasks.example.com/'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `manage-my-damn-life` | |
-| `image` | `docker.io/intriin/mmdl:v0.9.3` | |
+| `image` | `docker.io/intriin/mmdl:v0.10.0` | |
 | `dbDialect` | `postgres` | also `mysql` or `sqlite` |
 | `dbHost` / `dbPort` / `dbName` / `dbUser` | `manage-my-damn-life-db-rw` … | pairs with a `cnpg-cluster` named `manage-my-damn-life-db` |
 | `baseUrl` | absent | the URL people visit |
