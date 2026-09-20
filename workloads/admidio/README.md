@@ -23,7 +23,7 @@ kurly.list(admidio(rootPath='https://members.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `admidio` | |
-| `image` | `docker.io/admidio/admidio:v5.0.14` | |
+| `image` | `docker.io/admidio/admidio:v5.0.15` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | `adm_my_files` — config and uploads |
 | `dbType` | `mysql` | `mysql` (also MariaDB) or `pgsql` |
 | `dbHost` / `dbPort` / `database` / `dbUser` | `admidio-db` / `3306` / `admidio` / `admidio` | |
