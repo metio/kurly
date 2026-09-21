@@ -21,7 +21,7 @@ kurly.list(znc())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `znc` | |
-| `image` | `docker.io/library/znc:1.10.2` | |
+| `image` | `docker.io/library/znc:1.10.3` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the data volume (`/znc-data`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
