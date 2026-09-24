@@ -21,7 +21,7 @@ kurly.list(inspircd())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `inspircd` | |
-| `image` | `docker.io/inspircd/inspircd-docker:4.11.0` | |
+| `image` | `docker.io/inspircd/inspircd-docker:4.12.0` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | the runtime data volume (`/inspircd/data`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
