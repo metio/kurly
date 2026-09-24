@@ -25,7 +25,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `etherpad` | |
-| `image` | `docker.io/etherpad/etherpad:3.3.3` | |
+| `image` | `docker.io/etherpad/etherpad:3.3.6` | |
 | `dbHost` / `dbName` / `dbUser` | `etherpad-db-rw` / `etherpad` / `etherpad` | the PostgreSQL database |
 | `secretName` | `etherpad-secrets` | Secret with `DB_PASS`, `ADMIN_PASSWORD`, `APIKEY` (envFrom) |
 | `replicas` | `1` | stateless — scale out freely |
