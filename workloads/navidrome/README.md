@@ -22,7 +22,7 @@ kurly.list(navidrome())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `navidrome` | |
-| `image` | `docker.io/deluan/navidrome:0.63.2` | |
+| `image` | `docker.io/deluan/navidrome:0.64.1` | |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | database (`/data`) and music (`/music`) |
 | `env` | `{}` | extra `ND_*` settings |
 | `resources` / `labels` / `annotations` | | |
