@@ -54,7 +54,7 @@ source hack/smoke/lib.sh
 ns=kurly-cnpg-stageset
 
 # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-CNPG_VERSION="1.30.0"
+CNPG_VERSION="1.30.1"
 
 # The bump the walk performs. Two patches of the same major: same major keeps
 # this an image roll rather than a (slow, failure-prone) major upgrade, which is
