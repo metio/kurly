@@ -28,7 +28,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `pilos` | |
-| `image` | `docker.io/pilos/pilos:4.17.0` | |
+| `image` | `docker.io/pilos/pilos:4.18.0` | |
 | `storageSize` / `storageClass` | `5Gi` / cluster default | uploaded assets (`/var/www/html/storage/app`) |
 | `secretName` | `pilos-secrets` | database/Redis/`APP_KEY`/BBB settings (envFrom) |
 | `env` / `resources` / `labels` / `annotations` | | |
