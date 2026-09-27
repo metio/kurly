@@ -22,7 +22,7 @@ kurly.list(stirling())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `stirling-pdf` | |
-| `image` | `docker.io/stirlingtools/stirling-pdf:2.14.3` | |
+| `image` | `docker.io/stirlingtools/stirling-pdf:3.0.0` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | configuration and custom files (`/configs`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
