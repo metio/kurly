@@ -22,7 +22,7 @@ kurly.list(accent())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `accent` | |
-| `image` | `docker.io/mirego/accent:v1.30.4` | |
+| `image` | `docker.io/mirego/accent:v1.31.0` | |
 | `secretName` | `accent` | Secret with `DATABASE_URL` and `SECRET_KEY_BASE` (envFrom) |
 | `canonicalUrl` | | the URL the browser reaches this instance at |
 | `replicas` | `1` | stateless — scale out freely |
