@@ -25,7 +25,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `fider` | |
-| `image` | `docker.io/getfider/fider:v0.36.0` | |
+| `image` | `docker.io/getfider/fider:v0.38.0` | |
 | `baseUrl` | inferred | the public URL |
 | `secretName` | `fider-secrets` | Secret with `DATABASE_URL`, `JWT_SECRET`, `EMAIL_*` (envFrom) |
 | `replicas` | `1` | stateless — scale out freely |
