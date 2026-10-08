@@ -23,7 +23,7 @@ kurly.list(habitat(url='https://habitat.example.com'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `habitat` | |
-| `image` | `docker.io/carlnewton/habitat:1.6.0` | |
+| `image` | `docker.io/carlnewton/habitat:1.7.0` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | `/uploads` |
 | `port` | `8080` | what Caddy listens on |
 | `url` | unset | the address the instance is reached at |
