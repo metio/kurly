@@ -53,7 +53,7 @@ address it (`core(registryName=…)`, `jobservice(coreName=…)`).
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `harbor-portal` | |
-| `image` | `docker.io/goharbor/harbor-portal:v2.15.2` | |
+| `image` | `docker.io/goharbor/harbor-portal:v2.15.3` | |
 | `replicas` / `resources` / `labels` / `annotations` / `podLabels` / `podAnnotations` | | |
 
 ### `registry`
