@@ -34,7 +34,7 @@ function(
   name='harbor-registry',
   image=defaultImage,
   // registryctl ships as its own image, released in lockstep with the registry.
-  controllerImage='docker.io/goharbor/harbor-registryctl:v2.15.0@sha256:463172f71d3a1e8d4f9e3b4e687a447f41fbc3126316d8c150dba04a903bbc47',
+  controllerImage='docker.io/goharbor/harbor-registryctl:v2.15.3@sha256:59067e35534790a600ac625c8c9b96a52db27a08431c5ca822c46a1ea1ca8556',
   redisHost='harbor-cache',
   redisPort='6379',
   secretName='harbor',
