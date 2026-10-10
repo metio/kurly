@@ -24,7 +24,7 @@ kurly.list(librebooking(scriptUrl='https://booking.example.com/Web'))
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `librebooking` | |
-| `image` | `docker.io/librebooking/librebooking:5.3.0` | |
+| `image` | `docker.io/librebooking/librebooking:6.1.0` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | configuration (`/config`) |
 | `uploadsSize` | `5Gi` | images and attachments (`/var/www/html/Web/uploads`) |
 | `dbHost` / `database` / `dbUser` | `librebooking-db` / `librebooking` / `librebooking` | the MySQL/MariaDB |
