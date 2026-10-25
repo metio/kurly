@@ -23,7 +23,7 @@ kurly.list(gonic())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `gonic` | |
-| `image` | `docker.io/sentriz/gonic:v0.22.0` | |
+| `image` | `docker.io/sentriz/gonic:v0.23.0` | |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | database, music, cache, podcasts, playlists |
 | `port` | `8080` | also written to `GONIC_LISTEN_ADDR` |
 | `env` | `{}` | extra `GONIC_*` settings |
