@@ -22,7 +22,7 @@ kurly.list(homer())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `homer` | |
-| `image` | `docker.io/b4bz/homer:v26.4.2` | |
+| `image` | `docker.io/b4bz/homer:v26.08.3` | |
 | `storageSize` / `storageClass` | `1Gi` / cluster default | assets and `config.yml` (`/www/assets`) |
 | `env` | `{}` | extra environment |
 | `resources` / `labels` / `annotations` | | |
