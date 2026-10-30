@@ -50,6 +50,8 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: true # zizmor: ignore[artipacked] the job pushes the branch it opens a pull request from
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - name: Create the kind cluster (latest Kubernetes)
         run: nix develop --command kind create cluster --wait 120s

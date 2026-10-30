@@ -79,6 +79,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
+          persist-credentials: false
       - id: changed
         env:
           # Via env, never inlined into the script: a dispatch input containing
@@ -199,6 +200,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - run: nix develop --command check-tests
       - run: nix develop --command check-examples
@@ -217,6 +220,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       - name: Assert single layer and render from the built image
         # Single layer is the library-image contract: it serves as both an
@@ -334,6 +338,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: metio/nix-devshell@1976169d4c51b321be318ade369ccf689849f9f0 # 2026.7.6091757
       # The catalogue names the artifacts its facts came from. Nothing before the
       # release can do this: those artifacts do not exist yet. Everything the
@@ -544,11 +549,10 @@ jobs:
       contents: write # push the <workload>-<version> tag + GitHub Release
       packages: write # push to GHCR
       id-token: write # cosign keyless image signing
-    uses: ./.github/workflows/release-workload.yml
+    uses: ./.github/workflows/release-workload.yml # zizmor: ignore[self-repository] runs the copy in this commit
     with:
       workload: ${{ matrix.workload }}
       version: ${{ needs.discover.outputs.version }}
-    secrets: inherit
   workload-1:
     name: Release workloads 2/4
     needs: [discover, validate]
@@ -575,11 +579,10 @@ jobs:
       contents: write # push the <workload>-<version> tag + GitHub Release
       packages: write # push to GHCR
       id-token: write # cosign keyless image signing
-    uses: ./.github/workflows/release-workload.yml
+    uses: ./.github/workflows/release-workload.yml # zizmor: ignore[self-repository] runs the copy in this commit
     with:
       workload: ${{ matrix.workload }}
       version: ${{ needs.discover.outputs.version }}
-    secrets: inherit
   workload-2:
     name: Release workloads 3/4
     needs: [discover, validate]
@@ -606,11 +609,10 @@ jobs:
       contents: write # push the <workload>-<version> tag + GitHub Release
       packages: write # push to GHCR
       id-token: write # cosign keyless image signing
-    uses: ./.github/workflows/release-workload.yml
+    uses: ./.github/workflows/release-workload.yml # zizmor: ignore[self-repository] runs the copy in this commit
     with:
       workload: ${{ matrix.workload }}
       version: ${{ needs.discover.outputs.version }}
-    secrets: inherit
   workload-3:
     name: Release workloads 4/4
     needs: [discover, validate]
@@ -637,8 +639,7 @@ jobs:
       contents: write # push the <workload>-<version> tag + GitHub Release
       packages: write # push to GHCR
       id-token: write # cosign keyless image signing
-    uses: ./.github/workflows/release-workload.yml
+    uses: ./.github/workflows/release-workload.yml # zizmor: ignore[self-repository] runs the copy in this commit
     with:
       workload: ${{ matrix.workload }}
       version: ${{ needs.discover.outputs.version }}
-    secrets: inherit
