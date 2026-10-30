@@ -23,7 +23,7 @@ kurly.list(receiptWrangler())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `receipt-wrangler` | |
-| `image` | `docker.io/noah231515/receipt-wrangler:v7.1.0` | |
+| `image` | `docker.io/noah231515/receipt-wrangler:v7.3.0` | |
 | `storageSize` / `storageClass` | `10Gi` / cluster default | `/app/receipt-wrangler-api/data` |
 | `dbHost` / `dbPort` / `database` / `dbUser` | `receipt-wrangler-db-rw` … | pairs with a `cnpg-cluster` named `receipt-wrangler-db` |
 | `redisHost` / `redisPort` | `receipt-wrangler-cache-headless` / `6379` | pairs with a `valkey` named `receipt-wrangler-cache` |
