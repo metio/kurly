@@ -23,7 +23,7 @@ kurly.list(gerbera())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `gerbera` | |
-| `image` | `docker.io/gerbera/gerbera:3.2.1` | |
+| `image` | `docker.io/gerbera/gerbera:3.3.0` | |
 | `storageSize` / `storageClass` | `50Gi` / cluster default | config and database (`/var/run/gerbera`) and media (`/content`) |
 | `env` | `{}` | extra settings for the entrypoint |
 | `resources` / `labels` / `annotations` | | |
