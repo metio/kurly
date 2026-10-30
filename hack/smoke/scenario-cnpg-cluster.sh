@@ -14,7 +14,7 @@ source hack/smoke/lib.sh
 kurly::vendor
 
 # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-CNPG_VERSION="1.30.0"
+CNPG_VERSION="1.30.1"
 
 
 # The published manifest is the whole operator, not a CRD bundle, so it is applied
