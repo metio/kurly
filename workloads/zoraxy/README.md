@@ -22,7 +22,7 @@ kurly.list(zoraxy())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `zoraxy` | |
-| `image` | `docker.io/zoraxydocker/zoraxy:v3.3.3` | |
+| `image` | `docker.io/zoraxydocker/zoraxy:v3.3.4` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | `/opt/zoraxy/config` |
 | `env` | `PORT=8000`, `DOCKER=false`, `MDNS=false`, `ZEROTIER=false` | merged over, so a key you set wins |
 | `resources` / `labels` / `annotations` | | |
