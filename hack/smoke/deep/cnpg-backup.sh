@@ -22,7 +22,7 @@ cd "$(dirname "$0")/../../.."
 source hack/smoke/lib.sh
 
 # renovate: datasource=github-releases depName=cloudnative-pg/cloudnative-pg
-CNPG_VERSION="1.30.0"
+CNPG_VERSION="1.30.1"
 
 ns=kurly-cnpg-backup
 bucket=kurly-backups
