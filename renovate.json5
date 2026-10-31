@@ -1,0 +1,133 @@
+// SPDX-FileCopyrightText: The kurly Authors
+// SPDX-License-Identifier: 0BSD
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "description": "Every workload's default image. The PRIMARY image of each stage lives in its own dedicated file (workloads/<name>/<stage>.image), and any secondary image (a sidecar's, a README deploy example's) in that workload's own .libsonnet or README. catalog.json carries the same reference under each stage's `runs.image`, but it is DERIVED and no longer committed — so nothing here matches it, and a bump touches only the files a person wrote. The placeholder registries are disabled in packageRules above.",
+      "managerFilePatterns": [
+        "/^workloads/.+\\.image$/",
+        "/^workloads/.+\\.libsonnet$/",
+        "/^workloads/.+\\.md$/"
+      ],
+      "matchStrings": [
+        "(?<depName>(?:docker\\.io|ghcr\\.io|quay\\.io|gcr\\.io|registry\\.k8s\\.io|mcr\\.microsoft\\.com|public\\.ecr\\.aws|lscr\\.io|codeberg\\.org)/[a-z0-9][a-z0-9._/-]*):(?<currentValue>[a-zA-Z0-9][a-zA-Z0-9._-]*)(?:@(?<currentDigest>sha256:[a-f0-9]{64}))?"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "Operator-backed workloads (mysql/mongodb/opensearch/cassandra clusters) pin a VERSION the operator maps to a container image, not a full image ref. Track each through a `// renovate: datasource=... depName=... versioning=...` hint above its `<name>Version='X'` line in the workload's own .libsonnet — a per-workload file, so these bumps never collide either.",
+      "managerFilePatterns": [
+        "/^workloads/.+\\.libsonnet$/"
+      ],
+      "matchStrings": [
+        "// renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\s+[a-zA-Z]+[Vv]ersion='(?<currentValue>[^']+)'"
+      ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "docker.io/nginxinc/nginx-unprivileged",
+      "description": "The nginx image the examples and docs render with, so the illustrative manifests never pin a stale tag. Placeholder images (ghcr.io/acme/*, ghcr.io/example/*) carry no real tags and are deliberately not matched.",
+      "managerFilePatterns": [
+        "/^examples/.+\\.jsonnet$/",
+        "/^docs/content/.+\\.md$/",
+        "/^README\\.md$/"
+      ],
+      "matchStrings": [
+        "docker\\.io/nginxinc/nginx-unprivileged:(?<currentValue>[0-9][0-9A-Za-z._-]+)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "alpinejs",
+      "description": "Alpine.js, fetched by gen-docs-data at docs-build time from the pinned version so the assembler page always ships the tracked release.",
+      "managerFilePatterns": [
+        "/^scripts/gen-docs-data\\.sh$/"
+      ],
+      "matchStrings": [
+        "ALPINE_VERSION=(?<currentValue>[0-9][0-9A-Za-z._-]+)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "Operator versions the e2e scenarios install, pinned in hack/smoke/*.sh via a `# renovate:` comment above a `<TOOL>_VERSION=\"...\"` line.",
+      "managerFilePatterns": [
+        "/^hack/smoke/.+\\.sh$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)( versioning=(?<versioning>\\S+))?\\s+[A-Z0-9_]+_VERSION=\"(?<currentValue>[^\"]+)\""
+      ]
+    }
+  ],
+  "extends": [
+    "github>metio/renovate-config"
+  ],
+  "git-submodules": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "nix": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "description": "Pin every image by digest. A tag says which version; only a digest says which bits, so a rebuilt base image carrying a patched library is otherwise indistinguishable from no change at all. It also makes a moved tag a pull failure rather than a silent substitution.",
+      "matchCategories": [
+        "docker"
+      ],
+      "pinDigests": true
+    },
+    {
+      "automerge": true,
+      "automergeStrategy": "squash",
+      "description": "Zero-manual-work policy: every workload tracks the latest published version, majors included. The e2e smoke suite is the safety net — a break becomes a new test, never a pinned-back version. Renovate opens and auto-merges the bump once CI is green.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchUpdateTypes": [
+        "major",
+        "minor",
+        "patch",
+        "digest"
+      ]
+    },
+    {
+      "description": "A workload's image reference is written ONCE, in workloads/<name>/<stage>.image. Grouping by dependency keeps a bump to the same image across a stage file and its README example in one branch. Nothing derived is touched: catalog.json is a build artifact, gitignored, regenerated wherever it is needed.",
+      "groupName": "{{depName}}",
+      "matchDatasources": [
+        "docker"
+      ]
+    },
+    {
+      "description": "Placeholder images in illustrative code (ghcr.io/example/*, ghcr.io/acme/*) carry no real tags — never look them up.",
+      "enabled": false,
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/example/**",
+        "ghcr.io/acme/**"
+      ]
+    },
+    {
+      "description": "tik and the kurly library ship calendar-versioned tags (YYYY.M.D), which the default docker versioning cannot order.",
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "ghcr.io/metio/tik",
+        "ghcr.io/metio/kurly"
+      ],
+      "versioning": "loose"
+    }
+  ],
+  "prConcurrentLimit": 20,
+  "rebaseWhen": "conflicted",
+  "separateMultipleMajor": false
+}
