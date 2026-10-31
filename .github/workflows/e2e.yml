@@ -79,7 +79,7 @@ jobs:
             list="$(printf '%s\n' workloads/*/ | sed -E 's#workloads/([^/]+)/#\1#' | tr '\n' ' ')"
           else
             list="$(git diff --name-only "origin/${BASE_REF}"...HEAD \
-              | grep -oE '^workloads/[a-z0-9-]+/' | sed -E 's#workloads/([^/]+)/#\1#' | sort -u | tr '\n' ' ')"
+              | { grep -oE '^workloads/[a-z0-9-]+/' || true; } | sed -E 's#workloads/([^/]+)/#\1#' | sort -u | tr '\n' ' ')"
           fi
           echo "list=${list}" >> "$GITHUB_OUTPUT"
           if [ -z "${list// /}" ]; then
