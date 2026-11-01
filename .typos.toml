@@ -1,34 +1,21 @@
 # SPDX-FileCopyrightText: The kurly Authors
 # SPDX-License-Identifier: 0BSD
-[files]
-# docs/themes/metio is a separate submodule with its own CI, and alpine.min.js
-# is vendored third-party minified code — both trip the spell-checker on tokens
-# they don't own. bollwerk.libsonnet carries the BSI policy messages verbatim from
-# the opencode.de source, some in German (als, oder, muss, …), which are content,
-# not typos; its README stays English and checked. spdx.gen.libsonnet is the SPDX
-# register copied verbatim (`iMatix`, `cve-tou`, …) — its spelling is the point.
-extend-exclude = ["LICENSES/", "vendor/", "docs/themes/", "docs/static/js/alpine.min.js", "bollwerk/bollwerk.libsonnet", "catalog/spdx.gen.libsonnet"]
 
-# `edn` (Clojure's Extensible Data Notation) is the tik workload's config
-# format, not a typo of `end`.
+[default]
+extend-ignore-re = []
+
 [default.extend-words]
-mosquitto = "mosquitto"
-pyload = "pyload"
 edn = "edn"
-EDN = "EDN"
-# `ND` is Navidrome's environment-variable prefix (ND_MUSICFOLDER, ND_PORT, …),
-# not a typo of `AND`.
-ND = "ND"
-# `searchd` is the name of Manticore Search's server binary — the daemon suffix,
-# as in `httpd`, rather than a misspelling of `searched`.
-searchd = "searchd"
-# `offen` is the analytics project's name — German for `open`, and the name it
-# publishes under — not a typo of `often`.
+pyload = "pyload"
 offen = "offen"
-Offen = "Offen"
-# `Pn` is the middle of UPnP — Universal Plug and Play, the protocol gerbera
-# implements. The checker splits the name and reads that fragment as a misspelt
-# `On`, so the FRAGMENT is what has to be allowed; listing `UPnP` does nothing
-# because the whole word is never what it compares.
+ND = "ND"
+searchd = "searchd"
 Pn = "Pn"
+EDN = "EDN"
+mosquitto = "mosquitto"
+Offen = "Offen"
 
+[default.extend-identifiers]
+
+[files]
+extend-exclude = ["LICENSES/", "docs/themes/", "vendor/", "docs/static/js/alpine.min.js", "bollwerk/bollwerk.libsonnet", "catalog/spdx.gen.libsonnet"]

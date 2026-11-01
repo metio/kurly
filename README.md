@@ -367,4 +367,4 @@ The full documentation lives at **<https://kurly.projects.metio.wtf/>**:
 
 ## License
 
-[0BSD](LICENSE) — see [REUSE.toml](REUSE.toml) for the details.
+[0BSD](LICENSES/0BSD.txt).
