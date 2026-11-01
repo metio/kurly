@@ -204,7 +204,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/policy-check@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # main
+      - uses: metio/ci/policy-check@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
   dco:
     # Developer Certificate of Origin: every commit must carry a Signed-off-by
     # trailer. Skipped for bot-authored PRs (Renovate/Dependabot cannot sign off);
@@ -217,7 +217,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: metio/ci/dco@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # main
+      - uses: metio/ci/dco@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
   verify:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.

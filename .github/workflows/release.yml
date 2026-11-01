@@ -191,7 +191,7 @@ jobs:
       - id: version
         name: Compute the shared version for this run
         if: steps.changed.outputs.any == 'true'
-        uses: metio/ci/calver@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # main
+        uses: metio/ci/calver@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
   validate:
     name: Test the library and workloads
     needs: discover
@@ -254,7 +254,7 @@ jobs:
           [ "$kind" = '"Deployment"' ] || { echo "::error::library image did not render kurly.http (got: $kind) — the layer is missing lib/"; exit 1; }
           echo "library image renders kurly.http from its own tree"
       - name: Build, push and sign the image
-        uses: metio/ci/container-release@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # main
+        uses: metio/ci/container-release@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
         with:
           image: ghcr.io/metio/kurly
           version: ${{ needs.discover.outputs.version }}
@@ -264,7 +264,7 @@ jobs:
         run: echo "prev=$(git tag --list 'library-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # main
+        uses: metio/ci/release-notes@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: library
@@ -467,7 +467,7 @@ jobs:
         run: echo "prev=$(git tag --list 'vocabularies-*' --sort=-creatordate | head -1)" >> "$GITHUB_OUTPUT"
       - id: notes
         name: Generate Release Notes
-        uses: metio/ci/release-notes@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # main
+        uses: metio/ci/release-notes@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
         env:
           # The org cliff config renders the unit name into the notes header.
           CHART: vocabularies
