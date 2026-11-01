@@ -34,10 +34,10 @@ kurly.list(
 ```
 
 `+` is the parameter system: the library's features are the parameters, so you
-override or add anything by composing. Render locally through the flake devShell:
+override or add anything by composing. Render locally with the tools `breto env` puts on PATH:
 
 ```sh
-nix develop --command check-examples   # renders + validates every workload with defaults
+check-examples   # renders + validates every workload with defaults
 ```
 
 ## 2 · Render it with JaaS

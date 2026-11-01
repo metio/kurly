@@ -72,9 +72,6 @@
   "lockFileMaintenance": {
     "enabled": true
   },
-  "nix": {
-    "enabled": true
-  },
   "packageRules": [
     {
       "description": "Pin every image by digest. A tag says which version; only a digest says which bits, so a rebuilt base image carrying a patched library is otherwise indistinguishable from no change at all. It also makes a moved tag a pull failure rather than a silent substitution.",

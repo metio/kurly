@@ -21,8 +21,8 @@ if ! git diff --quiet -- catalog/maturity.gen.libsonnet 2>/dev/null; then
 fi
 echo "maturity tiers match the smoke scenarios and tests"
 
-# The SPDX register every licence value is checked against comes from the
-# devShell, so it moves when the flake pin moves. Rewrite it and fail if the
+# The SPDX register every licence value is checked against comes from
+# .breto.edn, so it moves when that package moves. Rewrite it and fail if the
 # committed copy is stale, exactly as the maturity tiers are handled — a
 # licence that was valid against last year's list must not stay published as
 # valid against this one's.
@@ -34,7 +34,7 @@ if ! git diff --quiet -- catalog/spdx.gen.libsonnet 2>/dev/null; then
   git --no-pager diff --stat -- catalog/spdx.gen.libsonnet >&2 || true
   exit 1
 fi
-echo "the SPDX register matches the one the devShell ships"
+echo "the SPDX register matches the one .breto.edn installs"
 
 # The catalogue drops a licence label SPDX does not recognise rather than
 # publishing it, which is right but silent. Name them here so a junk label stays

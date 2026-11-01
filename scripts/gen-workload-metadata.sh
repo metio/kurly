@@ -23,8 +23,7 @@
 # to diverge: the envelope is at 1 while `requires` inside moves to v2.
 #
 #   gen-workload-metadata <workload> [outfile]      (outfile defaults to stdout)
-# Run from the repository root, like every other script here: wrapped by nix,
-# "$0" is a store path and its parent is not this repository.
+# Run from the repository root, like every other script here.
 set -euo pipefail
 
 # .build/catalog.json is a BUILD ARTIFACT with no committed copy, so a fresh

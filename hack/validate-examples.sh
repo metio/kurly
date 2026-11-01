@@ -99,7 +99,7 @@ jq -c '.[] | select(.kind == "List") | .items[]' "$all" \
 # A persistent schema cache so the remote CRD schemas (Gateway API and the
 # operator CRDs) are fetched once and reused, rather than re-downloaded every run
 # — this, not the render, is what dominates repeated local runs. CI restores it
-# from the same actions cache as the nix store.
+# from the actions cache.
 cache="${KUBECONFORM_CACHE:-${XDG_CACHE_HOME:-$HOME/.cache}/kubeconform}"
 mkdir -p "$cache"
 

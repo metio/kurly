@@ -52,17 +52,19 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: true # zizmor: ignore[artipacked] the job pushes the branch it opens a pull request from
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       - name: Create the kind cluster (latest Kubernetes)
-        run: nix develop --command kind create cluster --wait 120s
+        run: kind create cluster --wait 120s
       - name: Regenerate the manifest verdicts
-        run: nix develop --command gen-bsi
+        run: gen-bsi
       - name: Install the operators the custom-resource stages need
         # Reports the ones that will not install rather than failing: an operator
         # that has broken upstream leaves its stages unmeasured, which the ledger
         # records as an absence with a reason. Failing the whole run would throw
         # away the verdicts every other operator produced.
-        run: nix develop --command bash hack/smoke/deep/cr-bsi-operators.sh
+        run: bash hack/smoke/deep/cr-bsi-operators.sh
       - name: Measure the pods those operators create
         # Every stage the catalogue reports as out of scope for its own manifest.
         # A stage this run cannot measure keeps whatever the committed ledger
@@ -70,20 +72,20 @@ jobs:
         run: |
           set -euo pipefail
           # shellcheck disable=SC2016  # jq's \(…) is not shell interpolation
-          stages="$(nix develop --command jq -r '
+          stages="$(jq -r '
             .workloads[] | .id as $w | .stages[]
             | select(.bsi.applicable == false)
             | "\($w)/\(.id)"' .build/catalog.json | tr '\n' ' ')"
           echo "asking about: ${stages}"
           # shellcheck disable=SC2086  # deliberate: one argument per stage
-          nix develop --command bash hack/smoke/deep/cr-bsi.sh /tmp/cr-bsi ${stages}
+          bash hack/smoke/deep/cr-bsi.sh /tmp/cr-bsi ${stages}
       - name: Rebuild the catalog from the new answers
         run: |
           set -euo pipefail
-          nix develop --command jb install
+          jb install
           mkdir -p vendor/github.com/metio
           ln -sfn ../../.. vendor/github.com/metio/kurly
-          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
+          jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
       # A pull request rather than a push: a verdict that changed is a claim
       # about compliance that changed, and somebody should read why before it
       # ships. Same token handling as the catalog refresh — a pull request opened

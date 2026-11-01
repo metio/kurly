@@ -26,8 +26,8 @@ behind the catalog's `maturity.delivered`, an axis of its own rather than a rung
 on the tier ladder:
 
 ```shell
-nix develop --command bash hack/smoke/deep-run.sh            # the whole fleet
-nix develop --command bash hack/smoke/deep-run.sh tik valkey # just these
+bash hack/smoke/deep-run.sh            # the whole fleet
+bash hack/smoke/deep-run.sh tik valkey # just these
 ```
 
 The walk is resumable and writes the ledger after each workload, so a run stopped
@@ -67,7 +67,7 @@ registry, operators, the delivery stack), take minutes rather than seconds, and
 are run deliberately:
 
 ```shell
-nix develop --command bash hack/smoke/deep/tik-stageset.sh
+bash hack/smoke/deep/tik-stageset.sh
 ```
 
 One of them proves an **axis** rather than a workload, and it is green. `mesh-istio.sh` stands up

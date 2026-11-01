@@ -106,7 +106,7 @@ jobs:
             # SEVERAL units in one dispatch, separated by spaces or commas. A
             # partial failure leaves a handful of units unreleased — a rate limit
             # refused twenty-one of them once — and re-dispatching one at a time
-            # is twenty-one runs, each rebuilding the same devshell, to recover
+            # is twenty-one runs, each installing the same tools, to recover
             # from one. Every token is validated before anything runs, so a typo
             # in the tenth name fails the dispatch rather than releasing nine and
             # then stopping.
@@ -202,10 +202,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
-      - run: nix develop --command check-tests
-      - run: nix develop --command check-examples
-      - run: nix develop --command check-security
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
+      - run: check-tests
+      - run: check-examples
+      - run: check-security
   library:
     name: Release the library
     needs: [discover, validate]
@@ -221,7 +223,9 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       - name: Assert single layer and render from the built image
         # Single layer is the library-image contract: it serves as both an
         # image-volume mount and a Flux OCIRepository source without a
@@ -247,9 +251,9 @@ jobs:
           docker rm "$cid" >/dev/null
           # k8s-libsonnet is not in the image (JaaS supplies it); vendor it here
           # and drop just its tree beside the extracted library.
-          nix develop --command jb install
+          jb install
           cp -r vendor/github.com/jsonnet-libs "$tree/github.com/"
-          kind="$(nix develop --command jsonnet -J "$tree" -e \
+          kind="$(jsonnet -J "$tree" -e \
             "local kurly = import 'github.com/metio/kurly/main.libsonnet'; kurly.list(kurly.http('probe', 'img:1')).items[0].kind")"
           [ "$kind" = '"Deployment"' ] || { echo "::error::library image did not render kurly.http (got: $kind) — the layer is missing lib/"; exit 1; }
           echo "library image renders kurly.http from its own tree"
@@ -339,7 +343,9 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       # The catalogue names the artifacts its facts came from. Nothing before the
       # release can do this: those artifacts do not exist yet. Everything the
       # stamp adds is derived from this run's version, the repository's release
@@ -352,13 +358,13 @@ jobs:
             ${{ join(fromJSON(needs.discover.outputs.workloads), ' ') }}
         run: |
           set -euo pipefail
-          nix develop --command jb install >/dev/null
+          jb install >/dev/null
           # The unstamped rendering, kept for the comparison below. catalog.json is
           # not committed, so "what you can read in git" is the SOURCE it renders
           # from — this is that rendering, made before the stamp touches it.
-          nix develop --command gen-catalog
+          gen-catalog
           cp .build/catalog.json /tmp/catalog.unstamped.json
-          nix develop --command stamp-catalog
+          stamp-catalog
       # What the source renders to is what ships, with one enumerated exception.
       # The stamped keys are the only fields allowed to differ, and they are
       # removed before the comparison rather than the comparison being relaxed —
@@ -381,7 +387,7 @@ jobs:
         # consumer as "every term disappeared".
         run: |
           set -euo pipefail
-          nix develop --command gen-library .build/library.json
+          gen-library .build/library.json
           version="$(jq -r '.schemaVersion // empty' .build/library.json)"
           [ -n "$version" ] || { echo "::error::library document carries no schemaVersion"; exit 1; }
           jq -e '.library.requiresKinds | length > 0' .build/library.json >/dev/null \
@@ -421,22 +427,22 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          nix develop --command oras login ghcr.io --username "$ACTOR" --password "$GH_TOKEN"
+          oras login ghcr.io --username "$ACTOR" --password "$GH_TOKEN"
           # Pushed from inside the build directory, because oras takes the layer
           # title from the path it is given and a consumer should get
           # `library.json` rather than `.build/library.json`.
           cd .build
-          nix develop --command oras push \
+          oras push \
             "ghcr.io/metio/kurly/library:${VERSION},latest" \
             --artifact-type application/vnd.metio.kurly.library.v1+json \
             library.json:application/json
-          digest="$(nix develop --command oras resolve "ghcr.io/metio/kurly/library:${VERSION}")"
+          digest="$(oras resolve "ghcr.io/metio/kurly/library:${VERSION}")"
           echo "digest=${digest}" >> "$GITHUB_OUTPUT"
           echo "pushed ghcr.io/metio/kurly/library@${digest}"
       - name: Sign the artifact
         env:
           DIGEST: ${{ steps.push.outputs.digest }}
-        run: nix develop --command cosign sign --yes "ghcr.io/metio/kurly/library@${DIGEST}"
+        run: cosign sign --yes "ghcr.io/metio/kurly/library@${DIGEST}"
       # Provenance came free from buildx when this was an image. It is worth
       # keeping, so it is attached explicitly — as a referrer on the artifact,
       # which is where the referrers API expects it and which leaves the
@@ -454,11 +460,7 @@ jobs:
         run: |
           set -euo pipefail
           out="$(mktemp -d)"
-          # --output rather than cd'ing into the directory first: `nix develop`
-          # resolves the flake from the CURRENT directory, so running it from a
-          # temp dir fails with "could not find a flake.nix" before oras is even
-          # invoked — a failure about the shell, in a step about the registry.
-          nix develop --command oras pull --output "$out" "ghcr.io/metio/kurly/library@${DIGEST}"
+          oras pull --output "$out" "ghcr.io/metio/kurly/library@${DIGEST}"
           [ -f "${out}/library.json" ] || { echo "::error::oras pull wrote no library.json"; exit 1; }
           diff -q "${out}/library.json" .build/library.json
           echo "oras pull yields library.json, byte-identical to what was published"

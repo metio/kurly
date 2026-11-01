@@ -29,17 +29,19 @@ jobs:
           fetch-depth: 0
           submodules: recursive
           persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       - name: Render the catalog the site is built from
         # catalog.json is a build artifact rather than committed source, so the
         # site generates it here before staging it.
-        run: nix develop --command gen-catalog
+        run: gen-catalog
       - name: Stage catalog into the site
         # Copies .build/catalog.json into docs/assets/ (gitignored); the
         # assembler embeds it.
-        run: nix develop --command gen-docs-data
+        run: gen-docs-data
       - name: Build Website
-        run: nix develop --command hugo --minify --printI18nWarnings --printPathWarnings --source docs
+        run: hugo --minify --printI18nWarnings --printPathWarnings --source docs
       - name: Deploy Website
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4

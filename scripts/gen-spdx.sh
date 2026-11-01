@@ -12,8 +12,7 @@
 # and the last two would make a source-offer obligation miss a case or a
 # proprietary edition look permissive. Only the register knows.
 #
-# The list rides in the devShell (nixpkgs' spdx-license-list-data, pinned by
-# flake.lock and bumped by Renovate), so this generator needs no network and
+# The list comes from the spdx-license-list-data package in .breto.edn, so this generator needs no network and
 # check-catalog can rerun it in the per-PR gate — the published set of valid
 # identifiers cannot drift from the one that was checked against.
 #
@@ -25,7 +24,7 @@
 set -euo pipefail
 
 out=catalog/spdx.gen.libsonnet
-data="${SPDX_LICENSE_LIST_DATA:?the devShell must provide spdx-license-list-data}/json/licenses.json"
+data="${SPDX_LICENSE_LIST_DATA:?run through breto, which provides spdx-license-list-data}/json/licenses.json"
 
 {
   printf '// %s: The kurly Authors\n' 'SPDX-FileCopyrightText'

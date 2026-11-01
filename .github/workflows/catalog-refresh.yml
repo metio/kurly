@@ -51,38 +51,40 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: true # zizmor: ignore[artipacked] the job pushes the branch it opens a pull request from
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       - name: Ask every upstream forge for its licence
         env:
           # The run's own token, which only lifts the rate limit — the API calls
           # read public repositories and need no permission beyond that.
           GITHUB_TOKEN: ${{ github.token }}
-        run: nix develop --command gen-forge
+        run: gen-forge
       - name: Ask deps.dev what the Scorecard says about each upstream project
         # A different question from every other fact here: how the software is
         # DEVELOPED, rather than what the image contains or the manifest renders.
         # deps.dev needs no token and answers in minutes, and roughly two in five
         # upstreams are indexed there at all — an absent entry is the ordinary
         # answer, never a bad score.
-        run: nix develop --command gen-scorecard
+        run: gen-scorecard
       - name: Ask every registry which architectures its image publishes
-        run: nix develop --command gen-architectures
+        run: gen-architectures
       - name: Ask every image whether it is signed, and by whom
         # A signature is about specific bytes, so this answer expires whenever
         # Renovate bumps an image — the catalogue drops the claim by itself and
         # this run is what earns it back.
-        run: nix develop --command gen-signatures
+        run: gen-signatures
       - name: Re-read every image label
         if: inputs.images
-        run: nix develop --command gen-upstream
+        run: gen-upstream
       - name: Rebuild the catalog from the new answers
         run: |
           set -euo pipefail
-          nix develop --command jb install
+          jb install
           mkdir -p vendor/github.com/metio
           ln -sfn ../../.. vendor/github.com/metio/kurly
           mkdir -p .build
-          nix develop --command jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
+          jsonnet -J vendor catalog/catalog.jsonnet > .build/catalog.json
       # A release matrix runs fail-fast disabled, so one workload's job can fail
       # while the run still reads as a release — and nothing says so again. The
       # catalogue keeps listing the workload and a consumer offering it finds
@@ -95,7 +97,7 @@ jobs:
       # just earned are why it exists.
       - name: Every catalogued workload has a published artifact
         continue-on-error: true
-        run: nix develop --command check-published
+        run: check-published
       # A pull request rather than a push to the default branch: publishing the
       # catalogue is a release, and a licence that changed is exactly the kind of
       # thing somebody should read before it ships.

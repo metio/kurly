@@ -19,7 +19,7 @@
 # app defaults to, so it connects with no param override, and get a Secret minted
 # from the catalog's per-stage `secretKeys`.
 set -euo pipefail
-# Run from the repository root (as the flake's `gen-smoke` command does), matching
+# Run from the repository root (as the `gen-smoke` command does), matching
 # the sibling gen-* scripts — paths below are repo-relative.
 
 # Assemble the SPDX tag names from parts so the literal tokens never appear whole

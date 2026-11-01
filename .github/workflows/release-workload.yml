@@ -60,7 +60,9 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       - name: Stamp the release version into the workload's version.txt
         # The image ships SOURCE, and a stage reads its version with
         # `importstr './version.txt'`, so the release version has to be in that
@@ -121,9 +123,9 @@ jobs:
           set -euo pipefail
           # catalog.json is a build artifact and is not in the checkout, so the
           # document this derives from has to be rendered first.
-          nix develop --command gen-catalog >/dev/null
-          nix develop --command gen-workload-metadata "$WORKLOAD" metadata.json
-          nix develop --command oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
+          gen-catalog >/dev/null
+          gen-workload-metadata "$WORKLOAD" metadata.json
+          oras login ghcr.io --username "$ACTOR" --password-stdin <<<"$GH_TOKEN"
           # Both registry writes retry with backoff. A fleet-wide release makes
           # hundreds of manifest PUTs against ghcr.io within a few minutes and
           # trips its SECONDARY rate limit, which answers 403 permission_denied —
@@ -136,7 +138,7 @@ jobs:
           # sign comes out of the attach, and a retry of only the signature would
           # re-sign whatever the last successful attach produced.
           publish_metadata() {
-            nix develop --command oras attach \
+            oras attach \
               --artifact-type application/vnd.metio.kurly.workload.v1+json \
               --format json \
               "ghcr.io/metio/kurly/workloads/${WORKLOAD}:${VERSION}" \
@@ -147,7 +149,7 @@ jobs:
             # this repository published it.
             local ref
             ref="$(jq -r '.reference' attached.json)" || return 1
-            nix develop --command cosign sign --yes "$ref" || return 1
+            cosign sign --yes "$ref" || return 1
           }
           published=0
           for delay in 0 30 90 240; do

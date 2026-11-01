@@ -9,9 +9,7 @@
 # rerun it when an image is bumped (Renovate touches the .image file, this reads
 # it). check-catalog fails if an image-bearing stage has no entry.
 set -uo pipefail
-# Run from the repository root, like every other generator here: under nix the
-# script lives in the store, so deriving the root from the script's own path
-# lands in the store instead and every relative path fails.
+# Run from the repository root, like every other generator here.
 
 out=catalog/architectures.gen.libsonnet
 

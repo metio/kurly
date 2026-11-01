@@ -1,0 +1,65 @@
+;; SPDX-FileCopyrightText: The kurly Authors
+;; SPDX-License-Identifier: 0BSD
+
+{:packages ["@docs" "@jsonnet" "@lint"
+            "conftest" "cosign" "helm" "jq" "kind" "kubeconform" "kubectl" "kubesec@2.14.2" "minikube"
+            "node" "oras" "pluto" "renovate" "skopeo" "spdx-license-list-data@3.29.0" "step" "yq"]
+ :env {"LC_COLLATE" "C"}
+ :commands {"check-shell" {:run "exec shellcheck --shell=bash --exclude=SC2016,SC2318,SC2329 scripts/*.sh"
+                           :description "shellcheck across the scripts"}
+            "check-assembler" {:run ["bash" "-euo" "pipefail" "scripts/check-assembler.sh"]
+             :description "Drive the docs site assembler and parse what it hands out"}
+            "check-catalog" {:run ["bash" "-euo" "pipefail" "scripts/check-catalog.sh"]
+             :description "Regenerate the derived catalog data and fail on drift"}
+            "check-coverage" {:run ["bash" "-euo" "pipefail" "scripts/check-coverage.sh"]
+             :description "Render every catalog composition, validate with kubeconform"}
+            "check-examples" {:run ["bash" "-euo" "pipefail" "scripts/check-examples.sh"]
+             :description "Render examples and workloads, validate with kubeconform"}
+            "check-fmt" {:run ["bash" "-euo" "pipefail" "scripts/check-fmt.sh"]
+             :description "jsonnetfmt --test across all sources"}
+            "check-published" {:run ["bash" "-euo" "pipefail" "scripts/check-published.sh"]
+             :description "Every catalogued workload has a published artifact"}
+            "check-readme" {:run ["bash" "-euo" "pipefail" "scripts/check-readme.sh"]
+             :description "Fail if a workload README's generated section is stale"}
+            "check-readme-examples" {:run ["bash" "-euo" "pipefail" "scripts/check-readme-examples.sh"]
+             :description "Render workload README examples, validate with kubeconform"}
+            "check-security" {:run ["bash" "-euo" "pipefail" "scripts/check-security.sh"]
+             :description "conftest Rego policy, pluto and kubesec"}
+            "check-tests" {:run ["bash" "-euo" "pipefail" "scripts/check-tests.sh"]
+             :description "Assertion suite and the requiresService negative check"}
+            "gen-architectures" {:run ["bash" "-euo" "pipefail" "scripts/gen-architectures.sh"]
+             :description "Derive each image's CPU architectures from the registry"}
+            "gen-bsi" {:run ["bash" "-euo" "pipefail" "scripts/gen-bsi.sh"]
+             :description "Ask a kind cluster which bollwerk policies each stage violates"}
+            "gen-catalog" {:run ["bash" "-euo" "pipefail" "scripts/gen-catalog.sh"]
+             :description "Render .build/catalog.json"}
+            "gen-docs-data" {:run ["bash" "-euo" "pipefail" "scripts/gen-docs-data.sh"]
+             :description "Stage catalog.json into docs/data/ for the site"}
+            "gen-forge" {:run ["bash" "-euo" "pipefail" "scripts/gen-forge.sh"]
+             :description "Ask each workload's forge for licence and name"}
+            "gen-library" {:run ["bash" "-euo" "pipefail" "scripts/gen-library.sh"]
+             :description "The vocabularies, API model and exclusions"}
+            "gen-maturity" {:run ["bash" "-euo" "pipefail" "scripts/gen-maturity.sh"]
+             :description "Derive workload maturity tiers"}
+            "gen-measurements" {:run ["bash" "-euo" "pipefail" "scripts/gen-measurements.sh"]
+             :description "Fold what the e2e scenarios measured into the catalog"}
+            "gen-readme" {:run ["bash" "-euo" "pipefail" "scripts/gen-readme.sh"]
+             :description "Splice the deploy walkthrough into every workload README"}
+            "gen-scorecard" {:run ["bash" "-euo" "pipefail" "scripts/gen-scorecard.sh"]
+             :description "Ask deps.dev for each upstream project's Scorecard"}
+            "gen-signatures" {:run ["bash" "-euo" "pipefail" "scripts/gen-signatures.sh"]
+             :description "Derive whether each image is signed, and by whom"}
+            "gen-smoke" {:run ["bash" "-euo" "pipefail" "scripts/gen-smoke.sh"]
+             :description "Generate an e2e scenario for every standalone workload"}
+            "gen-spdx" {:run ["bash" "-euo" "pipefail" "scripts/gen-spdx.sh"]
+             :description "Write the SPDX licence register"}
+            "gen-upstream" {:run ["bash" "-euo" "pipefail" "scripts/gen-upstream.sh"]
+             :description "Read each workload's image labels from the registry"}
+            "gen-workload-metadata" {:run ["bash" "-euo" "pipefail" "scripts/gen-workload-metadata.sh"]
+             :description "One workload's catalogue entry, as its own document"}
+            "onboard-workload" {:run ["bash" "-euo" "pipefail" "scripts/onboard-workload.sh"]
+             :description "Run every generator for a new workload, in order"}
+            "stamp-catalog" {:run ["bash" "-euo" "pipefail" "scripts/stamp-catalog.sh"]
+             :description "Write the artifacts a catalogue describes into it"}
+            "verify" {:run ["bash" "-euo" "pipefail" "scripts/verify.sh"]
+             :description "Run every gate locally"}}}

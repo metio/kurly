@@ -1303,7 +1303,7 @@ kurly::deep() {
   # because the two failures look identical when they are folded together and mean
   # opposite things. Piping a failed render into jq yields no match, which reads as
   # "this workload is operator-backed" — a notice, not an error, and the walk moves
-  # on. Started outside the devShell, where jsonnet is not on PATH, that misreports
+  # on. Started outside `breto env`, where jsonnet is not on PATH, that misreports
   # EVERY remaining workload as CR-only: 79 of them in one run, in about eight
   # seconds each, recording nothing and reporting no failure.
   # Rendered with NOTHING composed onto it. A custom-resource stage refuses a kurly
@@ -1323,7 +1323,7 @@ kurly::deep() {
   local rendered stage0
   stage0="workloads/${id}/$(jq -r --arg i "$id" '.workloads[]|select(.id==$i)|.stages[0].id' .build/catalog.json).libsonnet"
   if ! rendered="$(kurly::render "$stage0" "" 2>&1)" && ! rendered="$(kurly::render "$stage0" "" 2>&1)"; then
-    echo "::error::${id}: its stage did not render, so nothing can be concluded about it — run inside the devShell (nix develop --command …)"
+    echo "::error::${id}: its stage did not render, so nothing can be concluded about it — run inside `breto env`"
     printf '%s\n' "$rendered" | tail -3
     return 1
   fi

@@ -31,9 +31,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       - name: Create the kind cluster (latest Kubernetes)
-        run: nix develop --command kind create cluster --wait 120s
+        run: kind create cluster --wait 120s
       # The catalog publishes which bollwerk policies each stage breaks, judged by
       # an API server. Nothing keeps that true on its own: a relaxed security knob
       # or an edited policy changes the verdicts, and a published claim about
@@ -55,7 +57,7 @@ jobs:
       - name: Regenerate and compare
         env:
           KURLY_BSI_CHECK: '1'
-        run: nix develop --command gen-bsi
+        run: gen-bsi
   changes:
     name: Which workloads changed?
     runs-on: ubuntu-latest
@@ -98,13 +100,15 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
+      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+        with:
+          registries: github:metio/toolchains
       - name: Create the kind cluster (latest Kubernetes) with a registry port-map
         run: |
-          nix develop --command kind create cluster --wait 120s \
+          kind create cluster --wait 120s \
             --config hack/smoke/kind-registry-config.yaml
       - name: Walk the changed workloads (fast then deep)
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
           WORKLOADS: ${{ needs.changes.outputs.list }}
-        run: nix develop --command bash hack/smoke/e2e-run.sh
+        run: bash hack/smoke/e2e-run.sh

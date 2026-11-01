@@ -65,7 +65,7 @@ if [ "${KURLY_IN_SLICE:-0}" != 1 ] && [ "${KURLY_NO_SLICE:-0}" != 1 ]; then
   echo "== re-executing inside kurly.slice =="
   # PATH and the podman/kube settings are passed explicitly: a transient unit does
   # not necessarily inherit the caller's environment, and a walk that loses the
-  # flake tools renders nothing while reporting that it ran.
+  # project's tools renders nothing while reporting that it ran.
   exec systemd-run --user --quiet --scope --collect --slice=kurly.slice \
     env KURLY_IN_SLICE=1 HOME="$HOME" PATH="$PATH" KUBERC=/dev/null \
       ${KUBECONFIG:+KUBECONFIG="$KUBECONFIG"} \
@@ -103,8 +103,7 @@ recorded=catalog/measurements.gen.libsonnet
 
 # The cluster is created with the host's own wrapper, which carries the rootless
 # podman configuration this machine needs (an isolated store, fuse-overlayfs, a
-# delegated cgroup scope). It runs on the HOST: rootless podman cannot nest a
-# user namespace inside nix-portable's sandbox.
+# delegated cgroup scope). It runs on the HOST.
 ensure_cluster() {
   if kubectl cluster-info >/dev/null 2>&1; then
     echo "== using the cluster the current context points at =="

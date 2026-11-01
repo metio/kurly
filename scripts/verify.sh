@@ -31,11 +31,12 @@ gates=(
   "check-readme-examples"
   "check-coverage"
   "check-security"
-  "reuse lint"
-  "yamllint ."
-  "actionlint"
-  "markdownlint-cli2 '**/*.md' '#vendor' '#docs/themes'"
-  "typos"
+  "ci-reuse"
+  "ci-yaml"
+  "ci-actionlint"
+  "ci-markdown"
+  "ci-typos"
+  "check-shell"
 )
 
 # Incremental mode: VERIFY_SINCE=<ref> restricts the per-workload gates to the

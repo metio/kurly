@@ -83,8 +83,8 @@ workloads/<name>/
   `importstr './version.txt'`. It is a data file, licensed through `REUSE.toml`,
   and deliberately outside the `*.libsonnet` globs so no gate treats it as a
   stage.
-- Every file needs an SPDX header or a `REUSE.toml` entry. `nix develop --command
-  reuse lint` is the check.
+- Every file needs an SPDX header or a `REUSE.toml` entry. `reuse lint` is the
+  check.
 
 ---
 
@@ -113,7 +113,7 @@ Every stage must:
 `check-tests` enforces all of the above per stage. Run it before anything else:
 
 ```shell
-nix develop --command check-tests
+check-tests
 ```
 
 ### What booting the whole catalogue taught about images
@@ -193,8 +193,8 @@ reason. Do not invent a generator for a document a person has to write.
 Then regenerate and check:
 
 ```shell
-nix develop --command gen-readme        # splices the generated README section
-nix develop --command check-catalog     # regenerates derived data, fails on drift
+gen-readme        # splices the generated README section
+check-catalog     # regenerates derived data, fails on drift
 ```
 
 ### What you do NOT write
@@ -241,8 +241,8 @@ finds *candidates*; whether a page answers the question is a reading job.
 Rendering is not running. In order:
 
 ```shell
-nix develop --command gen-smoke                      # generates a scenario per workload
-nix develop --command bash hack/smoke/scenario-<id>.sh   # boot it on kind
+gen-smoke                      # generates a scenario per workload
+bash hack/smoke/scenario-<id>.sh   # boot it on kind
 ```
 
 A generated scenario is marker-guarded, so a hand-written one is never
@@ -263,7 +263,7 @@ happened**, never claims:
 Finally, the full gate — what CI runs, so green here is green there:
 
 ```shell
-nix develop --command verify
+verify
 ```
 
 ---
@@ -302,17 +302,17 @@ obligation — every licence here permits commercial hosting.
 crane manifest <image>:<tag> >/dev/null
 
 # 1-3. author, annotate, regenerate
-nix develop --command check-tests
-nix develop --command gen-readme
-nix develop --command check-catalog
+check-tests
+gen-readme
+check-catalog
 
 # 4. the network-bound facts
-nix develop --command gen-architectures
-WORKLOADS=<name> nix develop --command gen-upstream
+gen-architectures
+WORKLOADS=<name> gen-upstream
 bash hack/trademark-probe.sh          # then READ what it finds
 
 # 5. prove it runs, then the full gate
-nix develop --command gen-smoke
-nix develop --command bash hack/smoke/scenario-<name>.sh
-nix develop --command verify
+gen-smoke
+bash hack/smoke/scenario-<name>.sh
+verify
 ```
