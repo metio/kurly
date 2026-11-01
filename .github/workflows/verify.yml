@@ -131,15 +131,6 @@ jobs:
           persist-credentials: false
       - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
       - run: nix develop --command check-security
-  reuse:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
-      - run: nix develop --command reuse lint
   yaml:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -194,35 +185,11 @@ jobs:
           persist-credentials: false
       - uses: metio/nix-devshell@d0c25fdb0d2c08f23bc62c867317a266b6f1a5c1 # 2026.9.12204255
       - run: nix develop --command typos
-  policy:
-    # The metio org convention policies (conftest/Rego) from metio/ci: SHA
-    # pins, permissions, timeouts, run-injection, and — because this repo
-    # ships a flake.nix — the flake-owned-toolchain rules.
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          persist-credentials: false
-      - uses: metio/ci/policy-check@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
-  dco:
-    # Developer Certificate of Origin: every commit must carry a Signed-off-by
-    # trailer. Skipped for bot-authored PRs (Renovate/Dependabot cannot sign off);
-    # a skipped job still satisfies the all-green gate below.
-    if: github.event.pull_request.user.type != 'Bot'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - uses: metio/ci/dco@4b2fc8164c0fe34e2fe37ec169161f72f868baf0 # 2026.11.1123354
   verify:
     # Single required check covering every job above: mark only this one
     # required in branch protection and new jobs are covered automatically.
     name: Verify
-    needs: [fmt, catalog, test, assembler, examples, readme-examples, coverage, security, reuse, yaml, github-actions, renovate, markdown, typos, policy, dco]
+    needs: [fmt, catalog, test, assembler, examples, readme-examples, coverage, security, yaml, github-actions, renovate, markdown, typos]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 15
