@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       - run: check-fmt
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       - run: gen-catalog
@@ -58,7 +58,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       # Vendors k8s-libsonnet (floats at upstream HEAD, matching the JOI
@@ -72,7 +72,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       # Drives the docs site's assembler the way the page does and checks that the
@@ -85,7 +85,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       # Persist kubeconform's downloaded schemas (Gateway API + operator CRDs)
@@ -107,7 +107,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
@@ -125,7 +125,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
@@ -143,7 +143,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       - run: check-security
@@ -154,7 +154,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       - env:
@@ -168,7 +168,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - uses: metio/ci/breto@d4a165ac035d1fa1a7aee5b27192d0aed9c7a0b0 # 2026.11.1111906
+      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
         with:
           registries: github:metio/toolchains
       # Renovate stops opening pull requests entirely when its config is
