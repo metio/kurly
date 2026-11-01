@@ -20,3 +20,4 @@ COPY lib /github.com/metio/kurly/lib
 
 FROM scratch
 COPY --from=src / /
+LABEL wtf.metio.ci.root-allowed="data-only image with no process to run"
