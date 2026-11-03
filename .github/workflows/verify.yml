@@ -6,6 +6,7 @@
 # Renovate maintains the lock; no job installs tools any other way.
 name: Verify
 on:
+  merge_group:
   pull_request:
     branches: [main]
 permissions:
