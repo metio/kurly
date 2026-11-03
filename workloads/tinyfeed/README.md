@@ -25,7 +25,7 @@ kurly.list(tinyfeed(feeds=[
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `tinyfeed` | |
-| `image` | `docker.io/thebigroomxxl/tinyfeed:v1.5.0` | |
+| `image` | `docker.io/thebigroomxxl/tinyfeed:1.5.1` | |
 | `feeds` | the project's release feed | one URL per entry, rendered to the input file |
 | `storageSize` / `storageClass` / `accessModes` | `1Gi` / cluster default / `ReadWriteOnce` | `/output` |
 | `outputPath` | `/output/index.html` | the page the HTTP server serves |
