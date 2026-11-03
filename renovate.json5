@@ -82,7 +82,6 @@
     },
     {
       "automerge": true,
-      "automergeStrategy": "squash",
       "description": "Zero-manual-work policy: every workload tracks the latest published version, majors included. The e2e smoke suite is the safety net — a break becomes a new test, never a pinned-back version. Renovate opens and auto-merges the bump once CI is green.",
       "matchDatasources": [
         "docker"
