@@ -28,7 +28,7 @@ kurly.list([
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `wger` | |
-| `image` | `docker.io/wger/server:2.6.0` | |
+| `image` | `docker.io/wger/server:2.7.0` | |
 | `storageSize` / `storageClass` | `2Gi` / cluster default | uploaded media (`/home/wger/media`) |
 | `dbHost` / `dbName` / `dbUser` | `wger-db-rw` / `wger` / `wger` | the PostgreSQL database |
 | `redisHost` | `wger-cache` | the Redis/valkey Service |
