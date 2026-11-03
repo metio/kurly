@@ -1,8 +1,8 @@
 ;; SPDX-FileCopyrightText: The kurly Authors
 ;; SPDX-License-Identifier: 0BSD
 
-{:packages ["@docs" "@jsonnet" "@lint"
-            "conftest" "cosign" "go" "helm" "jq" "kind" "kubeconform" "kubectl" "kubesec@2.14.2" "minikube"
+{:packages ["@docs" "@jsonnet" "@kubernetes" "@lint"
+            "conftest" "cosign" "go" "helm" "jq" "kind" "kubeconform" "kubectl" "minikube"
             "node" "oras" "pluto" "renovate" "skopeo" "spdx-license-list-data@3.29.0" "step" "yq"]
  :env {"LC_COLLATE" "C"}
  :commands {"check-shell" {:run "exec shellcheck --shell=bash --exclude=SC2016,SC2318,SC2329 scripts/*.sh"
