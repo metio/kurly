@@ -42,7 +42,7 @@ function(
   routerInstances=2,
   // The MySQL server version the operator pins (its container image tag).
   // renovate: datasource=docker depName=docker.io/library/mysql versioning=docker
-  serverVersion='9.7.1',
+  serverVersion='26.7.0',
   storageSize='10Gi',
   storageClass=null,
   // The consumer-provided Secret holding rootUser / rootHost / rootPassword. The
