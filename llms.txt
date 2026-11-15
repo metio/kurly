@@ -1,0 +1,12 @@
+# kurly
+
+> a Jsonnet library of composable Kubernetes workload recipes
+
+Project home: https://kurly.projects.metio.wtf/ — full text for LLMs: https://kurly.projects.metio.wtf/llms-full.txt
+
+## Assembler
+
+
+## Reference
+
+
