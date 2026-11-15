@@ -6,47 +6,25 @@ on:
   push:
     branches: [main]
     paths:
+      - .github/workflows/docs.yml
       - docs/**
       # The assembler reads the catalog, so a catalog change must rebuild the
       # site even though no docs/ file changed.
       - catalog/**
   pull_request:
     paths:
+      - .github/workflows/docs.yml
       - docs/**
       - catalog/**
 permissions:
   contents: read
 jobs:
   website:
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    name: Website
+    uses: metio/ci/.github/workflows/hugo.yml@92eaf0dff9859e52fbbc3f07c7f9eb832b31ea3b # 2026.11.15155907
     permissions:
       contents: write
-    steps:
-      - name: Clone Git Repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          fetch-depth: 0
-          submodules: recursive
-          persist-credentials: false
-      - uses: metio/ci/breto@287dfa682ad90cf769ef29d0b9f9bc2d65d2ddc1 # 2026.11.1194625
-        with:
-          registries: github:metio/toolchains
-      - name: Render the catalog the site is built from
-        # catalog.json is a build artifact rather than committed source, so the
-        # site generates it here before staging it.
-        run: gen-catalog
-      - name: Stage catalog into the site
-        # Copies .build/catalog.json into docs/assets/ (gitignored); the
-        # assembler embeds it.
-        run: gen-docs-data
-      - name: Build Website
-        run: hugo --minify --printI18nWarnings --printPathWarnings --source docs
-      - name: Deploy Website
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/public
-          force_orphan: true
-          cname: kurly.projects.metio.wtf
+    with:
+      source: docs
+      prepare: gen-catalog && gen-docs-data
+      cname: kurly.projects.metio.wtf
