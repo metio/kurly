@@ -22,7 +22,7 @@ kurly.list(traduora())
 | Parameter | Default | Notes |
 |---|---|---|
 | `name` | `traduora` | |
-| `image` | `docker.io/everco/ever-traduora:v0.21.0` | |
+| `image` | `docker.io/everco/ever-traduora:v0.23.0` | |
 | `dbType` | `postgres` | traduora's own vocabulary: `postgres` or `mysql` |
 | `dbHost` / `dbPort` / `database` | `traduora-db-rw` / `5432` / `traduora` | pairs with a `cnpg-cluster` named `traduora-db` |
 | `virtualHost` | `http://localhost:8080` | the URL users reach this instance on |
