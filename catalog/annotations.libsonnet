@@ -1273,7 +1273,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     citadel: {
       name: 'Citadel',
-      upstream: { repo: 'https://github.com/citadel-org/citadel' },
+      upstream: { repo: 'https://code.citadel.org/citadel.git' },
       homepage: 'https://www.citadel.org/',
       license: 'GPL-3.0',
       description: 'Run mail, calendars, address books, forums and chat for a community from one server.',
@@ -3917,7 +3917,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     pdfding: {
       name: 'PdfDing',
-      upstream: { repo: 'https://github.com/mrmn2/PdfDing' },
+      upstream: { repo: 'https://codeberg.org/mrmn/PdfDing' },
       license: 'AGPL-3.0-only',
       description: 'Keep a library of PDFs you can tag, search and read where you left off.',
       summary: "A PdfDing server (a PDF manager, viewer and editor with tags, search and reading progress). A plain composable http workload keeping the uploaded PDFs and the SQLite database together under DATA_DIR on a PersistentVolume — no external database. HOST_NAME is Django's ALLOWED_HOSTS, so every Host it is not set to is answered 400 before any view runs; the probes therefore check the listening socket rather than an HTTP path. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :8000.",
@@ -6147,7 +6147,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     pocketbase: {
       name: 'PocketBase',
-      upstream: { repo: 'https://github.com/pocketbase/pocketbase' },
+      upstream: { repo: 'https://ganigeorgiev.com/pocketbase/pocketbase' },
       description: 'Get a database, authentication and file storage for your app in one small backend.',
       summary: 'A PocketBase server (a self-hosted, open-source backend in one file: an embedded SQLite database, auth, file storage and a REST/realtime API, with an admin dashboard) on the official image. A plain composable http workload that keeps its database, uploads and migrations on a PersistentVolume under /pb_data. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves the API and admin UI on :8080.',
       category: 'application',
@@ -7167,47 +7167,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
         ]) + { kind: 'http' },
       },
     },
-    metamcp: {
-      license: 'MIT',
-      name: 'MetaMCP',
-      upstream: { repo: 'https://github.com/metatool-ai/metamcp' },
-      description: 'Aggregate many Model Context Protocol servers behind a single endpoint.',
-      summary: "A MetaMCP server (an MCP proxy that aggregates several Model Context Protocol servers into one endpoint, groups them into namespaces and applies middleware in front) on the project's own image, backed by an external PostgreSQL. Pairs with a cnpg-cluster named metamcp-db. APP_URL IS REQUIRED AND NOT DECORATION: the application throws and exits without one, and builds its callback URLs from it while validating request origins against it, so a wrong value gives a page that loads and a login that fails — the default is a placeholder that boots and is wrong for every real deployment. Registration stays open until an administrator exists, so bootstrapEmail with BOOTSTRAP_USER_PASSWORD in the Secret creates that account at start rather than leaving the first visitor to claim it. The first start applies migrations with pnpm, which writes a tool cache under HOME — unset it resolves to / and the migration fails before the application starts once — so HOME points at the scratch, and the wait is a startup probe. Stateless: a plain rolling Deployment. Serves on :12008.",
-      category: 'tool',
-      requires: [{ kind: 'database', engine: 'postgresql', required: true }],
-      stages: {
-        server: d.fn('The MetaMCP server. dbHost/dbPort/dbName/dbUser point at PostgreSQL, defaulting to a cnpg-cluster named metamcp-db. appUrl is the browser-visible URL callbacks and origin checks are built from. bootstrapEmail/bootstrapName create the administrator at start, on the first run only. secretName holds DATABASE_URL — the whole connection string, which the migration step reads and which a manifest cannot compose from an envFrom password — plus POSTGRES_PASSWORD, BETTER_AUTH_SECRET and BOOTSTRAP_USER_PASSWORD (envFrom). Compose an exposure onto the HTTP port.', [
-          d.arg('name', d.T.string, default='metamcp'),
-          d.arg('image', d.T.string),
-          d.arg('replicas', d.T.int, default=1),
-          d.arg('dbHost', d.T.string, default='metamcp-db-rw'),
-          d.arg('dbPort', d.T.int, default=5432),
-          d.arg('dbName', d.T.string, default='metamcp'),
-          d.arg('dbUser', d.T.string, default='metamcp'),
-          d.arg('appUrl', d.T.string, default='http://localhost:12008'),
-          d.arg('bootstrapEmail', d.T.string, example='admin@example.com'),
-          d.arg('bootstrapName', d.T.string, default='admin'),
-          d.arg('logLevel', d.T.string, default='info'),
-          d.arg('secretName', d.T.string, default='metamcp'),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '200m', memory: '512Mi' }, limits: { memory: '2Gi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + {
-          kind: 'http',
-          secretKeys: [
-            // DATABASE_URL rather than a password the manifest composes: the
-            // migration step reads a whole connection string, and a value built
-            // from an envFrom variable cannot be expanded — Kubernetes only
-            // substitutes $(VAR) from the container's own env list.
-            { key: 'DATABASE_URL', generate: 'postgresUrl' },
-            { key: 'POSTGRES_PASSWORD', generate: 'password', length: 32 },
-            { key: 'BETTER_AUTH_SECRET', generate: 'hex', length: 64 },
-            { key: 'BOOTSTRAP_USER_PASSWORD', generate: 'password', length: 24 },
-          ],
-        },
-      },
-    },
     rssbox: {
       license: 'AGPL-3.0-or-later',
       name: 'RSS Box',
@@ -7281,7 +7240,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     varnish: {
       license: 'BSD-2-Clause',
       name: 'Varnish Cache',
-      upstream: { repo: 'https://github.com/varnishcache/varnish-cache' },
+      upstream: { repo: 'https://github.com/varnish/varnish' },
       description: 'Put an HTTP cache in front of a slow site and serve most requests from memory.',
       summary: "A Varnish Cache instance (an HTTP cache in front of something slower: responses held in memory and served without waking the backend, with the policy written in VCL) on the official image. THE BACKEND IS RESOLVED WHEN THE VCL IS COMPILED, NOT WHEN A REQUEST ARRIVES: Varnish refuses to compile a configuration naming a host that does not resolve and the pod never listens, so backendHost must point at a Service that already exists and a cache whose backend is deleted fails its next restart rather than its next request. THE CACHE IS MEMORY AND MEMORY IS A LIMIT: size is what Varnish may use for objects and the pod's memory limit must be comfortably larger, since a cache sized at the limit is a pod the kernel kills under load rather than one that evicts. The rendered VCL only names the backend; anything beyond caching what the backend calls cacheable means supplying the whole file, because there is no half-way merge of somebody else's policy. Nothing is persisted by design, so a rollout is a cold cache and a burst straight to the backend, and replicas each fill their own. Stateless: a plain rolling Deployment. Serves on :80.",
       category: 'networking',
@@ -8170,24 +8129,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('replicas', d.T.int, default=2),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
-      },
-    },
-    filebrowser: {
-      name: 'File Browser',
-      description: 'Browse, upload, edit and share your files from a clean web interface.',
-      summary: 'A File Browser server (a self-hosted web file manager: browse, upload, edit and share files through a clean UI) on the official image; its SQLite database lives on a PersistentVolume. It manages the directory mounted at /srv — compose the volume to serve onto that path. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :80.',
-      category: 'application',
-      stages: {
-        server: d.fn('The File Browser server. Database at /database; compose the volume to serve onto /srv. Compose an exposure onto the HTTP port.', [
-          d.arg('name', d.T.string, default='filebrowser'),
-          d.arg('image', d.T.string),
-          d.arg('storageSize', d.T.quantity, default='1Gi'),
-          d.arg('storageClass', d.T.string),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '64Mi' }, limits: { memory: '128Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http' },
@@ -9225,24 +9166,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('timezone', d.T.string, default='UTC'),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
-      },
-    },
-    whoogle: {
-      name: 'Whoogle Search',
-      upstream: { repo: 'https://github.com/benbusby/whoogle-search' },
-      description: 'Search Google without the ads, the tracking or the JavaScript.',
-      summary: 'A Whoogle Search server (a self-hosted, privacy-respecting metasearch proxy for Google results: no ads, no tracking, no JavaScript required) on the official image. Stateless: a plain rolling Deployment. Configure through WHOOGLE_CONFIG_* env. Serves on :5000.',
-      category: 'tool',
-      stages: {
-        server: d.fn('The Whoogle server. Stateless; configure via WHOOGLE_CONFIG_* env. Compose an exposure onto the HTTP port.', [
-          d.arg('name', d.T.string, default='whoogle'),
-          d.arg('image', d.T.string),
-          d.arg('replicas', d.T.int, default=2),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '50m', memory: '128Mi' }, limits: { memory: '256Mi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http' },
@@ -12396,7 +12319,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     picoshare: {
       name: 'PicoShare',
-      upstream: { repo: 'https://github.com/mtlynch/picoshare' },
+      upstream: { repo: 'https://codefloe.com/mtlynch/picoshare' },
       license: 'AGPL-3.0-only',
       description: 'Upload a file, get a link, optionally one that expires.',
       summary: 'A PicoShare server (a minimal file-sharing app: upload a file, get a link, optionally with an expiry). A plain composable http workload whose files AND metadata live in one SQLite database on a PersistentVolume — uploaded content is stored as blobs inside the database rather than beside it, so the volume must be sized for everything hosted, not for an index. One shared passphrase grants upload and administration. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :4001.',
@@ -12491,26 +12414,6 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
           d.arg('storageClass', d.T.string),
           d.arg('env', d.T.object, default={}),
           d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '512Mi' } }),
-          d.arg('labels', d.T.object, default={}),
-          d.arg('annotations', d.T.object, default={}),
-        ]) + { kind: 'http' },
-      },
-    },
-    'yt-dlp-web-ui': {
-      name: 'yt-dlp Web UI',
-      upstream: { repo: 'https://github.com/marcopiovanello/yt-dlp-web-ui' },
-      license: 'GPL-3.0-only',
-      description: 'Paste a video URL and download it, from a browser instead of a shell.',
-      summary: 'A yt-dlp Web UI server (a browser front end for yt-dlp: paste a URL, pick a format, watch progress, fetch the file). A plain composable http workload with downloads on a PersistentVolume. It downloads whatever it is asked to, from wherever the pod can reach, and has NO authentication unless one is configured — so an exposed instance is an open downloader inside your network, and a NetworkPolicy composed onto it is the other half of that decision. Single writer over a ReadWriteOnce volume: one replica, recreated. Serves on :3033.',
-      category: 'application',
-      stages: {
-        server: d.fn("The yt-dlp Web UI server. Downloads land at /downloads on the volume, which is where the image's own entrypoint already points, so no argument is overridden. Size storageSize for what will be kept. Put an authenticating proxy in front of it and consider what egress the pod has. Compose an exposure onto the HTTP port.", [
-          d.arg('name', d.T.string, default='yt-dlp-web-ui'),
-          d.arg('image', d.T.string),
-          d.arg('storageSize', d.T.quantity, default='50Gi'),
-          d.arg('storageClass', d.T.string),
-          d.arg('env', d.T.object, default={}),
-          d.arg('resources', d.T.object, default={ requests: { cpu: '100m', memory: '256Mi' }, limits: { memory: '1Gi' } }),
           d.arg('labels', d.T.object, default={}),
           d.arg('annotations', d.T.object, default={}),
         ]) + { kind: 'http' },
@@ -13812,7 +13715,7 @@ local replicatedKinds = ['http', 'worker', 'stateful'];
     },
     databasus: {
       name: 'Databasus',
-      upstream: { repo: 'https://github.com/RostislavDugin/databasus' },
+      upstream: { repo: 'https://github.com/databasus/databasus' },
       homepage: 'https://databasus.com',
       license: 'Apache-2.0',
       description: 'Take scheduled backups of your databases and restore one on demand.',

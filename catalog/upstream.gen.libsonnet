@@ -302,9 +302,6 @@
     source: 'https://github.com/FerretDB/FerretDB',
     homepage: 'https://www.ferretdb.com/',
   },
-  filebrowser: {
-    source: 'https://github.com/filebrowser/filebrowser',
-  },
   'firefly-iii': {
     license: 'AGPL-3.0-or-later',
     title: 'Firefly III',
@@ -1312,11 +1309,5 @@
     title: 'your_spotify',
     source: 'https://github.com/Yooooomi/your_spotify',
     homepage: 'https://github.com/Yooooomi/your_spotify',
-  },
-  'yt-dlp-web-ui': {
-    license: 'MPL-2.0',
-    title: 'yt-dlp-web-ui',
-    source: 'https://github.com/marcopeocchi/yt-dlp-web-ui',
-    homepage: 'https://github.com/marcopeocchi/yt-dlp-web-ui',
   },
 }
