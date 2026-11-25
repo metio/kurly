@@ -281,10 +281,6 @@
     license: 'AGPL-3.0',
     name: 'fider',
   },
-  filebrowser: {
-    license: 'Apache-2.0',
-    name: 'filebrowser',
-  },
   filestash: {
     homepage: 'https://www.filestash.app/',
     license: 'AGPL-3.0',
@@ -1117,11 +1113,6 @@
     homepage: 'https://wger.de',
     license: 'AGPL-3.0',
     name: 'wger',
-  },
-  whoogle: {
-    homepage: 'https://pypi.org/project/whoogle-search/',
-    license: 'MIT',
-    name: 'whoogle-search',
   },
   wikijs: {
     homepage: 'https://js.wiki',

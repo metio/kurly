@@ -173,6 +173,10 @@
   overseerr: { reason: 'upstream-archived', note: 'upstream archived on 2026-02-15 — https://github.com/sct/overseerr' },
   'pingvin-share': { reason: 'upstream-archived', note: 'upstream archived on 2026-05-18 — https://github.com/stonith404/pingvin-share' },
   readarr: { reason: 'upstream-archived', note: 'upstream archived on 2025-06-27 — https://github.com/Readarr/Readarr' },
+  filebrowser: { reason: 'upstream-archived', note: 'upstream archived on 2026-09-01; its README says there will be no further releases, bug fixes or security fixes — https://github.com/filebrowser/filebrowser' },
+  metamcp: { reason: 'upstream-archived', note: 'upstream archived; the GitHub API reports archived: true as of 2026-11-25 and names no successor — https://github.com/metatool-ai/metamcp' },
+  whoogle: { reason: 'upstream-archived', note: 'upstream archived; its README says Google has closed every way Whoogle could fetch results, so it no longer returns any — https://github.com/benbusby/whoogle-search' },
+  'yt-dlp-web-ui': { reason: 'upstream-archived', note: 'upstream archived; the GitHub API reports archived: true as of 2026-11-25 and names no successor — https://github.com/marcopiovanello/yt-dlp-web-ui' },
 
   // Undeployable as packaged: an image it needs does not exist. Not a licence or a
   // maintenance judgement — the thing simply cannot start.

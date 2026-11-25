@@ -10,6 +10,21 @@ kurly cuts a release on every push, with a calendar version that carries the
 time of day (`library-2026.8.3141650`), so an entry is dated rather than
 numbered and applies from the first release of that day onward.
 
+## 2026-11-25 — `filebrowser`, `metamcp`, `whoogle` and `yt-dlp-web-ui` removed
+
+The upstream repositories of these four workloads are archived, so the catalogue
+no longer carries them. File Browser's maintainers have announced no further
+releases or security fixes, and Whoogle can no longer fetch search results at
+all. `catalog/excluded.libsonnet` records the reason for each.
+
+A render importing `github.com/metio/kurly/workloads/<name>/server.libsonnet`
+from a new kurly checkout fails, because the directory is gone. Move those
+deployments to a maintained alternative before taking the next catalogue.
+
+`ghcr.io/metio/kurly/workloads/<name>` is not withdrawn: the images already
+published stay where they are, and anything pinning one by digest keeps working.
+They receive no further releases.
+
 ## 2026-08-12 — `draw-io` removed, use `drawio`
 
 The catalogue carried draw.io twice, as `draw-io` and as `drawio`, from the same
